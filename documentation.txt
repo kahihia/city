@@ -1,0 +1,38 @@
+Monday, June 13th 2011
+--------------------------------
+Cityfusion project description
+--------------------------------
+
+A website which allows anonymous users to post events, which are then
+displayed for other users to see.
+
+Features
+ - Anonymous users (like kijiji) can edit from a hash link in email
+
+Initial objectives:
+ - Build an app which features an 'event' model
+ - Design a form which allows an event to be created in the database
+
+Event design
+
+Events can be based on pre-existing event models, such as those
+featured on facebook. Facebook has fields for:
+When?
+ - Start
+   - date
+   - time (half hour increments
+ - End (optional, same as start)
+What are you planning?
+ - Text field description
+Where?
+ - Text field description
+ - Enter street address (Optional)
+   - Street address
+   - City/Town field
+More info?
+ - Charfield(length undetermined)
+Who's invited
+ - Select guests app
+ - "Anyone can view and RSVP (public event)" Boolean
+   - "Guests can invite Friends" Boolean
+ - "Show the guest list on the event page" Boolean
