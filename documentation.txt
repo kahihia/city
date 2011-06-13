@@ -55,3 +55,10 @@ django app that can handle this:
 django-taggit
   - This is the most up to date tagging application available
 
+---------------------------------------------------------------
+Apps to install for this project
+---------------------------------------------------------------
+django - using 1.3
+django-taggit - for tagging functionality
+django-registration - for user registration
+south - for database migration
