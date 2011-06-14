@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'registration',
     'south',
     'taggit',
+    'alpha.event',
 )
 
 # A sample logging configuration. The only tangible logging

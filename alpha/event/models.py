@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Event(models.Model):
@@ -17,10 +17,10 @@ class Event(models.Model):
 
     # the time at which the event starts, in UTC
     # stored as a combined date and time
-    start_time = models.DateTime(auto_now=False, auto_now_add=False)
+    start_time = models.DateTimeField(auto_now=False, auto_now_add=False)
 
     # the time at which the event will end, in UTC
-    end_time = models.DateTime(auto_now=False, auto_now_add=False, blank=True)
+    end_time = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
 
     # the location that the event will be held
     location = models.CharField(max_length=500)
