@@ -11,8 +11,8 @@
        Remove this if you use the .htaccess -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>{% block title %}{% endblock %}Gymbudz Friend Finder</title>
-  <meta name="description" content="{% block description %}The Gymbudz friend finder website{% endblock %}">
+  <title>{% block title %}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{% endblock %}">
   <meta name="author" content="{% block author %}{% endblock %}" >
 
   <!-- Mobile viewport optimized: j.mp/bplateviewport -->
@@ -31,52 +31,25 @@
 
 <body>
   <div id="container">
-    <header id="top">
-      <h1>
-	<a href="{% url home %}">
-	  <img src="{{ STATIC_URL }}img/logo.svg" width="100%" height="100%" alt="Gymbudz Friend Finder">
-	</a>
-      </h1>
-      {% block header %}
-      <div id="top_menu">
-	<nav>
-	  <ul>
-	    {% if user.is_authenticated %}
-	      <li><a href = "{% url auth_logout %}">Log out</a></li>
-
-	      <li>
-		{# django-messages inbox link goes here #}
-	      	{% load inbox %}
-		{% inbox_count as num_msg %}
-		<a href="{% url messages_inbox %}">
-		  {% if num_msg == 0 %}
-		    No new messages
-		  {% endif %}
-		  {% if num_msg == 1 %}
-		    1 new message
-		  {% endif %}
-		  {% if num_msg > 1 %}
-		    {{ num_msg }} new messages
-		  {% endif %}
-		</a>
-	      </li>
-
-	      <li><p>Welcome {{ user.username }}</p></li>
-	    {% else %}
-	      <li><a href = "{% url auth_login %}">Log in</a></li>
-	      <li><a href = "{% url registration_register %}">Sign up</a></li>
-	    {% endif %}
-	  </ul>
-	</nav>
-      </div> <!-- end of #top_menu -->
-      {% endblock %}
-    </header>
-    <div id="main" role="main">
-      <div id="sidebar">{% block sidebar %}{% endblock %}</div>
-      {% block main %}{% endblock %}
-      {% block content %}{% endblock %}
-    </div>
-    <footer id="bottom">{% block footer %}{% endblock %}</footer>
+    {% block container %}
+      <div id="header-links" class="heading-links">
+	<ul>
+	  <li>Post an event</li>
+	  <li>Sign up/Log in</li>
+	  <li>About</li>
+	</ul>
+      </div>
+      <div id="header-logo">
+	<img src="{{ MEDIA_URL }}images/cityfusion-logo.png"/>
+      </div>
+      <div id="content" class="container">
+	{% block body %}{% endblock %}
+      </div>
+      <div id="ads">
+	advertisements here
+      </div>
+      <div class="clear"></div>
+    {% endblock %}
   </div> <!--! end of #container -->
 
 

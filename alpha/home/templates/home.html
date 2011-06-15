@@ -1,20 +1,4 @@
 {% extends 'base.html' %}
 
-{% block author %}Sam{% endblock %}
-
-{% block main %}
-<div id="main-left">
-  <header>
-    <h1>Find a workout partner</h1>
-    <p>Stay motivated, learn new excercises and meet people.</p>
-  </header>
-  <a href="{% url registration_register %}">
-    <span class="blue-rounded-button">
-      Get Started
-    </span>
-  </a>
-</div><!-- end of #main-left -->
-<div id="main-right">
-  <img src="{{ STATIC_URL }}img/logo.svg" width="300" height="220" alt="Gymbudz">
-</div><!-- end of #main-right -->
+{% block container %}
 {% endblock %}

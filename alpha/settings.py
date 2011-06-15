@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'south',
     'taggit',
     'alpha.event',
+    'alpha.home',
 )
 
 # A sample logging configuration. The only tangible logging
