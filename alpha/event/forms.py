@@ -10,7 +10,7 @@ class EventForm(forms.ModelForm):
     """
     class Meta:
         model = models.Event
-        exclude = ('public_key', 'authentication_key',)
+        exclude = ('authentication_key',)
 
-    #email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict, maxlength=75)),
-    #                         label=_(u'email address'))
+    email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict, maxlength=75)),
+                             label=_(u'email address'))

@@ -4,24 +4,24 @@ from django.contrib.auth.models import User
 import sha
 import random
 
-
-# Create your models here.
-
 class Event(models.Model):
     # by default, the model has an id = models.AutoField(primary_key=True)
+
     # The manager is the interface for making database query operations on all models
     # example usage: Event.events.all() will provide a list of all event objects
     events = models.Manager()
 
-    # private key...
+    # private key
     authentication_key = models.CharField(_('authentication key'), max_length=40)
 
-    # public key
-    public_key = models.CharField(_('public key'), max_length=40)
+    # public key is just the model id
 
     # the user which that created the event, or no event
     # only one user can own an event
     owner = models.ForeignKey(User, blank=True)
+    
+    # the event must have an email
+    email = models.CharField(max_length=100)
 
     # the title of the event
     name = models.CharField(max_length=500)
@@ -33,7 +33,7 @@ class Event(models.Model):
     # the time at which the event will end, in UTC
     end_time = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
     # the location that the event will be held
-    location = models.CharField(max_length=500)  
+    location = models.CharField(max_length=500)
     # a specific address of the event
     # represented by a model defined in this app
     venue = models.ForeignKey('Venue')
