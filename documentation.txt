@@ -127,3 +127,7 @@ New ordering of importance:
 
 A. Creating Events
   A template can be made for a form which can populate an event.
+
+ - The form will be filled by the user
+
+ 
