@@ -18,7 +18,7 @@ class Event(models.Model):
 
     # the user which that created the event, or no event
     # only one user can own an event
-    owner = models.ForeignKey(User, blank=True)
+    owner = models.ForeignKey(User, blank=True, null=True)
     
     # the event must have an email
     email = models.CharField('Email address',max_length=100)
@@ -31,12 +31,12 @@ class Event(models.Model):
     # stored as a combined date and time
     start_time = models.DateTimeField('Starting time',auto_now=False, auto_now_add=False)
     # the time at which the event will end, in UTC
-    end_time = models.DateTimeField('Ending time (optional)',auto_now=False, auto_now_add=False, blank=True)
+    end_time = models.DateTimeField('Ending time (optional)',auto_now=False, auto_now_add=False, blank=True, null=True)
     # the location that the event will be held
     location = models.CharField(max_length=500)
     # a specific address of the event
     # represented by a model defined in this app
-    venue = models.ForeignKey('Venue', blank=True)
+    venue = models.ForeignKey('Venue', blank=True, null=True)
     
     # django-taggit field for tags
     # TODO
