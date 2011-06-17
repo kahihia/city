@@ -130,4 +130,41 @@ A. Creating Events
 
  - The form will be filled by the user
 
- 
+
+Friday, June 17th 2011
+---------------------------------------
+B. View events
+ - small list description
+ - large detail description
+
+Also, some event websites such as ticketmaster, allow you to specify
+more than one day for an event.
+
+As well as the event, the venue is an object with additional
+information and properties such as:
+  - Parking information
+  - Public transportation info
+  - Box office numbers for tickets
+  - Box office Hours
+  - types of payments for tickets
+  - capacity
+  - wheelchair access or not
+  - general rules regarding the event
+  - age rules, such as children under a certain age
+  - miscellaneous section for:
+    - seating layout information
+    - binoculars
+    - whatever extra is left out
+  - its own description page with:
+   - address
+   - website
+   - google map widget
+
+
+Events can be accessed from the url
+event/view/<event name> ...
+this might have some overlap.
+Some sites seem to have a random number before the event name
+event/view/<number>/<event name>
+
+We might implement that later.

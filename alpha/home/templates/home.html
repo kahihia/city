@@ -1,4 +1,17 @@
 {% extends 'base.html' %}
 
-{% block container %}
+{% block title %}CityFusion.com{% endblock %}
+
+{% block page %}
+
+{% include 'header.html' %}
+
+<div id="content">
+  {% block content %}{% endblock %}
+</div>
+
+{% include 'ads.html' %}
+
+{% include 'footer.html' %}
+
 {% endblock %}

@@ -17,7 +17,7 @@ def host_type():
     run('uname -a')
 
 def django_admin(cmd):
-    return ". venv/bin/activate; cd cityfusion; python manage.py %s" % (cmd)
+    return ". venv/bin/activate; cd alpha; python manage.py %s" % (cmd)
 
 def check_schema(app):
     return local(
@@ -28,7 +28,7 @@ def schemas():
     orig = env.warn_only
     env.warn_only = True
 
-    res = check_schema("gb_profile")
+    res = check_schema("event")
 
     env.warn_only = orig
 

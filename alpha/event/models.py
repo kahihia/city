@@ -12,7 +12,7 @@ class Event(models.Model):
     events = models.Manager()
 
     # private key
-    authentication_key = models.CharField(_('authentication key'), max_length=40)
+    authentication_key = models.CharField(max_length=40)
 
     # public key is just the model id
 
@@ -21,22 +21,22 @@ class Event(models.Model):
     owner = models.ForeignKey(User, blank=True)
     
     # the event must have an email
-    email = models.CharField(max_length=100)
+    email = models.CharField('Email address',max_length=100)
 
     # the title of the event
-    name = models.CharField(max_length=500)
+    name = models.CharField('Event title',max_length=500)
     # the longer description of the event
     description = models.TextField(blank=True)
     # the time at which the event starts, in UTC
     # stored as a combined date and time
-    start_time = models.DateTimeField(auto_now=False, auto_now_add=False)
+    start_time = models.DateTimeField('Starting time',auto_now=False, auto_now_add=False)
     # the time at which the event will end, in UTC
-    end_time = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
+    end_time = models.DateTimeField('Ending time (optional)',auto_now=False, auto_now_add=False, blank=True)
     # the location that the event will be held
     location = models.CharField(max_length=500)
     # a specific address of the event
     # represented by a model defined in this app
-    venue = models.ForeignKey('Venue')
+    venue = models.ForeignKey('Venue', blank=True)
     
     # django-taggit field for tags
     # TODO

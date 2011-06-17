@@ -29,29 +29,11 @@
 
 </head>
 
-<body>
-  <div id="container">
-    {% block container %}
-      <div id="header-links" class="heading-links">
-	<ul>
-	  <li>Post an event</li>
-	  <li>Sign up/Log in</li>
-	  <li>About</li>
-	</ul>
-      </div>
-      <div id="header-logo">
-	<img src="{{ MEDIA_URL }}images/cityfusion-logo.png"/>
-      </div>
-      <div id="content" class="container">
-	{% block body %}{% endblock %}
-      </div>
-      <div id="ads">
-	advertisements here
-      </div>
-      <div class="clear"></div>
+<body id="cityfusion">
+  <div id="page">
+    {% block page %}
     {% endblock %}
-  </div> <!--! end of #container -->
-
+  </div> 
 
   <!-- JavaScript at the bottom for fast page loading -->
 
