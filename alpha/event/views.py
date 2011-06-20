@@ -1,4 +1,3 @@
-from event.utils import create_key
 from event.utils import get_event
 from event.utils import generate_form
 from django.core.urlresolvers import reverse
@@ -8,8 +7,8 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 
-def list(request):
-    return render_to_response('events/list_events.html')
+def browse(request):
+    return render_to_response('events/browse_events.html')
 
 def view(request, event_name=None):
     if event_name == None:
@@ -19,9 +18,9 @@ def create(request, form_class=None, success_url=None,
            template_name='events/create_event.html'):
     if form_class == None:
         if request.user.is_authenticated():
-            form_class = generate_form('owner', 'authentication_key', 'email')
+            form_class = generate_form('owner', 'authentication_key', 'slug', 'email')
         else:
-            form_class = generate_form('owner', 'authentication_key')
+            form_class = generate_form('owner', 'authentication_key', 'slug')
     # on success, redirect to the event detail by default
     if success_url is None:
         success_url = reverse('home')
@@ -29,9 +28,12 @@ def create(request, form_class=None, success_url=None,
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
-            event_object = form.save(commit=False)
-            event_object.authentication_key = create_key()
-            event_object.save()
+            if not request.user.is_authenticated():
+                form.save()
+            else:
+                event_obj = form.save(commit=False)
+                event_obj.owner = request.user
+                event_obj.save()
             return HttpResponseRedirect(success_url)
     else:
         form = form_class()

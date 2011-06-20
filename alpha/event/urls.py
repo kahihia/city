@@ -6,7 +6,7 @@ from alpha.event import views as event
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-                       #url(r'^$', event.list, name='event'),
+                       url(r'^$', event.browse, name='event_browse'),
 
                        #url(r'edit/(?P<authentication_key>\w+)/$',
                        #    event.edit,

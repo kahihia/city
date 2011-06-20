@@ -1,63 +1,62 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.template.defaultfilters import slugify
 import sha
 import random
 
 class Event(models.Model):
-    # by default, the model has an id = models.AutoField(primary_key=True)
+    class Meta:
+        verbose_name_plural = 'Events'
+    #--------------------------------------------------------------
+    # Django set fields - these are set by django -----------------
+    #==============================================================
+    # id = models.AutoField(primary_key=True)
 
     # The manager is the interface for making database query operations on all models
     # example usage: Event.events.all() will provide a list of all event objects
     events = models.Manager()
-
+ 
+    #--------------------------------------------------------------
+    # Save set fields - these are set in the save -----------------
+    #==============================================================
     # private key
     authentication_key = models.CharField(max_length=40)
+    # public key is a 'slug' generated from the name of the event
+    slug = models.SlugField()
 
-    # public key is just the model id
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.authentication_key = ''.join(random.choice(string.ascii_letters + '0123456789') for x in xrange(40) )
+        self.slug = slugify(self.name)
+        super(Event, self).save(*args, **kwargs)
 
+    #--------------------------------------------------------------
+    # View set fields - these are set in the view -----------------
+    #==============================================================
     # the user which that created the event, or no event
     # only one user can own an event
     owner = models.ForeignKey(User, blank=True, null=True)
-    
-    # the event must have an email
-    email = models.CharField('Email address',max_length=100)
 
-    # the title of the event
-    name = models.CharField('Event title',max_length=500)
-    # the longer description of the event
-    description = models.TextField(blank=True)
-    # the time at which the event starts, in UTC
-    # stored as a combined date and time
-    start_time = models.DateTimeField('Starting time',auto_now=False, auto_now_add=False)
-    # the time at which the event will end, in UTC
-    end_time = models.DateTimeField('Ending time (optional)',auto_now=False, auto_now_add=False, blank=True, null=True)
-    # the location that the event will be held
-    location = models.CharField(max_length=500)
-    # a specific address of the event
-    # represented by a model defined in this app
-    venue = models.ForeignKey('Venue', blank=True, null=True)
-    
-    # django-taggit field for tags
-    # TODO
-
-    # Future possible fields (present in facebook model):
-    #  privacy
-    #  update_timestamp
-    #  feed
-    #  noreply
-    #  maybe
-    #  invited
-    #  attending
-    #  declined
-    #  picture
-
+    #--------------------------------------------------------------
+    # User set fields - these are input by the user and validated -
+    #==============================================================
+    email = models.CharField('email address',max_length=100)    # the event must have an email
+    name = models.CharField('event title',max_length=255)    # the title of the event
+    description = models.TextField(blank=True)    # the longer description of the event
+    start_time = models.DateTimeField('starting time',auto_now=False, auto_now_add=False)
+    end_time = models.DateTimeField('ending time (optional)',auto_now=False, auto_now_add=False, blank=True, null=True)
+    location = models.CharField('location of the event',max_length=500)
+    venue = models.ForeignKey('CanadianVenue', blank=True, null=True)    # a specific venue associated with the event
+    misc_notes = models.CharField('miscellaneous small, key info about the event',max_length=40, blank=True, default='')
+    # TODO - django-taggit field for tags
 
 class Venue(models.Model):
     street = models.CharField(max_length=250)
     city = models.CharField(max_length=200)
-    province = models.CharField(max_length=200)
-    postal_code = models.CharField(max_length=50)
-    country = models.CharField(max_length=200)
     latitude = models.DecimalField(decimal_places=2, max_digits=8)
     longitude = models.DecimalField(decimal_places=2, max_digits=8)
+    country = models.CharField(max_length=200)
+
+class CanadianVenue(Venue):
+    province = models.CharField(max_length=200)
+    postal_code = models.CharField(max_length=50)
