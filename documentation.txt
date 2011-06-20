@@ -168,3 +168,6 @@ Some sites seem to have a random number before the event name
 event/view/<number>/<event name>
 
 We might implement that later.
+
+Monday, June 20th 2011
+---------------------------------------
