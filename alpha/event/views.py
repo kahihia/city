@@ -5,10 +5,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-
+from event.models import Event
 
 def browse(request):
-    return render_to_response('events/browse_events.html')
+    upcoming_events = Event.events.all()
+    return render_to_response('events/browse_events.html',
+                              {'upcoming_events':upcoming_events},
+                              context_instance = RequestContext(request))
 
 def view(request, event_name=None):
     if event_name == None:
