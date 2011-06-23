@@ -240,4 +240,5 @@ Thursday, June 23rd 2011
 Todo list:
  + edit event
  - event tagging
- - 
+ # javascript on the DateTime fields still is not working
+ - add the user registration templates

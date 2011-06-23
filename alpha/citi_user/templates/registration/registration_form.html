@@ -1,0 +1,23 @@
+{% extends 'home.html' %}
+
+{% block content %}
+
+<div id="registration_form">
+  <header>
+    <h1>Sign up</h1>
+    <p>Create your account now</p>
+  </header>
+
+  <form class="register-login" method="post">
+    {% csrf_token %}
+    <fieldset>
+      {{ form.as_p }}
+    </fieldset>
+    {% with button_label="Create my account" %}
+    <input type="submit" value="{{ button_label }}">
+    <h6>By clicking '{{ button_label }}' you agree to the <a href="{% url terms %}">Terms &amp; Conditions.</a></h6>
+    {% endwith %}
+  </form>
+</div>
+
+{% endblock %}

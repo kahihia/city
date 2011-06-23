@@ -153,3 +153,7 @@ LOGGING = {
         },
     }
 }
+
+
+# django.registration settings, one week window to activate
+ACCOUNT_ACTIVATION_DAYS = 7
