@@ -13,7 +13,7 @@ urlpatterns = patterns('',
                            name='event_edit'
                            ),
 
-                       url(r'view/(?P<slug>\[-w]+)',
+                       url(r'view/(?P<slug>[^/]+)/',
                            event.view,
                            name='event_view' 
                            ),

@@ -234,3 +234,10 @@ Edit event:
      B) Facebook integration could allow updates to be pushed into the
      facebook event page for the linked event.
 
+Thursday, June 23rd 2011
+---------------------------------------
+
+Todo list:
+ + edit event
+ - event tagging
+ - 

@@ -16,7 +16,6 @@ def view(request, slug=None):
     try:
         event = Event.events.get(slug=slug)
     except ObjectDoesNotExist:
-        print slug + 'does not exist in the database.'
         return HttpResponseRedirect(reverse('event_browse'))
     
     return render_to_response('events/event_description.html',
@@ -71,14 +70,25 @@ def create(request, form_class=None, success_url=None,
                               context_instance=context)
 
 def edit(request, form_class=None, success_url=None,
+         authentication_key=None,
          template_name='events/edit_event.html'):
+
+
+    if form_class == None:
+        if request.user.is_authenticated():
+            form_class = generate_form('owner', 'authentication_key', 'slug', 'email')
+        else:
+            form_class = generate_form('owner', 'authentication_key', 'slug')
+
     # Event object is retrieved based on incoming path hash
     # If the hash does not match an existing event, the user
     # is redirected to the event creation page.
     try:
-        event_obj = Event.events.get(authentication_key__exact=request.authentication_key)
+        event_obj = Event.events.get(authentication_key__exact=authentication_key)
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_create'))
+    if success_url is None:
+        success_url = reverse('event_view', kwargs={ 'slug':event_obj.slug})
     # Verify and save the form to model
     if request.method == 'POST':
         form = form_class( instance = event_obj,
