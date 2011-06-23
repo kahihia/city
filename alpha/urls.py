@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'alpha.home.views.home', name='home'),
     url(r'^events/', include('event.urls')),
-    url(r'^accounts/' include('registration.backends.defaults.urls'))
+    url(r'^accounts/' include('citi_user.urls'))
 
     # url(r'^alpha/', include('alpha.foo.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:

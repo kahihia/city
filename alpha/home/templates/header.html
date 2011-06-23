@@ -14,14 +14,22 @@
   </nav>
 
   <nav id="user-nav">
+    {% if user.is_authenticated %}
+    <a href="{% url citi_user_events %}">
+      <h4>View your events</h4>
+    </a>
+    <a href="{% url auth_logout %}">
+      <h4>Log out</h4>
+    </a>
+    {% else %}
     <a href="{% url registration_register %}">
       <h4>Join</h4>
     </a>
     <a href="{% url auth_login %}">
       <h4>Log In</h4>
     </a>
+    {% endif %}
   </nav>
-
     {# TODO: city pulldown menu goes here #}
 
 </header>

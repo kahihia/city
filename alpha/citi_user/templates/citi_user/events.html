@@ -1,0 +1,19 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<div id="browse_events">
+  <header>
+    <h1>Browse/edit your events</h1>
+    <p>Here is a list of your events</p>
+  </header>
+  
+  <section>
+    {% for event in user_events %}
+    <span class="user_event">
+      {% include 'events/event_description_small.html' %}
+      <a href="{% url event_edit authentication_key=event.authentication_key %}">Edit this event</a>
+    </span>
+    {% endfor %}
+  </section>
+</div>
+{% endblock %}
