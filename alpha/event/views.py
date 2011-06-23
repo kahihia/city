@@ -1,4 +1,3 @@
-from event.utils import get_event
 from event.utils import generate_form
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,12 +12,19 @@ def browse(request):
                               {'upcoming_events':upcoming_events},
                               context_instance = RequestContext(request))
 
-def view(request, event_name=None):
-    if event_name == None:
-        return HttpResponseRedirect(reverse('event'))
+def view(request, slug=None):
+    try:
+        event = Event.events.get(slug=slug)
+    except ObjectDoesNotExist:
+        print slug + 'does not exist in the database.'
+        return HttpResponseRedirect(reverse('event_browse'))
+    
+    return render_to_response('events/event_description.html',
+                              {'event': event},
+                              context_instance = RequestContext(request))
 
 def create(request, form_class=None, success_url=None,
-           template_name='events/create_event.html'):
+           template_name='events/create_event.html', send_email=True):
     if form_class == None:
         if request.user.is_authenticated():
             form_class = generate_form('owner', 'authentication_key', 'slug', 'email')
@@ -36,7 +42,25 @@ def create(request, form_class=None, success_url=None,
             else:
                 event_obj = form.save(commit=False)
                 event_obj.owner = request.user
-                event_obj.save()
+                event_obj = event_obj.save()
+                if send_email:
+                    from django.core.email import send_mail
+                    current_site = Site.objects.get_current()
+                    subject = render_to_string('events/creation_email_subject.txt',
+                                               { 'site': current_site,
+                                                 'title': event_obj.name })
+                    # Email subjects are all on one line
+                    subject= ''.join(subject.splitlines())
+                    message = render_to_string('events/creation_email.txt',
+                                               { 'authentication_key': event_obj.authentication_key,
+                                                 'slug': event_obj.slug,
+                                                 'site': current_site } )
+                    send_mail(subject,message, settings.DEFAULT_FROM_EMAIL, [event_obj.email])
+                else:
+                    print 'New event edit key: http://127.0.0.1:8000/events/edit/' + event_obj.authentication_key + '/'
+                    print 'New event public address: http://127.0.0.1:8000/events/view/' + event_obj.slug + '/'
+            if request.user.is_authenticated():
+                success_url = reverse('user_event_list')
             return HttpResponseRedirect(success_url)
     else:
         form = form_class()
@@ -52,7 +76,7 @@ def edit(request, form_class=None, success_url=None,
     # If the hash does not match an existing event, the user
     # is redirected to the event creation page.
     try:
-        event_obj = get_event(request.authentication_key)
+        event_obj = Event.events.get(authentication_key__exact=request.authentication_key)
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_create'))
     # Verify and save the form to model

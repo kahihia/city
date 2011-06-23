@@ -5,13 +5,6 @@ from django import forms
 from alpha.event.fields import JqSplitDateTimeField
 from alpha.event.widgets import JqSplitDateTimeWidget
 
-def get_event(auth_key):
-    """
-    Returns the event which matches the auth_key
-    Throws ObjectDoesNotExist if not found
-    """
-    return Event.events.get(authentication_key__exact=auth_key)
-
 def generate_form(*args):
     class HTML5DateTimeInput(forms.DateTimeInput):
         input_type = 'datetime'

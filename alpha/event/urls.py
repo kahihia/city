@@ -8,14 +8,19 @@ from alpha.event import views as event
 urlpatterns = patterns('',
                        url(r'^$', event.browse, name='event_browse'),
 
-                       #url(r'edit/(?P<authentication_key>\w+)/$',
-                       #    event.edit,
-                       #    name='event_edit'),
+                       url(r'edit/(?P<authentication_key>\w+)/$',
+                           event.edit,
+                           name='event_edit'
+                           ),
 
-                       #url(r'view/(?<event_name>\w+)/$',
-                       #    event.view,
-                       #    name='event_view'),
+                       url(r'view/(?P<slug>\[-w]+)',
+                           event.view,
+                           name='event_view' 
+                           ),
+
                        url(r'create/',
                            event.create,
-                           name='event_create'),
+                           kwargs= { 'send_email': False },
+                           name='event_create'
+                           ),
 )

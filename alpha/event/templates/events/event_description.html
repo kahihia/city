@@ -1,0 +1,18 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<div id="event_description">
+  <header>
+    {% include 'events/event_description_small.html' %}
+  </header>
+  
+  <section>
+    <span class="event_description">
+      {{ event.description }}
+    </span>
+    <span class="event_location">
+      {{ event.location }}
+    </span>
+  </section>
+</div>
+{% endblock %}

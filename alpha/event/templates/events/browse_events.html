@@ -1,16 +1,18 @@
 {% extends 'home.html' %}
 
 {% block content %}
-<header>
-<h1>Browse events</h1>
-<p>Here is a list of upcoming events</p>
-</header>
-
-<section>
-  {% for event in upcoming_events %}
-  <span class="upcoming_event">
-    {% include 'events/event_description_small.html' %}
-  </span>
-  {% endfor %}
-</section>
+<div id="browse_events">
+  <header>
+    <h1>Browse events</h1>
+    <p>Here is a list of upcoming events</p>
+  </header>
+  
+  <section>
+    {% for event in upcoming_events %}
+    <span class="upcoming_event">
+      {% include 'events/event_description_small.html' %}
+    </span>
+    {% endfor %}
+  </section>
+</div>
 {% endblock %}

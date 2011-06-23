@@ -1,7 +1,7 @@
 {% extends 'home.html' %}
 
 {% block content %}
-
+<div id="create_event">
 <form method="post">
     {% csrf_token %}
     <fieldset>
@@ -12,6 +12,7 @@
 
 <script src="{{ STATIC_URL }}js/mylibs/jquery-ui-1.8.13.custom.min.js"></script>
 <script src="{{ STATIC_URL }}js/jqsplitdatetime.js"></script>
+</div>
 {% endblock %}
 
 {% block css %}

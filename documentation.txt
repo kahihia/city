@@ -194,3 +194,43 @@ The user will still need to be set in the view, however, because it is
 dependant upon whether the user is logged in or not.
 
 
+Wednesday, June 22nd 2011
+---------------------------------------
+Create event:
+       
+       A flow chart I drew up indicates that,
+       upon creation user is redirected to:
+       	    if the user is logged in:
+	       a list of events they can edit named 'user_event_list'
+	    the website home page
+	
+       Regardless of their login status, an email is sent to them.
+
+       This email option could be added to a list of user options.
+
+Possible feature:
+
+	  - User profile allowing for emails to be toggled
+	  - along with user info such as name, email etc.
+
+Todo list:
+ # edit event
+ + email users with link
+ - event tagging
+
+
+Edit event:
+
+     Similar to the create event view, the user will be prompted with
+     a form and allowed to update and resubmit the fields they wish to
+     change.
+
+     Possible features:
+     
+     A) Ajax could be used here to dynamically select elements of the
+     model for editing, allowing the user a WYSIWYG interface for
+     editing the event details.
+
+     B) Facebook integration could allow updates to be pushed into the
+     facebook event page for the linked event.
+

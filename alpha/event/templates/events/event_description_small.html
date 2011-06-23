@@ -2,9 +2,9 @@
 <div class="event_picture">
   {# This is where event picture would go. #}
 </div>
-<div class="event_desc">
+<div class="event_small_info">
   <div class="name">
-    <a href="{{ event.get_absolute_url }}">
+    <a href="{% url event_view event.slug %}">
       {{ event.name }}
     </a>
   </div>
