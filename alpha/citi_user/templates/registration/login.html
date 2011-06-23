@@ -1,0 +1,16 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<div id="login">
+  <header>
+    <h1>Log in</h1>
+  </header>
+  <form class="register-login" method="post">
+    {% csrf_token %}
+    <fieldset>
+      {{ form.as_p }}
+      </fieldset>
+    <input type="submit" value="Log in">
+  </form>
+</div>
+{% endblock%}

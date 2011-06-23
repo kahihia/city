@@ -1,0 +1,12 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<div id="logout">
+  <header>
+    <h1>You have logged out</h1>
+  </header>
+  <section>
+    <p>Click <a href="{% url auth_login %}">here</a> to log in again.</p>
+  </section>
+</div>
+{% endblock%}
