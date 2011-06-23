@@ -1,4 +1,5 @@
-from registration.backends.defaults.urls import urlpatterns
+from django.conf.urls.defaults import patterns, include, url
+from registration.urls import urlpatterns
 
 urlpatterns += patterns('',
     url(r'terms/$', 'alpha.citi_user.views.terms', name='citi_user_terms'),

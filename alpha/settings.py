@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'taggit',
     'alpha.event',
     'alpha.home',
+    'alpha.citi_user',
 )
 
 # A sample logging configuration. The only tangible logging
