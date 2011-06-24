@@ -1,5 +1,3 @@
-import random
-import string
 from event.models import Event
 from django import forms
 from alpha.event.fields import JqSplitDateTimeField

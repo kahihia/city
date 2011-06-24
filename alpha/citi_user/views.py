@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-
+from event.models import Event
 
 
 def terms(request):
@@ -12,5 +12,8 @@ def terms(request):
 
 def events(request):
     context = RequestContext(request)
+    print context
+    user_events = Event.events.filter(ownero=request.user)
     return render_to_response('citi_user/events.html',
+                              {'user_events':user_events},
                               context_instance = context)

@@ -1,10 +1,11 @@
-from event.utils import generate_form
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from event.models import Event
+from event.forms import EventFormLoggedIn
+from event.forms import EventForm
 
 def browse(request):
     upcoming_events = Event.events.all()
@@ -26,9 +27,9 @@ def create(request, form_class=None, success_url=None,
            template_name='events/create_event.html', send_email=True):
     if form_class == None:
         if request.user.is_authenticated():
-            form_class = generate_form('owner', 'authentication_key', 'slug', 'email')
+            form_class = EventFormLoggedIn
         else:
-            form_class = generate_form('owner', 'authentication_key', 'slug')
+            form_class = EventForm
     # on success, redirect to the event detail by default
     if success_url is None:
         success_url = reverse('home')
@@ -42,6 +43,7 @@ def create(request, form_class=None, success_url=None,
                 event_obj = form.save(commit=False)
                 event_obj.owner = request.user
                 event_obj = event_obj.save()
+                form.save_m2m()
                 if send_email:
                     from django.core.email import send_mail
                     current_site = Site.objects.get_current()
@@ -59,7 +61,7 @@ def create(request, form_class=None, success_url=None,
                     print 'New event edit key: http://127.0.0.1:8000/events/edit/' + event_obj.authentication_key + '/'
                     print 'New event public address: http://127.0.0.1:8000/events/view/' + event_obj.slug + '/'
             if request.user.is_authenticated():
-                success_url = reverse('user_event_list')
+                success_url = reverse('citi_user_events')
             return HttpResponseRedirect(success_url)
     else:
         form = form_class()
@@ -76,9 +78,9 @@ def edit(request, form_class=None, success_url=None,
 
     if form_class == None:
         if request.user.is_authenticated():
-            form_class = generate_form('owner', 'authentication_key', 'slug', 'email')
+            form_class = EventFormLoggedIn
         else:
-            form_class = generate_form('owner', 'authentication_key', 'slug')
+            form_class = EventForm
 
     # Event object is retrieved based on incoming path hash
     # If the hash does not match an existing event, the user

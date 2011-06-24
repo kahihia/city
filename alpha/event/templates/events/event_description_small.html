@@ -18,12 +18,12 @@
       {{ event.misc_notes }}
     </p>
   </div>
-{% comment %}
   <div class="tags">
+    {% for tag in event.tags.all %}
     <p>
-      {{ event.tags }}
+      {{ tag }}
     </p>
+    {% endfor %}
   </div>
-{% endcomment %}
 </div>
 {% endif %}

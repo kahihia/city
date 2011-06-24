@@ -4,6 +4,7 @@ from django.template.defaultfilters import slugify
 import string
 import sha
 import random
+from taggit.managers import TaggableManager
 
 class Event(models.Model):
     class Meta:
@@ -30,6 +31,7 @@ class Event(models.Model):
             self.authentication_key = ''.join(random.choice(string.ascii_letters + '0123456789') for x in xrange(40) )
         self.slug = slugify(self.name)
         super(Event, self).save(*args, **kwargs)
+        return self
 
     #--------------------------------------------------------------
     # View set fields - these are set in the view -----------------
@@ -49,7 +51,11 @@ class Event(models.Model):
     location = models.CharField('location of the event',max_length=500)
     venue = models.ForeignKey('CanadianVenue', blank=True, null=True)    # a specific venue associated with the event
     misc_notes = models.CharField('miscellaneous small, key info about the event',max_length=40, blank=True, default='')
-    # TODO - django-taggit field for tags
+
+    #-------------------------------------------------------------
+    # django-taggit field for tags--------------------------------
+    #=============================================================
+    tags = TaggableManager()
 
 class Venue(models.Model):
     street = models.CharField(max_length=250)
