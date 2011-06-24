@@ -64,3 +64,6 @@ def pip_freeze():
 
 def echo_shell():
     print env.shell
+
+def test():
+    local(django_admin("test event home citi_user"), capture=False)
