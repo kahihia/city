@@ -13,7 +13,7 @@ def terms(request):
 def events(request):
     context = RequestContext(request)
     print context
-    user_events = Event.events.filter(ownero=request.user)
+    user_events = Event.events.filter(owner=request.user)
     return render_to_response('citi_user/events.html',
                               {'user_events':user_events},
                               context_instance = context)
