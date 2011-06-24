@@ -15,5 +15,7 @@ class SimpleTest(TestCase):
         """
         self.assertEqual(1 + 1, 2)
 
-    def test_fail(self):
-        self.assert_(False)
+class FilterUrlGenerator(TestCase):
+    def test_another_thing(self):
+        self.assertEqual(1+3, 4)
+        
