@@ -6,6 +6,7 @@ from django.template import RequestContext
 from event.models import Event
 from event.forms import EventFormLoggedIn
 from event.forms import EventForm
+from taggit.models import Tag
 
 def browse(request):
     #parsing
@@ -15,10 +16,11 @@ def browse(request):
     #url generation
 
     #list off all the tags in the system!
-
+    all_tags = Tag.objects.all()
     upcoming_events = Event.events.all()
     return render_to_response('events/browse_events.html',
-                              {'upcoming_events':upcoming_events},
+                              { 'upcoming_events':upcoming_events,
+                                'all_tags':all_tags},
                               context_instance = RequestContext(request))
 
 def view(request, slug=None):

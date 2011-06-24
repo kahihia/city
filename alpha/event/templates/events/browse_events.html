@@ -6,13 +6,20 @@
     <h1>Browse events</h1>
     <p>Here is a list of upcoming events</p>
   </header>
+
+  <div id = "tags">
+    {% for tag in all_tags %}
+    <p>{{ tag }}</p>
+    {% endfor %}
+  </div>
   
-  <section>
+  <div id = "events">
     {% for event in upcoming_events %}
     <span class="upcoming_event">
       {% include 'events/event_description_small.html' %}
     </span>
     {% endfor %}
-  </section>
+  </div>
+
 </div>
 {% endblock %}
