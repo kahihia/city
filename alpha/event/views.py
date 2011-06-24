@@ -8,6 +8,14 @@ from event.forms import EventFormLoggedIn
 from event.forms import EventForm
 
 def browse(request):
+    #parsing
+
+    #filtering
+
+    #url generation
+
+    #list off all the tags in the system!
+
     upcoming_events = Event.events.all()
     return render_to_response('events/browse_events.html',
                               {'upcoming_events':upcoming_events},

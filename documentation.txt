@@ -241,4 +241,32 @@ Todo list:
  + edit event
  - event tagging
  # javascript on the DateTime fields still is not working
- - add the user registration templates
+ + add the user registration templates
+
+Friday, June 24th 2011
+---------------------------------------
+Todo list:
+ + event tagging
+ # javascript still not working on create event!
+ + user editing of events
+ + user list of their events
+ - filter events by tag
+
+
+Filtering events by tag: 
+  
+  The event browser shall have a list of tags, which users can select
+  with a mouse by clicking on.
+
+  The user can select more than one.
+
+  As the tags are selected they become active on the page.
+
+  Active tags have their CSS style attribute class changed.
+
+  If a tag is selected and clicked, then it becomes deselected.
+
+  The output of the browser is dependent upon the tags active.
+
+  There is a debate upon whether the 'all' tag should have special
+  features, in that turning another filter on will turn it off, etc.
