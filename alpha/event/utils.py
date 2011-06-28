@@ -1,24 +1,28 @@
-from event.models import Event
-from django import forms
-from alpha.event.fields import JqSplitDateTimeField
-from alpha.event.widgets import JqSplitDateTimeWidget
-
-def generate_form(*args):
-    class HTML5DateTimeInput(forms.DateTimeInput):
-        input_type = 'datetime'
-    class HTML5EmailInput(forms.TextInput):
-        input_type = 'email'
-
+from django.template.defaultfilters import slugify
+from copy import copy
+class TagInfo:
     """
-    Generates an event form
+    Container for:
+    the name of the tag (unicode), 
+    a list of existing tags (unicode list) and, 
+    the number of events which contain that tag
     """
-    class _EventForm(forms.ModelForm):
-        def __init__(self, *args, **kwargs):
-            super(_EventForm, self).__init__(*args,**kwargs)
-            #self.fields['start_time'].widget = HTML5DateTimeInput(attrs={'class':'date_time'})
-            self.fields['email'].widget = HTML5EmailInput()
-        class Meta:
-            model = Event
-            exclude = tuple(args)
-        start_time = JqSplitDateTimeField(widget=JqSplitDateTimeWidget(attrs={'date_class':'datepicker','time_class':'timepicker'}))
-    return _EventForm
+    def __init__(self, tag, previous_slug, num):
+        self.name = tag
+        self.number = num
+        self.slug = ''
+
+        if previous_slug is None:
+            self.slug = slugify(tag)
+        elif previous_slug == '':
+            self.slug = ''
+        else:
+            new_slug = copy(previous_slug)
+            if tag in previous_slug: #toggles tag on and off
+                new_slug.remove(tag)
+            else:
+                new_slug.append(tag)
+            self.slug = ','.join(new_slug)
+
+        
+

@@ -9,7 +9,11 @@
 
   <div id = "tags">
     {% for tag in all_tags %}
-    <p>{{ tag }}</p>
+    {% if tag.slug == "" %}
+    <p><a href = "{% url event_browse %}">{{ tag.name }} ({{ tag.number }})</a></p>
+    {% else %}
+    <p><a href = "{% url event_browse_tags tags=tag.slug %}">{{ tag.name }} ({{ tag.number }})</a></p>
+    {% endif %}
     {% endfor %}
   </div>
   

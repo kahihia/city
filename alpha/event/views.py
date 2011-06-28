@@ -3,25 +3,49 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+
 from event.models import Event
 from event.forms import EventFormLoggedIn
 from event.forms import EventForm
+from event.utils import TagInfo
+
 from taggit.models import Tag
+from taggit.utils import parse_tags
 
-def browse(request):
-    #parsing
+def browse(request, tags=None):
+    #parsing the tags string
+    old_tags = tags
+    if old_tags != None:
+        old_tags.replace('+',' ')
+        old_tags = parse_tags(old_tags)
 
-    #filtering
+        #TODO: this doesn't seem to be filtering like it is supposed to.
+        upcoming_events = Event.events.filter(tags__name__in=[old_tags]).distinct()
+    else:
+        upcoming_events = Event.events.all()
 
-    #url generation
+    #packaging new tag information given old_tags list
+    tags = Tag.objects.all()
+    all_tags = []
+    all_tags.append( TagInfo('All', '', Event.events.all().count()))
+    for tag in tags:
+        all_tags.append(
+            TagInfo(
+                tag.name, #the name of the tag
+                old_tags, #list of existing tags
+                Event.events.filter(tags__name__in=[tag]).count() #number of events which are tagged this way
+                )
+            ) 
 
-    #list off all the tags in the system!
-    all_tags = Tag.objects.all()
-    upcoming_events = Event.events.all()
     return render_to_response('events/browse_events.html',
                               { 'upcoming_events':upcoming_events,
                                 'all_tags':all_tags},
                               context_instance = RequestContext(request))
+
+
+
+
+
 
 def view(request, slug=None):
     try:
