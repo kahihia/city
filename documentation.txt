@@ -270,3 +270,26 @@ Filtering events by tag:
 
   There is a debate upon whether the 'all' tag should have special
   features, in that turning another filter on will turn it off, etc.
+
+Tuesday, June 28th 2011
+---------------------------------------
+ + filter events by tag
+ - filter events by date
+
+Filter events by tag
+
+   Implemented on monday, bug tested today.  Tags are separated by
+   commas in the url. The Tag model in taggit contains a unique slug
+   field, so this is used by the browse view in Event.views.browse to
+   identify the tag.
+
+   Toggling of the tags is achieved by a utility class in
+   Event.utils.TagInfo which contains the three pieces of information
+   used by the template to display the tag.
+
+   A list of these TagInfo objects are passed to the template for
+   rendering, along with a list of the filtered Events.
+
+Filter events by date
+
+   

@@ -23,7 +23,7 @@ urlpatterns = patterns('',
                            name='event_create'
                            ),
 
-                       url(r'^(?P<tags>[^/]+)/$', event.browse, name='event_browse_tags'),
+                       url(r'^(?P<old_tags>[^/]+)/$', event.browse, name='event_browse_tags'),
 
 
 )

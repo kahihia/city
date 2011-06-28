@@ -12,28 +12,24 @@ from event.utils import TagInfo
 from taggit.models import Tag
 from taggit.utils import parse_tags
 
-def browse(request, tags=None):
+def browse(request, old_tags=None):
     #parsing the tags string
-    old_tags = tags
     if old_tags != None:
-        old_tags.replace('+',' ')
-        old_tags = parse_tags(old_tags)
-
-        #TODO: this doesn't seem to be filtering like it is supposed to.
-        upcoming_events = Event.events.filter(tags__name__in=[old_tags]).distinct()
+        old_tags = old_tags.split(',')
+        upcoming_events = Event.events.filter(tags__slug__in=old_tags).distinct()
     else:
         upcoming_events = Event.events.all()
 
     #packaging new tag information given old_tags list
     tags = Tag.objects.all()
     all_tags = []
-    all_tags.append( TagInfo('All', '', Event.events.all().count()))
+    all_tags.append( TagInfo(num=Event.events.all().count()) )
     for tag in tags:
         all_tags.append(
             TagInfo(
-                tag.name, #the name of the tag
-                old_tags, #list of existing tags
-                Event.events.filter(tags__name__in=[tag]).count() #number of events which are tagged this way
+                tag=tag, #the tag object
+                previous_slugs=old_tags, #list of existing tags
+                num=Event.events.filter(tags__name__in=[tag]).count() #number of events which are tagged this way
                 )
             ) 
 

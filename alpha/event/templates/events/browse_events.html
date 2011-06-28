@@ -12,7 +12,7 @@
     {% if tag.slug == "" %}
     <p><a href = "{% url event_browse %}">{{ tag.name }} ({{ tag.number }})</a></p>
     {% else %}
-    <p><a href = "{% url event_browse_tags tags=tag.slug %}">{{ tag.name }} ({{ tag.number }})</a></p>
+    <p><a href = "{% url event_browse_tags old_tags=tag.slug %}">{{ tag.name }} ({{ tag.number }})</a></p>
     {% endif %}
     {% endfor %}
   </div>
