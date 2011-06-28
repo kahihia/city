@@ -292,4 +292,36 @@ Filter events by tag
 
 Filter events by date
 
-   
+   The url shall be appended with:
+    a date
+    a page number (if applicable)
+
+ Notes on date:
+  - the date will be either relative or absolute
+    Relative:
+     - today
+     - tomorrow
+     - this weekend
+     - this week
+     - next week
+    Absolute:
+     - an ISO standard date YYYY-MM-DD
+
+ Notes on page number:
+  - the page numbers start at 1
+  - a lack of page number means page 1
+  - page 0 is page 1
+  - 'next' and 'previous' buttons will cycle through
+    pages relative to the date being viewed.
+
+ Plan of implementation (in order):
+
+ - absolute dates, no pages
+ - today, no pages
+ - today, with pages
+ - tomorrow, with pages
+ - this weekend, with pages
+ - this week, with pages
+ - next week, with pages
+
+
