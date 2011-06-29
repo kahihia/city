@@ -12,7 +12,7 @@ from event.utils import TagInfo
 from taggit.models import Tag
 from taggit.utils import parse_tags
 
-def browse(request, old_tags=None):
+def browse(request, old_tags=None, date=None):
     #parsing the tags string
     if old_tags != None:
         old_tags = old_tags.split(',')
@@ -33,6 +33,12 @@ def browse(request, old_tags=None):
                 )
             ) 
 
+    #now we filter based on the date selected
+    #base case is we have no date selected, in which case we do nothing
+    if date != None:
+        #we must filter based on the date
+        print type(upcoming_events)
+        
     return render_to_response('events/browse_events.html',
                               { 'upcoming_events':upcoming_events,
                                 'all_tags':all_tags},
