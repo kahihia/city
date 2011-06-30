@@ -8,19 +8,25 @@ from event.models import Event
 from event.forms import EventFormLoggedIn
 from event.forms import EventForm
 from event.utils import TagInfo
+from event.utils import EventSet
 
 from taggit.models import Tag
-from taggit.utils import parse_tags
 
-def browse(request, old_tags=None, date=None):
+import datetime
+
+def redirect(request):
+    return HttpResponseRedirect( reverse('event_browse'))
+
+def browse(request, old_tags=u'all', date=u'today', num=1):
+    split_tags = []
     #parsing the tags string
-    if old_tags != None:
-        old_tags = old_tags.split(',')
-        upcoming_events = Event.events.filter(tags__slug__in=old_tags).distinct()
+    if old_tags != u'all':
+        split_tags = old_tags.split(',')
+        upcoming_events = Event.events.filter(tags__slug__in=split_tags).distinct()
     else:
         upcoming_events = Event.events.all()
 
-    #packaging new tag information given old_tags list
+    #packaging new tag information given split_tags list
     tags = Tag.objects.all()
     all_tags = []
     all_tags.append( TagInfo(num=Event.events.all().count()) )
@@ -28,26 +34,39 @@ def browse(request, old_tags=None, date=None):
         all_tags.append(
             TagInfo(
                 tag=tag, #the tag object
-                previous_slugs=old_tags, #list of existing tags
+                previous_slugs=split_tags, #list of existing tags
                 num=Event.events.filter(tags__name__in=[tag]).count() #number of events which are tagged this way
                 )
-            ) 
+            )
 
     #now we filter based on the date selected
-    #base case is we have no date selected, in which case we do nothing
-    if date != None:
-        #we must filter based on the date
-        print type(upcoming_events)
+    # error check the date input
+    today = datetime.datetime.now()
+    print today
+    print type(today)
+    event_sets = []
+
+    if date == u'today':
+        date_events = upcoming_events.filter(start_time__year=today.year, 
+                                                 start_time__month=today.month,
+                                                 start_time__day=today.day)
+        date_events.order_by('start_time')
         
+        event_sets.append( EventSet(u"Today's Events", date_events ) )
+
+    # error checking for num argument
+    if num < 1:
+        num = 1
+
+
     return render_to_response('events/browse_events.html',
                               { 'upcoming_events':upcoming_events,
-                                'all_tags':all_tags},
+                                'all_tags':all_tags,
+                                'current_tags':old_tags,
+                                'page_date':date,
+                                'page_num':num,
+                                'event_sets':event_sets},
                               context_instance = RequestContext(request))
-
-
-
-
-
 
 def view(request, slug=None):
     try:

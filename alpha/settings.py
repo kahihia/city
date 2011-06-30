@@ -160,6 +160,6 @@ LOGGING = {
 ACCOUNT_ACTIVATION_DAYS = 7
 
 # django auth settings
-LOGIN_REDIRECT_URL = '/events'
+LOGIN_REDIRECT_URL = '/events/'
 
 # django taggit settings

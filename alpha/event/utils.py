@@ -26,5 +26,13 @@ class TagInfo:
             self.name = u'All'
             self.slug = ''
         
-        
-
+from alpha.event.models import Event 
+class EventSet:
+    """
+    Container for:
+    a name (optional) (unicode string)
+    a list of Event objects
+    """
+    def __init__(self, name=None, events=[]):
+        self.name = name
+        self.events = events

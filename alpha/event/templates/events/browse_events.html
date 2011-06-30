@@ -1,29 +1,62 @@
 {% extends 'home.html' %}
 
 {% block content %}
+
 <div id="browse_events">
   <header>
     <h1>Browse events</h1>
     <p>Here is a list of upcoming events</p>
   </header>
 
-  <div id = "tags">
+  <div id="dates">
+    <p><a href = "{% url event_browse_tags_date date="today" old_tags=current_tags %}">Today</a></p>
+    <p><a href = "{% url event_browse_tags_date date="tomorrow" old_tags=current_tags %}">Tomorrow</a></p>
+    <p><a href = "{% url event_browse_tags_date date="this-weekend" old_tags=current_tags %}">This weekend</a></p>
+    <p><a href = "{% url event_browse_tags_date date="this-week" old_tags=current_tags %}">This week</a></p>
+    <p><a href = "{% url event_browse_tags_date date="next-week" old_tags=current_tags %}">Next week</a></p>
+  </div>
+
+  <div id="tags">
+    <h2>Categories</h2>
     {% for tag in all_tags %}
-    {% if tag.slug == "" %}
-    <p><a href = "{% url event_browse %}">{{ tag.name }} ({{ tag.number }})</a></p>
-    {% else %}
-    <p><a href = "{% url event_browse_tags old_tags=tag.slug %}">{{ tag.name }} ({{ tag.number }})</a></p>
-    {% endif %}
+      {% if tag.slug == "" %}
+        <p><a href = "{% url event_browse_date date=page_date%}">{{ tag.name }} ({{ tag.number }})</a></p>
+      {% else %}
+        {% if page_date %}
+          {% if page_num < 2 %}
+            <p><a href = "{% url event_browse_tags_date old_tags=tag.slug date=page_date %}">{{ tag.name }} ({{ tag.number }})</a></p>
+          {% else %}
+            <p><a href = "{% url event_browse_tags_date_num old_tags=tag.slug date=page_date num=page_num %}">{{ tag.name }} ({{ tag.number }})</a></p>
+          {% endif %}
+        {% else %}
+          <p><a href = "{% url event_browse_tags old_tags=tag.slug %}">{{ tag.name }} ({{ tag.number }})</a></p>
+        {% endif %}
+      {% endif %}
     {% endfor %}
   </div>
   
-  <div id = "events">
+  <div id="events">
+    {% comment %}
     {% for event in upcoming_events %}
     <span class="upcoming_event">
       {% include 'events/event_description_small.html' %}
     </span>
     {% endfor %}
+    {% endcomment %}
+    {% for set in event_sets %}
+    <div class="event_list">
+      {% if set.name %}
+      <h3>{{ set.name }}</h3>
+      {% endif %}
+      {% for event in set.events %}
+      <span class="upcoming_event">
+	{% include 'events/event_description_small.html' %}
+      </span>
+      {% endfor %}
+    </div>
+    {% endfor %}
   </div>
+
 
 </div>
 {% endblock %}
