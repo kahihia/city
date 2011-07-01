@@ -12,7 +12,8 @@ from event.utils import EventSet
 
 from taggit.models import Tag
 
-import datetime
+from datetime import datetime
+from datetime import timedelta
 
 def redirect(request):
     return HttpResponseRedirect( reverse('event_browse'))
@@ -40,19 +41,61 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
             )
 
     #now we filter based on the date selected
-    # error check the date input
-    today = datetime.datetime.now()
-    print today
-    print type(today)
+    today = datetime.now()
     event_sets = []
 
     if date == u'today':
-        date_events = upcoming_events.filter(start_time__year=today.year, 
-                                                 start_time__month=today.month,
-                                                 start_time__day=today.day)
-        date_events.order_by('start_time')
-        
-        event_sets.append( EventSet(u"Today's Events", date_events ) )
+        todays_events = upcoming_events.filter(start_time__year=today.year, 
+                                              start_time__month=today.month,
+                                              start_time__day=today.day)
+                                              #start_time__hour=today.hour
+                                              
+        todays_events.order_by('start_time')
+        event_sets.append( EventSet(u"Today's Events", todays_events ) )
+
+    if date == u'tomorrow':
+        tomorrow = today + timedelta(days=1)
+        tomorrows_events = upcoming_events.filter(start_time__year=tomorrow.year, 
+                                                 start_time__month=tomorrow.month,
+                                                 start_time__day=tomorrow.day)
+        tomorrows_events.order_by('start_time')
+        event_sets.append( EventSet(u"Tomorrow's Events", tomorrows_events ) )
+
+    if date == u'this-weekend':
+        #weekday 6 5 4 sun sat fri
+        end = today + timedelta(days=6-today.weekday())
+        end = end.replace(hour=23,minute=59,second=59,microsecond=0)
+        #sat is 5
+        if today.weekday() == 5:
+            start = today + timedelta(days=5-today.weekday())
+            start = start.replace(hour=0,minute=0,second=0,microsecond=0)
+        #friday at 5pm is the weekend.
+        else:
+            start = today + timedelta(days=4-today.weekday())
+            start = start.replace(hour=17,minute=0,second=0,microsecond=0)
+        this_weekends_events = upcoming_events.filter(start_time__range=(start,end))
+        this_weekends_events.order_by('start_time')
+        event_sets.append( EventSet(u"Event's This Weekend", this_weekends_events) )
+    if date == u'next-weekend':
+        next_monday = today + timedelta(days=7-today.weekday())
+        end = next_monday + timedelta(days=6-next_monday.weekday())
+        start = next_monday + timedelta(days=4-next_monday.weekday())
+        next_weekends_events = upcoming_events.filter(start_time__range=(start,end))
+        next_weekends_events.order_by('start_time')
+        event_sets.append( EventSet(u"Event's Next Weekend", next_weekends_events) )
+    if date == u'this-week':
+        end = today + timedelta(days=6-today.weekday())
+        start = today
+        this_weeks_events = upcoming_events.filter(start_time__range=(start,end))
+        this_weeks_events.order_by('start_date')
+        event_sets.append( EventSet(u"Event's This Week" ) )
+    if date == u'next-week':
+        end = today + timedelta(days=13-today.weekday())
+        start = today + timedelta(days=7-today.weekday())
+        next_weeks_events = upcoming_events.filter(start_time__range=(start,end))
+        next_weeks_events.order_by('start_date')
+        event_sets.append( EventSet(u"Event's Next Week") )    
+
 
     # error checking for num argument
     if num < 1:
