@@ -23,6 +23,9 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
     #parsing the tags string
     if old_tags != u'all':
         split_tags = old_tags.split(',')
+        # Right now we query based on tags, and then later split this up based on date.
+        # Does django make a query every time? If so this could be an expensive, inefficient way of
+        # doing the job.
         upcoming_events = Event.events.filter(tags__slug__in=split_tags).distinct()
     else:
         upcoming_events = Event.events.all()
@@ -41,6 +44,12 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
             )
 
     #now we filter based on the date selected
+    # Sam note: I realize that i have way too many queries here, but im not really sure how
+    # to combine them properly and still get the header correct. Levi mentioned having more
+    # than one day listing per page, so they flow into one another, if that is the case then
+    # there will have to be a number of different queries.
+    # its possible I could try implementing this using loops, but I am afraid of what kind
+    # of bugs might crop up if I had a database query in a loop - so i'm not going there.
     today = datetime.now()
     event_sets = []
 
@@ -48,19 +57,16 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         todays_events = upcoming_events.filter(start_time__year=today.year, 
                                               start_time__month=today.month,
                                               start_time__day=today.day)
-                                              #start_time__hour=today.hour
-                                              
-        todays_events.order_by('start_time')
+                                              #start_time__hour=today.hour)                       
+        todays_events = todays_events.order_by('start_time')
         event_sets.append( EventSet(u"Today's Events", todays_events ) )
-
     if date == u'tomorrow':
         tomorrow = today + timedelta(days=1)
         tomorrows_events = upcoming_events.filter(start_time__year=tomorrow.year, 
                                                  start_time__month=tomorrow.month,
                                                  start_time__day=tomorrow.day)
-        tomorrows_events.order_by('start_time')
+        tomorrows_events = tomorrows_events.order_by('start_time')
         event_sets.append( EventSet(u"Tomorrow's Events", tomorrows_events ) )
-
     if date == u'this-weekend':
         #weekday 6 5 4 sun sat fri
         end = today + timedelta(days=6-today.weekday())
@@ -74,26 +80,26 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
             start = today + timedelta(days=4-today.weekday())
             start = start.replace(hour=17,minute=0,second=0,microsecond=0)
         this_weekends_events = upcoming_events.filter(start_time__range=(start,end))
-        this_weekends_events.order_by('start_time')
+        this_weekends_events = this_weekends_events.order_by('start_time')
         event_sets.append( EventSet(u"Events This Weekend", this_weekends_events) )
     if date == u'next-weekend':
         next_monday = today + timedelta(days=7-today.weekday())
         end = next_monday + timedelta(days=6-next_monday.weekday())
         start = next_monday + timedelta(days=4-next_monday.weekday())
         next_weekends_events = upcoming_events.filter(start_time__range=(start,end))
-        next_weekends_events.order_by('start_time')
+        next_weekends_events = next_weekends_events.order_by('start_time')
         event_sets.append( EventSet(u"Events Next Weekend", next_weekends_events) )
     if date == u'this-week':
         end = today + timedelta(days=6-today.weekday())
         start = today
         this_weeks_events = upcoming_events.filter(start_time__range=(start,end))
-        this_weeks_events.order_by('start_date')
+        this_weeks_events = this_weeks_events.order_by('start_time')
         event_sets.append( EventSet(u"Events This Week", this_weeks_events ) )
     if date == u'next-week':
         end = today + timedelta(days=13-today.weekday())
         start = today + timedelta(days=7-today.weekday())
         next_weeks_events = upcoming_events.filter(start_time__range=(start,end))
-        next_weeks_events.order_by('start_date')
+        next_weeks_events = next_weeks_events.order_by('start_time')
         event_sets.append( EventSet(u"Events Next Week", next_weeks_events) )    
 
 
