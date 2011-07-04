@@ -163,3 +163,6 @@ ACCOUNT_ACTIVATION_DAYS = 7
 LOGIN_REDIRECT_URL = '/events/'
 
 # django taggit settings
+
+# alpha.event settings
+EVENTS_PER_PAGE = 5
