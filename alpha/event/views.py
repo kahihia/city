@@ -75,26 +75,26 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
             start = start.replace(hour=17,minute=0,second=0,microsecond=0)
         this_weekends_events = upcoming_events.filter(start_time__range=(start,end))
         this_weekends_events.order_by('start_time')
-        event_sets.append( EventSet(u"Event's This Weekend", this_weekends_events) )
+        event_sets.append( EventSet(u"Events This Weekend", this_weekends_events) )
     if date == u'next-weekend':
         next_monday = today + timedelta(days=7-today.weekday())
         end = next_monday + timedelta(days=6-next_monday.weekday())
         start = next_monday + timedelta(days=4-next_monday.weekday())
         next_weekends_events = upcoming_events.filter(start_time__range=(start,end))
         next_weekends_events.order_by('start_time')
-        event_sets.append( EventSet(u"Event's Next Weekend", next_weekends_events) )
+        event_sets.append( EventSet(u"Events Next Weekend", next_weekends_events) )
     if date == u'this-week':
         end = today + timedelta(days=6-today.weekday())
         start = today
         this_weeks_events = upcoming_events.filter(start_time__range=(start,end))
         this_weeks_events.order_by('start_date')
-        event_sets.append( EventSet(u"Event's This Week" ) )
+        event_sets.append( EventSet(u"Events This Week", this_weeks_events ) )
     if date == u'next-week':
         end = today + timedelta(days=13-today.weekday())
         start = today + timedelta(days=7-today.weekday())
         next_weeks_events = upcoming_events.filter(start_time__range=(start,end))
         next_weeks_events.order_by('start_date')
-        event_sets.append( EventSet(u"Event's Next Week") )    
+        event_sets.append( EventSet(u"Events Next Week", next_weeks_events) )    
 
 
     # error checking for num argument
