@@ -20,9 +20,9 @@ from django.conf import settings
 def redirect(request):
     return HttpResponseRedirect( reverse('event_browse'))
 
-def browse(request, old_tags=u'all', date=u'today', num=0):
-    pages = False # pages are used to split up the data by settings.EVENTS_PER_PAGE
-
+def browse(request, old_tags=u'all', date=u'today', num=1):
+    pages = False
+    num = int(num) -1
     split_tags = []
     #parsing the tags string
     if old_tags != u'all':
@@ -58,24 +58,26 @@ def browse(request, old_tags=u'all', date=u'today', num=0):
     today = datetime.now()
     event_sets = []
 
+    # error checking for num argument
+    if int(num) < 0:
+        num = 0
+
     # I should really combine this all into a function... there's a lot of shared code here
     if date == u'today':
         todays_events = upcoming_events.filter(start_time__year=today.year, 
                                               start_time__month=today.month,
                                               start_time__day=today.day)
                                               #start_time__hour=today.hour)                       
-        if todays_events.count() > settings.EVENTS_PER_PAGE:
-            pages = True
-        todays_events = todays_events.order_by('start_time')[num*settings.EVENTS_PER_PAGE:settings.EVENTS_PER_PAGE]
+        pages = todays_events.count() > settings.EVENTS_PER_PAGE
+        todays_events = todays_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:settings.EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Today's Events", todays_events ) )
     if date == u'tomorrow':
         tomorrow = today + timedelta(days=1)
         tomorrows_events = upcoming_events.filter(start_time__year=tomorrow.year, 
                                                  start_time__month=tomorrow.month,
                                                  start_time__day=tomorrow.day)
-        if tomorrows_events.count() > settings.EVENTS_PER_PAGE:
-            pages = True
-        tomorrows_events = tomorrows_events.order_by('start_time')[num*settings.EVENTS_PER_PAGE:settings.EVENTS_PER_PAGE]
+        pages = tomorrows_events.count() > settings.EVENTS_PER_PAGE
+        tomorrows_events = tomorrows_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Tomorrow's Events", tomorrows_events ) )
     if date == u'this-weekend':
         #weekday 6 5 4 sun sat fri
@@ -90,50 +92,50 @@ def browse(request, old_tags=u'all', date=u'today', num=0):
             start = today + timedelta(days=4-today.weekday())
             start = start.replace(hour=17,minute=0,second=0,microsecond=0)
         this_weekends_events = upcoming_events.filter(start_time__range=(start,end))
-        if this_weekends_events.count() > settings.EVENTS_PER_PAGE:
-            pages = True
-        this_weekends_events = this_weekends_events.order_by('start_time')[num*settings.EVENTS_PER_PAGE:settings.EVENTS_PER_PAGE]
+        pages = this_weekends_events.count() > settings.EVENTS_PER_PAGE
+        this_weekends_events = this_weekends_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Events This Weekend", this_weekends_events) )
     if date == u'next-weekend':
         next_monday = today + timedelta(days=7-today.weekday())
         end = next_monday + timedelta(days=6-next_monday.weekday())
         start = next_monday + timedelta(days=4-next_monday.weekday())
         next_weekends_events = upcoming_events.filter(start_time__range=(start,end))
-        if next_weekends_events.count() > settings.EVENTS_PER_PAGE:
-            pages = True
-        next_weekends_events = next_weekends_events.order_by('start_time')[num*settings.EVENTS_PER_PAGE:settings.EVENTS_PER_PAGE]
+        pages = next_weekends_events.count() > settings.EVENTS_PER_PAGE
+        next_weekends_events = next_weekends_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Events Next Weekend", next_weekends_events) )
     if date == u'this-week':
         end = today + timedelta(days=6-today.weekday())
         start = today
         this_weeks_events = upcoming_events.filter(start_time__range=(start,end))
-        if this_weeks_events.count() > settings.EVENTS_PER_PAGE:
-            pages = True
-        this_weeks_events = this_weeks_events.order_by('start_time')[num*settings.EVENTS_PER_PAGE:settings.EVENTS_PER_PAGE]
+        pages = this_weeks_events.count() > settings.EVENTS_PER_PAGE
+        this_weeks_events = this_weeks_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
+        print 'This weeks events count: ' + str(this_weeks_events.count())
         event_sets.append( EventSet(u"Events This Week", this_weeks_events ) )
     if date == u'next-week':
         end = today + timedelta(days=13-today.weekday())
         start = today + timedelta(days=7-today.weekday())
         next_weeks_events = upcoming_events.filter(start_time__range=(start,end))
-        if next_weeks_events.count() > settings.EVENTS_PER_PAGE:
-            pages = True
-        next_weeks_events = next_weeks_events.order_by('start_time')[num*settings.EVENTS_PER_PAGE:settings.EVENTS_PER_PAGE]
+        pages = next_weeks_events.count() > settings.EVENTS_PER_PAGE
+        next_weeks_events = next_weeks_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Events Next Week", next_weeks_events) )    
 
-
-    # error checking for num argument
-    if num < 1:
-        num = 1
-
+    num = num + 1
+    page_less = num - 1
+    if num < 2:
+        page_more = 2
+    else:
+        page_more = num +1
 
     return render_to_response('events/browse_events.html',
                               { 'upcoming_events':upcoming_events,
                                 'all_tags':all_tags,
                                 'current_tags':old_tags,
                                 'page_date':date,
-                                'page_num':num,
+                                'page_num':int(num),
                                 'event_sets':event_sets,
-                                'pages':pages},
+                                'pages':pages,
+                                'page_less':page_less,
+                                'page_more':page_more},
                               context_instance = RequestContext(request))
 
 def view(request, slug=None):

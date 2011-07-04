@@ -56,6 +56,18 @@
       {% endfor %}
     </div>
     {% endfor %}
+    {% if pages %}
+    <nav>
+      {% if page_num > 1 %}
+        {% if page_num == 2 %}
+          <p><a href="{% url event_browse_tags_date old_tags=current_tags date=page_date %}">Prev</a></p>
+        {% else %}
+          <p><a href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}">Prev</a></p>
+        {% endif %}
+      {% endif %}
+      <p><a href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}">Next</a></p>
+    </nav>
+    {% endif %}
   </div>
 
 
