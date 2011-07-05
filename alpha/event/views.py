@@ -64,10 +64,10 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
 
     # I should really combine this all into a function... there's a lot of shared code here
     if date == u'today':
-        todays_events = upcoming_events.filter(start_time__year=today.year, 
-                                              start_time__month=today.month,
-                                              start_time__day=today.day)
-                                              #start_time__hour=today.hour)                       
+        todays_events = upcoming_events.filter(
+            start_time__year=today.year, 
+            start_time__month=today.month,
+            start_time__day=today.day)   
         pages = todays_events.count() > settings.EVENTS_PER_PAGE
         todays_events = todays_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:settings.EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Today's Events", todays_events ) )
