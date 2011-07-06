@@ -112,7 +112,6 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         this_weeks_events = upcoming_events.filter(start_time__range=(start,end))
         pages = this_weeks_events.count() > settings.EVENTS_PER_PAGE
         this_weeks_events = this_weeks_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
-        print 'This weeks events count: ' + str(this_weeks_events.count())
         event_sets.append( EventSet(u"Events This Week", this_weeks_events ) )
     elif date == u'next-week':
         end = today + timedelta(days=13-today.weekday())

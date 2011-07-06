@@ -25,6 +25,9 @@ class Event(models.Model):
     authentication_key = models.CharField(max_length=40)
     # public key is a 'slug' generated from the name of the event
     slug = models.SlugField()
+    # event picture
+    picture = models.ImageField(upload_to='pictures', blank=True, null=True, help_text='The event picture')
+    picture_thumb = models.ImageField(upload_to='pictures_thumb', blank=True, null=True, editable=False)
 
     def save(self, *args, **kwargs):
         if self.pk is None:
