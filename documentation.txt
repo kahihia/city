@@ -314,14 +314,25 @@ Filter events by date
   - 'next' and 'previous' buttons will cycle through
     pages relative to the date being viewed.
 
- Plan of implementation (in order):
+ Plan of implementation:
 
- - absolute dates, no pages
- - today, no pages
- - today, with pages
- - tomorrow, with pages
- - this weekend, with pages
- - this week, with pages
- - next week, with pages
+ - absolute dates
+ + today, no pages
+ + today, with pages
+ + tomorrow, with pages
+ + this weekend, with pages
+ + this week, with pages
+ + next week, with pages
 
 
+Tuesday, July 5th 2011
+---------------------------------------
+Brainstorm on things wrong with the site:
+
+  - dates should always be displayed in relation to the current time
+    - for example, events happening today, should have 'Today, 5:00pm'
+      or something like that, instead of 'July 5, 2011, 5:03pm'
+    - dates further ahead in time, out of current context, should be
+      displayed using their date, so that the user can better
+      understand when they are occuring
+    

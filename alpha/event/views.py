@@ -17,12 +17,15 @@ from datetime import timedelta
 
 from django.conf import settings
 
+import re
+
 def redirect(request):
     return HttpResponseRedirect( reverse('event_browse'))
 
 def browse(request, old_tags=u'all', date=u'today', num=1):
-    pages = False
-    num = int(num) -1
+    pages = False # used in date filter code for determining if we have pagination
+    num = int(num) -1 # see comment labeled NUMCODE
+
     split_tags = []
     #parsing the tags string
     if old_tags != u'all':
@@ -71,7 +74,7 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         pages = todays_events.count() > settings.EVENTS_PER_PAGE
         todays_events = todays_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:settings.EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Today's Events", todays_events ) )
-    if date == u'tomorrow':
+    elif date == u'tomorrow':
         tomorrow = today + timedelta(days=1)
         tomorrows_events = upcoming_events.filter(start_time__year=tomorrow.year, 
                                                  start_time__month=tomorrow.month,
@@ -79,7 +82,7 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         pages = tomorrows_events.count() > settings.EVENTS_PER_PAGE
         tomorrows_events = tomorrows_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Tomorrow's Events", tomorrows_events ) )
-    if date == u'this-weekend':
+    elif date == u'this-weekend':
         #weekday 6 5 4 sun sat fri
         end = today + timedelta(days=6-today.weekday())
         end = end.replace(hour=23,minute=59,second=59,microsecond=0)
@@ -95,7 +98,7 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         pages = this_weekends_events.count() > settings.EVENTS_PER_PAGE
         this_weekends_events = this_weekends_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Events This Weekend", this_weekends_events) )
-    if date == u'next-weekend':
+    elif date == u'next-weekend':
         next_monday = today + timedelta(days=7-today.weekday())
         end = next_monday + timedelta(days=6-next_monday.weekday())
         start = next_monday + timedelta(days=4-next_monday.weekday())
@@ -103,7 +106,7 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         pages = next_weekends_events.count() > settings.EVENTS_PER_PAGE
         next_weekends_events = next_weekends_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Events Next Weekend", next_weekends_events) )
-    if date == u'this-week':
+    elif date == u'this-week':
         end = today + timedelta(days=6-today.weekday())
         start = today
         this_weeks_events = upcoming_events.filter(start_time__range=(start,end))
@@ -111,14 +114,31 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         this_weeks_events = this_weeks_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
         print 'This weeks events count: ' + str(this_weeks_events.count())
         event_sets.append( EventSet(u"Events This Week", this_weeks_events ) )
-    if date == u'next-week':
+    elif date == u'next-week':
         end = today + timedelta(days=13-today.weekday())
         start = today + timedelta(days=7-today.weekday())
         next_weeks_events = upcoming_events.filter(start_time__range=(start,end))
         pages = next_weeks_events.count() > settings.EVENTS_PER_PAGE
         next_weeks_events = next_weeks_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Events Next Week", next_weeks_events) )    
+    else:
+        ISO8601_REGEX = re.compile(r'(?P<year>[0-9]{4})-(?P<month>[0-9]{1,2})-(?P<day>[0-9]{1,2})')
+        exact_date = ISO8601_REGEX.match(date)
+        if exact_date:
+            group = exact_date.groupdict()
+            start = datetime(year=int(group["year"]), 
+                             month=int(group["month"]), 
+                             day=int(group["day"]) )
+            end = start + timedelta(days=1)
+            exact_day_events = upcoming_events.filter(start_time__range=(start,end))
+            pages = exact_day_events.count() > settings.EVENTS_PER_PAGE
+            exact_day_events = exact_day_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
+            event_sets.append( EventSet( u'Events for ' + start.date().isoformat() , exact_day_events))
+            
 
+    # NUMCODE: This code is here because the page numbers start at 1 (which is never displayed or linked to)
+    # and according to the resident HCI guru, people like counting from 1
+    # but I use it in the date filter code as a multiplier, which I want to start at 0
     num = num + 1
     page_less = num - 1
     if num < 2:
