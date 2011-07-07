@@ -7,8 +7,8 @@ env.schema_apps = [ 'citi_user', 'home', 'event' ]
 env.local_settings_file = 'alpha.settings'
 
 def dev():
-    env.hosts = ['cityfusion@cityfusion.dev.peakxp.com']
-    env.hg_directory = '/home/cityfusion/devsite/cityfusion'
+    env.hosts = ['cityfusion-dev@cityfusion.dev.peakxp.com']
+    env.hg_directory = '/home/cityfusion-dev/src/cityfusion'
     env.wsgi_filename = 'djangodev.wsgi'
     env.settings_file = 'alpha.settings_dev'
 
