@@ -1,4 +1,4 @@
 virtualenv --no-site-packages winvenv
-winvenv\Scripts\activate.bat
+CALL winvenv\Scripts\activate.bat
 
-REM pip install -r requirements.txt
+pip install -r requirements.txt
