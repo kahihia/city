@@ -168,15 +168,20 @@ def view(request, slug=None):
                               context_instance = RequestContext(request))
 
 def create(request, form_class=None, success_url=None,
-           template_name='events/create_event.html', send_email=True):
+           template_name='events/create_event.html', send_email=False):
     if form_class == None:
         if request.user.is_authenticated():
             form_class = EventFormLoggedIn
         else:
             form_class = EventForm
-    # on success, redirect to the event detail by default
+    # on success, redirect to the home page by default
+    # if the user is authenticated, take them to their event page
     if success_url is None:
-        success_url = reverse('home')
+        if request.user.is_authenticated():
+            success_url = reverse('citi_user_events')
+        else:
+            success_url = reverse('home')
+
     # Verify and save to the model
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
@@ -195,17 +200,19 @@ def create(request, form_class=None, success_url=None,
                                                { 'site': current_site,
                                                  'title': event_obj.name })
                     # Email subjects are all on one line
-                    subject= ''.join(subject.splitlines())
+                    subject= ''.join( subject.splitlines() )
                     message = render_to_string('events/creation_email.txt',
                                                { 'authentication_key': event_obj.authentication_key,
                                                  'slug': event_obj.slug,
-                                                 'site': current_site } )
-                    send_mail(subject,message, settings.DEFAULT_FROM_EMAIL, [event_obj.email])
+                                                 'site': current_site } 
+                                               )
+                    send_mail( subject,
+                               message, 
+                               settings.DEFAULT_FROM_EMAIL, 
+                               [event_obj.email] )
                 else:
                     print 'New event edit key: http://127.0.0.1:8000/events/edit/' + event_obj.authentication_key + '/'
                     print 'New event public address: http://127.0.0.1:8000/events/view/' + event_obj.slug + '/'
-            if request.user.is_authenticated():
-                success_url = reverse('citi_user_events')
             return HttpResponseRedirect(success_url)
     else:
         form = form_class()
@@ -215,11 +222,11 @@ def create(request, form_class=None, success_url=None,
                               { 'form': form },
                               context_instance=context)
 
-def edit(request, form_class=None, success_url=None,
-         authentication_key=None,
+def edit(request, 
+         form_class=None, success_url=None, authentication_key=None,
          template_name='events/edit_event.html'):
 
-
+    # Define the form to be used. This allows for anonymous creation of events.
     if form_class == None:
         if request.user.is_authenticated():
             form_class = EventFormLoggedIn
@@ -233,8 +240,11 @@ def edit(request, form_class=None, success_url=None,
         event_obj = Event.events.get(authentication_key__exact=authentication_key)
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_create'))
+
+    # Set the return address
     if success_url is None:
         success_url = reverse('event_view', kwargs={ 'slug':event_obj.slug})
+
     # Verify and save the form to model
     if request.method == 'POST':
         form = form_class( instance = event_obj,
@@ -245,6 +255,7 @@ def edit(request, form_class=None, success_url=None,
             return HttpResponseRedirect(success_url)
     else:
         form = form_class(instance = event_obj)
+
     # Edit the event
     context = RequestContext(request)
     return render_to_response(template_name,

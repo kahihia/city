@@ -18,7 +18,6 @@ urlpatterns = patterns('',
                            ),
                        url(r'^create/$',
                            event.create,
-                           kwargs= { 'send_email': False },
                            name='event_create'
                            ),
                        url(r'^(?P<old_tags>[^/]+)/$', 
