@@ -3,10 +3,14 @@ from fabric.state import env
 from fabric.context_managers import cd
 from fabric.operations import run, local, sudo, _handle_failure
 
+env.schema_apps = [ 'citi_user', 'home', 'event' ]
+env.local_settings_file = 'alpha.settings'
+
 def dev():
     env.hosts = ['cityfusion@cityfusion.dev.peakxp.com']
     env.hg_directory = '/home/cityfusion/devsite/cityfusion'
     env.wsgi_filename = 'djangodev.wsgi'
+    env.settings_file = 'alpha.settings_dev'
 
 #def production():
 #    env.hosts = ['circulate@cityfusion.ca']
@@ -17,20 +21,25 @@ def host_type():
     run('uname -a')
 
 def django_admin(cmd):
-    return ". venv/bin/activate; cd alpha; python manage.py %s" % (cmd)
+    return ". venv/bin/activate; django-admin.py %s --settings=%s --pythonpath=." % (cmd, env.settings_file)
+
+def django_admin_local(cmd):
+    return ". venv/bin/activate; django-admin.py %s --settings=%s --pythonpath=." % (cmd, env.local_settings_file)
+
 
 def check_schema(app):
     return local(
-        django_admin("schemamigration %s --auto" % (app,)), 
+        django_admin_local("schemamigration %s --auto" % (app,)), 
         capture=False)
     
 def schemas():
     orig = env.warn_only
     env.warn_only = True
-
-    res = check_schema("event")
+    for schema in env.schema_apps:
+        check_schema(schema)
 
     env.warn_only = orig
+
 
 def committed():
     output = local("hg st")
