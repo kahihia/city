@@ -192,28 +192,29 @@ def create(request, form_class=None, success_url=None,
             else:
                 event_obj = form.save(commit=False)
                 event_obj.owner = request.user
+                event_obj.email = request.user.email
                 event_obj = event_obj.save()
                 form.save_m2m()
-                if send_email:
-                    from django.core.mail import send_mail
-                    current_site = 'Cityfusion'
-                    subject = render_to_string('events/creation_email_subject.txt',
-                                               { 'site': current_site,
-                                                 'title': event_obj.name })
-                    # Email subjects are all on one line
-                    subject= ''.join( subject.splitlines() )
-                    message = render_to_string('events/creation_email.txt',
-                                               { 'authentication_key': event_obj.authentication_key,
-                                                 'slug': event_obj.slug,
-                                                 'site': current_site } 
-                                               )
-                    send_mail( subject,
-                               message, 
-                               settings.DEFAULT_FROM_EMAIL, 
-                               [event_obj.email] )
-                else:
-                    print 'New event edit key: http://127.0.0.1:8000/events/edit/' + event_obj.authentication_key + '/'
-                    print 'New event public address: http://127.0.0.1:8000/events/view/' + event_obj.slug + '/'
+            if send_email:
+                from django.core.mail import send_mail
+                current_site = 'Cityfusion'
+                subject = render_to_string('events/creation_email_subject.txt',
+                                           { 'site': current_site,
+                                             'title': event_obj.name })
+                # Email subjects are all on one line
+                subject= ''.join( subject.splitlines() )
+                message = render_to_string('events/creation_email.txt',
+                                           { 'authentication_key': event_obj.authentication_key,
+                                             'slug': event_obj.slug,
+                                             'site': current_site } 
+                                           )
+                send_mail( subject,
+                           message, 
+                           settings.DEFAULT_FROM_EMAIL, 
+                           [event_obj.email] )
+            else:
+                print 'New event edit key: http://127.0.0.1:8000/events/edit/' + event_obj.authentication_key + '/'
+                print 'New event public address: http://127.0.0.1:8000/events/view/' + event_obj.slug + '/'
             return HttpResponseRedirect(success_url)
     else:
         form = form_class()
