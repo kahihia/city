@@ -4,6 +4,5 @@ syntax: glob
 venv/*
 \#*\#
 .\#*
-static/
 media/*
 winvenv/*
