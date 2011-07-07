@@ -44,9 +44,9 @@ class JqSplitDateTimeWidget(MultiWidget):
                                                 rendered_widgets[2], rendered_widgets[3])
         
     class Media:
-        css = {
+        css = (
             'css/overcast/jquery-ui-1.8.13.custom.css'
-            }
+            )
         js = (
             'js/mylibs/jquery-1.5.1.min.js',
             'js/mylibs/jquery-ui-1.8.13.custom.min.js',
