@@ -194,7 +194,7 @@ def create(request, form_class=None, success_url=None,
                 event_obj = event_obj.save()
                 form.save_m2m()
                 if send_email:
-                    from django.core.email import send_mail
+                    from django.core.mail import send_mail
                     current_site = Site.objects.get_current()
                     subject = render_to_string('events/creation_email_subject.txt',
                                                { 'site': current_site,
