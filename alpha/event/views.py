@@ -168,7 +168,7 @@ def view(request, slug=None):
                               context_instance = RequestContext(request))
 
 def create(request, form_class=None, success_url=None,
-           template_name='events/create_event.html', send_email=False):
+           template_name='events/create_event.html', send_email=True):
     if form_class == None:
         if request.user.is_authenticated():
             form_class = EventFormLoggedIn
