@@ -8,7 +8,7 @@ env.local_settings_file = 'alpha.settings'
 
 def dev():
     env.hosts = ['cityfusion-dev@cityfusion.dev.peakxp.com']
-    env.hg_directory = '/home/cityfusion-dev/src/cityfusion'
+    env.hg_directory = '/home/cityfusion-dev/src'
     env.wsgi_filename = 'djangodev.wsgi'
     env.settings_file = 'alpha.settings_dev'
 
