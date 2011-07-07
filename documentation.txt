@@ -324,7 +324,6 @@ Filter events by date
  + this week, with pages
  + next week, with pages
 
-
 Tuesday, July 5th 2011
 ---------------------------------------
 Brainstorm on things wrong with the site:
@@ -336,3 +335,19 @@ Brainstorm on things wrong with the site:
       displayed using their date, so that the user can better
       understand when they are occuring
     
+Thursday, July 7th 2011
+---------------------------------------
+Additions to the event model have been made:
+
+ - Misc field name changed to price field
+
+The reasoning behind this was unclear to me. It was requested, and
+done. I suppose any more information can be put in the tags.
+
+Work remaining to be done
+-------------------------------------
+ - Event pictures must be able to be added/deleted
+ - CSS is not implemented yet
+ - Venue is not used at the moment but will be very important if the
+ desire is to integrate gps, or google maps functionality
+

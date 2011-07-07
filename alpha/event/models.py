@@ -53,7 +53,7 @@ class Event(models.Model):
     end_time = models.DateTimeField('ending time (optional)',auto_now=False, auto_now_add=False, blank=True, null=True)
     location = models.CharField('location of the event',max_length=500)
     venue = models.ForeignKey('CanadianVenue', blank=True, null=True)    # a specific venue associated with the event
-    misc_notes = models.CharField('miscellaneous small, key info about the event',max_length=40, blank=True, default='')
+    price = models.CharField('event price (optional)',max_length=40, blank=True, default='Free')
 
     #-------------------------------------------------------------
     # django-taggit field for tags--------------------------------
