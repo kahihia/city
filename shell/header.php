@@ -25,20 +25,20 @@
 	
 			<nav id="main-nav">
 				<ul>
-					<li><a href="index2.html">Browse Events</a></li>
-					<li><a href="index.html" class="post current">Post an Event</a></li>
+					<li><a href="">Browse Events</a></li>
+					<li><a href="post-event.php" class="post current">Post an Event</a></li>
 				</ul>
 			</nav>
 	
 			<nav id="user-nav">
 				<ul>
-					<li><a href="#">Log in</a></li>
+					<li><a href="login.php">Sign In</a></li>
 					<li><a href="#">Register</a></li>
 				</ul>
 			</nav>
 	
 			<nav id="city-nav">
-				<a href="">Saskatoon</a>
+				<a href="">Saskatoon <span class="downtick"></span></a>
 			</nav>
 	</header>
 	

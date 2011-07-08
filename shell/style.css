@@ -83,10 +83,12 @@ a:hover { text-decoration: underline; }
 #main-nav a.post { margin-left: 4px; }
 #main-nav a.post.current { margin: 0; padding: 0 23px; }
 
-#user-nav { position: absolute; top: 10px; right: 11px; font-size: 11px; }
-#user-nav li { padding-right: 19px; }
+#user-nav { position: absolute; top: 10px; right: 17px; font-size: 11px; }
+#user-nav li { padding-right: 7px; }
+#user-nav a { padding: 5px; }
 
-#city-nav { position: absolute; bottom: 14px; right: 30px; font-size: 13px; }
+#city-nav { position: absolute; bottom: 14px; right: 30px; font-size: 13px; float: right; width: 100px; text-align: right; }
+#city-nav .downtick { display: block; float: right; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 4px solid #fff; margin: 5px 0 0 6px; }
 
 #date-nav { height: 40px; padding-left: 97px; background: url('img/see-events-for.png') no-repeat 9px 50%; font-size: 12px; }
 #date-nav li { float: left; }
@@ -101,30 +103,87 @@ a:hover { text-decoration: underline; }
 #tags a { display: block; height: 26px; padding-left: 9px; border-radius: 3px; font-weight: bold; line-height: 27px; }
 #tags a.current, #tags a:hover { background: #343796; color: #fff; text-decoration: none; }
 #tags li:first-child { padding-bottom: 3px; border-bottom: 1px solid #ccc; margin-bottom: 3px; }
+#tags span.downtick, #tags span.uptick { display: block; float: left; width: 0; height: 0; border-left: 3px solid transparent; border-right: 3px solid transparent; border-top: 3px solid #000; margin: 3px 2px; }
+#tags span.uptick { border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 3px solid #000; border-top: 0; margin: 3px 2px; }
+#tags span.tickbox { display: block; float: left; height: 9px; width: 10px; margin: 8px 4px 0 0; border: 1px solid #999; }
 #tags a.more { color: #333; font-size: 11px; }
-#tags a.more:hover { background: #fff; color: #666; }
+#tags a.more:hover { background: #fff; opacity: 0.8; }
+
+#pagination ul { margin-top: 10px; }
+#pagination li { float: left; }
 
 .body { min-height: 600px; width: 600px; padding: 0 20px; float: left; border-left: 1px solid #ccc; border-right: 1px solid #ccc; }
-.body li { position: relative; display: block; margin: 20px 0; color: #666; }
-.body li img { position: absolute; height: 40px; width: 40px; top: 0; left: 0; }
-.body li a { padding: 5px 0 5px 50px; display: block; font-weight: bold; }
-.body li ul { position: absolute; left: 50px; top: 20px; }
-.body li li { float: left; margin: 5px 10px 0 0; padding: 0; }
+.noborder { border: 0; }
 
-.body h1 { font-size: 19px; font-weight: bold; margin: 25px 0; }
+.events li { position: relative; display: block; margin: 20px 0; color: #666; }
+.events li img { position: absolute; height: 40px; width: 40px; top: 0; left: 0; }
+.events li a { padding: 5px 0 5px 50px; display: block; font-weight: bold; }
+.events li ul { position: absolute; left: 50px; top: 20px; }
+.events li li { float: left; margin: 5px 10px 0 0; padding: 0; }
 
+.body h1 { font-size: 20px; font-weight: bold; margin: 25px 0; }
+.small { color: #999; font-size: 11px; }
 
 form {  }
-.body input { height: 18px; padding: 3px; box-shadow: 0 0 2px #f7f7f7; border: 1px solid #919191; font-size: 15px; } 
-.body .password { font-size: 16px; }
-.body input.submit { background: #343796; text-shadow: 1px 1px 0 #000; }
+form p { margin: 0 0 20px; }
+form p label { font-weight: 11px; font-weight: bold; }
+input.text, textarea, form input.othertext, select { height: 18px; margin: 0 0 20px; padding: 6px; background: #f9f9f9; box-shadow: inset 0 0 4px #999; border: 1px solid #919191; border-radius: 2px; font-size: 15px; width: 300px; } 
+p.remember { margin: 0 0 10px; }
+p.remember label { color: #4c4c4c; font-size: 11px; font-weight: normal; margin-left: 2px; }
+
+form select { height: 32px; width: 100px; margin-left: 8px; background: #fff; border-radius: 0px; font-size: 12px; vertical-align: top; }
+form input.file { margin-top: 8px; }
+form input.date { background: #f9f9f9 url('img/calendar.png') no-repeat 131px 50%; width: 140px; }
+form .addevent { font-size: 11px; font-weight: bold; margin: -2px 0 0 5px; }
+
+form li.label { width: 130px; margin-top: 10px; float: left; color: #333; font-size: 12px; font-weight: bold; }
+form li ul { overflow: hidden; width: 420px; margin-top: 8px; }
+form li ul li { float: left; width: 100px; margin-bottom: 10px; font-size: 12px; font-weight: normal;  }
+form li.other { display: block; width: 400px; margin: 0; }
+form input.othertext { height: 14px; margin-left: 7px; width: 200px; }
+input.wide, textarea.wide { width: 400px; }
+textarea { height: 75px; }
+form .forgot { padding-left: 7px; font-size: 11px; }
+form .password { font-size: 16px; }
+.button {
+	color: #fff;
+	background: #4f53a9;
+	background: -moz-linear-gradient(top, #4f53a9 0%, #24267e 100%); /* FF3.6+ */
+	background: -webkit-linear-gradient(top, #4f53a9 0%,#24267e 100%); /* Chrome10+,Safari5.1+ */
+	background: -ms-linear-gradient(top, #4f53a9 0%,#24267e 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4f53a9', endColorstr='#24267e',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #4f53a9 0%,#24267e 100%);
+	box-shadow: 1px 2px 0 #d9d9d9;
+	text-shadow: 1px 1px 0 #000;
+	border-top: 1px solid #8183bf;
+	border-left: 1px solid #5a5caa;
+	border-right: 1px solid #242669;
+	border-bottom: 1px solid #171949; 
+	border-radius: 5px; 
+	height: 35px;
+	margin-top: 30px;
+	padding: 0 20px;
+	font-size: 13px;
+}
+.button:hover {
+	cursor: pointer;
+	background: -moz-linear-gradient(top, #6568b7 0%, #32358a 100%);
+	background: -webkit-linear-gradient(top, #5f61b3 0%, #2c2f85 100%);
+	background: -ms-linear-gradient(top, #6568b7 0%, #32358a 100%);
+	background: linear-gradient(top, #6568b7 0%, #32358a 100%);
+}
+.button:active { 
+	background: #494da0;	
+}
+.page { width: 100px; }
+
 
 
 #ads { width: 125px; overflow: hidden; padding: 20px 0 0 11px; }
 #ads p { margin-bottom: 10px; color: #999; font-size: 11px; }
 #ads li { height: 125px; width: 125px; float: left; margin: 0 0 10px; background: #d9d9d9; }
 
-#footer { height: 56px; width: 100%; margin: 0 auto; background: #f2f2f2; line-height: 56px; font-size: 12px; font-weight: bold; }
+#footer { height: 56px; width: 100%; margin: 0 auto; background: #f2f2f2; line-height: 57px; font-size: 12px; font-weight: bold; }
 #footer p { float: left; color: #797979; padding-left: 9px; }
-#footer li { float: left; padding-left: 10px; }
+#footer li { float: left; padding-left: 15px; }
 #footer a { color: #343796; }

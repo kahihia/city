@@ -4,6 +4,7 @@
 			<nav>
 				<ul>
 					<li><a href="">Feedback</a></li>
+					<li><a href="">Advertise</a></li>
 				</ul>
 			</nav>
 		</div>
