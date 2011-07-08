@@ -6,6 +6,7 @@ import sha
 import random
 from taggit.managers import TaggableManager
 
+
 class Event(models.Model):
     class Meta:
         verbose_name_plural = 'Events'
@@ -32,7 +33,9 @@ class Event(models.Model):
     def save(self, *args, **kwargs):
         if self.pk is None:
             self.authentication_key = ''.join(random.choice(string.ascii_letters + '0123456789') for x in xrange(40) )
-        self.slug = slugify(self.name)
+        
+        self.slug = self.uniqueSlug()
+
         super(Event, self).save(*args, **kwargs)
         return self
 
@@ -59,6 +62,18 @@ class Event(models.Model):
     # django-taggit field for tags--------------------------------
     #=============================================================
     tags = TaggableManager()
+
+    def uniqueSlug(self):
+        suffix = 0
+        potential = base = slugify(self.name)
+        while True:
+            if suffix:
+                potential = base + str(suffix)
+            try:
+                conflict = Event.events.get(slug=potential)
+            except ObjectDoesNotExist:
+                return potential
+            suffix = suffix + 1
 
 class Venue(models.Model):
     street = models.CharField(max_length=250)
