@@ -109,8 +109,11 @@ a:hover { text-decoration: underline; }
 #tags a.more { color: #333; font-size: 11px; }
 #tags a.more:hover { background: #fff; opacity: 0.8; }
 
-#pagination ul { margin-top: 10px; }
+#pagination { margin-top: 13px; }
 #pagination li { float: left; }
+#pagination a { padding: 4px 7px; font-size: 12px; }
+#pagination a:hover {background: #4f53a9; color: #fff; text-decoration: none; }
+#pagination a.current { background: #ddd; color: #000; }
 
 .body { min-height: 600px; width: 600px; padding: 0 20px; float: left; border-left: 1px solid #ccc; border-right: 1px solid #ccc; }
 .noborder { border: 0; }
