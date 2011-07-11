@@ -42,6 +42,11 @@
 			</nav>
 	</header>
 	
+	<aside id="city-widget">
+		<p>Cityfusion is currently only available in Saskatoon, Canada.</p>
+		<p><span class="white">Want your city to be next?</span><br><a href="/feedback">Let us know.</a></p>
+	</aside>
+	
 	<nav id="date-nav">
 		<ul>
 			<li><a href="" class="current">Today</a></li>

@@ -20,6 +20,12 @@
 <!-- asynchronous analytics code by Mathias Bynens; change UA-XXXXX-X to your own code; http://mathiasbynens.be/notes/async-analytics-snippet -->
 <!-- this can also be placed in the <head> if you want page views to be tracked quicker -->
 <script>
+$('#city-nav a').bind('click', function() {
+  $(this).toggleClass('active');
+  $('#city-widget').toggleClass('active');
+	return false;
+});
+
 var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
 (function(d, t) {
 	var g = d.createElement(t),
