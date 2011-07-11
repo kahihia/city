@@ -21,9 +21,18 @@
 <!-- this can also be placed in the <head> if you want page views to be tracked quicker -->
 <script>
 $('#city-nav a').bind('click', function() {
-  $(this).toggleClass('active');
-  $('#city-widget').toggleClass('active');
+  $('#city-nav a, #city-widget').toggleClass('active');
 	return false;
+});
+
+$('html').click(function() {
+	if($('#city-widget').hasClass('active') == true)
+	{
+	  $('#city-nav a, #city-widget').toggleClass('active');
+	}
+});
+$('#city-widget').click(function(event){
+	event.stopPropagation();
 });
 
 var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];

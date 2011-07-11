@@ -54,6 +54,6 @@
 			<li><a href="">This weekend</a></li>
 			<li><a href="">This week</a></li>
 			<li><a href="">Next week</a></li>			
-			<li><a href="">Jump to date</a></li>
+			<li><a href="" class="jump">Jump to date</a></li>
 		</ul>
 	</nav>
