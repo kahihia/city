@@ -8,8 +8,44 @@ from taggit.managers import TaggableManager
 
 from PIL import Image
 
-from Event.utils import picture_file_path
-from Event import EVENT_RESIZE_METHOD, EVENT_PICTURE_DIR
+from alpha.event import EVENT_PICTURE_DIR, EVENT_RESIZE_METHOD
+
+def picture_file_path(instance = None, filename = None):
+    """
+    This is used by the model and is defined in the Django
+    documentation as a function which is used by the upload_to karg of
+    an ImageField I will copy the relevant documentation here from
+    FileField.upload_to:
+    
+    This may also be a callable, such as a function, which will be
+    called to obtain the upload path, including the filename. This
+    callable must be able to accept two arguments, and return a
+    Unix-style path (with forward slashes) to be passed along to the
+    storage system. The two arguments that will be passed are:
+    
+    Argument      Description 
+
+    ------------------------------------------------------------------
+
+    instance      An instance of the model where the
+                  FileField is defined. More specifically, this is 
+                  the particular instance where the current file is 
+                  being attached.
+                  
+                  In most cases, this object will not have been saved 
+                  to the database yet, so if it uses the default 
+                  AutoField, it might not yet have a value for its 
+                  primary key field.
+
+    filename 	  The filename that was originally given to the
+                  file. This may or may not be taken into account 
+                  when determining the final destination path.
+
+    Also has one optional argument: FileField.storage, a storage
+    object, which handles the storage and retrieval of your files.
+    """
+    return os.path.join(EVENT_PICTURE_DIR, instance.pk, filename)
+
 
 class Event(models.Model):
     class Meta:
@@ -147,6 +183,12 @@ class Event(models.Model):
                                            resized_pic_file )
                                   
 
+def create_default_pictures(event=None, created=False, **kwargs):
+    if created:
+        for size in EVENT_DEFAULT_SIZES:
+            instance.create_resized(size)
+models.signals.post_save.connect(create_default_pictures, sender=Event)
+
 class Venue(models.Model):
     street = models.CharField(max_length=250)
     city = models.CharField(max_length=200)
@@ -157,3 +199,4 @@ class Venue(models.Model):
 class CanadianVenue(Venue):
     province = models.CharField(max_length=200)
     postal_code = models.CharField(max_length=50)
+
