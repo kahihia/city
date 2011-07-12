@@ -127,7 +127,7 @@ class Event(models.Model):
         Returns: The file name of the picture of a given size.
         """
         return os.path.join(EVENT_PICTURE_DIR, str(self.pk), 'resized_pic', 
-                            str(size), self.picture.file.name)
+                            str(size), os.path.basename(self.picture.name))
 
     def picture_url(self, size):
         """

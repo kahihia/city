@@ -4,7 +4,7 @@ syntax: glob
 venv/*
 \#*\#
 .\#*
-media/*
 winvenv/*
 syntax: regexp
 ^static/
+^media/
