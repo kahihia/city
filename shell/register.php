@@ -4,7 +4,7 @@
 	<div id="main">
 		<section class="body">
 
-			<h1>Sign In to Cityfusion</h1>
+			<h1>Register for Cityfusion</h1>
 
 			<form>
 			
@@ -14,15 +14,11 @@
 			</p>
 			
 			<p>
-			<label for="password">Password</label><a href="" class="forgot">Forgot your password?</a><br>
+			<label for="password">Password</label><br>
 			<input id="password" type="password" class="text password">
 			</p>
 			
-			<p class="remember">
-			<input type="checkbox" id="remember"><label for="remember">Remember me</label>
-			</p>
-			
-			<input type="submit" class="submit button close" value="Sign In">
+			<input type="submit" class="submit button close" value="Register">
 			
 			</form>
 

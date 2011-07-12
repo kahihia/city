@@ -33,7 +33,7 @@
 			<nav id="user-nav">
 				<ul>
 					<li><a href="login.php">Sign In</a></li>
-					<li><a href="#">Register</a></li>
+					<li><a href="register.php">Register</a></li>
 				</ul>
 			</nav>
 	

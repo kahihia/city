@@ -100,7 +100,7 @@ a:hover { text-decoration: underline; }
 
 #tags { width: 140px; margin: 20px 10px 0 0; float: left; font-size: 12px; }
 #tags li { height: 26px; }
-#tags a { display: block; height: 26px; padding-left: 9px; border-radius: 3px; font-weight: bold; line-height: 27px; }
+#tags a { display: block; height: 26px; padding-left: 9px; -moz-border-radius: 3px; border-radius: 3px; font-weight: bold; line-height: 27px; }
 #tags a.current, #tags a:hover { background: #343796; color: #fff; text-decoration: none; }
 #tags li:first-child { padding-bottom: 3px; border-bottom: 1px solid #ccc; margin-bottom: 3px; }
 #tags span.downtick, #tags span.uptick { display: block; float: left; width: 0; height: 0; border-left: 3px solid transparent; border-right: 3px solid transparent; border-top: 3px solid #000; margin: 3px 2px; }
@@ -111,82 +111,57 @@ a:hover { text-decoration: underline; }
 
 #pagination { margin-top: 13px; }
 #pagination li { float: left; }
-#pagination a { padding: 4px 7px; font-size: 12px; }
+#pagination a { padding: 4px 7px; font-size: 11px; font-weight: bold; }
 #pagination a:hover {background: #4f53a9; color: #fff; text-decoration: none; }
 #pagination a.current { background: #ddd; color: #000; }
 
 .body { min-height: 600px; width: 600px; padding: 0 20px; float: left; border-left: 1px solid #ccc; border-right: 1px solid #ccc; }
 .noborder { border: 0; }
 
-.events li { position: relative; display: block; margin: 20px 0; color: #666; }
+.events li { position: relative; display: block; margin: 20px 0; color: #666; height: 40px; }
 .events li img { position: absolute; height: 40px; width: 40px; top: 0; left: 0; }
-.events li a { padding: 5px 0 5px 50px; display: block; font-weight: bold; }
+.events li a { position: absolute; top: 0; left: 45px; padding: 5px; font-weight: bold; }
 .events li ul { position: absolute; left: 50px; top: 20px; }
-.events li li { float: left; margin: 5px 10px 0 0; padding: 0; }
+.events li li { float: left; margin: 5px 10px 0 0; padding: 0; height: 15px; font-size: 12px; }
 
 .body h1 { font-size: 20px; font-weight: bold; margin: 25px 0; }
 .small { color: #999; font-size: 11px; }
 
 form {  }
-form p { margin: 0 0 20px; }
-form p label { font-weight: 11px; font-weight: bold; }
-input.text, textarea, form input.othertext, select { height: 18px; margin: 0 0 20px; padding: 6px; background: #f9f9f9; box-shadow: inset 0 0 4px #999; border: 1px solid #919191; border-radius: 2px; font-size: 15px; width: 300px; } 
-p.remember { margin: 0 0 10px; }
-p.remember label { color: #4c4c4c; font-size: 11px; font-weight: normal; margin-left: 2px; }
-
-form select { height: 32px; width: 100px; margin-left: 8px; background: #fff; border-radius: 0px; font-size: 12px; vertical-align: top; }
-form input.file { margin-top: 8px; }
-form input.date { background: #f9f9f9 url('img/calendar.png') no-repeat 131px 50%; width: 140px; }
-form .addevent { font-size: 11px; font-weight: bold; margin: -2px 0 0 5px; }
+p input.text { margin-top: 5px;}
+p label { font-weight: 11px; font-weight: bold; }
 
 form li.label { width: 130px; margin-top: 10px; float: left; color: #333; font-size: 12px; font-weight: bold; }
 form li ul { overflow: hidden; width: 420px; margin-top: 8px; }
 form li ul li { float: left; width: 100px; margin-bottom: 10px; font-size: 12px; font-weight: normal;  }
 form li.other { display: block; width: 400px; margin: 0; }
-form input.othertext { height: 14px; margin-left: 7px; width: 200px; }
+
+input.text, textarea, form input.othertext, select { height: 18px; margin: 0 0 20px; padding: 6px; background: #f9f9f9; box-shadow: inset 0 0 4px #999; border: 1px solid #919191; border-radius: 2px; font-size: 15px; width: 300px; } 
 input.wide, textarea.wide { width: 400px; }
+input.othertext { height: 14px; margin-left: 7px; width: 200px; }
+input.file { margin-top: 8px; }
+input.date { background: #f9f9f9 url('img/calendar.png') no-repeat 131px 50%; width: 140px; }
+select { height: 32px; width: 100px; margin-left: 8px; background: #fff; border-radius: 0px; font-size: 12px; vertical-align: top; }
 textarea { height: 75px; }
+
+form .addevent { font-size: 11px; font-weight: bold; margin: -2px 0 0 5px; }
 form .forgot { padding-left: 7px; font-size: 11px; }
 form .password { font-size: 16px; }
-.button {
-	color: #fff;
-	background: #4f53a9;
-	background: -moz-linear-gradient(top, #4f53a9 0%, #24267e 100%); /* FF3.6+ */
-	background: -webkit-linear-gradient(top, #4f53a9 0%,#24267e 100%); /* Chrome10+,Safari5.1+ */
-	background: -ms-linear-gradient(top, #4f53a9 0%,#24267e 100%); /* IE10+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4f53a9', endColorstr='#24267e',GradientType=0 ); /* IE6-9 */
-	background: linear-gradient(top, #4f53a9 0%,#24267e 100%);
-	box-shadow: 1px 2px 0 #d9d9d9;
-	text-shadow: 1px 1px 0 #000;
-	border-top: 1px solid #8183bf;
-	border-left: 1px solid #5a5caa;
-	border-right: 1px solid #242669;
-	border-bottom: 1px solid #171949; 
-	border-radius: 5px; 
-	height: 35px;
-	margin-top: 30px;
-	padding: 0 20px;
-	font-size: 13px;
-}
-.button:hover {
-	cursor: pointer;
-	background: -moz-linear-gradient(top, #6568b7 0%, #32358a 100%);
-	background: -webkit-linear-gradient(top, #5f61b3 0%, #2c2f85 100%);
-	background: -ms-linear-gradient(top, #6568b7 0%, #32358a 100%);
-	background: linear-gradient(top, #6568b7 0%, #32358a 100%);
-}
-.button:active { 
-	background: #494da0;	
-}
-.page { width: 100px; }
+form .remember { margin: 0 0 10px; }
+form .remember label { color: #4c4c4c; font-size: 11px; font-weight: normal; margin-left: 2px; }
+form .description { font-size: 11px; color: #999; }
 
-
+.button { color: #fff; cursor: pointer; background: #4f53a9; background: -moz-linear-gradient(top, #4f53a9 0%, #24267e 100%); background: -webkit-linear-gradient(top, #4f53a9 0%,#24267e 100%); background: -ms-linear-gradient(top, #4f53a9 0%,#24267e 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4f53a9', endColorstr='#24267e',GradientType=0 ); background: linear-gradient(top, #4f53a9 0%,#24267e 100%); box-shadow: 1px 2px 0 #d9d9d9; text-shadow: 1px 1px 0 #000; border-top: 1px solid #8183bf; border-left: 1px solid #5a5caa; border-right: 1px solid #242669; border-bottom: 1px solid #171949; -moz-border-radius: 5px; border-radius: 5px; height: 35px; margin-top: 30px; padding: 0 20px; font-size: 13px; }
+.button.close { margin-top: 0; }
+.button:hover { background: -moz-linear-gradient(top, #6568b7 0%, #32358a 100%); background: -webkit-linear-gradient(top, #5f61b3 0%, #2c2f85 100%); background: -ms-linear-gradient(top, #6568b7 0%, #32358a 100%); background: linear-gradient(top, #6568b7 0%, #32358a 100%); }
+.button:active { background: #494da0;	}
+.button.page { width: 90px; }
 
 #ads { width: 125px; overflow: hidden; padding: 20px 0 0 11px; }
 #ads p { margin-bottom: 10px; color: #999; font-size: 11px; }
 #ads li { height: 125px; width: 125px; float: left; margin: 0 0 10px; background: #d9d9d9; }
 
-#footer { height: 56px; width: 100%; margin: 0 auto; background: #f2f2f2; line-height: 57px; font-size: 12px; font-weight: bold; }
+#footer { height: 56px; width: 100%; margin: 0 auto; background: #eee; line-height: 57px; font-size: 12px; font-weight: bold; }
 #footer p { float: left; color: #797979; padding-left: 9px; }
 #footer li { float: left; padding-left: 15px; }
 #footer a { color: #343796; }

@@ -22,7 +22,10 @@
 						<option>12:00am</option>
 					</select>
 					<a href="" class="addevent">- Remove end time</a></a></li>
-					<li class="label"><label for="description">Description</label></li><li><textarea id="description" class="wide" rows=5></textarea></li><li id="description-info"></li>
+					<li class="label">
+						<label for="description">Description</label>
+						<span class="description">Optional</span>
+					</li><li><textarea id="description" class="wide" rows=5></textarea></li><li id="description-info"></li>
 					<li class="label">Tags</li>
 					<li>
 						<ul>
