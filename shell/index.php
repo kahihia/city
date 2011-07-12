@@ -5,16 +5,16 @@
 		<aside id="tags">
 			<nav>
 				<ul>
-					<li><a href="" class="current">All Categories</a></li>
+					<li><a href="">All Categories</a></li>
+					<li><a href="">Tag name</a></li>
+					<li><a href="">Tag name</a></li>
+					<li><a href="">Tag name</a></li>
+					<li><a href="" class="active">Tag name</a></li>
 					<li><a href="">Tag name</a></li>
 					<li><a href="">Tag name</a></li>
 					<li><a href="">Tag name</a></li>
 					<li><a href="">Tag name</a></li>
-					<li><a href="">Tag name</a></li>
-					<li><a href="">Tag name</a></li>
-					<li><a href="">Tag name</a></li>
-					<li><a href="">Tag name</a></li>
-					<li><a href="">Tag name</a></li>
+					<li><a href="" class="active">Tag name</a></li>
 					<li><a href="">Tag name</a></li>
 					<li><a href="" class="more"><span class="tickbox"><span class="downtick"></span></span>More</a></li>
 					<li><a href="" class="more"><span class="tickbox"><span class="uptick"></span></span>Fewer</a></li>
@@ -31,47 +31,47 @@
 	
 			<ul class="events">
 				<li>
-					<img src="">
+					<img src="" alt="">
 					<a href="">Union Square Free Summer Salsa Concert Series</a><br>
 					<ul><li>6:00PM</li><li>Union Square</li><li>$5</li><li>Music</li></ul>				
 				</li>
 				<li>
-					<img src="">
+					<img src="" alt="">
 					<a href="">Union Square Free Summer Salsa Concert Series</a><br>
 					<ul><li>6:00PM</li><li>Union Square</li><li>$5</li><li>Music</li></ul>				
 				</li>
 				<li>
-					<img src="">
+					<img src="" alt="">
 					<a href="">Union Square Free Summer Salsa Concert Series</a><br>
 					<ul><li>6:00PM</li><li>Union Square</li><li>$5</li><li>Music</li></ul>				
 				</li>
 				<li>
-					<img src="">
+					<img src="" alt="">
 					<a href="">Union Square Free Summer Salsa Concert Series</a><br>
 					<ul><li>6:00PM</li><li>Union Square</li><li>$5</li><li>Music</li></ul>				
 				</li>
 				<li>
-					<img src="">
+					<img src="" alt="">
 					<a href="">Union Square Free Summer Salsa Concert Series</a><br>
 					<ul><li>6:00PM</li><li>Union Square</li><li>$5</li><li>Music</li></ul>				
 				</li>
 				<li>
-					<img src="">
+					<img src="" alt="">
 					<a href="">Union Square Free Summer Salsa Concert Series</a><br>
 					<ul><li>6:00PM</li><li>Union Square</li><li>$5</li><li>Music</li></ul>				
 				</li>
 				<li>
-					<img src="">
+					<img src="" alt="">
 					<a href="">Union Square Free Summer Salsa Concert Series</a><br>
 					<ul><li>6:00PM</li><li>Union Square</li><li>$5</li><li>Music</li></ul>				
 				</li>
 				<li>
-					<img src="">
+					<img src="" alt="">
 					<a href="">Union Square Free Summer Salsa Concert Series</a><br>
 					<ul><li>6:00PM</li><li>Union Square</li><li>$5</li><li>Music</li></ul>				
 				</li>
 				<li>
-					<img src="">
+					<img src="" alt="">
 					<a href="">Union Square Free Summer Salsa Concert Series</a><br>
 					<ul><li>6:00PM</li><li>Union Square</li><li>$5</li><li>Music</li></ul>				
 				</li>
@@ -80,18 +80,18 @@
 			<p>
 				<button id="previous" class="button page">Previous</button>
 				<button id="next" class="button page">Next</button>
-				<ul id="pagination">
-					<li><a href="" class="current">1</a></li>
-					<li><a href="">2</a></li>
-					<li><a href="">3</a></li>
-					<li><a href="">4</a></li>
-					<li><a href="">5</a></li>
-					<li><a href="">6</a></li>
-					<li><a href="">7</a></li>
-					<li><a href="">8</a></li>
-					<li><a href="">9</a></li>
-				</ul>
 			</p>
+			<ul id="pagination">
+				<li><a href="" class="current">1</a></li>
+				<li><a href="">2</a></li>
+				<li><a href="">3</a></li>
+				<li><a href="">4</a></li>
+				<li><a href="">5</a></li>
+				<li><a href="">6</a></li>
+				<li><a href="">7</a></li>
+				<li><a href="">8</a></li>
+				<li><a href="">9</a></li>
+			</ul>
 
 		</section><!-- .body -->
 
