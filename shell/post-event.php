@@ -11,17 +11,17 @@
 				<ul>
 					<li class="label"><label for="name">Event Name</label></li><li><input id="name" type="text" class="text wide"></li><li id="name-info"></li>
 					<li class="label"><label for="location">Location</label></li><li><input id="location" type="text" class="text wide"></li><li id="location-info"></li>
-					<li class="label"><label for="when">When</label></li><li><input id="when" type="text" class="text wide date">
+					<li class="label"><label for="start">When</label></li><li><input id="start" type="text" class="text wide date">
 					<select name="time">
 						<option>12:00am</option>
 					</select>
 					<a href="" class="addevent">+ Add end time</a></li>
 					<li id="when-info"></li>
-					<li class="label"></li><li><input id="when" type="text" class="text wide date">
+					<li class="label"></li><li><input id="end" type="text" class="text wide date">
 					<select name="time">
 						<option>12:00am</option>
 					</select>
-					<a href="" class="addevent">- Remove end time</a></a></li>
+					<a href="" class="addevent">- Remove end time</a></li>
 					<li class="label"><label for="description">Description</label></li><li><textarea id="description" class="wide" rows=5></textarea></li><li id="description-info"></li>
 					<li class="label">Tags</li>
 					<li>
