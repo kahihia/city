@@ -1,7 +1,7 @@
 {% if event != null %}
 <div class="event_picture">
   {% load event_pictures %}
-  <img src="{% event_picture_url %}" alt="" width="100%" size="100%">
+  <img src="{% event_picture_url event %}" alt="" width="40" size="40">
 </div>
 <div class="event_small_info">
   <div class="name">

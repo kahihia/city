@@ -1,15 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+from django.core.exceptions import ObjectDoesNotExist
 import string
 import sha
 import random
 from taggit.managers import TaggableManager
-
+import os
+import os.path
 from PIL import Image
-
-from alpha.event import EVENT_PICTURE_DIR, EVENT_RESIZE_METHOD
-
+import datetime
+from alpha.event import EVENT_PICTURE_DIR, EVENT_RESIZE_METHOD, EVENT_DEFAULT_SIZES
+from StringIO import StringIO
+from django.core.files.base import ContentFile
 def picture_file_path(instance = None, filename = None):
     """
     This is used by the model and is defined in the Django
@@ -44,7 +47,7 @@ def picture_file_path(instance = None, filename = None):
     Also has one optional argument: FileField.storage, a storage
     object, which handles the storage and retrieval of your files.
     """
-    return os.path.join(EVENT_PICTURE_DIR, instance.pk, filename)
+    return os.path.join(EVENT_PICTURE_DIR, datetime.date.today().isoformat(), filename)
 
 
 class Event(models.Model):
@@ -123,8 +126,8 @@ class Event(models.Model):
         """
         Returns: The file name of the picture of a given size.
         """
-        return os.path.join(EVENT_PICTURE_DIR, self.pk, 'resized_pic', 
-                            str(size), self.image.name)
+        return os.path.join(EVENT_PICTURE_DIR, str(self.pk), 'resized_pic', 
+                            str(size), self.picture.file.name)
 
     def picture_url(self, size):
         """
@@ -183,11 +186,40 @@ class Event(models.Model):
                                            resized_pic_file )
                                   
 
-def create_default_pictures(event=None, created=False, **kwargs):
+def create_default_pictures(instance=None, created=False, **kwargs):
+    """
+    post_save
+
+    django.db.models.signals.post_save
+
+    Like pre_save, but sent at the end of the save() method.
+    
+    Arguments sent with this signal:
+
+    sender
+      The model class.
+
+    instance
+      The actual instance being saved.
+
+    created
+      A boolean; True if a new record was created.
+
+    raw
+      A boolean; True if the model is saved exactly as presented
+      (i.e. when loading a fixture). One should not query/modify other
+      records in the database as the database might not be in a
+      consistent state yet.
+
+    using
+      The database alias being used. 
+
+    """
     if created:
         for size in EVENT_DEFAULT_SIZES:
             instance.create_resized(size)
 models.signals.post_save.connect(create_default_pictures, sender=Event)
+
 
 class Venue(models.Model):
     street = models.CharField(max_length=250)

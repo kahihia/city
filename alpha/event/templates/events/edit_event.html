@@ -2,6 +2,9 @@
 
 {% block content %}
 <div id="edit_event">
+  <p>Your current picture: </p>
+  {% load event_pictures %}
+  {% event_picture_url event %}
 <form method="post">
     {% csrf_token %}
     <fieldset>

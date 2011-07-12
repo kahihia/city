@@ -7,18 +7,15 @@ from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
 
-from event.models import Event
-from event.forms import EventFormLoggedIn
-from event.forms import EventForm
-from event.utils import TagInfo
-from event.utils import EventSet
+from event import EVENTS_PER_PAGE, DEFAULT_FROM_EMAIL
+from event.models import Event, picture_file_path
+from event.forms import EventFormLoggedIn, EventForm
+from event.utils import TagInfo, EventSet
 
 from taggit.models import Tag
 
 from datetime import datetime
 from datetime import timedelta
-
-from event import EVENTS_PER_PAGE
 
 import re
 
@@ -177,26 +174,28 @@ def create(request, form_class=None, success_url=None,
             form_class = EventFormLoggedIn
         else:
             form_class = EventForm
-    # on success, redirect to the home page by default
-    # if the user is authenticated, take them to their event page
-    if success_url is None:
-        if request.user.is_authenticated():
-            success_url = reverse('citi_user_events')
-        else:
-            success_url = reverse('home')
 
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
-            #save the form to the database
-            if not request.user.is_authenticated():
-                form.save()
-            else: #if logged in, use the users info to complete form
-                event_obj = form.save(commit=False)
+            event_obj = form.save(commit=False)
+
+            if request.user.is_authenticated():
+                #if logged in, use the users info to complete form
                 event_obj.owner = request.user
-                event_obj.email = request.user.email
-                event_obj = event_obj.save()
-                form.save_m2m() #needed for many-to-many fields
+                event_obj.email = request.user.email #don't really need this line
+
+            
+            # make sure the picture field is filled before saving!
+            if 'picture' in request.FILES:
+                path = picture_file_path(instance=event_obj,
+                                         filename=request.FILES['picture'].name)
+                event_obj.picture = path
+                new_file = event_obj.picture.storage.save(path,
+                                                          request.FILES['picture'])
+                
+            event_obj = event_obj.save() #save to the database
+            form.save_m2m() #needed for many-to-many fields
 
             #email the user
             current_site = 'Cityfusion'
@@ -213,8 +212,16 @@ def create(request, form_class=None, success_url=None,
                                        )
             send_mail( subject,
                        message, 
-                       settings.DEFAULT_FROM_EMAIL, 
+                       DEFAULT_FROM_EMAIL, 
                        [event_obj.email] )
+
+            # on success, redirect to the home page by default
+            # if the user is authenticated, take them to their event page
+            if success_url is None:
+                if request.user.is_authenticated():
+                    success_url = reverse('citi_user_events')
+                else:
+                    success_url = reverse('home')
             #send user off into the abyss...
             return HttpResponseRedirect(success_url)
     else:
@@ -262,5 +269,7 @@ def edit(request,
     # Edit the event
     context = RequestContext(request)
     return render_to_response(template_name,
-                              { 'form': form },
+                              { 'form': form,
+                                'event':event_obj,
+                                'picture_exists': event_obj.picture_exists(40)},
                               context_instance=context)
