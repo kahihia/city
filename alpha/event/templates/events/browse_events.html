@@ -7,15 +7,18 @@
     <h1>Browse events</h1>
     <p>Here is a list of upcoming events</p>
   </header>
-
-  <div id="dates">
-    <p><a href = "{% url event_browse_tags_date date="today" old_tags=current_tags %}">Today</a></p>
-    <p><a href = "{% url event_browse_tags_date date="tomorrow" old_tags=current_tags %}">Tomorrow</a></p>
-    <p><a href = "{% url event_browse_tags_date date="this-weekend" old_tags=current_tags %}">This weekend</a></p>
-    <p><a href = "{% url event_browse_tags_date date="next-weekend" old_tags=current_tags %}">Next weekend</a></p>
-    <p><a href = "{% url event_browse_tags_date date="this-week" old_tags=current_tags %}">This week</a></p>
-    <p><a href = "{% url event_browse_tags_date date="next-week" old_tags=current_tags %}">Next week</a></p>
-  </div>
+      
+  <nav id="date-nav">
+    <ul>
+      <li><a href="{% url event_browse_tags_date date="today" old_tags=current_tags %}" class="current">Today</a></li>
+      <li><a href="{% url event_browse_tags_date date="tomorrow" old_tags=current_tags %}">Tomorrow</a></li>
+      <li><a href="{% url event_browse_tags_date date="this-weekend" old_tags=current_tags %}">This weekend</a></li>
+      <li><a href="{% url event_browse_tags_date date="next-weekend" old_tags=current_tags %}">Next weekend</a></li>
+      <li><a href="{% url event_browse_tags_date date="this-week" old_tags=current_tags %}">This week</a></li>
+      <li><a href="{% url event_browse_tags_date date="next-week" old_tags=current_tags %}">Next week</a></li>			
+      <li><a href="" class="jump">Jump to date</a></li>
+    </ul>
+  </nav>
 
   <div id="tags">
     <h2>Categories</h2>
