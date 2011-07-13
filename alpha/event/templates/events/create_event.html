@@ -1,20 +1,17 @@
 {% extends 'home.html' %}
 
 {% block content %}
-<div id="create_event">
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <fieldset>
-      {{ form.as_p }}
-    </fieldset>
-    <input type="submit" value="Create event"/>
-</form>
 
-<script src="{{ STATIC_URL }}js/mylibs/jquery-ui-1.8.13.custom.min.js"></script>
-<script src="{{ STATIC_URL }}js/jqsplitdatetime.js"></script>
-</div>
-{% endblock %}
-
-{% block css %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/overcast/jquery-ui-1.8.13.custom.css?v=2">
+  <section class="body noborder">
+    <h1>Post Event</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <ul>
+	{{ form.as_ul }}
+	<li>
+	  <input type="submit" class="submit button" value="Post Event">
+	</li>
+      </ul>
+    </form>
+  </section><!-- .body -->
 {% endblock %}

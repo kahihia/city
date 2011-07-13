@@ -1,6 +1,7 @@
 # Create your views here.
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 def custom_404(request):
     return render(request,"404.html")

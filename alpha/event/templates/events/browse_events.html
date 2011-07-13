@@ -2,12 +2,7 @@
 
 {% block content %}
 
-<div id="browse_events">
-  <header>
-    <h1>Browse events</h1>
-    <p>Here is a list of upcoming events</p>
-  </header>
-      
+<div id="browse_events">      
   <nav id="date-nav">
     <ul>
       <li><a href="{% url event_browse_tags_date date="today" old_tags=current_tags %}" class="current">Today</a></li>

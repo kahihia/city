@@ -1,44 +1,14 @@
 {% extends 'home.html' %}
 
 {% block content %}
-<div id="main">
   <section class="body">
-    
     <h1>Sign In to Cityfusion</h1>
-    
     <form method="post">
       {% csrf_token %}
-      
       <fieldset>
 	{{ form.as_p }}
       </fieldset>
-
-      <p>
-	<label for="login">Email</label><br>
-	<input id="login" type="text" class="text">
-      </p>
-      
-      <p>
-	<label for="password">Password</label><a href="" class="forgot">Forgot your password?</a><br>
-	<input id="password" type="password" class="text password">
-      </p>
-      
-      <p class="remember">
-	<input type="checkbox" id="remember"><label for="remember">Remember me</label>
-      </p>
-      
       <input type="submit" class="submit button close" value="Sign In">
-      
     </form>
-    
   </section><!-- .body -->
-</div> <!-- #main -->
-
-  <header>
-    <h1>Log in</h1>
-  </header>
-    <fieldset>
-      {{ form.as_p }}
-      </fieldset>
-</div>
 {% endblock%}

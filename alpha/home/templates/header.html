@@ -13,8 +13,8 @@
   <nav id="user-nav">
     <ul>
       {% if user.is_authenticated %}
-      <li><a href="{% url auth_logout %}">Log out</a></li>
       <li><a href="{% url citi_user_events %}">View your events</a></li>
+      <li><a href="{% url auth_logout %}">Log out</a></li>
       {% else %}
       <li><a href="{% url auth_login %}">Sign In</a></li>
       <li><a href="{% url registration_register %}">Register</a></li>
