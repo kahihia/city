@@ -154,7 +154,8 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
                                 'event_sets':event_sets,
                                 'pages':pages,
                                 'page_less':page_less,
-                                'page_more':page_more},
+                                'page_more':page_more,
+                                'browsing':True},
                               context_instance = RequestContext(request))
 
 def view(request, slug=None):
@@ -229,7 +230,8 @@ def create(request, form_class=None, success_url=None,
     #Send out the form
     context = RequestContext(request)
     return render_to_response(template_name,
-                              { 'form': form },
+                              { 'form': form,
+                                'posting':True},
                               context_instance=context)
 
 def edit(request, 
