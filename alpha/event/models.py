@@ -184,7 +184,7 @@ class Event(models.Model):
         # save the jpeg
         thumb = self.picture.storage.save( self.picture_name(size),
                                            resized_pic_file )
-                                  
+ 
 
 def create_default_pictures(instance=None, created=False, **kwargs):
     """
