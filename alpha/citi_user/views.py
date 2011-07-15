@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from event.models import Event
+from django.contrib.auth import views as auth_views
 
 
 def terms(request):
@@ -12,7 +13,17 @@ def terms(request):
 
 def events(request):
     context = RequestContext(request)
-    user_events = Event.events.filter(owner=request.user)
+    try:
+        user_events = Event.events.filter(owner=request.user)
+    except ObjectDoesNotExist:
+        pass
     return render_to_response('citi_user/events.html',
                               {'user_events':user_events},
                               context_instance = context)
+
+# def login(request, args*, **kwargs):
+#     if request.method =='POST':
+#         if request.POST.get('remember', None):
+#             request.session.set_expiry(0)
+#     #authentication_form=CityAuthForm
+#     return auth_views.login(request,*args,**kwargs)

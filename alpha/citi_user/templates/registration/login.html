@@ -1,16 +1,14 @@
 {% extends 'home.html' %}
 
 {% block content %}
-<div id="login">
-  <header>
-    <h1>Log in</h1>
-  </header>
-  <form class="register-login" method="post">
-    {% csrf_token %}
-    <fieldset>
-      {{ form.as_p }}
+  <section class="body">
+    <h1>Sign In to Cityfusion</h1>
+    <form method="post">
+      {% csrf_token %}
+      <fieldset>
+	{{ form.as_p }}
       </fieldset>
-    <input type="submit" value="Log in">
-  </form>
-</div>
+      <input type="submit" class="submit button close" value="Sign In">
+    </form>
+  </section><!-- .body -->
 {% endblock%}

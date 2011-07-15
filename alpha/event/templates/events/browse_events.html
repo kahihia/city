@@ -1,75 +1,97 @@
 {% extends 'home.html' %}
 
 {% block content %}
+<nav id="date-nav">
+  <ul>
+    <li>
+      <a href="{% url event_browse_tags_date date="today" old_tags=current_tags %}" {% if page_date == "today" %}class="current"{% endif %}>Today</a>
+    </li>
+    <li>
+      <a href="{% url event_browse_tags_date date="tomorrow" old_tags=current_tags %}" {% if page_date == "tomorrow" %}class="current"{% endif %}>Tomorrow</a>
+    </li>
+    <li>
+      <a href="{% url event_browse_tags_date date="this-weekend" old_tags=current_tags %}" {% if page_date == "this-weekend" %}class="current"{% endif %}>This weekend</a>
+    </li>
+    <li>
+      <a href="{% url event_browse_tags_date date="next-weekend" old_tags=current_tags %}" {% if page_date == "next-weekend" %}class="current"{% endif %}>Next weekend</a>
+    </li>
+    <li>
+      <a href="{% url event_browse_tags_date date="this-week" old_tags=current_tags %}" {% if page_date == "this-week" %}class="current"{% endif %}>This week</a>
+    </li>
+    <li>
+      <a href="{% url event_browse_tags_date date="next-week" old_tags=current_tags %}" {% if page_date == "next-week" %}class="current"{% endif %}>Next week</a>
+    </li>			
+    <li>
+      <a href="" class="jump">Jump to date</a>
+    </li>
+  </ul>
+</nav>
 
-<div id="browse_events">
-  <header>
-    <h1>Browse events</h1>
-    <p>Here is a list of upcoming events</p>
-  </header>
-
-  <div id="dates">
-    <p><a href = "{% url event_browse_tags_date date="today" old_tags=current_tags %}">Today</a></p>
-    <p><a href = "{% url event_browse_tags_date date="tomorrow" old_tags=current_tags %}">Tomorrow</a></p>
-    <p><a href = "{% url event_browse_tags_date date="this-weekend" old_tags=current_tags %}">This weekend</a></p>
-    <p><a href = "{% url event_browse_tags_date date="next-weekend" old_tags=current_tags %}">Next weekend</a></p>
-    <p><a href = "{% url event_browse_tags_date date="this-week" old_tags=current_tags %}">This week</a></p>
-    <p><a href = "{% url event_browse_tags_date date="next-week" old_tags=current_tags %}">Next week</a></p>
-  </div>
-
-  <div id="tags">
-    <h2>Categories</h2>
+<aside id="tags">
+  <nav>
+    <ul>
     {% for tag in all_tags %}
       {% if tag.slug == "" %}
-        <p><a href = "{% url event_browse_date date=page_date%}">{{ tag.name }} ({{ tag.number }})</a></p>
+      <li>
+	<a href = "{% url event_browse_date date=page_date %}"{{ tag.status|safe }}>{{ tag.name }} ({{ tag.number }})</a>
+      </li>
       {% else %}
         {% if page_date %}
           {% if page_num < 2 %}
-            <p><a href = "{% url event_browse_tags_date old_tags=tag.slug date=page_date %}">{{ tag.name }} ({{ tag.number }})</a></p>
-          {% else %}
-            <p><a href = "{% url event_browse_tags_date_num old_tags=tag.slug date=page_date num=page_num %}">{{ tag.name }} ({{ tag.number }})</a></p>
-          {% endif %}
-        {% else %}
-          <p><a href = "{% url event_browse_tags old_tags=tag.slug %}">{{ tag.name }} ({{ tag.number }})</a></p>
-        {% endif %}
+            <li>
+	      <a href = "{% url event_browse_tags_date old_tags=tag.slug date=page_date %}"{{ tag.status|safe}}>{{ tag.name }} ({{ tag.number }})</a>
+	    </li>
+	  {% else %}
+            <li>
+	      <a href = "{% url event_browse_tags_date_num old_tags=tag.slug date=page_date num=page_num %}"{{ tag.status|safe }}>{{ tag.name }} ({{ tag.number }})</a>
+	    </li>
+	  {% endif %}
+	{% else %}
+          <li>
+	    <a href = "{% url event_browse_tags old_tags=tag.slug %}"{{ tag.status|safe }}>{{ tag.name }} ({{ tag.number }})</a>
+	  </li>
+	{% endif %}
       {% endif %}
     {% endfor %}
-  </div>
-  
-  <div id="events">
-    {% comment %}
-    {% for event in upcoming_events %}
-    <span class="upcoming_event">
-      {% include 'events/event_description_small.html' %}
-    </span>
-    {% endfor %}
-    {% endcomment %}
-    {% for set in event_sets %}
-    <div class="event_list">
-      {% if set.name %}
-      <h3>{{ set.name }}</h3>
-      {% endif %}
-      {% for event in set.events %}
-      <span class="upcoming_event">
-	{% include 'events/event_description_small.html' %}
-      </span>
-      {% endfor %}
-    </div>
-    {% endfor %}
-    {% if pages %}
-    <nav>
-      {% if page_num > 1 %}
-        {% if page_num == 2 %}
-          <p><a href="{% url event_browse_tags_date old_tags=current_tags date=page_date %}">Prev</a></p>
-        {% else %}
-          <p><a href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}">Prev</a></p>
-        {% endif %}
-      {% endif %}
-      <p><a href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}">Next</a></p>
-    </nav>
+    </ul>
+  </nav>
+</aside>
+
+<section class="body">
+  {% for set in event_sets %}
+    {% if set.name %}
+      <header>
+	<h1>{{ set.name }}</h1>
+      </header>
     {% endif %}
-  </div>
+    <ul class="events">
+      {% for event in set.events %}
+        {% include 'events/event_description_small.html' %}
+      {% endfor %}
+    </ul>
+  {% endfor %}
+  {% if pages|length > 0 %}
+    <p>
+      {% if page_num > 1 %}
+	{% if page_num == 2 %}
+	  <a class="button page" href="{% url event_browse_tags_date old_tags=current_tags date=page_date %}">Prev</a>
+	  {% else %}
+	  <a class="button page" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}">Prev</a>
+	{% endif %}
+      {% endif %}
+      {% if page_more in pages %}
+      <a class="button page" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}">Next</a>
+      {% endif %}
+    </p>
 
+    <ul id="pagination">
+      {% for numb in pages %}
+      <li>
+	<a class="current" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}">{{ numb }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</section>
 
-</div>
 {% endblock %}

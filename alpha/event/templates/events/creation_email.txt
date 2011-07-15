@@ -8,12 +8,9 @@
 <p>Your event has now been created and is available for people to see.</p>
 
 
-<h2>Here is your personal link for editing this event:</h2>
+<h2>Here is your personal, private link for editing this event:</h2>
 <a href = "http://{{ site }}/events/edit/{{ authentication_key }}/">http://{{ site }}/events/edit/{{ authentication_key }}</a>
 <p><strong>Do not share this with anyone!</strong></p>
-
-<h2>Here is your public link for sharing this event with other people:</h2>
-<a href = "http://{{ site }}/events/view/{{ slug }}/">http://{{ site }}/events/view/{{ slug }}/</a>
 
 <p>Have a great day.</p>
 

@@ -6,8 +6,12 @@ from alpha.event import views as event
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-                       url(r'^$', event.redirect),
-                       url(r'^all/today/$', event.browse, name='event_browse'),
+                       url(r'^$',
+                           event.browse,
+                           kwargs={'date': u'flow'},
+                           name='event_browse'
+                           ),
+                       url(r'^all/today/$', event.browse, name='event_browse_today'),
                        url(r'^edit/(?P<authentication_key>\w+)/$',
                            event.edit,
                            name='event_edit'

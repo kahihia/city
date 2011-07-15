@@ -7,19 +7,14 @@ from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
 
-from event.models import Event
-from event.forms import EventFormLoggedIn
-from event.forms import EventForm
-from event.utils import TagInfo
-from event.utils import EventSet
+from event import EVENTS_PER_PAGE, DEFAULT_FROM_EMAIL
+from event.models import Event, picture_file_path
+from event.forms import EventFormLoggedIn, EventForm
+from event.utils import TagInfo, EventSet
 
 from taggit.models import Tag
 
-from datetime import datetime
-from datetime import timedelta
-
-from django.conf import settings
-
+import datetime
 
 import re
 
@@ -27,8 +22,9 @@ def redirect(request):
     return HttpResponseRedirect( reverse('event_browse'))
 
 def browse(request, old_tags=u'all', date=u'today', num=1):
-    pages = False # used in date filter code for determining if we have pagination
+    pages = 0 # used in date filter code for determining if we have pagination
     num = int(num) -1 # see comment labeled NUMCODE
+    today = datetime.datetime(*(datetime.date.today().timetuple()[:6])) # isnt python so easy to read?
 
     split_tags = []
     #parsing the tags string
@@ -37,20 +33,20 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         # Right now we query based on tags, and then later split this up based on date.
         # Does django make a query every time? If so this could be an expensive, inefficient way of
         # doing the job.
-        upcoming_events = Event.events.filter(tags__slug__in=split_tags).distinct()
+        upcoming_events = Event.events.filter(start_time__gte=today, tags__slug__in=split_tags).distinct()
     else:
-        upcoming_events = Event.events.all()
+        upcoming_events = Event.events.filter(start_time__gte=today)
 
     #packaging new tag information given split_tags list
     tags = Tag.objects.all()
     all_tags = []
-    all_tags.append( TagInfo(num=Event.events.all().count()) )
+    all_tags.append( TagInfo( num=Event.events.filter(start_time__gte=today).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
     for tag in tags:
         all_tags.append(
             TagInfo(
                 tag=tag, #the tag object
                 previous_slugs=split_tags, #list of existing tags
-                num=Event.events.filter(tags__name__in=[tag]).count() #number of events which are tagged this way
+                num=Event.events.filter(start_time__gte=today ,tags__name__in=[tag]).count() #number of events which are tagged this way
                 )
             )
 
@@ -62,7 +58,6 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
     # its possible I could try implementing this using loops, but I am afraid of what kind
     # of bugs might crop up if I had a database query in a loop - so i'm not going there.
     # IF django is lazy about the queries, then I'm totally saved here. And I think it is lazy.
-    today = datetime.now()
     event_sets = []
 
     # error checking for num argument
@@ -75,67 +70,100 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
             start_time__year=today.year, 
             start_time__month=today.month,
             start_time__day=today.day)   
-        pages = todays_events.count() > settings.EVENTS_PER_PAGE
-        todays_events = todays_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:settings.EVENTS_PER_PAGE]
+        pages = todays_events.count() / EVENTS_PER_PAGE
+        todays_events = todays_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Today's Events", todays_events ) )
     elif date == u'tomorrow':
-        tomorrow = today + timedelta(days=1)
+        tomorrow = today + datetime.timedelta(days=1)
         tomorrows_events = upcoming_events.filter(start_time__year=tomorrow.year, 
                                                  start_time__month=tomorrow.month,
                                                  start_time__day=tomorrow.day)
-        pages = tomorrows_events.count() > settings.EVENTS_PER_PAGE
-        tomorrows_events = tomorrows_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
+        pages = tomorrows_events.count() / EVENTS_PER_PAGE
+        tomorrows_events = tomorrows_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Tomorrow's Events", tomorrows_events ) )
     elif date == u'this-weekend':
         #weekday 6 5 4 sun sat fri
-        end = today + timedelta(days=6-today.weekday())
+        end = today + datetime.timedelta(days=6-today.weekday())
         end = end.replace(hour=23,minute=59,second=59,microsecond=0)
         #sat is 5
         if today.weekday() == 5:
-            start = today + timedelta(days=5-today.weekday())
+            start = today + datetime.timedelta(days=5-today.weekday())
             start = start.replace(hour=0,minute=0,second=0,microsecond=0)
         #friday at 5pm is the weekend.
         else:
-            start = today + timedelta(days=4-today.weekday())
+            start = today + datetime.timedelta(days=4-today.weekday())
             start = start.replace(hour=17,minute=0,second=0,microsecond=0)
         this_weekends_events = upcoming_events.filter(start_time__range=(start,end))
-        pages = this_weekends_events.count() > settings.EVENTS_PER_PAGE
-        this_weekends_events = this_weekends_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Events This Weekend", this_weekends_events) )
+        pages = this_weekends_events.count() / EVENTS_PER_PAGE
+        this_weekends_events = this_weekends_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
+        event_sets.append( EventSet(u'Events This Weekend', this_weekends_events) )
     elif date == u'next-weekend':
-        next_monday = today + timedelta(days=7-today.weekday())
-        end = next_monday + timedelta(days=6-next_monday.weekday())
-        start = next_monday + timedelta(days=4-next_monday.weekday())
+        next_monday = today + datetime.timedelta(days=7-today.weekday())
+        end = next_monday + datetime.timedelta(days=6-next_monday.weekday())
+        start = next_monday + datetime.timedelta(days=4-next_monday.weekday())
         next_weekends_events = upcoming_events.filter(start_time__range=(start,end))
-        pages = next_weekends_events.count() > settings.EVENTS_PER_PAGE
-        next_weekends_events = next_weekends_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Events Next Weekend", next_weekends_events) )
+        pages = next_weekends_events.count() / EVENTS_PER_PAGE
+        next_weekends_events = next_weekends_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
+        event_sets.append( EventSet(u'Events Next Weekend', next_weekends_events) )
     elif date == u'this-week':
-        end = today + timedelta(days=6-today.weekday())
+        end = today + datetime.timedelta(days=6-today.weekday())
         start = today
         this_weeks_events = upcoming_events.filter(start_time__range=(start,end))
-        pages = this_weeks_events.count() > settings.EVENTS_PER_PAGE
-        this_weeks_events = this_weeks_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Events This Week", this_weeks_events ) )
+        pages = this_weeks_events.count() / EVENTS_PER_PAGE
+        this_weeks_events = this_weeks_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
+        event_sets.append( EventSet(u'Events This Week', this_weeks_events ) )
     elif date == u'next-week':
-        end = today + timedelta(days=13-today.weekday())
-        start = today + timedelta(days=7-today.weekday())
+        end = today + datetime.timedelta(days=13-today.weekday())
+        start = today + datetime.timedelta(days=7-today.weekday())
         next_weeks_events = upcoming_events.filter(start_time__range=(start,end))
-        pages = next_weeks_events.count() > settings.EVENTS_PER_PAGE
-        next_weeks_events = next_weeks_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Events Next Week", next_weeks_events) )    
+        pages = next_weeks_events.count() / EVENTS_PER_PAGE
+        next_weeks_events = next_weeks_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
+        event_sets.append( EventSet(u'Events Next Week', next_weeks_events) )
+    elif date == u'flow':
+        #flow code goes here
+        pages = upcoming_events.count() / EVENTS_PER_PAGE
+        flow_events = list( upcoming_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE] )
+        #title = flow_events[0].start_time.strftime('%A, %B %-1d')
+        #event_sets.append( EventSet(title, flow_events) )
+        num_on_page = len(flow_events)
+        start = flow_events[0].start_time.replace(hour=0, minute=0, second=0)
+        end = start.replace(hour=23,minute=59,second=59)
+        keep_flowing = len(flow_events) > 0
+        i = -1
+        while keep_flowing == True:
+            i = i + 1
+            if i > 0: #advance to the next day
+                start = start + datetime.timedelta(days=1)
+                end = end + datetime.timedelta(days=1)
+            #current_days_events = flow_events.filter(start_time__range=(start,end))
+            current_days_events = [ x for x in flow_events if start <= x.start_time < end ]
+            # sort the events by start time
+            if len(current_days_events) == 0:
+                continue
+            # pull the title from the first event on the list
+            title = current_days_events[0].start_time.strftime('%A, %B %-1d')
+
+            # make the eventset
+            event_sets.append( EventSet(title, current_days_events) )
+            #update the tally
+            num_on_page -= len(event_sets[-1].events)
+            #event_sets.append( EventSet(str(num_on_page)))
+            
+            #check for pagination!
+            if num_on_page <= 0:
+                keep_flowing = False
     else:
         ISO8601_REGEX = re.compile(r'(?P<year>[0-9]{4})-(?P<month>[0-9]{1,2})-(?P<day>[0-9]{1,2})')
         exact_date = ISO8601_REGEX.match(date)
         if exact_date:
             group = exact_date.groupdict()
-            start = datetime(year=int(group["year"]), 
-                             month=int(group["month"]), 
-                             day=int(group["day"]) )
-            end = start + timedelta(days=1)
+            start = datetime.datetime(year=int(group['year']), 
+                             month=int(group['month']), 
+                             day=int(group['day']) )
+            end = start + datetime.timedelta(days=1)
             exact_day_events = upcoming_events.filter(start_time__range=(start,end))
-            pages = exact_day_events.count() > settings.EVENTS_PER_PAGE
-            exact_day_events = exact_day_events.order_by('start_time')[int(num)*settings.EVENTS_PER_PAGE:int(num)*settings.EVENTS_PER_PAGE + settings.EVENTS_PER_PAGE]
+            pages = exact_day_events.count() / EVENTS_PER_PAGE
+            exact_day_events = exact_day_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
             event_sets.append( EventSet( u'Events for ' + start.date().isoformat() , exact_day_events))
             
 
@@ -156,9 +184,10 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
                                 'page_date':date,
                                 'page_num':int(num),
                                 'event_sets':event_sets,
-                                'pages':pages,
+                                'pages':range(pages),
                                 'page_less':page_less,
-                                'page_more':page_more},
+                                'page_more':page_more,
+                                'browsing':True},
                               context_instance = RequestContext(request))
 
 def view(request, slug=None):
@@ -178,26 +207,28 @@ def create(request, form_class=None, success_url=None,
             form_class = EventFormLoggedIn
         else:
             form_class = EventForm
-    # on success, redirect to the home page by default
-    # if the user is authenticated, take them to their event page
-    if success_url is None:
-        if request.user.is_authenticated():
-            success_url = reverse('citi_user_events')
-        else:
-            success_url = reverse('home')
 
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
-            #save the form to the database
-            if not request.user.is_authenticated():
-                form.save()
-            else: #if logged in, use the users info to complete form
-                event_obj = form.save(commit=False)
+            event_obj = form.save(commit=False)
+
+            if request.user.is_authenticated():
+                #if logged in, use the users info to complete form
                 event_obj.owner = request.user
-                event_obj.email = request.user.email
-                event_obj = event_obj.save()
-                form.save_m2m() #needed for many-to-many fields
+                event_obj.email = request.user.email #don't really need this line
+
+            
+            # make sure the picture field is filled before saving!
+            if 'picture' in request.FILES:
+                path = picture_file_path(instance=event_obj,
+                                         filename=request.FILES['picture'].name)
+                event_obj.picture = path
+                new_file = event_obj.picture.storage.save(path,
+                                                          request.FILES['picture'])
+                
+            event_obj = event_obj.save() #save to the database
+            form.save_m2m() #needed for many-to-many fields
 
             #email the user
             current_site = 'Cityfusion'
@@ -214,8 +245,16 @@ def create(request, form_class=None, success_url=None,
                                        )
             send_mail( subject,
                        message, 
-                       settings.DEFAULT_FROM_EMAIL, 
+                       DEFAULT_FROM_EMAIL, 
                        [event_obj.email] )
+
+            # on success, redirect to the home page by default
+            # if the user is authenticated, take them to their event page
+            if success_url is None:
+                if request.user.is_authenticated():
+                    success_url = reverse('citi_user_events')
+                else:
+                    success_url = reverse('home')
             #send user off into the abyss...
             return HttpResponseRedirect(success_url)
     else:
@@ -223,7 +262,8 @@ def create(request, form_class=None, success_url=None,
     #Send out the form
     context = RequestContext(request)
     return render_to_response(template_name,
-                              { 'form': form },
+                              { 'form': form,
+                                'posting':True},
                               context_instance=context)
 
 def edit(request, 
@@ -263,5 +303,8 @@ def edit(request,
     # Edit the event
     context = RequestContext(request)
     return render_to_response(template_name,
-                              { 'form': form },
+                              { 'form': form,
+                                'event':event_obj,
+                                'picture_exists': event_obj.picture_exists(40)},
                               context_instance=context)
+

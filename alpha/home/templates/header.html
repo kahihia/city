@@ -1,35 +1,34 @@
 <header id="header">
-  <a href="{% url home %}">
-     <img src="{{ STATIC_URL }}img/p-logo.png">
-  </a>
-  <nav>
-    <a href="{% url event_browse %}">
-      <h1>Browse</h1>
-      <h3>Upcoming Events</h3>
-    </a>
-    <a href="{% url event_create %}">
-      <h1>Post</h1>
-      <h3>An Event</h3>
-    </a>
+  <hgroup>
+    <h1><a href="{% url home %}">Cityfusion</a></h1>
+    <h2>The community at your fingertips</h2>
+  </hgroup>
+	
+  <nav id="main-nav">
+    <ul>
+      <li><a href="{% url event_browse %}"{% if browsing %} class="post current" {% endif %}>Browse Events</a></li>
+      <li><a href="{% url event_create %}"{% if posting %} class="post current" {% endif %}>Post an Event</a></li>
+    </ul>
   </nav>
-
   <nav id="user-nav">
-    {% if user.is_authenticated %}
-    <a href="{% url citi_user_events %}">
-      <h4>View your events</h4>
-    </a>
-    <a href="{% url auth_logout %}">
-      <h4>Log out</h4>
-    </a>
-    {% else %}
-    <a href="{% url registration_register %}">
-      <h4>Join</h4>
-    </a>
-    <a href="{% url auth_login %}">
-      <h4>Log In</h4>
-    </a>
-    {% endif %}
+    <ul>
+      {% if user.is_authenticated %}
+      <li><a href="{% url citi_user_events %}">View your events</a></li>
+      <li><a href="{% url auth_logout %}">Log out</a></li>
+      {% else %}
+      <li><a href="{% url auth_login %}">Sign In</a></li>
+      <li><a href="{% url registration_register %}">Register</a></li>
+      {% endif %}
+    </ul>
   </nav>
-    {# TODO: city pulldown menu goes here #}
+  
+  <nav id="city-nav">
+    <a href="">Saskatoon <span class="downtick"></span></a>
+  </nav>
 
 </header>
+
+<aside id="city-widget">
+  <p>Cityfusion is currently only available in Saskatoon, Canada.</p>
+  <p><span class="white">Want your city to be next?</span><br><a href="{% url feedback %}">Let us know.</a></p>
+</aside>

@@ -4,6 +4,8 @@ from django.conf.urls.defaults import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
+from django.conf import settings
+
 handler404 = 'alpha.home.views.custom_404'
 
 urlpatterns = patterns('',
@@ -11,6 +13,8 @@ urlpatterns = patterns('',
     url(r'^$', 'alpha.home.views.home', name='home'),
     url(r'^events/', include('event.urls')),
     url(r'^accounts/', include('citi_user.urls')),
+    url(r'^feedback/$', 'alpha.home.views.redirect', name='feedback'),
+    url(r'^advertise/$', 'alpha.home.views.redirect', name='advertise'),
 
     # url(r'^alpha/', include('alpha.foo.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -19,3 +23,10 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.MEDIA_ROOT,
+        }),
+   )

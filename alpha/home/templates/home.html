@@ -6,12 +6,8 @@
 
 {% include 'header.html' %}
 
-<div id="content">
+<div id="main">
   {% block content %}{% endblock %}
+  {% include 'ads.html' %}
 </div>
-
-{% include 'ads.html' %}
-
-{% include 'footer.html' %}
-
 {% endblock %}
