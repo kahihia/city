@@ -62,36 +62,49 @@
    window.ccar = createCalendarArrayRows;
 
    function createCalendarRow(options, row) {
-     var i, elem, html = [];
+     var i, elem, entries = $(), cell;
      for (i in row) {
        if (row.hasOwnProperty(i)) {
 	 elem = row[i];
 	 if (elem === '') {
-	   html.push('<td class="newcal-noday"></td>');
+	   entries = entries.add( $('<td class="newcal-noday"></td>'));
 	 } else {
-	   html.push('<td class="newcal-day">' + elem + '</td>');
+	   cell = $('<td class="newcal-day">' + elem + '</td>')
+	     .bind(
+	       'click',
+	       (function(day) {
+		 return function() { 
+		   var date = new Date(options.startOfMonth.year,
+				       options.startOfMonth.month,
+				       day);
+		   console.log("clickly:", date);
+		 };
+		}(elem)));
+	   entries = entries.add( cell );
 	 }
        }
      }
-     return html.join('');
+     return entries;
    }
 
    function createCalendarRows(options, rows) {
      var i, row, html = [];
+     var outrows = $();
      for (i in rows) {
        if (rows.hasOwnProperty(i)) {
-	 html.push('<tr>');
-	 html.push(createCalendarRow(options, rows[i]));
-	 html.push('</tr>');
+	 row = $('<tr>');
+	 row.append(createCalendarRow(options, rows[i]));
+	 outrows = outrows.add(row);
        }
      }
-     return $(html.join(''));
+     console.log(outrows);
+     return outrows;
    }
    
    function createTable(options) {
      return (createHead(options)
 	     .append(createDays(options))
-	     .append(createCalendarRows(options, createCalendarArrayRows(startOfThisMonth()))));
+	     .append(createCalendarRows(options, createCalendarArrayRows(options.startOfMonth))));
    };
 
    /***
@@ -99,6 +112,8 @@
     *   onClick: function(date) - function to call when a date is selected
     */
    $.fn.newcal = function(options) {
+     options = options || {};
+     options.startOfMonth = startOfThisMonth();
      return this.each(
        function() {
 	 var div;
@@ -118,8 +133,8 @@
 		 })
 	       .bind('click', function(e) { e.stopPropagation(); e.preventDefault(); return false; });
 	     element.after(div);
-	     div.append( createTable(options) );
 	     e.preventDefault();
+	     div.append( createTable(options) );
 	     return false;
 	   });
 	 $(document).bind(
