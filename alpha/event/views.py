@@ -97,7 +97,7 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         this_weekends_events = upcoming_events.filter(start_time__range=(start,end))
         pages = this_weekends_events.count() / EVENTS_PER_PAGE
         this_weekends_events = this_weekends_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Events This Weekend", this_weekends_events) )
+        event_sets.append( EventSet(u'Events This Weekend', this_weekends_events) )
     elif date == u'next-weekend':
         next_monday = today + timedelta(days=7-today.weekday())
         end = next_monday + timedelta(days=6-next_monday.weekday())
@@ -105,32 +105,41 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         next_weekends_events = upcoming_events.filter(start_time__range=(start,end))
         pages = next_weekends_events.count() / EVENTS_PER_PAGE
         next_weekends_events = next_weekends_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Events Next Weekend", next_weekends_events) )
+        event_sets.append( EventSet(u'Events Next Weekend', next_weekends_events) )
     elif date == u'this-week':
         end = today + timedelta(days=6-today.weekday())
         start = today
         this_weeks_events = upcoming_events.filter(start_time__range=(start,end))
         pages = this_weeks_events.count() / EVENTS_PER_PAGE
         this_weeks_events = this_weeks_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Events This Week", this_weeks_events ) )
+        event_sets.append( EventSet(u'Events This Week', this_weeks_events ) )
     elif date == u'next-week':
         end = today + timedelta(days=13-today.weekday())
         start = today + timedelta(days=7-today.weekday())
         next_weeks_events = upcoming_events.filter(start_time__range=(start,end))
         pages = next_weeks_events.count() / EVENTS_PER_PAGE
         next_weeks_events = next_weeks_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Events Next Week", next_weeks_events) )
+        event_sets.append( EventSet(u'Events Next Week', next_weeks_events) )
     elif date == u'flow':
         #flow code goes here
-        flow = True
+        keep_flowing = True
+        num_on_page = 0
+        while keep_flowing == True:
+            title = u'Upcoming Events'
+            event_list = upcoming_events.order_by('start_time')
+            event_sets.append( EventSet(title, event_list) )
+            num_on_page += event_sets[-1].events.count()
+            event_sets.append( EventSet(str(num_on_page)))
+            if num_on_page >= EVENTS_PER_PAGE or num_on_page == Event.events.all().count():
+                keep_flowing = False
     else:
         ISO8601_REGEX = re.compile(r'(?P<year>[0-9]{4})-(?P<month>[0-9]{1,2})-(?P<day>[0-9]{1,2})')
         exact_date = ISO8601_REGEX.match(date)
         if exact_date:
             group = exact_date.groupdict()
-            start = datetime(year=int(group["year"]), 
-                             month=int(group["month"]), 
-                             day=int(group["day"]) )
+            start = datetime(year=int(group['year']), 
+                             month=int(group['month']), 
+                             day=int(group['day']) )
             end = start + timedelta(days=1)
             exact_day_events = upcoming_events.filter(start_time__range=(start,end))
             pages = exact_day_events.count() / EVENTS_PER_PAGE
@@ -155,7 +164,7 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
                                 'page_date':date,
                                 'page_num':int(num),
                                 'event_sets':event_sets,
-                                'pages':pages,
+                                'pages':range(pages),
                                 'page_less':page_less,
                                 'page_more':page_more,
                                 'browsing':True},
@@ -278,3 +287,4 @@ def edit(request,
                                 'event':event_obj,
                                 'picture_exists': event_obj.picture_exists(40)},
                               context_instance=context)
+

@@ -159,7 +159,7 @@ LOGIN_REDIRECT_URL = '/events/'
 # django taggit settings
 
 # alpha.event settings
-EVENTS_PER_PAGE = 20 #defaults to 5
+# EVENTS_PER_PAGE = 20
 # EVENT_PICTURE_DIR #defaults to 'pictures'
 # EVENT_RESIZE_METHOD #defaults to Image.BICUBIC (cubic spline
 #                      interpolation in a 4x4 environment), can be

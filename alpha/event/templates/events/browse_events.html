@@ -70,7 +70,7 @@
       {% endfor %}
     </ul>
   {% endfor %}
-  {% if pages > 0 %}
+  {% if pages|length > 0 %}
     <p>
       {% if page_num > 1 %}
 	{% if page_num == 2 %}
@@ -79,7 +79,9 @@
 	  <a class="button page" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}">Prev</a>
 	{% endif %}
       {% endif %}
+      {% if page_more in pages %}
       <a class="button page" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}">Next</a>
+      {% endif %}
     </p>
 
     <ul id="pagination">

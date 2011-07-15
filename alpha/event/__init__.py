@@ -2,7 +2,7 @@ from django.conf import settings
 from PIL import Image
 
 #used in views
-EVENTS_PER_PAGE = getattr(settings, 'EVENTS_PER_PAGE', 5)
+EVENTS_PER_PAGE = getattr(settings, 'EVENTS_PER_PAGE', 2)
 DEFAULT_FROM_EMAIL = getattr(settings,'DEFAULT_FROM_EMAIL', u'noreply@peakxp.com')
 #used in event_pictures
 EVENT_DEFAULT_PICTURE_URL = getattr(settings, 'EVENT_DEFAULT_PICTURE_URL',
