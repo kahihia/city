@@ -30,7 +30,7 @@
      var date = new Date();
      var start = { 'day' : date.getDay(),
 		   'month' : date.getMonth(),
-		   'year' : date.getYear() };
+		   'year' : date.getYear() + 1900};
      return start;
    }
    window.sotm = startOfThisMonth;
@@ -77,7 +77,10 @@
 		   var date = new Date(options.startOfMonth.year,
 				       options.startOfMonth.month,
 				       day);
-		   console.log("clickly:", date);
+		   console.log("Going to", date);
+		   if (options['onClick']) {
+		     options.onClick(date);
+		   }
 		 };
 		}(elem)));
 	   entries = entries.add( cell );
@@ -121,7 +124,7 @@
 	 element.bind(
 	   'click',
 	   function(e) {
-	     if (div) return true;
+	     if (div) return false;
 	     var offset = element.position();
 	     var padding = element.css('padding-left');
 	     div = $('<div />')
@@ -144,5 +147,11 @@
 	   });
        });
    };
+
+   function jumpToDate(date) {
+     window.location = sprintf("/events/all/%04d-%02d-%02d", date.getYear() + 1900,
+			       date.getMonth() + 1, date.getDate());
+   }
+   window.jumpToDate = jumpToDate;
 
  })(jQuery);
