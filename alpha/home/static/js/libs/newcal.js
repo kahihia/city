@@ -143,7 +143,9 @@
 	 $(document).bind(
 	   'click',
 	   function(e) {
-	     div.hide();
+	     if (div) {
+	       div.hide();
+	     }
 	   });
        });
    };
