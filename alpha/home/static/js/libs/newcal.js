@@ -5,9 +5,9 @@
      var content = (
        '<thead>' +
 	 '<tr>' +
-	 '<td class="newcal-month-left">A</td>' +
+	 '<td class="newcal-month-left">&laquo;</td>' +
 	 '<td class="newcal-month" colspan="5">July 2011</td>' +
-	 '<td class="newcal-month-right">B</td>' +
+	 '<td class="newcal-month-right">&raquo;</td>' +
 	 '</tr>' +
 	 '</thead>');
      table.html( content );
