@@ -31,6 +31,7 @@ $('html').click(function() {
 	  $('#city-nav a, #city-widget').toggleClass('active');
 	}
 });
+
 $('#city-widget').click(function(event){
 	event.stopPropagation();
 });
