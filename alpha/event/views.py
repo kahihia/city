@@ -122,6 +122,7 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         event_sets.append( EventSet(u"Events Next Week", next_weeks_events) )
     elif date == u'flow':
         #flow code goes here
+        flow = True
     else:
         ISO8601_REGEX = re.compile(r'(?P<year>[0-9]{4})-(?P<month>[0-9]{1,2})-(?P<day>[0-9]{1,2})')
         exact_date = ISO8601_REGEX.match(date)
