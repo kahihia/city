@@ -79,16 +79,18 @@
 	  <a class="button page" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}">Prev</a>
 	{% endif %}
       {% endif %}
-      {% if page_more in pages %}
+      {% if page_more < pages|length %}
       <a class="button page" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}">Next</a>
       {% endif %}
     </p>
 
     <ul id="pagination">
       {% for numb in pages %}
-      <li>
-	<a class="current" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}">{{ numb }}</a>
-      </li>
+        {% if numb > 0 %}
+	  <li>
+	    <a class="current" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}">{{ numb }}</a>
+	  </li>    
+        {% endif %}
       {% endfor %}
     </ul>
   {% endif %}

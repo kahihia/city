@@ -184,7 +184,7 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
                                 'page_date':date,
                                 'page_num':int(num),
                                 'event_sets':event_sets,
-                                'pages':range(pages),
+                                'pages':range(pages+1),
                                 'page_less':page_less,
                                 'page_more':page_more,
                                 'browsing':True},
