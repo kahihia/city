@@ -177,3 +177,21 @@ form .description { font-size: 11px; color: #999; }
 #footer p { float: left; color: #797979; padding-left: 9px; }
 #footer li { float: left; padding-left: 15px; }
 #footer a { color: #343796; }
+
+.newcal-date-popup {
+  background: #eee;
+  width: 200px;
+  height: 200px;
+  -moz-box-shadow: 2px 2px 5px #888;
+  -webkit-box-shadow: 2px 2px 5px #888;
+  box-shadow: 2px 2px 5px #888;
+}
+.newcal-table {
+  width: 100%;
+}
+.newcal-month-left {
+  width: 30px;
+}
+.newcal-month-right {
+  width: 30px;
+}
