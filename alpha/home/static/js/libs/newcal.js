@@ -61,14 +61,37 @@
    }
    window.ccar = createCalendarArrayRows;
 
-   function createCalendarRows() {
-     
+   function createCalendarRow(options, row) {
+     var i, elem, html = [];
+     for (i in row) {
+       if (row.hasOwnProperty(i)) {
+	 elem = row[i];
+	 if (elem === '') {
+	   html.push('<td class="newcal-noday"></td>');
+	 } else {
+	   html.push('<td class="newcal-day">' + elem + '</td>');
+	 }
+       }
+     }
+     return html.join('');
+   }
+
+   function createCalendarRows(options, rows) {
+     var i, row, html = [];
+     for (i in rows) {
+       if (rows.hasOwnProperty(i)) {
+	 html.push('<tr>');
+	 html.push(createCalendarRow(options, rows[i]));
+	 html.push('</tr>');
+       }
+     }
+     return $(html.join(''));
    }
    
-
-   function createTable() {
-     return (createHead()
-	     .append(createDays()));
+   function createTable(options) {
+     return (createHead(options)
+	     .append(createDays(options))
+	     .append(createCalendarRows(options, createCalendarArrayRows(startOfThisMonth()))));
    };
 
    /***
@@ -95,7 +118,7 @@
 		 })
 	       .bind('click', function(e) { e.stopPropagation(); e.preventDefault(); return false; });
 	     element.after(div);
-	     div.append( createTable() );
+	     div.append( createTable(options) );
 	     e.preventDefault();
 	     return false;
 	   });
