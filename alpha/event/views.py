@@ -119,7 +119,9 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         next_weeks_events = upcoming_events.filter(start_time__range=(start,end))
         pages = next_weeks_events.count() / EVENTS_PER_PAGE
         next_weeks_events = next_weeks_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Events Next Week", next_weeks_events) )    
+        event_sets.append( EventSet(u"Events Next Week", next_weeks_events) )
+    elif date == u'flow':
+        #flow code goes here
     else:
         ISO8601_REGEX = re.compile(r'(?P<year>[0-9]{4})-(?P<month>[0-9]{1,2})-(?P<day>[0-9]{1,2})')
         exact_date = ISO8601_REGEX.match(date)
