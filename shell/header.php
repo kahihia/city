@@ -22,7 +22,7 @@
 	
 			<nav id="main-nav">
 				<ul>
-					<li><a href="">Browse Events</a></li>
+					<li><a href="index.php">Browse Events</a></li>
 					<li><a href="post-event.php" class="post current">Post an Event</a></li>
 				</ul>
 			</nav>
