@@ -126,7 +126,10 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         #title = flow_events[0].start_time.strftime('%A, %B %-1d')
         #event_sets.append( EventSet(title, flow_events) )
         num_on_page = len(flow_events)
-        start = flow_events[0].start_time.replace(hour=0, minute=0, second=0)
+        if flow_events:
+            start = flow_events[0].start_time.replace(hour=0, minute=0, second=0)
+        else:
+            start = today
         end = start.replace(hour=23,minute=59,second=59)
         keep_flowing = len(flow_events) > 0
         i = -1
