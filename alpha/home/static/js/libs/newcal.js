@@ -110,6 +110,17 @@
 	     .append(createCalendarRows(options, createCalendarArrayRows(options.startOfMonth))));
    };
 
+   $.fn.newcal_fill = function(options) {
+     options = options || {};
+     options.startOfMonth = options.startOfMonth || startOfThisMonth();
+     return this.each(
+       function() {
+	 var div = $(this);
+	 div.children().remove();
+	 div.append( createTable(options));
+       });
+   };
+
    /***
     * Options for newcal:
     *   onClick: function(date) - function to call when a date is selected
@@ -137,7 +148,7 @@
 	       .bind('click', function(e) { e.stopPropagation(); e.preventDefault(); return false; });
 	     element.after(div);
 	     e.preventDefault();
-	     div.append( createTable(options) );
+	     div.newcal_fill(options);
 	     return false;
 	   });
 	 $(document).bind(
