@@ -33,6 +33,7 @@
 
    function startOfMonth(date) {
      date = date || new Date();
+     date = new Date(date.getYear() + 1900, date.getMonth(), 1);
      var start = { 'day' : date.getDay(),
 		   'month' : date.getMonth(),
 		   'year' : date.getYear() + 1900};
