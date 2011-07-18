@@ -27,3 +27,22 @@ def contextualize_date(dense_date=None):
     if difference < datetime.timedelta(days=7-now.weekday()):
         return dense_date.strftime('%A, ' + hour_format)
     return dense_date.strftime('%A %B %-1d, ' + hour_format)
+
+@register.filter(name='just_day')
+def just_day(dense_date=None):
+    """
+    Pre: dense_date is a DateTimeField
+    Post: just the day as a unicode string
+    Returns: the generated string
+    """
+    return dense_date.strftime('%A %B %-1d')
+
+@register.filter(name='just_time')
+def just_time(dense_date=None):
+    """
+    Pre: dense_date is a DateTimeField
+    Post: just the day as a unicode string
+    Returns: the generated string
+    """
+    return dense_date.strftime('%-1I:%M %p')
+
