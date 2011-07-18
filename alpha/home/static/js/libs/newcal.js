@@ -1,12 +1,17 @@
 (function($) {
+   var month_names = ['January', 'February', 'March', 'April', 'May',
+		      'June', 'July', 'August', 'September', 'October',
+		      'November', 'December'];
 
-   function createHead() {
+   function createHead(options) {
      var table = $('<table class="newcal-table"/>');
+     var month_name = month_names[options.startOfMonth.month];
+     var year = options.startOfMonth.year;
      var content = (
        '<thead>' +
 	 '<tr>' +
 	 '<td class="newcal-month-left">&laquo;</td>' +
-	 '<td class="newcal-month" colspan="5">July 2011</td>' +
+	 '<td class="newcal-month" colspan="5">' + month_name + ' ' + year + '</td>' +
 	 '<td class="newcal-month-right">&raquo;</td>' +
 	 '</tr>' +
 	 '</thead>');
@@ -110,6 +115,19 @@
 	     .append(createCalendarRows(options, createCalendarArrayRows(options.startOfMonth))));
    };
 
+   function make_month_nav_handler(delta, div, options) {
+     return (function() {
+       var new_month = startOfMonth(
+	 new Date(options.startOfMonth.year, 
+		  options.startOfMonth.month + delta, 
+		  1));
+       var new_options = $.extend(true, {}, options);
+       new_options.startOfMonth = new_month;
+       div.newcal_fill(new_options);
+     });
+          
+   }
+
    $.fn.newcal_fill = function(options) {
      options = options || {};
      options.startOfMonth = options.startOfMonth || startOfMonth();
@@ -119,13 +137,9 @@
 	 div.children().remove();
 	 div.append( createTable(options));
 	 div.find('.newcal-month-left').bind(
-	   'click', 
-	   function() {
-	     var prev_month = startOfMonth(new Date(options.startOfMonth.year, options.startOfMonth.month - 1, 1));
-	     var new_options = $.extend(true, {}, options);
-	     new_options.startOfMonth = prev_month;
-	     div.newcal_fill(new_options);
-	   });
+	   'click', make_month_nav_handler(-1, div, options));
+	 div.find('.newcal-month-right').bind(
+	   'click', make_month_nav_handler(1, div, options));
        });
    };
 
