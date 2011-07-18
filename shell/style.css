@@ -62,6 +62,7 @@ table {
 
 
 html { background: url('img/bg.png') repeat-x 0 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; }
+html.browse { background: none; }
 .wrapper { position: relative; width: 940px; margin: 0 auto; }
 
 a { color: #343796; text-decoration: none; }

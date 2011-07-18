@@ -3,7 +3,7 @@
 
 	<div id="main">
 		<aside id="photo">
-			<img src="" width=250 height=350>
+			<img src="">
 		</aside>
 			
 		<section class="body noborder detail">
