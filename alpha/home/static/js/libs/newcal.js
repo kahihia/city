@@ -26,14 +26,14 @@
      return $( html.join("") );
    }
 
-   function startOfThisMonth() {
-     var date = new Date();
+   function startOfMonth(date) {
+     date = date || new Date();
      var start = { 'day' : date.getDay(),
 		   'month' : date.getMonth(),
 		   'year' : date.getYear() + 1900};
      return start;
    }
-   window.sotm = startOfThisMonth;
+   window.sotm = startOfMonth;
 
    function createCalendarArrayRows(start) {
      var rows = [], current = [], i;
@@ -112,12 +112,20 @@
 
    $.fn.newcal_fill = function(options) {
      options = options || {};
-     options.startOfMonth = options.startOfMonth || startOfThisMonth();
+     options.startOfMonth = options.startOfMonth || startOfMonth();
      return this.each(
        function() {
 	 var div = $(this);
 	 div.children().remove();
 	 div.append( createTable(options));
+	 div.find('.newcal-month-left').bind(
+	   'click', 
+	   function() {
+	     var prev_month = startOfMonth(new Date(options.startOfMonth.year, options.startOfMonth.month - 1, 1));
+	     var new_options = $.extend(true, {}, options);
+	     new_options.startOfMonth = prev_month;
+	     div.newcal_fill(new_options);
+	   });
        });
    };
 
@@ -127,7 +135,7 @@
     */
    $.fn.newcal = function(options) {
      options = options || {};
-     options.startOfMonth = startOfThisMonth();
+     options.startOfMonth = startOfMonth();
      return this.each(
        function() {
 	 var div;
