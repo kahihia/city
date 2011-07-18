@@ -6,6 +6,13 @@ from fabric.operations import run, local, sudo, _handle_failure
 env.schema_apps = [ 'citi_user', 'home', 'event' ]
 env.local_settings_file = 'alpha.settings'
 
+def prod():
+    env.hosts = ['cityfusion@python.peakxp.com']
+    env.hg_directory = '/home/cityfusion/src'
+    env.wsgi_filename = 'django.wsgi'
+    env.settings_file = 'alpha.settings_prod'
+
+
 def dev():
     env.hosts = ['cityfusion-dev@cityfusion.dev.peakxp.com']
     env.hg_directory = '/home/cityfusion-dev/src'
