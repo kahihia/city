@@ -1,8 +1,5 @@
 <!doctype html>
-
-<!-- Paul Irish's technique for targeting IE, modified to only target IE6, applied to the html element instead of body -->
-<!--[if lt IE 7 ]><html lang="en" class="no-js ie6"><![endif]-->
-<!--[if (gt IE 6)|!(IE)]><!--><html lang="en" class="no-js"><!--<![endif]-->
+<html lang="en">
 
 <head>
 	<meta charset="utf-8">
@@ -40,20 +37,20 @@
 			<nav id="city-nav">
 				<a href="">Saskatoon <span class="downtick"></span></a>
 			</nav>
-	</header>
+		</header>
 	
-	<aside id="city-widget">
-		<p>Cityfusion is currently only available in Saskatoon, Canada.</p>
-		<p><span class="white">Want your city to be next?</span><br><a href="/feedback">Let us know.</a></p>
-	</aside>
-	
-	<nav id="date-nav">
-		<ul>
-			<li><a href="" class="current">Today</a></li>
-			<li><a href="">Tomorrow</a></li>
-			<li><a href="">This weekend</a></li>
-			<li><a href="">This week</a></li>
-			<li><a href="">Next week</a></li>			
-			<li><a href="" class="jump">Jump to date</a></li>
-		</ul>
-	</nav>
+		<aside id="city-widget">
+			<p>Cityfusion is currently only available in Saskatoon, Canada.</p>
+			<p><span class="white">Want your city to be next?</span><br><a href="/feedback">Let us know.</a></p>
+		</aside>
+		
+		<nav id="date-nav">
+			<ul>
+				<li><a href="" class="current">Today</a></li>
+				<li><a href="">Tomorrow</a></li>
+				<li><a href="">This weekend</a></li>
+				<li><a href="">This week</a></li>
+				<li><a href="">Next week</a></li>			
+				<li><a href="" class="jump">Jump to date</a></li>
+			</ul>
+		</nav>
