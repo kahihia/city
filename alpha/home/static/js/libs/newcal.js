@@ -153,7 +153,7 @@
      options.startOfMonth = startOfMonth();
      return this.each(
        function() {
-	 var div;
+	 var div; // this is to limit it to one popup?
 	 var element = $(this);
 	 element.bind(
 	   'click',
