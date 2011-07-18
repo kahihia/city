@@ -133,6 +133,7 @@ a:hover { text-decoration: underline; }
 .noborder { border: 0; }
 
 #photo { float: left; padding-top: 20px; }
+#photo img { display: block; height: 350px; width: 250px; }
 
 .events li { position: relative; display: block; margin: 20px 0; color: #666; height: 40px; }
 .events li img { position: absolute; height: 40px; width: 40px; top: 0; left: 0; }

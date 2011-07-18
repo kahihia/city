@@ -10,7 +10,7 @@
 
 			<h1>Event Name</h1>
 
-			<ul"><li class="date"><a href="">Wednesday, August 12</a><br>5:00PM &mdash; 7:00PM</li><li class="loc"><a href="">TCU Place</a><br>100 20th St</li><li class="price">$5</li></ul>
+			<ul><li class="date"><a href="">Wednesday, August 12</a><br>5:00PM &mdash; 7:00PM</li><li class="loc"><a href="">TCU Place</a><br>100 20th St</li><li class="price">$5</li></ul>
 									
 			
 			<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p>
