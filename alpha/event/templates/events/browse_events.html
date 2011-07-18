@@ -1,32 +1,6 @@
 {% extends 'home.html' %}
 
 {% block content %}
-<nav id="date-nav">
-  <ul>
-    <li>
-      <a href="{% url event_browse_tags_date date="today" old_tags=current_tags %}" {% if page_date == "today" %}class="current"{% endif %}>Today</a>
-    </li>
-    <li>
-      <a href="{% url event_browse_tags_date date="tomorrow" old_tags=current_tags %}" {% if page_date == "tomorrow" %}class="current"{% endif %}>Tomorrow</a>
-    </li>
-    <li>
-      <a href="{% url event_browse_tags_date date="this-weekend" old_tags=current_tags %}" {% if page_date == "this-weekend" %}class="current"{% endif %}>This weekend</a>
-    </li>
-    <li>
-      <a href="{% url event_browse_tags_date date="next-weekend" old_tags=current_tags %}" {% if page_date == "next-weekend" %}class="current"{% endif %}>Next weekend</a>
-    </li>
-    <li>
-      <a href="{% url event_browse_tags_date date="this-week" old_tags=current_tags %}" {% if page_date == "this-week" %}class="current"{% endif %}>This week</a>
-    </li>
-    <li>
-      <a href="{% url event_browse_tags_date date="next-week" old_tags=current_tags %}" {% if page_date == "next-week" %}class="current"{% endif %}>Next week</a>
-    </li>			
-    <li>
-      <a href="" class="jump">Jump to date</a>
-    </li>
-  </ul>
-</nav>
-
 <aside id="tags">
   <nav>
     <ul>
