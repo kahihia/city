@@ -145,6 +145,7 @@
 	   function(e) {
 	     if (div) {
 	       div.hide();
+	       div = null;
 	     }
 	   });
        });
