@@ -83,7 +83,6 @@
 		   var date = new Date(options.startOfMonth.year,
 				       options.startOfMonth.month,
 				       day);
-		   console.log("Going to", date);
 		   if (options['onClick']) {
 		     options.onClick(date);
 		   }
@@ -106,7 +105,6 @@
 	 outrows = outrows.add(row);
        }
      }
-     console.log(outrows);
      return outrows;
    }
    
