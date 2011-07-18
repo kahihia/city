@@ -34,6 +34,10 @@ def django_admin_local(cmd):
     return ". venv/bin/activate; django-admin.py %s --settings=%s --pythonpath=." % (cmd, env.local_settings_file)
 
 
+def serve():
+    local(". venv/bin/activate; cd alpha; python manage.py runserver 0.0.0.0:8000")
+
+
 def check_schema(app):
     return local(
         django_admin_local("schemamigration %s --auto" % (app,)), 
