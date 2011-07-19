@@ -4,18 +4,19 @@
 		      'November', 'December'];
 
    function createHead(options) {
-     var table = $('<table class="newcal-table"/>');
      var month_name = month_names[options.startOfMonth.month];
      var year = options.startOfMonth.year;
      var content = (
-       '<thead>' +
-	 '<tr class="newcal-header">' +
-	 '<td class="newcal-month-left">&laquo;</td>' +
-	 '<td class="newcal-month" colspan="5">' + month_name + ' ' + year + '</td>' +
-	 '<td class="newcal-month-right">&raquo;</td>' +
-	 '</tr>' +
-	 '</thead>');
-     table.html( content );
+	 '<div class="newcal-header">' +
+	 '<div class="newcal-month-left">&laquo;</div>' +
+	 '<div class="newcal-month-right">&raquo;</div>' +
+	 '<div class="newcal-month" colspan="5">' + month_name + ' ' + year + '</div>' +
+	 '</div>');
+     return $(content);
+   }
+
+   function createTable(options) {
+     var table = $('<table class="newcal-table"/>');     
      return table;
    }
 
@@ -108,10 +109,12 @@
      return outrows;
    }
    
-   function createTable(options) {
-     return (createHead(options)
-	     .append(createDays(options))
-	     .append(createCalendarRows(options, createCalendarArrayRows(options.startOfMonth))));
+   function populateDiv(options, div) {
+     div.append(createHead(options));
+     var table = createTable(options)
+       .append(createDays(options))
+       .append(createCalendarRows(options, createCalendarArrayRows(options.startOfMonth)));
+     div.append(table);
    };
 
    function make_month_nav_handler(delta, div, options) {
@@ -134,7 +137,7 @@
        function() {
 	 var div = $(this);
 	 div.children().remove();
-	 div.append( createTable(options));
+	 populateDiv(options, div);
 	 div.find('.newcal-month-left').bind(
 	   'click', make_month_nav_handler(-1, div, options));
 	 div.find('.newcal-month-right').bind(

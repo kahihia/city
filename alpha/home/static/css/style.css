@@ -209,6 +209,7 @@ form .description { color: #999; font-size: 11px; }
   width: 100%;
   border-spacing: 2px;
   border-collapse: separate;
+  clear: both;
 }
 
 .newcal-header {
@@ -218,6 +219,7 @@ form .description { color: #999; font-size: 11px; }
 .newcal-month-left {
   padding: 5px;
   text-align: left;
+  float: left;
 }
 .newcal-day-head {
   text-align: center;
@@ -225,6 +227,7 @@ form .description { color: #999; font-size: 11px; }
 .newcal-month-right {
   padding: 5px;
   text-align: right;
+  float: right;
 }
 .newcal-month {
   text-align: center;
