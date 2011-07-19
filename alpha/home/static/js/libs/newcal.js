@@ -9,7 +9,7 @@
      var year = options.startOfMonth.year;
      var content = (
        '<thead>' +
-	 '<tr>' +
+	 '<tr class="newcal-header">' +
 	 '<td class="newcal-month-left">&laquo;</td>' +
 	 '<td class="newcal-month" colspan="5">' + month_name + ' ' + year + '</td>' +
 	 '<td class="newcal-month-right">&raquo;</td>' +
