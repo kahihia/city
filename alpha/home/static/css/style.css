@@ -235,6 +235,7 @@ form .description { color: #999; font-size: 11px; }
   padding: 5px;
   border: 1px solid #343796;
   background: #f7f8ff;
+  cursor: pointer;
 /*  width: 30px; */
 }
 .newcal-day:hover {
