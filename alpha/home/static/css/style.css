@@ -213,13 +213,22 @@ form .description { color: #999; font-size: 11px; }
 }
 
 .newcal-header {
-  /* background: #f00; */
+  background: #343796; 
+  padding: 2px;
+  margin: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #fff;
 }
 
 .newcal-month-left {
   padding: 5px;
   text-align: left;
   float: left;
+  cursor: pointer;
+
 }
 .newcal-day-head {
   text-align: center;
@@ -228,6 +237,7 @@ form .description { color: #999; font-size: 11px; }
   padding: 5px;
   text-align: right;
   float: right;
+  cursor: pointer;
 }
 .newcal-month {
   text-align: center;
