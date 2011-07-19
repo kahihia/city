@@ -7,7 +7,7 @@
   <nav id="main-nav">
     <ul>
       <li><a href="{% url event_browse %}"{% if browsing %} class="current" {% endif %}>Browse Events</a></li>
-      <li><a href="{% url event_create %}" class="post{% if posting %} current{% endif %}">Post an Event</a></li>
+      <li><a href="{% url event_create %}"{% if posting %} class="current" {% endif %}>Post an Event</a></li>
     </ul>
   </nav>
   <nav id="user-nav">
