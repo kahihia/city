@@ -6,24 +6,32 @@
     <form class="register-login" method="post">
       {% csrf_token %}
       <p>
-	{{ form.username.errors }}
-	<label for="{{ form.username.label }}">Username<br>
+	{{ form.username.label_tag }}<br>
 	{{ form.username }}
+	{% for error in form.username.errors %}
+	<span class="error">{{ error }}</span>
+	{% endfor %}
       </p>
       <p>
-	{{ form.email.errors }}
-	<label for="{{ form.email.label }}">Email<br>
+	{{ form.email.label_tag }}<br>
 	{{ form.email }}
+	{% for error in form.email.errors %}
+	<span class="error">{{ error }}</span>
+	{% endfor %}
       </p>
       <p>
-	{{ form.password1.errors }}
-	<label for="{{ form.password1.label }}">Password<br>
+	{{ form.password1.label_tag }}<br>
 	{{ form.password1 }}
+	{% for error in form.password1.errors %}
+	<span class="error">{{ error }}</span>
+	{% endfor %}
       </p>
       <p>
-	{{ form.password2.errors }}
-	<label for="{{ form.password2.label }}">Password (again)<br>
+	{{ form.password2.label_tag }}<br>
 	{{ form.password2 }}
+	{% for error in form.password2.errors %}
+	<span class="error">{{ error }}</span>
+	{% endfor %}
       </p>
      
       <input type="submit" class="submit button close" value="Register">      

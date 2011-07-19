@@ -5,9 +5,24 @@
     <h1>Sign In to Cityfusion</h1>
     <form method="post">
       {% csrf_token %}
-      <fieldset>
-	{{ form.as_p }}
-      </fieldset>
+      <p>
+	{{ form.username.label_tag }}<br>
+	{{ form.username }}
+	{% for error in form.username.errors %}
+	<span class="error">{{ error }}</span>
+	{% endfor %}
+      </p>
+      <p>
+	{{ form.password.label_tag }}<a href="" class="forgot">Forgot your password?</a><br>
+	{{ form.password }}
+	{% for error in form.password.errors %}
+	<span class="error">{{ error }}</span>
+	{% endfor %}
+      </p>
+      <p class="remember">
+	{{ form.remember }} <label for="{{ form.remember.label }}">Remember me</label><br>
+      </p>
+	
       <input type="submit" class="submit button close" value="Sign In">
     </form>
   </section><!-- .body -->
