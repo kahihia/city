@@ -5,10 +5,18 @@
     <h1>Register for Cityfusion</h1>
     <form class="register-login" method="post">
       {% csrf_token %}
-      <fieldset>
-	{{ form.as_p }}
-      </fieldset>
+      <p>
+	{{ form.email.errors }}
+	<label for="{{ form.email.label }}">Email<br>
+	{{ form.email }}
+      </p>
+      <p>
+	{{ form.password.errors }}
+	<label for="{{ form.password.label }}">Password<br>
+	{{ form.password }}
+      </p>
+     
       <input type="submit" class="submit button close" value="Register">      
     </form>
-  </section><!-- .body -->
+  </section>
 {% endblock %}
