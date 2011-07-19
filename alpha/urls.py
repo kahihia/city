@@ -15,18 +15,18 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('citi_user.urls')),
     url(r'^feedback/$', 'alpha.home.views.redirect', name='feedback'),
     url(r'^advertise/$', 'alpha.home.views.redirect', name='advertise'),
-
     # url(r'^alpha/', include('alpha.foo.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
 
 if settings.DEBUG:
     urlpatterns += patterns('',
-        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
-            'document_root': settings.MEDIA_ROOT,
-        }),
+        url(r'^media/(?P<path>.*)$', 
+            'django.views.static.serve', 
+            {
+                'document_root': settings.MEDIA_ROOT,
+            }),
    )

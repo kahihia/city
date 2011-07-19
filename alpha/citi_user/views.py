@@ -21,9 +21,9 @@ def events(request):
                               {'user_events':user_events},
                               context_instance = context)
 
-# def login(request, args*, **kwargs):
-#     if request.method =='POST':
-#         if request.POST.get('remember', None):
-#             request.session.set_expiry(0)
-#     #authentication_form=CityAuthForm
-#     return auth_views.login(request,*args,**kwargs)
+def login(request, *args, **kwargs):
+    if request.method =='POST':
+        if request.POST.get('remember', None):
+            request.session.set_expiry(0)
+    return auth_views.login(request,*args,**kwargs)
+        
