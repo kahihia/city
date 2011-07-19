@@ -81,8 +81,6 @@ a:hover { text-decoration: underline; }
 #main-nav a { display: block; height: 37px; width: 131px; padding: 0 0; line-height: 38px; text-align: center; }
 #main-nav a.current { background: url('img/nav-bg.png') no-repeat 0 0; text-shadow: 0 0 2px #babbd5; }
 #main-nav a.current:hover { text-decoration: none; }
-#main-nav a.post { margin-left: 4px; }
-#main-nav a.post.current { margin: 0; }
 
 #user-nav { position: absolute; top: 10px; right: 17px; font-size: 11px; }
 #user-nav li { padding-right: 7px; }
@@ -151,12 +149,10 @@ a:hover { text-decoration: underline; }
 .detail .price { background: url('img/icons.png') no-repeat 0 -186px; }
 
 
-
 .body h1 { font-size: 20px; font-weight: bold; margin: 25px 0; }
 .small { color: #999; font-size: 11px; }
 
-form {  }
-p input.text { margin-top: 5px;}
+p input.text { margin-top: 5px; }
 p label { font-weight: 11px; font-weight: bold; }
 
 form li.label { width: 130px; margin-top: 10px; float: left; color: #333; font-size: 12px; font-weight: bold; }
@@ -164,7 +160,7 @@ form li ul { overflow: hidden; width: 420px; margin-top: 8px; }
 form li ul li { float: left; width: 100px; margin-bottom: 10px; font-size: 12px; font-weight: normal;  }
 form li.other { display: block; width: 400px; margin: 0; }
 
-input.text, textarea, form input.othertext, select { height: 18px; margin: 0 0 20px; padding: 6px; background: #f9f9f9; box-shadow: inset 0 0 4px #999; border: 1px solid #919191; border-radius: 2px; font-size: 15px; width: 300px; } 
+input.text, textarea, form input.othertext, select { height: 18px; margin: 0 0 10px; padding: 6px; background: #f9f9f9; box-shadow: inset 0 0 4px #999; border: 1px solid #919191; border-radius: 2px; font-size: 15px; width: 300px; } 
 input.wide, textarea.wide { width: 400px; }
 input.othertext { height: 14px; margin-left: 7px; width: 200px; }
 input.file { margin-top: 8px; }
@@ -178,6 +174,8 @@ form .password { font-size: 16px; }
 form .remember { margin: 0 0 10px; }
 form .remember label { color: #4c4c4c; font-size: 11px; font-weight: normal; margin-left: 2px; }
 form .description { font-size: 11px; color: #999; }
+form input.error { border: 3px solid red; }
+form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 
 .button { color: #fff; cursor: pointer; background: #4f53a9; background: -moz-linear-gradient(top, #4f53a9 0%, #24267e 100%); background: -webkit-linear-gradient(top, #4f53a9 0%,#24267e 100%); background: -ms-linear-gradient(top, #4f53a9 0%,#24267e 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4f53a9', endColorstr='#24267e',GradientType=0 ); background: linear-gradient(top, #4f53a9 0%,#24267e 100%); box-shadow: 1px 2px 0 #d9d9d9; text-shadow: 1px 1px 0 #000; border-top: 1px solid #8183bf; border-left: 1px solid #5a5caa; border-right: 1px solid #242669; border-bottom: 1px solid #171949; -moz-border-radius: 5px; border-radius: 5px; height: 35px; margin-top: 30px; padding: 0 20px; font-size: 13px; }
 .button.close { margin-top: 0; }

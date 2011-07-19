@@ -10,7 +10,8 @@
 			
 			<p>
 			<label for="login">Email</label><br>
-			<input id="login" type="text" class="text">
+			<input id="login" type="text" class="text error">
+			<span class="error">Your email address sucks man.</span>
 			</p>
 			
 			<p>
@@ -25,6 +26,7 @@
 			<input type="submit" class="submit button close" value="Sign In">
 			
 			</form>
+
 
 		</section><!-- .body -->
 	</div> <!-- #main -->
