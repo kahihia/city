@@ -191,7 +191,12 @@ form .description { color: #999; font-size: 11px; }
 #footer a { color: #343796; }
 
 .newcal-date-popup {
-  background: #fff;
+  background: #eee;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee'); /* for IE */
+  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee)); /* for webkit browsers */
+  background: -moz-linear-gradient(top,  #fff,  #eee); /* for firefox 3.6+ */ 
+
+  border: 1px solid #ddd;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
@@ -229,8 +234,10 @@ form .description { color: #999; font-size: 11px; }
   text-align: center;
   padding: 5px;
   border: 1px solid #343796;
+  background: #f7f8ff;
 /*  width: 30px; */
 }
 .newcal-day:hover {
-  background: #ddf;
+  background: #ebc964;
+  border-color: #d7ad33;
 }
