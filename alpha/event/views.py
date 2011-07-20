@@ -209,7 +209,7 @@ def create(request, form_class=None, success_url=None,
         exclude = ['owner', 'authentication_key', 'slug']
         if request.user.is_authenticated():
             exclude.append('email')
-        form_class = generate_form(exclude)
+        form_class = generate_form(*exclude)
 
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)

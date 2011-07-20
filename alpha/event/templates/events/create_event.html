@@ -7,7 +7,7 @@
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <ul>
-	{% if email in form.fields %}<li class="label">{{ form.email.label_tag }}</li><li>{{ form.email }}</li><li id="email-info">{% for error in form.email.errors %}{{ error }} {% endfor %}</li>{% endif %}
+	{% if form.email %}<li class="label">{{ form.email.label_tag }}</li><li>{{ form.email }}</li><li id="email-info">{% for error in form.email.errors %}{{ error }} {% endfor %}</li>{% endif %}
 	<li class="label">{{ form.name.label_tag }}</li><li>{{ form.name }}</li><li id="name-info">{% for error in form.name.errors %}{{ error }} {% endfor %}</li>
 	<li class="label">{{ form.location.label_tag }}</li><li>{{ form.location }}</li><li id="location-info">{% for error in form.location.errors %}{{ error }} {% endfor %}</li>
 	<li class="label">{{ form.start_time.label_tag }}</li><li>{{ form.start_time }}
