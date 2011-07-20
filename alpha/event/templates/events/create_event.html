@@ -7,10 +7,18 @@
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <ul>
-	{{ form.as_ul }}
+	<li class="label">
+	  <label for="{{ form.description.html_name }}">{{ form.description.label }}</label>
+	  <span class="description">Optional</span>
+	</li><li>{{ form.description }}</li>
+	<li class="label">Tags</li>
 	<li>
-	  <input type="submit" class="submit button" value="Post Event">
-	</li>
+	  <ul>
+	    <li class="other">{# <label for="{{ form.tags.label_html}}">Tags <span class="small">(Specify)</span> #}</label>{{ form.tags }}</li>
+	  </ul>
+	<li>
+	<li class="label">{{ form.picture.label_tag }}</li><li>{{ form.picture }}</li><li id="image-info">{% for error in form.username.errors %}{{ error }} {% endfor %}</li>
+	<li class="label"></li><li><input type="submit" class="submit button" value="Post Event"></li>
       </ul>
     </form>
   </section><!-- .body -->

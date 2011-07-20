@@ -9,7 +9,7 @@ from django.template import RequestContext
 
 from event import EVENTS_PER_PAGE, DEFAULT_FROM_EMAIL
 from event.models import Event, picture_file_path
-from event.forms import EventFormLoggedIn, EventForm
+from event.forms import generate_form
 from event.utils import TagInfo, EventSet
 
 from taggit.models import Tag
@@ -206,10 +206,10 @@ def view(request, slug=None):
 def create(request, form_class=None, success_url=None,
            template_name='events/create_event.html', send_email=True):
     if form_class == None:
+        exclude = ['owner', 'authentication_key', 'slug']
         if request.user.is_authenticated():
-            form_class = EventFormLoggedIn
-        else:
-            form_class = EventForm
+            exclude.append('email')
+        form_class = generate_form(exclude)
 
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
