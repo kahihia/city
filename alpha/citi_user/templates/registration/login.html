@@ -5,7 +5,7 @@
     <h1>Sign In to Cityfusion</h1>
     <form method="post">
       {% csrf_token %}
-      <p>
+      <p {% if form.username.errors %}class="field-error"{% endif %}>
 	{{ form.username.label_tag }}<br>
 	{{ form.username }}
 	{% for error in form.username.errors %}
