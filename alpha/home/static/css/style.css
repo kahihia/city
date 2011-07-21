@@ -130,8 +130,8 @@ a:hover { text-decoration: underline; }
 .body a { font-weight: bold; }
 .noborder { border: 0; }
 
-#photo { float: left; padding-top: 20px; }
-#photo img { display: block; height: 350px; width: 250px; }
+#photo { float: left; width: 250px; padding-top: 20px; }
+#photo img { display: block; }
 
 .events li { position: relative; display: block; margin: 20px 0; color: #666; height: 40px; }
 .events li img { position: absolute; height: 40px; width: 40px; top: 0; left: 0; }
@@ -162,7 +162,7 @@ input.text, textarea, form input.othertext, select { height: 18px; margin: 0 0 2
 input.wide, textarea.wide { width: 400px; }
 input.othertext { height: 14px; margin-left: 7px; width: 200px; }
 input.file { margin-top: 8px; }
-input.date { background: #f9f9f9 url('../img/calendar.png') no-repeat 131px 8px; width: 140px; }
+input.date { background: #f9f9f9 url('../img/calendar.png') no-repeat 151px 8px; width: 160px; }
 select { height: 32px; width: 100px; margin-left: 8px; background: #fff; border-radius: 0px; font-size: 12px; vertical-align: top; }
 textarea { height: 75px; }
 

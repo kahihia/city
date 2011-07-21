@@ -275,10 +275,7 @@ def edit(request,
 
     # Define the form to be used. This allows for anonymous creation of events.
     if form_class == None:
-        if request.user.is_authenticated():
-            form_class = EventFormLoggedIn
-        else:
-            form_class = EventForm
+        form_class = generate_form('owner', 'authentication_key', 'slug', 'email')
 
     # Event object is retrieved based on incoming path hash
     # If the hash does not match an existing event, the user

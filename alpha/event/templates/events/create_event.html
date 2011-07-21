@@ -22,9 +22,9 @@
 	<li class="label">Tags</li>
 	<li>
 	  <ul>
-	    <li class="other">{# <label for="{{ form.tags.label_html}}">Tags <span class="small">(Specify)</span> #}</label>{{ form.tags }}</li>
+	    <li class="other">{# <label for="{{ form.tags.label_html}}">Tags <span class="small">(Specify)</span> </label>#}{{ form.tags }}</li>
 	  </ul>
-	<li>
+	</li>
 	<li class="label">{{ form.picture.label_tag }}</li><li>{{ form.picture }}</li><li id="image-info">{% for error in form.username.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 	<li class="label"></li><li><input type="submit" class="submit button" value="Post Event"></li>
       </ul>

@@ -1,17 +1,44 @@
 {% extends 'home.html' %}
 
 {% block content %}
-<div id="edit_event">
-  <p>Your current picture: </p>
-  {% load event_pictures %}
-  {% event_picture_url event %}
-<form method="post">
-    {% csrf_token %}
-    <fieldset>
-      {{ form.as_p }}
-    </fieldset>
-    <input type="submit" value="Edit event"/>
-</form>
 
-</div>
+
+  <section class="body noborder">
+    <h1>Edit Event</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <ul>
+	{% if form.email %}<li class="label">{{ form.email.label_tag }}</li><li>{{ form.email }}</li><li id="email-info">{% for error in form.email.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>{% endif %}
+	<li class="label">{{ form.name.label_tag }}</li><li>{{ form.name }}</li><li id="name-info">{% for error in form.name.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+	<li class="label">{{ form.location.label_tag }}</li><li>{{ form.location }}</li><li id="location-info">{% for error in form.location.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+	<li class="label">{{ form.start_time.label_tag }}</li><li>{{ form.start_time }}
+	  <a href="" class="addevent">+ Add end time</a></li>
+	<li id="when-info"></li>
+	<li class="label"></li><li>{{ form.end_time }}
+	  <a href="" class="addevent">- Remove end time</a></li>
+	<li class="label">
+	  <label for="{{ form.description.html_name }}">{{ form.description.label }}</label>
+	  <span class="description">Optional</span>
+	</li><li>{{ form.description }}</li><li id="description-info">{% for error in form.description.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+	<li class="label">Tags</li>
+	<li>
+	  <ul>
+	    <li class="other">
+	      {# <label for="{{ form.tags.label_html}}">Tags <span class="small">(Specify)</span> </label>#}
+	      {{ form.tags }}
+	    </li>
+	  </ul>
+	</li>
+	<li class="label">Your current picture</li>
+	<li>
+	  {% load event_pictures %}
+	  <img src="{% event_picture_url event %}">
+	</li><li></li>
+
+	<li class="label">{{ form.picture.label_tag }}</li><li>{{ form.picture }}</li><li id="image-info">{% for error in form.username.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+
+	<li class="label"></li><li><input type="submit" class="submit button" value="Save Changes"></li>
+      </ul>
+    </form>
+  </section><!-- .body -->
 {% endblock %}

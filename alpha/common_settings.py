@@ -161,6 +161,7 @@ LOGIN_REDIRECT_URL = '/events/'
 # alpha.event settings
 # EVENTS_PER_PAGE = 20
 # EVENT_PICTURE_DIR #defaults to 'pictures'
+EVENT_DEFAULT_PICTURE_URL = 'img/default.gif'
 # EVENT_RESIZE_METHOD #defaults to Image.BICUBIC (cubic spline
 #                      interpolation in a 4x4 environment), can be
 #                      Image.NEAREST (use nearest neighbour),
