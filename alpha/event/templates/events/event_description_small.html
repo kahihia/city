@@ -13,5 +13,9 @@
       <li>{{ tag }}</li>
     {% endfor %}
   </ul>
+  {% if citi_user_events %}
+  <a class="edit" href="{% url event_edit authentication_key=event.authentication_key %}">(Edit this event)</a>
+  {% endif %}
 </li>
+
 {% endif %}

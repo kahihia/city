@@ -37,19 +37,6 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
     else:
         upcoming_events = Event.events.filter(start_time__gte=today)
 
-    #packaging new tag information given split_tags list
-    tags = Tag.objects.all()
-    all_tags = []
-    all_tags.append( TagInfo( num=Event.events.filter(start_time__gte=today).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
-    for tag in tags:
-        all_tags.append(
-            TagInfo(
-                tag=tag, #the tag object
-                previous_slugs=split_tags, #list of existing tags
-                num=Event.events.filter(start_time__gte=today ,tags__name__in=[tag]).count() #number of events which are tagged this way
-                )
-            )
-
     #now we filter based on the date selected
     # Sam note: I realize that i have way too many queries here, but im not really sure how
     # to combine them properly and still get the header correct. Levi mentioned having more
@@ -66,6 +53,8 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
 
     # I should really combine this all into a function... there's a lot of shared code here
     if date == u'today':
+        start = today
+        end = today.replace(hour=23, minute=59, second=59)
         todays_events = upcoming_events.filter(
             start_time__year=today.year, 
             start_time__month=today.month,
@@ -75,6 +64,8 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         event_sets.append( EventSet(u"Today's Events", todays_events ) )
     elif date == u'tomorrow':
         tomorrow = today + datetime.timedelta(days=1)
+        start = tomorrow
+        end = tomorrow.replace(hour=23, minute=59, second=59)
         tomorrows_events = upcoming_events.filter(start_time__year=tomorrow.year, 
                                                  start_time__month=tomorrow.month,
                                                  start_time__day=tomorrow.day)
@@ -127,34 +118,31 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         #event_sets.append( EventSet(title, flow_events) )
         num_on_page = len(flow_events)
         if flow_events:
-            start = flow_events[0].start_time.replace(hour=0, minute=0, second=0)
+            flow_start = flow_events[0].start_time.replace(hour=0, minute=0, second=0)
         else:
-            start = today
-        end = start.replace(hour=23,minute=59,second=59)
+            flow_start = today
+        start = flow_start
+        flow_end = flow_start.replace(hour=23,minute=59,second=59)
         keep_flowing = len(flow_events) > 0
         i = -1
         while keep_flowing == True:
             i = i + 1
             if i > 0: #advance to the next day
-                start = start + datetime.timedelta(days=1)
-                end = end + datetime.timedelta(days=1)
-            #current_days_events = flow_events.filter(start_time__range=(start,end))
-            current_days_events = [ x for x in flow_events if start <= x.start_time < end ]
-            # sort the events by start time
+                flow_start = flow_start + datetime.timedelta(days=1)
+                flow_end = flow_end + datetime.timedelta(days=1)
+            current_days_events = [ x for x in flow_events if flow_start <= x.start_time < flow_end ]
             if len(current_days_events) == 0:
                 continue
             # pull the title from the first event on the list
             title = current_days_events[0].start_time.strftime('%A, %B %-1d')
-
             # make the eventset
             event_sets.append( EventSet(title, current_days_events) )
             #update the tally
             num_on_page -= len(event_sets[-1].events)
-            #event_sets.append( EventSet(str(num_on_page)))
-            
             #check for pagination!
             if num_on_page <= 0:
                 keep_flowing = False
+        end = flow_end
     else:
         ISO8601_REGEX = re.compile(r'(?P<year>[0-9]{4})-(?P<month>[0-9]{1,2})-(?P<day>[0-9]{1,2})')
         exact_date = ISO8601_REGEX.match(date)
@@ -169,6 +157,18 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
             exact_day_events = exact_day_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
             event_sets.append( EventSet( u'Events for ' + start.date().isoformat() , exact_day_events))
             
+    #packaging new tag information given split_tags list
+    tags = Tag.objects.all()
+    all_tags = []
+    all_tags.append( TagInfo( num=Event.events.filter(start_time__range=(start,end)).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
+    for tag in tags:
+        all_tags.append(
+            TagInfo(
+                tag=tag, #the tag object
+                previous_slugs=split_tags, #list of existing tags
+                num=Event.events.filter(start_time__range=(start,end), tags__name__in=[tag]).count() #number of events which are tagged this way
+                )
+            )
 
     # NUMCODE: This code is here because the page numbers start at 1 (which is never displayed or linked to)
     # and according to the resident HCI guru, people like counting from 1
