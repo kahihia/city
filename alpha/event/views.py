@@ -160,7 +160,6 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
     #packaging new tag information given split_tags list
     tags = Tag.objects.all()
     all_tags = []
-    all_tags.append( TagInfo( num=Event.events.filter(start_time__range=(start,end)).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
     for tag in tags:
         all_tags.append(
             TagInfo(
@@ -169,6 +168,10 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
                 num=Event.events.filter(start_time__range=(start,end), tags__name__in=[tag]).count() #number of events which are tagged this way
                 )
             )
+    all_tags.sort(key=lambda tag: tag.name)
+    all_tags.sort(key=lambda tag: tag.number, reverse=True)
+
+    all_tags.insert(0, TagInfo( num=Event.events.filter(start_time__range=(start,end)).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
 
     # NUMCODE: This code is here because the page numbers start at 1 (which is never displayed or linked to)
     # and according to the resident HCI guru, people like counting from 1
