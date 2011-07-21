@@ -27,8 +27,8 @@ def generate_form(*args):
             self.fields['name'].label = _(u'Event Name')
             self.fields['location'].widget.attrs['class'] = 'text wide'
             self.fields['location'].label = _(u'Location')
-            self.fields['start_time'].widget = HTML5DateTimeInput(attrs={'class':'text wide date'})
-            self.fields['end_time'].widget = HTML5DateTimeInput(attrs={'class':'text wide date'})
+            self.fields['start_time'].widget = forms.DateTimeInput(attrs={'class':'text wide date'})
+            self.fields['end_time'].widget = forms.DateTimeInput(attrs={'class':'text wide date'})
             self.fields['start_time'].label = _(u'When')
             self.fields['description'].widget = forms.widgets.Textarea( attrs={ 'class':'wide', 
                                                                                 'rows':5 } )

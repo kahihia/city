@@ -192,4 +192,90 @@
    }
    window.jumpToDate = jumpToDate;
 
+   function make_list(elements, classes, clickhandler) {
+     var main_tag, main_elem, inner_tag;
+     if (classes) {
+       main_tag = '<ul class="' + classes + '"/>';
+     } else {
+       main_tag = '<ul/>';
+     }
+     main_elem = $(main_tag);
+     for (var i in elements) {
+       if (elements.hasOwnProperty(i)) {
+	 inner_tag = $('<li/>').html(elements[i])
+	   .bind('click',
+		function() { 
+		  main_elem.children().removeClass('newtime-active');
+		  $(this).addClass('newtime-active');
+		  if (clickhandler) {
+		    clickhandler(this); 
+		  }
+		});
+	 main_elem.append( inner_tag );
+       }
+     }
+     return main_elem;
+   };
+
+   function make_header(text) {
+     return $("<div>").addClass("newtime-header").html(text);
+   }
+
+   function NewtimeContext(initial) {
+     var defaults = {
+       hour: 12,
+       minute: 0,
+       period: 'AM',
+       container: null
+     };
+     this.state = jQuery.extend(true, {}, defaults, initial);
+   };
+
+   NewtimeContext.prototype.setHour = function( hour ) {
+     this.state.hour = parseInt(hour, 10);
+     this.refresh();
+   };
+   NewtimeContext.prototype.setMinute = function( minute ) {
+     this.state.minute = parseInt(minute, 10);
+     this.refresh();
+   };
+   NewtimeContext.prototype.setPeriod = function( period ) {
+     this.state.period = period;
+     this.refresh();
+   };
+   NewtimeContext.prototype.refresh = function() {
+     console.log(sprintf("%d:%02d %s", this.state.hour, this.state.minute,
+			this.state.period));
+   };
+
+   $.fn.newtime_fill = function(options) {
+     hours = [ 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+     minutes = [ 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 ];
+     periods = [ 'AM', 'PM' ];
+     return this.each(
+       function() {
+	 var elem = $(this);
+	 var ctx = new NewtimeContext();
+	 elem.children().remove();
+	 elem.append( make_header("header here"));
+	 elem.append( make_list(hours, "newtime-hours",
+				function(e) {
+				  ctx.setHour($(e).text());
+				}));
+	 elem.append( make_list(minutes, "newtime-minutes",
+			       function(e) {
+				 ctx.setMinute($(e).text())
+			       }));
+	 elem.append( make_list(periods, "newtime-period",
+			       function(e) {
+				 ctx.setPeriod($(e).text())
+			       }));
+       });
+   };
+
+   $.fn.newtime = function(options) {
+     options = options || {};
+     
+   };
+
  })(jQuery);
