@@ -13,7 +13,7 @@
 	{% endfor %}
       </p>
       <p>
-	{{ form.password.label_tag }}<a href="" class="forgot">Forgot your password?</a><br>
+	{{ form.password.label_tag }}<a href="{% url auth_password_reset %}" class="forgot">Forgot your password?</a><br>
 	{{ form.password }}
 	{% for error in form.password.errors %}
 	<span class="error">{{ error }}</span>
