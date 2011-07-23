@@ -257,9 +257,10 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 }
 
 .newtime-frame { background: #fee; }
-.newtime-header { background: #fdd; }
-.newtime-frame li { line-height: 20px; padding-left: 10px; padding-right: 10px; }
+.newtime-header { background: #fdd; line-height: 32px; font-size: 14px; text-align: center; }
+.newtime-frame li { line-height: 20px; padding-left: 10px; padding-right: 10px; cursor: pointer; }
 .newtime-frame li.newtime-active { background: #f00; }
+.newtime-frame ul { margin: 1px; }
 .newtime-hours { float: left; text-align: right; }
 .newtime-minutes { float: left; text-align: center; }
 .newtime-period { float: left; text-align: left; }

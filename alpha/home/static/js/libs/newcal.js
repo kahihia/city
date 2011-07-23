@@ -226,7 +226,8 @@
        hour: 12,
        minute: 0,
        period: 'AM',
-       container: null
+       container: null,
+       refreshCallback: null
      };
      this.state = jQuery.extend(true, {}, defaults, initial);
    };
@@ -244,8 +245,9 @@
      this.refresh();
    };
    NewtimeContext.prototype.refresh = function() {
-     console.log(sprintf("%d:%02d %s", this.state.hour, this.state.minute,
-			this.state.period));
+     var timestring = sprintf("%d:%02d %s", this.state.hour, this.state.minute,
+			this.state.period);
+     this.state.container.find(".newtime-header").html(timestring);
    };
 
    $.fn.newtime_fill = function(options) {
@@ -255,7 +257,9 @@
      return this.each(
        function() {
 	 var elem = $(this);
-	 var ctx = new NewtimeContext();
+	 var ctx = new NewtimeContext(
+	   { container: elem });
+
 	 elem.children().remove();
 	 elem.append( make_header("header here"));
 	 elem.append( make_list(hours, "newtime-hours",
@@ -275,7 +279,30 @@
 
    $.fn.newtime = function(options) {
      options = options || {};
-     
+     var div;
+     // bind to input fields
+     return this.each(
+       function() {
+	 var element = $(this);
+	 console.log("binding");
+	 element.bind(
+	   'focus click', 
+	   function() {
+	     console.log("focus click");
+	     if (div) { return; }
+	     var offset = element.position();
+	     div = $('<div/>')
+	       .addClass("newtime-frame")
+	       .css(
+		 { position: 'absolute',
+		   left: offset.left,
+		   top: offset.top + element.height() + 2
+		 });
+	     div.newtime_fill();
+	     element.after(div);
+	     
+	   });
+       });
    };
 
  })(jQuery);
