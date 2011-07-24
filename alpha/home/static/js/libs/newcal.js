@@ -259,7 +259,6 @@
 	 var elem = $(this);
 	 var ctx = new NewtimeContext(
 	   { container: elem });
-
 	 elem.children().remove();
 	 elem.append( make_header("header here"));
 	 elem.append( make_list(hours, "newtime-hours",
@@ -268,11 +267,11 @@
 				}));
 	 elem.append( make_list(minutes, "newtime-minutes",
 			       function(e) {
-				 ctx.setMinute($(e).text())
+				 ctx.setMinute($(e).text());
 			       }));
 	 elem.append( make_list(periods, "newtime-period",
 			       function(e) {
-				 ctx.setPeriod($(e).text())
+				 ctx.setPeriod($(e).text());
 			       }));
        });
    };

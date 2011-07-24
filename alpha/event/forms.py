@@ -16,6 +16,8 @@ def generate_form(*args):
     Generates an event form
     """
     class _EventForm(forms.ModelForm):
+        start_time = forms.SplitDateTimeField()
+        end_time = forms.SplitDateTimeField()
         class Meta:
             model = Event
             exclude = tuple(args)
@@ -27,9 +29,11 @@ def generate_form(*args):
             self.fields['name'].label = _(u'Event Name')
             self.fields['location'].widget.attrs['class'] = 'text wide'
             self.fields['location'].label = _(u'Location')
-            self.fields['start_time'].widget = forms.DateTimeInput(attrs={'class':'text wide date'})
-            self.fields['end_time'].widget = forms.DateTimeInput(attrs={'class':'text wide date'})
-            self.fields['start_time'].label = _(u'When')
+            #self.fields['start_time'] = forms.SplitDateTimeWidget(attrs={'class':'text wide date'})
+            
+#            self.fields['start_time'].widget = forms.SplitDateTimeInput(attrs={'class':'text wide date'})
+#            self.fields['end_time'].widget = forms.SplitDateTimeInput(attrs={'class':'text wide date'})
+#            self.fields['start_time'].label = _(u'When')
             self.fields['description'].widget = forms.widgets.Textarea( attrs={ 'class':'wide', 
                                                                                 'rows':5 } )
             self.fields['tags'].widget.attrs['class'] = 'text wide'
