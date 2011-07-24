@@ -5,6 +5,24 @@ from alpha.event.widgets import JqSplitDateTimeWidget
 from django import forms
 from django.utils.translation import ugettext_lazy as _                        
 
+class StyledSplitDateTimeWidget(forms.SplitDateTimeWidget):
+    def __init__(self, attrs=None, date_format=None, time_format=None):
+        if attrs:
+            date_attrs = attrs.copy()
+            time_attrs = attrs.copy()
+        else:
+            date_attrs = {}
+            time_attrs = {}
+        date_attrs['class'] = 'text wide date'
+        time_attrs['class'] = 'text wide time'
+        widgets = (forms.DateInput(attrs=date_attrs, format=date_format),
+                   forms.TimeInput(attrs=time_attrs, format=time_format))
+        super(forms.SplitDateTimeWidget, self).__init__(widgets, attrs)
+
+
+class StyledSplitDateTimeField(forms.SplitDateTimeField):
+    widget = StyledSplitDateTimeWidget
+
 def generate_form(*args):
     class HTML5DateTimeInput(forms.DateTimeInput):
         input_type = 'datetime'
@@ -16,8 +34,8 @@ def generate_form(*args):
     Generates an event form
     """
     class _EventForm(forms.ModelForm):
-        start_time = forms.SplitDateTimeField()
-        end_time = forms.SplitDateTimeField()
+        start_time = StyledSplitDateTimeField()
+        end_time = StyledSplitDateTimeField()
         class Meta:
             model = Event
             exclude = tuple(args)
