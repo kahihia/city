@@ -272,10 +272,10 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
   box-shadow: 2px 2px 5px #888;
 }
 .newtime-header { background: #fdd; line-height: 32px; font-size: 14px; text-align: center; }
-.newtime-frame li { float: none; line-height: 20px; padding-left: 10px; padding-right: 10px; cursor: pointer; border: 1px solid #343796; padding: 5px; margin: 2px; background: #f7f8ff; }
+.newtime-frame li { width: auto; float: none; line-height: 20px; padding-left: 10px; padding-right: 10px; cursor: pointer; border: 1px solid #343796; padding: 5px; margin: 2px; background: #f7f8ff; }
 .newtime-frame li:hover { background: #ebc964; border-color: #d7ad37; }
 .newtime-frame li.newtime-active { background: #f00;  }
-.newtime-frame ul { margin: 1px; list-style: none; padding: 0; margin: 0; }
+.newtime-frame ul { width: auto; margin: 1px; list-style: none; padding: 0; margin: 0; }
 .newtime-hours { float: left; text-align: right; }
 .newtime-minutes { float: left; text-align: center; }
 .newtime-period { float: left; text-align: left; }
