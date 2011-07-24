@@ -5,6 +5,24 @@ from alpha.event.widgets import JqSplitDateTimeWidget
 from django import forms
 from django.utils.translation import ugettext_lazy as _                        
 
+class StyledSplitDateTimeWidget(forms.SplitDateTimeWidget):
+    def __init__(self, attrs=None, date_format=None, time_format=None):
+        if attrs:
+            date_attrs = attrs.copy()
+            time_attrs = attrs.copy()
+        else:
+            date_attrs = {}
+            time_attrs = {}
+        date_attrs['class'] = 'text wide date'
+        time_attrs['class'] = 'text wide time'
+        widgets = (forms.DateInput(attrs=date_attrs, format=date_format),
+                   forms.TimeInput(attrs=time_attrs, format=time_format))
+        super(forms.SplitDateTimeWidget, self).__init__(widgets, attrs)
+
+
+class StyledSplitDateTimeField(forms.SplitDateTimeField):
+    widget = StyledSplitDateTimeWidget
+
 def generate_form(*args):
     class HTML5DateTimeInput(forms.DateTimeInput):
         input_type = 'datetime'
@@ -16,6 +34,8 @@ def generate_form(*args):
     Generates an event form
     """
     class _EventForm(forms.ModelForm):
+        start_time = StyledSplitDateTimeField()
+        end_time = StyledSplitDateTimeField()
         class Meta:
             model = Event
             exclude = tuple(args)
@@ -27,9 +47,11 @@ def generate_form(*args):
             self.fields['name'].label = _(u'Event Name')
             self.fields['location'].widget.attrs['class'] = 'text wide'
             self.fields['location'].label = _(u'Location')
-            self.fields['start_time'].widget = HTML5DateTimeInput(attrs={'class':'text wide date'})
-            self.fields['end_time'].widget = HTML5DateTimeInput(attrs={'class':'text wide date'})
-            self.fields['start_time'].label = _(u'When')
+            #self.fields['start_time'] = forms.SplitDateTimeWidget(attrs={'class':'text wide date'})
+            
+#            self.fields['start_time'].widget = forms.SplitDateTimeInput(attrs={'class':'text wide date'})
+#            self.fields['end_time'].widget = forms.SplitDateTimeInput(attrs={'class':'text wide date'})
+#            self.fields['start_time'].label = _(u'When')
             self.fields['description'].widget = forms.widgets.Textarea( attrs={ 'class':'wide', 
                                                                                 'rows':5 } )
             self.fields['tags'].widget.attrs['class'] = 'text wide'
