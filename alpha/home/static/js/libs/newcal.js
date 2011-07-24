@@ -1,4 +1,31 @@
 (function($) {
+   function PopupManager() {
+     var that = this;
+     this.current = null;
+     
+     $(document).bind(
+       'click',
+       function(e) {
+	 that.hideCurrent();
+       });
+   }
+
+   PopupManager.prototype.hideCurrent = function() {
+     if (this.current) {
+       this.current.hide();
+       this.current = null;
+     }
+   };
+
+   PopupManager.prototype.show = function(elem) {
+     if (this.current == elem) { return; }
+     this.hideCurrent();
+     this.current = elem;
+     elem.show();
+   };
+
+   $.popupManager = new PopupManager();
+
    var month_names = ['January', 'February', 'March', 'April', 'May',
 		      'June', 'July', 'August', 'September', 'October',
 		      'November', 'December'];
@@ -80,13 +107,14 @@
 	     .bind(
 	       'click',
 	       (function(day) {
-		 return function() { 
+		 return function(e) { 
 		   var date = new Date(options.startOfMonth.year,
 				       options.startOfMonth.month,
 				       day);
 		   if (options['onClick']) {
-		     options.onClick(date);
+		     options.onClick(date, options.element);
 		   }
+		   $.popupManager.hideCurrent();
 		 };
 		}(elem)));
 	   entries = entries.add( cell );
@@ -154,15 +182,17 @@
      options.startOfMonth = startOfMonth();
      return this.each(
        function() {
-	 var div; // this is to limit it to one popup?
+	 var this_options = jQuery.extend(true, {}, options);
+	 var context = { div: null };
 	 var element = $(this);
+	 this_options.element = element;
 	 element.bind(
 	   'click',
 	   function(e) {
-	     if (div) return false;
+	     if (context.div) { $.popupManager.show(context.div); return false; }
 	     var offset = element.position();
 	     var padding = element.css('padding-left');
-	     div = $('<div />')
+	     context.div = $('<div />')
 	       .addClass('newcal-date-popup')
 	       .css(
 		 { position: 'absolute',
@@ -170,22 +200,23 @@
 		   top: offset.top + element.height()
 		 })
 	       .bind('click', function(e) { e.stopPropagation(); e.preventDefault(); return false; });
-	     element.after(div);
+	     element.after(context.div);
 	     e.preventDefault();
-	     div.newcal_fill(options);
+	     context.div.newcal_fill(this_options);
+	     $.popupManager.show(context.div);
 	     return false;
-	   });
-	 $(document).bind(
-	   'click',
-	   function(e) {
-	     if (div) {
-	       div.hide();
-	       div = null;
-	     }
 	   });
        });
    };
 
+   $.newcal_input_callback = function(date, elem) {
+     var formatted = sprintf("%04d-%02d-%02d",
+			    date.getYear() + 1900, date.getMonth()+1,
+			    date.getDate());
+     console.log("clickly");
+     elem.val(formatted);
+   };
+   
    function jumpToDate(date) {
      window.location = sprintf("/events/all/%04d-%02d-%02d", date.getYear() + 1900,
 			       date.getMonth() + 1, date.getDate());
@@ -204,7 +235,7 @@
        if (elements.hasOwnProperty(i)) {
 	 inner_tag = $('<li/>').html(elements[i])
 	   .bind('click',
-		function() { 
+		function(e) { 
 		  main_elem.children().removeClass('newtime-active');
 		  $(this).addClass('newtime-active');
 		  if (clickhandler) {
@@ -248,58 +279,67 @@
      var timestring = sprintf("%d:%02d %s", this.state.hour, this.state.minute,
 			this.state.period);
      this.state.container.find(".newtime-header").html(timestring);
+     if (this.state.refreshCallback) {
+       this.state.refreshCallback(timestring);
+     }
    };
 
-   $.fn.newtime_fill = function(options) {
+   $.newtime_create = function(options, ctx) {
      hours = [ 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
      minutes = [ 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 ];
      periods = [ 'AM', 'PM' ];
-     return this.each(
-       function() {
-	 var elem = $(this);
-	 var ctx = new NewtimeContext(
-	   { container: elem });
-	 elem.children().remove();
-	 elem.append( make_header("header here"));
-	 elem.append( make_list(hours, "newtime-hours",
-				function(e) {
-				  ctx.setHour($(e).text());
-				}));
-	 elem.append( make_list(minutes, "newtime-minutes",
-			       function(e) {
-				 ctx.setMinute($(e).text());
-			       }));
-	 elem.append( make_list(periods, "newtime-period",
-			       function(e) {
-				 ctx.setPeriod($(e).text());
-			       }));
-       });
+     var elem = ctx.state.div;
+
+     //  elem.children().remove();
+     //	 elem.append( make_header("header here"));
+     elem.append( make_list(hours, "newtime-hours",
+			    function(e) {
+			      ctx.setHour($(e).text());
+			    }));
+     elem.append( make_list(minutes, "newtime-minutes",
+			    function(e) {
+			      ctx.setMinute($(e).text());
+			    }));
+     elem.append( make_list(periods, "newtime-period",
+			    function(e) {
+			      ctx.setPeriod($(e).text());
+			    }));
    };
 
    $.fn.newtime = function(options) {
      options = options || {};
-     var div;
      // bind to input fields
      return this.each(
        function() {
 	 var element = $(this);
+	 var context = new NewtimeContext(
+	   { container: element, 
+	     div: null,
+	     refreshCallback: function(s) {
+	       element.val(s);
+	     }
+	   });
 	 console.log("binding");
 	 element.bind(
 	   'focus click', 
-	   function() {
+	   function(e) {
 	     console.log("focus click");
-	     if (div) { return; }
+	     if (context.state.div) { $.popupManager.show(context.state.div); return false; }
 	     var offset = element.position();
-	     div = $('<div/>')
+	     context.state.div = $('<div/>')
 	       .addClass("newtime-frame")
 	       .css(
 		 { position: 'absolute',
 		   left: offset.left,
 		   top: offset.top + element.height() + 2
-		 });
-	     div.newtime_fill();
-	     element.after(div);
-	     
+		 })
+	       .bind('click',
+		     function(e) { e.preventDefault(); return false; });
+	     $.newtime_create(options, context);
+	     element.after(context.state.div);
+	     e.preventDefault();
+	     $.popupManager.show(context.state.div);
+	     return false;
 	   });
        });
    };
