@@ -28,14 +28,12 @@ def generate_form(*args):
         input_type = 'datetime'
     class HTML5EmailInput(forms.TextInput):
         input_type = 'email'
-
-
     """
     Generates an event form
     """
     class _EventForm(forms.ModelForm):
-        start_time = StyledSplitDateTimeField()
-        end_time = StyledSplitDateTimeField()
+        start_time = StyledSplitDateTimeField(input_time_formats=['%I:%M %p'])
+        end_time = StyledSplitDateTimeField(required = False, input_time_formats=['%I:%M %p'])
         class Meta:
             model = Event
             exclude = tuple(args)
@@ -48,14 +46,10 @@ def generate_form(*args):
             self.fields['location'].widget.attrs['class'] = 'text wide'
             self.fields['location'].label = _(u'Location')
             #self.fields['start_time'] = forms.SplitDateTimeWidget(attrs={'class':'text wide date'})
-            
-#            self.fields['start_time'].widget = forms.SplitDateTimeInput(attrs={'class':'text wide date'})
-#            self.fields['end_time'].widget = forms.SplitDateTimeInput(attrs={'class':'text wide date'})
-#            self.fields['start_time'].label = _(u'When')
-            self.fields['description'].widget = forms.widgets.Textarea( attrs={ 'class':'wide', 
-                                                                                'rows':5 } )
+            #self.fields['start_time'].widget = forms.SplitDateTimeInput(attrs={'class':'text wide date'})
+            #self.fields['end_time'].widget = forms.SplitDateTimeInput(attrs={'class':'text wide date'})
+            #self.fields['start_time'].label = _(u'When')
+            self.fields['description'].widget = forms.widgets.Textarea( attrs={ 'class':'wide', 'rows':5 } )
             self.fields['tags'].widget.attrs['class'] = 'text wide'
             self.fields['picture'].label = _(u'Image')
-
-
     return _EventForm

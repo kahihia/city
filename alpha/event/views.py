@@ -263,13 +263,16 @@ def create(request, form_class=None, success_url=None,
                     success_url = reverse('home')
             #send user off into the abyss...
             return HttpResponseRedirect(success_url)
+        
     else:
         form = form_class()
     #Send out the form
     context = RequestContext(request)
     return render_to_response(template_name,
                               { 'form': form,
-                                'posting':True},
+                                'posting':True,
+                                #'hide_end':form.end_time != ''
+                                },
                               context_instance=context)
 
 def edit(request, 
