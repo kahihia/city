@@ -8,6 +8,8 @@
 
 <div id="main">
   {% block content %}{% endblock %}
+  {% if show_ads %}
   {% include 'ads.html' %}
+  {% endif %}
 </div>
 {% endblock %}
