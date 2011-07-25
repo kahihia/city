@@ -16,11 +16,10 @@
 	<li class="label end_time"></li><li class="end_time">{{ form.end_time }}
 	  <a href="" id="remove_time" class="addevent">- Remove end time</a></li>
 	<li class="label">
-	  <label for="{{ form.description.html_name }}">{{ form.description.label }}</label>
-	  <span class="description">Optional</span>
+	  <label for="{{ form.description.html_name }}">{{ form.description.label }}<span class="description">Optional</span></label>
 	</li><li>{{ form.description }}</li><li id="description-info">{% for error in form.description.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 	<li class="label">Tags
-	  <label for="{{ form.tags.label_html}}"><span class="small">e.g Sports, Free</span> </label>
+	  <label for="{{ form.tags.label_html}}"><span class="description">e.g Sports, Free</span></label>
 	</li>
 	<li>
 	  <ul>
