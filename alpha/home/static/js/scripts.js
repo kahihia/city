@@ -1,4 +1,4 @@
-$('#city-nav a').bind('click', function() {
+$('tr.hasactions').bind('hover', function() {
     $('#city-nav a, #city-widget').toggleClass('active');
     return false;
 });
