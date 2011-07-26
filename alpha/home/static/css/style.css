@@ -96,10 +96,10 @@ a:hover { text-decoration: underline; }
 #city-widget a { color: #ffebac; }
 #city-widget .white { color: #fff; }
 
-#date-nav { height: 40px; padding-left: 97px; background: url('../img/see-events-for.png') no-repeat 9px 50%; font-size: 12px; }
+#date-nav { height: 40px; padding-left: 97px; background: url('../img/icons.png') no-repeat 9px -235px; font-size: 12px; }
 #date-nav li { float: left; }
 #date-nav a { display: block; height: 40px; padding: 0 13px; color: #3c3d76; cursor: pointer; font-weight: bold; line-height: 41px; }
-#date-nav a.jump, #date-nav a.jump:hover { padding: 0 13px 0 34px; background: url('../img/calendar.png') no-repeat 13px -29px; }
+#date-nav a.jump, #date-nav a.jump:hover { padding: 0 13px 0 34px; background: url('../img/icons.png') no-repeat 12px -193px; }
 #date-nav a:hover { height: 38px; background-color: #fbfaf6 !important; border-bottom: 2px solid #fff; text-decoration: none; }
 #date-nav a.current { background-color: #fff !important; }
 
@@ -163,8 +163,8 @@ input.text, textarea, form input.othertext, select { height: 18px; margin: 0 0 2
 input.wide, textarea.wide { width: 400px; }
 input.othertext { height: 14px; margin-left: 7px; width: 200px; }
 input.file { margin-top: 8px; }
-input.date { background: #f9f9f9 url('../img/calendar.png') no-repeat 151px 8px; width: 160px; }
-input.time { background: #f9f9f9 url('../img/calendar.png') no-repeat 151px 8px; width: 160px; }
+input.date { background: #f9f9f9 url('../img/icons.png') no-repeat 150px -158px; width: 160px; }
+input.time { width: 80px; margin-left: 10px; background: #f9f9f9 url('../img/icons.png') no-repeat 71px -35px; }
 select { height: 32px; width: 100px; margin-left: 8px; background: #fff; border-radius: 0px; font-size: 12px; vertical-align: top; }
 textarea { height: 75px; }
 

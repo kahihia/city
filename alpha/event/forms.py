@@ -14,7 +14,7 @@ class StyledSplitDateTimeWidget(forms.SplitDateTimeWidget):
             date_attrs = {}
             time_attrs = {}
         date_attrs['class'] = 'text wide date'
-        time_attrs['class'] = 'text wide time'
+        time_attrs['class'] = 'text time'
         widgets = (forms.DateInput(attrs=date_attrs, format=date_format),
                    forms.TimeInput(attrs=time_attrs, format=time_format))
         super(forms.SplitDateTimeWidget, self).__init__(widgets, attrs)
