@@ -224,7 +224,6 @@
      var formatted = sprintf("%04d-%02d-%02d",
 			    date.getYear() + 1900, date.getMonth()+1,
 			    date.getDate());
-     console.log("clickly");
      elem.val(formatted);
    };
    
@@ -330,11 +329,9 @@
 	       element.val(s);
 	     }
 	   });
-	 console.log("binding");
 	 element.bind(
 	   'focus click', 
 	   function(e) {
-	     console.log("focus click");
 	     if (context.state.div) { 
 	       $.popupManager.show(context.state.div); 
 	       return false; 
