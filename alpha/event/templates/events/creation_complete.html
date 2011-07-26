@@ -1,0 +1,12 @@
+{% extends 'home.html' %}
+{% block content %}
+  <section class="body noborder">
+    <h1>Event Posted!</h1>
+
+    {% if user.is_authenticated %}
+    <p><a href="{% url event_browse %}">Click here</a> to view your events.</p>
+    {% endif %}
+    <p>A link to the event has been emailed to you.<p>
+
+  </section><!-- .body -->
+{% endblock %}

@@ -32,8 +32,8 @@ def generate_form(*args):
     Generates an event form
     """
     class _EventForm(forms.ModelForm):
-        start_time = StyledSplitDateTimeField(input_time_formats=['%I:%M %p'])
-        end_time = StyledSplitDateTimeField(required = False, input_time_formats=['%I:%M %p'])
+        start_time = StyledSplitDateTimeField(input_time_formats=['%I:%M %p'], label=_(u'Start Time'))
+        end_time = StyledSplitDateTimeField(required = False, input_time_formats=['%I:%M %p'], label=_(u'End Time'))
         class Meta:
             model = Event
             exclude = tuple(args)
@@ -41,6 +41,7 @@ def generate_form(*args):
             super(_EventForm, self).__init__(*args,**kwargs)
             if 'email' in self.fields:
                 self.fields['email'].widget = HTML5EmailInput(attrs={'class': 'text wide'})
+                self.fields['email'].label = _(u'Email Address')
             self.fields['name'].widget.attrs['class'] = 'text wide'
             self.fields['name'].label = _(u'Event Name')
             self.fields['location'].widget.attrs['class'] = 'text wide'
