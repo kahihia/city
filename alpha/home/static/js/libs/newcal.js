@@ -330,8 +330,8 @@
 	       .addClass("newtime-frame")
 	       .css(
 		 { position: 'absolute',
-		   left: offset.left,
-		   top: offset.top + element.height() + 2
+		   left: offset.left + parseInt(element.css('marginLeft')),
+		   top: offset.top + element.outerHeight()
 		 })
 	       .bind('click',
 		     function(e) { e.preventDefault(); return false; });
