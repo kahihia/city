@@ -7,7 +7,7 @@ class CityRegistrationForm(RegistrationForm):
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['class']= 'text'
-        self.fields['username'].label = _(u'User name')
+        self.fields['username'].label = _(u'Username')
         self.fields['email'].widget.attrs['class'] = 'text'
         self.fields['email'].label = _(u'Email')
         self.fields['password1'].widget.attrs['class'] = 'text password'
