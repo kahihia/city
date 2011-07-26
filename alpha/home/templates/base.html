@@ -23,7 +23,7 @@
 	    <p>&copy; Cityfusion {% now "Y" %}.</p>
 	    <nav>
 	      <ul>
-		<li><a href="{% url feedback %}">Feedback</a></li>
+					<!--<li><a href="{% url feedback %}">Feedback</a></li>-->
 	      </ul>
 	    </nav>
 	  </div>
@@ -63,10 +63,15 @@
 	  feedback_widget_options.display = "overlay";  
 	  feedback_widget_options.company = "cityfusion";
 	  feedback_widget_options.placement = "bottom";
-	  feedback_widget_options.color = "#f4660d";
+	  feedback_widget_options.color = "#3d409d";
 	  feedback_widget_options.style = "idea";
 	  
 	  var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+				$('a.fdbk_tab_bottom').css("right","30%");
+		});
 	</script>
 </body>
 </html>

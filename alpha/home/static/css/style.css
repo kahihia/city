@@ -283,3 +283,6 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 .newtime-minutes { float: left; text-align: center; }
 .newtime-period { float: left; text-align: left; }
 .newtime-footer { clear: both; }
+
+
+a.fdbk_tab_bottom { right: 30% !important; }
