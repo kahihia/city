@@ -61,7 +61,7 @@ table {
 
 
 
-html { background: url('../img/bg-browse.png') repeat-x 0 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; }
+html { background: url('../img/bg-browse.png') repeat-x 0 0; min-height: 100%; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; }
 html.browse { background: url('../img/bg.png') repeat-x 0 0; }
 .wrapper { position: relative; width: 940px; margin: 0 auto; }
 
@@ -285,4 +285,4 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 .newtime-footer { clear: both; }
 
 
-a.fdbk_tab_bottom { right: 30% !important; }
+a.fdbk_tab_bottom { right: 20% !important; }

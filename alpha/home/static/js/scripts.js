@@ -19,3 +19,5 @@ $('.addevent').click(function(remove_time) {
     remove_time.preventDefault();
     remove_time.stopPropagation();
 });
+
+ 
