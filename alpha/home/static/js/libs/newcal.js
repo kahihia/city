@@ -100,7 +100,7 @@
    window.ccar = createCalendarArrayRows;
 
    function createCalendarRow(options, row) {
-     var i, elem, entries = $(), cell;
+     var i, elem, entries = $(), cell, today = new Date();
      for (i in row) {
        if (row.hasOwnProperty(i)) {
 	 elem = row[i];
@@ -121,6 +121,11 @@
 		   $.popupManager.hideCurrent();
 		 };
 		}(elem)));
+	   if ( (today.getYear()+1900 === options.startOfMonth.year) &&
+	     (today.getMonth() === options.startOfMonth.month) &&
+		(today.getDate() == elem)) {
+	     cell.addClass("newcal-today");
+	   }
 	   entries = entries.add( cell );
 	 }
        }
