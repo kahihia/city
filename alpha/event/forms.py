@@ -43,6 +43,8 @@ def generate_form(*args):
                 self.fields['email'].widget = HTML5EmailInput(attrs={'class': 'text wide'})
                 self.fields['email'].label = _(u'Email Address')
             self.fields['name'].widget.attrs['class'] = 'text wide'
+            self.fields['price'].widget.attrs['class'] = 'text wide'
+            self.fields['price'].label = _(u'Price')
             self.fields['name'].label = _(u'Event Name')
             self.fields['location'].widget.attrs['class'] = 'text wide'
             self.fields['location'].label = _(u'Location')
