@@ -121,7 +121,6 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
             flow_start = flow_events[0].start_time.replace(hour=0, minute=0, second=0)
         else:
             flow_start = today
-        start = flow_start
         flow_end = flow_start.replace(hour=23,minute=59,second=59)
         keep_flowing = len(flow_events) > 0
         i = -1
@@ -142,7 +141,8 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
             #check for pagination!
             if num_on_page <= 0:
                 keep_flowing = False
-        end = flow_end
+        start = today
+        end = None
     else:
         ISO8601_REGEX = re.compile(r'(?P<year>[0-9]{4})-(?P<month>[0-9]{1,2})-(?P<day>[0-9]{1,2})')
         exact_date = ISO8601_REGEX.match(date)
@@ -152,6 +152,15 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
                              month=int(group['month']), 
                              day=int(group['day']) )
             end = start + datetime.timedelta(days=1)
+            if old_tags != u'all':
+                split_tags = old_tags.split(',')
+                # Right now we query based on tags, and then later split this up based on date.
+                # Does django make a query every time? If so this could be an expensive, inefficient way of
+                # doing the job.
+                upcoming_events = Event.events.filter(start_time__gte=start, tags__slug__in=split_tags).distinct()
+            else:
+                upcoming_events = Event.events.filter(start_time__gte=start)
+
             exact_day_events = upcoming_events.filter(start_time__range=(start,end))
             pages = exact_day_events.count() / EVENTS_PER_PAGE
             exact_day_events = exact_day_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
@@ -161,11 +170,15 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
     tags = Tag.objects.all()
     all_tags = []
     for tag in tags:
+        if end is None:
+            number_of_events = Event.events.filter(start_time__gte=start, tags__name__in=[tag]).count()
+        else:
+            number_of_events = Event.events.filter(start_time__range=(start,end), tags__name__in=[tag]).count()
         all_tags.append(
             TagInfo(
                 tag=tag, #the tag object
                 previous_slugs=split_tags, #list of existing tags
-                num=Event.events.filter(start_time__range=(start,end), tags__name__in=[tag]).count() #number of events which are tagged this way
+                num=number_of_events #number of events which are tagged this way
                 )
             )
     all_tags.sort(key=lambda tag: tag.name)
