@@ -35,7 +35,7 @@
   <script src="{{ STATIC_URL }}js/libs/sprintf-0.7-beta1.js"></script>
   <script src="{{ STATIC_URL }}js/libs/newcal.js"></script>
   <script>
-    $('.jump').newcal({ onClick: window.jumpToDate });
+    $('.jump').newcal({ onClick: window.jumpToDate, toggles: true });
     $('#id_start_time_0').newcal({ onClick: $.newcal_input_callback });
     $('#id_start_time_1').newtime();
     $('#id_end_time_0').newcal({ onClick: $.newcal_input_callback });

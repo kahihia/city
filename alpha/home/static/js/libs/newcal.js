@@ -24,6 +24,10 @@
      elem.show();
    };
 
+   PopupManager.prototype.isShowing = function(elem) {
+     return this.current == elem;
+   };
+
    $.popupManager = new PopupManager();
 
    var month_names = ['January', 'February', 'March', 'April', 'May',
@@ -189,7 +193,14 @@
 	 element.bind(
 	   'click',
 	   function(e) {
-	     if (context.div) { $.popupManager.show(context.div); return false; }
+	     if (context.div) { 
+	       if (options.toggles && $.popupManager.isShowing(context.div)) {
+		 $.popupManager.hideCurrent();
+		 return false;
+	       }
+	       $.popupManager.show(context.div); 
+	       return false; 
+	     }
 	     var offset = element.position();
 	     var padding = element.css('padding-left');
 	     context.div = $('<div />')
@@ -213,7 +224,6 @@
      var formatted = sprintf("%04d-%02d-%02d",
 			    date.getYear() + 1900, date.getMonth()+1,
 			    date.getDate());
-     console.log("clickly");
      elem.val(formatted);
    };
    
@@ -319,12 +329,13 @@
 	       element.val(s);
 	     }
 	   });
-	 console.log("binding");
 	 element.bind(
 	   'focus click', 
 	   function(e) {
-	     console.log("focus click");
-	     if (context.state.div) { $.popupManager.show(context.state.div); return false; }
+	     if (context.state.div) { 
+	       $.popupManager.show(context.state.div); 
+	       return false; 
+	     }
 	     var offset = element.position();
 	     context.state.div = $('<div/>')
 	       .addClass("newtime-frame")
