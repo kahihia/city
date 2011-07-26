@@ -10,7 +10,8 @@ handler404 = 'alpha.home.views.custom_404'
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'alpha.home.views.home', name='home'),
+    #url(r'^$', 'alpha.home.views.home', name='home'),
+    url(r'^$', 'alpha.event.views.redirect', name='home'),
     url(r'^events/', include('event.urls')),
     url(r'^accounts/', include('citi_user.urls')),
     url(r'^feedback/$', 'alpha.home.views.redirect', name='feedback'),
