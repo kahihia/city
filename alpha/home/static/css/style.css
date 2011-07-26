@@ -194,19 +194,15 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 #footer a { color: #343796; }
 
 .newcal-date-popup {
+  padding: 3px;
   background: #eee;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee'); /* for IE */
-  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #fff,  #eee); /* for firefox 3.6+ */ 
-
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
-  border-radius: 4px;
-/*  width: 200px; */
-  -moz-box-shadow: 2px 2px 5px #888;
-  -webkit-box-shadow: 2px 2px 5px #888;
-  box-shadow: 2px 2px 5px #888;
+  box-shadow: 2px 2px 5px #999;
+  -moz-box-shadow: 2px 2px 5px #999;
+  -webkit-box-shadow: 2px 2px 5px #999;
 }
 .newcal-table {
   width: 100%;
@@ -214,75 +210,75 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
   border-collapse: separate;
   clear: both;
 }
-
 .newcal-header {
+	height: 28px;
+	margin: 0 0 2px;
   background: #343796; 
-  padding: 2px;
-  margin: 4px;
+  border-radius: 4px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
-  border-radius: 4px;
-  font-weight: bold;
   color: #fff;
+  font-weight: bold;
+  line-height: 19px;
 }
-
-.newcal-month-left {
-  padding: 5px;
-  text-align: left;
+.newcal-month-left, .newcal-month-right {
+  height: 18px;
+	padding: 5px 15px;
   float: left;
+	border-radius: 4px;
   cursor: pointer;
-
+  font-size: 18px;
+  line-height: 16px;
 }
+.newcal-month-right { float: right; }
+.newcal-month-left:hover, .newcal-month-right:hover { background: #4d51a8; }
+
+
+
+
 .newcal-day-head {
+	padding-bottom: 2px;
+	color: #999;
+	font-size: 12px; 
   text-align: center;
 }
-.newcal-month-right {
-  padding: 5px;
-  text-align: right;
-  float: right;
-  cursor: pointer;
-}
+
 .newcal-month {
   text-align: center;
   padding: 5px;
 }
 .newcal-day {
   text-align: center;
-  padding: 5px;
-  border: 1px solid #343796;
-  background: #f7f8ff;
+  padding: 6px;
+  background: #fff;
+	border-radius: 2px;
+	color: #333;
   cursor: pointer;
-/*  width: 30px; */
 }
 .newcal-day:hover {
-  background: #ebc964;
-  border-color: #d7ad33;
+  background: #343796;
+  border-color: #343796;
+  color: #fff;
 }
 
 
 .newtime-frame { 
 	padding: 10px;
-
-
-
   background: #eee; 
-  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #fff,  #eee); /* for firefox 3.6+ */ 
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee'); /* for IE */
   border: 1px solid #999;
   border-radius: 4px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
-  box-shadow: 2px 2px 5px #888;
-  -moz-box-shadow: 2px 2px 5px #888;
-  -webkit-box-shadow: 2px 2px 5px #888;
+  box-shadow: 2px 2px 5px #999;
+  -moz-box-shadow: 2px 2px 5px #999;
+  -webkit-box-shadow: 2px 2px 5px #999;
 }
 .newtime-header { background: #fdd; line-height: 32px; font-size: 14px; text-align: center; }
-.newtime-frame ul { width: auto; margin: 1px; list-style: none; padding: 0; margin: 0; }
-.newtime-frame li { float: none; width: auto; padding: 5px 10px; line-height: 20px; background: #f7f8ff; border: 1px solid #343796; cursor: pointer; margin: 2px; }
+.newtime-frame ul { width: auto; margin: 0; padding: 0; list-style: none; }
+.newtime-frame li { width: auto; margin: 2px; padding: 5px 10px; float: none; background: #f7f8ff; border: 1px solid #343796; cursor: pointer; line-height: 20px; }
 .newtime-frame li:hover { background: #ebc964; border-color: #d7ad37; }
 .newtime-frame li.newtime-active { background: #3D409D; border: 0; color: #fff; }
-.newtime-hours { display: table-cell; padding-right: 10px; bordeR: 1px solid red; float: left; text-align: right; }
+.newtime-hours { padding-right: 10px; float: left; text-align: right; }
 .newtime-minutes { float: left; text-align: center; }
 .newtime-period { float: left; text-align: left; }
 .newtime-footer { clear: both; }
