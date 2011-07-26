@@ -144,9 +144,9 @@ a:hover { text-decoration: underline; }
 .detail ul.tags { margin: 30px 0 0; }
 .detail ul.tags li { background: url('../img/icons.png') no-repeat 0 1px; }
 .detail li { float: left; width: 178px; padding-left: 22px; height: 40px; line-height: 16px; }
-.detail .date { background: url('../img/icons.png') no-repeat 0 -62px; }
-.detail .loc { background: url('../img/icons.png') no-repeat 0 -124px; }
-.detail .price { background: url('../img/icons.png') no-repeat 0 -186px; }
+.detail .date { background: url('../img/icons.png') no-repeat 0 -166px; }
+.detail .loc { background: url('../img/icons.png') no-repeat 0 -84px; }
+.detail .price { background: url('../img/icons.png') no-repeat 0 -124px; }
 
 .body h1 { margin: 25px 0; font-size: 20px; font-weight: bold; }
 .small { color: #999; font-size: 11px; }
@@ -255,11 +255,9 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 	color: #333;
   cursor: pointer;
 }
-.newcal-day:hover {
-  background: #343796;
-  border-color: #343796;
-  color: #fff;
-}
+.newcal-day:hover { background: #343796; border-color: #343796; color: #fff; } 
+.newcal-past { background: #f6f6f6; }
+.newcal-today { background: #fff; }
 
 
 .newtime-frame { 
