@@ -270,10 +270,7 @@ def create(request, form_class=None, success_url=None,
             # on success, redirect to the home page by default
             # if the user is authenticated, take them to their event page
             if success_url is None:
-                if request.user.is_authenticated():
-                    success_url = reverse('citi_user_events')
-                else:
-                    success_url = reverse('home')
+                success_url = reverse('event_created')
             #send user off into the abyss...
             return HttpResponseRedirect(success_url)
         
@@ -287,6 +284,10 @@ def create(request, form_class=None, success_url=None,
                                 #'hide_end':form.end_time != ''
                                 },
                               context_instance=context)
+
+def created(request):
+    return render_to_response('events/creation_complete.html',
+                              context_instance=RequestContext(request))
 
 def edit(request, 
          form_class=None, success_url=None, authentication_key=None,

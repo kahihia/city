@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import patterns, include, url
+from django.core.urlresolvers import reverse
 
 from alpha.event import views as event
 # Uncomment the next two lines to enable the admin:
@@ -23,6 +24,10 @@ urlpatterns = patterns('',
                        url(r'^create/$',
                            event.create,
                            name='event_create'
+                           ),
+                       url(r'^create/posted/$',
+                           event.created,
+                           name='event_created'
                            ),
                        url(r'^(?P<old_tags>[^/]+)/$', 
                            event.browse, 
