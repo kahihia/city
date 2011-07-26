@@ -155,7 +155,7 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
             exact_day_events = upcoming_events.filter(start_time__range=(start,end))
             pages = exact_day_events.count() / EVENTS_PER_PAGE
             exact_day_events = exact_day_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-            event_sets.append( EventSet( u'Events for ' + start.date().isoformat() , exact_day_events))
+            event_sets.append( EventSet( u'Events for ' + start.date().strftime('%A, %B %-1d') , exact_day_events))
             
     #packaging new tag information given split_tags list
     tags = Tag.objects.all()
@@ -263,13 +263,16 @@ def create(request, form_class=None, success_url=None,
                     success_url = reverse('home')
             #send user off into the abyss...
             return HttpResponseRedirect(success_url)
+        
     else:
         form = form_class()
     #Send out the form
     context = RequestContext(request)
     return render_to_response(template_name,
                               { 'form': form,
-                                'posting':True},
+                                'posting':True,
+                                #'hide_end':form.end_time != ''
+                                },
                               context_instance=context)
 
 def edit(request, 
