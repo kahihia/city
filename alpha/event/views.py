@@ -11,7 +11,7 @@ from event import EVENTS_PER_PAGE, DEFAULT_FROM_EMAIL
 from event.models import Event, picture_file_path
 from event.forms import generate_form
 from event.utils import TagInfo, EventSet
-
+from django.http import Http404
 from taggit.models import Tag
 
 import datetime
@@ -165,6 +165,9 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
             pages = exact_day_events.count() / EVENTS_PER_PAGE
             exact_day_events = exact_day_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
             event_sets.append( EventSet( u'Events for ' + start.date().strftime('%A, %B %-1d') , exact_day_events))
+        else:
+            #we need to 404 error here...
+            raise Http404
             
     #packaging new tag information given split_tags list
     tags = Tag.objects.all()
@@ -270,7 +273,7 @@ def create(request, form_class=None, success_url=None,
             # on success, redirect to the home page by default
             # if the user is authenticated, take them to their event page
             if success_url is None:
-                success_url = reverse('event_created')
+                success_url = reverse('event_created',kwargs={ 'slug':event_obj.slug})
             #send user off into the abyss...
             return HttpResponseRedirect(success_url)
         
@@ -285,8 +288,11 @@ def create(request, form_class=None, success_url=None,
                                 },
                               context_instance=context)
 
-def created(request):
+def created(request, slug=None):
+    if slug is None:
+        raise Http404
     return render_to_response('events/creation_complete.html',
+                              { 'slug':slug },
                               context_instance=RequestContext(request))
 
 def edit(request, 

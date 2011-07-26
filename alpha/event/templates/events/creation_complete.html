@@ -2,11 +2,11 @@
 {% block content %}
   <section class="body noborder">
     <h1>Event Posted!</h1>
-
+    <p><a href="{% url event_view slug %}"> &rarr; See event in action</a></p>
+    <p>An email has been sent to you with the details.</p>
     {% if user.is_authenticated %}
-    <p><a href="{% url event_browse %}">Click here</a> to view your events.</p>
+    <p>To edit your event anytime, go to <a href="{% url event_browse %}">View your events</a>.</p>
     {% endif %}
-    <p>A link to the event has been emailed to you.<p>
 
   </section><!-- .body -->
 {% endblock %}
