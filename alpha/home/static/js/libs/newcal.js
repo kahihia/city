@@ -65,10 +65,10 @@
 
    function startOfMonth(date) {
      date = date || new Date();
-     date = new Date(date.getYear() + 1900, date.getMonth(), 1);
+     date = new Date(date.getFullYear(), date.getMonth(), 1);
      var start = { 'day' : date.getDay(),
 		   'month' : date.getMonth(),
-		   'year' : date.getYear() + 1900};
+		   'year' : date.getFullYear() };
      return start;
    }
    window.sotm = startOfMonth;
@@ -90,7 +90,7 @@
 	 rows.push(current);
        }
        current.push(now.getDate());
-       now = new Date(now.getYear(), now.getMonth(), now.getDate() + 1);
+       now = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
      }
      while (current.length < 7) {
        current.push('');
@@ -101,30 +101,34 @@
 
    function createCalendarRow(options, row) {
      var i, elem, entries = $(), cell, today = new Date();
+     today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
      for (i in row) {
        if (row.hasOwnProperty(i)) {
 	 elem = row[i];
 	 if (elem === '') {
 	   entries = entries.add( $('<td class="newcal-noday"></td>'));
 	 } else {
+	   var date = new Date(options.startOfMonth.year,
+			       options.startOfMonth.month,
+			       elem);
 	   cell = $('<td class="newcal-day">' + elem + '</td>')
 	     .bind(
 	       'click',
-	       (function(day) {
+	       (function(day, date) {
 		 return function(e) { 
-		   var date = new Date(options.startOfMonth.year,
-				       options.startOfMonth.month,
-				       day);
 		   if (options['onClick']) {
 		     options.onClick(date, options.element);
 		   }
 		   $.popupManager.hideCurrent();
 		 };
-		}(elem)));
-	   if ( (today.getYear()+1900 === options.startOfMonth.year) &&
+		}(elem, date)));
+	   if ( (today.getFullYear() === options.startOfMonth.year) &&
 	     (today.getMonth() === options.startOfMonth.month) &&
 		(today.getDate() == elem)) {
 	     cell.addClass("newcal-today");
+	   }
+	   if (date < today) {
+	     cell.addClass("newcal-past");
 	   }
 	   entries = entries.add( cell );
 	 }
@@ -227,13 +231,13 @@
 
    $.newcal_input_callback = function(date, elem) {
      var formatted = sprintf("%04d-%02d-%02d",
-			    date.getYear() + 1900, date.getMonth()+1,
+			    date.getFullYear(), date.getMonth()+1,
 			    date.getDate());
      elem.val(formatted);
    };
    
    function jumpToDate(date) {
-     window.location = sprintf("/events/all/%04d-%02d-%02d", date.getYear() + 1900,
+     window.location = sprintf("/events/all/%04d-%02d-%02d", date.getFullYear(),
 			       date.getMonth() + 1, date.getDate());
    }
    window.jumpToDate = jumpToDate;
