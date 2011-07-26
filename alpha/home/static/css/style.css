@@ -260,7 +260,9 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
   border-color: #343796;
   color: #fff;
 }
-
+.newcal-today {
+  background: #f00;
+}
 
 .newtime-frame { 
   padding: 3px;
