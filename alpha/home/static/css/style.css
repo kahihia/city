@@ -255,14 +255,10 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 	color: #333;
   cursor: pointer;
 }
-.newcal-day:hover {
-  background: #343796;
-  border-color: #343796;
-  color: #fff;
-}
-.newcal-today {
-  background: #f00;
-}
+.newcal-day:hover { background: #343796; border-color: #343796; color: #fff; } 
+.newcal-past { background: #eee; }
+.newcal-today { background: #fff; border: 1px solid #9092d7; }
+
 
 .newtime-frame { 
   padding: 3px;
