@@ -164,7 +164,7 @@ input.wide, textarea.wide { width: 400px; }
 input.othertext { height: 14px; margin-left: 7px; width: 200px; }
 input.file { margin-top: 8px; }
 input.date { background: #f9f9f9 url('../img/icons.png') no-repeat 150px -158px; width: 160px; }
-input.time { width: 80px; margin-left: 10px; background: #f9f9f9 url('../img/icons.png') no-repeat 71px -35px; }
+input.time { width: 100px; margin-left: 10px; background: #f9f9f9 url('../img/icons.png') no-repeat 91px -35px; }
 select { height: 32px; width: 100px; margin-left: 8px; background: #fff; border-radius: 0px; font-size: 12px; vertical-align: top; }
 textarea { height: 75px; }
 
@@ -263,9 +263,9 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 
 
 .newtime-frame { 
-	padding: 10px;
-  background: #eee; 
-  border: 1px solid #999;
+  padding: 3px;
+  background: #eee;
+  border: 1px solid #ccc;
   border-radius: 4px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -275,8 +275,8 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 }
 .newtime-header { background: #fdd; line-height: 32px; font-size: 14px; text-align: center; }
 .newtime-frame ul { width: auto; margin: 0; padding: 0; list-style: none; }
-.newtime-frame li { width: auto; margin: 2px; padding: 5px 10px; float: none; background: #f7f8ff; border: 1px solid #343796; cursor: pointer; line-height: 20px; }
-.newtime-frame li:hover { background: #ebc964; border-color: #d7ad37; }
+.newtime-frame li { height: 12px; width: auto; margin: 2px; padding: 5px 10px; float: none; background: #fff; border-radius: 2px; cursor: pointer; line-height: 12px; text-align: center; }
+.newtime-frame li:hover { background: #343796; border-color: #343796; color: #fff; }
 .newtime-frame li.newtime-active { background: #3D409D; border: 0; color: #fff; }
 .newtime-hours { padding-right: 10px; float: left; text-align: right; }
 .newtime-minutes { float: left; text-align: center; }
