@@ -23,17 +23,23 @@
 	<li class="label">{{ form.price.label_tag }}<span class="description">Optional</span></li><li>{{ form.price }}</li><li id="price-info">{% for error in form.price.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>	
 	<li class="label">
 	  <label for="{{ form.description.html_name }}">{{ form.description.label }}<span class="description">Optional</span></label>
-	</li><li>{{ form.description }}</li><li id="description-info">{% for error in form.description.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+	</li>
+	<li>{{ form.description }}</li>
+	<li id="description-info">{% for error in form.description.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 	<li class="label">Tags
 	  <label for="{{ form.tags.label_html}}"><span class="description">e.g Sports, Free</span></label>
 	</li>
 	<li>
 	  <ul>
 	    <li class="other">{{ form.tags }}</li>
+	    <li id="tag-info">{% for error in form.tags.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 	  </ul>
 	</li>
-	<li class="label">{{ form.picture.label_tag }}</li><li>{{ form.picture }}</li><li id="image-info">{% for error in form.username.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
-	<li class="label"></li><li><input type="submit" class="submit button" value="Post Event"></li>
+	<li class="label">{{ form.picture.label_tag }}</li>
+	<li>{{ form.picture }}</li>
+	<li id="image-info">{% for error in form.username.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+	<li class="label"></li>
+	<li><input type="submit" class="submit button" value="Post Event"></li>
       </ul>
     </form>
   </section><!-- .body -->

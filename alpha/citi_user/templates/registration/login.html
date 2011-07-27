@@ -6,7 +6,7 @@
     <form method="post">
       {% csrf_token %}
       <p {% if form.username.errors %}class="field-error"{% endif %}>
-	{{ form.username.label_tag }}<br>
+	{{ form.username.label_tag }}<a href="{% url registration_register %}" class="forgot">Don't have an account yet?</a><br>
 	{{ form.username }}
 	{% for error in form.username.errors %}
 	<span class="error">{{ error }}</span>

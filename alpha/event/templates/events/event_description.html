@@ -17,7 +17,7 @@
       {% if event.end_time %}&mdash; {{ event.end_time|just_time }}{% endif %}
     </li>
     <li class="loc">
-      <a href="">{{ event.location }}</a>
+      {{ event.location }}
     </li>
     <li class="price">
       {{ event.price }}
