@@ -39,7 +39,9 @@
      var year = options.startOfMonth.year;
      var content = (
 	 '<div class="newcal-header">' +
-		 '<div class="newcal-month">' + month_name + ' ' + year + '</div>' +
+	 '<div class="newcal-month-left">&laquo;</div>' +
+	 '<div class="newcal-month-right">&raquo;</div>' +
+	 '<div class="newcal-month" colspan="5">' + month_name + ' ' + year + '</div>' +
 	 '</div>');
      return $(content);
    }
