@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail
+from django.core.mail.message import EmailMessage
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -267,11 +267,13 @@ def create(request, form_class=None, success_url=None,
                                          'slug': event_obj.slug,
                                          'site': current_site } 
                                        )
-            send_mail( subject,
+            
+            msg = EmailMessage( subject,
                        message, 
                        DEFAULT_FROM_EMAIL, 
                        [event_obj.email] )
-
+            msg.content_subtype = 'html'
+            msg.send()
             # on success, redirect to the home page by default
             # if the user is authenticated, take them to their event page
             if success_url is None:
