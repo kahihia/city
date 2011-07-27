@@ -48,7 +48,7 @@
     <p>
       {% if page_num > 1 %}
 	{% if page_num == 2 %}
-	  <a class="button" href="{% url event_browse_tags_date old_tags=current_tags date=page_date %}">Prev</a>
+	  <a class="button" href="{% url event_browse_tags_date old_tags=current_tags date=page_date %}">Previous</a>
 	  {% else %}
 	  <a class="button" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}">Previous</a>
 	{% endif %}
