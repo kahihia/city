@@ -25,7 +25,7 @@ urlpatterns = patterns('',
                            event.create,
                            name='event_create'
                            ),
-                       url(r'^create/posted/$',
+                       url(r'^create/posted/(?P<slug>[^/]+)/$',
                            event.created,
                            name='event_created'
                            ),
