@@ -195,7 +195,7 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 
 .newcal-date-popup {
   padding: 3px;
-  background: #eee;
+  background: #e8e8e8;
   border: 1px solid #ccc;
   border-radius: 4px;
   -moz-border-radius: 4px;
@@ -211,7 +211,7 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
   clear: both;
 }
 .newcal-header {
-	height: 28px;
+	height: 26px;
 	margin: 0 0 2px;
   background: #343796; 
   border-radius: 4px;
@@ -219,16 +219,16 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
   -webkit-border-radius: 4px;
   color: #fff;
   font-weight: bold;
-  line-height: 19px;
+  line-height: 18px;
 }
 .newcal-month-left, .newcal-month-right {
-  height: 18px;
+  height: 16px;
 	padding: 5px 15px;
   float: left;
 	border-radius: 4px;
   cursor: pointer;
   font-size: 18px;
-  line-height: 16px;
+  line-height: 14px;
 }
 .newcal-month-right { float: right; }
 .newcal-month-left:hover, .newcal-month-right:hover { background: #4d51a8; }
@@ -262,7 +262,7 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 
 .newtime-frame { 
   padding: 3px;
-  background: #eee;
+  background: #e8e8e8;
   border: 1px solid #ccc;
   border-radius: 4px;
   -moz-border-radius: 4px;
