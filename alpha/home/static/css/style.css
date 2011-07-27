@@ -85,21 +85,21 @@ a:hover { text-decoration: underline; }
 #user-nav li { padding-right: 7px; }
 #user-nav a { padding: 5px; }
 
-#city-nav { position: absolute; bottom: 2px; right: 23px; font-size: 13px; float: right; width: 100px; text-align: right; height: 32px; line-height: 33px; }
-#city-nav .downtick { display: block; float: right; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 4px solid #fff; margin: 15px 8px 0 6px }
-#city-nav a { cursor: pointer; display: block; height: 32px; width: 100%; border-radius: 2px; }
+#city-nav { position: absolute; bottom: 2px; right: 23px; font-size: 13px; float: right; width: auto; height: 32px; line-height: 33px; }
+#city-nav .downtick { position: absolute; top: 0; right: 2px; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 4px solid #fff; margin: 15px 8px 0 6px }
+#city-nav a { display: block; height: 32px; width: auto; padding: 0 27px 0 13px; border-radius: 2px; cursor: pointer; text-align: right; }
 #city-nav a.active { background: #393c97; box-shadow: 1px 1px 0 #000; }
 
 #city-widget { display: none; position: absolute; width: 210px; min-height: 1px; top: 73px; right: 23px; padding: 10px 20px; background: #393c97; border-radius: 3px; box-shadow: 1px 1px 0 #000; color: #d7d8eb; font-size: 12px; font-weight: bold; }
 #city-widget.active { display: block; }
 #city-widget p { margin: 1em 0; line-height: 1.4em; text-shadow: -1px -1px 0 #202265; }
-#city-widget a { color: #ffebac; }
+#city-widget a { padding-right: 10px; color: #ffebac; }
 #city-widget .white { color: #fff; }
 
 #date-nav { height: 40px; padding-left: 97px; background: url('../img/icons.png') no-repeat 9px -235px; font-size: 12px; }
 #date-nav li { float: left; }
 #date-nav a { display: block; height: 40px; padding: 0 13px; color: #3c3d76; cursor: pointer; font-weight: bold; line-height: 41px; }
-#date-nav a.jump, #date-nav a.jump:hover { padding: 0 13px 0 34px; background: url('../img/icons.png') no-repeat 12px -193px; }
+#date-nav a.jump, #date-nav a.jump:hover { padding: 0  13px 0 34px; background: url('../img/icons.png') no-repeat 12px -193px; }
 #date-nav a:hover { height: 38px; background-color: #fbfaf6 !important; border-bottom: 2px solid #fff; text-decoration: none; }
 #date-nav a.current { background-color: #fff !important; }
 
@@ -145,7 +145,7 @@ a:hover { text-decoration: underline; }
 
 .detail ul { margin: -5px 0 15px; overflow: hidden; }
 .detail ul.tags { margin: 30px 0 0; }
-.detail ul.tags li { background: url('../img/icons.png') no-repeat 0 1px; }
+.detail ul.tags li { width: auto; background: url('../img/icons.png') no-repeat 0 1px; }
 .detail li { float: left; width: 178px; padding-left: 22px; height: 40px; line-height: 16px; }
 .detail .date { background: url('../img/icons.png') no-repeat 0 -166px; }
 .detail .loc { background: url('../img/icons.png') no-repeat 0 -84px; }
