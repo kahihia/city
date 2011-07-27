@@ -3,6 +3,11 @@
 
 
 	<div id="main">
+		
+		<nav id="back">
+			<p><a href="">&larr; Back to Today's Events</a></p>
+		</nav>
+	
 		<aside id="photo">
 			<img src="">
 		</aside>
