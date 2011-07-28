@@ -140,7 +140,7 @@ a:hover { text-decoration: underline; }
 .events li { position: relative; display: block; margin: 20px 0; color: #666; height: 40px; }
 .events img { position: absolute; height: 40px; width: 40px; top: 0; left: 0; }
 .events a { cursor: pointer; }
-.events a.text { position: absolute; top: 0; left: 45px; padding: 5px; font-weight: bold; }
+.events a.text , .events a.edit { position: absolute; top: 0; left: 45px; padding: 5px; font-weight: bold; }
 .events a.edit { top: 39px; font-size: 11px; }
 .events li ul { position: absolute; left: 50px; top: 20px; }
 .events li li { float: left; margin: 5px 10px 0 0; padding: 0; height: 15px; font-size: 12px; }

@@ -10,21 +10,23 @@
 	<a href = "{% url event_browse_date date=page_date %}"{{ tag.status|safe }}>{{ tag.name }} ({{ tag.number }})</a>
       </li>
       {% else %}
-        {% if page_date %}
-          {% if page_num < 2 %}
-            <li>
-	      <a href = "{% url event_browse_tags_date old_tags=tag.slug date=page_date %}"{{ tag.status|safe}}>{{ tag.name }} ({{ tag.number }})</a>
-	    </li>
+        {% if tag.number > 0 %}
+          {% if page_date %}
+            {% if page_num < 2 %}
+              <li>
+	        <a href = "{% url event_browse_tags_date old_tags=tag.slug date=page_date %}"{{ tag.status|safe}}>{{ tag.name }} ({{ tag.number }})</a>
+	      </li>
+	    {% else %}
+              <li>
+	        <a href = "{% url event_browse_tags_date_num old_tags=tag.slug date=page_date num=page_num %}"{{ tag.status|safe }}>{{ tag.name }} ({{ tag.number }})</a>
+	      </li>
+	    {% endif %}
 	  {% else %}
             <li>
-	      <a href = "{% url event_browse_tags_date_num old_tags=tag.slug date=page_date num=page_num %}"{{ tag.status|safe }}>{{ tag.name }} ({{ tag.number }})</a>
+	      <a href = "{% url event_browse_tags old_tags=tag.slug %}"{{ tag.status|safe }}>{{ tag.name }} ({{ tag.number }})</a>
 	    </li>
 	  {% endif %}
-	{% else %}
-          <li>
-	    <a href = "{% url event_browse_tags old_tags=tag.slug %}"{{ tag.status|safe }}>{{ tag.name }} ({{ tag.number }})</a>
-	  </li>
-	{% endif %}
+        {% endif %}
       {% endif %}
     {% endfor %}
     </ul>
