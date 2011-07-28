@@ -18,16 +18,6 @@ class StyledSplitDateTimeWidget(forms.SplitDateTimeWidget):
         widgets = (forms.DateInput(attrs=date_attrs, format=date_format),
                    forms.TimeInput(attrs=time_attrs, format=time_format))
         super(forms.SplitDateTimeWidget, self).__init__(widgets, attrs)
-    def decompress(self, value):
-        if value:
-            d = strftime('%Y-%m-%d', value.timetuple())
-            hour = strftime('%I', value.timetuple())
-            minute = strftime('%M', value.timetuple())
-            meridian = strftime('%p', value.timetuple())
-            return (d, hour, minute, meridian)
-        else:
-            return (None, None, None, None)
-
 
 class StyledSplitDateTimeField(forms.SplitDateTimeField):
     widget = StyledSplitDateTimeWidget(time_format="%I:%M %p")
