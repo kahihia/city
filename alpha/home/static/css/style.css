@@ -196,6 +196,7 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 #footer li { float: left; padding-left: 15px; }
 #footer a { color: #343796; }
 
+
 .newcal-date-popup {
   width: 250px;
   position: relative;
@@ -238,46 +239,14 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 }
 .newcal-month-right { float: right; }
 .newcal-month-left:hover, .newcal-month-right:hover { background: #4d51a8; }
-
-
-
-
-.newcal-day-head {
-	padding-bottom: 2px;
-	color: #888;
-	font-size: 12px; 
-  text-align: center;
-}
-
-.newcal-month {
-  text-align: center;
-  padding: 5px;
-}
-.newcal-day {
-  text-align: center;
-  padding: 6px;
-  background: #fff;
-	border-radius: 2px;
-	color: #333;
-  cursor: pointer;
-  border: 1px solid #ddd;
-}
+.newcal-day-head { padding-bottom: 2px; color: #888; font-size: 12px; text-align: center; }
+.newcal-month { padding: 5px; text-align: center; }
+.newcal-day { padding: 6px; background: #fff; border-radius: 2px; color: #333; cursor: pointer; border: 1px solid #ddd; text-align: center; }
 .newcal-day:hover { background: #343796; border-color: #343796; color: #fff; } 
 .newcal-past { background: #f6f6f6; border: 0; }
 .newcal-today { background: #fff; }
 
-
-.newtime-frame { 
-  padding: 3px;
-  background: #eaeaea;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  box-shadow: 2px 2px 5px #999;
-  -moz-box-shadow: 2px 2px 5px #999;
-  -webkit-box-shadow: 2px 2px 5px #999;
-}
+.newtime-frame { padding: 3px; background: #eaeaea; border: 1px solid #ccc; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; box-shadow: 2px 2px 5px #999; -moz-box-shadow: 2px 2px 5px #999; -webkit-box-shadow: 2px 2px 5px #999; }
 .newtime-header { background: #fdd; line-height: 32px; font-size: 14px; text-align: center; }
 .newtime-frame ul { width: auto; margin: 0; padding: 0; list-style: none; }
 .newtime-frame li { height: 12px; width: auto; margin: 2px; padding: 5px 10px; float: none; background: #fff; border-radius: 2px; cursor: pointer; line-height: 12px; text-align: center; }
@@ -287,6 +256,5 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 .newtime-minutes { float: left; text-align: center; }
 .newtime-period { float: left; text-align: left; }
 .newtime-footer { clear: both; }
-
 
 a.fdbk_tab_bottom { right: 20% !important; }
