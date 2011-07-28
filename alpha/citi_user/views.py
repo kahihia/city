@@ -17,7 +17,6 @@ def events(request):
         user_events = Event.events.filter(owner=request.user)
     except ObjectDoesNotExist:
         pass
-    print context
     return render_to_response('citi_user/events.html',
                               {'user_events':user_events,
                                'citi_user_events':True},
