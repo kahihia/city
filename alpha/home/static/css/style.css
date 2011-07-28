@@ -133,16 +133,19 @@ a:hover { text-decoration: underline; }
 .body a { font-weight: bold; }
 .noborder { border: 0; }
 
-#photo { float: left; width: 250px; padding-top: 20px; }
+#photo { float: left; width: 200px; padding-top: 20px; }
 #photo img { display: block; }
 
 .events li { position: relative; display: block; margin: 20px 0; color: #666; height: 40px; }
-.events li img { position: absolute; height: 40px; width: 40px; top: 0; left: 0; }
-.events li a { position: absolute; top: 0; left: 45px; padding: 5px; font-weight: bold; }
+.events img { position: absolute; height: 40px; width: 40px; top: 0; left: 0; }
+.events a { cursor: pointer; }
+.events a.text { position: absolute; top: 0; left: 45px; padding: 5px; font-weight: bold; }
+.events a.edit { top: 39px; font-size: 11px; }
 .events li ul { position: absolute; left: 50px; top: 20px; }
 .events li li { float: left; margin: 5px 10px 0 0; padding: 0; height: 15px; font-size: 12px; }
-.events li a.edit { top: 39px; font-size: 11px; }
 
+
+.detail { padding-left: 23px; }
 .detail ul { margin: -5px 0 15px; overflow: hidden; }
 .detail ul.tags { margin: 30px 0 0; }
 .detail ul.tags li { width: auto; background: url('../img/icons.png') no-repeat 0 1px; }
@@ -196,88 +199,22 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 #footer li { float: left; padding-left: 15px; }
 #footer a { color: #343796; }
 
-.newcal-date-popup {
-  width: 250px;
-  position: relative;
-  z-index: 1000;
-  padding: 3px;
-  background: #eaeaea;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  box-shadow: 2px 2px 5px #999;
-  -moz-box-shadow: 2px 2px 5px #999;
-  -webkit-box-shadow: 2px 2px 5px #999;
-}
-.newcal-table {
-  width: 100%;
-  border-spacing: 2px;
-  border-collapse: separate;
-  clear: both;
-}
-.newcal-header {
-	height: 26px;
-	margin: 0 0 2px;
-  background: #343796; 
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  color: #fff;
-  font-weight: bold;
-  line-height: 18px;
-}
-.newcal-month-left, .newcal-month-right {
-  height: 16px;
-	padding: 5px 15px;
-  float: left;
-	border-radius: 4px;
-  cursor: pointer;
-  font-size: 18px;
-  line-height: 14px;
-}
+
+.newcal-date-popup { position: relative; z-index: 1000; width: 250px; padding: 3px; background: #eaeaea; border: 1px solid #ccc; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; box-shadow: 2px 2px 5px #999; -moz-box-shadow: 2px 2px 5px #999; -webkit-box-shadow: 2px 2px 5px #999; }
+.newcal-table { width: 100%; border-spacing: 2px; border-collapse: separate; clear: both; }
+.newcal-header { height: 26px; margin: 0 0 2px; background: #343796; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; color: #fff; font-weight: bold; line-height: 18px; }
+.newcal-month-left, .newcal-month-right { height: 16px; padding: 5px 15px; float: left; border-radius: 4px; cursor: pointer; font-size: 18px; line-height: 14px; }
 .newcal-month-right { float: right; }
 .newcal-month-left:hover, .newcal-month-right:hover { background: #4d51a8; }
-
-
-
-
-.newcal-day-head {
-	padding-bottom: 2px;
-	color: #888;
-	font-size: 12px; 
-  text-align: center;
-}
-
-.newcal-month {
-  text-align: center;
-  padding: 5px;
-}
-.newcal-day {
-  text-align: center;
-  padding: 6px;
-  background: #fff;
-	border-radius: 2px;
-	color: #333;
-  cursor: pointer;
-  border: 1px solid #ddd;
-}
+.newcal-day-head { padding-bottom: 2px; color: #888; font-size: 12px; text-align: center; }
+.newcal-month { padding: 5px; text-align: center; }
+.newcal-day { padding: 6px; background: #fff; border-radius: 2px; color: #333; cursor: pointer; border: 1px solid #ddd; text-align: center; }
 .newcal-day:hover { background: #343796; border-color: #343796; color: #fff; } 
 .newcal-past { background: #f6f6f6; border: 0; }
 .newcal-today { background: #fff; }
 
 
-.newtime-frame { 
-  padding: 3px;
-  background: #eaeaea;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  box-shadow: 2px 2px 5px #999;
-  -moz-box-shadow: 2px 2px 5px #999;
-  -webkit-box-shadow: 2px 2px 5px #999;
-}
+.newtime-frame { padding: 3px; background: #eaeaea; border: 1px solid #ccc; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; box-shadow: 2px 2px 5px #999; -moz-box-shadow: 2px 2px 5px #999; -webkit-box-shadow: 2px 2px 5px #999; }
 .newtime-header { background: #fdd; line-height: 32px; font-size: 14px; text-align: center; }
 .newtime-frame ul { width: auto; margin: 0; padding: 0; list-style: none; }
 .newtime-frame li { height: 12px; width: auto; margin: 2px; padding: 5px 10px; float: none; background: #fff; border-radius: 2px; cursor: pointer; line-height: 12px; text-align: center; }

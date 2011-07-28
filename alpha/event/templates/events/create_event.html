@@ -35,8 +35,7 @@
 	</li>
 	<li>{{ form.description }}</li>
 	<li id="description-info">{% for error in form.description.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
-	<li class="label">Tags
-	  <label for="{{ form.tags.label_html}}"><span class="description">e.g Sports, Free</span></label>
+	<li class="label">Tags<label for="{{ form.tags.label_html}}"><span class="description">e.g Sports, Free</span></label>
 	</li>
 	<li>
 	  <ul>
@@ -52,8 +51,13 @@
 	</li>
 	<li>{{ form.picture }}</li>
 	<li id="image-info">{% for error in form.username.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+	<li class="label">
+	  <label for="{{ form.website.html_name }}">{{ form.website.label }}<span class="description">Optional</span></label>
+	</li>
+	<li>{{ form.website }}</li>
+	<li id="website-info">{% for error in form.website.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 	<li class="label"></li>
-	<li><input type="submit" class="submit button" value="Post Event"></li>
+	<li><input type="submit" class="submit button" value="{% block submit_button %}Post Event{% endblock %}"></li>
       </ul>
     </form>
   </section><!-- .body -->

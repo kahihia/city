@@ -1,9 +1,9 @@
 {% if event != null %}
 <li>
   {% load event_pictures %}
-  <img src="{% event_picture_url event %}" alt="">
+  <a href="{% url event_view event.slug %}"><img src="{% event_picture_url event %}" alt=""></a>
   <br>
-  <a href="{% url event_view event.slug %}">{{ event.name }}</a>
+  <a href="{% url event_view event.slug %}" class="text">{{ event.name }}</a>
   <ul>
     {% load date_formatting %}
     <li>{{ event.start_time|contextualize_date }}</li>
