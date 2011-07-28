@@ -23,18 +23,29 @@
 	<li>{{ form.start_time }}
 	  <a href="" class="addevent" id="addevent">+ Add end time</a></li>
 	<li id="when-info">{% for error in form.start_time.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
-	
 	<li class="label end_time">{{ form.end_time.label_tag }}</li>
 	<li class="end_time">{{ form.end_time }}
 	  <a href="" id="remove_time" class="addevent">- Remove end time</a></li>
 	<li class="label">{{ form.price.label_tag }}<span class="description">Optional</span></li>
 	<li>{{ form.price }}</li>
 	<li id="price-info">{% for error in form.price.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>	
+	
+	<!-- Description -->
 	<li class="label">
 	  <label for="{{ form.description.html_name }}">{{ form.description.label }}<span class="description">Optional</span></label>
 	</li>
 	<li>{{ form.description }}</li>
 	<li id="description-info">{% for error in form.description.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+
+
+	<!-- Website -->
+	<li class="label">
+	  <label for="{{ form.website.html_name }}">{{ form.website.label }}<span class="description">Optional</span></label>
+	</li>
+	<li>{{ form.website }}</li>
+	<li id="website-info">{% for error in form.website.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+
+	<!-- Tags -->
 	<li class="label">Tags<label for="{{ form.tags.label_html}}"><span class="description">e.g Sports, Free</span></label>
 	</li>
 	<li>
@@ -43,19 +54,16 @@
 	  </ul>
 	</li>
 	<li id="tag-info">{% for error in form.tags.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
-
 	{% block current_picture %}{% endblock %}
 
+	<!-- Image -->
 	<li class="label">
 	  <label for="{{ form.picture.html_name }}">{{ form.picture.label }}<span class="description">Optional</span></label>
 	</li>
 	<li>{{ form.picture }}</li>
 	<li id="image-info">{% for error in form.username.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
-	<li class="label">
-	  <label for="{{ form.website.html_name }}">{{ form.website.label }}<span class="description">Optional</span></label>
-	</li>
-	<li>{{ form.website }}</li>
-	<li id="website-info">{% for error in form.website.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+
+	<!-- Submit -->
 	<li class="label"></li>
 	<li><input type="submit" class="submit button" value="Post Event"></li>
       </ul>

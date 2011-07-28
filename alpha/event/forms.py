@@ -56,4 +56,5 @@ def generate_form(*args):
             self.fields['tags'].widget.attrs['class'] = 'text wide'
             self.fields['website'].widget.attrs['class'] = 'text wide'
             self.fields['picture'].label = _(u'Image')
+            self.fields['picture'].widget.attrs['class'] = 'file'            
     return _EventForm
