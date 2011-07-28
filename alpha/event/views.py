@@ -22,7 +22,7 @@ import re
 def redirect(request):
     return HttpResponseRedirect( reverse('event_browse'))
 
-def browse(request, old_tags=u'all', date=u'today', num=1):
+def browse(request, old_tags=u'all', date=u'flow', num=1):
     pages = 0 # used in date filter code for determining if we have pagination
     num = int(num) -1 # see comment labeled NUMCODE
     today = datetime.datetime(*(datetime.date.today().timetuple()[:6])) # isnt python so easy to read?
@@ -111,7 +111,7 @@ def browse(request, old_tags=u'all', date=u'today', num=1):
         pages = next_weeks_events.count() / EVENTS_PER_PAGE
         next_weeks_events = next_weeks_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
         event_sets.append( EventSet(u'Events Next Week', next_weeks_events) )
-    elif date == u'flow':
+    elif date == u'flow' or date == u'':
         #flow code goes here
         pages = upcoming_events.count() / EVENTS_PER_PAGE
         flow_events = list( upcoming_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE] )
