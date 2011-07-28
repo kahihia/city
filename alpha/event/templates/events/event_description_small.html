@@ -9,9 +9,11 @@
     <li>{{ event.start_time|contextualize_date }}</li>
     <li>{{ event.location }}</li>
     <li>{{ event.price }}</li>
+    {% comment %}
     {% for tag in event.tags.all %}
       <li>{{ tag }}</li>
     {% endfor %}
+    {% endcomment %}
   </ul>
   {% if citi_user_events %}
   <a class="edit" href="{% url event_edit authentication_key=event.authentication_key %}">(Edit this event)</a>
