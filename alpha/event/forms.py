@@ -30,7 +30,7 @@ class StyledSplitDateTimeWidget(forms.SplitDateTimeWidget):
 
 
 class StyledSplitDateTimeField(forms.SplitDateTimeField):
-    widget = StyledSplitDateTimeWidget
+    widget = StyledSplitDateTimeWidget(time_format="%I:%M %p")
 
 def generate_form(*args):
     class HTML5DateTimeInput(forms.DateTimeInput):

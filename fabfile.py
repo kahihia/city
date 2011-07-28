@@ -33,8 +33,11 @@ def django_admin(cmd):
 def django_admin_local(cmd):
     return ". venv/bin/activate; django-admin.py %s --settings=%s --pythonpath=." % (cmd, env.local_settings_file)
 
+def migrate():
+    return local(django_admin_local('migrate'))
 
 def serve():
+    migrate()
     local(". venv/bin/activate; cd alpha; python manage.py runserver 0.0.0.0:8000")
 
 
