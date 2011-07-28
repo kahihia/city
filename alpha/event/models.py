@@ -87,6 +87,7 @@ class Event(models.Model):
     location = models.CharField('location of the event',max_length=500)
     venue = models.ForeignKey('CanadianVenue', blank=True, null=True)    # a specific venue associated with the event
     price = models.CharField('event price (optional)',max_length=40, blank=True, default='Free')
+    website = models.URLField(verify_exists=False, blank=True, null=True, default='')
     #-------------------------------------------------------------
     # django-taggit field for tags--------------------------------
     #=============================================================

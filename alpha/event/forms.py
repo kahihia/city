@@ -54,5 +54,6 @@ def generate_form(*args):
             #self.fields['start_time'].label = _(u'When')
             self.fields['description'].widget = forms.widgets.Textarea( attrs={ 'class':'wide', 'rows':5 } )
             self.fields['tags'].widget.attrs['class'] = 'text wide'
+            self.fields['website'].widget.attrs['class'] = 'text wide'
             self.fields['picture'].label = _(u'Image')
     return _EventForm
