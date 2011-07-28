@@ -57,7 +57,7 @@
 	<li>{{ form.website }}</li>
 	<li id="website-info">{% for error in form.website.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 	<li class="label"></li>
-	<li><input type="submit" class="submit button" value="Post Event"></li>
+	<li><input type="submit" class="submit button" value="{% block submit_button %}Post Event{% endblock %}"></li>
       </ul>
     </form>
   </section><!-- .body -->
