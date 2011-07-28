@@ -169,3 +169,5 @@ EVENT_DEFAULT_PICTURE_URL = STATIC_URL + 'img/default.gif'
 #                      Image.ANTIALIAS (a high-quality downsampling
 #                      filter), or Image.BILINEAR (linear
 #                      interpolation in a 2x2 environment)
+
+EVENT_EMAIL_SITE = 'www.cityfusion.ca'
