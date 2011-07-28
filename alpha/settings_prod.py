@@ -14,5 +14,5 @@ DATABASES = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEFAULT_FROM_EMAIL = 'automaton@cityfusion.ca'
+DEFAULT_FROM_EMAIL = 'CityFusion Mailer <automaton@cityfusion.ca>'
 EMAIL_HOST = '10.181.225.239'
