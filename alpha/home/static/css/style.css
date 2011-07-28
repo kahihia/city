@@ -202,22 +202,22 @@ form span.error { display:block; padding: 0 0 12px 10px; color: red; }
 
 .newcal-date-popup { position: relative; z-index: 1000; width: 250px; padding: 3px; background: #eaeaea; border: 1px solid #ccc; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; box-shadow: 2px 2px 5px #999; -moz-box-shadow: 2px 2px 5px #999; -webkit-box-shadow: 2px 2px 5px #999; }
 .newcal-table { width: 100%; border-spacing: 2px; border-collapse: separate; clear: both; }
-.newcal-header { height: 26px; margin: 0 0 2px; background: #343796; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; color: #fff; font-weight: bold; line-height: 18px; }
+.newcal-header { height: 27px; margin: 0 0 2px; background: #343796; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; color: #fff; font-weight: bold; line-height: 18px; }
 .newcal-month-left, .newcal-month-right { height: 16px; padding: 5px 15px; float: left; border-radius: 4px; cursor: pointer; font-size: 18px; line-height: 14px; }
 .newcal-month-right { float: right; }
 .newcal-month-left:hover, .newcal-month-right:hover { background: #4d51a8; }
 .newcal-day-head { padding-bottom: 2px; color: #888; font-size: 12px; text-align: center; }
 .newcal-month { padding: 5px; text-align: center; }
-.newcal-day { padding: 6px; background: #fff; border-radius: 2px; color: #333; cursor: pointer; border: 1px solid #ddd; text-align: center; }
+.newcal-day { padding: 6px; background: #fff; border-radius: 2px; color: #333; cursor: pointer; box-shadow: 1px 1px 0 #ddd; text-align: center; }
 .newcal-day:hover { background: #343796; border-color: #343796; color: #fff; } 
-.newcal-past { background: #f6f6f6; border: 0; }
+.newcal-past { background: #f6f6f6; border: 0; box-shadow: 0; }
 .newcal-today { background: #fff; }
 
 
 .newtime-frame { padding: 3px; background: #eaeaea; border: 1px solid #ccc; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; box-shadow: 2px 2px 5px #999; -moz-box-shadow: 2px 2px 5px #999; -webkit-box-shadow: 2px 2px 5px #999; }
 .newtime-header { background: #fdd; line-height: 32px; font-size: 14px; text-align: center; }
 .newtime-frame ul { width: auto; margin: 0; padding: 0; list-style: none; }
-.newtime-frame li { height: 12px; width: auto; margin: 2px; padding: 5px 10px; float: none; background: #fff; border-radius: 2px; cursor: pointer; line-height: 12px; text-align: center; }
+.newtime-frame li { height: 13px; width: auto; margin: 2px; padding: 5px 10px; float: none; background: #fff; border-radius: 2px; box-shadow: 1px 1px 0 #ddd; cursor: pointer; line-height: 13px; text-align: center; }
 .newtime-frame li:hover { background: #343796; border-color: #343796; color: #fff; }
 .newtime-frame li.newtime-active { background: #3D409D; border: 0; color: #fff; }
 .newtime-hours { padding-right: 10px; float: left; text-align: right; }
