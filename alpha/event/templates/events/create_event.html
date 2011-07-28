@@ -41,12 +41,15 @@
 	<li>
 	  <ul>
 	    <li class="other">{{ form.tags }}</li>
-	    <li id="tag-info">{% for error in form.tags.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 	  </ul>
 	</li>
+	<li id="tag-info">{% for error in form.tags.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+
 	{% block current_picture %}{% endblock %}
 
-	<li class="label">{{ form.picture.label_tag }}</li>
+	<li class="label">
+	  <label for="{{ form.picture.html_name }}">{{ form.picture.label }}<span class="description">Optional</span></label>
+	</li>
 	<li>{{ form.picture }}</li>
 	<li id="image-info">{% for error in form.username.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 	<li class="label"></li>
