@@ -36,9 +36,7 @@
 <section class="body">
   {% for set in event_sets %}
     {% if set.name %}
-      <header>
 	<h1>{{ set.name }}</h1>
-      </header>
     {% endif %}
     <ul class="events">
       {% for event in set.events %}
