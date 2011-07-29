@@ -13,7 +13,6 @@ from event.forms import generate_form
 from event.utils import TagInfo, EventSet
 from django.http import Http404
 from taggit.models import Tag
-from django.conf import settings
 
 import datetime
 
@@ -111,7 +110,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         pages = next_weeks_events.count() / EVENTS_PER_PAGE
         next_weeks_events = next_weeks_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
         event_sets.append( EventSet(u'Events Next Week', next_weeks_events) )
-    elif date == u'flow' or date == u'':
+    elif date == u'flow':
         #flow code goes here
         pages = upcoming_events.count() / EVENTS_PER_PAGE
         flow_events = list( upcoming_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE] )
@@ -256,7 +255,7 @@ def create(request, form_class=None, success_url=None,
             form.save_m2m() #needed for many-to-many fields
 
             #email the user
-            current_site = settings.EVENT_EMAIL_SITE
+            current_site = 'Cityfusion'
             subject = render_to_string('events/creation_email_subject.txt',
                                        { 'site': current_site,
                                          'title': event_obj.name })
