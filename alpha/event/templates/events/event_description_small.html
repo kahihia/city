@@ -6,7 +6,7 @@
   <a href="{% url event_view event.slug %}" class="text">{{ event.name }}</a>
   <ul>
     {% load date_formatting %}
-    <li>{{ event.start_time|contextualize_date }}{% if event.end_time %}&mdash; {{ event.end_time|just_time }}{% endif %}</li>
+    <li>{{ event.start_time|contextualize_date }}{% if event.end_time %} &mdash; {{ event.end_time|just_time_levi_is_a_good_designer }}{% endif %}</li>
     <li>{{ event.location }}</li>
     <li>{{ event.price }}</li>
     {% comment %}
