@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail.message import EmailMessage
+from django.utils.safestring import mark_safe
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -13,6 +14,7 @@ from event.forms import generate_form
 from event.utils import TagInfo, EventSet
 from django.http import Http404
 from taggit.models import Tag
+from django.conf import settings
 
 import datetime
 
@@ -255,10 +257,10 @@ def create(request, form_class=None, success_url=None,
             form.save_m2m() #needed for many-to-many fields
 
             #email the user
-            current_site = 'Cityfusion'
+            current_site = settings.EVENT_EMAIL_SITE
             subject = render_to_string('events/creation_email_subject.txt',
                                        { 'site': current_site,
-                                         'title': event_obj.name })
+                                         'title': mark_safe(event_obj.name) })
 
             subject= ''.join( subject.splitlines() )  # Email subjects are all on one line
 
