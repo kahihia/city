@@ -138,15 +138,15 @@ a:hover { text-decoration: underline; }
 #photo img { display: block; }
 
 .events li { position: relative; display: block; margin: 20px 0; color: #666; height: 40px; }
-.events img { position: absolute; height: 40px; width: 40px; top: 0; left: 0; }
+.events img { position: absolute; height: 40px; width: 40px; top: 0; left: 0; background: #eee; }
 .events a { cursor: pointer; }
-.events a.text , .events a.edit { position: absolute; top: 0; left: 45px; padding: 5px; font-weight: bold; }
+.events a.text , .events a.edit { position: absolute; top: 0; left: 45px; padding: 5px; color: #2D51D8; font-weight: normal; }
 .events a.edit { top: 39px; font-size: 11px; }
-.events li ul { position: absolute; left: 50px; top: 20px; }
-.events li li { float: left; margin: 5px 10px 0 0; padding: 0; height: 15px; font-size: 12px; }
+.events li ul { position: absolute; left: 50px; top: 19px; }
+.events li li { float: left; margin: 5px 13px 0 0; padding: 0; height: 15px; font-size: 11px; }
 
 .detail { padding-left: 23px; }
-.detail ul { margin: -5px 0 15px; overflow: hidden; }
+.detail ul { margin: 15px 0; overflow: hidden; }
 .detail ul.tags { margin: 30px 0 0; }
 .detail ul.tags li { width: auto; background: url('../img/icons.png') no-repeat 0 1px; }
 .detail li { float: left; width: 178px; padding-left: 22px; height: 40px; line-height: 16px; }
@@ -154,7 +154,8 @@ a:hover { text-decoration: underline; }
 .detail .loc { background: url('../img/icons.png') no-repeat 0 -84px; }
 .detail .price { background: url('../img/icons.png') no-repeat 0 -125px; }
 
-.body h1 { margin: 25px 0; font-size: 20px; font-weight: bold; }
+.body h1 { margin: 40px 0 10px; font-size: 20px; font-weight: bold; }
+.body h1:first-child { margin-top: 23px;}
 .small { color: #999; font-size: 11px; }
 
 p input.text { margin-top: 5px;}
