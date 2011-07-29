@@ -223,7 +223,8 @@ def view(request, slug=None):
         return HttpResponseRedirect(reverse('event_browse'))
     
     return render_to_response('events/event_description.html',
-                              {'event': event},
+                              { 'event': event,
+                                'browsing':True },
                               context_instance = RequestContext(request))
 
 def create(request, form_class=None, success_url=None,
