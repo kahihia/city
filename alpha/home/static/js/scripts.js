@@ -20,4 +20,10 @@ $('.addevent').click(function(remove_time) {
     remove_time.stopPropagation();
 });
 
- 
+//this hides all the tags after the first ten.
+$('#tags ul li').filter(':gt(10)').hide();
+
+
+$('#tags ul').append('<li>more</li>').find('li:last').click(function(){
+    $(this).siblings(':gt(1)').toggle();
+});
