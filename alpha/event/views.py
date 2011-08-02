@@ -205,7 +205,9 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
                                 'pages':range(pages+1),
                                 'page_less':page_less,
                                 'page_more':page_more,
-                                'browsing':True},
+                                'browsing':True, 
+                                'browse_bar':True,
+                                },
                               context_instance = RequestContext(request))
 
 def view(request, slug=None):
@@ -216,7 +218,8 @@ def view(request, slug=None):
     
     return render_to_response('events/event_description.html',
                               { 'event': event,
-                                'browsing':True },
+                                'browsing':True,
+                                },
                               context_instance = RequestContext(request))
 
 def create(request, form_class=None, success_url=None,
@@ -291,7 +294,9 @@ def created(request, slug=None):
     if slug is None:
         raise Http404
     return render_to_response('events/creation_complete.html',
-                              { 'slug':slug },
+                              { 'slug':slug,
+                                'posting':True, 
+                                },
                               context_instance=RequestContext(request))
 
 def edit(request, 
