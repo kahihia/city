@@ -90,14 +90,6 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         pages = this_weekends_events.count() / EVENTS_PER_PAGE
         this_weekends_events = this_weekends_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
         event_sets.append( EventSet(u'Events This Weekend', this_weekends_events) )
-    elif date == u'next-weekend':
-        next_monday = today + datetime.timedelta(days=7-today.weekday())
-        end = next_monday + datetime.timedelta(days=6-next_monday.weekday())
-        start = next_monday + datetime.timedelta(days=4-next_monday.weekday())
-        next_weekends_events = upcoming_events.filter(start_time__range=(start,end))
-        pages = next_weekends_events.count() / EVENTS_PER_PAGE
-        next_weekends_events = next_weekends_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u'Events Next Weekend', next_weekends_events) )
     elif date == u'this-week':
         end = today + datetime.timedelta(days=6-today.weekday())
         start = today
