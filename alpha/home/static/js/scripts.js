@@ -21,9 +21,16 @@ $('.addevent').click(function(remove_time) {
 });
 
 //this hides all the tags after the first ten.
-$('#tags ul li').filter(':gt(10)').hide();
+$('#tags ul li').slice(10).hide();
 
 
-$('#tags ul').append('<li>more</li>').find('li:last').click(function(){
-    $(this).siblings(':gt(1)').toggle();
+$('#tags ul').append('<li><a href="#" class="more"><span class="tickbox"><span class="downtick"></span></span>More</a></li>');
+$('#tags ul').find('li:last').click(function(){
+    $(this).siblings(':gt(10)').toggle();
+    $(this).toggle();
+});
+$('#tags ul').append('<li><a href="#" class="more"><span class="tickbox"><span class="uptick"></span></span>Fewer</a></li>');
+$('#tags ul').find('li:last').hide().click(function(){
+    $(this).siblings(':gt(10)').toggle();
+    $(this).toggle();
 });
