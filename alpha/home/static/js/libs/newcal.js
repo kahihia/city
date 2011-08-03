@@ -242,6 +242,33 @@
    }
    window.jumpToDate = jumpToDate;
 
+   function highlight_correct_elements(ctx) {
+     var div = ctx.state.div;
+     console.log("div:", ctx.state.div);
+     div.find(".newtime-active").removeClass('newtime-active');
+     div.find(".newtime-hours li").each(
+       function() {
+	 var e = $(this);
+	 if (e.text() == ctx.state.hour) {
+	   e.addClass('newtime-active');
+	 }
+       });
+     div.find(".newtime-minutes li").each(
+       function() {
+	 var e = $(this);
+	 if (e.text() == sprintf("%02d", ctx.state.minute)) {
+	   e.addClass('newtime-active');
+	 }
+       });
+     div.find(".newtime-period li").each(
+       function() {
+	 var e = $(this);
+	 if (e.text() == ctx.state.period) {
+	   e.addClass('newtime-active');
+	 }
+       });
+   }
+
    function make_list(elements, classes, clickhandler) {
      var main_tag, main_elem, inner_tag;
      if (classes) {
@@ -255,8 +282,6 @@
 	 inner_tag = $('<li/>').html(elements[i])
 	   .bind('click',
 		function(e) { 
-		  main_elem.children().removeClass('newtime-active');
-		  $(this).addClass('newtime-active');
 		  if (clickhandler) {
 		    clickhandler(this); 
 		  }
@@ -294,6 +319,19 @@
      this.state.period = period;
      this.refresh();
    };
+   NewtimeContext.prototype.setTimeFromString = function( timeString ) {
+     // assume it follows a normal pattern
+     var re = /(\d+):(\d+) ?(\w+)/;
+     var match = re.exec(timeString);
+     console.log("setTimeFromString: ", timeString, match);
+     if (match && match.length == 4) {
+       this.state.hour = parseInt(match[1], 10);
+       this.state.minute = parseInt(match[2], 10);
+       this.state.period = match[3];
+       this.refresh();
+     }
+   };
+
    NewtimeContext.prototype.refresh = function() {
      var timestring = sprintf("%d:%02d %s", this.state.hour, this.state.minute,
 			this.state.period);
@@ -314,14 +352,17 @@
      elem.append( make_list(hours, "newtime-hours",
 			    function(e) {
 			      ctx.setHour($(e).text());
+			      highlight_correct_elements(ctx);
 			    }));
      elem.append( make_list(minutes, "newtime-minutes",
 			    function(e) {
 			      ctx.setMinute($(e).text());
+			      highlight_correct_elements(ctx);
 			    }));
      elem.append( make_list(periods, "newtime-period",
 			    function(e) {
 			      ctx.setPeriod($(e).text());
+			      highlight_correct_elements(ctx);
 			    }));
    };
 
@@ -336,12 +377,14 @@
 	     div: null,
 	     refreshCallback: function(s) {
 	       element.val(s);
+	       highlight_correct_elements(context);
 	     }
 	   });
 	 element.bind(
 	   'focus click', 
 	   function(e) {
 	     if (context.state.div) { 
+	       context.setTimeFromString( element.val() );
 	       $.popupManager.show(context.state.div); 
 	       return false; 
 	     }
