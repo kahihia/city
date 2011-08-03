@@ -18,3 +18,6 @@ DEFAULT_FROM_EMAIL = 'Cityfusion Mailer <dev-automaton@cityfusion.ca>'
 EMAIL_HOST = '10.181.225.239'
 
 EVENT_EMAIL_SITE = 'cityfusion.dev.peakxp.com'
+
+# alpha.event settings
+EVENTS_PER_PAGE = 20

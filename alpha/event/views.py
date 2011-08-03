@@ -196,8 +196,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         page_more = num +1
 
     return render_to_response('events/browse_events.html',
-                              { 'upcoming_events':upcoming_events,
-                                'all_tags':all_tags,
+                              { 'all_tags':all_tags,
                                 'current_tags':old_tags,
                                 'page_date':date,
                                 'page_num':int(num),

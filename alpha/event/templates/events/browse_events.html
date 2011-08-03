@@ -1,5 +1,22 @@
 {% extends 'home.html' %}
 
+{% comment %}
+browse_events.html
+--------------------------------------
+This is the event browser.
+
+Incoming context has:
+all_tags: a container of tags associated with events that could be displayed on this page
+current_tags: the tags enabled on this page
+page_date: the date we are looking at
+page_num: the current page number
+pages: a list of the numbers from 1 to the number of pages to be displayed
+page_less: the previous page number
+page_more: the next page number
+browsing: the boolean stating to the header that we are browsing (the top button)
+browse_bar: the boolean stating to the header that we want a nav list of dates in the header
+{% endcomment %}
+
 {% block content %}
 <aside id="tags">
   <nav>
@@ -36,11 +53,13 @@
 <section class="body">
   {% for set in event_sets %}
     {% if set.name %}
-	<h1>{{ set.name }}</h1>
+      <h1>{{ set.name }}</h1>
     {% endif %}
     <ul class="events">
       {% for event in set.events %}
         {% include 'events/event_description_small.html' %}
+      {% empty %}
+        {% include 'events/no_events.html' %}
       {% endfor %}
     </ul>
   {% endfor %}
@@ -62,7 +81,7 @@
       {% for numb in pages %}
         {% if numb > 0 %}
 	  <li>
-		<a {% if page_num == numb %}class="current"{% endif %} href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}">{{ numb }}</a>
+	    <a {% if page_num == numb %}class="current"{% endif %} href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}">{{ numb }}</a>
 	  </li>    
         {% endif %}
       {% endfor %}

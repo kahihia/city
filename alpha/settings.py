@@ -14,3 +14,5 @@ DATABASES = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# alpha.event settings
+EVENTS_PER_PAGE = 2
