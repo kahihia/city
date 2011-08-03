@@ -140,10 +140,10 @@ a:hover { text-decoration: underline; }
 .events li { position: relative; display: block; margin: 20px 0; color: #666; height: 40px; }
 .events img { position: absolute; height: 40px; width: 40px; top: 0; left: 0; background: #eee; }
 .events a { cursor: pointer; }
-.events a.text , .events a.edit { position: absolute; top: 0; left: 45px; padding: 5px; color: #2D51D8; font-weight: normal; }
+.events a.text , .events a.edit { position: absolute; top: 0; left: 45px; padding: 5px; color: #2D51D8; font-size: 14px; font-weight: normal; }
 .events a.edit { top: 39px; font-size: 11px; }
 .events li ul { position: absolute; left: 50px; top: 19px; }
-.events li li { float: left; margin: 5px 13px 0 0; padding: 0; height: 15px; font-size: 11px; }
+.events li li { float: left; margin: 6px 13px 0 0; padding: 0; height: 15px; font-size: 12px; }
 
 .detail { padding-left: 23px; }
 .detail ul { margin: 15px 0; overflow: hidden; }
