@@ -19,3 +19,6 @@ EMAIL_HOST = '10.181.225.239'
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+
+# alpha.event settings
+EVENTS_PER_PAGE = 30

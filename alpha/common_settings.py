@@ -160,7 +160,6 @@ LOGIN_REDIRECT_URL = '/events/'
 # django taggit settings
 
 # alpha.event settings
-EVENTS_PER_PAGE = 30
 # EVENT_PICTURE_DIR #defaults to 'pictures'
 EVENT_DEFAULT_PICTURE_URL = STATIC_URL + 'img/default.gif'
 # EVENT_RESIZE_METHOD #defaults to Image.BICUBIC (cubic spline
