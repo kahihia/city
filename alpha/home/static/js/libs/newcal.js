@@ -244,7 +244,6 @@
 
    function highlight_correct_elements(ctx) {
      var div = ctx.state.div;
-     console.log("div:", ctx.state.div);
      div.find(".newtime-active").removeClass('newtime-active');
      div.find(".newtime-hours li").each(
        function() {
@@ -323,7 +322,6 @@
      // assume it follows a normal pattern
      var re = /(\d+):(\d+) ?(\w+)/;
      var match = re.exec(timeString);
-     console.log("setTimeFromString: ", timeString, match);
      if (match && match.length == 4) {
        this.state.hour = parseInt(match[1], 10);
        this.state.minute = parseInt(match[2], 10);
