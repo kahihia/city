@@ -96,8 +96,7 @@ class Event(models.Model):
     def save(self, *args, **kwargs):
         if self.pk is None:
             self.authentication_key = ''.join(random.choice(string.ascii_letters + '0123456789') for x in xrange(40) )
-        
-        self.slug = self.uniqueSlug()
+            self.slug = self.uniqueSlug()
         super(Event, self).save(*args, **kwargs)
         return self
 
