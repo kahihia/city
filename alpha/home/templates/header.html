@@ -33,7 +33,7 @@
   <p><span class="white">Want your city to be next?</span><br><a href="#" onclick="feedback_widget.show(); return false;">Let us know.</a></p>
 </aside>
 
-{% if browsing %}
+{% if browse_bar %}
 <nav id="date-nav">
   <ul>
     <li>
@@ -44,9 +44,6 @@
     </li>
     <li>
       <a href="{% url event_browse_tags_date date="this-weekend" old_tags=current_tags %}" {% if page_date == "this-weekend" %}class="current"{% endif %}>This weekend</a>
-    </li>
-    <li>
-      <a href="{% url event_browse_tags_date date="next-weekend" old_tags=current_tags %}" {% if page_date == "next-weekend" %}class="current"{% endif %}>Next weekend</a>
     </li>
     <li>
       <a href="{% url event_browse_tags_date date="this-week" old_tags=current_tags %}" {% if page_date == "this-week" %}class="current"{% endif %}>This week</a>

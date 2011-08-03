@@ -90,14 +90,6 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         pages = this_weekends_events.count() / EVENTS_PER_PAGE
         this_weekends_events = this_weekends_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
         event_sets.append( EventSet(u'Events This Weekend', this_weekends_events) )
-    elif date == u'next-weekend':
-        next_monday = today + datetime.timedelta(days=7-today.weekday())
-        end = next_monday + datetime.timedelta(days=6-next_monday.weekday())
-        start = next_monday + datetime.timedelta(days=4-next_monday.weekday())
-        next_weekends_events = upcoming_events.filter(start_time__range=(start,end))
-        pages = next_weekends_events.count() / EVENTS_PER_PAGE
-        next_weekends_events = next_weekends_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u'Events Next Weekend', next_weekends_events) )
     elif date == u'this-week':
         end = today + datetime.timedelta(days=6-today.weekday())
         start = today
@@ -213,7 +205,9 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
                                 'pages':range(pages+1),
                                 'page_less':page_less,
                                 'page_more':page_more,
-                                'browsing':True},
+                                'browsing':True, 
+                                'browse_bar':True,
+                                },
                               context_instance = RequestContext(request))
 
 def view(request, slug=None):
@@ -223,7 +217,9 @@ def view(request, slug=None):
         return HttpResponseRedirect(reverse('event_browse'))
     
     return render_to_response('events/event_description.html',
-                              {'event': event},
+                              { 'event': event,
+                                'browsing':True,
+                                },
                               context_instance = RequestContext(request))
 
 def create(request, form_class=None, success_url=None,
@@ -298,7 +294,9 @@ def created(request, slug=None):
     if slug is None:
         raise Http404
     return render_to_response('events/creation_complete.html',
-                              { 'slug':slug },
+                              { 'slug':slug,
+                                'posting':True, 
+                                },
                               context_instance=RequestContext(request))
 
 def edit(request, 

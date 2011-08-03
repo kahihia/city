@@ -12,10 +12,6 @@ urlpatterns = patterns('',
                            kwargs={'date': u'flow'},
                            name='event_browse'
                            ),
-                       url(r'^all/today/$', 
-                           event.browse, 
-                           name='event_browse_today'
-                           ),
                        url(r'^edit/(?P<authentication_key>\w+)/$',
                            event.edit,
                            name='event_edit'
