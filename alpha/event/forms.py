@@ -4,6 +4,7 @@ from alpha.event.fields import JqSplitDateTimeField
 from alpha.event.widgets import JqSplitDateTimeWidget
 from django import forms
 from django.utils.translation import ugettext_lazy as _                        
+import string
 
 class StyledSplitDateTimeWidget(forms.SplitDateTimeWidget):
     def __init__(self, attrs=None, date_format=None, time_format=None):
@@ -55,5 +56,9 @@ def generate_form(*args):
             self.fields['tags'].widget.attrs['class'] = 'text wide'
             self.fields['website'].widget.attrs['class'] = 'text wide'
             self.fields['picture'].label = _(u'Image')
-            self.fields['picture'].widget.attrs['class'] = 'file'            
+            self.fields['picture'].widget.attrs['class'] = 'file' 
+        def clean(self):
+            cleaned_data= self.cleaned_data
+            cleaned_data['tags'] = map(string.capwords,cleaned_data['tags'])
+            return cleaned_data
     return _EventForm

@@ -247,7 +247,7 @@ def create(request, form_class=None, success_url=None,
                 event_obj.picture = path
                 new_file = event_obj.picture.storage.save(path,
                                                           request.FILES['picture'])
-                
+            
             event_obj = event_obj.save() #save to the database
             form.save_m2m() #needed for many-to-many fields
 
