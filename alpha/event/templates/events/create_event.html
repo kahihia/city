@@ -7,6 +7,8 @@
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <ul>
+	<li class="label"></li>
+	<li>{{ form.non_field_errors }}</li>
 	{% if form.email %}<li class="label">{{ form.email.label_tag }}</li>
 	<li>{{ form.email }}</li>
 	<li id="email-info">{% for error in form.email.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>{% endif %}

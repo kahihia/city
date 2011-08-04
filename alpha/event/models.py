@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 import string
 import sha
 import random
@@ -99,7 +99,9 @@ class Event(models.Model):
             self.slug = self.uniqueSlug()
         super(Event, self).save(*args, **kwargs)
         return self
-
+    def clean(self):
+        if self.start_time > self.end_time:
+            raise ValidationError('Temporal anomaly detected! The event must end after it starts')
     def uniqueSlug(self):
         """
         Returns: A unique (to database) slug name
