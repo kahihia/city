@@ -24,7 +24,7 @@
     </li>
   </ul>
   
-  <p>{{ event.description }}</p>
+  <p>{{ event.description|linebreaks }}</p>
   {% if event.website %}<p><a href="{{ event.website }}">Website</a></p>{% endif %}
   <ul class="tags">
     <li>{% for tag in event.tags.all %}<a href="{% url event_browse_tags tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</li>
