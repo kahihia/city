@@ -100,8 +100,9 @@ class Event(models.Model):
         super(Event, self).save(*args, **kwargs)
         return self
     def clean(self):
-        if self.start_time > self.end_time:
-            raise ValidationError('Temporal anomaly detected! The event must end after it starts')
+        if self.end_time:
+            if self.start_time > self.end_time:
+                raise ValidationError('Temporal anomaly detected! The event must end after it starts')
     def uniqueSlug(self):
         """
         Returns: A unique (to database) slug name
