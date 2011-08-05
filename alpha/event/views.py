@@ -209,7 +209,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
                                 },
                               context_instance = RequestContext(request))
 
-def view(request, slug=None):
+def view(request, slug=None, old_tags=None):
     try:
         event = Event.events.get(slug=slug)
     except ObjectDoesNotExist:
@@ -218,6 +218,7 @@ def view(request, slug=None):
     return render_to_response('events/event_description.html',
                               { 'event': event,
                                 'browsing':True,
+                                'old_tags':old_tags,
                                 },
                               context_instance = RequestContext(request))
 

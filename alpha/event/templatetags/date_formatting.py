@@ -13,6 +13,8 @@ def contextualize_date(dense_date=None):
 
     Returns: the generated string
     """
+    if not dense_date:
+        return ''
     now = datetime.datetime.now()
     hour = dense_date.time()
     #if hour.minute == 0:
@@ -35,7 +37,15 @@ def just_day(dense_date=None):
     Post: just the day as a unicode string
     Returns: the generated string
     """
+    if not dense_date:
+        return ''
     return dense_date.strftime('%A %B %-1d')
+
+@register.filter(name='month_day')
+def month_day(dense_date=None):
+    if not dense_date:
+        return ''
+    return dense_date.strftime('%B %-1d')
 
 @register.filter(name='just_time')
 def just_time(dense_date=None):
@@ -44,6 +54,8 @@ def just_time(dense_date=None):
     Post: just the day as a unicode string
     Returns: the generated string
     """
+    if not dense_date:
+        return ''
     return dense_date.strftime('%-1I:%M %p')
 
 @register.filter(name='just_time_levi_is_a_good_designer')
@@ -53,4 +65,6 @@ def just_time_levi_is_a_good_designer(dense_date=None):
     Post: just the day as a unicode string
     Returns: the generated string
     """
+    if not dense_date:
+        return ''
     return dense_date.strftime('%-1I:%M%p')

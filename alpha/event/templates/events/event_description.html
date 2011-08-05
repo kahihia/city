@@ -1,6 +1,26 @@
 {% extends 'home.html' %}
 
 {% block content %}
+
+{% block breadcrumb %}
+  {% load date_formatting %}
+  <p>
+    <a href="{% url event_browse %}">
+      Browse Events
+    </a>
+    &rarr; 
+    <a href="{% url event_browse_date event.start_time.date.isoformat %}">
+      {{ event.start_time|month_day }}
+    </a>
+    &rarr;
+    {% for tag in event.tags.all %}
+      <a href="{% url event_browse_tags tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+    &rarr;
+    {{ event.name }}
+</p>
+{% endblock %}
+
 <aside id="photo">
   {% load event_pictures %}
   <img src="{% event_picture_url event 200 %}">
@@ -8,10 +28,9 @@
 
 <section class="body noborder detail">
   <h1>{{ event.name }}</h1>
-  
+
   <ul>
     <li class="date">
-      {% load date_formatting %}
       <a href="{% url event_browse_date date=event.start_time.date.isoformat %}">{{ event.start_time|just_day }}</a>
       <br>{{ event.start_time|just_time }}
       {% if event.end_time %}&mdash; {{ event.end_time|just_time }}{% endif %}

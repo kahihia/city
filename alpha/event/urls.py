@@ -20,6 +20,10 @@ urlpatterns = patterns('',
                            event.view,
                            name='event_view' 
                            ),
+                       url(r'^view/(?P<slug>[^/]+)/(?P<old_tags>[^/]+)/$',
+                           event.view,
+                           name='event_view_tags' 
+                           ),
                        url(r'^create/$',
                            event.create,
                            name='event_create'
@@ -30,8 +34,8 @@ urlpatterns = patterns('',
                            ),
                        url(r'^(?P<old_tags>[^/]+)/$', 
                            event.browse, 
-                           name='event_browse_tags'),
-
+                           name='event_browse_tags'
+                           ),
                        url(r'^all/(?P<date>[-\w]+)/$', 
                            event.browse, 
                            name='event_browse_date'),
