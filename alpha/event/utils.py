@@ -28,7 +28,7 @@ class TagInfo:
                 new_slugs = copy(previous_slugs)
                 if tag.slug in previous_slugs: #toggles tag on and off
                     new_slugs.remove(tag.slug) #the new slug wont have our tag when clicked
-                    self.status = u""" class="active" """ #this is used to style the CSS of the tag
+                    self.status = u'active' #this is used to style the CSS of the tag
                 else:
                     new_slugs.append(tag.slug) #the new slug WILL have our tag when clicked
                 self.slug = ','.join(new_slugs) #make the new slug by joining with commas (this appears in the URL)
@@ -36,7 +36,7 @@ class TagInfo:
             self.name = u'All Categories' #this sets up the fake tag, which is a null tag, the absense of tags
             self.slug = ''
             if previous_slugs == []:
-                self.status = u""" class="active" """ #this is used to style the CSS of the tag
+                self.status = u'active' #this is used to style the CSS of the tag
 
 
 from alpha.event.models import Event 
