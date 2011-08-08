@@ -34,7 +34,7 @@ class TagInfo:
                 self.slug = ','.join(new_slugs) #make the new slug by joining with commas (this appears in the URL)
         else:
             self.name = u'All Categories' #this sets up the fake tag, which is a null tag, the absense of tags
-            self.slug = ''
+            self.slug = u''
             if previous_slugs == []:
                 self.status = u'active' #this is used to style the CSS of the tag
 
