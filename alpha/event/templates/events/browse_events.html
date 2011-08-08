@@ -58,9 +58,13 @@ browse_bar: the boolean stating to the header that we want a nav list of dates i
     <ul class="events">
       {% for event in set.events %}
         {% load date_formatting %}
-        {% ifchanged event.start_time|just_day %}
-          <li><h2>{{ event.start_time|just_day }}</h2></li>
-        {% endifchanged %}
+        {% if page_date != "flow" %}
+          {% ifchanged event.start_time|just_day %}
+            </ul>
+            <h2>{{ event.start_time|just_day }}</h2>
+	    <ul class="events">
+          {% endifchanged %}
+	{% endif %}
         {% include 'events/event_description_small.html' %}
       {% empty %}
         {% include 'events/no_events.html' %}
