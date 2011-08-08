@@ -92,6 +92,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         event_sets.append( EventSet(u'Events This Weekend', this_weekends_events) )
     elif date == u'this-week':
         end = today + datetime.timedelta(days=6-today.weekday())
+        end = end.replace(hour=23, minute=59,second=59, microsecond=0)
         start = today
         this_weeks_events = upcoming_events.filter(start_time__range=(start,end))
         pages = this_weeks_events.count() / EVENTS_PER_PAGE
@@ -201,7 +202,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
                                 'page_date':date,
                                 'page_num':int(num),
                                 'event_sets':event_sets,
-                                'pages':range(pages+1),
+                                'pages':range(pages),
                                 'page_less':page_less,
                                 'page_more':page_more,
                                 'browsing':True, 
