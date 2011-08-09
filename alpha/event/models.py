@@ -67,7 +67,7 @@ class Event(models.Model):
     # private key
     authentication_key = models.CharField(max_length=40)
     # public key is a 'slug' generated from the name of the event
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, max_length=255)
     # event picture
     picture = models.ImageField(upload_to=picture_file_path, blank=True, null=True, help_text='The event picture')
     #--------------------------------------------------------------
@@ -80,7 +80,7 @@ class Event(models.Model):
     # User set fields - these are input by the user and validated -
     #==============================================================
     email = models.CharField('email address',max_length=100)    # the event must have an email
-    name = models.CharField('event title',max_length=255)    # the title of the event
+    name = models.CharField('event title',max_length=250)    # the title of the event
     description = models.TextField(blank=True)    # the longer description of the event
     start_time = models.DateTimeField('starting time',auto_now=False, auto_now_add=False)
     end_time = models.DateTimeField('ending time (optional)',auto_now=False, auto_now_add=False, blank=True, null=True)
