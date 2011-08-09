@@ -4,21 +4,23 @@
 
 {% block breadcrumb %}
   {% load date_formatting %}
-  <p>
-    <a href="{% url event_browse %}">
-      Browse Events
-    </a>
-    &rarr; 
-    <a href="{% url event_browse_date event.start_time.date.isoformat %}">
-      {{ event.start_time|month_day }}
-    </a>
-    &rarr;
-    {% for tag in event.tags.all %}
-      <a href="{% url event_browse_tags tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
-    {% endfor %}
-    &rarr;
-    {{ event.name }}
-</p>
+  <nav id="back">
+    <p>
+      <a href="{% url event_browse %}">
+        Browse Events
+      </a>
+      &gt; 
+      <a href="{% url event_browse_date event.start_time.date.isoformat %}">
+        {{ event.start_time|month_day }}
+      </a>
+      &gt; 
+      {% for tag in event.tags.all %}
+        <a href="{% url event_browse_tags tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+      &gt; 
+        <span class="current">{{ event.name }}</span>
+    </p>
+  </nav>
 {% endblock %}
 
 <aside id="photo">

@@ -103,8 +103,8 @@ a:hover { text-decoration: underline; }
 #date-nav a:hover { height: 38px; background-color: #fbfaf6 !important; border-bottom: 2px solid #fff; text-decoration: none; }
 #date-nav a.current { background-color: #fff !important; }
 
-#back { padding: 2px 0 12px; border-bottom: 1px solid #ccc; font-size: 12px; font-weight: bold; }
-#back a { padding: 10px; }
+#back { padding: 2px 0 12px; border-bottom: 1px solid #bbb; font-size: 12px; font-weight: normal; }
+#back a, #back span.current { padding: 5px; font-weight: bold; }
 
 #main { overflow: hidden; width: 940px; padding: 10px 0 60px; }
 
@@ -154,8 +154,9 @@ a:hover { text-decoration: underline; }
 .detail .loc { background: url('../img/icons.png') no-repeat 0 -84px; }
 .detail .price { background: url('../img/icons.png') no-repeat 0 -125px; }
 
-.body h1 { margin: 40px 0 10px; font-size: 20px; font-weight: bold; }
+.body h1, .body h2 { margin: 40px 0 10px; font-size: 20px; font-weight: bold; }
 .body h1:first-child { margin-top: 23px;}
+.body h2 { margin-top: 10px; font-size: 17px; }
 .small { color: #999; font-size: 11px; }
 
 p input.text { margin-top: 5px;}
