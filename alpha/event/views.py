@@ -25,6 +25,7 @@ def redirect(request):
 
 def browse(request, old_tags=u'all', date=u'flow', num=1):
     pages = 0 # used in date filter code for determining if we have pagination
+    page_remainder = 0 # used for pagination
     num = int(num) -1 # see comment labeled NUMCODE
     today = datetime.datetime(*(datetime.date.today().timetuple()[:6])) # isnt python so easy to read?
 
@@ -62,6 +63,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
             start_time__month=today.month,
             start_time__day=today.day)   
         pages = todays_events.count() / EVENTS_PER_PAGE
+        page_remainder = todays_events.count() % EVENTS_PER_PAGE
         todays_events = todays_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Today's Events", todays_events ) )
     elif date == u'tomorrow':
@@ -72,6 +74,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
                                                  start_time__month=tomorrow.month,
                                                  start_time__day=tomorrow.day)
         pages = tomorrows_events.count() / EVENTS_PER_PAGE
+        page_remainder = tomorrows_events.count() % EVENTS_PER_PAGE
         tomorrows_events = tomorrows_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
         event_sets.append( EventSet(u"Tomorrow's Events", tomorrows_events ) )
     elif date == u'this-weekend':
@@ -88,6 +91,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
             start = start.replace(hour=17,minute=0,second=0,microsecond=0)
         this_weekends_events = upcoming_events.filter(start_time__range=(start,end))
         pages = this_weekends_events.count() / EVENTS_PER_PAGE
+        page_remainder = this_weekends_events.count() % EVENTS_PER_PAGE
         this_weekends_events = this_weekends_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
         event_sets.append( EventSet(u'Events This Weekend', this_weekends_events) )
     elif date == u'this-week':
@@ -96,6 +100,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         start = today
         this_weeks_events = upcoming_events.filter(start_time__range=(start,end))
         pages = this_weeks_events.count() / EVENTS_PER_PAGE
+        page_remainder = this_weeks_events.count() % EVENTS_PER_PAGE
         this_weeks_events = this_weeks_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
         event_sets.append( EventSet(u'Events This Week', this_weeks_events ) )
     elif date == u'next-week':
@@ -103,11 +108,13 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         start = today + datetime.timedelta(days=7-today.weekday())
         next_weeks_events = upcoming_events.filter(start_time__range=(start,end))
         pages = next_weeks_events.count() / EVENTS_PER_PAGE
+        page_remainder = next_weeks_events.count() % EVENTS_PER_PAGE
         next_weeks_events = next_weeks_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
         event_sets.append( EventSet(u'Events Next Week', next_weeks_events) )
     elif date == u'flow':
         #flow code goes here
         pages = upcoming_events.count() / EVENTS_PER_PAGE
+        page_remainder = upcoming_events.count() % EVENTS_PER_PAGE
         flow_events = list( upcoming_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE] )
         #title = flow_events[0].start_time.strftime('%A, %B %-1d')
         #event_sets.append( EventSet(title, flow_events) )
@@ -158,6 +165,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
 
             exact_day_events = upcoming_events.filter(start_time__range=(start,end))
             pages = exact_day_events.count() / EVENTS_PER_PAGE
+            page_remainder = exact_day_events.count() % EVENTS_PER_PAGE
             exact_day_events = exact_day_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
             event_sets.append( EventSet( u'Events for ' + start.date().strftime('%A, %B %-1d') , exact_day_events))
         else:
@@ -202,7 +210,8 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
                                 'page_date':date,
                                 'page_num':int(num),
                                 'event_sets':event_sets,
-                                'pages':range(pages),
+                                'pages':range(1, pages + 2),
+                                'page_remainder':page_remainder,
                                 'page_less':page_less,
                                 'page_more':page_more,
                                 'browsing':True, 

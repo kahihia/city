@@ -71,27 +71,27 @@ browse_bar: the boolean stating to the header that we want a nav list of dates i
       {% endfor %}
     </ul>
   {% endfor %}
-  {% if pages|length > 1 %}
-    <p>
-      {% if page_num > 1 %}
-	{% if page_num == 2 %}
-	  <a class="button" href="{% url event_browse_tags_date old_tags=current_tags date=page_date %}">Previous</a>
-	  {% else %}
-	  <a class="button" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}">Previous</a>
-	{% endif %}
-      {% endif %}
-      {% if page_more < pages|length %}
-      <a class="button next" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}">Next</a>
-      {% endif %}
-    </p>
 
+
+  <p>
+    {% if page_num > 1 %}
+      {% if page_num == 2 %}
+        <a class="button" href="{% url event_browse_tags_date old_tags=current_tags date=page_date %}">Previous</a>
+      {% else %}
+        <a class="button" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}">Previous</a>
+      {% endif %}
+    {% endif %}
+
+    {% if page_more <= pages|length %}
+      <a class="button next" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}">Next</a>
+    {% endif %}
+  </p>
+  {% if pages|length > 1 %}
     <ul id="pagination">
       {% for numb in pages %}
-        {% if numb > 0 %}
-	  <li>
+          <li>
 	    <a {% if page_num == numb %}class="current"{% endif %} href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}">{{ numb }}</a>
-	  </li>    
-        {% endif %}
+	  </li>  
       {% endfor %}
     </ul>
   {% endif %}
