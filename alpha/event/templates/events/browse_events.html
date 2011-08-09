@@ -16,7 +16,8 @@ page_more: the next page number
 browsing: the boolean stating to the header that we are browsing (the top button)
 browse_bar: the boolean stating to the header that we want a nav list of dates in the header
 {% endcomment %}
-
+{% load date_formatting %}
+{% block title %} | browse | {{ page_date }}{% endblock %}
 {% block content %}
 <aside id="tags">
   <nav>
@@ -62,6 +63,7 @@ browse_bar: the boolean stating to the header that we want a nav list of dates i
           {% ifchanged event.start_time|just_day %}
             </ul>
             <h2>{{ event.start_time|just_day }}</h2>
+
 	    <ul class="events">
           {% endifchanged %}
 	{% endif %}
