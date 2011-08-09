@@ -162,6 +162,7 @@ a:hover { text-decoration: underline; }
 p input.text { margin-top: 5px;}
 p label { font-weight: 11px; font-weight: bold; }
 
+form { margin-top: 20px; }
 form li.label { width: 130px; margin-top: 10px; float: left; color: #333; font-size: 12px; font-weight: bold; }
 form li ul { overflow: hidden; width: 420px; margin-top: 8px; }
 form li ul li { float: left; width: 100px; margin-bottom: 10px; font-size: 12px; font-weight: normal;  }
