@@ -83,15 +83,29 @@ browse_bar: the boolean stating to the header that we want a nav list of dates i
     {% endif %}
 
     {% if page_more <= pages|length %}
-      <a class="button next" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}">Next</a>
+      {% if page_more == pages|length %}
+        {% if page_remainder > 0 %}
+          <a class="button next" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}">Next</a>
+        {% endif %}
+      {% else %}
+        <a class="button next" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}">Next</a>
+      {% endif %}
     {% endif %}
   </p>
-  {% if pages|length > 1 %}
+  {% if pages|length > 2 %}
     <ul id="pagination">
       {% for numb in pages %}
+        {% if forloop.last %}
+          {% if page_remainder > 0 %}
+            <li>
+	      <a {% if page_num == numb %}class="current"{% endif %} href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}">{{ numb }}</a>
+	    </li>
+	  {% endif %}
+	{% else %}
           <li>
 	    <a {% if page_num == numb %}class="current"{% endif %} href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}">{{ numb }}</a>
-	  </li>  
+	  </li>
+	{% endif %}
       {% endfor %}
     </ul>
   {% endif %}
