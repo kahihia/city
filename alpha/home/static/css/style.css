@@ -104,7 +104,7 @@ a:hover { text-decoration: underline; }
 #date-nav a.current { background-color: #fff !important; }
 
 #back { padding: 2px 0 12px; border-bottom: 1px solid #bbb; font-size: 12px; font-weight: normal; }
-#back a, #back span.current { padding: 5px; font-weight: bold; }
+#back a, #back span.current { padding: 2px; font-weight: bold; }
 
 #main { overflow: hidden; width: 940px; padding: 10px 0 60px; }
 
