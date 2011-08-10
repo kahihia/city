@@ -181,13 +181,14 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
             number_of_events = Event.events.filter(start_time__gte=start, tags__name__in=[tag]).count()
         else:
             number_of_events = Event.events.filter(start_time__range=(start,end), tags__name__in=[tag]).count()
-        all_tags.append(
-            TagInfo(
-                tag=tag, #the tag object
-                previous_slugs=split_tags, #list of existing tags
-                num=number_of_events #number of events which are tagged this way
+        if number_of_events > 0:
+            all_tags.append(
+                TagInfo(
+                    tag=tag, #the tag object
+                    previous_slugs=split_tags, #list of existing tags
+                    num=number_of_events #number of events which are tagged this way
+                    )
                 )
-            )
     all_tags.sort(key=lambda tag: tag.name)
     all_tags.sort(key=lambda tag: tag.number, reverse=True)
     if end is None:
