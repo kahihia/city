@@ -65,7 +65,7 @@ html { background: url('../img/bg-browse.png') repeat-x 0 0; min-height: 100%; f
 html.browse { background: url('../img/bg.png') repeat-x 0 0; }
 .wrapper { position: relative; width: 940px; margin: 0 auto; }
 
-a { color: #343796; text-decoration: none; }
+a { color: #2D51D8; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 #header { position: relative; height: 77px; }
