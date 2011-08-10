@@ -24,29 +24,31 @@ browse_bar: the boolean stating to the header that we want a nav list of dates i
     <ul>
     {% for tag in all_tags %}
       {% if tag.slug == "" %}
-        <li>
+        <li {% if forloop.counter0 > 9 %}style="display: none; "{% endif %}>
           <a href = "{% url event_browse_date date=page_date %}"{% if tag.status %} class="{{ tag.status|safe }}"{% endif %}>{{ tag.name }} ({{ tag.number }})</a>
         </li>
       {% else %}
         {% if tag.number > 0 %}
           {% if page_date %}
             {% if page_num < 2 %}
-              <li>
+              <li {% if forloop.counter0 > 9 %}style="display: none; "{% endif %}>
 	        <a href = "{% url event_browse_tags_date old_tags=tag.slug date=page_date %}"{% if tag.status %}class="{{ tag.status|safe }}"{% endif %}>{{ tag.name }} ({{ tag.number }})</a>
 	      </li>
 	    {% else %}
-              <li>
+              <li {% if forloop.counter0 > 9 %}style="display: none; "{% endif %}>
 	        <a href = "{% url event_browse_tags_date_num old_tags=tag.slug date=page_date num=page_num %}"{% if tag.status %}class="{{ tag.status|safe }}"{% endif %}>{{ tag.name }} ({{ tag.number }})</a>
 	      </li>
 	    {% endif %}
 	  {% else %}
-            <li>
+            <li {% if forloop.counter0 > 9 %}style="display: none; "{% endif %}>
 	      <a href = "{% url event_browse_tags old_tags=tag.slug %}"{% if tag.status %}class="{{ tag.status|safe }}"{% endif %}>{{ tag.name }} ({{ tag.number }})</a>
 	    </li>
           {% endif %}
         {% endif %}
       {% endif %}
     {% endfor %}
+      <li id="tags_more"><a href="#" class="more"><span class="tickbox"><span class="downtick"></span></span>More</a></li>
+      <li id="tags_less" style="display: none; "><a href="#" class="more"><span class="tickbox"><span class="uptick"></span></span>Fewer</a></li>
     </ul>
   </nav>
 </aside>
