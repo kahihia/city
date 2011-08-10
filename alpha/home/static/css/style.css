@@ -110,7 +110,7 @@ a:hover { text-decoration: underline; }
 
 #tags { width: 140px; margin: 20px 10px 0 0; float: left; font-size: 12px; }
 #tags li { height: 26px; margin-bottom: 1px; }
-#tags a { display: block; height: 26px; padding-left: 9px; border-radius: 3px; font-weight: bold; line-height: 26px; }
+#tags a { display: block; height: 26px; padding-left: 9px; border-radius: 3px; font-weight: bold; line-height: 26px; overflow: hidden; }
 #tags a.active, #tags a:hover { background: #343796 url('../img/icons.png') no-repeat 119px -265px; color: #fff; text-decoration: none; }
 #tags a:active { background-position: 119px -291px; }
 #tags a.active { background-position: 119px -317px; }
