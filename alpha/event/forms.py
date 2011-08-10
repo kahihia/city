@@ -55,6 +55,7 @@ def generate_form(*args):
             self.fields['picture'].widget.attrs['class'] = 'file' 
         def clean(self):
             cleaned_data= self.cleaned_data
-            cleaned_data['tags'] = map(string.capwords,cleaned_data['tags'])
+            if 'tags' in cleaned_data:
+                cleaned_data['tags'] = map(string.capwords,cleaned_data['tags'])
             return cleaned_data
     return _EventForm
