@@ -1,0 +1,21 @@
+{% extends "home.html" %}
+{% block title %} > Feedback{% endblock %}
+
+{% block content %}
+<section class="body">
+<h2>Talk to us.</h2>
+<p>Our product is your product. Help us shape it.</p>
+
+<form id="contact" method="post">
+  {% csrf_token %}
+  <ul>
+    {% for field in form %}
+    <li class="label">{{ field.label_tag }}</li>
+    <li>{{ field }}{% for error in field.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+    {% endfor %}
+    <li class="label"></li>
+    <li><input type="submit" class="submit button" value="Send Message"></li>
+  </ul>
+</form>
+</section>
+{% endblock %}
