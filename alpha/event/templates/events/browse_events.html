@@ -47,8 +47,10 @@ browse_bar: the boolean stating to the header that we want a nav list of dates i
         {% endif %}
       {% endif %}
     {% endfor %}
+    {% if all_tags|length > 9 %}
       <li id="tags_more"><a href="#" class="more"><span class="tickbox"><span class="downtick"></span></span>More</a></li>
       <li id="tags_less" style="display: none; "><a href="#" class="more"><span class="tickbox"><span class="uptick"></span></span>Fewer</a></li>
+    {% endif %}
     </ul>
   </nav>
 </aside>
