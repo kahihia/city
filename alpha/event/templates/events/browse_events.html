@@ -94,7 +94,7 @@ browse_bar: the boolean stating to the header that we want a nav list of dates i
       {% endif %}
     {% endif %}
   </p>
-  {% if pages|length > 2 %}
+  {% if pages|length > 2 or page_num > 1 or page_more <= pages|length and page_remainder > 0 %}
     <ul id="pagination">
       {% for numb in pages %}
         {% if forloop.last %}
