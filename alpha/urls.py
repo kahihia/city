@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r'^$', 'alpha.event.views.redirect', name='home'),
     url(r'^events/', include('event.urls')),
     url(r'^accounts/', include('citi_user.urls')),
-    url(r'^feedback/$', 'alpha.home.views.redirect', name='feedback'),
+    url(r'^feedback/', include('feedback.urls')),
     url(r'^advertise/$', 'alpha.home.views.redirect', name='advertise'),
     # url(r'^alpha/', include('alpha.foo.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:

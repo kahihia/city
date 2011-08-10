@@ -9,7 +9,7 @@
 
   <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css?v=2">
   {% block css %}{% endblock %}
-
+  {% block redirect %}{% endblock %}
   <script src="{{ STATIC_URL }}js/libs/modernizr-1.7.min.js"></script>
 </head>
 
@@ -18,16 +18,7 @@
     {% block page %}
     {% endblock %}
   </div> 
-	<footer id="footer">
-	  <div class="wrapper">
-	    <p>&copy; cityfusion.ca {% now "Y" %}.</p>
-	    <nav>
-	      <ul>
-					<!--<li><a href="{% url feedback %}">Feedback</a></li>-->
-	      </ul>
-	    </nav>
-	  </div>
-	</footer>
+  {% include 'footer.html' %}
 
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
