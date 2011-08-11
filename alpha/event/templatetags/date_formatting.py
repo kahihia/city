@@ -1,5 +1,6 @@
 from django import template
 import datetime
+import string
 
 register = template.Library()
 
@@ -68,3 +69,14 @@ def just_time_levi_is_a_good_designer(dense_date=None):
     if not dense_date:
         return ''
     return dense_date.strftime('%-1I:%M%p')
+
+@register.filter('slug_to_title')
+def slug_to_title(slug=None):
+    """
+    Pre: slug is a string as ouput from slguify
+    Post: an english formatted string
+    Returns: the generated string
+    """
+    if not slug:
+        return ''
+    return [ word[0].upper + word[1:] for word in slug.split('-')].join(' ')
