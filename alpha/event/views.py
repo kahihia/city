@@ -28,7 +28,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
     page_remainder = 0 # used for pagination
     num = int(num) -1 # see comment labeled NUMCODE
     today = datetime.datetime(*(datetime.date.today().timetuple()[:6])) # isnt python so easy to read?
-
+    show_ads = False
     split_tags = []
     #parsing the tags string
     if old_tags != u'all':
@@ -113,6 +113,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         event_sets.append( EventSet(u'Events Next Week', next_weeks_events) )
     elif date == u'flow':
         #flow code goes here
+        show_ads = True
         pages = upcoming_events.count() / EVENTS_PER_PAGE
         page_remainder = upcoming_events.count() % EVENTS_PER_PAGE
         flow_events = list( upcoming_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE] )
@@ -216,6 +217,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
                                 'page_more':page_more,
                                 'browsing':True, 
                                 'browse_bar':True,
+                                'show_ads':show_ads,
                                 },
                               context_instance = RequestContext(request))
 

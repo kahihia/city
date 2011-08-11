@@ -102,9 +102,9 @@ class Event(models.Model):
     def clean(self):
         if self.end_time:
             if self.start_time > self.end_time:
-                raise ValidationError('Temporal anomaly detected! The event must end after it starts')
+                raise ValidationError('The event date and time must be later than the start date and time.')
         if self.name and slugify(self.name) == '':
-            raise ValidationError('Please enter a valid name for your event')
+            raise ValidationError('Please enter a name for your event.')
 
     def uniqueSlug(self):
         """
