@@ -24,9 +24,15 @@ browse_bar: the boolean stating to the header that we want a nav list of dates i
     <ul>
     {% for tag in all_tags %}
       {% if tag.slug == "" %}
+        {% if page_date != "flow" %}
         <li {% if forloop.counter0 > 9 %}style="display: none; "{% endif %}>
           <a href = "{% url event_browse_date date=page_date %}"{% if tag.status %} class="{{ tag.status|safe }}"{% endif %}>{{ tag.name }} ({{ tag.number }})</a>
         </li>
+	{% else %}
+        <li {% if forloop.counter0 > 9 %}style="display: none; "{% endif %}>
+          <a href = "{% url event_browse %}"{% if tag.status %} class="{{ tag.status|safe }}"{% endif %}>{{ tag.name }} ({{ tag.number }})</a>
+        </li>
+	{% endif %}
       {% else %}
         {% if tag.number > 0 %}
           {% if page_date != "flow" %}
@@ -76,19 +82,19 @@ browse_bar: the boolean stating to the header that we want a nav list of dates i
   <p>
     {% if page_num > 1 %}
       {% if page_num == 2 %}
-        <a class="button" href="{% url event_browse_tags_date old_tags=current_tags date=page_date %}">Previous</a>
+        <a class="button" href="{% if page_date != "flow" %}{% url event_browse_tags_date old_tags=current_tags date=page_date %}{% else %}{% url event_browse_tags old_tags=current_tags %}{% endif %}">Previous</a>
       {% else %}
-        <a class="button" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}">Previous</a>
+        <a class="button" href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=page_less %}{% endif %}">Previous</a>
       {% endif %}
     {% endif %}
 
     {% if page_more <= pages|length %}
       {% if page_more == pages|length %}
         {% if page_remainder > 0 %}
-          <a class="button next" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}">Next</a>
+          <a class="button next" href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=page_more %}{% endif %}">Next</a>
         {% endif %}
       {% else %}
-        <a class="button next" href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}">Next</a>
+        <a class="button next" href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=page_more %}{% endif %}">Next</a>
       {% endif %}
     {% endif %}
   </p>
@@ -98,12 +104,12 @@ browse_bar: the boolean stating to the header that we want a nav list of dates i
         {% if forloop.last %}
           {% if page_remainder > 0 %}
             <li>
-	      <a {% if page_num == numb %}class="current"{% endif %} href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}">{{ numb }}</a>
+	      <a {% if page_num == numb %}class="current"{% endif %} href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=numb %}{% endif %}">{{ numb }}</a>
 	    </li>
 	  {% endif %}
 	{% else %}
           <li>
-	    <a {% if page_num == numb %}class="current"{% endif %} href="{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}">{{ numb }}</a>
+	    <a {% if page_num == numb %}class="current"{% endif %} href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=numb %}{% endif %}">{{ numb }}</a>
 	  </li>
 	{% endif %}
       {% endfor %}

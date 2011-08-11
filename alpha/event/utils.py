@@ -33,7 +33,7 @@ class TagInfo:
                     new_slugs.append(tag.slug) #the new slug WILL have our tag when clicked
                 self.slug = ','.join(new_slugs) #make the new slug by joining with commas (this appears in the URL)
         else:
-            self.name = u'All Categories' #this sets up the fake tag, which is a null tag, the absense of tags
+            self.name = u'All Events' #this sets up the fake tag, which is a null tag, the absense of tags
             self.slug = u''
             if previous_slugs == []:
                 self.status = u'active' #this is used to style the CSS of the tag

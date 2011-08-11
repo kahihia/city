@@ -44,6 +44,10 @@ urlpatterns = patterns('',
                            event.browse, 
                            name='event_browse_tags_date'),
 
+                       url(r'^(?P<old_tags>[^/]+)/(?P<num>\d+)/$', 
+                           event.browse, 
+                           name='event_browse_tags_num'),
+
                        url(r'^(?P<old_tags>[^/]+)/(?P<date>[-\w]+)/(?P<num>\d+)/$', 
                            event.browse, 
                            name='event_browse_tags_date_num'),
