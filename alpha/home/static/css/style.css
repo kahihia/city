@@ -65,7 +65,7 @@ html { background: url('../img/bg-browse.png') repeat-x 0 0; min-height: 100%; f
 html.browse { background: url('../img/bg.png') repeat-x 0 0; }
 .wrapper { position: relative; width: 940px; margin: 0 auto; }
 
-a { color: #343796; text-decoration: none; }
+a { color: #2D51D8; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 #header { position: relative; height: 77px; }
@@ -111,12 +111,12 @@ a:hover { text-decoration: underline; }
 #tags { width: 140px; margin: 20px 10px 0 0; float: left; font-size: 12px; }
 #tags li { height: 26px; margin-bottom: 1px; }
 #tags a { display: block; height: 26px; padding-left: 9px; border-radius: 3px; font-weight: bold; line-height: 26px; overflow: hidden; }
-#tags a.active, #tags a:hover { background: #343796 url('../img/icons.png') no-repeat 119px -265px; color: #fff; text-decoration: none; }
+#tags a.active, #tags a:hover { background: #2D51D8 url('../img/icons.png') no-repeat 119px -265px; color: #fff; text-decoration: none; }
 #tags a:active { background-position: 119px -291px; }
-#tags a.active { background-position: 119px -317px; }
+#tags a.active { background: #5c74cd; background-position: 119px -317px; }
 #tags a.active:hover { background-position: 119px -343px; }
 #tags li:first-child { margin-bottom: 2px; padding-bottom: 2px; border-bottom: 1px solid #ccc; }
-#tags li:first-child a.active { background: #343796; }
+#tags li:first-child a.active { background: #2D51D8; }
 #tags span.downtick, #tags span.uptick { display: block; float: left; width: 0; height: 0; margin: 3px 2px; border-left: 3px solid transparent; border-right: 3px solid transparent; border-top: 3px solid #000; }
 #tags span.uptick { border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 3px solid #000; border-top: 0; margin: 3px 2px; }
 #tags span.tickbox { display: block; float: left; height: 9px; width: 10px; margin: 8px 4px 0 0; border: 1px solid #999; }
@@ -155,7 +155,7 @@ a:hover { text-decoration: underline; }
 .detail .price { background: url('../img/icons.png') no-repeat 0 -125px; }
 
 .body h1, .body h2 { margin: 40px 0 10px; font-size: 20px; font-weight: bold; }
-.body h1:first-child { margin-top: 23px;}
+.body h1:first-child { margin: 20px 0; }
 .body h2 { margin-top: 10px; font-size: 17px; }
 .small { color: #999; font-size: 11px; }
 
