@@ -17,7 +17,7 @@ browsing: the boolean stating to the header that we are browsing (the top button
 browse_bar: the boolean stating to the header that we want a nav list of dates in the header
 {% endcomment %}
 {% load date_formatting %}
-{% block title %} > Browse > {{ page_date|slug_to_title }}{% endblock %}
+{% block title %} > Browse {% if page_date != "flow" %}> {{ page_date|slug_to_title }}{% endif %}{% endblock %}
 {% block content %}
 <aside id="tags">
   <nav>
@@ -29,7 +29,7 @@ browse_bar: the boolean stating to the header that we want a nav list of dates i
         </li>
       {% else %}
         {% if tag.number > 0 %}
-          {% if page_date %}
+          {% if page_date != "flow" %}
               <li {% if forloop.counter0 > 9 %}style="display: none; "{% endif %}>
 	        <a href = "{% url event_browse_tags_date old_tags=tag.slug date=page_date %}"{% if tag.status %}class="{{ tag.status|safe }}"{% endif %}>{{ tag.name }} ({{ tag.number }})</a>
 	      </li>
