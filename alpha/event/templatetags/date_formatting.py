@@ -79,4 +79,5 @@ def slug_to_title(slug=None):
     """
     if not slug:
         return ''
-    return [ word[0].upper + word[1:] for word in slug.split('-')].join(' ')
+    slug = slug.replace('-',' ')
+    return string.capwords(slug) 
