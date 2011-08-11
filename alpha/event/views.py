@@ -26,7 +26,10 @@ def redirect(request):
 def browse(request, old_tags=u'all', date=u'flow', num=1):
     pages = 0 # used in date filter code for determining if we have pagination
     page_remainder = 0 # used for pagination
-    num = int(num) -1 # see comment labeled NUMCODE
+    try:
+        num = int(num) -1 # see comment labeled NUMCODE
+    except ValueError:
+        raise Http404
     today = datetime.datetime(*(datetime.date.today().timetuple()[:6])) # isnt python so easy to read?
     show_ads = False
     split_tags = []
@@ -171,7 +174,8 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
             event_sets.append( EventSet( u'Events for ' + start.date().strftime('%A, %B %-1d') , exact_day_events))
         else:
             #we need to 404 error here...
-            raise Http404
+            return browse(request, old_tags=old_tags, num=date)
+            #raise Http404
             
     #packaging new tag information given split_tags list
     tags = Tag.objects.all()

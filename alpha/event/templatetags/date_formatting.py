@@ -70,7 +70,7 @@ def just_time_levi_is_a_good_designer(dense_date=None):
         return ''
     return dense_date.strftime('%-1I:%M%p')
 
-@register.filter('slug_to_title')
+@register.filter(name='slug_to_title')
 def slug_to_title(slug=None):
     """
     Pre: slug is a string as ouput from slguify
