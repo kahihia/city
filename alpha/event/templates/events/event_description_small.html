@@ -2,7 +2,6 @@
 <li>
   {% load event_pictures %}
   <img src="{% event_picture_url event %}" alt="">
-  <br>
   <a href="{% url event_view event.slug %}" class="text">{{ event.name }}</a>
   <ul>
     {% load date_formatting %}
