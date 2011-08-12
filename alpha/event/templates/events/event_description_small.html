@@ -1,7 +1,7 @@
 {% if event != null %}
 <li>
   {% load event_pictures %}
-  <a href="{% url event_view event.slug %}"><img src="{% event_picture_url event %}" alt=""></a>
+  <img src="{% event_picture_url event %}" alt="">
   <br>
   <a href="{% url event_view event.slug %}" class="text">{{ event.name }}</a>
   <ul>
@@ -18,6 +18,7 @@
   {% if citi_user_events %}
   <a class="edit" href="{% url event_edit authentication_key=event.authentication_key %}">(Edit this event)</a>
   {% endif %}
+  <a href="{% url event_view event.slug %}" class="row"></a>
 </li>
 
 {% endif %}

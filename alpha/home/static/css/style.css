@@ -138,12 +138,14 @@ a:hover { text-decoration: underline; }
 #photo { float: left; width: 200px; padding-top: 20px; }
 #photo img { display: block; }
 
-.events li { position: relative; display: block; margin: 20px 0; color: #666; height: 40px; }
-.events img { position: absolute; height: 40px; width: 40px; top: 0; left: 0; background: #eee; }
+.events li { position: relative; display: block; margin: 20px 0; color: #666; height: 40px; padding: 5px; }
+.events li:hover { background: #f0f1f4; }
+.events img { position: absolute; height: 40px; width: 40px; top: 5px; left: 5px; background: #ddd; }
 .events a { cursor: pointer; }
-.events a.text , .events a.edit { position: absolute; top: 0; left: 45px; padding: 5px; color: #2D51D8; font-size: 14px; font-weight: normal; }
+.events a.text , .events a.edit { position: absolute; top: 4px; left: 50px; padding: 5px; color: #2D51D8; font-size: 14px; font-weight: normal; }
+.events a.row { position: absolute; top: 0; left: 0; bottom: 0; right: 0; }
 .events a.edit { top: 39px; font-size: 11px; }
-.events li ul { position: absolute; left: 50px; top: 19px; }
+.events li ul { position: absolute; left: 55px; top: 24px; }
 .events li li { float: left; margin: 6px 13px 0 0; padding: 0; height: 10px; font-size: 12px; }
 
 .detail { padding-left: 23px; }
@@ -172,7 +174,7 @@ form li.other { display: block; width: 400px; margin: 0; }
 input.text, textarea, form input.othertext, select { height: 18px; margin: 0 0 20px; padding: 6px; background: #f9f9f9; box-shadow: inset 0 0 4px #999; border: 1px solid #919191; border-radius: 2px; font-size: 15px; width: 300px; } 
 input.wide, textarea.wide { width: 400px; }
 input.othertext { height: 14px; margin-left: 7px; width: 200px; }
-input.file { margin: 10px 0; }
+input.file { margin: 10px 0 30px; }
 input.date { background: #f9f9f9 url('../img/icons.png') no-repeat 150px -158px; width: 160px; }
 input.time { width: 100px; margin-left: 10px; background: #f9f9f9 url('../img/icons.png') no-repeat 91px -35px; }
 select { height: 32px; width: 100px; margin-left: 8px; background: #fff; border-radius: 0px; font-size: 12px; vertical-align: top; }
