@@ -140,7 +140,8 @@ a:hover { text-decoration: underline; }
 
 .events li { position: relative; display: block; margin: 20px 0; color: #666; height: 40px; padding: 5px; }
 .events li:hover { background: #f0f1f4; }
-.events img { position: absolute; height: 40px; width: 40px; top: 5px; left: 5px; background: #ddd; }
+.events li:hover a.text { text-decoration: underline; }
+.events img { position: absolute; height: 40px; width: 40px; top: 5px; left: 5px; background: #eee; }
 .events a { cursor: pointer; }
 .events a.text , .events a.edit { position: absolute; top: 4px; left: 50px; padding: 5px; color: #2D51D8; font-size: 14px; font-weight: normal; }
 .events a.row { position: absolute; top: 0; left: 0; bottom: 0; right: 0; }
