@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+
 import string
 import sha
 import random
@@ -61,6 +62,9 @@ class Event(models.Model):
     # The manager is the interface for making database query operations on all models
     # example usage: Event.events.all() will provide a list of all event objects
     events = models.Manager()
+    # timestamps
+    created = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now())
+    modified = models.DateTimeField(auto_now=True, default=datetime.datetime.now())
     #--------------------------------------------------------------
     # Save set fields - these are set in the save -----------------
     #==============================================================
