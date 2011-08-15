@@ -15,9 +15,10 @@
     {% endcomment %}
   </ul>
   {% if citi_user_events %}
-  <a class="edit" href="{% url event_edit authentication_key=event.authentication_key %}">(Edit this event)</a>
+    <a class="edit" href="{% url event_edit authentication_key=event.authentication_key %}">(Edit this event)</a>
+  {% else %}
+    <a href="{% url event_view event.slug %}" class="row"></a>  
   {% endif %}
-  <a href="{% url event_view event.slug %}" class="row"></a>
 </li>
 
 {% endif %}
