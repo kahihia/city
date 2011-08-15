@@ -143,9 +143,9 @@ a:hover { text-decoration: underline; }
 .events li:hover a.text { text-decoration: underline; }
 .events img { float: left; height: 40px; width: 40px; margin-right: 5px; background: #f0f1f4;  }
 .events a { cursor: pointer; }
-.events a.text, .events a.edit { display: block; padding: 4px; color: #2D51D8; font-size: 14px; line-height: 14px; font-weight: normal; }
+.events a.text { display: block; padding: 4px; color: #2D51D8; font-size: 14px; line-height: 14px; font-weight: normal; }
 .events a.row { position: absolute; top: 0; left: 0; bottom: 0; right: 0; }
-.events a.edit { top: 39px; font-size: 11px; }
+.events a.edit { display: block; padding-top: 10px; font-size: 11px; }
 .events li ul { overflow: hidden; margin-top: -2px; }
 .events li li { float: left; margin: 6px 13px 0 0; padding: 0; height: 13px; font-size: 12px; }
 
