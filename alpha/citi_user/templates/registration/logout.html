@@ -2,12 +2,8 @@
 {% block title %} > Signed Out{% endblock %}
 
 {% block content %}
-<div id="logout">
-  <header>
+  <section class="body">
     <h1>You have logged out</h1>
-  </header>
-  <section>
     <p>Click <a href="{% url auth_login %}">here</a> to log in again.</p>
   </section>
-</div>
 {% endblock%}

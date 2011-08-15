@@ -32,8 +32,10 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         raise Http404
     today = datetime.datetime(*(datetime.date.today().timetuple()[:6])) # isnt python so easy to read?
     show_ads = False
-    split_tags = []
+
+    ################################################################
     #parsing the tags string
+    split_tags = []
     if old_tags != u'all':
         split_tags = old_tags.split(',')
         # Right now we query based on tags, and then later split this up based on date.
@@ -43,14 +45,8 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
     else:
         upcoming_events = Event.events.filter(start_time__gte=today)
 
+    ##############################################################
     #now we filter based on the date selected
-    # Sam note: I realize that i have way too many queries here, but im not really sure how
-    # to combine them properly and still get the header correct. Levi mentioned having more
-    # than one day listing per page, so they flow into one another, if that is the case then
-    # there will have to be a number of different queries.
-    # its possible I could try implementing this using loops, but I am afraid of what kind
-    # of bugs might crop up if I had a database query in a loop - so i'm not going there.
-    # IF django is lazy about the queries, then I'm totally saved here. And I think it is lazy.
     event_sets = []
 
     # error checking for num argument
@@ -176,7 +172,8 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
             #we need to 404 error here...
             return browse(request, old_tags=old_tags, num=date)
             #raise Http404
-            
+    
+    #########################################################################################
     #packaging new tag information given split_tags list
     tags = Tag.objects.all()
     all_tags = []
@@ -200,6 +197,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
     else:
     	all_tags.insert(0, TagInfo( num=Event.events.filter(start_time__range=(start,end)).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
 
+    #############################################################################################
     # NUMCODE: This code is here because the page numbers start at 1 (which is never displayed or linked to)
     # and according to the resident HCI guru, people like counting from 1
     # but I use it in the date filter code as a multiplier, which I want to start at 0
