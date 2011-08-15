@@ -31,7 +31,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
     except ValueError:
         raise Http404
     today = datetime.datetime(*(datetime.date.today().timetuple()[:6])) # isnt python so easy to read?
-    show_ads = False
+    show_ads = False #this is set to True in the flow
 
     ################################################################
     #parsing the tags string
@@ -111,7 +111,6 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         next_weeks_events = next_weeks_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
         event_sets.append( EventSet(u'Events Next Week', next_weeks_events) )
     elif date == u'flow':
-        #flow code goes here
         show_ads = True
         pages = upcoming_events.count() / EVENTS_PER_PAGE
         page_remainder = upcoming_events.count() % EVENTS_PER_PAGE
@@ -169,9 +168,9 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
             exact_day_events = exact_day_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
             event_sets.append( EventSet( u'Events for ' + start.date().strftime('%A, %B %-1d') , exact_day_events))
         else:
-            #we need to 404 error here...
+            #we need to 404 error here
+            #URL overlap means the date might actually be a page number, so the 404 is actually checked above
             return browse(request, old_tags=old_tags, num=date)
-            #raise Http404
     
     #########################################################################################
     #packaging new tag information given split_tags list
