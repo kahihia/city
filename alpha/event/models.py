@@ -232,6 +232,7 @@ models.signals.post_save.connect(create_default_pictures, sender=Event)
 
 
 class Venue(models.Model):
+    name = models.CharField(max_length=250, default='Default Venue')
     street = models.CharField(max_length=250)
     city = models.CharField(max_length=200)
     latitude = models.DecimalField(decimal_places=2, max_digits=8)
