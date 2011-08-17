@@ -54,6 +54,8 @@ def picture_file_path(instance = None, filename = None):
 class Event(models.Model):
     class Meta:
         verbose_name_plural = 'Events'
+    def __unicode__(self):
+        return u'%s %s' % (self.name, self.created)
     #--------------------------------------------------------------
     # Django set fields - these are set by django -----------------
     #==============================================================
