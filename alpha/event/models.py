@@ -80,6 +80,8 @@ class Event(models.Model):
     # the user which that created the event, or no event
     # only one user can own an event
     owner = models.ForeignKey(User, blank=True, null=True)
+    # a recurrence is a set of events, combined with some user defined rule
+    recurrence = models.ForeignKey('Recurrence', null=True, blank=True)
     #--------------------------------------------------------------
     # User set fields - these are input by the user and validated -
     #==============================================================
@@ -242,3 +244,5 @@ class CanadianVenue(Venue):
     province = models.CharField(max_length=200)
     postal_code = models.CharField(max_length=50)
 
+class Recurrence(models.Model):
+    pass
