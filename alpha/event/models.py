@@ -55,7 +55,7 @@ class Event(models.Model):
     class Meta:
         verbose_name_plural = 'Events'
     def __unicode__(self):
-        return u'%s %s' % (self.name, self.created)
+        return u'%s/// %s' % (self.owner, self.name)
     #--------------------------------------------------------------
     # Django set fields - these are set by django -----------------
     #==============================================================
