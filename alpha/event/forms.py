@@ -32,7 +32,7 @@ def generate_form(*args):
     Generates an event form
     """
     class _EventForm(forms.ModelForm):
-        recurrence = forms.BooleanField()
+        recurrence = forms.BooleanField(required=False)
         start_time = StyledSplitDateTimeField(input_time_formats=['%I:%M %p'], label=_(u'Start Time'))
         end_time = StyledSplitDateTimeField(required = False, input_time_formats=['%I:%M %p'], label=_(u'End Time'))
         class Meta:
