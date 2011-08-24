@@ -92,6 +92,7 @@ class Event(models.Model):
     description = models.TextField(blank=True)    # the longer description of the event
     start_time = models.DateTimeField('starting time',auto_now=False, auto_now_add=False)
     end_time = models.DateTimeField('ending time (optional)',auto_now=False, auto_now_add=False, blank=True, null=True)
+    recur = models.BooleanField('recurring event', blank=True)
     location = models.CharField('location of the event',max_length=500)
     venue = models.ForeignKey('CanadianVenue', blank=True, null=True)    # a specific venue associated with the event
     price = models.CharField('event price (optional)',max_length=40, blank=True, default='Free')

@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 
 from event import EVENTS_PER_PAGE, DEFAULT_FROM_EMAIL
-from event.models import Event, picture_file_path
+from event.models import Event, picture_file_path, Recurrence
 from event.forms import generate_form
 from event.utils import TagInfo, EventSet
 from django.http import Http404
@@ -17,6 +17,7 @@ from taggit.models import Tag
 from django.conf import settings
 
 import datetime
+import copy
 
 import re
 
@@ -192,7 +193,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
     all_tags.sort(key=lambda tag: tag.name)
     all_tags.sort(key=lambda tag: tag.number, reverse=True)
     if end is None:
-    	    	all_tags.insert(0, TagInfo( num=Event.events.filter(start_time__gte=start).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
+        all_tags.insert(0, TagInfo( num=Event.events.filter(start_time__gte=start).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
     else:
     	all_tags.insert(0, TagInfo( num=Event.events.filter(start_time__range=(start,end)).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
 
@@ -264,7 +265,12 @@ def create(request, form_class=None, success_url=None,
                                                           request.FILES['picture'])
             
             event_obj = event_obj.save() #save to the database
-            form.save_m2m() #needed for many-to-many fields
+            form.save_m2m() #needed for many-to-many fields (i.e. the event tags)
+
+            # event recurring, so we create a new one here
+            if event_obj.recur:
+                print 'recurring'
+                create_recurrence(event_obj)
 
             #email the user
             current_site = settings.EVENT_EMAIL_SITE
@@ -340,6 +346,8 @@ def edit(request,
                                data = request.POST )
         if form.is_valid():
             form.save()
+            form.save()
+            form.save()
             return HttpResponseRedirect(success_url)
     else:
         form = form_class(instance = event_obj)
@@ -352,3 +360,39 @@ def edit(request,
                                 'picture_exists': event_obj.picture_exists(40)},
                               context_instance=context)
 
+
+def create_recurrence(event):
+    recurrence = Recurrence()
+    event.recurrence = recurrence
+    recurrence.save()
+    event.save()
+    #generate list of days based on start and end date
+    days = daily(event.start_time.date(), event.end_time.date())
+    #iterate through list and create events
+    for day in days:
+        print 'entering copy loop, day: ' + day.strftime('%a')
+        next_event = copy.copy(event)
+        next_event.start_time = datetime.datetime.combine(day, next_event.start_time.time())
+        next_event.id = None
+        next_event.save()
+        event = next_event
+
+def daily (start, end, weekday=False, day_delta=1):
+    """
+    Pre: start is a date
+         end is a date
+         weekday is a boolean, to pick if we are skipping saturdays and sundays
+         day_delta is an integer, to pick how many days to skip between events.
+    Returns: a list of days specified by the inputs
+    """
+    date_list = []
+    if weekday:
+        #TODO: implement week day recurrance
+        pass
+    else:
+        delta = datetime.timedelta(days=day_delta)
+    	current = start + delta
+    	while current <= end:
+            date_list.append(current)
+            current += delta
+    return date_list
