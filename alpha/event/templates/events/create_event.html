@@ -14,7 +14,7 @@
 	<li class="label">{{ form.name.label_tag }}</li><li>{{ form.name }}</li>
 	<li id="name-info">{% for error in form.name.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 
-  <!-- Location -->
+	<!-- Location -->
 	<li class="label">{{ form.location.label_tag }}</li>
 	<li>{{ form.location }}</li>
 	<li id="location-info">{% for error in form.location.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
@@ -26,9 +26,11 @@
 	<li id="when-info">{% for error in form.start_time.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 	<li class="label end_time">{{ form.end_time.label_tag }}</li>
 	<li class="end_time">{{ form.end_time }}
-	  <a href="" id="remove_time" class="addevent">- Remove end time</a></li>
-	<li class="label">Create Recurrence</li>
-	<li>{{ form.recur }}</li>
+	  <a href="" id="remove_time" class="addevent">- Remove end time</a><br>
+	  <div id="recur">{{ form.recur }} {{ form.recur.label_tag }}</div>
+	</li>
+
+	<!-- Price -->
 	<li class="label">{{ form.price.label_tag }}<span class="description">Optional</span></li>
 	<li>{{ form.price }}</li>
 	<li id="price-info">{% for error in form.price.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>	
