@@ -27,8 +27,8 @@
 	<li class="label end_time">{{ form.end_time.label_tag }}</li>
 	<li class="end_time">{{ form.end_time }}
 	  <a href="" id="remove_time" class="addevent">- Remove end time</a>
-	  <br>
-	  <div id="recur">{{ form.recur }} {{ form.recur.label_tag }}</div>
+	  {% comment %}<br>
+	  <div id="recur">{{ form.recur }} {{ form.recur.label_tag }}</div> {% endcomment %}
 	</li>
 
 	<!-- Price -->
