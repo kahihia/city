@@ -26,8 +26,9 @@
 	<li id="when-info">{% for error in form.start_time.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 	<li class="label end_time">{{ form.end_time.label_tag }}</li>
 	<li class="end_time">{{ form.end_time }}
-	  <a href="" id="remove_time" class="addevent">- Remove end time</a><br>
-	  <div id="recur">{{ form.recur }} {{ form.recur.label_tag }}</div>
+	  <a href="" id="remove_time" class="addevent">- Remove end time</a>
+	  {% comment %}<br>
+	  <div id="recur">{{ form.recur }} {{ form.recur.label_tag }}</div> {% endcomment %}
 	</li>
 
 	<!-- Price -->

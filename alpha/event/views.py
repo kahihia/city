@@ -269,7 +269,6 @@ def create(request, form_class=None, success_url=None,
 
             # event recurring, so we create a new one here
             if event_obj.recur:
-                print 'recurring'
                 create_recurrence(event_obj)
 
             #email the user
@@ -346,8 +345,6 @@ def edit(request,
                                data = request.POST )
         if form.is_valid():
             form.save()
-            form.save()
-            form.save()
             return HttpResponseRedirect(success_url)
     else:
         form = form_class(instance = event_obj)
@@ -370,7 +367,6 @@ def create_recurrence(event):
     days = daily(event.start_time.date(), event.end_time.date())
     #iterate through list and create events
     for day in days:
-        print 'entering copy loop, day: ' + day.strftime('%a')
         next_event = copy.copy(event)
         next_event.start_time = datetime.datetime.combine(day, next_event.start_time.time())
         next_event.id = None
