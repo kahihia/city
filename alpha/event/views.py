@@ -359,18 +359,29 @@ def edit(request,
 
 
 def create_recurrence(event):
+    """
+
+    Pre: event is an event object, populated with data from the form and saved
+         event has an 'end_time' attr which contains valid information
+         event has as 'recur' attr which is True
+    Post: a recurrence object is created, as well as a series of events
+    Returns: nothing
+    """
+    #create the recurrence
     recurrence = Recurrence()
     event.recurrence = recurrence
     recurrence.save()
     event.save()
     #generate list of days based on start and end date
+    #TODO - add different functions for handling the daily, weekly, and monthly use cases
     days = daily(event.start_time.date(), event.end_time.date())
     #iterate through list and create events
     for day in days:
         next_event = copy.copy(event)
         next_event.start_time = datetime.datetime.combine(day, next_event.start_time.time())
         next_event.id = None
-        next_event.save()
+        next_event.save() #this does not update the many to many attributes (the tags)
+        #TODO find out how to call the TaggitManager with the information 
         event = next_event
 
 def daily (start, end, weekday=False, day_delta=1):
