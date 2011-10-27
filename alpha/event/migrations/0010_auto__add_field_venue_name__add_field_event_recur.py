@@ -9,7 +9,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding field 'Venue.name'
-        db.add_column('event_venue', 'name', self.gf('django.db.models.fields.CharField')(default='Default Venue', max_length=250), keep_default=False)
+        #db.add_column('event_venue', 'name', self.gf('django.db.models.fields.CharField')(default='Default Venue', max_length=250), keep_default=False)
 
         # Adding field 'Event.recur'
         db.add_column('event_event', 'recur', self.gf('django.db.models.fields.BooleanField')(default=False), keep_default=False)
@@ -18,7 +18,7 @@ class Migration(SchemaMigration):
     def backwards(self, orm):
         
         # Deleting field 'Venue.name'
-        db.delete_column('event_venue', 'name')
+        #db.delete_column('event_venue', 'name')
 
         # Deleting field 'Event.recur'
         db.delete_column('event_event', 'recur')
