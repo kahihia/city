@@ -139,9 +139,9 @@ a:hover { text-decoration: underline; }
 #photo img { display: block; }
 
 .events li { position: relative; display: block; margin: 7px 0; color: #666; padding: 5px; overflow: hidden; }
-.events li:hover { background: #f0f1f4; }
+.events li:hover { background: #dddef2; }
 .events li:hover a.text { text-decoration: underline; }
-.events img { float: left; height: 40px; width: 40px; margin-right: 5px; background: #f0f1f4;  }
+.events img { float: left; height: 40px; width: 40px; margin-right: 5px; background: #dddef2;  }
 .events a { cursor: pointer; }
 .events a.text { display: block; padding: 4px; color: #2D51D8; font-size: 14px; line-height: 14px; font-weight: normal; }
 .events a.row { position: absolute; top: 0; left: 0; bottom: 0; right: 0; }
