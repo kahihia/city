@@ -236,7 +236,7 @@ def view(request, slug=None, old_tags=None):
     opengraph = { 'og:title' : event.name,
                   'og:type' : 'event',
                   'og:image' : event_picture_url(event),
-                  'og:url' : reverse('event_view', args=(event.slug,)),
+                  'og:url' : 'http://cityfusion.ca' + reverse('event_view', args=(event.slug,)),
                   'og:site_name' : 'Cityfusion',
                   'fb:app_id' : '330171680330072',
                   'og:description' : '%s, %s' % (
