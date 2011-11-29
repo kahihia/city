@@ -235,7 +235,7 @@ def view(request, slug=None, old_tags=None):
 
     opengraph = { 'og:title' : event.name,
                   'og:type' : 'event',
-                  'og:locale' : 'en_CA',
+                  'og:locale' : 'en_US',
                   'og:image' : 'http://' + settings.EVENT_EMAIL_SITE + event_picture_url(event),
                   'og:url' : 'http://' + settings.EVENT_EMAIL_SITE + reverse('event_view', args=(event.slug,)),
                   'og:site_name' : 'Cityfusion',
