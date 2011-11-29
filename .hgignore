@@ -8,3 +8,4 @@ winvenv/*
 syntax: regexp
 ^static/
 ^media/
+^thumbnail_algorithms/
