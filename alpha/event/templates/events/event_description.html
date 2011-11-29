@@ -50,6 +50,6 @@
   <ul class="tags">
     <li>{% for tag in event.tags.all %}<a href="{% url event_browse_tags tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</li>
   </ul>
-
+  <div class="fb-like" data-href="" data-send="true" data-width="450" data-show-faces="true"></div>
 </section>
 {% endblock %}
