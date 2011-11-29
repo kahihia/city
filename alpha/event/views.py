@@ -238,6 +238,7 @@ def view(request, slug=None, old_tags=None):
                   'og:image' : event_picture_url(event),
                   'og:url' : reverse('event_view', args=(event.slug,)),
                   'og:site_name' : 'Cityfusion',
+                  'fb:app_id' : '330171680330072',
                   'og:description' : '%s, %s' % (
                       event.start_time.strftime("%B %-1d"),
                       event.start_time.strftime('%-1I:%M %p'))
