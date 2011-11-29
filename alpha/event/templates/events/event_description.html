@@ -1,5 +1,14 @@
 {% extends 'home.html' %}
 {% block title %} > View > {{ event.name }}{% endblock %}
+
+{% block opengraph %}
+{% if opengraph %}
+  {% for prop, value in opengraph.items %}
+    <meta property="{{ prop }}" content="{{ value }}"/>
+  {% endfor %}
+{% endif %}
+{% endblock %}
+
 {% block content %}
 
 {% block breadcrumb %}

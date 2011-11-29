@@ -229,11 +229,19 @@ def view(request, slug=None, old_tags=None):
         event = Event.events.get(slug=slug)
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))
+
+    opengraph = { 'og:title' : event.name,
+                  'og:site_name' : 'Cityfusion',
+                  'og:description' : '%s, %s' % (
+                      event.start_time.strftime("%B %-1d"),
+                      event.start_time.strftime('%-1I:%M %p'))
+                  }
     
     return render_to_response('events/event_description.html',
                               { 'event': event,
                                 'browsing':True,
                                 'old_tags':old_tags,
+                                'opengraph' : opengraph
                                 },
                               context_instance = RequestContext(request))
 

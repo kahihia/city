@@ -6,7 +6,7 @@
   <title>cityfusion.ca{% block title %}{% endblock %}</title>
   <meta name="description" content="Online events listings. Find and post local events.">
   <meta name="author" content="Peak Experience, peakxp.com">
-
+  {% block opengraph %}{% endblock %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css">
   {% block css %}{% endblock %}
   {% block redirect %}{% endblock %}
