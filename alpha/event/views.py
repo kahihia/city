@@ -3,6 +3,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail.message import EmailMessage
 from django.utils.safestring import mark_safe
 
+from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
@@ -12,9 +15,9 @@ from event import EVENTS_PER_PAGE, DEFAULT_FROM_EMAIL
 from event.models import Event, picture_file_path, Recurrence
 from event.forms import generate_form
 from event.utils import TagInfo, EventSet
-from django.http import Http404
+from event.templatetags.event_pictures import event_picture_url
+
 from taggit.models import Tag
-from django.conf import settings
 
 import datetime
 import copy
@@ -231,6 +234,9 @@ def view(request, slug=None, old_tags=None):
         return HttpResponseRedirect(reverse('event_browse'))
 
     opengraph = { 'og:title' : event.name,
+                  'og:type' : 'event',
+                  'og:image' : event_picture_url(event),
+                  'og:url' : reverse('event_view', args=(event.slug,)),
                   'og:site_name' : 'Cityfusion',
                   'og:description' : '%s, %s' % (
                       event.start_time.strftime("%B %-1d"),
