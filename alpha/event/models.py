@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
+from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
+
 import string
 import sha
 import random
@@ -20,36 +23,35 @@ def picture_file_path(instance = None, filename = None):
     documentation as a function which is used by the upload_to karg of
     an ImageField I will copy the relevant documentation here from
     FileField.upload_to:
-    
+
     This may also be a callable, such as a function, which will be
     called to obtain the upload path, including the filename. This
     callable must be able to accept two arguments, and return a
     Unix-style path (with forward slashes) to be passed along to the
     storage system. The two arguments that will be passed are:
-    
-    Argument      Description 
+
+    Argument      Description
 
     ------------------------------------------------------------------
 
     instance      An instance of the model where the
-                  FileField is defined. More specifically, this is 
-                  the particular instance where the current file is 
+                  FileField is defined. More specifically, this is
+                  the particular instance where the current file is
                   being attached.
-                  
-                  In most cases, this object will not have been saved 
-                  to the database yet, so if it uses the default 
-                  AutoField, it might not yet have a value for its 
+
+                  In most cases, this object will not have been saved
+                  to the database yet, so if it uses the default
+                  AutoField, it might not yet have a value for its
                   primary key field.
 
     filename 	  The filename that was originally given to the
-                  file. This may or may not be taken into account 
+                  file. This may or may not be taken into account
                   when determining the final destination path.
 
     Also has one optional argument: FileField.storage, a storage
     object, which handles the storage and retrieval of your files.
     """
     return os.path.join(EVENT_PICTURE_DIR, datetime.date.today().isoformat(), filename)
-
 
 class Event(models.Model):
     class Meta:
@@ -63,6 +65,7 @@ class Event(models.Model):
 
     # The manager is the interface for making database query operations on all models
     # example usage: Event.events.all() will provide a list of all event objects
+
     events = models.Manager()
     # timestamps
     created = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now())
@@ -83,17 +86,16 @@ class Event(models.Model):
     # only one user can own an event
     owner = models.ForeignKey(User, blank=True, null=True)
     # a recurrence is a set of events, combined with some user defined rule
-    recurrence = models.ForeignKey('Recurrence', null=True, blank=True)
+    #commented by Arlus
+    #recurrence = models.ForeignKey('Recurrence', null=True, blank=True)
     #--------------------------------------------------------------
     # User set fields - these are input by the user and validated -
     #==============================================================
     email = models.CharField('email address',max_length=100)    # the event must have an email
     name = models.CharField('event title',max_length=250)    # the title of the event
     description = models.TextField(blank=True)    # the longer description of the event
-    start_time = models.DateTimeField('starting time',auto_now=False, auto_now_add=False)
-    end_time = models.DateTimeField('ending time (optional)',auto_now=False, auto_now_add=False, blank=True, null=True)
-    recur = models.BooleanField('recurring event', blank=True)
-    location = models.CharField('location of the event',max_length=500)
+    location_name = models.CharField('location of the event', max_length=500)
+    location = models.PointField()
     venue = models.ForeignKey('CanadianVenue', blank=True, null=True)    # a specific venue associated with the event
     price = models.CharField('event price (optional)',max_length=40, blank=True, default='Free')
     website = models.URLField(verify_exists=False, blank=True, null=True, default='')
@@ -141,7 +143,7 @@ class Event(models.Model):
         """
         Returns: The file name of the picture of a given size.
         """
-        return os.path.join(EVENT_PICTURE_DIR, str(self.pk), 'resized_pic', 
+        return os.path.join(EVENT_PICTURE_DIR, str(self.pk), 'resized_pic',
                             str(size), os.path.basename(self.picture.name))
 
     def picture_url(self, size):
@@ -149,7 +151,7 @@ class Event(models.Model):
         Returns: The url of the picture of a certain size.
         """
         return self.picture.storage.url(self.picture_name(size))
-    
+
     def create_resized(self, size):
         """
         Creates a resized image on the filesystem using EVENT_RESIZE_METHOD
@@ -199,7 +201,22 @@ class Event(models.Model):
         # save the jpeg
         thumb = self.picture.storage.save( self.picture_name(size),
                                            resized_pic_file )
- 
+
+def SingleEvent(Event):
+    """
+        Single event is event that occur only once.
+        So when we create Event that occur more then one time,
+        for it automaticaly will be created single events.
+    """
+    class Meta:
+        verbose_name_plural = 'Single events'
+    def __unicode__(self):
+        return u'%s/// %s' % (self.owner, self.name)
+    event = models.ForeignKey(Event, blank=False, null=False)
+    start_time = models.DateTimeField('starting time',auto_now=False, auto_now_add=False)
+    end_time = models.DateTimeField('ending time (optional)',auto_now=False, auto_now_add=False, blank=True, null=True)
+
+
 
 def create_default_pictures(instance=None, created=False, **kwargs):
     """
@@ -208,7 +225,7 @@ def create_default_pictures(instance=None, created=False, **kwargs):
     django.db.models.signals.post_save
 
     Like pre_save, but sent at the end of the save() method.
-    
+
     Arguments sent with this signal:
 
     sender
@@ -227,7 +244,7 @@ def create_default_pictures(instance=None, created=False, **kwargs):
       consistent state yet.
 
     using
-      The database alias being used. 
+      The database alias being used.
 
     """
     if created:
@@ -248,5 +265,10 @@ class CanadianVenue(Venue):
     province = models.CharField(max_length=200)
     postal_code = models.CharField(max_length=50)
 
-class Recurrence(models.Model):
-    pass
+class Reminder(models.Model):
+    email = models.CharField(max_length=100)
+    date = models.DateTimeField()
+    event = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.event

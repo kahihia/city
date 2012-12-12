@@ -1,100 +1,312 @@
-{% extends 'home.html' %}
 
-{% comment %}
+{% extends 'base.html' %}
+ <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+<style type="text/css">
+	.round	
+	{ 	
+		-moz-border-radius:12px;
+		-webkit-border-radius:12px;
+		background:#eee;
+		border:1px solid #ccc;
+		padding:20px;
+	}
+#exit {
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+	background-color:#ededed;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	color:#777777;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #ffffff;
+}#exit:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+	background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+	background-color:#dfdfdf;
+}#exit:active {
+	position:relative;
+	top:1px;
+}
+
+  </style>
+<script type="text/javascript">
+$(document).ready(function(e) {
+    $('.search-lists ul li a').click(function(){
+		var v = $(this).attr('rel');
+		$('.location-text-box .location').val(v);
+	});
+	$('.footer-site-map ul li').addClass('add-border-right-white');
+	$('.footer-site-map ul li:last').removeClass('add-border-right-white');
+	//$('.right-navigation-wrapper').height($('.main-navigation-content-nav').height());
+});
+
+</script>{% comment %}
 browse_events.html
 --------------------------------------
 This is the event browser.
-
 Incoming context has:
-all_tags: a container of tags associated with events that could be displayed on this page
+all_tags: a container of tags associated with events that could be
+displayed on this page
 current_tags: the tags enabled on this page
 page_date: the date we are looking at
 page_num: the current page number
-pages: a list of the numbers from 1 to the number of pages to be displayed
+pages: a list of the numbers from 1 to the number of pages to be
+displayed
 page_less: the previous page number
 page_more: the next page number
-browsing: the boolean stating to the header that we are browsing (the top button)
-browse_bar: the boolean stating to the header that we want a nav list of dates in the header
+browsing: the boolean stating to the header that we are browsing (the
+top button)
+browse_bar: the boolean stating to the header that we want a nav list
+of dates in the header
 {% endcomment %}
 {% load date_formatting %}
-{% block title %} > Browse {% if page_date != "flow" %}> {{ page_date|slug_to_title }}{% endif %}{% endblock %}
-{% block content %}
-<aside id="tags">
-  <nav>
-    <ul>
-    {% for tag in all_tags %}
-      {% if tag.slug == "" %}
-        {% if page_date != "flow" %}
-        <li {% if forloop.counter0 > 9 %}style="display: none; "{% endif %}>
-          <a href = "{% url event_browse_date date=page_date %}"{% if tag.status %} class="{{ tag.status|safe }}"{% endif %}>{{ tag.name }} ({{ tag.number }})</a>
-        </li>
-	{% else %}
-        <li {% if forloop.counter0 > 9 %}style="display: none; "{% endif %}>
-          <a href = "{% url event_browse %}"{% if tag.status %} class="{{ tag.status|safe }}"{% endif %}>{{ tag.name }} ({{ tag.number }})</a>
-        </li>
-	{% endif %}
-      {% else %}
-        {% if tag.number > 0 %}
-          {% if page_date != "flow" %}
-              <li {% if forloop.counter0 > 9 %}style="display: none; "{% endif %}>
-	        <a href = "{% url event_browse_tags_date old_tags=tag.slug date=page_date %}"{% if tag.status %}class="{{ tag.status|safe }}"{% endif %}>{{ tag.name }} ({{ tag.number }})</a>
-	      </li>
-	  {% else %}
-            <li {% if forloop.counter0 > 9 %}style="display: none; "{% endif %}>
-	      <a href = "{% url event_browse_tags old_tags=tag.slug %}"{% if tag.status %}class="{{ tag.status|safe }}"{% endif %}>{{ tag.name }} ({{ tag.number }})</a>
-	    </li>
-          {% endif %}
-        {% endif %}
-      {% endif %}
+{% block title %} &gt; Browse {% if page_date != "flow" %}&gt; {{
+page_date|slug_to_title }}{% endif %}{% endblock %}
+{% block page %}
+<!--<link rel="stylesheet" href="{{STATIC_URL}}popup/css/styles.css">-->
+<style>
+.messages{
+list-style-type: none; text-align: center;
+}
+.msg{
+border: 1px solid #06C;
+padding: 3px;
+border-radius:3px;
+background-color:rgba(255,165,0,0.5);
+}
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#date").datepicker({
+        buttonImage: '{{STATIC_URL}}images/jump-to-date.png',
+        buttonImageOnly: true,
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        showOn: 'both',
+        onClick: window.jumpToDate, 
+        toggles: true,
+        onSelect: function(dateText, inst) {
+                window.location.replace("http://cityfusion.ca/events/all/" + dateText) // make your AJAX call!
+            }
+        }); //make the datepicker appear!
+     });
+     
+</script>
+{% if messages %}
+<div class="msg">
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><h3>{{ message }}</h3></li>
     {% endfor %}
-    {% if all_tags|length > 9 %}
+</ul>
+</div>
+{% endif %}
+<div class="wrapper">
+	<div class="page-container">    
+   <div class="featured-area">
+    <h2>Featured Events</h2>
+    <div class="features-wrapper">
+    <!--start.features-->
+    
+    {% for event in locd.object_list %}    
+    {% load event_pictures %}
+        <div class="features">
+            <div class="featured-img-wrapper"><img src="{% event_picture_url event 200 %}" height="153px" weight="154px"></div>
+            <div class="featured-img-details">
+                <div class="featured-img-details-wrapper">
+                    <div class="featured-title"><a href="#">{{event.name}}</a></div>
+                    <div class="featured-date">{{ event.start_time|just_day }}
+<br>{{ event.start_time|just_time }}
+      {% if event.end_time %}&mdash; {{ event.end_time|just_time }}{% endif %}</div>
+                    <div class="featured-details-link"><a href="/events/view/{{event.slug}}/">{{ event.description|linebreaks }}</a></div>                            
+                </div>                        
+            </div>                    
+        </div>
+{%endfor%}
+
+        
+   <!--end.features-->
+        <div class="clr"></div>
+    </div>
+    
+    <!--start.features-navigation-->
+    
+    <div class="features-navigation">
+    <ul>
+       <span class="step-links">
+        {% if locd.has_previous %}
+            <a href="?page={{ locd.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+        {%if locd.num_pages > 1%}
+            Page {{ locd.number }} of {{ locd.paginator.num_pages }}.
+        </span>
+		{%endif%}
+        {% if locd.has_next %}
+            <a href="?page={{ locd.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+    </ul>
+    </div>
+    
+    <!--end.features-navigation-->
+
+</div> 
+
+
+    <div class="content-wrapper">
+    	<div class="content-wrapper-panel">
+            <!--start.main-content-wrapper-->
+            
+            <div class="main-content-wrapper">
+            	<h1>Search <span class="orange">Pad</span></h1>
+                <div class="main-content">
+                	<!--start.main-navigation-->
+                    
+                    <div class="main-navigation">
+                    	<!--start.main-navigation-nav-->
+                        <div class="main-navigation-nav">
+                        	<div class="main-navigation-nav-wrapper">
+                            	<ul class="categories">
+                                	<li class="header">Browse All Events({{locs|length}})</li>
+                                    <li class="subcat"><a href="{% url event_browse_tags_date date="this-week" old_tags=current_tags %}" {% if page_date == "this-week" %}class="current"{% endif %}>&#8250;&#8250; All this week</a></li>
+                                    <li class="subcat">                                                                                <a href="">&#8250;&#8250; Featured events</a></li>
+                                      
+                                    {%for tag in all_tags%}
+                                    {%if tag.slug = ''%}
+                                    <li {% if forloop.counter0 > 9 %} {% endif %} class="blue"><a href="/events/">{{tag.name}}</a></li>
+                                    {%else%}
+                                    <li {% if forloop.counter0 > 9 %} {% endif %} class="blue"><a href="{% url event_browse_tags old_tags=tag.slug %}">{{tag.name}}</a></li>
+                                    {%endif%}
+                                    {%endfor%}
+                                    {% if all_tags|length > 9 %}
       <li id="tags_more"><a href="#" class="more"><span class="tickbox"><span class="downtick"></span></span>More</a></li>
       <li id="tags_less" style="display: none; "><a href="#" class="more"><span class="tickbox"><span class="uptick"></span></span>Fewer</a></li>
     {% endif %}
-    </ul>
-  </nav>
-</aside>
+                                </ul>
+                            </div>
+                        </div>                        
+                        <!--end.main-navigation-nav-->
+                        
+                        <!--start.main-navigation-content-nav-->
+                        
+                        <div class="main-navigation-content-nav">
+                        	<div class="main-navigation-content-nav-wrapper">
+                            	<!--start.schedule-bar-->
+                            
+                            	<div class="schedule-bar">
+                                	<div class="schedule-bar-wrapper">
+                                    	<ul>
+                                            <li><a  href="{% url event_browse_tags_date date="today" old_tags=current_tags %}" {% if page_date == "today" %}class="current"{% endif %} class="jump">Today</a></li>
+                                             <li><a  href="{% url event_browse_tags_date date="tomorrow" old_tags=current_tags %}" {% if page_date == "tomorrow" %}class="current"{% endif %} class="jump">Tomorrow</a></li>
+                                              <li><a  href="{% url event_browse_tags_date date="this-weekend" old_tags=current_tags %}" {% if page_date == "this-weekend" %}class="current"{% endif %}  class="jump">This weekend</a></li>
+                                               <li><a  href="{% url event_browse_tags_date date="next-week" old_tags=current_tags %}" {% if page_date == "next-week" %}class="current"{% endif %}>Next week</a></li>
+                              <li>
+                              <div style="background-color: white; border: solid thin #CCC; border-radius: 5px; height:21px;"><input type="hidden" id="date"/></div>
+                              </li>
+                              
+                              
+                                            
+                                            <div class="clr"></div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <!--end.schedule-bar-->
+                                
+                                <!--start.entry-wrapper-->
+                               <div class="entry-wrapper">
+                                {% for set in event_sets %}
+                                {% for event in set.events %}
+                                
+                                {% load event_pictures %}
+                                
+                                	<div class="entry-info" style="border-bottom: solid thin #999; width: 450px;">
+                                	
+                                    <div class="entry-img-prev"><img src="{% event_picture_url event 200 %}"></div>
+                                    <div class="entry-details-wrapper">
+                                    	<div class="title-wrapper">
+                                        	<div class="title">{{event.name}}&nbsp;</div>
+                                            <div class="price">{{event.price}}</div>
 
-<section class="body">
-  {% for set in event_sets %}
-    {% if set.name %}
-      <h1>{{ set.name }}</h1>
-    {% endif %}
-    <ul class="events">
-      {% for event in set.events %}
-        {% load date_formatting %}
-        {% if page_date != "flow" %}
-          {% ifchanged event.start_time|just_day %}
-            </ul>
-            <h2>{{ event.start_time|just_day }}</h2>
-
-	    <ul class="events">
-          {% endifchanged %}
-	{% endif %}
-        {% include 'events/event_description_small.html' %}
-      {% empty %}
-        {% include 'events/no_events.html' %}
-      {% endfor %}
-    </ul>
-  {% endfor %}
-
-
-  <p>
+                                            <div class="clr"></div>
+                                        </div>
+                                        
+                                      <div class="entry-date-wrapper">
+                                        	{{ event.start_time|just_day }}
+<br>{{ event.start_time|just_time }}
+      {% if event.end_time %}&mdash; {{ event.end_time|just_time }}{% endif %}
+                                      </div>
+                                        
+                                      <div class="entry-description">
+                                           <br>
+                                            {{event.location}}
+                                        </div>
+                                        
+                                      <div class="auctions-wrapper">
+                                        	<ul>
+                                            	<!--<li><a href="#"><img src="images/buy-ticket.png" align="absmiddle"> Buy Tickets</a></li> -->
+                                            	<div id="basic-modal" >
+                                                <li><a href="/events/remind/{{event.id}}/?next={{next}}" method="GET" name='basic' align="absmiddle" class='basic'/> Remind Me</a></li></div>
+                                                
+                                                </form>
+                                                <!--start -->
+                                               
+                                                <li><a href="#"><img src="{{STATIC_URL}}images/like.png" align="absmiddle" /> Like</a></li>
+                                            </ul>
+                                        </div>
+                                        
+                                    </div>
+                                
+                                	<div class="clr"></div>
+                                	 {% if event.website %}<p><a href="{{ event.website }}">Website</a></p>{% endif %}</p> <p>{{ event.description|linebreaks }}</p>  
+                                	 <button>hide</button>
+                                	 <script>
+    $("button").click(function() {
+    $(this).parent().hide();
+});
+</script> 
+                                    </div>
+                                    
+                                                              
+                                {%endfor%}
+                                {%endfor%}
+                                
+                                </div>
+                                
+                               <div class="entry-navigation-np">
+ <p>
     {% if page_num > 1 %}
       {% if page_num == 2 %}
-        <a class="button" href="{% if page_date != "flow" %}{% url event_browse_tags_date old_tags=current_tags date=page_date %}{% else %}{% url event_browse_tags old_tags=current_tags %}{% endif %}">Previous</a>
+        <a class="btnbg rboarder submit" href="{% if page_date != "flow" %}{% url event_browse_tags_date old_tags=current_tags date=page_date %}{% else %}{% url event_browse_tags old_tags=current_tags %}{% endif %}">Previous</a>
       {% else %}
-        <a class="button" href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=page_less %}{% endif %}">Previous</a>
+        <a class="btnbg rboarder submit" href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=page_less %}{% endif %}">Previous</a>
       {% endif %}
     {% endif %}
 
     {% if page_more <= pages|length %}
       {% if page_more == pages|length %}
         {% if page_remainder > 0 %}
-          <a class="button next" href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=page_more %}{% endif %}">Next</a>
+          <a class="btnbg rboarder submit" href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=page_more %}{% endif %}">Next</a>
         {% endif %}
       {% else %}
-        <a class="button next" href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=page_more %}{% endif %}">Next</a>
+        <a class="btnbg rboarder submit" href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=page_more %}{% endif %}">Next</a>
       {% endif %}
     {% endif %}
   </p>
@@ -103,18 +315,53 @@ browse_bar: the boolean stating to the header that we want a nav list of dates i
       {% for numb in pages %}
         {% if forloop.last %}
           {% if page_remainder > 0 %}
-            <li>
-	      <a {% if page_num == numb %}class="current"{% endif %} href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=numb %}{% endif %}">{{ numb }}</a>
-	    </li>
+	      <a {% if page_num == numb %}class="current"{% endif %} href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=numb %}{% endif %}">{{ numb }}</a>&nbsp;
 	  {% endif %}
 	{% else %}
-          <li>
-	    <a {% if page_num == numb %}class="current"{% endif %} href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=numb %}{% endif %}">{{ numb }}</a>
-	  </li>
-	{% endif %}
+	    <a {% if page_num == numb %}class="current"{% endif %} href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=numb %}{% endif %}">{{ numb }}</a>&nbsp;{% endif %}
       {% endfor %}
     </ul>
   {% endif %}
-</section>
+                                </div>
+                                <!--end.entry-->
+                            
+                            </div>
+                        
+                        </div>
+                        
+                        <!--end.main-navigation-content-nav-->
+                        
+                        <div class="clr"></div>
+                    
+                    </div>
+                    
+                    <!--end.main-navigation-->
+                    
+                    <!--start.right-navigation-->
+                    
+					<?php include("rightside.php");?>
+                    
+                    <!--end.right-navigation-->
+                
+                	<div class="clr"></div>
+                
+                </div>
+            
+            </div>
+            
+            <!--end.main-content-wrapper-->
+        
+        </div>
+    
+    </div>
+    
+    <!--end.content-wrapper-->
 
+
+             
+    </div>
+</div>
+<!--jQuery-->
+	
+	<script src="{{STATIC_URL}}popup/js/jquery.reveal.js"></script>
 {% endblock %}

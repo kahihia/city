@@ -13,11 +13,19 @@ DATABASES = {
     }
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEFAULT_FROM_EMAIL = 'Cityfusion Mailer <dev-automaton@cityfusion.ca>'
-EMAIL_HOST = '10.181.225.239'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#DEFAULT_FROM_EMAIL = 'Cityfusion Mailer <dev-automaton@cityfusion.ca>'
+#EMAIL_HOST = '10.181.225.239'
 
-EVENT_EMAIL_SITE = 'cityfusion.dev.peakxp.com'
+#EVENT_EMAIL_SITE = 'cityfusion.dev.peakxp.com'
 
 # alpha.event settings
 EVENTS_PER_PAGE = 20
+
+#instead of taking the hustles of configuring a simple mail server, use an established one instead
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'arlusishmael@gmail.com'
+EMAIL_HOST_PASSWORD = '19553b2008'
+EMAIL_PORT = 587

@@ -1,84 +1,264 @@
-{% extends 'home.html' %}
+{% extends 'base.html' %}
+{% load selectable_tags %}
 {% block title %} > Post Event{% endblock %}
+{% block page %}
 
-{% block content %}
+<link href="{{STATIC_URL}}styles/tcal.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/create_event.css" rel="stylesheet" type="text/css" />
+{% include_ui_theme 'ui-lightness' %}
+{% include_jquery_libs %}
+<link href="{{STATIC_URL}}styles/dj.selectable.css" rel="stylesheet" type="text/css" />
+<script src="{{STATIC_URL}}js/create_event.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/jquery.dj.selectable.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/showhint.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/validate.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/tcal.js" type="text/javascript"></script>
+<!-- end time -->
+{{ form.map }}
+{{ form.media.js }}
+<script type="text/javascript">
 
-  <section class="body noborder">
-    {% block page_title %}<h1>Post Event</h1>{% endblock %}
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <ul>
-	{% if form.non_field_errors %}<li class="label"></li>
-	<li>{{ form.non_field_errors }}</li>{% endif %}
-	
-	<li class="label">{{ form.name.label_tag }}</li><li>{{ form.name }}</li>
-	<li id="name-info">{% for error in form.name.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+$(document).ready(function(e) {
+    $('.search-lists ul li a').click(function(){
+		var v = $(this).attr('rel');
+		$('.location-text-box .location').val(v);
+	});
+	$('.footer-site-map ul li').addClass('add-border-right-white');
+	$('.footer-site-map ul li:last').removeClass('add-border-right-white');
+	//$('.right-navigation-wrapper').height($('.main-navigation-content-nav').height());
+    function newParameters(query) {
+        query.foo = 'bar';
+    }
 
-	<!-- Location -->
-	<li class="label">{{ form.location.label_tag }}</li>
-	<li>{{ form.location }}</li>
-	<li id="location-info">{% for error in form.location.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
-	
-	<!-- Times -->
-	<li class="label">{{ form.start_time.label_tag }}</li>
-	<li>{{ form.start_time }}
-	  <a href="" class="addevent" id="addevent">+ Add end time</a></li>
-	<li id="when-info">{% for error in form.start_time.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
-	<li class="label end_time">{{ form.end_time.label_tag }}</li>
-	<li class="end_time">{{ form.end_time }}
-	  <a href="" id="remove_time" class="addevent">- Remove end time</a>
-	  {% comment %} TODO recurrences<br>
-	  <div id="recur">{{ form.recur }} {{ form.recur.label_tag }}</div>{% endcomment %}
-	</li>
+    // $(document).ready(function() {
+    //     $('#id_location_name').djselectable();
+    // });
+});
 
-	<!-- Price -->
-	<li class="label">{{ form.price.label_tag }}<span class="description">Optional</span></li>
-	<li>{{ form.price }}</li>
-	<li id="price-info">{% for error in form.price.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>	
-	
-	<!-- Description -->
-	<li class="label">
-	  <label for="{{ form.description.html_name }}">{{ form.description.label }}<span class="description">Optional</span></label>
-	</li>
-	<li>{{ form.description }}</li>
-	<li id="description-info">{% for error in form.description.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+</script>
 
 
-	<!-- Website -->
-	<li class="label">
-	  <label for="{{ form.website.html_name }}">{{ form.website.label }}<span class="description">Optional</span></label>
-	</li>
-	<li>{{ form.website }}</li>
-	<li id="website-info">{% for error in form.website.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<style>
+#id_start_time_1 {
+	width: 30px;
+}
+#id_end_time_1 {
+width: 30px;
+}
+#id_frequency {
+padding: 4px;
+border-radius: 4px;
+background: white;
+border: #E3E3E3 solid thin;
+}
+SPAN.tagMatches {
+    margin-left: 10px;
+}
 
-	<!-- Tags -->
-	<li class="label">Tags<label for="{{ form.tags.label_html}}"><span class="description">e.g Sports, Free</span></label>
-	</li>
-	<li>
-	  <ul>
-	    <li class="other">{{ form.tags }}</li>
-	  </ul>
-	</li>
-	<li id="tag-info">{% for error in form.tags.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
-	{% block current_picture %}{% endblock %}
+SPAN.tagMatches SPAN {
+    padding: 2px;
+    margin-right: 4px;
+    background-color: #0000AB;
+    color: #fff;
+    cursor: pointer;
+    background: url(/static/images/blue.png);
+}
+</style>
+<script type="text/javascript" src="{{STATIC_URL}}/js/auto.js"></script>
 
-	<!-- Image -->
-	<li class="label">
-	  <label for="{{ form.picture.html_name }}">{{ form.picture.label }}<span class="description">Optional</span></label>
-	</li>
-	<li>{{ form.picture }}</li>
-	<li id="image-info">{% for error in form.username.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<div class="wrapper">
+	<div class="page-container">
+    <!--start.header-wrapper-->
+    <!--end.header-wrapper-->
 
-  <!-- Email -->
-	{% if form.email %}<li class="label">{{ form.email.label_tag }}</li>
-	<li>{{ form.email }}</li>
-	<li id="email-info">{% for error in form.email.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>{% endif %}
+    <!--start.content-wrapper-->
+    <div class="content-wrapper">
+    	<div class="content-wrapper-panel">
+       		<!--start.featured-area-->
 
-	<!-- Submit -->
-	<li class="label"></li>
-	<li><input type="submit" class="submit button" value="{% block submit_button %}Post Event{% endblock %}"></li>
-      </ul>
-    </form>
-  </section><!-- .body -->
-  
+            <!--end.featured-area-->
+
+            <!--start.main-content-wrapper-->
+
+            <div class="main-content-wrapper">
+            	<h1>Post <span class="orange">Events</span></h1>
+                <div class="main-content">
+                	<!--start.main-navigation-->
+                    <div class="main-navigation">
+                    	<!--start.main-navigation-nav-->
+                        	<div id="entry-form">
+                                <form method="post" name="post-events" onsubmit="return validate_form_events(this)" enctype="multipart/form-data">
+                                {% csrf_token %}
+<!--errors -->
+{%if form.errors %}
+<h3>Please correct the following:</h3>
+<div class="errors" style="border:1px solid RED;border-radius:4px;">
+<ul style="list-style-type: none;">
+<li id="email-info">{% for error in form.email.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<li id="image-info">{% for error in form.username.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<li id="tag-info">{% for error in form.tags.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<li id="website-info">{% for error in form.website.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<li id="description-info">{% for error in form.description.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<li id="price-info">{% for error in form.price.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<li id="when-info">{% for error in form.start_time.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<li id="location-info">{% for error in form.location.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<li id="name-info">{% for error in form.name.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+
+</ul>
+</div>
+{% endif %}
+<!-- end errors -->
+                                 <table>
+                                        <tr>
+                                            <td>Event Name</td>
+                                            <td>{{form.name}}</td>
+                                            <td>
+                                                <a href="#" onmouseover="showhint('<h3>Help - Enter event <i>[Event name]:</i></h3><p><strong>e.g:</strong> &ldquo;My House party&rdquo;  or &ldquo;Freshmen bash&rdquo; </p>', this, event, '250px')">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Location</td>
+                                            <td>
+                                                <div>
+                                                    {{form.location_name}}
+                                                    <span class="choose_location"></span>
+                                                </div>
+                                                <div class="location_map">
+                                                    {{form.location}}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="#" onmouseover="showhint('<h3>Help - Enter event <i>[Location]:</i></h3><p><strong>e.g:</strong> &ldquo;Sakstoon&rdquo;  or &ldquo;Ottawa&rdquo; </p>', this, event, '250px')">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Start Date & Time</td><td>{{form.start_time}}</td><td><a href="#" onmouseover="showhint('<h3>Help - Enter event <i>[start date]:</i></h3><p><strong>e.g:</strong> &ldquo;August 23rd 2012 3.30pm&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        <ul>
+
+	</ul>
+                                            <td>End Date & Time</td><td>{{form.end_time}}</td><td><a href="#" onmouseover="showhint('<h3>Help - Enter event <i>[End time]:</i></h3><p><strong></strong> &ldquo;Should be later than start time&rdquo;</p>', this, event, '250px')"><div class="buttonq"></div></a>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Reccurrence&nbsp;&nbsp;</td><td>&nbsp;&nbsp;{{form.frequency}}</td><td><a href="#" onmouseover="showhint('<h3>Help - Enter event <i>[Recurrence]:</i></h3><p><strong>e.g:</strong> &ldquo;Daily&rdquo;  or &ldquo;Weekly&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Price</td><td>{{form.price}}</td><td><a href="#" onmouseover="showhint('<h3>Help - Enter event <i>[enterance]:</i></h3><p><strong>e.g:</strong> &ldquo;Free&rdquo;  or &ldquo;$5&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="top">
+                                                Description
+
+                                            </td><td>{{form.description}}</td><td><a href="#" onmouseover="showhint('<h3>Help - Enter event <i>[Description]:</i></h3><p><strong>e.g:</strong> &ldquo;This is to celebrate my birthday&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Website</td><td>{{form.website}}</td><td><a href="#" onmouseover="showhint('<h3>Help - Enter event <i>[Website]:</i></h3><p><strong>e.g:</strong> &ldquo;www.example.com&rdquo;  or &ldquo;www.example.mine.net&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">Wheelchair  Accessible <input type="checkbox" name="option1" value="Yes"> Yes<input type="checkbox" name="option2" value="No" checked>No</td><td><a href="#" onmouseover="showhint('<h3>Help - Check your <i>[wheelchair]:</i></h3><p><strong>e.g:</strong> &ldquo;yes&rdquo;  or &ldquo;no&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a></td>
+
+                                            </td>
+                                        </tr>
+                                       <tr>
+                                            <td>Tags</td><td>
+                                            {{form.tags}}
+                                           <script type="text/javascript">
+$(function () {
+  $('#id_tags').tagSuggest({
+    url: 'tags/',
+    separator: ',',
+  });
+});
+</script>
+
+                                            </td><td><a href="#" onmouseover="showhint('<h3>Help - Enter your <i>[tags]:</i></h3><p><strong>e.g:</strong> &ldquo;Cat Empire&rdquo;  or &ldquo;Young Jeezy&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tickets</td><td><input type="text" name="tickets" class="inputfield rborder" /></td><td><a href="#" onmouseover="showhint('<h3>Help - Enter your <i>[tickets]:</i></h3><p><strong>e.g:</strong> &ldquo;Cat Empire&rdquo;  or &ldquo;Young Jeezy&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a></td>
+                                        </tr>
+                                        <tr>
+                                        <tr>
+
+                                            <td>Images</td><td>{{ form.picture }}</td>
+                                        </tr>
+                                        <tr>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td><td><input type="submit" name="submitevents" class="btnbg rborder submit" value="{% block submit_button %}Post Event{% endblock %}" /></td><td>&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+
+
+                        <!--end.main-navigation-content-nav-->
+
+                        <div class="clr"></div>
+
+                    </div>
+
+                    <!--end.main-navigation-->
+
+                    <!--start.right-navigation-->
+
+                    <!--end.right-navigation-->
+
+                	<div class="clr"></div>
+
+                </div>
+
+            </div>
+
+            <!--end.main-content-wrapper-->
+
+        </div>
+
+    </div>
+
+    <!--end.content-wrapper-->
+
+
+
+    </div>
+</div>
+
+<!--start.footer-wrapper-->
+
+<!--end.footer-site-links-->
+
+<script type="text/javascript">
+function onBlur(el) {
+	if (el.value == '') {
+		el.value = el.defaultValue;
+	}
+}
+function onFocus(el) {
+	if (el.value == el.defaultValue) {
+		el.value = '';
+	}
+}
+</script>
 {% endblock %}

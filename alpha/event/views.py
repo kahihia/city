@@ -12,22 +12,76 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 
 from event import EVENTS_PER_PAGE, DEFAULT_FROM_EMAIL
-from event.models import Event, picture_file_path, Recurrence
-from event.forms import generate_form
+from event.models import Event, picture_file_path, Reminder
+from event.forms import generate_form, reminderForm
 from event.utils import TagInfo, EventSet
 from event.templatetags.event_pictures import event_picture_url
-
+from citi_user.forms import CityAuthForm
 from taggit.models import Tag
 
 import datetime
 import copy
-
 import re
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
+import json
+import smtplib
+from django.views.decorators.csrf import csrf_protect
+from django.contrib import messages
+
+#Email params -Arlus
+FROMADDR = "arlusishmael@gmail.com"
+LOGIN    = FROMADDR
+PASSWORD = "19553b2008"
 
 def redirect(request):
     return HttpResponseRedirect( reverse('event_browse'))
 
+def search_pad(request, old_tags=u'all', date=u'flow'):
+    events = Event.events.all()
+    feature = Paginator(events, 6)
+    page = request.GET.get('page','1')
+
+    try:
+        locd = feature.page(page)
+    except PageNotAnInteger:
+        locd = feature.page(1)
+    except EmptyPage:
+        locd = feature.page(feature.num_pages)
+
+    feature2 = Paginator(events, 5)
+    browse_page = request.GET.get('page','1')
+
+    try:
+        locs = feature2.page(browse_page)
+    except PageNotAnInteger:
+        locs = feature2.page(1)
+    except EmptyPage:
+        locs = feature2.page(feature2.num_pages)
+    return render_to_response('events/browse.html',
+                              {'locd': locd,
+                              'locs': locs,
+                              'events': events,
+                              'all_tags': Tag.objects.all(),},
+                              context_instance = RequestContext(request))
+
+
 def browse(request, old_tags=u'all', date=u'flow', num=1):
+
+    locations = []
+    locs = Event.events.all()
+    feature = Paginator(locs, 6)
+    page = request.GET.get('page','1')
+
+    try:
+        locd = feature.page(page)
+    except PageNotAnInteger:
+        locd = feature.page(1)
+    except EmptyPage:
+        locd = feature.page(feature.num_pages)
+    for y in locs:
+        locations.append(y.location)
+    form2 = CityAuthForm
     pages = 0 # used in date filter code for determining if we have pagination
     page_remainder = 0 # used for pagination
     try:
@@ -62,9 +116,9 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         start = today
         end = today.replace(hour=23, minute=59, second=59)
         todays_events = upcoming_events.filter(
-            start_time__year=today.year, 
+            start_time__year=today.year,
             start_time__month=today.month,
-            start_time__day=today.day)   
+            start_time__day=today.day)
         pages = todays_events.count() / EVENTS_PER_PAGE
         page_remainder = todays_events.count() % EVENTS_PER_PAGE
         todays_events = todays_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:EVENTS_PER_PAGE]
@@ -73,7 +127,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         tomorrow = today + datetime.timedelta(days=1)
         start = tomorrow
         end = tomorrow.replace(hour=23, minute=59, second=59)
-        tomorrows_events = upcoming_events.filter(start_time__year=tomorrow.year, 
+        tomorrows_events = upcoming_events.filter(start_time__year=tomorrow.year,
                                                  start_time__month=tomorrow.month,
                                                  start_time__day=tomorrow.day)
         pages = tomorrows_events.count() / EVENTS_PER_PAGE
@@ -153,8 +207,8 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         exact_date = ISO8601_REGEX.match(date)
         if exact_date:
             group = exact_date.groupdict()
-            start = datetime.datetime(year=int(group['year']), 
-                             month=int(group['month']), 
+            start = datetime.datetime(year=int(group['year']),
+                             month=int(group['month']),
                              day=int(group['day']) )
             end = start + datetime.timedelta(days=1)
             if old_tags != u'all':
@@ -175,7 +229,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
             #we need to 404 error here
             #URL overlap means the date might actually be a page number, so the 404 is actually checked above
             return browse(request, old_tags=old_tags, num=date)
-    
+
     #########################################################################################
     #packaging new tag information given split_tags list
     tags = Tag.objects.all()
@@ -218,15 +272,19 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
                                 'page_num':int(num),
                                 'event_sets':event_sets,
                                 'pages':range(1, pages + 2),
+                                'form2':form2,
+                                'next':request.path,
                                 'page_remainder':page_remainder,
                                 'page_less':page_less,
                                 'page_more':page_more,
-                                'browsing':True, 
+                                'browsing':True,
                                 'browse_bar':True,
                                 'show_ads':show_ads,
+                                'locations':locations,
+                                'locs':locs,
+                                'locd':locd,
                                 },
                               context_instance = RequestContext(request))
-
 def view(request, slug=None, old_tags=None):
     try:
         event = Event.events.get(slug=slug)
@@ -244,7 +302,7 @@ def view(request, slug=None, old_tags=None):
                       event.start_time.strftime("%B %-1d"),
                       event.start_time.strftime('%-1I:%M %p'))
                   }
-    
+
     return render_to_response('events/event_description.html',
                               { 'event': event,
                                 'browsing':True,
@@ -259,6 +317,8 @@ def create(request, form_class=None, success_url=None,
         exclude = ['owner', 'authentication_key', 'slug']
         if request.user.is_authenticated():
             exclude.append('email')
+        else:
+            return HttpResponseRedirect('/accounts/login/')
         form_class = generate_form(*exclude)
 
     if request.method == 'POST':
@@ -271,7 +331,6 @@ def create(request, form_class=None, success_url=None,
                 event_obj.owner = request.user
                 event_obj.email = request.user.email #don't really need this line
 
-            
             # make sure the picture field is filled before saving!
             if 'picture' in request.FILES:
                 path = picture_file_path(instance=event_obj,
@@ -279,7 +338,7 @@ def create(request, form_class=None, success_url=None,
                 event_obj.picture = path
                 new_file = event_obj.picture.storage.save(path,
                                                           request.FILES['picture'])
-            
+
             event_obj = event_obj.save() #save to the database
             form.save_m2m() #needed for many-to-many fields (i.e. the event tags)
 
@@ -298,22 +357,33 @@ def create(request, form_class=None, success_url=None,
             message = render_to_string('events/creation_email.txt',
                                        { 'authentication_key': event_obj.authentication_key,
                                          'slug': event_obj.slug,
-                                         'site': current_site } 
+                                         'site': current_site }
                                        )
-            
+
             msg = EmailMessage( subject,
-                       message, 
-                       DEFAULT_FROM_EMAIL, 
+                       message,
+                       DEFAULT_FROM_EMAIL,
                        [event_obj.email] )
             msg.content_subtype = 'html'
             msg.send()
+
+            #added Arlus
+            msgg = ("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n"
+       % (FROMADDR, ", ".join(event_obj.email), subject) )
+            msgg += message
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.set_debuglevel(1)
+            server.ehlo()
+            server.starttls()
+            server.login(LOGIN, PASSWORD)
+            server.sendmail(FROMADDR, event_obj.email, msgg)
+            server.quit()
             # on success, redirect to the home page by default
             # if the user is authenticated, take them to their event page
             if success_url is None:
                 success_url = reverse('event_created',kwargs={ 'slug':event_obj.slug})
             #send user off into the abyss...
             return HttpResponseRedirect(success_url)
-        
     else:
         form = form_class()
     #Send out the form
@@ -330,11 +400,11 @@ def created(request, slug=None):
         raise Http404
     return render_to_response('events/creation_complete.html',
                               { 'slug':slug,
-                                'posting':True, 
+                                'posting':True,
                                 },
                               context_instance=RequestContext(request))
 
-def edit(request, 
+def edit(request,
          form_class=None, success_url=None, authentication_key=None,
          template_name='events/edit_event.html'):
 
@@ -397,7 +467,7 @@ def create_recurrence(event):
         next_event.start_time = datetime.datetime.combine(day, next_event.start_time.time())
         next_event.id = None
         next_event.save() #this does not update the many to many attributes (the tags)
-        #TODO find out how to call the TaggitManager with the information 
+        #TODO find out how to call the TaggitManager with the information
         event = next_event
 
 def daily (start, end, weekday=False, day_delta=1):
@@ -419,3 +489,24 @@ def daily (start, end, weekday=False, day_delta=1):
             date_list.append(current)
             current += delta
     return date_list
+
+def ason(request):
+    tag_list = []
+    all_events = Event.events.all()
+    for j in all_events:
+        for u in j.tags.all():
+            tag_list.append(u.name)
+
+    return HttpResponse(json.dumps(tag_list), mimetype="application/json")
+
+def reminder(request, event_id):
+
+    if request.user.is_authenticated():
+        mail = request.user.email
+        search = Event.events.get(id=event_id)
+        saves = Reminder(event = search.name, email = mail, date=search.start_time)
+        saves.save()
+        messages.add_message(request, messages.SUCCESS, 'Event reminder will be sent')
+    else:
+        return HttpResponseRedirect('/accounts/register/')
+    return HttpResponseRedirect(request.GET['next'])

@@ -1,7 +1,8 @@
 {% if event != null %}
 <li>
   {% load event_pictures %}
-  <img src="{% event_picture_url event %}" alt="">
+  <div class="entry-img-prev">
+  <img src="{% event_picture_url event %}" alt=""></div>
   <a href="{% url event_view event.slug %}" class="text">{{ event.name }}</a>
   <ul>
     {% load date_formatting %}

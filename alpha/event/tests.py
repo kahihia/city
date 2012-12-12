@@ -18,4 +18,3 @@ class SimpleTest(TestCase):
 class FilterUrlGenerator(TestCase):
     def test_another_thing(self):
         self.assertEqual(1+3, 4)
-        

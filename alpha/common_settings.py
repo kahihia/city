@@ -119,12 +119,16 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
+    'django.contrib.gis',
+    'cities',
+    'selectable',
     'registration',
     'south',
     'taggit',
     'alpha.event',
     'alpha.home',
     'alpha.feedback',
+
 )
 
 # A sample logging configuration. The only tangible logging performed
@@ -140,6 +144,10 @@ LOGGING = {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console':{
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler'
         }
     },
     'loggers': {
@@ -148,6 +156,10 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'cities': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
     }
 }
 
@@ -171,3 +183,29 @@ EVENT_DEFAULT_PICTURE_URL = STATIC_URL + 'img/default.gif'
 #                      interpolation in a 2x2 environment)
 
 EVENT_EMAIL_SITE = 'www.cityfusion.ca'
+#instead of taking the hustles of configuring a simple mail server, use an established one instead
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'arlusishmael@gmail.com'
+EMAIL_HOST_PASSWORD = '19553b2008'
+EMAIL_PORT = 587
+
+CITIES_FILES = {
+    'city': {
+       'filename': 'CA.zip',
+       'urls':     ['http://download.geonames.org/export/dump/CA.zip']
+    },
+    'region': {
+       'filename': 'CA.zip',
+       'urls':     ['http://download.geonames.org/export/dump/CA.zip']
+    },
+}
+
+CITIES_POSTAL_CODES = ['CA']
+CITIES_LOCALES = ['en', 'und', 'LANGUAGES']
+CITIES_PLUGINS = [
+    'cities.plugin.postal_code_ca.Plugin',  # Canada postal codes need region codes remapped to match geonames
+]
+
+SELECTABLE_MAX_LIMIT = 10

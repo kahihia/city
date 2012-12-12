@@ -12,6 +12,10 @@ urlpatterns = patterns('',
                            kwargs={'date': u'flow'},
                            name='event_browse'
                            ),
+                       url(r'^browse/$',
+                           event.search_pad,
+                           name='search_pad'
+                           ),
                        url(r'^edit/(?P<authentication_key>\w+)/$',
                            event.edit,
                            name='event_edit'
@@ -20,10 +24,15 @@ urlpatterns = patterns('',
                            event.view,
                            name='event_view' 
                            ),
+                       url(r'^remind/(?P<event_id>\d+)/$',
+                           event.reminder,
+                           name='event_reminder' 
+                           ),
                        url(r'^view/(?P<slug>[^/]+)/(?P<old_tags>[^/]+)/$',
                            event.view,
                            name='event_view_tags' 
                            ),
+                       url(r'^create/tags/$', event.ason),
                        url(r'^create/$',
                            event.create,
                            name='event_create'
@@ -39,7 +48,6 @@ urlpatterns = patterns('',
                        url(r'^all/(?P<date>[-\w]+)/$', 
                            event.browse, 
                            name='event_browse_date'),
-
                        url(r'^(?P<old_tags>[^/]+)/(?P<date>[-\w]+)/$', 
                            event.browse, 
                            name='event_browse_tags_date'),
@@ -51,4 +59,5 @@ urlpatterns = patterns('',
                        url(r'^(?P<old_tags>[^/]+)/(?P<date>[-\w]+)/(?P<num>\d+)/$', 
                            event.browse, 
                            name='event_browse_tags_date_num'),
+                           
 )

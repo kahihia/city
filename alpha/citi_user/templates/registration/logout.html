@@ -1,7 +1,7 @@
-{% extends 'home.html' %}
+{% extends 'base.html' %}
 {% block title %} > Signed Out{% endblock %}
 
-{% block content %}
+{% block page %}
   <section class="body">
     <h1>You have logged out</h1>
     <p>Click <a href="{% url auth_login %}">here</a> to log in again.</p>

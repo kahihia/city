@@ -12,7 +12,7 @@ urlpatterns = patterns(
     '',
     # Examples:
     #url(r'^$', 'alpha.home.views.home', name='home'),
-    url(r'^channel.html$', 'alpha.home.views.channelfile'),                   
+    url(r'^channel.html$', 'alpha.home.views.channelfile'),
     url(r'^$', 'alpha.event.views.redirect', name='home'),
     url(r'^events/', include('event.urls')),
     url(r'^accounts/', include('citi_user.urls')),
@@ -23,13 +23,17 @@ urlpatterns = patterns(
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^selectable/', include('selectable.urls')),
 )
 
 if settings.DEBUG:
     urlpatterns += patterns('',
-        url(r'^media/(?P<path>.*)$', 
-            'django.views.static.serve', 
-            {
-                'document_root': settings.MEDIA_ROOT,
-            }),
+        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+        { 'document_root': settings.STATIC_ROOT, 'show_indexes': True }),
    )
+    urlpatterns += patterns('',
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+        { 'document_root': settings.MEDIA_ROOT, 'show_indexes': True }),
+    )
+
+

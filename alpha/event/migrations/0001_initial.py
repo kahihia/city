@@ -7,7 +7,6 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
         # Adding model 'Event'
         db.create_table('event_event', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),

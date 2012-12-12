@@ -2,12 +2,273 @@
 
 {% block page %}
 
-{% include 'header.html' %}
+<!--start.content-wrapper-->
+    <div class="content-wrapper">
+    	<div class="content-wrapper-panel">
+       		<!--start.featured-area-->
+				<div class="featured-area">
+    <h2>Featured Events</h2>
+    <div class="features-wrapper">
+    <!--start.features-->
+        <div class="features">
+                                                    
+        </div>
 
-<div id="main">
-  {% block content %}{% endblock %}
-  {% if show_ads %}
-  {% include 'ads.html' %}
-  {% endif %}
+        <div class="features">
+            <div class="featured-img-wrapper"><img src="{{STATIC_URL}}images/events_images/featured-img2.png"></div>
+            <div class="featured-img-details">
+                <div class="featured-img-details-wrapper">
+                    <div class="featured-title"><a href="#">Johnny Raid</a></div>
+                    <div class="featured-date">Oct 01 | Credit Union Centre</div>
+                    <div class="featured-details-link"><a href="#">event details</a></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="featured-img-wrapper"><img src="{{STATIC_URL}}images/events_images/featured-img3.png"></div>
+            <div class="featured-img-details">
+                <div class="featured-img-details-wrapper">
+                    <div class="featured-title"><a href="#">Young Jeezy</a></div>
+                    <div class="featured-date">Oct 30 | Odeon Event's Centre</div>
+                    <div class="featured-details-link"><a href="#">event details</a></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="featured-img-wrapper"><img src="{{STATIC_URL}}images/events_images/featured-img4.png"></div>
+            <div class="featured-img-details">
+                <div class="featured-img-details-wrapper">
+                    <div class="featured-title"><a href="#">Saskatoon Country</a></div>
+                    <div class="featured-date">Nov 30 | Western Music</div>
+                    <div class="featured-details-link"><a href="#">event details</a></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="featured-img-wrapper"><img src="{{STATIC_URL}}images/events_images/featured-img5.png"></div>
+            <div class="featured-img-details">
+                <div class="featured-img-details-wrapper">
+                    <div class="featured-title"><a href="#">Ricky Rock &amp; DJ Twix</a></div>
+                    <div class="featured-date">Dec 30 | Tequilla Nightclub</div>
+                    <div class="featured-details-link"><a href="#">event details</a></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="featured-img-wrapper"><img src="{{STATIC_URL}}images/events_images/featured-img1.png"></div>
+            <div class="featured-img-details">
+                <div class="featured-img-details-wrapper">
+                    <div class="featured-title"><a href="#">Ricky Rock &amp; DJ Twix</a></div>
+                    <div class="featured-date">Dec 30 | Tequilla Nightclub</div>
+                    <div class="featured-details-link"><a href="#">event details</a></div>
+                </div>
+            </div>
+        </div>
+        
+   <!--end.features-->
+        <div class="clr"></div>
+    </div>
+    
+    <!--start.features-navigation-->
+    
+    <div class="features-navigation">
+        <ul>
+            <li><a href="">Prev</a></li>
+            <li><a href="">&#8249;&#8249;</a></li>
+            <?php 
+                for($i=1; $i<=5; $i++){?>
+                <li><a href=""><?php echo $i;?></a></li>
+                <?php
+                }
+            ?>
+            <li><a href="">&#8250;&#8250;</a></li>
+            <li><a href="">Next</a></li>
+        </ul>
+    </div>
+    </div>
+    
+    <!--end.features-navigation-->
+
 </div>
+            <!--end.featured-area-->
+            
+            <!--start.main-content-wrapper-->
+            
+            <div class="main-content-wrapper">
+            	<h1>Search <span class="orange">Pad</span></h1>
+                <div class="main-content">
+                	<!--start.main-navigation-->
+                    
+                    <div class="main-navigation"></div>
+                    <!--right navigation -->
+                        <div class="right-navigation">
+  <div class="right-navigation-wrapper">                        
+        <div> <a href="#"><img src="{{STATIC_URL}}images/add_images/adobe-creative-suite5.png" /></a></div>
+  </div>
+  </div>
+                    	<!--start.main-navigation-nav-->
+                        <div class="main-navigation-nav">
+                        	<div class="main-navigation-nav-wrapper">
+                            	<ul class="categories">
+                                	<li class="header">Browse All Events(50)</li>
+                                    <li class="subcat"><a href="#">&#8250;&#8250; Random Events</a></li>
+                                    <li class="subcat">
+                                        <div class="active"><a href="#" onclick="toggle_visibility('tags_popup');"></a></div>
+                                        <a href="#">&#8250;&#8250; Top 5 Categories</a></li>
+                                        <div id="tags_popup" class="tags_popup rborder">
+                                            <ul class="child-categories">
+                                                <li><a href="#">Night Life</a></li>
+                                                <li><a href="#">Date Night</a></li>
+                                                <li><a href="#">Free</a></li>
+                                                <li><a href="#">Family</a></li>
+                                            </ul>                                            
+                                        </div>
+                                    <li class="subcat"><a href="#">&#8250;&#8250; Recently Featured</a><div class="clr"></div></li>
+                                    <li class="subcat"><a href="#">&#8250;&#8250; Today's Events</a></li>
+                                    <li class="blue"><a href="#">Night Life</a></li>
+                                    <li class="blue"><a href="#">Date Night</a></li>
+                                    <li class="blue"><a href="#">Free</a></li>
+                                    <li class="blue"><a href="#">Family</a></li>
+                                </ul>
+                            </div>
+                        
+</div>                        
+                        <!--end.main-navigation-nav-->
+                        
+                        <!--start.main-navigation-content-nav-->
+                        
+                        <div class="main-navigation-content-nav">
+                        	<div class="main-navigation-content-nav-wrapper">
+                            	<!--start.schedule-bar-->
+                            
+                            	<div class="schedule-bar">
+                                	<div class="schedule-bar-wrapper">
+                                    	<ul>
+                                            <li><a href="#">Mon</a>
+                                            	<div class="pop-up-wrapper">
+                                                	<div class="pop-up-pointer"></div>
+                                                	<div class="pop-up-wrapper-container">
+                                                   	  <div class="pop-up-arrow-left"><a href="#"></a></div>
+                                                      <div class="contents">
+                                                        	<div class="pop-featured-img"><a href="#"><img src="{{STATIC_URL}}images/events_images/pop-up-featured.png"></a></div>
+                                                            <div class="pop-featured-details">
+                                                            	<div class="subcontent">
+                                                                	<strong>Def Leppard with Poison, Lita Ford</strong><br />
+                                                                  <div class="infos">
+                                                                    
+                                                                    Friday, June 22, 2012<br>
+                                                                    Today at 1:00PM - 5:00PM
+                                                                    <div class="location">
+                                                                    @ Verizon Wireless<br>
+                                                                    Amphitheater 
+                                                                    </div>
+                                                                  </div>
+                                                              </div>
+                                                            </div>
+                                                            <div class="clr"></div>
+                                                        </div>
+                                                        <div class="social-links"> <a href="#"><img src="{{STATIC_URL}}images/pop-buy-tickets-btn.png"></a>
+                                                            <a href="#"><img src="{{STATIC_URL}}images/pop-remind-me-btn.png"></a>
+                                                            <a href="#"><img src="{{STATIC_URL}}images/pop-up-fb-like.png"></a>
+                                                        </div>
+                                                        <div class="pop-up-arrow-right"><a href="#"></a></div>
+                                                  </div>
+                                                </div>
+                                            </li>
+                                            <li><a href="#">Tue</a></li>
+                                            <li><a href="#">Wed</a></li>
+                                            <li><a href="#">Thu</a></li>
+                                            <li><a href="#">Fri</a></li>
+                                            <li><a href="#">Sat</a></li>
+                                            <li><a href="#">Sun</a></li>
+                                            
+                                            <div class="clr"></div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <!--end.schedule-bar-->
+                                
+                                <!--start.entry-wrapper-->
+                                
+                                <div class="entry-wrapper">
+                                	<div class="entry-info">
+                                    <div class="entry-img-prev"><img src="{{STATIC_URL}}images/events_images/entry-img-test.png"></div>
+                                    <div class="entry-details-wrapper">
+                                    	<div class="title-wrapper">
+                                        	<div class="title">Hot Chip</div>
+                                            <div class="price">$20.00</div>
+
+                                            <div class="clr"></div>
+                                        </div>
+                                        
+                                      <div class="entry-date-wrapper">
+                                        	Sep 9, 2012 7:00 pm | Sunday
+                                      </div>
+                                        
+                                      <div class="entry-description">
+                                        	Hollywood Bowl<br>
+                                            2301 North Highland Avenue<br>
+                                            Los Angeles, CA 90068<br>
+                                        </div>
+                                        
+                                      <div class="auctions-wrapper">
+                                        	<ul>
+                                            	<li><a href="#"><img src="{{STATIC_URL}}images/buy-ticket.png" align="absmiddle"> Buy Tickets</a></li>
+                                                <li><a href="#"><img src="{{STATIC_URL}}images/remind-me.png" align="absmiddle" /> Remind Me</a></li>
+                                                <li><a href="#"><img src="{{STATIC_URL}}images/like.png" align="absmiddle" /> Like</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                
+                                	<div class="clr"></div>
+                                    </div>
+                                    
+                                  <div class="entry-long-description">
+                                    
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                    
+                                    </div>
+                                    
+                                    <div class="entry-navigation-np"><a href="#"><img src="{{STATIC_URL}}images/entry-prev.png"></a><a href="#"><img src="{{STATIC_URL}}images/entry-next.png"></a></div>
+                                </div>
+                                
+                                <!--end.entry-->
+                            
+                            </div>
+                        
+                        </div>
+                        
+                        <!--end.main-navigation-content-nav-->
+                        
+                        <div class="clr"></div>
+                    
+                    </div>
+                    
+                    <!--end.main-navigation-->
+                    
+                    <!--start.right-navigation-->
+                    
+					<?php include("rightside.php");?>
+                    
+                    <!--end.right-navigation-->
+                
+                	<div class="clr"></div>
+                
+                </div>
+            
+            </div>
+            
+            <!--end.main-content-wrapper-->
+        
+        </div>
+    
+    </div>
+    
+    <!--end.content-wrapper-->
+
 {% endblock %}

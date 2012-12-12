@@ -1,9 +1,13 @@
-{% extends 'home.html' %}
+{% extends 'base.html' %}
 {% block title %} > Register{% endblock %}
 
-{% block content %}
+{% block page %}
+<style>
+.orange {
+color: #FF9E00;}
+</style>
   <section class="body">
-    <h1>Register for Cityfusion</h1>
+    <h1>Register for<span class="orange"> Cityfusion</span></h1>
     <form class="register-login" method="post">
       {% csrf_token %}
       <p>
@@ -35,7 +39,7 @@
 	{% endfor %}
       </p>
      
-      <input type="submit" class="submit button close" value="Register" tabindex="10">      
+      <input type="submit" class="btnbg rborder submit" value="Register" tabindex="10">      
     </form>
   </section>
 {% endblock %}

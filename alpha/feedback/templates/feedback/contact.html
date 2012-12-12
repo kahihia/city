@@ -1,21 +1,26 @@
-{% extends "home.html" %}
+{% extends "base.html" %}
 {% block title %} > Feedback{% endblock %}
 
-{% block content %}
+{% block page %}
 <section class="body">
 <h2>Feedback</h2>
 <p>We'd love to hear your comments on how Cityfusion can be improved for you.</p>
 
 <form id="contact" method="post">
   {% csrf_token %}
-  <ul>
+  <table>
     {% for field in form %}
-    <li class="label">{{ field.label_tag }}</li>
-    <li>{{ field }}{% for error in field.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+    <tr>
+    <td>
+    <p class="label">{{ field.label_tag }}</p>
+    {{ field }}{% for error in field.errors %}<span class="error">{{ error }}</span> {% endfor %}
     {% endfor %}
-    <li class="label"></li>
-    <li><input type="submit" class="submit button" value="Send Message"></li>
-  </ul>
+    <p class="label"></p>
+    <input type="submit" class="submit button" value="Send Message">
+    </td>
+    </tr>
+    </table>
+
 </form>
 </section>
 {% endblock %}
