@@ -19,10 +19,10 @@ def dev():
     env.wsgi_filename = 'djangodev.wsgi'
     env.settings_file = 'alpha.settings_dev'
 
-#def production():
-#    env.hosts = ['circulate@cityfusion.ca']
-#    env.hg_directory = '/home/circulate/prodsite/circulate'
-#    env.wsgi_filename = 'django.wsgi'
+def cityfusion():
+    env.hosts = ['root@50.116.14.210']
+    env.hg_directory = '/root/cityfusion-hg'
+    env.wsgi_filename = 'django.wsgi'
 
 def host_type():
     run('uname -a')
@@ -45,7 +45,7 @@ def check_schema(app):
     return local(
         django_admin_local("schemamigration %s --auto" % (app,)), 
         capture=False)
-    
+
 def schemas():
     orig = env.warn_only
     env.warn_only = True

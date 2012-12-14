@@ -1,0 +1,46 @@
+<div class="featured-area">
+    <h2>Featured Events</h2>
+    <div class="features-wrapper">
+    <!--start.features-->
+    {% for event in locs %}
+                                
+    {% load event_pictures %}
+        <div class="features">
+            <div class="featured-img-wrapper"><img src="{% event_picture_url event 200 %}"></div>
+            <div class="featured-img-details">
+                <div class="featured-img-details-wrapper">
+                    <div class="featured-title"><a href="#">{{event.name}}</a></div>
+                    <div class="featured-date">{{ event.start_time}}
+<br>{{ event.start_time }}
+      {% if event.end_time %}&mdash; {{ event.end_time }}{% endif %}</div>
+                    <div class="featured-details-link"><a href="#">{{ event.description|linebreaks }}</a></div>                            
+                </div>                        
+            </div>                    
+        </div>
+{%endfor%}
+{%endfor%}
+        
+   <!--end.features-->
+        <div class="clr"></div>
+    </div>
+    
+    <!--start.features-navigation-->
+    
+    <div class="features-navigation">
+        <ul>
+            <li><a href="">Prev</a></li>
+            <li><a href="">&#8249;&#8249;</a></li>
+            <?php 
+                for($i=1; $i<=5; $i++){?>
+                <li><a href=""><?php echo $i;?></a></li>
+                <?php
+                }
+            ?>
+            <li><a href="">&#8250;&#8250;</a></li>
+            <li><a href="">Next</a></li>
+        </ul>
+    </div>
+    
+    <!--end.features-navigation-->
+
+</div>
