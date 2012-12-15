@@ -1,8 +1,30 @@
 from django import forms
+from django.conf import settings
 from django.db import models
 from django.template.loader import render_to_string
 from django.forms.widgets import Select, MultiWidget, DateInput, TextInput
 from time import strftime
+
+STATIC_PREFIX = settings.STATIC_URL
+
+class WhenWidget(forms.TextInput):
+    def __init__(self, *args, **kwargs):
+        self.realValue = forms.widgets.HiddenInput()
+        super(WhenWidget, self).__init__(*args, **kwargs)
+
+    class Media(object):
+        css = {
+            'all' : (
+                u'%scss/datepicker.css' % STATIC_PREFIX,
+                u'%scss/when.css' % STATIC_PREFIX,
+            )
+        }
+        js = (
+            u'%sjs/jquery-ui.multidatespicker.js' % STATIC_PREFIX,
+            u'%sjs/time/jquery.ptTimeSelect.js' % STATIC_PREFIX,
+            u'%sjs/jquery.mtz.monthpicker.js' % STATIC_PREFIX,
+            u'%sjs/when.js' % STATIC_PREFIX,
+        )
 
 class JqSplitDateTimeWidget(MultiWidget):
 
@@ -42,7 +64,7 @@ class JqSplitDateTimeWidget(MultiWidget):
         """
         return 'Date: %s<br/>Time: %s:%s %s' % (rendered_widgets[0], rendered_widgets[1],
                                                 rendered_widgets[2], rendered_widgets[3])
-        
+
     class Media:
         css = (
             'css/overcast/jquery-ui-1.8.13.custom.css'

@@ -1,0 +1,147 @@
+.hidden {
+	display:none;
+}
+.when-deck {
+	width:600px;
+	border:1px solid #CCC;
+	padding:10px 5px;
+	background:#fff;
+	/*display:none;*/
+	position:absolute;
+	margin-top:10px;
+}
+
+.when-deck .close-button {
+	font-size:1.3em;
+	padding:5px 10px;
+	position:absolute;
+	right:10px;
+	bottom:5px;
+	background: #efefef;
+	border: 1px solid #e6e6e6;
+	-moz-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+.month-picker {
+	width:157px;
+	height: 20px;
+	line-height:20px;
+	background: #eaeaea;
+	vertical-align:middle;
+	margin-top:5px;
+	padding: 0 5px;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+.month-picker{
+	cursor: pointer;
+}
+
+.month-picker span{
+
+}
+
+.month-picker .new-month-select-arrow {
+	width:15px;
+	height:10px;
+	margin-top:5px;
+	display:inline-block;
+	float:right;
+	background: url("/static/images/arrow-down.png") center center no-repeat;
+	cursor: pointer;
+}
+
+.ui-datepicker-div {
+	float:right;
+}
+
+.month-and-days-wrapper {
+	display:inline-block;
+	margin-right:20px;
+	width:170px;
+}
+
+.days-time-picker {
+	display:inline-block;
+}
+
+.days-time-picker {
+	vertical-align: top;
+	color: #484848;
+}
+
+.dtp-labels {
+	display:inline-block;
+	margin-top:40px;
+	margin-right:10px;
+	font-size:1.1em;
+}
+.dtp-labels {
+	line-height:20px;
+}
+
+.days-container {
+	display:inline-block;
+	vertical-align: top;
+	margin-top:5px;
+	white-space: nowrap;
+	width: 345px;
+	overflow-x: auto;
+	padding-bottom: 10px;
+}
+
+.day-value {
+	width:35px;
+	height:28px;
+	padding-top:7px;
+	text-align:center;
+	vertical-align:middle;
+	font-size:1.5em;
+	line-height:1.5em;
+	font-weight:bold;
+	background: #eaeaea;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	margin-bottom:10px;
+	margin-left: 6px
+}
+
+.my-time-picker {
+	display:inline-block;
+	margin-right:10px;
+	text-align:center;
+}
+
+.my-time-picker input{
+	width:41px;
+	height:16px;
+	margin:11px 0;
+	padding:2px 4px;
+	display:block;
+	border:none;
+	background: #eaeaea;
+	-moz-border-radius: 8px;
+	-khtml-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+}
+
+.my-time-picker .checkbox.autofill{
+	width:17px;
+	height:17px;
+	border:1px solid #CCC;
+	background: #fff;
+	margin-left:15px;
+}
+
+.my-time-picker .checkbox.autofill.checked{
+	background: #CCC url("/static/images/checked.png") center center no-repeat;
+}

@@ -1,3 +1,28 @@
+#id_start_time_1 {
+  width: 30px;
+}
+#id_end_time_1 {
+  width: 30px;
+}
+#id_frequency {
+  padding: 4px;
+  border-radius: 4px;
+  background: white;
+  border: #E3E3E3 solid thin;
+}
+SPAN.tagMatches {
+  margin-left: 10px;
+}
+
+SPAN.tagMatches SPAN {
+  padding: 2px;
+  margin-right: 4px;
+  background-color: #0000AB;
+  color: #fff;
+  cursor: pointer;
+  background: url(/static/images/blue.png);
+}
+
 .choose_location {
   width:24px;
   height:24px;
@@ -18,3 +43,4 @@
   background: #fff;
   margin-top:5px;
 }
+

@@ -1,7 +1,7 @@
 from django import forms
 from event.models import Event, Reminder
 from alpha.event.fields import JqSplitDateTimeField
-from alpha.event.widgets import JqSplitDateTimeWidget
+from alpha.event.widgets import JqSplitDateTimeWidget, WhenWidget
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 import string
@@ -57,14 +57,17 @@ def generate_form(*args):
     Generates an event form
     """
     class _EventForm(forms.ModelForm):
-
-        start_time = StyledSplitDateTimeField(input_time_formats=['%I:%M %p'], label=_(u'Start Time'))
-        end_time = StyledSplitDateTimeField(required = False, input_time_formats=['%I:%M %p'], label=_(u'End Time'))
         location_name = forms.CharField(
             widget=selectable.AutoCompleteSelectWidget(CityLookup, allow_new=True),
             required=False
         )
         location = forms.Field(widget=LocationWidget())
+        when = forms.CharField(
+            widget= WhenWidget()
+        )
+
+        start_time = StyledSplitDateTimeField(input_time_formats=['%I:%M %p'], label=_(u'Start Time'))
+        end_time = StyledSplitDateTimeField(required = False, input_time_formats=['%I:%M %p'], label=_(u'End Time'))
         class Meta:
             model = Event
             exclude = tuple(args)
@@ -84,6 +87,11 @@ def generate_form(*args):
             self.fields['location_name'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['location_name'].label = _(u'Location')
             self.fields['location'].error_messages['required'] = 'Your event cannot miss a location'
+            self.fields['when'].widget.attrs['class'] = 'inputfield rborder'
+            self.fields['when'].widget.attrs['readonly'] = True
+            self.fields['when'].widget.attrs['placeholder'] = "Click to select"
+
+
             self.fields['description'].widget = forms.widgets.Textarea( attrs={ 'class':'textarea rborder'} )
             self.fields['tags'].error_messages['required'] = 'Please enter at least one tag'
             self.fields['tags'].widget.attrs['class'] = 'inputfield rborder'
