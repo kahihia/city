@@ -195,11 +195,7 @@ CITIES_FILES = {
     'city': {
        'filename': 'CA.zip',
        'urls':     ['http://download.geonames.org/export/dump/CA.zip']
-    },
-    'region': {
-       'filename': 'CA.zip',
-       'urls':     ['http://download.geonames.org/export/dump/CA.zip']
-    },
+    }    
 }
 
 CITIES_POSTAL_CODES = ['CA']

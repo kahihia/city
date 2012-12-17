@@ -1,7 +1,7 @@
 from django import forms
 from event.models import Event, Reminder
 from alpha.event.fields import JqSplitDateTimeField
-from alpha.event.widgets import JqSplitDateTimeWidget, WhenWidget
+from alpha.event.widgets import JqSplitDateTimeWidget, WhenWidget, PriceWidget
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 import string
@@ -65,15 +65,15 @@ def generate_form(*args):
         when = forms.CharField(
             widget= WhenWidget()
         )
-
-        start_time = StyledSplitDateTimeField(input_time_formats=['%I:%M %p'], label=_(u'Start Time'))
-        end_time = StyledSplitDateTimeField(required = False, input_time_formats=['%I:%M %p'], label=_(u'End Time'))
+        price = forms.CharField(
+            widget=PriceWidget()
+        )
+        
         class Meta:
             model = Event
             exclude = tuple(args)
         def __init__(self, *args, **kwargs):
-            super(_EventForm, self).__init__(*args,**kwargs)
-            self.fields['start_time'].error_messages['required'] = 'Your event should have a starting time'
+            super(_EventForm, self).__init__(*args,**kwargs)            
             if 'email' in self.fields:
                 self.fields['email'].widget = HTML5EmailInput(attrs={'class': 'text wide'})
                 self.fields['email'].label = _(u'Email Address')
@@ -87,7 +87,7 @@ def generate_form(*args):
             self.fields['location_name'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['location_name'].label = _(u'Location')
             self.fields['location'].error_messages['required'] = 'Your event cannot miss a location'
-            self.fields['when'].widget.attrs['class'] = 'inputfield rborder'
+            self.fields['when'].widget.attrs['class'] = 'inputfield rborder tcalInput'
             self.fields['when'].widget.attrs['readonly'] = True
             self.fields['when'].widget.attrs['placeholder'] = "Click to select"
 

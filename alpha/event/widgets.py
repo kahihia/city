@@ -25,6 +25,12 @@ class WhenWidget(forms.TextInput):
             u'%sjs/jquery.mtz.monthpicker.js' % STATIC_PREFIX,
             u'%sjs/when.js' % STATIC_PREFIX,
         )
+        
+class PriceWidget(forms.TextInput):
+    class Media(object):
+        js = {
+            u'%sjs/price.js' %STATIC_PREFIX,
+        }
 
 class JqSplitDateTimeWidget(MultiWidget):
 

@@ -10,6 +10,10 @@
   top:10px;
 }
 
+[name=location_name_0] {
+  background:#fff; 
+}
+
 .location_map {
   position:absolute;
   display:none;

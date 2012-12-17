@@ -4,6 +4,9 @@
 #id_end_time_1 {
   width: 30px;
 }
+body .ui-autocomplete-input {
+  background:#fff;
+}
 #id_frequency {
   padding: 4px;
   border-radius: 4px;
