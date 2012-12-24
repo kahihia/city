@@ -19,9 +19,11 @@
         Browse Events
       </a>
       &gt; 
-      <a href="{% url event_browse_date event.start_time.date.isoformat %}">
+      {% comment %}<a href="{% url event_browse_date event.start_time.date.isoformat %}">
         {{ event.start_time|month_day }}
       </a>
+      {% endcomment %}
+      
       &gt; 
       {% for tag in event.tags.all %}
         <a href="{% url event_browse_tags tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
@@ -39,12 +41,13 @@
 <div style="width: 780px; float: right;">
 <section class="body noborder detail">
   <h1>{{ event.name }}</h1>
-      <h4><a href="{% url event_browse_date date=event.start_time.date.isoformat %}">{{ event.start_time|just_day }}</a>
+      {% comment %}<h4><a href="{% url event_browse_date date=event.start_time.date.isoformat %}">{{ event.start_time|just_day }}</a>
       <br>{{ event.start_time|just_time }}
       {% if event.end_time %}&mdash; {{ event.end_time|just_time }}{% endif %}</h4>
+      {% endcomment %}
 
    
-      <p><h3 style="color: orange;">Location: {{ event.location }}</p></h3>
+      <p><h3 style="color: orange;">Location: {{ event.venue }}</p></h3>
    
       <h2 style="color: orange;">{{ event.price }}</h2>
   

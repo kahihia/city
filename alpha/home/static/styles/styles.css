@@ -296,7 +296,7 @@ body
 
 .content-wrapper-panel
 {
-	padding:15px 8px;
+	padding: 15px 0px;
 }
 
 .featured-area
@@ -425,7 +425,7 @@ body
 .main-content-wrapper
 {
 	width:auto;
-	padding:30px 0px 0px;
+	padding: 30px 15px 0px;
 }
 
 .main-content-wrapper h1
@@ -2061,20 +2061,3 @@ a
 .clr{
 	clear:both;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

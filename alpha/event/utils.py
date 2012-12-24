@@ -55,3 +55,6 @@ class EventSet:
     def __init__(self, name=None, events=[]):
         self.name = name
         self.events = events
+        
+def find_nearest_city(cities, location):
+    return cities.distance(location).order_by('-distance')[0]

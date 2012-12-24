@@ -115,7 +115,7 @@ class LocationWidget(forms.TextInput):
 
         return mark_safe(js + html)
 
-    class Media:
-        js = (
-            'http://maps.google.com/maps/api/js?sensor=false',
-        )
+    #class Media:
+    #    js = (
+    #        'http://maps.google.com/maps/api/js?sensor=false',
+    #    )

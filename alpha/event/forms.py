@@ -1,7 +1,7 @@
 from django import forms
 from event.models import Event, Reminder
 from alpha.event.fields import JqSplitDateTimeField
-from alpha.event.widgets import JqSplitDateTimeWidget, WhenWidget, PriceWidget
+from alpha.event.widgets import JqSplitDateTimeWidget, WhenWidget, PriceWidget, GeoCompleteWidget, WheelchairWidget, DescriptionWidget
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 import string
@@ -39,14 +39,15 @@ class StyledSplitDateTimeWidget(forms.SplitDateTimeWidget):
 class StyledSplitDateTimeField(forms.SplitDateTimeField):
     widget = StyledSplitDateTimeWidget(time_format="%I:%M %p")
 
-# gmap = maps.Map(opts = {
-#     'center': maps.LatLng(-79.4163, -43.70011),
-#     'mapTypeId': maps.MapTypeId.ROADMAP,
-#     'zoom': 3,
-#     'mapTypeControlOptions': {
-#         'style': maps.MapTypeControlStyle.DROPDOWN_MENU
-#     }
-# })
+class JSONCharField(forms.CharField):
+    def to_python(self, value):
+        """Convert string value to JSON"""
+        if isinstance(value, basestring):
+            try:
+                return json.loads(value, **self.load_kwargs)
+            except ValueError:
+                pass
+        return value
 
 def generate_form(*args):
     class HTML5DateTimeInput(forms.DateTimeInput):
@@ -57,22 +58,48 @@ def generate_form(*args):
     Generates an event form
     """
     class _EventForm(forms.ModelForm):
-        location_name = forms.CharField(
+        place = JSONCharField(
+            widget=GeoCompleteWidget(),
+            required=False
+        )        
+        
+        location = forms.Field(widget=LocationWidget(), required=False)
+        venue_name = forms.CharField(required=False)
+        street = forms.CharField(required=False)
+        city = forms.CharField(
             widget=selectable.AutoCompleteSelectWidget(CityLookup, allow_new=True),
             required=False
         )
-        location = forms.Field(widget=LocationWidget())
+        city_identifier = forms.CharField(required=False,widget=forms.widgets.HiddenInput())
+
         when = forms.CharField(
-            widget= WhenWidget()
+            widget=WhenWidget(),
+            required=True
+        )
+        when_json = forms.CharField(
+            required=True,
+            widget=forms.widgets.HiddenInput()
+            
+        )
+        description = forms.CharField(
+            widget = DescriptionWidget(),
+            required=False
         )
         price = forms.CharField(
-            widget=PriceWidget()
+            widget=PriceWidget(),
+            required=False
+        )
+        
+        wheelchair = forms.BooleanField(
+            widget=WheelchairWidget(),
+            required=False
         )
         
         class Meta:
             model = Event
             exclude = tuple(args)
         def __init__(self, *args, **kwargs):
+            self.city_required = False
             super(_EventForm, self).__init__(*args,**kwargs)            
             if 'email' in self.fields:
                 self.fields['email'].widget = HTML5EmailInput(attrs={'class': 'text wide'})
@@ -81,16 +108,26 @@ def generate_form(*args):
             self.fields['name'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['price'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['price'].label = _(u'Price')
+            self.fields['price'].widget.attrs['placeholder'] = "xx.xx or free"
             self.fields['name'].error_messages['required'] = 'Event name is required'
             self.fields['name'].label = _(u'Event Name')
-            self.fields['location_name'].error_messages['required'] = 'Your event cannot miss a location'
-            self.fields['location_name'].widget.attrs['class'] = 'inputfield rborder'
-            self.fields['location_name'].label = _(u'Location')
-            self.fields['location'].error_messages['required'] = 'Your event cannot miss a location'
+            
+            self.fields['place'].error_messages['required'] = 'Your event cannot miss a location'
+            self.fields['place'].widget.attrs['class'] = 'inputfield rborder'
+            self.fields['place'].label = _(u'Location')
+            
+            self.fields['venue_name'].widget.attrs['class'] = 'inputfield rborder'
+            self.fields['street'].widget.attrs['class'] = 'inputfield rborder'
+            
+            self.fields['city'].error_messages['required'] = 'Your event cannot miss a city'
+            self.fields['city'].widget.attrs['class'] = 'inputfield rborder'
+            self.fields['city'].label = _(u'City')
+            
             self.fields['when'].widget.attrs['class'] = 'inputfield rborder tcalInput'
             self.fields['when'].widget.attrs['readonly'] = True
             self.fields['when'].widget.attrs['placeholder'] = "Click to select"
-
+            self.fields['when'].error_messages['required'] = 'Please choose at least one date'
+            self.fields['when_json'].error_messages['required'] = 'Please choose at least one date'
 
             self.fields['description'].widget = forms.widgets.Textarea( attrs={ 'class':'textarea rborder'} )
             self.fields['tags'].error_messages['required'] = 'Please enter at least one tag'
@@ -98,9 +135,30 @@ def generate_form(*args):
             self.fields['website'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['picture'].label = _(u'Image')
             self.fields['picture'].widget.attrs['class'] = 'inputfield rborder'
+        
         def clean(self):
             cleaned_data= self.cleaned_data
             if 'tags' in cleaned_data:
                 cleaned_data['tags'] = map(string.capwords,cleaned_data['tags'])
+                
+            place = cleaned_data["place"]
+            
+            if cleaned_data["venue_name"]:                
+                if not cleaned_data["city_identifier"]:
+                    self.city_required = True
+                    raise forms.ValidationError(u'City is required')
+                if not cleaned_data["location"]:
+                    raise forms.ValidationError(u'Location on the map is required')  
+            
+            elif place["full"]:
+                if not place["city"]:
+                    raise forms.ValidationError(u'You need to select al least city')
+                if not place["venue"] or \
+                   not place["latitude"] or \
+                   not place["longtitude"]:
+                    raise forms.ValidationError(u'Invalid location')
+            elif (cleaned_data['venue_name']) and (not place["full"]):
+                raise forms.ValidationError(u'Please choose location')
+
             return cleaned_data
     return _EventForm

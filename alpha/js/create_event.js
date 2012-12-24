@@ -24,19 +24,12 @@
         function panMapToCenter(){
             var lng = document.getElementById("id_location_lng"),
                 lat = document.getElementById("id_location_lat");
-            $(map).toggle();
+            //$(map).toggle();
             google.maps.event.trigger(map_location, 'resize');
             map_location.panTo(new google.maps.LatLng(parseFloat(lat.value), parseFloat(lng.value)));
         }
 
-        $(choose_location_button).on("click", panMapToCenter);
-        $(document).mouseup(function (e){
-            var container = $(map);
-
-            if (container.has(e.target).length === 0 && container.is(':visible')){
-                container.hide();
-            }
-        });
+        $(choose_location_button).on("click", panMapToCenter);        
     }
 
     $(document).ready(function () {

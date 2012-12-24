@@ -38,12 +38,16 @@ SPAN.tagMatches SPAN {
   top:10px;
 }
 
-.location_map {
-  position:absolute;
-  display:none;
+.location_map {    
   padding:10px;
   border:1px solid #d8d8d8;
   background: #fff;
   margin-top:5px;
+}
+.new_venue .suggest{
+  display:table-row;  
+}
+.suggest {
+  display:none;
 }
 

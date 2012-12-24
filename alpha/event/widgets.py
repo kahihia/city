@@ -2,15 +2,22 @@ from django import forms
 from django.conf import settings
 from django.db import models
 from django.template.loader import render_to_string
-from django.forms.widgets import Select, MultiWidget, DateInput, TextInput
+from django.forms.widgets import Select, MultiWidget, DateInput, TextInput, CheckboxInput
+from django.utils.safestring import mark_safe
 from time import strftime
+import json
 
 STATIC_PREFIX = settings.STATIC_URL
 
 class WhenWidget(forms.TextInput):
-    def __init__(self, *args, **kwargs):
-        self.realValue = forms.widgets.HiddenInput()
+    def __init__(self, *args, **kwargs):        
         super(WhenWidget, self).__init__(*args, **kwargs)
+        #self.when_json = forms.widgets.HiddenInput()
+        
+    def render(self, name, value, *args, **kwargs):
+        html = super(WhenWidget, self).render(name, value, *args, **kwargs)
+        #html += self.when_json.render("when_json", "", {"id":'id_when_json'})
+        return mark_safe(html)
 
     class Media(object):
         css = {
@@ -30,6 +37,68 @@ class PriceWidget(forms.TextInput):
     class Media(object):
         js = {
             u'%sjs/price.js' %STATIC_PREFIX,
+        }
+
+class GeoCompleteWidget(forms.TextInput):
+    class Media(object):
+        js = {
+            u'%sjs/jquery.geocomplete.js' %STATIC_PREFIX,
+            u'%sjs/init.jquery.geocomplete.js' %STATIC_PREFIX,
+        }
+    def __init__(self, *args, **kw):
+        super(GeoCompleteWidget, self).__init__(*args, **kw)
+        self.geo_venue = forms.widgets.HiddenInput()
+        self.geo_street = forms.widgets.HiddenInput()
+        self.geo_city = forms.widgets.HiddenInput()
+        self.geo_country = forms.widgets.HiddenInput()
+        self.geo_longtitude = forms.widgets.HiddenInput()
+        self.geo_latitude = forms.widgets.HiddenInput()
+        
+    def render(self, name, value, *args, **kwargs):
+        html = super(GeoCompleteWidget, self).render(name, value, *args, **kwargs)
+        html += "<div class='geo-details'>"
+        html += self.geo_venue.render("geo_venue", "", {"id":'id_geo_venue','data-geo':"name"})
+        html += self.geo_street.render("geo_street", "", {"id":'id_geo_street','data-geo':"route"})
+        html += self.geo_city.render("geo_city", "", {"id":'id_geo_city','data-geo':"locality"})
+        html += self.geo_country.render("geo_country", "", {"id":'id_geo_country','data-geo':"country"})
+        html += self.geo_longtitude.render("geo_longtitude", "", {"id":'id_geo_longtitude','data-geo':"lng"})
+        html += self.geo_latitude.render("geo_latitude", "", {"id":'id_geo_latitude','data-geo':"lat"})
+        html += "</div>"
+        return mark_safe(html)
+    
+    def value_from_datadict(self, data, files, name):
+        return {
+            "full": super(GeoCompleteWidget, self).value_from_datadict(data, files, name),            
+            "venue": self.geo_venue.value_from_datadict(data, files, 'geo_venue'),
+            "street": self.geo_street.value_from_datadict(data, files, 'geo_street'),
+            "city": self.geo_city.value_from_datadict(data, files, 'geo_city'),
+            "country": self.geo_country.value_from_datadict(data, files, 'geo_country'),
+            "longtitude": self.geo_longtitude.value_from_datadict(data, files, 'geo_longtitude'),
+            "latitude": self.geo_latitude.value_from_datadict(data, files, 'geo_latitude')
+        }
+    
+    def decompress(self, value):
+        return json.loads(value)
+        
+class WheelchairWidget(forms.CheckboxInput):
+    class Media(object):
+        js = {
+            u'%sjs/wheelchair.js' %STATIC_PREFIX,
+        }
+        
+class DescriptionWidget(forms.Textarea):
+    def __init__(self, *args, **kwargs):        
+        super(DescriptionWidget, self).__init__(*args, **kwargs)
+        self.description_json = forms.widgets.HiddenInput()
+        
+    #def render(self, name, value, *args, **kwargs):
+    #    html = super(DescriptionWidget, self).render(name, value, *args, **kwargs)
+    #    html += self.description_json.render("description_json", "", {"id":'id_description_json'})
+    #    return mark_safe(html)
+    
+    class Media(object):
+        js = {
+            u'%sjs/description.js' %STATIC_PREFIX,
         }
 
 class JqSplitDateTimeWidget(MultiWidget):

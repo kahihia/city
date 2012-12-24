@@ -8,7 +8,7 @@ USER=root
 GROUP=root
 ADDRESS=127.0.0.1:8002
 cd /root/cityfusion/alpha
-#source /root/cityfusion/bin/activate
+#source ../bin/activate
 test -d $LOGDIR || mkdir -p $LOGDIR
 exec gunicorn_django -w $NUM_WORKERS --bind=$ADDRESS  \
   --user=$USER --group=$GROUP --log-level=debug \

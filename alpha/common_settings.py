@@ -125,6 +125,7 @@ INSTALLED_APPS = (
     'registration',
     'south',
     'taggit',
+    'taggit_autosuggest',
     'alpha.event',
     'alpha.home',
     'alpha.feedback',

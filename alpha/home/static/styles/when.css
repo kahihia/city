@@ -11,7 +11,13 @@
 	margin-top:10px;
 }
 
-.when-deck .close-button {
+.when-deck .error {
+	color:red;
+	margin-bottom:10px;
+	display:none;	
+}
+
+.when-deck .reset-button,.when-deck .close-button {
 	font-size:1.3em;
 	padding:5px 10px;
 	position:absolute;
@@ -24,6 +30,9 @@
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
 	cursor: pointer;
+}
+.when-deck .reset-button {
+	right:80px;
 }
 
 .ui-state-disabled {
@@ -160,7 +169,14 @@
 	height:17px;
 	border:1px solid #CCC;
 	background: #247cc3;
-	margin-left:22px;
+	margin-left:20px;
+}
+.my-time-picker .remove {
+	width:16px;
+	height:16px;
+	margin-left:21px;
+	margin-top:5px;
+	background:url("/static/styles/images/remove-icon.png") center center no-repeat;
 }
 
 .my-time-picker .checkbox.autofill.checked{

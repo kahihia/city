@@ -6,20 +6,26 @@ from django.utils.safestring import mark_safe
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import Http404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
 
+from django.contrib.gis.geos import Point
+from cities.models import City, Country
+from django.db.models import Q
+
 from event import EVENTS_PER_PAGE, DEFAULT_FROM_EMAIL
-from event.models import Event, picture_file_path, Reminder
+from event.models import Event, picture_file_path, Reminder, Venue, SingleEvent
 from event.forms import generate_form, reminderForm
-from event.utils import TagInfo, EventSet
+from event.utils import TagInfo, EventSet, find_nearest_city
 from event.templatetags.event_pictures import event_picture_url
 from citi_user.forms import CityAuthForm
 from taggit.models import Tag
 
 import datetime
+import time
+import calendar
 import copy
 import re
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -99,9 +105,11 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         # Right now we query based on tags, and then later split this up based on date.
         # Does django make a query every time? If so this could be an expensive, inefficient way of
         # doing the job.
-        upcoming_events = Event.events.filter(start_time__gte=today, tags__slug__in=split_tags).distinct()
+        #upcoming_events = Event.events.filter(start_time__gte=today, tags__slug__in=split_tags).distinct()
+        upcoming_events = Event.events.filter(tags__slug__in=split_tags).distinct()
     else:
-        upcoming_events = Event.events.filter(start_time__gte=today)
+        #upcoming_events = Event.events.filter(start_time__gte=today)
+        upcoming_events = Event.events
 
     ##############################################################
     #now we filter based on the date selected
@@ -172,23 +180,24 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         show_ads = True
         pages = upcoming_events.count() / EVENTS_PER_PAGE
         page_remainder = upcoming_events.count() % EVENTS_PER_PAGE
-        flow_events = list( upcoming_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE] )
+        #flow_events = list( upcoming_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE] )
+        flow_events = list( upcoming_events.all()[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE] )
         #title = flow_events[0].start_time.strftime('%A, %B %-1d')
         #event_sets.append( EventSet(title, flow_events) )
         num_on_page = len(flow_events)
-        if flow_events:
-            flow_start = flow_events[0].start_time.replace(hour=0, minute=0, second=0)
-        else:
-            flow_start = today
+        #if flow_events:
+        #    flow_start = flow_events[0].start_time.replace(hour=0, minute=0, second=0)
+        #else:
+        flow_start = today
         flow_end = flow_start.replace(hour=23,minute=59,second=59)
         keep_flowing = len(flow_events) > 0
         i = -1
-        while keep_flowing == True:
+        while False:#keep_flowing == True:
             i = i + 1
             if i > 0: #advance to the next day
                 flow_start = flow_start + datetime.timedelta(days=1)
                 flow_end = flow_end + datetime.timedelta(days=1)
-            current_days_events = [ x for x in flow_events if flow_start <= x.start_time < flow_end ]
+            current_days_events = flow_events#[ x for x in flow_events if flow_start <= x.start_time < flow_end ]
             if len(current_days_events) == 0:
                 continue
             # pull the title from the first event on the list
@@ -234,7 +243,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
     #packaging new tag information given split_tags list
     tags = Tag.objects.all()
     all_tags = []
-    for tag in tags:
+    for tag in []:# tags:
         if end is None:
             number_of_events = Event.events.filter(start_time__gte=start, tags__name__in=[tag]).count()
         else:
@@ -249,10 +258,10 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
                 )
     all_tags.sort(key=lambda tag: tag.name)
     all_tags.sort(key=lambda tag: tag.number, reverse=True)
-    if end is None:
-        all_tags.insert(0, TagInfo( num=Event.events.filter(start_time__gte=start).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
-    else:
-    	all_tags.insert(0, TagInfo( num=Event.events.filter(start_time__range=(start,end)).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
+    #if end is None:
+    #    all_tags.insert(0, TagInfo( num=Event.events.filter(start_time__gte=start).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
+    #else:
+   # 	all_tags.insert(0, TagInfo( num=Event.events.filter(start_time__range=(start,end)).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
 
     #############################################################################################
     # NUMCODE: This code is here because the page numbers start at 1 (which is never displayed or linked to)
@@ -298,9 +307,9 @@ def view(request, slug=None, old_tags=None):
                   'og:url' : 'http://' + settings.EVENT_EMAIL_SITE + reverse('event_view', args=(event.slug,)),
                   'og:site_name' : 'Cityfusion',
                   'fb:app_id' : '330171680330072',
-                  'og:description' : '%s, %s' % (
-                      event.start_time.strftime("%B %-1d"),
-                      event.start_time.strftime('%-1I:%M %p'))
+                  #'og:description' : '%s, %s' % (
+                  #    event.start_time.strftime("%B %-1d"),
+                  #    event.start_time.strftime('%-1I:%M %p'))
                   }
 
     return render_to_response('events/event_description.html',
@@ -321,10 +330,46 @@ def create(request, form_class=None, success_url=None,
             return HttpResponseRedirect('/accounts/login/')
         form_class = generate_form(*exclude)
 
-    if request.method == 'POST':
+    if request.method == 'POST':	
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
+            # Find or create new venue	    
+            if request.POST["venue_name"]:
+                name = request.POST["venue_name"]
+                street = request.POST["street"]
+                city = City.objects.get(id=int(request.POST["city_identifier"]))
+                country = Country.objects.get(name='Canada')
+                location = Point((
+                    float(request.POST["location_lng"]),
+                    float(request.POST["location_lat"])	            
+                ))
+                venue = Venue(name=name, street=street, city=city, country=country, location=location)
+		venue.save()
+            elif request.POST["place"]:
+                name = request.POST["geo_venue"]
+                street = request.POST["geo_street"]
+                city = City.objects.filter(
+                    Q(name_std=request.POST["geo_city"].encode('utf8'))|
+                    Q(name=request.POST["geo_city"])
+                )
+                country = Country.objects.get(name='Canada')
+                location = Point((
+                    float(request.POST["geo_longtitude"]),
+                    float(request.POST["geo_latitude"])	            
+                ))
+                if city.count()>1:
+                    city = find_nearest_city(city, location)
+                else:
+                    city = city[0]
+                venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, location=location)
+
             event_obj = form.save(commit=False)
+            event_obj.venue = venue
+
+            when_json = json.loads(request.POST["when_json"])
+            description_json = json.loads(request.POST["description_json"])
+
+            event_obj.description = description_json['default']
 
             if request.user.is_authenticated():
                 #if logged in, use the users info to complete form
@@ -342,9 +387,28 @@ def create(request, form_class=None, success_url=None,
             event_obj = event_obj.save() #save to the database
             form.save_m2m() #needed for many-to-many fields (i.e. the event tags)
 
-            # event recurring, so we create a new one here
-            if event_obj.recur:
-                create_recurrence(event_obj)
+            
+            for year, months in when_json.iteritems():
+                for month, days in months.iteritems():
+                    for day, times in days.iteritems():                        
+                        date = datetime.datetime(int(year), int(month), int(day),0,0)
+                        if date.strftime("%m/%d/%Y") in description_json['days']:
+                            description = description_json['days'][date.strftime("%m/%d/%Y")]
+                        else:
+                            description = ""
+                        start_time = time.strptime(times["start"], '%I:%M %p')
+                        start = datetime.datetime(int(year), int(month), int(day), start_time[3], start_time[4])
+
+                        end_time = time.strptime(times["end"], '%I:%M %p')
+                        end = datetime.datetime(int(year), int(month), int(day), end_time[3], end_time[4])
+                        
+                        single_event = SingleEvent(
+                            event = event_obj,
+                            start_time = start.strftime('%Y-%m-%d %H:%M'),
+                            end_time = end.strftime('%Y-%m-%d %H:%M'),
+                            description = description
+                        )
+                        single_event.save()
 
             #email the user
             current_site = settings.EVENT_EMAIL_SITE
@@ -368,8 +432,7 @@ def create(request, form_class=None, success_url=None,
             msg.send()
 
             #added Arlus
-            msgg = ("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n"
-       % (FROMADDR, ", ".join(event_obj.email), subject) )
+            msgg = ("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (FROMADDR, ", ".join(event_obj.email), subject) )
             msgg += message
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.set_debuglevel(1)
@@ -383,7 +446,7 @@ def create(request, form_class=None, success_url=None,
             if success_url is None:
                 success_url = reverse('event_created',kwargs={ 'slug':event_obj.slug})
             #send user off into the abyss...
-            return HttpResponseRedirect(success_url)
+            return HttpResponseRedirect(success_url)	
     else:
         form = form_class()
     #Send out the form

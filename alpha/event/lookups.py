@@ -13,7 +13,7 @@ class CityLookup(ModelLookup):
         return item.name
 
     def get_item_id(self, item):
-        return "%s,%s" % (item.location.x, item.location.y)
+        return "%d,%s,%s" % (item.id ,item.location.x, item.location.y)
 
 if not 'event-citylookup' in registry._registry:
     registry.register(CityLookup)

@@ -1,15 +1,14 @@
-from django.db import models
+from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
-from django.contrib.gis.db import models
-from django.contrib.gis.geos import Point
-
+from cities.models import City, Country
 import string
-import sha
+import hashlib
 import random
-from taggit.managers import TaggableManager
+from taggit_autosuggest.managers import TaggableManager
 import os
 import os.path
 from PIL import Image
@@ -93,12 +92,11 @@ class Event(models.Model):
     #==============================================================
     email = models.CharField('email address',max_length=100)    # the event must have an email
     name = models.CharField('event title',max_length=250)    # the title of the event
-    description = models.TextField(blank=True)    # the longer description of the event
-    location_name = models.CharField('location of the event', max_length=500)
+    description = models.TextField(blank=True)    # the longer description of the event    
     location = models.PointField()
-    venue = models.ForeignKey('CanadianVenue', blank=True, null=True)    # a specific venue associated with the event
+    venue = models.ForeignKey('Venue', blank=True, null=True)    # a specific venue associated with the event
     price = models.CharField('event price (optional)',max_length=40, blank=True, default='Free')
-    website = models.URLField(verify_exists=False, blank=True, null=True, default='')
+    website = models.URLField(blank=True, null=True, default='')
     #-------------------------------------------------------------
     # django-taggit field for tags--------------------------------
     #=============================================================
@@ -111,9 +109,9 @@ class Event(models.Model):
         super(Event, self).save(*args, **kwargs)
         return self
     def clean(self):
-        if self.end_time:
-            if self.start_time > self.end_time:
-                raise ValidationError('The event date and time must be later than the start date and time.')
+        #if self.end_time:
+        #    if self.start_time > self.end_time:
+        #        raise ValidationError('The event date and time must be later than the start date and time.')
         if self.name and slugify(self.name) == '':
             raise ValidationError('Please enter a name for your event.')
 
@@ -202,7 +200,7 @@ class Event(models.Model):
         thumb = self.picture.storage.save( self.picture_name(size),
                                            resized_pic_file )
 
-def SingleEvent(Event):
+class SingleEvent(models.Model):
     """
         Single event is event that occur only once.
         So when we create Event that occur more then one time,
@@ -211,10 +209,11 @@ def SingleEvent(Event):
     class Meta:
         verbose_name_plural = 'Single events'
     def __unicode__(self):
-        return u'%s/// %s' % (self.owner, self.name)
+        return u'%s/// %s' % (self.event, self.start_time)
     event = models.ForeignKey(Event, blank=False, null=False)
     start_time = models.DateTimeField('starting time',auto_now=False, auto_now_add=False)
-    end_time = models.DateTimeField('ending time (optional)',auto_now=False, auto_now_add=False, blank=True, null=True)
+    end_time = models.DateTimeField('ending time (optional)',auto_now=False, auto_now_add=False)
+    description = models.TextField(null=True, blank=True)    # additional description
 
 
 
@@ -255,11 +254,15 @@ models.signals.post_save.connect(create_default_pictures, sender=Event)
 
 class Venue(models.Model):
     name = models.CharField(max_length=250, default='Default Venue')
-    street = models.CharField(max_length=250)
-    city = models.CharField(max_length=200)
-    latitude = models.DecimalField(decimal_places=2, max_digits=8)
-    longitude = models.DecimalField(decimal_places=2, max_digits=8)
-    country = models.CharField(max_length=200)
+    street = models.CharField(max_length=250, blank=True)
+    city = models.ForeignKey(City)
+    location = models.PointField()    
+    country = models.ForeignKey(Country)
+    
+    objects = models.GeoManager()
+    
+    def __unicode__(self):
+        return "%s, %s, %s" % (self.name, self.street, self.city)
 
 class CanadianVenue(Venue):
     province = models.CharField(max_length=200)

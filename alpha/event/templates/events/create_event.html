@@ -8,18 +8,28 @@
 {% include_ui_theme 'ui-lightness' %}
 <link href="{{STATIC_URL}}styles/datepicker.css" rel="stylesheet" type="text/css" />
 <link href="{{STATIC_URL}}js/time/jquery.ptTimeSelect.css" rel="stylesheet" type="text/css" />
+
 <link href="{{STATIC_URL}}styles/when.css" rel="stylesheet" type="text/css" />
 
 <link href="{{STATIC_URL}}styles/tcal.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/place_autocomplete.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/autoSuggest.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/description.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/tagspopup.css" rel="stylesheet" type="text/css" />
 
 {% include_jquery_libs %}
 
 
 <script src="{{STATIC_URL}}js/create_event.js" type="text/javascript"></script>
 <script src="{{STATIC_URL}}js/jquery.dj.selectable.js" type="text/javascript"></script>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
+<script src="{{STATIC_URL}}js/jquery.geocomplete.js"></script>
+
 <script src="{{STATIC_URL}}js/showhint.js" type="text/javascript"></script>
 <script src="{{STATIC_URL}}js/validate.js" type="text/javascript"></script>
 <script src="{{STATIC_URL}}js/tcal.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/description.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/tags.popup.js" type="text/javascript"></script>
 <!-- end time -->
 {{ form.map }}
 {{ form.media.js }}
@@ -42,7 +52,7 @@ $(document).ready(function(e) {
 
 <script type="text/javascript" src="{{STATIC_URL}}/js/auto.js"></script>
 
-<div class="wrapper">
+<div class="wrapper {% if form.city_required %}new_venue{% endif %}">
 	<div class="page-container">
     <!--start.header-wrapper-->
     <!--end.header-wrapper-->
@@ -67,9 +77,14 @@ $(document).ready(function(e) {
                                 {% csrf_token %}
 <!--errors -->
 {%if form.errors %}
+<!--{{ form.errors }}-->
 <h3>Please correct the following:</h3>
 <div class="errors" style="border:1px solid RED;border-radius:4px;">
 <ul style="list-style-type: none;">
+<li id="all-info">{% for error in form.non_field_errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<li id="all-info">{% for error in form.venue_name.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<li id="all-info">{% for error in form.when.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
+<li id="all-info">{% for error in form.when_json.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 <li id="email-info">{% for error in form.email.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 <li id="image-info">{% for error in form.username.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
 <li id="tag-info">{% for error in form.tags.errors %}<span class="error">{{ error }}</span> {% endfor %}</li>
@@ -94,27 +109,59 @@ $(document).ready(function(e) {
                                                 </a>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>Location</td>
-                                            <td>
-                                                <div>
-                                                    {{form.location_name}}
-                                                    <span class="choose_location"></span>
-                                                </div>
-                                                <div class="location_map">
-                                                    {{form.location}}
-                                                </div>
-                                            </td>
-                                            <td>
+					<tr>
+					    <td>Location</td>
+					    <td>
+						<div>
+						    {{ form.place}}						    
+						</div>						
+					    </td>
+					    <td>
                                                 <a href="#" onmouseover="showhint('<h3>Help - Enter event <i>[Location]:</i></h3><p><strong>e.g:</strong> &ldquo;Sakstoon&rdquo;  or &ldquo;Ottawa&rdquo; </p>', this, event, '250px')">
                                                     <div class="buttonq"></div>
                                                 </a>
                                             </td>
-                                        </tr>
+					</tr>                                        
+					<tr class="suggest">
+					    <td>
+						Venue name
+					    </td>
+					    <td>						
+                                                {{form.venue_name}}						
+                                            </td>        
+					</tr>
+					<tr class="suggest">
+					    <td>
+						Street address
+					    </td>
+					    <td>						
+                                                {{form.street}}						
+                                            </td>        
+					</tr>
+					<tr class="suggest">
+					    <td>
+						City
+					    </td>
+					    <td>						
+                                                {{form.city}}
+						{{form.city_identifier}}
+                                            </td>        
+					</tr>
+					<tr class="suggest">
+					    <td>
+						Location
+					    </td>
+					    <td>						
+						<div class="location_map">
+                                                    {{form.location}}
+                                                </div>
+                                            </td>        
+					</tr>
                                         <tr>
                                             <td>When</td>
                                             <td>
                                                 {{form.when}}
+						{{form.when_json}}
                                             </td>
                                             <td>
                                                 <a href="#" onmouseover="showhint('<h3>Help - Enter event <i>[start date]:</i></h3><p><strong>e.g:</strong> &ldquo;August 23rd 2012 3.30pm&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a>
@@ -127,10 +174,36 @@ $(document).ready(function(e) {
                                         </tr>
                                         <tr>
                                             <td valign="top">
-                                                Description
-
-                                            </td><td>{{form.description}}</td><td><a href="#" onmouseover="showhint('<h3>Help - Enter event <i>[Description]:</i></h3><p><strong>e.g:</strong> &ldquo;This is to celebrate my birthday&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a>
-
+                                                Description<br>
+						<div class="description-select-day-widget">
+						    <div class="toggle">
+							<span>Optional</span>							
+						    </div>
+						    <div class="description-days-container">
+							<span class="result">
+							    Same for All Days
+							</span>
+							<div class="selected-result">
+							    Same for All
+							</div>
+							<ul class="days-list active">							    
+							    <!--<li>Mon, July 3</li>
+							    <li>Mon, July 4</li>
+							    <li>Mon, July 5</li>
+							    <li>Mon, July 6</li>
+							    <li>Mon, July 7</li>
+							    <li>Mon, July 8</li>
+							    <li>Mon, July 9</li>-->
+							</ul>							
+						    </div>
+						</div>
+                                            </td>
+					    <td>
+						{{form.description}}
+						<input type="hidden" name="description_json" id="id_description_json">
+					    </td>
+					    <td>
+						<a href="#" onmouseover="showhint('<h3>Help - Enter event <i>[Description]:</i></h3><p><strong>e.g:</strong> &ldquo;This is to celebrate my birthday&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a>
                                             </td>
                                         </tr>
                                         <tr>
@@ -139,23 +212,27 @@ $(document).ready(function(e) {
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2">Wheelchair  Accessible <input type="checkbox" name="option1" value="Yes"> Yes<input type="checkbox" name="option2" value="No" checked>No</td><td><a href="#" onmouseover="showhint('<h3>Help - Check your <i>[wheelchair]:</i></h3><p><strong>e.g:</strong> &ldquo;yes&rdquo;  or &ldquo;no&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a></td>
+                                            <td colspan="2">
+						Wheelchair  Accessible
+						{{form.wheelchair}}
 
                                             </td>
                                         </tr>
                                        <tr>
-                                            <td>Tags</td><td>
-                                            {{form.tags}}
-                                           <script type="text/javascript">
-$(function () {
-  $('#id_tags').tagSuggest({
-    url: 'tags/',
-    separator: ',',
-  });
-});
-</script>
+                                            <td class="tags_bottom">Tags</td>
+					    <td>
+						<div class="tags-popup-wrapper">
+						    <div class="tags-popup">
+							<div class="tags-container">
+							    
+							</div>
+							<div class="close-button">Close</div>
+						    </div>
+						</div>
+                                                {{form.tags}}
+                                           
 
-                                            </td><td><a href="#" onmouseover="showhint('<h3>Help - Enter your <i>[tags]:</i></h3><p><strong>e.g:</strong> &ldquo;Cat Empire&rdquo;  or &ldquo;Young Jeezy&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a>
+                                            </td><td class="tags_bottom"><a href="#" onmouseover="showhint('<h3>Help - Enter your <i>[tags]:</i></h3><p><strong>e.g:</strong> &ldquo;Cat Empire&rdquo;  or &ldquo;Young Jeezy&rdquo; </p>', this, event, '250px')"><div class="buttonq"></div></a>
 
                                             </td>
                                         </tr>
