@@ -40,12 +40,13 @@ body
 {
 	height:155px;
 	width:auto;
-	background:url(/static/images/header-bg-panel.png) repeat-x;
+	background:url(/static/images/header-bg.png) repeat-x;
 }
 
 .primary-header-wrapper
 {
 	width:auto;
+	height: 110px;
 }
 
 .sign-up-wrapper-top
@@ -302,7 +303,7 @@ body
 .featured-area
 {
 	width:1000px;
-	background:#247cc3;
+	background:#022E52;
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
 	border-radius:10px;
@@ -433,7 +434,7 @@ body
 	margin:0px;
 	padding:0px 0px 10px;
 	font-size:20px;
-	color:#454545;
+	color:#022e52;
 }
 .main-content-wrapper .orange
 {
@@ -1809,7 +1810,7 @@ body
 {
 	width:auto;
 	padding:20px 0px;
-	background:#247cc3;
+	background:#022E52;
 	text-align:center;
 }
 

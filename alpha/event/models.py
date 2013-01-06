@@ -16,6 +16,8 @@ import datetime
 from alpha.event import EVENT_PICTURE_DIR, EVENT_RESIZE_METHOD, EVENT_DEFAULT_SIZES
 from StringIO import StringIO
 from django.core.files.base import ContentFile
+from image_cropping import ImageCropField, ImageRatioField
+
 def picture_file_path(instance = None, filename = None):
     """
     This is used by the model and is defined in the Django
@@ -77,7 +79,8 @@ class Event(models.Model):
     # public key is a 'slug' generated from the name of the event
     slug = models.SlugField(unique=True, max_length=255)
     # event picture
-    picture = models.ImageField(upload_to=picture_file_path, blank=True, null=True, help_text='The event picture')
+    picture = ImageCropField(upload_to=picture_file_path, blank=True, null=True, help_text='The event picture')
+    cropping = ImageRatioField('picture', '180x180', size_warning=True, allow_fullsize=True)
     #--------------------------------------------------------------
     # View set fields - these are set in the view -----------------
     #==============================================================

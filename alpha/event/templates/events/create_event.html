@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
+{% load cropping %}
 {% load selectable_tags %}
 {% block title %} > Post Event{% endblock %}
 {% block page %}
+    
+{{ form.media }}
 
 <link href="{{STATIC_URL}}styles/tcal.css" rel="stylesheet" type="text/css" />
 <link href="{{STATIC_URL}}styles/create_event.css" rel="stylesheet" type="text/css" />
@@ -67,7 +70,7 @@ $(document).ready(function(e) {
             <!--start.main-content-wrapper-->
 
             <div class="main-content-wrapper">
-            	<h1>Post <span class="orange">Events</span></h1>
+            	<h1>Post Events</h1>
                 <div class="main-content">
                 	<!--start.main-navigation-->
                     <div class="main-navigation">
@@ -242,7 +245,11 @@ $(document).ready(function(e) {
                                         <tr>
                                         <tr>
 
-                                            <td>Images</td><td>{{ form.picture }}</td>
+                                            <td>Images</td>
+					    <td>
+						{{ form.picture }}
+						{{ form.cropping }}
+					    </td>
                                         </tr>
                                         <tr>
 
