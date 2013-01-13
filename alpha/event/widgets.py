@@ -2,9 +2,11 @@ from django import forms
 from django.conf import settings
 from django.db import models
 from django.template.loader import render_to_string
-from django.forms.widgets import Select, MultiWidget, DateInput, TextInput, CheckboxInput
+from django.template import Template, Context
+from django.forms.widgets import Select, MultiWidget, DateInput, TextInput, CheckboxInput, RadioSelect
 from django.utils.safestring import mark_safe
 from time import strftime
+from image_cropping.widgets import ImageCropWidget
 import json
 
 STATIC_PREFIX = settings.STATIC_URL
@@ -38,6 +40,11 @@ class PriceWidget(forms.TextInput):
         js = {
             u'%sjs/price.js' %STATIC_PREFIX,
         }
+
+    def render(self, name, value, *args, **kwargs):
+        html = """<label for="id_price_free"><input type='checkbox' id="id_price_free">Free</label>"""
+        html += super(forms.TextInput, self).render(name, value, *args, **kwargs)
+        return mark_safe(html)
 
 class GeoCompleteWidget(forms.TextInput):
     class Media(object):
@@ -79,8 +86,9 @@ class GeoCompleteWidget(forms.TextInput):
     
     def decompress(self, value):
         return json.loads(value)
-        
-class WheelchairWidget(forms.CheckboxInput):
+
+       
+class WheelchairWidget(RadioSelect):
     class Media(object):
         js = {
             u'%sjs/wheelchair.js' %STATIC_PREFIX,
@@ -149,3 +157,25 @@ class JqSplitDateTimeWidget(MultiWidget):
             'js/mylibs/jquery-ui-1.8.13.custom.min.js',
             'js/jqsplitdatetime.js'
             )
+
+class AjaxCropWidget(ImageCropWidget):
+    class Media:
+        js = (
+            "image_cropping/js/jquery.Jcrop.min.js",
+            "image_cropping/image_cropping.js",
+            "%sjs/fileuploader.js" % STATIC_PREFIX,
+            "%sjs/picture.js" % STATIC_PREFIX,
+        )
+        css = {'all': (
+            "%simage_cropping/css/jquery.Jcrop.min.css" % STATIC_PREFIX,
+            "%sajaxuploader/css/fileuploader.css" % STATIC_PREFIX,
+        )}
+
+    def render(self, name, value, *args, **kwargs):
+        html = super(ImageCropWidget, self).render(name, value, *args, **kwargs)
+        html += Template("""<div id="file-uploader" data-csrf-token="{{ csrf_token }}">
+            <noscript>          
+                <p>Please enable JavaScript to use file uploader.</p>
+            </noscript>         
+        </div>""").render(Context({}))        
+        return mark_safe(html)

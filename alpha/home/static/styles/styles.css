@@ -29,6 +29,7 @@ body
 .logo
 {
 	float:left;
+	margin-top: 10px;
 }
 .blue-title{
 	color:#247cc3;
@@ -78,7 +79,7 @@ body
 
 .post-events-for-free
 {
-	padding-top:15px;
+	padding-top:30px;
 }
 
 .menu-wrapper ul
@@ -106,7 +107,7 @@ body
 {
 	background: url(/static/images/active-menu-bg.png) repeat-x;
 	color:#fff;
-	border-right:1px solid #ff9b00 !important;
+	border-right:1px solid #022e52 !important;
 }
 
 .menu-wrapper ul li.addBorderRight a
@@ -159,7 +160,7 @@ body
 .location-text-box
 {
 	padding:7px 10px;
-	margin:3px;
+	margin: 1px 3px;
 	background:#fff;
 	-moz-border-radius:6px;
 	-webkit-border-radius:6px;
@@ -170,7 +171,7 @@ body
 .search-text-box
 {
 	padding:7px 50px 7px 10px;
-	margin:3px;
+	margin: 1px 3px;
 	background:#fff url(/static/images/search-icon.png) right no-repeat;
 	-moz-border-radius:6px;
 	-webkit-border-radius:6px;

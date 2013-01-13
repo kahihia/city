@@ -1,7 +1,7 @@
 from django import forms
 from event.models import Event, Reminder
-from alpha.event.fields import JqSplitDateTimeField
-from alpha.event.widgets import JqSplitDateTimeWidget, WhenWidget, PriceWidget, GeoCompleteWidget, WheelchairWidget, DescriptionWidget
+from event.fields import JqSplitDateTimeField
+from event.widgets import WhenWidget, PriceWidget, GeoCompleteWidget, WheelchairWidget, DescriptionWidget, AjaxCropWidget
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 import string
@@ -57,6 +57,10 @@ def generate_form(*args):
     """
     Generates an event form
     """
+    YES_OR_NO = (
+        (True, 'Yes'),
+        (False, 'No')
+    )
     class _EventForm(forms.ModelForm):
         place = JSONCharField(
             widget=GeoCompleteWidget(),
@@ -91,10 +95,14 @@ def generate_form(*args):
         )
         
         wheelchair = forms.BooleanField(
-            widget=WheelchairWidget(),
+            widget=WheelchairWidget(choices=YES_OR_NO),
             required=False
         )
-        
+        picture = forms.ImageField(
+            widget=AjaxCropWidget(),
+            required=False
+        )        
+
         class Meta:
             model = Event
             exclude = tuple(args)
@@ -108,7 +116,7 @@ def generate_form(*args):
             self.fields['name'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['price'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['price'].label = _(u'Price')
-            self.fields['price'].widget.attrs['placeholder'] = "xx.xx or free"
+            self.fields['price'].widget.attrs['placeholder'] = "xx.xx"
             self.fields['name'].error_messages['required'] = 'Event name is required'
             self.fields['name'].label = _(u'Event Name')
             
@@ -133,6 +141,7 @@ def generate_form(*args):
             self.fields['tags'].error_messages['required'] = 'Please enter at least one tag'
             self.fields['tags'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['website'].widget.attrs['class'] = 'inputfield rborder'
+            
             self.fields['picture'].label = _(u'Image')
             self.fields['picture'].widget.attrs['class'] = 'inputfield rborder'
         

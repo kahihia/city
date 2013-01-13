@@ -22,11 +22,14 @@ class Migration(SchemaMigration):
         # Deleting field 'Event.end_time'
         db.delete_column('event_event', 'end_time')
 
+        # Deleting field 'Event.location'
+        db.delete_column('event_event', 'location')
+
         # Adding field 'Event.location_name'
         db.add_column('event_event', 'location_name', self.gf('django.db.models.fields.CharField')(default='Noname', max_length=500), keep_default=False)
 
         # Changing field 'Event.location'
-        db.alter_column('event_event', 'location', self.gf('django.contrib.gis.db.models.fields.PointField')())
+        db.add_column('event_event', 'location', self.gf('django.contrib.gis.db.models.fields.PointField')())
 
 
     def backwards(self, orm):

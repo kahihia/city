@@ -193,7 +193,7 @@ $(document).ready(function() {
                                     {%if tag.slug = ''%}
                                     <li {% if forloop.counter0 > 9 %}{%endif%} class="blue"><a href="/events/">{{tag.name}}</a></li>
                                     {%else%}
-                                    <li {% if forloop.counter0 > 9 %} {% endif %} class="blue"><a href="{% url event_browse_tags old_tags=tag.slug%}">{{tag.name}}</a></li>
+                                    <li {% if forloop.counter0 > 9 %} {% endif %} class="blue"><a href="{% url 'event_browse_tags' old_tags=tag.slug%}">{{tag.name}}</a></li>
                                     {%endif%}
                                     {%endfor%}
                                     {% if all_tags|length > 9 %}

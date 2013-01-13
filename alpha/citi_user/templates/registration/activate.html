@@ -4,12 +4,12 @@
 <div id="activate">
   {% if account %}
     <h1>Activated!</h1>
-    <p>Click <a href="{% url auth_login %}">here</a> to sign in.</p>
+    <p>Click <a href="{% url 'auth_login' %}">here</a> to sign in.</p>
   {% else %}
     <h1>Uhoh! Activation failed</h1>
     <section>
       <p>Please recheck your email to ensure you used the proper key</p>
-      <p>Click <a href="{% url registration_register %}">here</a> to sign up again</p>
+      <p>Click <a href="{% url 'registration_register' %}">here</a> to sign up again</p>
     </section>
   {% endif %}
 </div>

@@ -2,7 +2,7 @@ from time import strptime, strftime
 from django import forms
 from django.db import models
 from django.forms import fields
-from alpha.event.widgets import JqSplitDateTimeWidget
+from event.widgets import JqSplitDateTimeWidget
 
 class JqSplitDateTimeField(fields.MultiValueField):
     widget = JqSplitDateTimeWidget

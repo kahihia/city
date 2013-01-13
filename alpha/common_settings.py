@@ -98,7 +98,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'alpha.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or
@@ -108,7 +108,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-    'alpha.citi_user',
+    'citi_user',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -126,11 +126,12 @@ INSTALLED_APPS = (
     'south',
     'taggit',
     'taggit_autosuggest',
-    'alpha.event',
-    'alpha.home',
-    'alpha.feedback',
+    'event',
+    'home',
+    'feedback',
     'easy_thumbnails',
     'image_cropping',
+    'ajaxuploader'
 )
 
 # A sample logging configuration. The only tangible logging performed

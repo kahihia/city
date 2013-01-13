@@ -13,7 +13,7 @@ import os
 import os.path
 from PIL import Image
 import datetime
-from alpha.event import EVENT_PICTURE_DIR, EVENT_RESIZE_METHOD, EVENT_DEFAULT_SIZES
+from event import EVENT_PICTURE_DIR, EVENT_RESIZE_METHOD, EVENT_DEFAULT_SIZES
 from StringIO import StringIO
 from django.core.files.base import ContentFile
 from image_cropping import ImageCropField, ImageRatioField

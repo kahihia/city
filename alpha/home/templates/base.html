@@ -1,4 +1,3 @@
-<?php error_reporting(E_ALL^E_NOTICE); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -44,11 +43,11 @@ $(document).ready(function(e) {
                         <div class="login-entry-info">
                             <ul>
       {% if user.is_authenticated %}
-      <li><a href="{% url citi_user_events %}">View your events</a>&nbsp; | &nbsp;</li>
-      <li><a href="{% url auth_logout %}">Sign out</a></li>
+      <li><a href="{% url 'citi_user_events' %}">View your events</a>&nbsp; | &nbsp;</li>
+      <li><a href="{% url 'auth_logout' %}">Sign out</a></li>
       {% else %}
-      <li><a href="{% url auth_login %}">Sign In</a>&nbsp; | &nbsp;</li>
-      <li><a href="{% url registration_register %}">Register</a></li>
+      <li><a href="{% url 'auth_login' %}">Sign In</a>&nbsp; | &nbsp;</li>
+      <li><a href="{% url 'registration_register' %}">Register</a></li>
       {% endif %}
     </ul>
                                 <div class="clr"></div>
@@ -57,7 +56,7 @@ $(document).ready(function(e) {
           			 </div>
                      <!-- end login-->
             </div>
-          <div class="post-events-for-free"><a href="{% url event_create %}"><img src="{{STATIC_URL}}images/post-events-for-free.png" /></a></div>
+          <div class="post-events-for-free"><a href="{% url 'event_create' %}"><img src="{{STATIC_URL}}images/post-events-for-free.png" /></a></div>
         </div>
         <!--end.sign-up-wrapper-top-->        
 
@@ -68,7 +67,7 @@ $(document).ready(function(e) {
         <div class="menu-wrapper">
             <ul class="main-menu">
                 <li class="addBorderRight"><a href="/events/browse/">Browse Events</a></li>
-                <li class="addBorderRight"><a href="{% url event_create %}">Post Events</a></li>
+                <li class="addBorderRight"><a href="{% url 'event_create' %}">Post Events</a></li>
                 <li class="addBorderRight"><a href="/">Profile</a></li>
                 <div class="clr"></div>
             </ul>

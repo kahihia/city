@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.core.urlresolvers import reverse
 
-from alpha.event import views as event
+from event import views as event
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -37,6 +37,9 @@ urlpatterns = patterns('',
                            event.create,
                            name='event_create'
                            ),
+                       url(r'^start$', event.start, name="start"),
+                       url(r'^ajax-upload$', event.import_uploader, name="my_ajax_upload"),
+                       url(r'^ctags$', event.city_tags, name='city_tags'),
                        url(r'^create/posted/(?P<slug>[^/]+)/$',
                            event.created,
                            name='event_created'
@@ -60,6 +63,5 @@ urlpatterns = patterns('',
                            event.browse, 
                            name='event_browse_tags_date_num'),
                        
-                       url(r'^taggit_autosuggest/', include('taggit_autosuggest.urls')),
-                           
+                       url(r'^taggit_autosuggest/', include('taggit_autosuggest.urls')),                           
 )

@@ -39,7 +39,7 @@ class TagInfo:
                 self.status = u'active' #this is used to style the CSS of the tag
 
 
-from alpha.event.models import Event 
+from event.models import Event 
 class EventSet:
     """
     EventSets are used by event.views.browse to return a set of events

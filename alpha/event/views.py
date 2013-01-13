@@ -35,6 +35,15 @@ import smtplib
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 
+from ajaxuploader.views import AjaxFileUploader
+
+def start(request):
+    csrf_token = get_token(request)
+    return render_to_response('import.html',
+        {'csrf_token': csrf_token}, context_instance = RequestContext(request))
+
+import_uploader = AjaxFileUploader()
+
 #Email params -Arlus
 FROMADDR = "arlusishmael@gmail.com"
 LOGIN    = FROMADDR
@@ -330,7 +339,7 @@ def create(request, form_class=None, success_url=None,
             return HttpResponseRedirect('/accounts/login/')
         form_class = generate_form(*exclude)
 
-    if request.method == 'POST':	
+    if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
             # Find or create new venue	    
@@ -381,8 +390,7 @@ def create(request, form_class=None, success_url=None,
                 path = picture_file_path(instance=event_obj,
                                          filename=request.FILES['picture'].name)
                 event_obj.picture = path
-                new_file = event_obj.picture.storage.save(path,
-                                                          request.FILES['picture'])
+                new_file = event_obj.picture.storage.save(path, request.FILES['picture'])
 
             event_obj = event_obj.save() #save to the database
             form.save_m2m() #needed for many-to-many fields (i.e. the event tags)
@@ -563,7 +571,6 @@ def ason(request):
     return HttpResponse(json.dumps(tag_list), mimetype="application/json")
 
 def reminder(request, event_id):
-
     if request.user.is_authenticated():
         mail = request.user.email
         search = Event.events.get(id=event_id)
@@ -573,3 +580,27 @@ def reminder(request, event_id):
     else:
         return HttpResponseRedirect('/accounts/register/')
     return HttpResponseRedirect(request.GET['next'])
+
+def city_tags(request):
+    city = None
+    if request.method == 'POST':                                
+        if "city_identifier" in request.POST:
+            city = City.objects.get(id=int(request.POST["city_identifier"]))
+            
+        elif "geo_city" in request.POST:
+            cities = City.objects.filter(
+                Q(name_std=request.POST["geo_city"].encode('utf8'))|
+                Q(name=request.POST["geo_city"])
+            )
+            if cities.count():
+                city=cities[0]
+        else:
+            return HttpResponse(json.dumps({'error':'City is not specified'}), mimetype="application/json")
+        
+        if not city:
+            return HttpResponse(json.dumps({'error':'City is not found'}), mimetype="application/json")
+
+        tags = Event.events.filter(venue__city=city).select_related('tags').values('tags')
+        tags = set([tag['tags'] for tag in tags if tag['tags']])
+        tags = Tag.objects.filter(id__in=tags).values()
+        return HttpResponse(json.dumps({"tags":list(tags)}), mimetype="application/json") 

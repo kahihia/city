@@ -114,8 +114,8 @@
         show: function (n) {
             var widget = $('#' + this.data('monthpicker').settings.id);
             var monthpicker = $('#' + this.data('monthpicker').target.attr("data-month-id"));
-            widget.css("top", monthpicker.offset().top  + monthpicker.outerHeight());
-            widget.css("left", monthpicker.offset().left);
+            //widget.css("top", monthpicker.offset().top  + monthpicker.outerHeight());
+            //widget.css("left", monthpicker.offset().left);
             widget.show();
             widget.find('select').focus();
             this.trigger('monthpicker-show');

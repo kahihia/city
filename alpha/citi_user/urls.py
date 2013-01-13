@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template
+from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 
 from registration.views import activate
@@ -50,9 +50,8 @@ urlpatterns = patterns(
         {'form_class': CityRegistrationForm },
         name='registration_register'),
     url(r'^register/complete/$',
-        direct_to_template,
-        {'template': 'registration/registration_complete.html'},
+        TemplateView.as_view(template_name='registration/registration_complete.html'),
         name='registration_complete'),
-    url(r'terms/$', 'alpha.citi_user.views.terms', name='citi_user_terms'),
-    url(r'events/$', 'alpha.citi_user.views.events', name='citi_user_events'),
+    url(r'terms/$', 'citi_user.views.terms', name='citi_user_terms'),
+    url(r'events/$', 'citi_user.views.events', name='citi_user_events'),
     )
