@@ -27,6 +27,11 @@
     color:#000;
 }
 
+#file-uploader .qq-upload-button:hover {
+    color:#234;
+    border:1px solid #79B7E7;
+}
+
 .full-screen-popup {
     position: absolute;
     bottom:200px;    
@@ -96,4 +101,41 @@
 }
 #id_price{
     display:block;
+}
+
+.balloon+.balloon-content {
+    display:none;
+}
+
+.my-balloon {
+    width:250px;
+}
+
+.hintbox{ /*CSS for pop up hint box */
+    position: absolute;
+    background-color: #f7f7f7;
+    width: 230px; /*Default width of hint.*/ 
+    border:1px solid #d6d6d6;
+    font-size: 11px;
+    font-weight:normal;
+    line-height:14px;
+    z-index:100;
+    visibility: hidden;
+    color:#454545;
+}
+    
+.hintanchor{ /*CSS for link that shows hint onmouseover*/
+    font-weight: bold;
+    color: #000000;
+    margin: 3px 8px;
+}
+
+.hintbox h3{
+    background-color:#e3e3e3;
+    height:19px;
+    padding: 5px 0 0 10px;
+}
+
+.hintbox p{
+    padding: 5px 10px 10px 10px;
 }

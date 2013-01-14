@@ -17,7 +17,7 @@ ul.as-selections {
 
 ul.as-selections.loading {
 	background-color: #eee;
-	border: orange solid thin;
+	border: #79B7E7 solid thin;
 }
 
 ul.as-selections li {
@@ -28,8 +28,7 @@ ul.as-selections li {
 ul.as-selections li.as-selection-item {
 	color: #2b3840;
 	font-size: 13px;
-	font-family: "Lucdia Grande", arial, sans-serif;
-	text-shadow: 0 1px 1px #fff;
+	font-family: "Lucdia Grande", arial, sans-serif;	
 	background-color: #ddd;
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ddd), to(#eee));
 	border: 1px solid #AAA;
@@ -56,7 +55,7 @@ ul.as-selections li.as-selection-item a.as-close {
 	font-family: "Helvetica", helvetica, arial, sans-serif;
 	font-size: 14px;
 	font-weight: bold;
-	text-shadow: 0 1px 1px #fff;
+	text-shadow: 0 1px 1px #ccc;
 	-webkit-transition: color .1s ease-in;
 }
 
@@ -76,11 +75,11 @@ ul.as-selections li.as-selection-item.blur a.as-close {
 }
 
 ul.as-selections li:hover.as-selection-item {
-	color: #2b3840;
+	color: #fff;
 	background-color: #223344;
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#EA2), to(#FC5));
-	border-color: #EA0;
-	border-top-color: #EA0;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#79B7E7), to(#06C));
+	border-color: #2b3840;
+	border-top-color: #06C;
 }
 
 ul.as-selections li:hover.as-selection-item a.as-close {
@@ -88,7 +87,7 @@ ul.as-selections li:hover.as-selection-item a.as-close {
 }
 
 ul.as-selections li.as-selection-item.selected {
-	border-color: orange;
+	border-color: #223344;
 }
 
 ul.as-selections li.as-selection-item a:hover.as-close {

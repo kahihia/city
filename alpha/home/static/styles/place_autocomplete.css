@@ -19,8 +19,9 @@
 .new-venue {
     position:absolute;
     bottom:0px;
-    color:orange;
+    color:#06C;
     background:#fafafa;
+    font-weight: bold;
     width:100%;
 }
 

@@ -52,33 +52,31 @@ PASSWORD = "19553b2008"
 def redirect(request):
     return HttpResponseRedirect( reverse('event_browse'))
 
+def events_from_paginator(paginator, page_num):
+    try:
+        events = paginator.page(page_num)
+    except PageNotAnInteger:
+        events = paginator.page(1)
+    except EmptyPage:
+        events = paginator.page(paginator.num_pages)  
+    return events  
+
 def search_pad(request, old_tags=u'all', date=u'flow'):
     events = Event.events.all()
-    feature = Paginator(events, 6)
-    page = request.GET.get('page','1')
+    featured_paginator = Paginator(events, 6)
+    featured_page = request.GET.get('featured_page','1')
+    featured_events = events_from_paginator(featured_paginator, featured_page)
 
-    try:
-        locd = feature.page(page)
-    except PageNotAnInteger:
-        locd = feature.page(1)
-    except EmptyPage:
-        locd = feature.page(feature.num_pages)
-
-    feature2 = Paginator(events, 5)
-    browse_page = request.GET.get('page','1')
-
-    try:
-        locs = feature2.page(browse_page)
-    except PageNotAnInteger:
-        locs = feature2.page(1)
-    except EmptyPage:
-        locs = feature2.page(feature2.num_pages)
-    return render_to_response('events/browse.html',
-                              {'locd': locd,
-                              'locs': locs,
-                              'events': events,
-                              'all_tags': Tag.objects.all(),},
-                              context_instance = RequestContext(request))
+    search_pad_paginator = Paginator(events, 1)
+    search_pad_page = request.GET.get('search_pad_page','1')
+    search_pad_events = events_from_paginator(search_pad_paginator, search_pad_page)
+    
+    return render_to_response('events/browse.html', {
+                                'featured_events': featured_events,
+                                'search_pad_events': search_pad_events,
+                                'events': events,
+                                'all_tags': Tag.objects.all(),
+                            }, context_instance = RequestContext(request))
 
 
 def browse(request, old_tags=u'all', date=u'flow', num=1):

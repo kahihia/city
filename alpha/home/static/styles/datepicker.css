@@ -96,14 +96,14 @@
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Arial, Helvetica, sans-serif; font-size: 1em; }
 .ui-widget-content { border: 1px solid #dddddd; background: #EAEAEA; color: #362b36; }
 .ui-widget-content a { color: #362b36; }
-.ui-widget-header { border: 1px solid orange; background: orange; color: #222222; font-weight: bold; }
+.ui-widget-header { border: 1px solid #022E52; background: #022E52; color: #fff; font-weight: bold; }
 .ui-widget-header a { color: #222222; }
 
 /* Interaction states
 ----------------------------------*/
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: none; background: #fff; font-weight: bold; color: #222; }
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #2779aa; text-decoration: none; }
-.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #74b2e2; background: white; font-weight: bold; color: orange; border:none}
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #74b2e2; background: white; font-weight: bold; color: #1C94C4; border:none}
 .ui-state-hover a, .ui-state-hover a:hover, .ui-state-hover a:link, .ui-state-hover a:visited { color: #0070a3; text-decoration: none; }
 .ui-state-highlight .ui-state-default { background: #3465a4; font-weight: bold; color: #ffffff; border: none;}
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #ffffff; text-decoration: none; }

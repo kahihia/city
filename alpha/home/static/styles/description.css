@@ -65,5 +65,5 @@
     cursor:pointer;
 }
 .description-select-day-widget .description-days-container ul.days-list li.selected {
-    color:orange;
+    color:#06C;
 }

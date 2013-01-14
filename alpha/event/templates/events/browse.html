@@ -1,60 +1,20 @@
 
 {% extends 'base.html' %}
- <script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 
 
-<style type="text/css">
-	.round	
-	{ 	
-		-moz-border-radius:12px;
-		-webkit-border-radius:12px;
-		background:#eee;
-		border:1px solid #ccc;
-		padding:20px;
-	}
-#exit {
-	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	box-shadow:inset 0px 1px 0px 0px #ffffff;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
-	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
-	background-color:#ededed;
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-	border:1px solid #dcdcdc;
-	display:inline-block;
-	color:#777777;
-	font-family:arial;
-	font-size:15px;
-	font-weight:bold;
-	padding:6px 24px;
-	text-decoration:none;
-	text-shadow:1px 1px 0px #ffffff;
-}#exit:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
-	background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
-	background-color:#dfdfdf;
-}#exit:active {
-	position:relative;
-	top:1px;
-}
-
-  </style>
+<link href="{{STATIC_URL}}css/browse.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
-$(document).ready(function(e) {
-    $('.search-lists ul li a').click(function(){
-		var v = $(this).attr('rel');
-		$('.location-text-box .location').val(v);
-	});
-	$('.footer-site-map ul li').addClass('add-border-right-white');
-	$('.footer-site-map ul li:last').removeClass('add-border-right-white');
-	//$('.right-navigation-wrapper').height($('.main-navigation-content-nav').height());
-});
-
-</script>{% comment %}
+    $(document).ready(function(e) {
+        $('.search-lists ul li a').click(function() {
+            var v = $(this).attr('rel');
+            $('.location-text-box .location').val(v);
+        });
+        $('.footer-site-map ul li').addClass('add-border-right-white');
+        $('.footer-site-map ul li:last').removeClass('add-border-right-white');
+    });
+</script>
+{% comment %}
 browse_events.html
 --------------------------------------
 This is the event browser.
@@ -74,168 +34,150 @@ browse_bar: the boolean stating to the header that we want a nav list
 of dates in the header
 {% endcomment %}
 {% load date_formatting %}
-{% block title %} &gt; Browse {% if page_date != "flow" %}&gt; {{
-page_date|slug_to_title }}{% endif %}{% endblock %}
+{% block title %} 
+    &gt; Browse {% if page_date != "flow" %}&gt; {{page_date|slug_to_title }}{% endif %}
+{% endblock %}
 {% block page %}
-<!--<link rel="stylesheet" href="{{STATIC_URL}}popup/css/styles.css">-->
-<style>
-.messages{
-list-style-type: none; text-align: center;
-}
-.msg{
-border: 1px solid #06C;
-padding: 3px;
-border-radius:3px;
-background-color:rgba(255,165,0,0.5);
-}
-</style>
-<script type="text/javascript">
-$(document).ready(function() {
-    $("#date").datepicker({
-        buttonImage: '{{STATIC_URL}}images/jump-to-date.png',
-        buttonImageOnly: true,
-        dateFormat: 'yy-mm-dd',
-        changeMonth: true,
-        changeYear: true,
-        showOn: 'both',
-        onClick: window.jumpToDate, 
-        toggles: true,
-        onSelect: function(dateText, inst) {
-                window.location.replace("http://cityfusion.ca/events/all/" + dateText) // make your AJAX call!
-            }
-        }); //make the datepicker appear!
-     });
-     
-</script>
 
-{% if messages %}
-<div class="msg">
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><h3>{{ message }}</h3></li>
-    {% endfor %}
-</ul>
-</div>
-{% endif %}
-<div class="wrapper">
-	<div class="page-container">    
-   <div class="featured-area">
-    <h2>Featured Events</h2>
-    <div class="features-wrapper">
-    <!--start.features-->
-    
-    {% for event in locd.object_list %}    
-    {% load event_pictures %}
-        <div class="features">
-            <div class="featured-img-wrapper"><img src="{% event_picture_url event 200 %}" height="153px" weight="154px"></div>
-            <div class="featured-img-details">
-                <div class="featured-img-details-wrapper">
-                    <div class="featured-title"><a href="/events/view/{{event.slug}}">{{event.name}}</a></div>
-                    <div class="featured-date">{{ event.start_time|just_day }}
-<br>{{ event.start_time|just_time }}
-      {% if event.end_time %}&mdash; {{ event.end_time|just_time }}{% endif %}</div>
-                    <div class="featured-details-link"><a href="/events/view/{{event.slug}}/">{{ event.description|linebreaks }}</a></div>                            
-                </div>                        
-            </div>                    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#date").datepicker({
+                buttonImage: '{{STATIC_URL}}images/jump-to-date.png',
+                buttonImageOnly: true,
+                dateFormat: 'yy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                showOn: 'both',
+                onClick: window.jumpToDate, 
+                toggles: true,
+                onSelect: function(dateText, inst) {
+                    window.location.replace("http://cityfusion.ca/events/all/" + dateText) // make your AJAX call!
+                }
+            }); //make the datepicker appear!
+        });         
+    </script>
+
+    {% if messages %}
+        <div class="msg">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><h3>{{ message }}</h3></li>
+                {% endfor %}
+            </ul>
         </div>
-{%endfor%}
-
-        
-   <!--end.features-->
-        <div class="clr"></div>
-    </div>
-    
-    <!--start.features-navigation-->
-    
-    <div class="features-navigation">
-    <ul>
-       <span class="step-links">
-        {% if locd.has_previous %}
-            <a href="?page={{ locd.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-        {%if locd.num_pages > 1%}
-            Page {{ locd.number }} of {{ locd.paginator.num_pages }}.
-        </span>
-		{%endif%}
-        {% if locd.has_next %}
-            <a href="?page={{ locd.next_page_number }}">next</a>
-        {% endif %}
-    </span>
-    </ul>
-    </div>
-    
-    <!--end.features-navigation-->
-
-</div> 
-
-
-    <div class="content-wrapper">
-    	<div class="content-wrapper-panel">
-            <!--start.main-content-wrapper-->
-            
-            <div class="main-content-wrapper">
-            	<h1>Search Pad</h1>
-                <div class="main-content">
-                	<!--start.main-navigation-->
-                    
-                    <div class="main-navigation">
-                    	<!--start.main-navigation-nav-->
-                        <div class="main-navigation-nav">
-                        	<div class="main-navigation-nav-wrapper">
-                            	<ul class="categories">
-                                	<li class="header">Browse All Events({{events|length}})</li>
-                                    <li class="subcat"><a href="/events/free/this-week/" >&#8250;&#8250; All this week</a></li>
-                                    <li class="subcat">                                                                                <a href="/events/free/">&#8250;&#8250; Featured events</a></li>
-                                      
-                                    {%for tag in all_tags%}
-                                    {%if tag.slug = ''%}
-                                    <li {% if forloop.counter0 > 9 %}{%endif%} class="blue"><a href="/events/">{{tag.name}}</a></li>
-                                    {%else%}
-                                    <li {% if forloop.counter0 > 9 %} {% endif %} class="blue"><a href="{% url 'event_browse_tags' old_tags=tag.slug%}">{{tag.name}}</a></li>
-                                    {%endif%}
-                                    {%endfor%}
-                                    {% if all_tags|length > 9 %}
-      <li id="tags_more"><a href="#" class="more"><span class="tickbox"><span class="downtick"></span></span>More</a></li>
-      <li id="tags_less" style="display: none; "><a href="#" class="more"><span class="tickbox"><span class="uptick"></span></span>Fewer</a></li>
     {% endif %}
-                                </ul>
-                            </div>
-                        </div>                        
-                        <!--end.main-navigation-nav-->
-                        
-                        <!--start.main-navigation-content-nav-->
-                        
-                        <div class="main-navigation-content-nav">
-                        	<div class="main-navigation-content-nav-wrapper">
-                            	<!--start.schedule-bar-->
-                            
-                            	<div class="schedule-bar">
-                                	<div class="schedule-bar-wrapper">
-                                    	<ul>
-                                            <li><a  href="/events/all/today/" class="jump">Today</a></li>
-                                             <li><a  href="/events/all/tomorrow/" class="jump">Tomorrow</a></li>
-                                              <li><a  href="/events/all/this-weekend/"  class="jump">This weekend</a></li>
-                                               <li><a  href="/events/all/next-week/" class="current">Next week</a></li>
-                              <li>
-                              <div style="background-color: white; border: solid thin #CCC; border-radius: 5px; height:21px;"><input type="hidden" id="date"/></div>
-                              </li>
-                              
-                              
-                                            
-                                            <div class="clr"></div>
-                                        </ul>
+
+    <div class="wrapper">
+        <div class="page-container">    
+            <div class="featured-area">
+                <h2>Featured Events</h2>
+                <div class="features-wrapper">
+                <!--start.featured_events-->
+    
+                    {% for event in featured_events.object_list %}    
+                        {% load event_pictures %}
+                        <div class="features">
+                            <div class="featured-img-wrapper"><img src="{% event_picture_url event 200 %}" height="153px" weight="154px"></div>
+                            <div class="featured-img-details">
+                                <div class="featured-img-details-wrapper">
+                                    <div class="featured-title"><a href="/events/view/{{event.slug}}">{{event.name}}</a></div>
+                                    <div class="featured-date">
+                                        {{ event.start_time|just_day }}<br>
+                                        {{ event.start_time|just_time }}
+                                        {% if event.end_time %}&mdash; {{ event.end_time|just_time }}{% endif %}
                                     </div>
+                                    <div class="featured-details-link"><a href="/events/view/{{event.slug}}/">{{ event.description|linebreaks }}</a></div>
                                 </div>
-                                
-                                <!--end.schedule-bar-->
+                            </div>
+                        </div>
+                    {%endfor%}
+                <!--end.features-->
+                <div class="clr"></div>
+            </div>
+            <!--start.features-navigation-->
+            <div class="features-navigation">
+                <ul>
+                    <span class="step-links">
+                    {% if featured_events.has_previous %}
+                        <a href="?featured_page={{ featured_events.previous_page_number }}&search_pad_page={{ search_pad_events.number }}">previous</a>
+                    {% endif %}
+                    <span class="current">
+                        {%if featured_events.num_pages > 1%}
+                            Page {{ featured_events.number }} of {{ featured_events.paginator.num_pages }}.
+                    </span>
+                        {%endif%}
+                        {% if featured_events.has_next %}
+                            <a href="?featured_page={{ featured_events.next_page_number }}&search_pad_page={{ search_pad_events.number }}">next</a>
+                        {% endif %}
+                    </span>
+                </ul>
+            </div>    
+            <!--end.features-navigation-->
+        </div> 
+
+        <div class="content-wrapper">
+        	<div class="content-wrapper-panel">
+                <!--start.main-content-wrapper-->
+                <div class="main-content-wrapper">
+                	<h1>Search Pad</h1>
+                    <div class="main-content">
+                	   <!--start.main-navigation-->
+                    
+                        <div class="main-navigation">
+                            <!--start.main-navigation-nav-->
+                            <div class="main-navigation-nav">
+                        	   <div class="main-navigation-nav-wrapper">
+                                    <ul class="categories">
+                                        <li class="header">Browse All Events({{events|length}})</li>
+                                        <li class="subcat"><a href="/events/free/this-week/" >&#8250;&#8250; All this week</a></li>
+                                        <li class="subcat">
+                                            <a href="/events/free/">&#8250;&#8250; Featured events</a>
+                                        </li>
+                                        {%for tag in all_tags%}
+                                            {%if tag.slug = ''%}
+                                                <li {% if forloop.counter0 > 9 %}{%endif%} class="blue"><a href="/events/">{{tag.name}}</a></li>
+                                            {%else%}
+                                                <li {% if forloop.counter0 > 9 %} {% endif %} class="blue"><a href="{% url 'event_browse_tags' old_tags=tag.slug%}">{{tag.name}}</a></li>
+                                            {%endif%}
+                                        {%endfor%}
+                                        {% if all_tags|length > 9 %}
+                                            <li id="tags_more"><a href="#" class="more"><span class="tickbox"><span class="downtick"></span></span>More</a></li>
+                                            <li id="tags_less" style="display: none; "><a href="#" class="more"><span class="tickbox"><span class="uptick"></span></span>Fewer</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>                        
+                            <!--end.main-navigation-nav-->
+                        
+                            <!--start.main-navigation-content-nav-->
+                        
+                            <div class="main-navigation-content-nav">
+                                <div class="main-navigation-content-nav-wrapper">
+                                    <!--start.schedule-bar-->
+                            
+                                    <div class="schedule-bar">
+                                        <div class="schedule-bar-wrapper">
+                                            <ul>
+                                                <li><a  href="/events/all/today/" class="jump">Today</a></li>
+                                                <li><a  href="/events/all/tomorrow/" class="jump">Tomorrow</a></li>
+                                                <li><a  href="/events/all/this-weekend/"  class="jump">This weekend</a></li>
+                                                <li><a  href="/events/all/next-week/" class="current">Next week</a></li>
+                                                <li>
+                                                    <div style="background-color: white; border: solid thin #CCC; border-radius: 5px; height:21px;"><input type="hidden" id="date"/></div>
+                                                </li>                                            
+                                                <div class="clr"></div>
+                                            </ul>
+                                        </div>
+                                    </div>                                
+                                    <!--end.schedule-bar-->
                       
-                                <!--start.entry-wrapper-->
-                                {% for event in locs.object_list %}    
-    {% load event_pictures %}
+                                    <!--start.entry-wrapper-->
+                                    {% for event in search_pad_events.object_list %}    
+                                        {% load event_pictures %}
                                         <div class="result-entry-info">
-                                            <div class="entry-img-prev"><img src="{% event_picture_url event 200 %}" length="72px" width="71px"></div>
+                                            <div class="entry-img-prev">
+                                                <img src="{% event_picture_url event 200 %}" length="72px" width="71px">
+                                            </div>
                                             <div class="entry-details-wrapper">
                                                 <div class="title-wrapper">
                                                     <div class="title"><a href="/events/view/{{event.slug}}/">{{event.name}}</a></div>
@@ -246,74 +188,62 @@ $(document).ready(function() {
                                                      {{event.start_time}}
                                                 </div>                                               
                                                 <div class="entry-description">
-                                                    {{event.venue}}
+                                                    {{ event.venue.name }}<br>
+                                                    {{ event.venue.street }}<br>
+                                                    {{ event.venue.city.name_std }}
                                                 </div>                                               
                                             </div>
-                                             <div class="clr"></div>
+                                            <div class="clr"></div>
                                        </div>
                                            
-                                            {%endfor%}
-                                             <div class="clr"></div>
-
-                                
-                               <div class="entry-navigation-np">
- <p>
-   <ul>
-       <span class="step-links">
-        {% if locs.has_previous %}
-            <a href="?page={{ locs.previous_page_number }}"><img src="{{STATIC_URL}}images/entry-prev.png"></a>
-        {% endif %}
-
-        <span class="current">
-        {%if locs.num_pages > 1%}
-            Page {{ locs.number }} of {{ locs.paginator.num_pages }}.
-        </span>
-		{%endif%}
-        {% if locs.has_next %}
-            <a href="?page={{ locs.next_page_number }}"><img src="{{STATIC_URL}}images/entry-next.png"></a>
-        {% endif %}
-    </span>
-    </ul>
+                                    {%endfor%}
+                                    <div class="clr"></div>
+                                    <div class="entry-navigation-np">
+                                        <p>
+                                            <ul>
+                                                <span class="step-links">
+                                                    <!--TODO: Fix this strange layout-->
+                                                    {% if search_pad_events.has_previous %}
+                                                        <a href="?search_pad_page={{ search_pad_events.previous_page_number }}&featured_page={{ featured_events.number }}">
+                                                            <img src="{{STATIC_URL}}images/entry-prev.png">
+                                                        </a>
+                                                    {% endif %}                                                    
+                                                    {%if search_pad_events.num_pages > 1%}
+                                                        <span class="current">
+                                                            Page {{ search_pad_events.number }} of {{ search_pad_events.paginator.num_pages }}.
+                                                        </span>
+		                                            {%endif%}
+                                                    {% if search_pad_events.has_next %}
+                                                        <a href="?search_pad_page={{ search_pad_events.next_page_number }}&featured_page={{ featured_events.number }}">
+                                                            <img src="{{STATIC_URL}}images/entry-next.png">
+                                                        </a>
+                                                    {% endif %}                                                    
+                                                </span>
+                                            </ul>
+                                        </p>
+                                    </div>
+                                    <!--end.entry-->                            
                                 </div>
-                                <!--end.entry-->
-                            
-                            </div>
-                        
-                        </div>
-                        
-                        <!--end.main-navigation-content-nav-->
-                        
-                        <div class="clr"></div>
+                            </div>                        
+                            <!--end.main-navigation-content-nav-->                        
+                            <div class="clr"></div>                    
+                        </div>                    
+                        <!--end.main-navigation-->
                     
+                        <!--start.right-navigation-->                    
+                        <!--<?php include("rightside.php");?>-->                    
+                        <!--end.right-navigation-->
+                
+                        <div class="clr"></div>                
                     </div>
-                    
-                    <!--end.main-navigation-->
-                    
-                    <!--start.right-navigation-->
-                    
-					<?php include("rightside.php");?>
-                    
-                    <!--end.right-navigation-->
-                
-                	<div class="clr"></div>
-                
                 </div>
-            
-            </div>
-            
-            <!--end.main-content-wrapper-->
-        
-        </div>
-    
-    </div>
-    
-    <!--end.content-wrapper-->
-
-
-             
+                <!--end.main-content-wrapper-->        
+            </div>    
+        </div>    
+        <!--end.content-wrapper-->             
     </div>
 </div>
 <!--jQuery-->
 	
-	<script src="{{STATIC_URL}}popup/js/jquery.reveal.js"></script>
+<script src="{{STATIC_URL}}popup/js/jquery.reveal.js"></script>
 {% endblock %}
