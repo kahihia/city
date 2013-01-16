@@ -3,10 +3,10 @@
 {% block page %}
   <section class="body noborder">
     <h1>Event Posted!</h1>
-    <p><a href="{% url event_view slug %}">See event in action &rarr;</a></p>
+    <p><a href="{% url 'event_view' slug %}">See event in action &rarr;</a></p>
     <p>An email has been sent to you with the details. Please check your spam filter if it does not arrive.</p>
     {% if user.is_authenticated %}
-    <p>To edit your event anytime, go to <a href="{% url citi_user_events %}">View your events</a>.</p>
+    <p>To edit your event anytime, go to <a href="{% url 'citi_user_events' %}">View your events</a>.</p>
     {% endif %}
   </section><!-- .body -->
 {% endblock %}

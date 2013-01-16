@@ -83,17 +83,21 @@ def generate_form(*args):
         when_json = forms.CharField(
             required=True,
             widget=forms.widgets.HiddenInput()
-            
         )
         description = forms.CharField(
             widget = DescriptionWidget(),
             required=False
         )
+        description_json = forms.CharField(
+            required=True,
+            widget=forms.widgets.HiddenInput()
+        )
+
         price = forms.CharField(
             widget=PriceWidget(),
             required=False
         )
-        
+
         wheelchair = forms.BooleanField(
             widget=WheelchairWidget(choices=YES_OR_NO),
             required=False

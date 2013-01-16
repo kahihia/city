@@ -39,9 +39,37 @@
 			$(this.resetButton).on("click", function() {
 				var agree = confirm("Are you sure you want to clear form?")
 				if(agree) that.clear();
-			});
+			});			
+		},
+		setValue: function(years){			
+			this.clear();
+			for(yi in years) if(years.hasOwnProperty(yi)){
+				var months = years[yi];
+				for(mi in months) if(months.hasOwnProperty(mi)){
+					var days = months[mi];
+					this.addMonth(yi, mi);
+					for(di in days) if(days.hasOwnProperty(di)){
+						var start = days[di].start,
+							end = days[di].end,
+							daysTimePicker = this.months[yi][mi];						
+						daysTimePicker.addDay(parseInt(di), parseInt(mi), parseInt(yi));
+						var format_day = $.datepicker.formatDate($.datepicker._defaults.dateFormat, new Date(yi, mi-1, di));
+						$(".days-picker", $(daysTimePicker.element).parents(".months-container")).multiDatesPicker('addDates', format_day);
+						//$(".days-time-picker", $(this).parents(".month-container")).data("daystimepicker").addDay(that.options.day, that.options.month, that.options.year);
+						timePicker = _.filter(daysTimePicker.days, function(day){
+							return day.options.day == di;
+						})[0];
+						timePicker.startTime.val(start);
+						timePicker.endTime.val(end);
+					}
+				}
+			}
+
 		},
 		addMonth: function(year, month) {
+			if((year in this.months) && (month in this.months[year])){
+				return;
+			}
 			var monthContainer, days;
 			date = new Date();
 			year && date.setFullYear(year);
@@ -270,6 +298,11 @@
 				0, 0, $(timePicker).data("timepicker"));
 				$(this.daysContainer).prepend(timePicker);
 			}
+			if(this.days.length === 0) {
+				$(this.labels).removeClass("active");
+			} else {
+				$(this.labels).addClass("active");
+			}
 		},
 		findPrevious: function(day) {
 			if(this.days.length) {
@@ -353,9 +386,7 @@
 			$(this.removeButton).on('click', function() {
 				var format_day = $.datepicker.formatDate($.datepicker._defaults.dateFormat, new Date(that.options.year, that.options.month, that.options.day));
 				$(".days-picker", $(this).parents(".month-container")).multiDatesPicker('removeDates', format_day);
-				$(".days-time-picker", $(this).parents(".month-container")).data("daystimepicker").addDay(that.options.day, that.options.month, that.options.year);
-
-				//$(that.element).remove();
+				$(".days-time-picker", $(this).parents(".month-container")).data("daystimepicker").addDay(that.options.day, that.options.month, that.options.year);				
 			})
 
 			// oldTime =  $.timePicker(this.startTime).getTime();
@@ -415,7 +446,14 @@
 	});
 
 	$(document).ready(function() {
-		$("#id_when").when();
+		$("#id_when").when();		
+		if($("#id_when_json").val()){
+			$("#id_when").data("when").setValue(
+				JSON.parse(
+					$("#id_when_json").val()
+				)
+			);			
+		};
 	});
 
 })(jQuery);

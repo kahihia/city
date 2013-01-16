@@ -126,7 +126,7 @@ $(document).ready(function() {
     {% for event in locd.object_list %}    
     {% load event_pictures %}
         <div class="features">
-            <div class="featured-img-wrapper"><img src="{% event_picture_url event 200 %}" height="153px" weight="154px"></div>
+            <div class="featured-img-wrapper"><img src="{% event_picture_url 'event' 200 %}" height="153px" weight="154px"></div>
             <div class="featured-img-details">
                 <div class="featured-img-details-wrapper">
                     <div class="featured-title"><a href="#">{{event.name}}</a></div>
@@ -192,7 +192,7 @@ $(document).ready(function() {
                                     {%if tag.slug = ''%}
                                     <li {% if forloop.counter0 > 9 %} {% endif %} class="blue"><a href="/events/">{{tag.name}}</a></li>
                                     {%else%}
-                                    <li {% if forloop.counter0 > 9 %} {% endif %} class="blue"><a href="{% url event_browse_tags old_tags=tag.slug %}">{{tag.name}}</a></li>
+                                    <li {% if forloop.counter0 > 9 %} {% endif %} class="blue"><a href="{% url 'event_browse_tags' old_tags=tag.slug %}">{{tag.name}}</a></li>
                                     {%endif%}
                                     {%endfor%}
                                     {% if all_tags|length > 9 %}
@@ -239,7 +239,7 @@ $(document).ready(function() {
                                 
                                 	<div class="entry-info" style="border-bottom: solid thin #999; width: 450px;">
                                 	
-                                    <div class="entry-img-prev"><img src="{% event_picture_url event 200 %}"></div>
+                                    <div class="entry-img-prev"><img src="{% event_picture_url 'event' 200 %}"></div>
                                     <div class="entry-details-wrapper">
                                     	<div class="title-wrapper">
                                         	<div class="title">{{event.name}}&nbsp;</div>
@@ -294,19 +294,19 @@ $(document).ready(function() {
  <p>
     {% if page_num > 1 %}
       {% if page_num == 2 %}
-        <a class="btnbg rboarder submit" href="{% if page_date != "flow" %}{% url event_browse_tags_date old_tags=current_tags date=page_date %}{% else %}{% url event_browse_tags old_tags=current_tags %}{% endif %}">Previous</a>
+        <a class="btnbg rboarder submit" href="{% if page_date != "flow" %}{% url 'event_browse_tags_date' old_tags=current_tags date=page_date %}{% else %}{% url 'event_browse_tags' old_tags=current_tags %}{% endif %}">Previous</a>
       {% else %}
-        <a class="btnbg rboarder submit" href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_less %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=page_less %}{% endif %}">Previous</a>
+        <a class="btnbg rboarder submit" href="{% if page_date != "flow" %}{% url 'event_browse_tags_date_num' old_tags=current_tags date=page_date num=page_less %}{% else %}{% url 'event_browse_tags_num' old_tags=current_tags num=page_less %}{% endif %}">Previous</a>
       {% endif %}
     {% endif %}
 
     {% if page_more <= pages|length %}
       {% if page_more == pages|length %}
         {% if page_remainder > 0 %}
-          <a class="btnbg rboarder submit" href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=page_more %}{% endif %}">Next</a>
+          <a class="btnbg rboarder submit" href="{% if page_date != "flow" %}{% url 'event_browse_tags_date_num' old_tags=current_tags date=page_date num=page_more %}{% else %}{% url 'event_browse_tags_num' old_tags=current_tags num=page_more %}{% endif %}">Next</a>
         {% endif %}
       {% else %}
-        <a class="btnbg rboarder submit" href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=page_more %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=page_more %}{% endif %}">Next</a>
+        <a class="btnbg rboarder submit" href="{% if page_date != "flow" %}{% url 'event_browse_tags_date_num' old_tags=current_tags date=page_date num=page_more %}{% else %}{% url 'event_browse_tags_num' old_tags=current_tags num=page_more %}{% endif %}">Next</a>
       {% endif %}
     {% endif %}
   </p>
@@ -315,10 +315,10 @@ $(document).ready(function() {
       {% for numb in pages %}
         {% if forloop.last %}
           {% if page_remainder > 0 %}
-	      <a {% if page_num == numb %}class="current"{% endif %} href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=numb %}{% endif %}">{{ numb }}</a>&nbsp;
+	      <a {% if page_num == numb %}class="current"{% endif %} href="{% if page_date != "flow" %}{% url 'event_browse_tags_date_num' old_tags=current_tags date=page_date num=numb %}{% else %}{% url 'event_browse_tags_num' old_tags=current_tags num=numb %}{% endif %}">{{ numb }}</a>&nbsp;
 	  {% endif %}
 	{% else %}
-	    <a {% if page_num == numb %}class="current"{% endif %} href="{% if page_date != "flow" %}{% url event_browse_tags_date_num old_tags=current_tags date=page_date num=numb %}{% else %}{% url event_browse_tags_num old_tags=current_tags num=numb %}{% endif %}">{{ numb }}</a>&nbsp;{% endif %}
+	    <a {% if page_num == numb %}class="current"{% endif %} href="{% if page_date != "flow" %}{% url 'event_browse_tags_date_num' old_tags=current_tags date=page_date num=numb %}{% else %}{% url 'event_browse_tags_num' old_tags=current_tags num=numb %}{% endif %}">{{ numb }}</a>&nbsp;{% endif %}
       {% endfor %}
     </ul>
   {% endif %}

@@ -28,6 +28,10 @@
             this.save();
 
         },
+        setValue: function(value){            
+            this.data = value;
+            this.drawWidget();
+        },
         setDays: function(days) {
             var oldDays = this.data.days;
             this.data.days = {}
@@ -88,8 +92,9 @@
                 $(this.textarea).val(this.data.default);
                 $(this.result).html(label + " Days");
             } else {
-                $(this.textarea).val(this.data.days[value] || this.data.default);
+                $(this.textarea).val(this.data.days[value] || "");                
             }
+            $(this.textarea).attr("placeholder",this.data.days[value]||this.data.default);
             $("[data-value='" + value + "']").addClass("selected");
             this.save();
         },
@@ -99,6 +104,11 @@
     });
 
     $(document).ready(function() {
+        var value = $("#id_description_json").val();
         $("#id_description").description();
+        if(value){
+            $("#id_description").data("description").setValue(JSON.parse(value));    
+        }
+        
     });
 })(jQuery);

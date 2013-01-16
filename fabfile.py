@@ -21,7 +21,7 @@ def dev():
 
 def cityfusion():
     env.hosts = ['root@50.116.14.210']
-    env.hg_directory = '/root/cityfusion-hg'
+    env.hg_directory = '/root/cityfusion'
     env.wsgi_filename = 'django.wsgi'
 
 def host_type():
@@ -43,7 +43,7 @@ def serve():
 
 def check_schema(app):
     return local(
-        django_admin_local("schemamigration %s --auto" % (app,)), 
+        django_admin_local("schemamigration %s --auto" % (app,)),
         capture=False)
 
 def schemas():
@@ -61,18 +61,31 @@ def committed():
         _handle_failure("Found uncommitted mercurial files")
 
 def update():
-    schemas()
-    committed()
-    local("hg push")
-
     with cd(env.hg_directory):
         run("hg pull")
         run("hg update")
-        run("source venv/bin/activate; pip install -r requirements.txt")
-        run(django_admin("syncdb --noinput"))
-        run(django_admin("migrate"))
-        run(django_admin("collectstatic --noinput"))
-        run("touch bin/" + env.wsgi_filename)
+    # schemas()
+    # committed()
+    # local("hg push")
+
+    # with cd(env.hg_directory):
+    #     run("hg pull")
+    #     run("hg update")
+    #     run("source venv/bin/activate; pip install -r requirements.txt")
+    #     run(django_admin("syncdb --noinput"))
+    #     run(django_admin("migrate"))
+    #     run(django_admin("collectstatic --noinput"))
+    #     run("touch bin/" + env.wsgi_filename)
+
+def ps(port=8002):
+    run("ps aux|grep %d" % port)
+
+def kill(process):
+    run("kill %d" % process)
+
+def run():
+    with cd("%s/alpha" % env.hg_directory):
+        run("sh script &")
 
 def make_virtualenv():
     local("virtualenv --no-site-packages venv")
@@ -90,3 +103,4 @@ def echo_shell():
 
 def test():
     local(django_admin("test event home citi_user"), capture=False)
+

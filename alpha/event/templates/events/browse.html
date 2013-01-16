@@ -77,7 +77,7 @@ of dates in the header
                     {% for event in featured_events.object_list %}    
                         {% load event_pictures %}
                         <div class="features">
-                            <div class="featured-img-wrapper"><img src="{% event_picture_url event 200 %}" height="153px" weight="154px"></div>
+                            <div class="featured-img-wrapper"><img src="{% event_picture_url 'event' 200 %}" height="153px" weight="154px"></div>
                             <div class="featured-img-details">
                                 <div class="featured-img-details-wrapper">
                                     <div class="featured-title"><a href="/events/view/{{event.slug}}">{{event.name}}</a></div>
@@ -176,7 +176,7 @@ of dates in the header
                                         {% load event_pictures %}
                                         <div class="result-entry-info">
                                             <div class="entry-img-prev">
-                                                <img src="{% event_picture_url event 200 %}" length="72px" width="71px">
+                                                <img src="{% event_picture_url 'event' 200 %}" length="72px" width="71px">
                                             </div>
                                             <div class="entry-details-wrapper">
                                                 <div class="title-wrapper">
