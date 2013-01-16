@@ -1,7 +1,7 @@
 from fabric.api import run
 from fabric.state import env
 from fabric.context_managers import cd
-from fabric.operations import run, local, sudo, _handle_failure
+from fabric.operations import run, local, sudo
 
 env.schema_apps = [ 'citi_user', 'home', 'event' ]
 env.local_settings_file = 'alpha.settings'
@@ -13,13 +13,13 @@ def prod():
     env.settings_file = 'alpha.settings_prod'
 
 
-def dev():
-    env.hosts = ['cityfusion-dev@cityfusion.dev.peakxp.com']
-    env.hg_directory = '/home/cityfusion-dev/src'
-    env.wsgi_filename = 'djangodev.wsgi'
-    env.settings_file = 'alpha.settings_dev'
+# def dev():
+#     env.hosts = ['cityfusion-dev@cityfusion.dev.peakxp.com']
+#     env.hg_directory = '/home/cityfusion-dev/src'
+#     env.wsgi_filename = 'djangodev.wsgi'
+#     env.settings_file = 'alpha.settings_dev'
 
-def cityfusion():
+def dev():
     env.hosts = ['root@50.116.14.210']
     env.hg_directory = '/root/cityfusion'
     env.wsgi_filename = 'django.wsgi'
@@ -57,8 +57,8 @@ def schemas():
 
 def committed():
     output = local("hg st")
-    if output:
-        _handle_failure("Found uncommitted mercurial files")
+    # if output:
+    #     _handle_failure("Found uncommitted mercurial files")
 
 def update():
     with cd(env.hg_directory):
@@ -77,13 +77,13 @@ def update():
     #     run(django_admin("collectstatic --noinput"))
     #     run("touch bin/" + env.wsgi_filename)
 
-def ps(port=8002):
-    run("ps aux|grep %d" % port)
+def ps(port="8002"):
+    run("ps aux|grep %s" % port)
 
 def kill(process):
-    run("kill %d" % process)
+    run("kill %s" % process)
 
-def run():
+def script():
     with cd("%s/alpha" % env.hg_directory):
         run("sh script &")
 

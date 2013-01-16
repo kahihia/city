@@ -99,9 +99,21 @@
 #id_price_free {
     margin-left:10px;    
 }
-#id_price{
-    display:block;
+
+.price-td {
+    position:relative;
 }
+
+[for=id_price_free] {
+    position:absolute;
+    left:-45px;
+    top:6px;    
+}
+[for=id_price_free] input{
+    position:relative;
+    top:2px;
+}
+
 
 .balloon+.balloon-content {
     display:none;

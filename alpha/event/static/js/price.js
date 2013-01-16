@@ -5,11 +5,12 @@
 				free = $("#id_price_free");
 			free.on("change", function() {
 				if(this.checked) {
-					$(that.element).val("");
+					$(that.element).val("Free");
 					$(that.element).prop('disabled', true);
 					that.addFreeTag();
 				} else {
 					$(that.element).prop('disabled', false);
+					$(that.element).val("");
 					that.removeFreeTag();
 				}
 			});
