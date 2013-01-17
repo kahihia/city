@@ -89,7 +89,7 @@
 			multiSelectModeWrapper = $("<div>").addClass("multi-select-mode-wrapper");
 			multiSelectMode = $("<input type='checkbox'>");
 			multiSelectModeSpan = $("<span>");
-			multiSelectModeSpan.html("multi select");
+			multiSelectModeSpan.html("select range");
 			multiSelectModeWrapper.append(multiSelectMode);
 			multiSelectModeWrapper.append(multiSelectModeSpan);
 			daysPicker = $("<div>").addClass("days-picker").multiDatesPicker({
@@ -405,9 +405,11 @@
 			});
 
 			$(this.removeButton).on('click', function() {
-				var format_day = $.datepicker.formatDate($.datepicker._defaults.dateFormat, new Date(that.options.year, that.options.month, that.options.day));
-				$(".days-picker", $(this).parents(".month-container")).multiDatesPicker('removeDates', format_day);
-				$(".days-time-picker", $(this).parents(".month-container")).data("daystimepicker").addDay(that.options.day, that.options.month, that.options.year);				
+				if(confirm("Do you realy want to remove day?")){
+					var format_day = $.datepicker.formatDate($.datepicker._defaults.dateFormat, new Date(that.options.year, that.options.month-1, that.options.day));
+					$(".days-picker", $(this).parents(".month-container")).multiDatesPicker('toggleDate', format_day);
+					//$(".days-time-picker", $(this).parents(".month-container")).data("daystimepicker").addDay(that.options.day, that.options.month, that.options.year);					
+				}				
 			})
 
 			// oldTime =  $.timePicker(this.startTime).getTime();
