@@ -84,11 +84,22 @@
 		},
 		monthContainer: function(date) {
 			var that = this,
-				widget, daysTimePicker, monthPicker, daysPicker, monthAndDaysWrapper, now = (new Date());
+				widget, daysTimePicker, multiSelectModeWrapper, multiSelectMode, multiSelectModeSpan, monthPicker, daysPicker, monthAndDaysWrapper, now = (new Date());
+
+			multiSelectModeWrapper = $("<div>").addClass("multi-select-mode-wrapper");
+			multiSelectMode = $("<input type='checkbox'>");
+			multiSelectModeSpan = $("<span>");
+			multiSelectModeSpan.html("multi select");
+			multiSelectModeWrapper.append(multiSelectMode);
+			multiSelectModeWrapper.append(multiSelectModeSpan);
 			daysPicker = $("<div>").addClass("days-picker").multiDatesPicker({
-				onSelect: function(dateText, inst) {
+				onToggle: function(dateText) {
 					var timepicker = $(daysTimePicker).data("daystimepicker");
-					timepicker.addDay(inst.currentDay, inst.currentMonth, inst.currentYear);
+					var dateArray = dateText.split("/")
+					var month = dateArray[0];
+					var day = dateArray[1];
+					var year = dateArray[2];
+					timepicker.addDay(day, month, year);
 					if(timepicker.days.length === 0) {
 						$(timepicker.labels).removeClass("active");
 					} else {
@@ -106,14 +117,24 @@
 				beforeShowDay: function(date) {
 					return [date >= now];
 				},
+				mode: 'normal'
 
 			}).datepicker("setDate", date);
+			multiSelectMode.on("change", function(){
+				if(this.checked){
+					daysPicker.multiDatesPicker("setMode", { mode:"range" });
+				} else {
+					daysPicker.multiDatesPicker("setMode", { mode:"normal"});
+				}
+			});
+
 			monthPicker = this.monthPicker();
 
 
 			monthAndDaysWrapper = $("<div>").addClass("month-and-days-wrapper").
-			append(daysPicker).
-			append(monthPicker);
+				append(multiSelectModeWrapper).
+				append(daysPicker).
+				append(monthPicker);
 
 			monthPicker.newMonthPicker();
 

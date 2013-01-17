@@ -39,6 +39,9 @@
 .ui-state-disabled {
 	color: #ccc;
 }
+.month-container{
+	min-height: 220px;	
+}
 
 .month-picker {
 	position:relative;

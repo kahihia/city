@@ -175,6 +175,7 @@
 				if(options) {
 					this.multiDatesPicker.originalBeforeShow = options.beforeShow;
 					this.multiDatesPicker.originalOnSelect = options.onSelect;
+					this.multiDatesPicker.originalOnToggle = options.onToggle;
 					this.multiDatesPicker.originalBeforeShowDay = options.beforeShowDay;
 					this.multiDatesPicker.originalOnClose = options.onClose;
 					
@@ -368,11 +369,44 @@
 						for(var i = begin; i < end; i++) 
 							methods.addDates.call(this, methods.sumDays(date, i), type);
 						break;
+					case 'range':
+						if(this.multiDatesPicker.secondStep){
+							var begin = methods.compareDates(this.multiDatesPicker.startDate, date);
+							var end = 0, mn=1;
+							if(end < begin) {
+								mn=-1
+							}
+							for(var i = begin; i*mn < end; i+=mn){
+								var toggle_date = methods.sumDays(this.multiDatesPicker.startDate, -i);
+								if(methods.gotDate.call(this, toggle_date) === false) // adds dates
+									methods.addDates.call(this, toggle_date, type);
+								else // removes dates
+									methods.removeDates.call(this, toggle_date, type);								
+								if(this.multiDatesPicker.originalOnToggle){
+									this.multiDatesPicker.originalOnToggle.call(this, toggle_date);
+								}
+							}
+							
+						} else {
+							this.multiDatesPicker.startDate = date;
+							if(methods.gotDate.call(this, date) === false) // adds dates
+								methods.addDates.call(this, date, type);
+							else // removes dates
+								methods.removeDates.call(this, date, type);	
+							if(this.multiDatesPicker.originalOnToggle){
+								this.multiDatesPicker.originalOnToggle.call(this, date);
+							}
+						}
+						this.multiDatesPicker.secondStep = !this.multiDatesPicker.secondStep;
+						break;
 					default:
 						if(methods.gotDate.call(this, date) === false) // adds dates
 							methods.addDates.call(this, date, type);
 						else // removes dates
 							methods.removeDates.call(this, date, type);
+						if(this.multiDatesPicker.originalOnToggle){
+							this.multiDatesPicker.originalOnToggle.call(this, date);
+						}
 						break;
 				}
 			}, 
@@ -393,6 +427,9 @@
 								//default: $.error('Option ' + option + ' ignored for mode "'.options.mode.'".');
 							}
 					break;
+					case 'range':
+						this.multiDatesPicker.secondStep = false;
+					break;
 					case 'daysRange':
 					case 'weeksRange':
 						var mandatory = 1;
@@ -407,7 +444,7 @@
 								//default: $.error('Option ' + option + ' does not exist for setMode on jQuery.multiDatesPicker');
 							}
 						if(mandatory > 0) $.error('Some mandatory options not specified!');
-					break;
+					break;					
 				}
 				
 				/*
