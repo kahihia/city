@@ -69,7 +69,7 @@ class LocationWidget(forms.TextInput):
         var point = new google.maps.LatLng(%(lat)f, %(lng)f);
 
         var options = {
-            zoom: 7,
+            zoom: 14,
             center: point,
             mapTypeId: google.maps.MapTypeId.ROADMAP
             // mapTypeControl: true,

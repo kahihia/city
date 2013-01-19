@@ -28,6 +28,8 @@
             $(button).trigger("click");
             $("#id_tags__tagautosuggest").blur();
             $('.tags-popup').hide();
+            $(".modal-bg").hide();
+            $(".as-selections").removeClass("active");
         }
     });
     $(document).ready(function() {

@@ -21,7 +21,7 @@
         screen_height = getClientHeight();
     });
 
-    $.widget("ui.fileuploader", {
+    $.widget("ui.picture", {
         _create: function() {
             var that = this;
             this.cropping = $("#id_cropping");
@@ -34,6 +34,7 @@
             this.save_button = $(".save-button", this.popup);
             $(this.save_button).on('click', function() {
                 $(that.popup).hide();
+                $(".modal-bg").hide();
                 that.saveThumbnail();
             });
 
@@ -44,8 +45,12 @@
                 allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
                 onComplete: function(id, fileName, responseJSON) {
                     if(responseJSON.success) {
-                        that.changeImage(responseJSON.path);
-                        $(that.popup).show();
+                        that.changeImage(responseJSON.path);                        
+                        $(".modal-bg").show();
+                        // User must not see how jcrop widget rewriting itself when new image coming
+                        setTimeout(function(){
+                            $(that.popup).show();
+                        },500);
                     } else {
                         console.log("upload failed!");
                     }
@@ -92,7 +97,7 @@
         changeImage: function(image_path) {
             var that = this;
             if(this.cropping_image) {
-                $(this.cropping_image).attr('src', image_path);
+                $(this.cropping_image).attr('src', image_path);                
                 this.jcrop.setImage(image_path);
             } else {
                 this.cropping_image = $("<img id='id_cropping-image'>");
@@ -100,7 +105,7 @@
                 this.cropping_image.attr('src', image_path);
                 $(this.cropping).after(this.cropping_image);
                 that.initJcrop();
-            }
+            }            
             this.changeImagePosition();
         },
         saveThumbnail: function() {
@@ -144,6 +149,6 @@
         }
     });
     $(document).ready(function() {
-        $("#file-uploader").fileuploader();
+        $("#file-uploader").picture();
     });
 })(jQuery);

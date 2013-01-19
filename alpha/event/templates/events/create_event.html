@@ -17,6 +17,7 @@
 <link href="{{STATIC_URL}}styles/description.css" rel="stylesheet" type="text/css" />
 <link href="{{STATIC_URL}}styles/tagspopup.css" rel="stylesheet" type="text/css" />
 <link href="{{STATIC_URL}}styles/suggest.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/modal.css" rel="stylesheet" type="text/css" />
 <link href="{{STATIC_URL}}ajaxuploader/css/fileuploader.css" rel="stylesheet" type="text/css" />
 <link href="{{STATIC_URL}}image_cropping/css/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
 <link href="{{STATIC_URL}}css/crop.css" rel="stylesheet" type="text/css" />
@@ -84,6 +85,7 @@
                         <!--start.main-navigation-->
                         <div class="main-navigation">
                             <!--start.main-navigation-nav-->
+                            <div class="modal-bg"></div>
                             <div id="entry-form">
                                 <form method="post" name="post-events" onsubmit="return validate_form_events(this)" enctype="multipart/form-data">
                                     {% csrf_token %}
@@ -185,7 +187,7 @@
                                             <td>
                                                 <div class="location">{{ form.place}}</div>
                                                 <div class="choose_location"></div>
-                                                <div class="suggest">
+                                                <div class="suggest modal">
                                                     <div class="error">
                                                         All fields is required
                                                     </div>
@@ -384,7 +386,7 @@
                                             <td>Images</td>
                                             <td>
                                                 {{ form.picture }}
-                                                <div class='full-screen-popup' data-thumb-width="180" data-thumb-height="180">
+                                                <div class='full-screen-popup modal' data-thumb-width="180" data-thumb-height="180">
                                                     {{ form.cropping }}
                                                     <div class='save-button'>Save image</div>
                                                 </div>

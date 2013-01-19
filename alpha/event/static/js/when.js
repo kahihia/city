@@ -10,7 +10,7 @@
 		_initDeck: function() {
 			var that = this,
 				date = new Date()
-				this.deck = $("<div>").addClass('ui-widget when-deck');
+				this.deck = $("<div>").addClass('ui-widget when-deck modal');
 			
 			this.monthsContainer = $("<div>").addClass('months-container');
 			this.error = $("<div>").addClass('error').html("Please choose the start/end time for the days you've selected");
@@ -22,12 +22,14 @@
 			$(this.element).on("click", function() {
 				setTimeout(function() {
 					$(that.deck).show();
+					$(".modal-bg").show();
 				}, 100);
 			});
 			$(this.closeButton).on("click", function() {
 				var valid = that.validate();
 				if(valid) {
 					$(that.deck).hide();
+					$(".modal-bg").hide();
 					$(that.error).hide();
 					$(that.element).val(that.getText());
 					$("#id_description").data("description").setDays(that.getDays());
@@ -38,7 +40,10 @@
 			});
 			$(this.resetButton).on("click", function() {
 				var agree = confirm("Are you sure you want to clear form?")
-				if(agree) that.clear();
+				if(agree){
+					that.clear();
+					$(".modal-bg").hide();
+				} 
 			});			
 		},
 		setValue: function(years){			
@@ -89,7 +94,7 @@
 			multiSelectModeWrapper = $("<div>").addClass("multi-select-mode-wrapper");
 			multiSelectMode = $("<input type='checkbox'>");
 			multiSelectModeSpan = $("<span>");
-			multiSelectModeSpan.html("select range");
+			multiSelectModeSpan.html("days range select mode");
 			multiSelectModeWrapper.append(multiSelectMode);
 			multiSelectModeWrapper.append(multiSelectModeSpan);
 			daysPicker = $("<div>").addClass("days-picker").multiDatesPicker({

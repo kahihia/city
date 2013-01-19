@@ -33,8 +33,8 @@
 }
 
 .full-screen-popup {
-    position: absolute;
-    bottom:200px;    
+    position:fixed;    
+    top:20%;
     width:800px;
     height:500px;    
     display:none;
@@ -104,16 +104,32 @@
     position:relative;
 }
 
+.price-td .inputfield {
+    width: 200px;
+    float: right;
+    margin-right: 75px;    
+    margin-left:-3px;
+}
+
 [for=id_price_free] {
-    position:absolute;
-    left:-45px;
-    top:6px;    
+    display: inline-block;
+    height: 26px;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: whiteSmoke;
+    border: 1px solid #EEE;
+    margin-left: 10px;
+    padding-top: 3px;
+    width: 64px;
 }
 [for=id_price_free] input{
     position:relative;
     top:2px;
 }
-
 
 .balloon+.balloon-content {
     display:none;

@@ -5,8 +5,7 @@
                 // Send the token to same-origin, relative URLs only.
                 // Send the token only if the method warrants CSRF protection
                 // Using the CSRFToken value acquired earlier
-                xhr.setRequestHeader("X-CSRFToken", crsf_token);
-            
+                xhr.setRequestHeader("X-CSRFToken", crsf_token);            
         }
     });
     $.widget("ui.tagspopup", {
@@ -19,11 +18,15 @@
             this.closeButton = $('.close-button', this.popup);
             $(this.element).on("focus", function() {
                 if(that.tags.length>0){
-                    $(that.popup).show();    
+                    $(that.popup).show();
+                    $(".modal-bg").show();
+                    $(".as-selections").addClass("active");
                 }                
             });
             $(this.closeButton).on("click", function() {
                 $(that.popup).hide();
+                $(".modal-bg").hide();
+                $(".as-selections").removeClass("active");
             });            
         },
         forCity: function(city){
@@ -43,6 +46,9 @@
             var that = this;
             this.tags = tags;
             $(this.popup).hide();
+            $(".modal-bg").hide();
+            $(".as-selections").removeClass("active");
+            
             this.tagsContainer.html("");
             for(var i in tags) if(tags.hasOwnProperty(i)) {
                 var tag = tags[i],
@@ -56,6 +62,7 @@
             }
         },
         addTag: function(tag) {
+            if($(".as-selection-item[data-value='"+tag+"']").length>0) return
             var e;
             $("#id_tags__tagautosuggest").val(tag);
             e = jQuery.Event("keydown");
