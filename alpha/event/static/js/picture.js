@@ -37,8 +37,7 @@
                 $(".modal-bg").hide();
                 that.saveThumbnail();
             });
-
-            $(".modal-bg").show();
+            
             this.uploader = new qq.FileUploader({
                 action: "/events/ajax-upload",
                 element: this.element[0],
@@ -64,6 +63,7 @@
                     }, 10);
                     $(input).attr("id", "id_picture");
                     $(input).attr("name", "picture");
+                    $(".modal-bg").show();
                 },
                 params: {
                     'csrf_token': crsf_token,
@@ -82,7 +82,7 @@
                 minSize: [50, 50],
                 boxWidth: 800,
                 boxHeight: 500,
-                setSelect: [0, 0, $(this.popup).data("thumb-height"), $(this.popup).data("thumb-width")],
+                setSelect: [0, 0, $(this.popup).data("thumb-height"), $(this.popup).data("thumb-width")],                
                 onSelect: function(selected) {
                     that.selected = selected;
                     that.update_selection(selected);
@@ -98,11 +98,8 @@
         changeImage: function(image_path) {
             var that = this;
             if(this.cropping_image) {
-                $(this.cropping_image).attr('src', image_path);
+                $(this.cropping_image).attr('src', image_path); 
                 this.jcrop.setImage(image_path);
-                $(this.cropping_image).on("load", function(){
-                    $(".modal-bg").show();
-                });                
             } else {
                 this.cropping_image = $("<img id='id_cropping-image'>");
 
