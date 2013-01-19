@@ -1,0 +1,65 @@
+.suggest {
+    width:600px;
+    border:1px solid #CCC;
+    padding:10px 5px;
+    background:#fff;
+    display:none;
+    position:absolute;
+    margin-top:10px;
+    z-index:1;
+    padding-bottom:50px;
+}
+
+.suggest .error {
+    display:none;
+    color: red;
+    margin-bottom: 10px;
+}
+
+.location {
+    display:inline-block;
+}
+
+.suggest .reset-button, .suggest .close-button {
+    font-size: 1.3em;
+    padding: 5px 10px;
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+    background: #EFEFEF;
+    border: 1px solid #E6E6E6;
+    -moz-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    cursor: pointer;    
+}
+
+.suggest .reset-button {
+    right: 80px;
+}
+
+.choose_location {
+    width:24px;
+    height:24px;
+    background: url('/static/images/map.png') no-repeat;
+    cursor: pointer;
+    display: inline-block;
+    margin-left:20px;
+    padding-top:5px;
+    position:relative;
+    top:12px;
+}
+
+.location_map {    
+  padding:10px;
+  border:1px solid #d8d8d8;
+  background: #fff;
+  margin-top:5px;
+}
+.new_venue .suggest{
+  display:table-row;  
+}
+.suggest {
+  display:none;
+}

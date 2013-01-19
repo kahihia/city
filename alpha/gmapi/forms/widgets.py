@@ -1,14 +1,7 @@
 """Custom Map widget."""
 from django.conf import settings
 from django import forms
-from django.forms.forms import Media
-from django.forms.util import flatatt
-from django.forms.widgets import Widget
-from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.utils.simplejson import dumps
-from gmapi import maps
-from urlparse import urljoin
 from django.contrib.gis.geos import Point
 
 DEFAULT_WIDTH = 400
@@ -31,6 +24,7 @@ MAPS_URL = getattr(settings, 'GMAPI_MAPS_URL',
 # Omit leading slash to make relative to MEDIA_URL.
 MEDIA_PREFIX = getattr(settings, 'GMAPI_MEDIA_PREFIX', 'gmapi/')
 
+
 class LocationWidget(forms.TextInput):
     def __init__(self, *args, **kw):
         self.map_width = kw.get("map_width", DEFAULT_WIDTH)
@@ -42,8 +36,8 @@ class LocationWidget(forms.TextInput):
 
     def value_from_datadict(self, data, files, name):
         return Point((
-            float(self.lng_widget.value_from_datadict(data, files, name + '_lng' )),
-            float(self.lat_widget.value_from_datadict(data, files, name + '_lat' ))
+            float(self.lng_widget.value_from_datadict(data, files, name + '_lng')),
+            float(self.lat_widget.value_from_datadict(data, files, name + '_lat'))
         ))
 
     def render(self, name, value, *args, **kwargs):

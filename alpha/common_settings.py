@@ -96,6 +96,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'event.middleware.LocationMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -213,3 +214,5 @@ from easy_thumbnails.conf import Settings as thumbnail_settings
 THUMBNAIL_PROCESSORS = (
     'image_cropping.thumbnail_processors.crop_corners',
 ) + thumbnail_settings.THUMBNAIL_PROCESSORS
+
+GEOIP_PATH = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'geoip'))

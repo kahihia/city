@@ -2,10 +2,6 @@
     content:none;
 }
 
-.pac-container{
-    padding-bottom:25px;    
-}
-
 .pac-container.show {
     display:block !important;
 }

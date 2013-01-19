@@ -37,20 +37,23 @@ from django.contrib import messages
 
 from ajaxuploader.views import AjaxFileUploader
 
+
 def start(request):
     csrf_token = get_token(request)
     return render_to_response('import.html',
-        {'csrf_token': csrf_token}, context_instance = RequestContext(request))
+        {'csrf_token': csrf_token}, context_instance=RequestContext(request))
 
 import_uploader = AjaxFileUploader()
 
 #Email params -Arlus
 FROMADDR = "arlusishmael@gmail.com"
-LOGIN    = FROMADDR
+LOGIN = FROMADDR
 PASSWORD = "19553b2008"
 
+
 def redirect(request):
-    return HttpResponseRedirect( reverse('event_browse'))
+    return HttpResponseRedirect(reverse('event_browse'))
+
 
 def events_from_paginator(paginator, page_num):
     try:
@@ -58,25 +61,26 @@ def events_from_paginator(paginator, page_num):
     except PageNotAnInteger:
         events = paginator.page(1)
     except EmptyPage:
-        events = paginator.page(paginator.num_pages)  
-    return events  
+        events = paginator.page(paginator.num_pages)
+    return events
+
 
 def search_pad(request, old_tags=u'all', date=u'flow'):
     events = Event.events.all()
     featured_paginator = Paginator(events, 6)
-    featured_page = request.GET.get('featured_page','1')
+    featured_page = request.GET.get('featured_page', '1')
     featured_events = events_from_paginator(featured_paginator, featured_page)
 
     search_pad_paginator = Paginator(events, 1)
-    search_pad_page = request.GET.get('search_pad_page','1')
+    search_pad_page = request.GET.get('search_pad_page', '1')
     search_pad_events = events_from_paginator(search_pad_paginator, search_pad_page)
-    
+
     return render_to_response('events/browse.html', {
                                 'featured_events': featured_events,
                                 'search_pad_events': search_pad_events,
                                 'events': events,
                                 'all_tags': Tag.objects.all(),
-                            }, context_instance = RequestContext(request))
+                            }, context_instance=RequestContext(request))
 
 
 def browse(request, old_tags=u'all', date=u'flow', num=1):
@@ -84,7 +88,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
     locations = []
     locs = Event.events.all()
     feature = Paginator(locs, 6)
-    page = request.GET.get('page','1')
+    page = request.GET.get('page', '1')
 
     try:
         locd = feature.page(page)
@@ -95,14 +99,14 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
     for y in locs:
         locations.append(y.location)
     form2 = CityAuthForm
-    pages = 0 # used in date filter code for determining if we have pagination
-    page_remainder = 0 # used for pagination
+    pages = 0  # used in date filter code for determining if we have pagination
+    page_remainder = 0  # used for pagination
     try:
-        num = int(num) -1 # see comment labeled NUMCODE
+        num = int(num) - 1  # see comment labeled NUMCODE
     except ValueError:
         raise Http404
-    today = datetime.datetime(*(datetime.date.today().timetuple()[:6])) # isnt python so easy to read?
-    show_ads = False #this is set to True in the flow
+    today = datetime.datetime(*(datetime.date.today().timetuple()[:6]))  # isnt python so easy to read?
+    show_ads = False  # this is set to True in the flow
 
     ################################################################
     #parsing the tags string
@@ -137,7 +141,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         pages = todays_events.count() / EVENTS_PER_PAGE
         page_remainder = todays_events.count() % EVENTS_PER_PAGE
         todays_events = todays_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Today's Events", todays_events ) )
+        event_sets.append( EventSet(u"Today's Events", todays_events ))
     elif date == u'tomorrow':
         tomorrow = today + datetime.timedelta(days=1)
         start = tomorrow
@@ -148,7 +152,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
         pages = tomorrows_events.count() / EVENTS_PER_PAGE
         page_remainder = tomorrows_events.count() % EVENTS_PER_PAGE
         tomorrows_events = tomorrows_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Tomorrow's Events", tomorrows_events ) )
+        event_sets.append( EventSet(u"Tomorrow's Events", tomorrows_events ))
     elif date == u'this-weekend':
         #weekday 6 5 4 sun sat fri
         end = today + datetime.timedelta(days=6-today.weekday())
@@ -225,7 +229,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
             group = exact_date.groupdict()
             start = datetime.datetime(year=int(group['year']),
                              month=int(group['month']),
-                             day=int(group['day']) )
+                             day=int(group['day']))
             end = start + datetime.timedelta(days=1)
             if old_tags != u'all':
                 split_tags = old_tags.split(',')
@@ -327,8 +331,8 @@ def view(request, slug=None, old_tags=None):
                                 },
                               context_instance = RequestContext(request))
 
-def create(request, form_class=None, success_url=None,
-           template_name='events/create_event.html', send_email=True):
+
+def create(request, form_class=None, success_url=None, template_name='events/create_event.html', send_email=True):
     if form_class == None:
         exclude = ['owner', 'authentication_key', 'slug']
         if request.user.is_authenticated():
@@ -340,7 +344,7 @@ def create(request, form_class=None, success_url=None,
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
-            # Find or create new venue	    
+            # Find or create new venue
             if request.POST["venue_name"]:
                 name = request.POST["venue_name"]
                 street = request.POST["street"]
@@ -348,23 +352,23 @@ def create(request, form_class=None, success_url=None,
                 country = Country.objects.get(name='Canada')
                 location = Point((
                     float(request.POST["location_lng"]),
-                    float(request.POST["location_lat"])	            
+                    float(request.POST["location_lat"])
                 ))
                 venue = Venue(name=name, street=street, city=city, country=country, location=location)
-		venue.save()
+                venue.save()
             elif request.POST["place"]:
                 name = request.POST["geo_venue"]
                 street = request.POST["geo_street"]
                 city = City.objects.filter(
-                    Q(name_std=request.POST["geo_city"].encode('utf8'))|
+                    Q(name_std=request.POST["geo_city"].encode('utf8')) |
                     Q(name=request.POST["geo_city"])
                 )
                 country = Country.objects.get(name='Canada')
                 location = Point((
                     float(request.POST["geo_longtitude"]),
-                    float(request.POST["geo_latitude"])	            
+                    float(request.POST["geo_latitude"])
                 ))
-                if city.count()>1:
+                if city.count() > 1:
                     city = find_nearest_city(city, location)
                 else:
                     city = city[0]
@@ -381,23 +385,15 @@ def create(request, form_class=None, success_url=None,
             if request.user.is_authenticated():
                 #if logged in, use the users info to complete form
                 event_obj.owner = request.user
-                event_obj.email = request.user.email #don't really need this line
+                event_obj.email = request.user.email  # don't really need this line
 
-            # make sure the picture field is filled before saving!
-            if 'picture' in request.FILES:
-                path = picture_file_path(instance=event_obj,
-                                         filename=request.FILES['picture'].name)
-                event_obj.picture = path
-                new_file = event_obj.picture.storage.save(path, request.FILES['picture'])
+            event_obj = event_obj.save()  # save to the database
+            form.save_m2m()  # needed for many-to-many fields (i.e. the event tags)
 
-            event_obj = event_obj.save() #save to the database
-            form.save_m2m() #needed for many-to-many fields (i.e. the event tags)
-
-            
             for year, months in when_json.iteritems():
                 for month, days in months.iteritems():
-                    for day, times in days.iteritems():                        
-                        date = datetime.datetime(int(year), int(month), int(day),0,0)
+                    for day, times in days.iteritems():
+                        date = datetime.datetime(int(year), int(month), int(day), 0, 0)
                         if date.strftime("%m/%d/%Y") in description_json['days']:
                             description = description_json['days'][date.strftime("%m/%d/%Y")]
                         else:
@@ -407,38 +403,39 @@ def create(request, form_class=None, success_url=None,
 
                         end_time = time.strptime(times["end"], '%I:%M %p')
                         end = datetime.datetime(int(year), int(month), int(day), end_time[3], end_time[4])
-                        
+
                         single_event = SingleEvent(
-                            event = event_obj,
-                            start_time = start.strftime('%Y-%m-%d %H:%M'),
-                            end_time = end.strftime('%Y-%m-%d %H:%M'),
-                            description = description
+                            event=event_obj,
+                            start_time=start.strftime('%Y-%m-%d %H:%M'),
+                            end_time=end.strftime('%Y-%m-%d %H:%M'),
+                            description=description
                         )
                         single_event.save()
 
             #email the user
             current_site = settings.EVENT_EMAIL_SITE
-            subject = render_to_string('events/creation_email_subject.txt',
-                                       { 'site': current_site,
-                                         'title': mark_safe(event_obj.name) })
+            subject = render_to_string('events/creation_email_subject.txt', {
+                    'site': current_site,
+                    'title': mark_safe(event_obj.name)
+                })
 
-            subject= ''.join( subject.splitlines() )  # Email subjects are all on one line
+            subject = ''.join(subject.splitlines())  # Email subjects are all on one line
 
-            message = render_to_string('events/creation_email.txt',
-                                       { 'authentication_key': event_obj.authentication_key,
-                                         'slug': event_obj.slug,
-                                         'site': current_site }
-                                       )
+            message = render_to_string('events/creation_email.txt', {
+                    'authentication_key': event_obj.authentication_key,
+                    'slug': event_obj.slug,
+                    'site': current_site
+                })
 
-            msg = EmailMessage( subject,
+            msg = EmailMessage(subject,
                        message,
                        DEFAULT_FROM_EMAIL,
-                       [event_obj.email] )
+                       [event_obj.email])
             msg.content_subtype = 'html'
             msg.send()
 
             #added Arlus
-            msgg = ("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (FROMADDR, ", ".join(event_obj.email), subject) )
+            msgg = ("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (FROMADDR, ", ".join(event_obj.email), subject))
             msgg += message
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.set_debuglevel(1)
@@ -450,28 +447,29 @@ def create(request, form_class=None, success_url=None,
             # on success, redirect to the home page by default
             # if the user is authenticated, take them to their event page
             if success_url is None:
-                success_url = reverse('event_created',kwargs={ 'slug':event_obj.slug})
+                success_url = reverse('event_created', kwargs={'slug': event_obj.slug})
             #send user off into the abyss...
-            return HttpResponseRedirect(success_url)	
+            return HttpResponseRedirect(success_url)
     else:
         form = form_class()
+
     #Send out the form
     context = RequestContext(request)
-    return render_to_response(template_name,
-                              { 'form': form,
-                                'posting':True,
-                                #'hide_end':form.end_time != ''
-                                },
-                              context_instance=context)
+    return render_to_response(template_name, {
+            'form': form,
+            'posting': True,
+            'location': request.location,
+        }, context_instance=context)
+
 
 def created(request, slug=None):
     if slug is None:
         raise Http404
-    return render_to_response('events/creation_complete.html',
-                              { 'slug':slug,
-                                'posting':True,
-                                },
-                              context_instance=RequestContext(request))
+    return render_to_response('events/creation_complete.html', {
+            'slug': slug,
+            'posting': True,
+        }, context_instance=RequestContext(request))
+
 
 def edit(request,
          form_class=None, success_url=None, authentication_key=None,

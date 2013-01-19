@@ -25,29 +25,3 @@ SPAN.tagMatches SPAN {
   cursor: pointer;
   background: url(/static/images/blue.png);
 }
-
-.choose_location {
-  width:24px;
-  height:24px;
-  background: url('/static/images/map.png') no-repeat;
-  cursor: pointer;
-  display: inline-block;
-  margin-left:20px;
-  padding-top:5px;
-  position:relative;
-  top:10px;
-}
-
-.location_map {    
-  padding:10px;
-  border:1px solid #d8d8d8;
-  background: #fff;
-  margin-top:5px;
-}
-.new_venue .suggest{
-  display:table-row;  
-}
-.suggest {
-  display:none;
-}
-

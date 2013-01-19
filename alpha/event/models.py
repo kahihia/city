@@ -1,12 +1,10 @@
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import Point
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from cities.models import City, Country
 import string
-import hashlib
 import random
 from taggit_autosuggest.managers import TaggableManager
 import os
@@ -18,7 +16,8 @@ from StringIO import StringIO
 from django.core.files.base import ContentFile
 from image_cropping import ImageCropField, ImageRatioField
 
-def picture_file_path(instance = None, filename = None):
+
+def picture_file_path(instance=None, filename=None):
     """
     This is used by the model and is defined in the Django
     documentation as a function which is used by the upload_to karg of
@@ -54,9 +53,11 @@ def picture_file_path(instance = None, filename = None):
     """
     return os.path.join(EVENT_PICTURE_DIR, datetime.date.today().isoformat(), filename)
 
+
 class Event(models.Model):
     class Meta:
         verbose_name_plural = 'Events'
+
     def __unicode__(self):
         return u'%s/// %s' % (self.owner, self.name)
     #--------------------------------------------------------------
@@ -93,12 +94,12 @@ class Event(models.Model):
     #--------------------------------------------------------------
     # User set fields - these are input by the user and validated -
     #==============================================================
-    email = models.CharField('email address',max_length=100)    # the event must have an email
-    name = models.CharField('event title',max_length=250)    # the title of the event
-    description = models.TextField(blank=True)    # the longer description of the event    
+    email = models.CharField('email address', max_length=100)  # the event must have an email
+    name = models.CharField('event title', max_length=250)  # the title of the event
+    description = models.TextField(blank=True)  # the longer description of the event
     location = models.PointField()
     venue = models.ForeignKey('Venue', blank=True, null=True)    # a specific venue associated with the event
-    price = models.CharField('event price (optional)',max_length=40, blank=True, default='Free')
+    price = models.CharField('event price (optional)', max_length=40, blank=True, default='Free')
     website = models.URLField(blank=True, null=True, default='')
     #-------------------------------------------------------------
     # django-taggit field for tags--------------------------------
@@ -107,10 +108,11 @@ class Event(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk is None:
-            self.authentication_key = ''.join(random.choice(string.ascii_letters + '0123456789') for x in xrange(40) )
+            self.authentication_key = ''.join(random.choice(string.ascii_letters + '0123456789') for x in xrange(40))
             self.slug = self.uniqueSlug()
         super(Event, self).save(*args, **kwargs)
         return self
+
     def clean(self):
         #if self.end_time:
         #    if self.start_time > self.end_time:
@@ -128,7 +130,7 @@ class Event(models.Model):
             if suffix:
                 potential = base + str(suffix)
             try:
-                conflict = Event.events.get(slug=potential)
+                Event.events.get(slug=potential)
             except ObjectDoesNotExist:
                 return potential
             suffix = suffix + 1
@@ -166,7 +168,7 @@ class Event(models.Model):
             original = self.picture.storage.open(self.picture.name, 'rb').read()
             image = Image.open(StringIO(original))
         except IOError:
-            picture_thumb = '' # we can't read the file, we don't have the codec support
+            picture_thumb = ''  # we can't read the file, we don't have the codec support
             return
         #make the jpeg
         (width,height) = image.size
@@ -203,6 +205,7 @@ class Event(models.Model):
         thumb = self.picture.storage.save( self.picture_name(size),
                                            resized_pic_file )
 
+
 class SingleEvent(models.Model):
     """
         Single event is event that occur only once.
@@ -211,13 +214,13 @@ class SingleEvent(models.Model):
     """
     class Meta:
         verbose_name_plural = 'Single events'
+
     def __unicode__(self):
         return u'%s/// %s' % (self.event, self.start_time)
     event = models.ForeignKey(Event, blank=False, null=False)
-    start_time = models.DateTimeField('starting time',auto_now=False, auto_now_add=False)
-    end_time = models.DateTimeField('ending time (optional)',auto_now=False, auto_now_add=False)
-    description = models.TextField(null=True, blank=True)    # additional description
-
+    start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
+    end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
+    description = models.TextField(null=True, blank=True)  # additional description
 
 
 def create_default_pictures(instance=None, created=False, **kwargs):
@@ -259,17 +262,18 @@ class Venue(models.Model):
     name = models.CharField(max_length=250, default='Default Venue')
     street = models.CharField(max_length=250, blank=True)
     city = models.ForeignKey(City)
-    location = models.PointField()    
+    location = models.PointField()
     country = models.ForeignKey(Country)
-    
     objects = models.GeoManager()
-    
+
     def __unicode__(self):
         return "%s, %s, %s" % (self.name, self.street, self.city)
+
 
 class CanadianVenue(Venue):
     province = models.CharField(max_length=200)
     postal_code = models.CharField(max_length=50)
+
 
 class Reminder(models.Model):
     email = models.CharField(max_length=100)
