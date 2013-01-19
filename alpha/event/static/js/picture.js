@@ -38,6 +38,7 @@
                 that.saveThumbnail();
             });
 
+            $(".modal-bg").show();
             this.uploader = new qq.FileUploader({
                 action: "/events/ajax-upload",
                 element: this.element[0],
@@ -45,8 +46,8 @@
                 allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
                 onComplete: function(id, fileName, responseJSON) {
                     if(responseJSON.success) {
-                        that.changeImage(responseJSON.path);                        
-                        $(".modal-bg").show();
+                        that.changeImage(responseJSON.path);
+                        
                         // User must not see how jcrop widget rewriting itself when new image coming
                         setTimeout(function(){
                             $(that.popup).show();
@@ -97,8 +98,11 @@
         changeImage: function(image_path) {
             var that = this;
             if(this.cropping_image) {
-                $(this.cropping_image).attr('src', image_path);                
+                $(this.cropping_image).attr('src', image_path);
                 this.jcrop.setImage(image_path);
+                $(this.cropping_image).on("load", function(){
+                    $(".modal-bg").show();
+                });                
             } else {
                 this.cropping_image = $("<img id='id_cropping-image'>");
 
