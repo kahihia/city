@@ -42,9 +42,7 @@
                     $.fancybox($(that.popup), {
                         autoSize: true,                     
                         closeBtn: false,                        
-                        hideOnOverlayClick: false,
-                        openEffect: 'elastic',
-                        openSpeed: 'slow'
+                        hideOnOverlayClick: false                        
                     });                    
                 }
             });
@@ -62,9 +60,7 @@
                         $.fancybox($(that.popup), {
                             autoSize: true,                     
                             closeBtn: false,                        
-                            hideOnOverlayClick: false,
-                            openEffect: 'elastic',
-                            openSpeed: 'slow'
+                            hideOnOverlayClick: false
                         });                          
                     } else {
                         console.log("upload failed!");

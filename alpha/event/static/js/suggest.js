@@ -38,9 +38,7 @@
             $.fancybox($(".suggest"), {
                 autoSize: true,                     
                 closeBtn: false,                        
-                hideOnOverlayClick: false,
-                openEffect: 'elastic',
-                openSpeed: 'slow'
+                hideOnOverlayClick: false
             });            
 
             google.maps.event.trigger(map_location, 'resize');
