@@ -1,8 +1,0 @@
-{% extends 'base.html' %}
-
-{% block page %}
-  <header>
-    <h1>Uh oh! Page not found.</h1>
-    <p>Sorry about that.</p>
-  </header>
-{% endblock %}
