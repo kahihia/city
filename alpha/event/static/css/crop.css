@@ -32,9 +32,8 @@
     border:1px solid #79B7E7;
 }
 
-.full-screen-popup {
-    position:fixed;    
-    top:5%;
+.full-screen-popup {    
+    position:relative;
     width:800px;
     height:500px;    
     display:none;
@@ -42,16 +41,6 @@
     border: 1px solid #ccc;
     padding:20px;    
     padding-bottom:50px;
-}
-
-@media all and (max-height: 600px) {
-    .full-screen-popup {
-        position:absolute;
-        top:0;
-        left:25%;    
-        z-index:3;   
-        border:3px solid #ccc; 
-    }  
 }
 
 .jcrop-holder {

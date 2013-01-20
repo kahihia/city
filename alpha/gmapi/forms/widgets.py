@@ -96,7 +96,7 @@ class LocationWidget(forms.TextInput):
 
     }
 
-    $(document).ready(function(){
+    jQuery(document).ready(function(){
         load_%(name)s();
     });
 

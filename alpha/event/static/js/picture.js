@@ -32,16 +32,18 @@
             }
             this.popup = $(".full-screen-popup");
             this.save_button = $(".save-button", this.popup);
-            $(this.save_button).on('click', function() {
-                $(that.popup).hide();
-                $(".modal-bg").hide();
+            $(this.save_button).on('click', function() {                
+                $.fancybox.close();
                 that.saveThumbnail();
             });
 
             $(".picture-thumb").on("click", function(){
                 if(that.cropping_image) {
-                    $(that.popup).show();
-                    $(".modal-bg").show();
+                    $.fancybox($(that.popup), {
+                        autoSize: true,                     
+                        closeBtn: false,                        
+                        hideOnOverlayClick: false
+                    });                    
                 }
             });
             
@@ -55,7 +57,11 @@
                         that.changeImage(responseJSON.path);
                         
                         // User must not see how jcrop widget rewriting itself when new image coming                        
-                        $(that.popup).show();                        
+                        $.fancybox($(that.popup), {
+                            autoSize: true,                     
+                            closeBtn: false,                        
+                            hideOnOverlayClick: false
+                        });                          
                     } else {
                         console.log("upload failed!");
                     }
@@ -67,8 +73,7 @@
                         picture.remove();
                     }, 10);
                     $(input).attr("id", "id_picture");
-                    $(input).attr("name", "picture");
-                    $(".modal-bg").show();
+                    $(input).attr("name", "picture");                    
                 },
                 params: {
                     'csrf_token': crsf_token,

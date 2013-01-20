@@ -2,17 +2,19 @@
 	display:none;
 }
 .when-deck {
+	position: relative;
 	width:700px;
 	border:1px solid #CCC;
 	padding:10px 5px;
 	background:#fff;
-	display:none;
-	position:absolute;
+	display:none;	
 	margin-top:10px;
 	z-index:1;
 	padding-bottom: 50px;
 }
-
+#ptTimeSelectCntr {
+	z-index:1000000 !important;
+}
 .when-deck .error {
 	color:red;
 	margin-bottom:10px;
@@ -223,5 +225,9 @@
 
 .hidden-arrows .ui-datepicker .ui-datepicker-prev, .hidden-arrows .ui-datepicker .ui-datepicker-next {
 	display:none;
+}
 
+.ui-datepicker .ui-datepicker-header {
+	position: relative;
+	padding: .5em 0;
 }

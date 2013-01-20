@@ -1,7 +1,6 @@
 (function($) {
 	$.widget("ui.when", {
-		_create: function() {
-			console.log("good");
+		_create: function() {			
 			this.months = {
 				//	2012: { 10: }
 			};
@@ -11,7 +10,7 @@
 			var that = this,
 				date = new Date(), disabledOrEnableMonths;
 
-			this.deck = $("<div>").addClass('ui-widget when-deck modal');			
+			this.deck = $("<div>").addClass('ui-widget when-deck');			
 			this.monthsContainer = $("<div>").addClass('months-container');
 			this.error = $("<div>").addClass('error').html("Please choose the start/end time for the days you've selected");
 			this.closeButton = $("<div>").addClass('close-button').html("Close");
@@ -54,15 +53,17 @@
 			this.addMonth(date.getFullYear(), date.getMonth() + 1);
 			$(this.element).on("click", function() {
 				setTimeout(function() {
-					$(that.deck).show();
-					$(".modal-bg").show();
+					$.fancybox($(that.deck), {
+						autoSize: true,						
+						closeBtn: false,						
+						hideOnOverlayClick: false
+					});
 				}, 100);
 			});
 			$(this.closeButton).on("click", function() {
 				var valid = that.validate();
 				if(valid) {
-					$(that.deck).hide();
-					$(".modal-bg").hide();
+					$.fancybox.close();										
 					$(that.error).hide();
 					$(that.element).val(that.getText());
 					$("#id_description").data("description").setDays(that.getDays());
@@ -75,7 +76,7 @@
 				var agree = confirm("Are you sure you want to clear form?")
 				if(agree){
 					that.clear();
-					$(".modal-bg").hide();
+					$.fancybox.close();
 				} 
 			});			
 		},

@@ -1,10 +1,10 @@
-.suggest {    
+.suggest {
+    position:relative;
     width:600px;
     border:1px solid #CCC;
     padding:10px 5px;
     background:#fff;
-    display:none;
-    position:absolute;
+    display:none;    
     margin-top:10px;
     z-index:2;
     padding-bottom:50px;

@@ -15,14 +15,14 @@
 
 
 <script type="text/javascript">
-$(document).ready(function(e) {
-    $('.search-lists ul li a').click(function(){
-		var v = $(this).attr('rel');
-		$('.location-text-box .location').val(v);
+jQuery(document).ready(function(e) {
+    jQuery('.search-lists ul li a').click(function(){
+		var v = jQuery(this).attr('rel');
+		jQuery('.location-text-box .location').val(v);
 	});
-	$('.footer-site-map ul li').addClass('add-border-right-white');
-	$('.footer-site-map ul li:last').removeClass('add-border-right-white');
-	//$('.right-navigation-wrapper').height($('.main-navigation-content-nav').height());
+	jQuery('.footer-site-map ul li').addClass('add-border-right-white');
+	jQuery('.footer-site-map ul li:last').removeClass('add-border-right-white');
+	//jQuery('.right-navigation-wrapper').height(jQuery('.main-navigation-content-nav').height());
 });
 
 </script>

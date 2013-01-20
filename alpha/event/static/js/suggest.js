@@ -22,21 +22,25 @@
             }
             var suggest_values = [venue, street, city];
             $("#id_place").val(suggest_values.join(", "))
-            $(".suggest").hide();
-            $(".modal-bg").hide();
+            $.fancybox.close();
         });
         $(".suggest .reset-button").on("click", function(){
             $(".suggest .error").hide();
             $("#id_venue_name").val("");
             $("#id_street").val("");
             $("#id_city_0").val("");
-            $(".suggest").hide();
-            $(".modal-bg").hide();
+            $.fancybox.close();
+            
         });
 
         $(".choose_location").on("click", function(){
             $(".suggest").show();
-            $(".modal-bg").show();
+            $.fancybox($(".suggest"), {
+                autoSize: true,                     
+                closeBtn: false,                        
+                hideOnOverlayClick: false
+            });            
+            
             google.maps.event.trigger(map_location, 'resize');
             if(user_lat && user_lng) {
                 panMapToCenter(user_lat, user_lng);
