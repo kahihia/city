@@ -37,6 +37,13 @@
                 $(".modal-bg").hide();
                 that.saveThumbnail();
             });
+
+            $(".picture-thumb").on("click", function(){
+                if(that.cropping_image) {
+                    $(that.popup).show();
+                    $(".modal-bg").show();
+                }
+            });
             
             this.uploader = new qq.FileUploader({
                 action: "/events/ajax-upload",
@@ -47,10 +54,8 @@
                     if(responseJSON.success) {
                         that.changeImage(responseJSON.path);
                         
-                        // User must not see how jcrop widget rewriting itself when new image coming
-                        setTimeout(function(){
-                            $(that.popup).show();
-                        },500);
+                        // User must not see how jcrop widget rewriting itself when new image coming                        
+                        $(that.popup).show();                        
                     } else {
                         console.log("upload failed!");
                     }
@@ -96,7 +101,7 @@
             });
         },
         changeImage: function(image_path) {
-            var that = this;
+            var that = this;            
             if(this.cropping_image) {
                 $(this.cropping_image).attr('src', image_path); 
                 this.jcrop.setImage(image_path);

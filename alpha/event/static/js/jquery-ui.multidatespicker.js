@@ -400,13 +400,33 @@
 						this.multiDatesPicker.secondStep = !this.multiDatesPicker.secondStep;
 						break;
 					default:
-						if(methods.gotDate.call(this, date) === false) // adds dates
-							methods.addDates.call(this, date, type);
-						else // removes dates
-							methods.removeDates.call(this, date, type);
-						if(this.multiDatesPicker.originalOnToggle){
-							this.multiDatesPicker.originalOnToggle.call(this, date);
+						if(event.shiftKey && this.multiDatesPicker.startDate){
+							event.preventDefault();
+							var begin = methods.compareDates(this.multiDatesPicker.startDate, date);
+							var end = 0, mn=1;
+							if(end < begin) {
+								mn=-1
+							}
+							for(var i = begin; i*mn < end; i+=mn){
+								var toggle_date = methods.sumDays(this.multiDatesPicker.startDate, -i);
+								if(methods.gotDate.call(this, toggle_date) === false) // adds dates
+									methods.addDates.call(this, toggle_date, type);
+								else // removes dates
+									methods.removeDates.call(this, toggle_date, type);								
+								if(this.multiDatesPicker.originalOnToggle){
+									this.multiDatesPicker.originalOnToggle.call(this, toggle_date);
+								}
+							}
+						} else {
+							if(methods.gotDate.call(this, date) === false) // adds dates
+								methods.addDates.call(this, date, type);
+							else // removes dates
+								methods.removeDates.call(this, date, type);
+							if(this.multiDatesPicker.originalOnToggle){
+								this.multiDatesPicker.originalOnToggle.call(this, date);
+							}
 						}
+						this.multiDatesPicker.startDate = date;						
 						break;
 				}
 			}, 

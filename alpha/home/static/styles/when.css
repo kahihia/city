@@ -10,6 +10,7 @@
 	position:absolute;
 	margin-top:10px;
 	z-index:1;
+	padding-bottom: 50px;
 }
 
 .when-deck .error {
@@ -39,12 +40,20 @@
 .ui-state-disabled {
 	color: #ccc;
 }
+
+.months-container {
+	max-height: 400px;
+	overflow: auto;
+}
+
 .month-container{
-	min-height: 220px;	
+	min-height: 200px;	
 }
 
 .month-picker {
-	position:relative;
+	position: absolute;
+	left:10px;
+	bottom:10px;
 	width:179px;
 	height: 20px;
 	line-height:20px;
@@ -57,6 +66,11 @@
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 }
+
+.month-picker .ui-datepicker{
+	top: -215px !important;	
+}
+
 .month-picker{
 	cursor: pointer;
 }
@@ -181,8 +195,28 @@
 	margin-left:21px;
 	margin-top:5px;
 	background:url("/static/styles/images/remove-icon.png") center center no-repeat;
+	cursor: pointer;
+}
+
+.multi-select-mode-wrapper {
+	height:24px;
+}
+
+.multi-select-mode-wrapper .remove{
+	display:inline-block;
+	float:right;
+	width:16px;
+	height:24px;
+	background:url("/static/styles/images/remove-icon.png") center center no-repeat;	
+	cursor: pointer;
+
 }
 
 .my-time-picker .checkbox.autofill.checked{
 	background: #247cc3 url("/static/images/checked.png") center center no-repeat;
+}
+
+.multi-select-mode-wrapper span{
+	position:relative;
+	top:-3px;
 }

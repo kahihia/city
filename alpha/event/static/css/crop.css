@@ -34,7 +34,7 @@
 
 .full-screen-popup {
     position:fixed;    
-    top:20%;
+    top:5%;
     width:800px;
     height:500px;    
     display:none;
@@ -42,6 +42,16 @@
     border: 1px solid #ccc;
     padding:20px;    
     padding-bottom:50px;
+}
+
+@media all and (max-height: 600px) {
+    .full-screen-popup {
+        position:absolute;
+        top:0;
+        left:25%;    
+        z-index:3;   
+        border:3px solid #ccc; 
+    }  
 }
 
 .jcrop-holder {
@@ -83,6 +93,7 @@
     overflow:hidden;
     margin-left:10px;
     margin-top:10px;
+    cursor: pointer;
 }
 
 .wheelchair-td ul {

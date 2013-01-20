@@ -16,3 +16,13 @@
     z-index:3;   
     border:3px solid #ccc; 
 }
+
+@media all and (max-height: 650px) {
+    .modal {
+        position:absolute;
+        top:5%;
+        left:25%;    
+        z-index:3;   
+        border:3px solid #ccc; 
+    }  
+}

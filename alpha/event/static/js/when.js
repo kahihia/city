@@ -9,15 +9,48 @@
 		},
 		_initDeck: function() {
 			var that = this,
-				date = new Date()
-				this.deck = $("<div>").addClass('ui-widget when-deck modal');
-			
+				date = new Date(), disabledOrEnableMonths;
+
+			this.deck = $("<div>").addClass('ui-widget when-deck modal');			
 			this.monthsContainer = $("<div>").addClass('months-container');
 			this.error = $("<div>").addClass('error').html("Please choose the start/end time for the days you've selected");
 			this.closeButton = $("<div>").addClass('close-button').html("Close");
 			this.resetButton = $("<div>").addClass('reset-button').html("Clear");
+			this.monthPicker = $("<div>").addClass("month-picker");
+
 			$(this.element).after(this.deck);
-			$(this.deck).append(this.error).append(this.monthsContainer).append(this.resetButton).append(this.closeButton);
+			$(this.deck).append(this.error).
+				append(this.monthsContainer).
+				append(this.monthPicker).
+				append(this.resetButton).
+				append(this.closeButton);
+
+			this.monthPicker.newMonthPicker();
+
+			$(this.monthPicker).on("monthselected", function(event, year, month) {				
+				that.addMonth(year, month);
+			});
+
+			disabledOrEnableMonths = function(year) {
+				//TODO: disable month in used
+				if((year || date.getFullYear()) == (new Date()).getFullYear()) {
+					var allMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+						disabledMonths;
+					disabledMonths = allMonths.filter(function(month) {
+						return month < (new Date().getMonth() + 1);
+					});
+					$($(that.monthPicker).data("newMonthPicker").monthValue).monthpicker('disableMonths', disabledMonths);
+
+				} else {
+					$($(that.monthPicker).data("newMonthPicker").monthValue).monthpicker('disableMonths', []);
+				}
+			}
+			setTimeout(disabledOrEnableMonths, 100);
+
+			$($(this.monthPicker).data("newMonthPicker").monthValue).monthpicker().bind("monthpicker-change-year", function(e, year) {
+				disabledOrEnableMonths(year);
+			});
+
 			this.addMonth(date.getFullYear(), date.getMonth() + 1);
 			$(this.element).on("click", function() {
 				setTimeout(function() {
@@ -46,7 +79,7 @@
 				} 
 			});			
 		},
-		setValue: function(years){			
+		setValue: function(years){
 			this.clear();
 			for(yi in years) if(years.hasOwnProperty(yi)){
 				var months = years[yi];
@@ -72,6 +105,7 @@
 
 		},
 		addMonth: function(year, month) {
+			// TODO: insert month beetween it neighb...
 			if((year in this.months) && (month in this.months[year])){
 				return;
 			}
@@ -79,28 +113,53 @@
 			date = new Date();
 			year && date.setFullYear(year);
 			month && date.setMonth(month - 1);
-			$(this.monthsContainer).append(monthContainer = this.monthContainer(date));
+			date.setDate(1);
+			prevDaysTimePicker = this.findPrevDaysTimePicker(year, month);
+			monthContainer = this.monthContainer(date, year, month);
+			if(prevDaysTimePicker){
+				$(prevDaysTimePicker).after(monthContainer);
+			} else {
+				$(this.monthsContainer).prepend(monthContainer);	
+			}
+			
 			days = $(".days-time-picker", monthContainer).data("daystimepicker");
 			if(!(year in this.months)) this.months[year] = {};
 			this.months[year][month] = days;
 		},
-		monthPicker: function(month_from, month_to) {
-			return $("<div>").addClass("month-picker");
+		removeMonth: function(year, month){
+			delete this.months[year][month];
+			if(this.months[year].length==0){
+				delete this.months[year];
+			}
 		},
-		monthContainer: function(date) {
+		findPrevDaysTimePicker: function(year, month){
+			var element;
+			$(".month-container .days-picker").each(function(){
+				if((year>this.year) || ((year==this.year) && (month>this.month))){
+					element = $(this).parents(".month-container")[0];
+				}
+			});
+			return element;
+		},
+		monthContainer: function(date, year, month) {
 			var that = this,
-				widget, daysTimePicker, multiSelectModeWrapper, multiSelectMode, multiSelectModeSpan, monthPicker, daysPicker, monthAndDaysWrapper, now = (new Date());
+				widget, daysTimePicker, multiSelectModeWrapper, multiSelectMode, removeButton, multiSelectModeSpan, daysPicker, monthAndDaysWrapper, now = (new Date());
 
 			multiSelectModeWrapper = $("<div>").addClass("multi-select-mode-wrapper");
 			multiSelectMode = $("<input type='checkbox'>");
 			multiSelectModeSpan = $("<span>");
 			multiSelectModeSpan.html("days range select mode");
+
+			removeButton = $("<span>").addClass("remove");
+
 			multiSelectModeWrapper.append(multiSelectMode);
 			multiSelectModeWrapper.append(multiSelectModeSpan);
+			multiSelectModeWrapper.append(removeButton);
+
 			daysPicker = $("<div>").addClass("days-picker").multiDatesPicker({
 				onToggle: function(dateText) {
 					var timepicker = $(daysTimePicker).data("daystimepicker");
-					var dateArray = dateText.split("/")
+					var dateArray = dateText.split("/");
 					var month = dateArray[0];
 					var day = dateArray[1];
 					var year = dateArray[2];
@@ -111,20 +170,23 @@
 						$(timepicker.labels).addClass("active");
 					}
 				},
-				onChangeMonthYear: function() {
-					if(daysTimePicker) {
-						timepicker = $(daysTimePicker).data("daystimepicker");
-						timepicker.clear();
-						$(this).multiDatesPicker('resetDates');
-						$(timepicker.labels).removeClass("active");
+				onChangeMonthYear: function(year, month) {
+					that.removeMonth(this.year, this.month);
+					if((year in that.months) && (month in that.months[year])){
+						year = this.year;
+						month = this.month;
 					}
+					$(this).parents(".month-container").remove();
+					that.addMonth(year, month);
 				},
 				beforeShowDay: function(date) {
 					return [date >= now];
 				},
-				mode: 'normal'
-
-			}).datepicker("setDate", date);
+				mode: 'normal',
+				defaultDate:date
+			});
+			daysPicker[0].year = year;
+			daysPicker[0].month = month;
 			multiSelectMode.on("change", function(){
 				if(this.checked){
 					daysPicker.multiDatesPicker("setMode", { mode:"range" });
@@ -133,39 +195,19 @@
 				}
 			});
 
-			monthPicker = this.monthPicker();
-
+			removeButton.on("click", function(){
+				if(confirm("Do you realy want to remove this month?")){
+					that.removeMonth(daysPicker[0].year, daysPicker[0].month);					
+					$(this).parents(".month-container").remove();					
+				}
+			})
 
 			monthAndDaysWrapper = $("<div>").addClass("month-and-days-wrapper").
 				append(multiSelectModeWrapper).
-				append(daysPicker).
-				append(monthPicker);
-
-			monthPicker.newMonthPicker();
-
-			$(monthPicker).on("monthselected", function(event, year, month) {
-				that.addMonth(year, month);
-			});
+				append(daysPicker);
+			
 			daysTimePicker = $("<div>").addClass("days-time-picker").daystimepicker();
-			widget = $("<div>").addClass("month-container").append(monthAndDaysWrapper).append(daysTimePicker);
-
-			var disabledOrEnableMonths = function(year) {
-					if((year || date.getFullYear()) == (new Date()).getFullYear()) {
-						var allMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-							disabledMonths;
-						disabledMonths = allMonths.filter(function(month) {
-							return month < (new Date().getMonth() + 1);
-						});
-						$($(monthPicker).data("newMonthPicker").monthValue).monthpicker('disableMonths', disabledMonths);
-
-					} else {
-						$($(monthPicker).data("newMonthPicker").monthValue).monthpicker('disableMonths', []);
-					}
-				}
-			setTimeout(disabledOrEnableMonths, 100);
-			$($(monthPicker).data("newMonthPicker").monthValue).monthpicker().bind("monthpicker-change-year", function(e, year) {
-				disabledOrEnableMonths(year);
-			});
+			widget = $("<div>").addClass("month-container").append(monthAndDaysWrapper).append(daysTimePicker);			
 			return widget;
 		},
 		getText: function() {
@@ -240,7 +282,8 @@
 
 	$.widget("ui.newMonthPicker", {
 		_create: function() {
-			var that = this;
+			var that = this, date;
+			date = new Date();
 			id = "mp_" + (+Date.now());
 			this.monthValue = $("<input>").addClass("hidden monthpicker").attr("data-month-id", id);
 			this.selectWrapper = $("<div>").addClass("wrapper");
