@@ -38,9 +38,11 @@
             $.fancybox($(".suggest"), {
                 autoSize: true,                     
                 closeBtn: false,                        
-                hideOnOverlayClick: false
+                hideOnOverlayClick: false,
+                openEffect: 'elastic',
+                openSpeed: 'slow'
             });            
-            
+
             google.maps.event.trigger(map_location, 'resize');
             if(user_lat && user_lng) {
                 panMapToCenter(user_lat, user_lng);

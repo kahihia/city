@@ -56,7 +56,9 @@
 					$.fancybox($(that.deck), {
 						autoSize: true,						
 						closeBtn: false,						
-						hideOnOverlayClick: false
+						hideOnOverlayClick: false,
+						openEffect: 'elastic',
+						openSpeed: 'slow'
 					});
 				}, 100);
 			});
