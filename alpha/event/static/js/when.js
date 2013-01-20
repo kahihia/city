@@ -166,8 +166,10 @@
 					timepicker.addDay(day, month, year);
 					if(timepicker.days.length === 0) {
 						$(timepicker.labels).removeClass("active");
+						$(timepicker.labels).parents(".month-container").removeClass("hidden-arrows");
 					} else {
 						$(timepicker.labels).addClass("active");
+						$(timepicker.labels).parents(".month-container").addClass("hidden-arrows");
 					}
 				},
 				onChangeMonthYear: function(year, month) {
@@ -369,8 +371,10 @@
 			}
 			if(this.days.length === 0) {
 				$(this.labels).removeClass("active");
+				$(this.labels).parents(".month-container").removeClass("hidden-arrows");
 			} else {
 				$(this.labels).addClass("active");
+				$(this.labels).parents(".month-container").addClass("hidden-arrows");
 			}
 		},
 		findPrevious: function(day) {

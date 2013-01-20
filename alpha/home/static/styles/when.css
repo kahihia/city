@@ -220,3 +220,8 @@
 	position:relative;
 	top:-3px;
 }
+
+.hidden-arrows .ui-datepicker .ui-datepicker-prev, .hidden-arrows .ui-datepicker .ui-datepicker-next {
+	display:none;
+
+}
