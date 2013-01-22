@@ -37,7 +37,7 @@
                 data.city_identifier = city;
             }
             $.post("/events/ctags", data, function(data){
-                tags = data.tags.map(function(tag){ return tag.name });
+                tags = _.map(data.tags, function(tag){ return tag.name });
                 that.loadTags(tags);
             });
 

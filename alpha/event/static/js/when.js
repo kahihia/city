@@ -1,4 +1,10 @@
 (function($) {
+	// For IE8 and earlier version.
+	if (!Date.now) {
+  		Date.now = function() {
+    		return new Date().valueOf();
+  		}
+	}
 	$.widget("ui.when", {
 		_create: function() {			
 			this.months = {
@@ -35,7 +41,7 @@
 				if((year || date.getFullYear()) == (new Date()).getFullYear()) {
 					var allMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 						disabledMonths;
-					disabledMonths = allMonths.filter(function(month) {
+					disabledMonths = _.filter(allMonths, function(month) {
 						return month < (new Date().getMonth() + 1);
 					});
 					$($(that.monthPicker).data("newMonthPicker").monthValue).monthpicker('disableMonths', disabledMonths);
@@ -350,7 +356,7 @@
 		},
 		addDay: function(day, month, year) {
 			var index
-			if((index = this.days.map(function(day) {
+			if((index = _.map(this.days, function(day) {
 				return day.options.day
 			}).indexOf(day)) !== -1) {
 				$(this.days.splice(index, 1)[0].element).remove();
@@ -522,6 +528,11 @@
 	});
 
 	$(document).ready(function() {
+		$('[data-event="click"] a').live("mousemove", function(e){
+			if(!('event' in window)){
+				window.eventObj = e;	
+			}			
+		});
 		$("#id_when").when();		
 		if($("#id_when_json").val()){
 			$("#id_when").data("when").setValue(

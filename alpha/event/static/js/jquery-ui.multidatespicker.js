@@ -6,6 +6,7 @@
  * Dual licensed under the MIT or GPL version 2 licenses.
  */
 (function( $ ){
+	var eventObj;
 	$.extend($.ui, { multiDatesPicker: { version: "1.6.1" } });
 	
 	$.fn.multiDatesPicker = function(method) {
@@ -399,9 +400,9 @@
 						}
 						this.multiDatesPicker.secondStep = !this.multiDatesPicker.secondStep;
 						break;
-					default:
-						if(event.shiftKey && this.multiDatesPicker.startDate){
-							event.preventDefault();
+					default:											
+						if((eventObj||event).shiftKey && this.multiDatesPicker.startDate){
+							(eventObj||event).preventDefault();
 							var begin = methods.compareDates(this.multiDatesPicker.startDate, date);
 							var end = 0, mn=1;
 							if(end < begin) {

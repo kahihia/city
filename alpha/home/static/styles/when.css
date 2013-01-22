@@ -45,6 +45,7 @@
 
 .months-container {
 	max-height: 400px;
+	min-height: 160px;
 	overflow: auto;
 }
 
