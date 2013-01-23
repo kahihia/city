@@ -256,7 +256,6 @@
 					}
 				}
 			}
-			console.log(value);
 			$("#id_when_json").val(JSON.stringify(value));
 			return value;
 		},

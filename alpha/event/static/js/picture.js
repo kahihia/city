@@ -63,7 +63,7 @@
                             hideOnOverlayClick: false
                         });                          
                     } else {
-                        console.log("upload failed!");
+                        console.log && console.log("upload failed!");
                     }
                 },
                 onSubmit: function(id, fileName, input) {

@@ -402,7 +402,12 @@
 						break;
 					default:											
 						if((eventObj||event).shiftKey && this.multiDatesPicker.startDate){
-							(eventObj||event).preventDefault();
+							if((eventObj||event).preventDefault){
+								(eventObj||event).preventDefault();
+							}  else {
+								// IE8 trick
+								event.returnValue = false;
+							}
 							var begin = methods.compareDates(this.multiDatesPicker.startDate, date);
 							var end = 0, mn=1;
 							if(end < begin) {
