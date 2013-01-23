@@ -74,7 +74,7 @@
         saveCurrentDay: function() {
             var days = this.data.days;
             if(this.currentDay == "default") {
-                this.data.default = $(this.textarea).val();
+                this.data["default"] = $(this.textarea).val();
             } else {
                 if(!(this.currentDay in this.selectedResult)) {
                     days[this.currentDay] = $(this.textarea).val();
@@ -89,12 +89,12 @@
             this.saveCurrentDay();
             this.currentDay = value;
             if(value == "default") {
-                $(this.textarea).val(this.data.default);
+                $(this.textarea).val(this.data["default"]);
                 $(this.result).html(label + " Days");
             } else {
                 $(this.textarea).val(this.data.days[value] || "");                
             }
-            $(this.textarea).attr("placeholder",this.data.days[value]||this.data.default);
+            $(this.textarea).attr("placeholder",this.data.days[value]||this.data["default"]);
             $("[data-value='" + value + "']").addClass("selected");
             this.save();
         },
