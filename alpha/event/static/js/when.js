@@ -19,16 +19,21 @@
 			this.deck = $("<div>").addClass('ui-widget when-deck');			
 			this.monthsContainer = $("<div>").addClass('months-container');
 			this.error = $("<div>").addClass('error').html("Please choose the start/end time for the days you've selected");
-			this.closeButton = $("<div>").addClass('close-button').html("Close");
+			this.multiSelectModeSpan = $("<span>");
+			this.multiSelectModeSpan.html("Use Shift Key to select more than one day");
+			this.sumbitButton = $("<div>").addClass('submit-button').html("Submit");
 			this.resetButton = $("<div>").addClass('reset-button').html("Clear");
+			this.cancelButton = $("<div>").addClass('cancel-button').html("Cancel");
 			this.monthPicker = $("<div>").addClass("month-picker");
 
 			$(this.element).after(this.deck);
 			$(this.deck).append(this.error).
+				append(this.multiSelectModeSpan).
 				append(this.monthsContainer).
 				append(this.monthPicker).
 				append(this.resetButton).
-				append(this.closeButton);
+				append(this.cancelButton).
+				append(this.sumbitButton);
 
 			this.monthPicker.newMonthPicker();
 
@@ -61,28 +66,31 @@
 				setTimeout(function() {
 					$.fancybox($(that.deck), {
 						autoSize: true,						
-						closeBtn: false,						
+						closeBtn: true,						
 						hideOnOverlayClick: false
 					});
 				}, 100);
 			});
-			$(this.closeButton).on("click", function() {
+			$(this.sumbitButton).on("click", function() {
 				var valid = that.validate();
 				if(valid) {
-					$.fancybox.close();										
+					$.fancybox.close();
 					$(that.error).hide();
 					$(that.element).val(that.getText());
 					$("#id_description").data("description").setDays(that.getDays());
 				} else {
 					$(that.error).show();
 				}
-
 			});
+			$(this.cancelButton).on("click", function(){
+				$.fancybox.close();
+				$(that.error).hide();
+			});			
 			$(this.resetButton).on("click", function() {
 				var agree = confirm("Are you sure you want to clear form?")
 				if(agree){
 					that.clear();
-					$.fancybox.close();
+					//$.fancybox.close();
 				} 
 			});			
 		},
@@ -150,17 +158,12 @@
 		},
 		monthContainer: function(date, year, month) {
 			var that = this,
-				widget, daysTimePicker, multiSelectModeWrapper, multiSelectMode, removeButton, multiSelectModeSpan, daysPicker, monthAndDaysWrapper, now = (new Date());
+				widget, daysTimePicker, multiSelectModeWrapper, removeButton, daysPicker, monthAndDaysWrapper, now = (new Date());
 
-			multiSelectModeWrapper = $("<div>").addClass("multi-select-mode-wrapper");
-			multiSelectMode = $("<input type='checkbox'>");
-			multiSelectModeSpan = $("<span>");
-			multiSelectModeSpan.html("days range select mode");
+			multiSelectModeWrapper = $("<div>").addClass("multi-select-mode-wrapper");						
 
-			removeButton = $("<span>").addClass("remove");
-
-			multiSelectModeWrapper.append(multiSelectMode);
-			multiSelectModeWrapper.append(multiSelectModeSpan);
+			removeButton = $("<span>").addClass("remove");		
+			
 			multiSelectModeWrapper.append(removeButton);
 
 			daysPicker = $("<div>").addClass("days-picker").multiDatesPicker({
@@ -196,15 +199,19 @@
 			});
 			daysPicker[0].year = year;
 			daysPicker[0].month = month;
-			multiSelectMode.on("change", function(){
+			/*multiSelectMode.on("change", function(){
 				if(this.checked){
 					daysPicker.multiDatesPicker("setMode", { mode:"range" });
 				} else {
 					daysPicker.multiDatesPicker("setMode", { mode:"normal"});
 				}
-			});
+			});*/
 
 			removeButton.on("click", function(){
+				if($(".month-container").length===1){
+					alert("You can not remove this month");
+					return;
+				}
 				if(confirm("Do you realy want to remove this month?")){
 					that.removeMonth(daysPicker[0].year, daysPicker[0].month);					
 					$(this).parents(".month-container").remove();					
@@ -285,6 +292,11 @@
 			$(this.deck).remove();
 			this.months = {};
 			this._initDeck();
+			$.fancybox($(this.deck), {
+				autoSize: true,						
+				closeBtn: true,						
+				hideOnOverlayClick: false
+			});
 		}
 
 	});

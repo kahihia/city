@@ -21,8 +21,8 @@
                 that.save();
             });
             this.data = {
-            default:
-                "", days: {}
+                "default":"", 
+                days: {}
             }
             this.currentDay = "default";
             this.save();

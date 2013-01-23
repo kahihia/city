@@ -37,7 +37,7 @@
             $(".suggest").show();
             $.fancybox($(".suggest"), {
                 autoSize: true,                     
-                closeBtn: false,                        
+                closeBtn: true,                        
                 hideOnOverlayClick: false
             });            
 
