@@ -23,13 +23,8 @@
             $("#id_location_lat").val(lat);
         }
 
-<<<<<<< local
         setTimeout(function(){
             panMapToCenter(user_lat, user_lng);
-        },1000);        
-=======
-        //panMapToCenter(user_lat, user_lng);        
-        
->>>>>>> other
+        },1000);
     });
 })(jQuery);
