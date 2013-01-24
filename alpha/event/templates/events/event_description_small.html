@@ -3,7 +3,7 @@
   {% load event_pictures %}
   <div class="entry-img-prev">
   <img src="{% event_picture_url event %}" alt=""></div>
-  <a href="{% url event_view event.slug %}" class="text">{{ event.name }}</a>
+  <a href="{% url 'event_view' event.slug %}" class="text">{{ event.name }}</a>
   <ul>
     {% load date_formatting %}
     <li>{{ event.start_time|contextualize_date }}{% if event.end_time %} &mdash; {{ event.end_time|just_time_levi_is_a_good_designer }}{% endif %}</li>
@@ -16,9 +16,9 @@
     {% endcomment %}
   </ul>
   {% if citi_user_events %}
-    <a class="edit" href="{% url event_edit authentication_key=event.authentication_key %}">(Edit this event)</a>
+    <a class="edit" href="{% url 'event_edit' authentication_key=event.authentication_key %}">(Edit this event)</a>
   {% else %}
-    <a href="{% url event_view event.slug %}" class="row"></a>  
+    <a href="{% url 'event_view' event.slug %}" class="row"></a>  
   {% endif %}
 </li>
 

@@ -15,7 +15,7 @@
   {% load date_formatting %}
   <nav id="back">
     <p>
-      <a href="{% url event_browse %}">
+      <a href="{% url 'event_browse' %}">
         Browse Events
       </a>
       &gt; 
@@ -26,7 +26,7 @@
       
       &gt; 
       {% for tag in event.tags.all %}
-        <a href="{% url event_browse_tags tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+        <a href="{% url 'event_browse_tags' tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
       {% endfor %}
       &gt; 
         <span class="current">{{ event.name }}</span>
@@ -54,7 +54,7 @@
   <p>{{ event.description|linebreaks }}</p>
   {% if event.website %}<p><a href="{{ event.website }}">Website</a></p>{% endif %}
 <h4>Tags: 
-    {% for tag in event.tags.all %}<a href="{% url event_browse_tags tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</h4>
+    {% for tag in event.tags.all %}<a href="{% url 'event_browse_tags' tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</h4>
   </div>
   <div style="clear: both;"></div>
   <div class="fb-like" data-href="" data-send="true" data-width="450" data-show-faces="true"></div>
