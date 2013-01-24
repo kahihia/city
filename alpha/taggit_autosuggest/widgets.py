@@ -64,7 +64,7 @@ class TagAutoSuggest(forms.TextInput):
                 'result_id': result_attrs['id'],
                 'widget_id': widget_attrs['id'],
                 'url': reverse('taggit_autosuggest-list'),
-                'start_text': _("Enter Tag Here"),
+                'start_text': _("Enter Tags Here"),
                 'empty_text': _("No Results"),
                 'limit_text': _('No More Selections Are Allowed'),
                 'retrieve_limit': MAX_SUGGESTIONS,

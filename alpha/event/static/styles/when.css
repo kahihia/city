@@ -206,7 +206,7 @@
 }
 
 .multi-select-mode-wrapper {
-    height:18px;
+    height:2px;
 }
 
 .multi-select-mode-wrapper .remove{
@@ -214,7 +214,7 @@
     float:right;
     width:16px;
     height:24px;
-    background:url("/static/styles/images/remove-icon.png") center center no-repeat;    
+    background:url("/static/styles/images/remove-icon-white.png") center center no-repeat;    
     cursor: pointer;
 
 }
@@ -224,8 +224,25 @@
 }
 
 .multi-select-mode-wrapper span{
-    position:relative;
-    top:-3px;
+    position: relative;
+    top: 7px;
+    z-index: 10;
+    right: 5px;
+}
+
+.ui-datepicker .ui-datepicker-next {
+    right: 19px;
+}
+
+.ui-datepicker .ui-datepicker-next-hover {
+    right: 19px;
+}
+
+.ui-datepicker .ui-datepicker-title {
+    margin: 0 2.3em;
+    line-height: 1em;
+    text-align: center;
+    margin-right: 3.5em;
 }
 
 .hidden-arrows .ui-datepicker .ui-datepicker-prev, .hidden-arrows .ui-datepicker .ui-datepicker-next {

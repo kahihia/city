@@ -105,7 +105,7 @@ ul.as-selections li.as-original {
 ul.as-selections li.as-original input {
 	border: none;
 	outline: none;
-	font-size: 13px;
+	font-size: 11px;
 	width: 80px;
 	height: 18px;
 	padding-top: 3px;
@@ -186,6 +186,7 @@ li.as-result-item.active em {
 	}
 	ul.as-selections li.as-original input {
 		height: 16px;
+		line-height:16px;
 		margin-left:0px;
 	}
 }

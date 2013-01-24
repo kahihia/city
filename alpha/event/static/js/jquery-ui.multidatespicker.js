@@ -401,9 +401,9 @@
 						this.multiDatesPicker.secondStep = !this.multiDatesPicker.secondStep;
 						break;
 					default:											
-						if((eventObj||event).shiftKey && this.multiDatesPicker.startDate){
-							if((eventObj||event).preventDefault){
-								(eventObj||event).preventDefault();
+						if((window.eventObj||event).shiftKey && this.multiDatesPicker.startDate){
+							if((window.eventObj||event).preventDefault){
+								(window.eventObj||event).preventDefault();
 							}  else {
 								// IE8 trick
 								event.returnValue = false;

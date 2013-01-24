@@ -94,6 +94,7 @@
                 boxHeight: 500,
                 setSelect: [0, 0, $(this.popup).data("thumb-height"), $(this.popup).data("thumb-width")],                
                 onSelect: function(selected) {
+                    $(".picture-thumb").addClass("result");
                     that.selected = selected;
                     that.update_selection(selected);
                     that.jcrop && that.showPreview(selected, that.jcrop.getWidgetSize());

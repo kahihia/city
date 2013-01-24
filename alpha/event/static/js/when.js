@@ -1,12 +1,23 @@
 (function($) {
 	// For IE8 and earlier version.
-	if (!Date.now) {
-  		Date.now = function() {
-    		return new Date().valueOf();
-  		}
+	if(!Date.now) {
+		Date.now = function() {
+			return new Date().valueOf();
+		}
 	}
+	if(!Array.prototype.indexOf) {
+		Array.prototype.indexOf = function(obj, start) {
+			for(var i = (start || 0), j = this.length; i < j; i++) {
+				if(this[i] === obj) {
+					return i;
+				}
+			}
+			return -1;
+		}
+	}
+
 	$.widget("ui.when", {
-		_create: function() {			
+		_create: function() {
 			this.months = {
 				//	2012: { 10: }
 			};
@@ -14,9 +25,10 @@
 		},
 		_initDeck: function() {
 			var that = this,
-				date = new Date(), disabledOrEnableMonths;
+				date = new Date(),
+				disabledOrEnableMonths;
 
-			this.deck = $("<div>").addClass('ui-widget when-deck');			
+			this.deck = $("<div>").addClass('ui-widget when-deck');
 			this.monthsContainer = $("<div>").addClass('months-container');
 			this.error = $("<div>").addClass('error').html("Please choose the start/end time for the days you've selected");
 			this.multiSelectModeSpan = $("<span>");
@@ -28,16 +40,16 @@
 
 			$(this.element).after(this.deck);
 			$(this.deck).append(this.error).
-				append(this.multiSelectModeSpan).
-				append(this.monthsContainer).
-				append(this.monthPicker).
-				append(this.resetButton).
-				append(this.cancelButton).
-				append(this.sumbitButton);
+			append(this.multiSelectModeSpan).
+			append(this.monthsContainer).
+			append(this.monthPicker).
+			append(this.resetButton).
+			append(this.cancelButton).
+			append(this.sumbitButton);
 
 			this.monthPicker.newMonthPicker();
 
-			$(this.monthPicker).on("monthselected", function(event, year, month) {				
+			$(this.monthPicker).on("monthselected", function(event, year, month) {
 				that.addMonth(year, month);
 			});
 
@@ -65,8 +77,8 @@
 			$(this.element).on("click", function() {
 				setTimeout(function() {
 					$.fancybox($(that.deck), {
-						autoSize: true,						
-						closeBtn: true,						
+						autoSize: true,
+						closeBtn: true,
 						hideOnOverlayClick: false
 					});
 				}, 100);
@@ -82,34 +94,34 @@
 					$(that.error).show();
 				}
 			});
-			$(this.cancelButton).on("click", function(){
+			$(this.cancelButton).on("click", function() {
 				$.fancybox.close();
 				$(that.error).hide();
-			});			
+			});
 			$(this.resetButton).on("click", function() {
 				var agree = confirm("Are you sure you want to clear form?")
-				if(agree){
+				if(agree) {
 					that.clear();
 					//$.fancybox.close();
-				} 
-			});			
+				}
+			});
 		},
-		setValue: function(years){
+		setValue: function(years) {
 			this.clear();
-			for(yi in years) if(years.hasOwnProperty(yi)){
+			for(yi in years) if(years.hasOwnProperty(yi)) {
 				var months = years[yi];
-				for(mi in months) if(months.hasOwnProperty(mi)){
+				for(mi in months) if(months.hasOwnProperty(mi)) {
 					var days = months[mi];
 					this.addMonth(yi, mi);
-					for(di in days) if(days.hasOwnProperty(di)){
+					for(di in days) if(days.hasOwnProperty(di)) {
 						var start = days[di].start,
 							end = days[di].end,
-							daysTimePicker = this.months[yi][mi];						
+							daysTimePicker = this.months[yi][mi];
 						daysTimePicker.addDay(parseInt(di), parseInt(mi), parseInt(yi));
-						var format_day = $.datepicker.formatDate($.datepicker._defaults.dateFormat, new Date(yi, mi-1, di));
+						var format_day = $.datepicker.formatDate($.datepicker._defaults.dateFormat, new Date(yi, mi - 1, di));
 						$(".days-picker", $(daysTimePicker.element).parents(".months-container")).multiDatesPicker('addDates', format_day);
 						//$(".days-time-picker", $(this).parents(".month-container")).data("daystimepicker").addDay(that.options.day, that.options.month, that.options.year);
-						timePicker = _.filter(daysTimePicker.days, function(day){
+						timePicker = _.filter(daysTimePicker.days, function(day) {
 							return day.options.day == di;
 						})[0];
 						timePicker.startTime.val(start);
@@ -121,7 +133,7 @@
 		},
 		addMonth: function(year, month) {
 			// TODO: insert month beetween it neighb...
-			if((year in this.months) && (month in this.months[year])){
+			if((year in this.months) && (month in this.months[year])) {
 				return;
 			}
 			var monthContainer, days;
@@ -131,26 +143,26 @@
 			date.setDate(1);
 			prevDaysTimePicker = this.findPrevDaysTimePicker(year, month);
 			monthContainer = this.monthContainer(date, year, month);
-			if(prevDaysTimePicker){
+			if(prevDaysTimePicker) {
 				$(prevDaysTimePicker).after(monthContainer);
 			} else {
-				$(this.monthsContainer).prepend(monthContainer);	
+				$(this.monthsContainer).prepend(monthContainer);
 			}
-			
+
 			days = $(".days-time-picker", monthContainer).data("daystimepicker");
 			if(!(year in this.months)) this.months[year] = {};
 			this.months[year][month] = days;
 		},
-		removeMonth: function(year, month){
+		removeMonth: function(year, month) {
 			delete this.months[year][month];
-			if(this.months[year].length==0){
+			if(this.months[year].length == 0) {
 				delete this.months[year];
 			}
 		},
-		findPrevDaysTimePicker: function(year, month){
+		findPrevDaysTimePicker: function(year, month) {
 			var element;
-			$(".month-container .days-picker").each(function(){
-				if((year>this.year) || ((year==this.year) && (month>this.month))){
+			$(".month-container .days-picker").each(function() {
+				if((year > this.year) || ((year == this.year) && (month > this.month))) {
 					element = $(this).parents(".month-container")[0];
 				}
 			});
@@ -160,10 +172,10 @@
 			var that = this,
 				widget, daysTimePicker, multiSelectModeWrapper, removeButton, daysPicker, monthAndDaysWrapper, now = (new Date());
 
-			multiSelectModeWrapper = $("<div>").addClass("multi-select-mode-wrapper");						
+			multiSelectModeWrapper = $("<div>").addClass("multi-select-mode-wrapper");
 
-			removeButton = $("<span>").addClass("remove");		
-			
+			removeButton = $("<span>").addClass("remove");
+
 			multiSelectModeWrapper.append(removeButton);
 
 			daysPicker = $("<div>").addClass("days-picker").multiDatesPicker({
@@ -184,7 +196,7 @@
 				},
 				onChangeMonthYear: function(year, month) {
 					that.removeMonth(this.year, this.month);
-					if((year in that.months) && (month in that.months[year])){
+					if((year in that.months) && (month in that.months[year])) {
 						year = this.year;
 						month = this.month;
 					}
@@ -195,7 +207,7 @@
 					return [date >= now];
 				},
 				mode: 'normal',
-				defaultDate:date
+				defaultDate: date
 			});
 			daysPicker[0].year = year;
 			daysPicker[0].month = month;
@@ -207,23 +219,23 @@
 				}
 			});*/
 
-			removeButton.on("click", function(){
-				if($(".month-container").length===1){
+			removeButton.on("click", function() {
+				if($(".month-container").length === 1) {
 					alert("You can not remove this month");
 					return;
 				}
-				if(confirm("Do you realy want to remove this month?")){
-					that.removeMonth(daysPicker[0].year, daysPicker[0].month);					
-					$(this).parents(".month-container").remove();					
+				if(confirm("Do you realy want to remove this month?")) {
+					that.removeMonth(daysPicker[0].year, daysPicker[0].month);
+					$(this).parents(".month-container").remove();
 				}
 			})
 
 			monthAndDaysWrapper = $("<div>").addClass("month-and-days-wrapper").
-				append(multiSelectModeWrapper).
-				append(daysPicker);
-			
+			append(multiSelectModeWrapper).
+			append(daysPicker);
+
 			daysTimePicker = $("<div>").addClass("days-time-picker").daystimepicker();
-			widget = $("<div>").addClass("month-container").append(monthAndDaysWrapper).append(daysTimePicker);			
+			widget = $("<div>").addClass("month-container").append(monthAndDaysWrapper).append(daysTimePicker);
 			return widget;
 		},
 		getText: function() {
@@ -292,8 +304,8 @@
 			this.months = {};
 			this._initDeck();
 			$.fancybox($(this.deck), {
-				autoSize: true,						
-				closeBtn: true,						
+				autoSize: true,
+				closeBtn: true,
 				hideOnOverlayClick: false
 			});
 		}
@@ -302,7 +314,8 @@
 
 	$.widget("ui.newMonthPicker", {
 		_create: function() {
-			var that = this, date;
+			var that = this,
+				date;
 			date = new Date();
 			id = "mp_" + (+Date.now());
 			this.monthValue = $("<input>").addClass("hidden monthpicker").attr("data-month-id", id);
@@ -475,11 +488,11 @@
 			});
 
 			$(this.removeButton).on('click', function() {
-				if(confirm("Do you realy want to remove day?")){
-					var format_day = $.datepicker.formatDate($.datepicker._defaults.dateFormat, new Date(that.options.year, that.options.month-1, that.options.day));
+				if(confirm("Do you realy want to remove day?")) {
+					var format_day = $.datepicker.formatDate($.datepicker._defaults.dateFormat, new Date(that.options.year, that.options.month - 1, that.options.day));
 					$(".days-picker", $(this).parents(".month-container")).multiDatesPicker('toggleDate', format_day);
 					//$(".days-time-picker", $(this).parents(".month-container")).data("daystimepicker").addDay(that.options.day, that.options.month, that.options.year);					
-				}				
+				}
 			})
 
 			// oldTime =  $.timePicker(this.startTime).getTime();
@@ -539,18 +552,16 @@
 	});
 
 	$(document).ready(function() {
-		$('[data-event="click"] a').live("mousemove", function(e){
-			if(!('event' in window)){
-				window.eventObj = e;	
-			}			
+		$('[data-event="click"] a').live("mousemove", function(e) {
+			if(!('event' in window)) {
+				window.eventObj = e;
+			}
 		});
-		$("#id_when").when();		
-		if($("#id_when_json").val()){
+		$("#id_when").when();
+		if($("#id_when_json").val()) {
 			$("#id_when").data("when").setValue(
-				JSON.parse(
-					$("#id_when_json").val()
-				)
-			);			
+			JSON.parse(
+			$("#id_when_json").val()));
 		};
 	});
 
