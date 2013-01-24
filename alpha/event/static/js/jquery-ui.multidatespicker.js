@@ -19,7 +19,7 @@
 		function removeDate(date, type) {
 			if(!type) type = 'picked';
 			date = dateConvert.call(this, date);
-			for(var i in this.multiDatesPicker.dates[type])
+			for(var i in this.multiDatesPicker.dates[type]) if(this.multiDatesPicker.dates[type].hasOwnProperty(i))
 				if(!methods.compareDates(this.multiDatesPicker.dates[type][i], date))
 					return this.multiDatesPicker.dates[type].splice(i, 1).pop();
 		}
@@ -442,7 +442,7 @@
 				
 				switch(this.multiDatesPicker.mode) {
 					case 'normal':
-						for(option in options)
+						for(option in options) if(options.hasOwnProperty(option))
 							switch(option) {
 								case 'maxPicks':
 								case 'minPicks':
@@ -459,7 +459,7 @@
 					case 'daysRange':
 					case 'weeksRange':
 						var mandatory = 1;
-						for(option in options)
+						for(option in options) if(options.hasOwnProperty(option))
 							switch(option) {
 								case 'autoselectRange':
 									mandatory--;

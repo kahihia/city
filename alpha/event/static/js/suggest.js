@@ -23,7 +23,7 @@
             $("#id_location_lat").val(lat);
         }
 
-        panMapToCenter(user_lat, user_lng);        
+        //panMapToCenter(user_lat, user_lng);        
         
     });
 })(jQuery);

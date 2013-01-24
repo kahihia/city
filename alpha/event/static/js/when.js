@@ -411,7 +411,7 @@
 		findPrevious: function(day) {
 			if(this.days.length) {
 				var maxDay, tempDay;
-				for(var di in this.days) {
+				for(var di in this.days) if(this.days.hasOwnProperty(di)) {
 					tempDay = this.days[di];
 					if(tempDay.options.day < day) {
 						maxDay = tempDay;
@@ -428,7 +428,7 @@
 			if(this.days.length) {
 				var minDay = false,
 					tempDay;
-				for(var di in this.days) {
+				for(var di in this.days) if(this.days.hasOwnProperty(di)) {
 					tempDay = this.days[di];
 					if(tempDay.options.day > day) {
 						minDay = tempDay;
