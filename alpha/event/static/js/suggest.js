@@ -23,42 +23,7 @@
             $("#id_location_lat").val(lat);
         }
 
-        $(".suggest .close-button").on("click", function(){
-            var venue, street, city;
-            $(".suggest .error").hide();
-            venue = $("#id_venue_name").val();
-            street = $("#id_street").val();
-            city = $("#id_city_0").val();
-            if(!venue || !street || !city){
-                $(".suggest .error").show();
-                return;
-            }
-            var suggest_values = [venue, street, city];
-            $("#id_place").val(suggest_values.join(", "))
-            $.fancybox.close();
-        });
-        $(".suggest .reset-button").on("click", function(){
-            $(".suggest .error").hide();
-            $("#id_venue_name").val("");
-            $("#id_street").val("");
-            $("#id_city_0").val("");
-            $.fancybox.close();
-            
-        });
-
-        $(".choose_location").on("click", function(){
-            $(".suggest").show();
-            $.fancybox($(".suggest"), {
-                autoSize: true,                     
-                closeBtn: true,                        
-                hideOnOverlayClick: false
-            });            
-
-            google.maps.event.trigger(map_location, 'resize');
-            if(user_lat && user_lng) {
-                panMapToCenter(user_lat, user_lng);
-            }
-        });
+        panMapToCenter(user_lat, user_lng);        
         
     });
 })(jQuery);
