@@ -1,19 +1,73 @@
+.suggest {    
+    width:600px;
+    border:1px solid #CCC;
+    padding:10px 5px;
+    background:#fff;
+    display:none;
+    margin-top:10px;
+    z-index:2;
+    padding-bottom:50px;
+}
+
+.suggest .error {
+    display:none;
+    color: red;
+    margin-bottom: 10px;
+}
+
+.location {
+    display:inline-block;
+}
+
+.suggest .reset-button, .suggest .submit-button, .suggest .cancel-button  {
+    font-size:1.3em;
+    padding:5px 10px;
+    position:absolute;
+    right:10px;
+    bottom:5px;
+    background: #efefef;
+    border: 1px solid #e6e6e6;
+    -moz-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.suggest .reset-button {
+    right:90px;
+}
+
+.suggest .cancel-button {
+    right:160px;
+}
+
+
+.show_map {
+    width:24px;
+    height:24px;
+    background: url('/static/images/map.png') no-repeat;
+    cursor: pointer;
+    display: inline-block;
+    margin-left:20px;
+    padding-top:5px;
+    position:relative;
+    top:12px;
+}
+
 .location_map {    
   padding:10px;
   border:1px solid #d8d8d8;
   background: #fff;
-  margin:20px 0;
-  width: 400px;
+  margin-top:5px;
 }
 .new_venue .suggest{
   display:table-row;  
 }
-
-.suggest-tr {
-    display:none;
+.suggest {
+  display:none;
 }
 
-a[data-switch-to]{
+a.choose_location{
     display:block;
     text-decoration: none;
     color: #022E52;

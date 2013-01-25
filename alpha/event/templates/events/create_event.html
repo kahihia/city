@@ -184,13 +184,48 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr class="location-tr">
+                                        <tr>
                                             <td>Location</td>
                                             <td>
-                                                <div class="location">{{ form.place }}</div>
-                                                <a href="#" data-switch-to="suggest-tr">
-                                                    or suggest new place
-                                                </a>
+                                                <div class="location">{{ form.place}}</div>
+                                                <div class="show_map"></div>
+                                                <a href="#" class="choose_location">
+                                                    suggest new venue
+                                                </a>                                                                    
+                                                <div class="suggest">
+                                                    <div class="error">
+                                                        All fields is required
+                                                    </div>
+                                                    <table>
+                                                        <tr>
+                                                            <td>Venue name</td>
+                                                            <td>{{form.venue_name}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Street address</td>
+                                                            <td>{{form.street}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>City</td>
+                                                            <td>
+                                                                {{form.city}}
+                                                                {{form.city_identifier}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Location</td>
+                                                            <td>
+                                                                <div class="location-map-wrapper">
+                                                                    <div class="location_map">{{form.location}}</div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>                                                    
+
+                                                    <div class="reset-button">Clear</div>
+                                                    <div class="cancel-button">Cancel</div>
+                                                    <div class="submit-button">Submit</div>
+                                                </div>
                                             </td>
                                             <td>
                                                 <a href="#"  class="balloon">
@@ -205,30 +240,7 @@
                                                     </p>
                                                 </div>
                                             </td>
-                                        </tr>
-                                        <tr class="suggest-tr">
-                                            <td>Venue name</td>
-                                            <td>{{form.venue_name}}</td>
-                                        </tr>
-                                        <tr class="suggest-tr">
-                                            <td>Street address</td>
-                                            <td>{{form.street}}</td>
-                                        </tr>
-                                        <tr class="suggest-tr">
-                                            <td>City</td>
-                                            <td>
-                                                {{form.city}}
-                                                {{form.city_identifier}}
-                                                <a href="#" data-switch-to="location-tr">
-                                                    or choose existing place
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <div class="location_map">{{form.location}}</div>
-                                            </td>
-                                        </tr>
+                                        </tr>       
                                                                 
                                         <tr>
                                             <td>When</td>

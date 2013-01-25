@@ -25,6 +25,8 @@
                 $("#id_street").val("");
                 $("#id_city_0").val("");
                 $("#id_tags__tagautosuggest")[0].tagspopup.forCity($("#id_geo_city").val());
+                user_lat = result.geometry.location.lat();
+                user_lng = result.geometry.location.lng();
                 panMapToCenter(result.geometry.location.lat(), result.geometry.location.lng());
             });
     

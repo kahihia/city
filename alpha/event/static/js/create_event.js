@@ -8,6 +8,9 @@
                 var point = $(location_point).val().split(','), identifier;
                 
                 $("#id_city_identifier").val(point[0]);
+
+                user_lat = parseFloat(point[2]);
+                user_lng = parseFloat(point[1]);
                 
                 lnglat = new google.maps.LatLng(parseFloat(point[2]), parseFloat(point[1]));
                 savePosition_location(lnglat);
@@ -15,7 +18,10 @@
                 map_location.panTo(lnglat);
             } else {
                 var lng = document.getElementById("id_location_lng"),
-                    lat = document.getElementById("id_location_lat");                
+                    lat = document.getElementById("id_location_lat");
+
+                user_lat = lat;
+                user_lng = lng;
                 google.maps.event.trigger(map_location, 'resize');
                 map_location.panTo(new google.maps.LatLng(parseFloat(lat.value), parseFloat(lng.value)));
             }

@@ -61,7 +61,7 @@ class LocationWidget(forms.TextInput):
         var lng = document.getElementById("id_%(name)s_lng"),
             lat = document.getElementById("id_%(name)s_lat");
         lng.value = point.lng().toFixed(6);
-        lat.value = point.lat().toFixed(6);
+        lat.value = point.lat().toFixed(6);        
         map_%(name)s.panTo(point);
     }
 
