@@ -161,6 +161,8 @@
         }
     });
     $(document).ready(function() {
-        $("#file-uploader").picture();
+        setTimeout(function(){
+            $("#file-uploader").picture();    
+        },100);        
     });
 })(jQuery);

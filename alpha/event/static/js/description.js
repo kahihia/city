@@ -103,12 +103,13 @@
         }
     });
 
-    $(document).ready(function() {
-        var value = $("#id_description_json").val();
-        $("#id_description").description();
-        if(value){
-            $("#id_description").data("description").setValue(JSON.parse(value));    
-        }
-        
+    $(document).ready(function(){
+        setTimeout(function(){
+            var value = $("#id_description_json").val();
+            $("#id_description").description();
+            if(value){
+                $("#id_description").data("description").setValue(JSON.parse(value));    
+            }
+        },100);
     });
 })(jQuery);

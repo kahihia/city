@@ -71,6 +71,8 @@
         }
     });
     $(document).ready(function() {
-        $("#id_tags__tagautosuggest").tagspopup();
+        setTimeout(function(){
+            $("#id_tags__tagautosuggest").tagspopup();
+        },100);
     });
 })(jQuery);

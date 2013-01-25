@@ -33,6 +33,8 @@
         }
     });
     $(document).ready(function() {
-        $("#id_wheelchair_0").wheelchair();
+        setTimeout(function(){
+            $("#id_wheelchair_0").wheelchair();    
+        },100);        
     });
 })(jQuery);

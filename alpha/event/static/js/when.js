@@ -552,17 +552,19 @@
 	});
 
 	$(document).ready(function() {
-		$('[data-event="click"] a').live("mousemove", function(e) {
-			if(!('event' in window)) {
-				window.eventObj = e;
-			}
-		});
-		$("#id_when").when();
-		if($("#id_when_json").val()) {
-			$("#id_when").data("when").setValue(
-			JSON.parse(
-			$("#id_when_json").val()));
-		};
+		setTimeout(function(){
+			$('[data-event="click"] a').live("mousemove", function(e) {
+				if(!('event' in window)) {
+					window.eventObj = e;
+				}
+			});
+			$("#id_when").when();
+			if($("#id_when_json").val()) {
+				$("#id_when").data("when").setValue(
+				JSON.parse(
+				$("#id_when_json").val()));
+			};	
+		}, 100);		
 	});
 
 })(jQuery);

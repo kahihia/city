@@ -52,6 +52,8 @@
 	});
 
 	$(document).ready(function() {
-		$("#id_price").price();
+		setTimeout(function(){
+			$("#id_price").price();
+		},100);		
 	});
 })(jQuery);

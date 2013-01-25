@@ -30,20 +30,23 @@
     }
 
     $(document).ready(function () {
-        new SearchLocation('#id_city_0', '#id_city_1', '.location_map', '.choose_location');
+        setTimeout(function(){
+            new SearchLocation('#id_city_0', '#id_city_1', '.location_map', '.choose_location');
 
-        $.balloon.defaults.classname = "hintbox";
-        $.balloon.defaults.css = {};
-        var ballons = $(".balloon");
-        $(ballons).each(function(){
-            var content = $(this).siblings(".balloon-content");
-            $(this).balloon({                 
-                contents:content,
-                position:"right bottom",
-                tipSize: 0,
-                offsetX:-25,
-                offsetY:25                
+            $.balloon.defaults.classname = "hintbox";
+            $.balloon.defaults.css = {};
+            var ballons = $(".balloon");
+            $(ballons).each(function(){
+                var content = $(this).siblings(".balloon-content");
+                $(this).balloon({                 
+                    contents:content,
+                    position:"right bottom",
+                    tipSize: 0,
+                    offsetX:-25,
+                    offsetY:25                
+                });
             });
-        });
+            
+        },100);        
     });
 })(jQuery);
