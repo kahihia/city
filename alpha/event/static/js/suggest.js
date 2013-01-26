@@ -86,12 +86,18 @@
                     });
                     // It need such strange init, arter that select will have true position
                                         
-                    $("#id_place").on('focus', function(){
-                    
-                        setTimeout(function(){
-                            $(".pac-container").show();    
-                        },10);                        
-                    })
+                    $("#id_place").on('keypress', function(){                    
+                                                
+                    });
+                    setInterval(function(){
+                        if($(".pac-container .pac-item").length>0){    
+                            $(".pac-container").removeClass("suggest-new");
+                        } else {
+                            if($("#id_place").val().length>3){
+                                $(".pac-container").addClass("suggest-new");    
+                            }
+                        }
+                    }, 10);
                 }
             }
             suggestVenueLine();

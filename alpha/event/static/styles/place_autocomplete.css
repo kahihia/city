@@ -2,7 +2,7 @@
     content:none;
 }
 
-.pac-container{
+.pac-container.suggest-new{
     padding-bottom:25px;    
 }
 
@@ -16,13 +16,19 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.new-venue {
+
+.pac-container .new-venue {
+    display:none;
+}
+
+.pac-container.suggest-new .new-venue {
     position:absolute;
     bottom:0px;
     color:#06C;
     background:#fafafa;
     font-weight: bold;
     width:100%;
+    display:block;
 }
 
 .tags_title {
