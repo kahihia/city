@@ -35,20 +35,7 @@
             });
             $("#id_place").on("focus", function() {
                 $(".pac-container").addClass("show");            
-            });
-            /*setTimeout(function() {
-                var newVenue = $("<div>").addClass("new-venue").html("suggest a new venue");
-                $(".pac-container").append(newVenue);
-                $(newVenue).on("mousedown", function() {
-                    $(".suggest").show();
-                    google.maps.event.trigger(map_location, 'resize');
-                    if(user_lat && user_lng) {
-                        panMapToCenter(user_lat, user_lng);
-                    }
-    
-                });
-            }, 1000);*/
-            
+            });            
         },100);        
     });
 })(jQuery);

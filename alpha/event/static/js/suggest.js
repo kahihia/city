@@ -39,22 +39,8 @@
                 $.fancybox.close();
             });
 
-            $(".choose_location").on("click", function(){
-                $(".location-map-wrapper").append($(".location_map").show());
-                $.fancybox($(".suggest"), {
-                        autoSize: true,
-                        closeBtn: true,
-                        hideOnOverlayClick: false
-                    });                
-                google.maps.event.trigger(map_location, 'resize');
-
-                setTimeout(function(){
-                    panMapToCenter(user_lat, user_lng);
-                },100);
-                
-            });
-
             $(".show_map").on("click", function(){
+                infowindow.close();
                 $.fancybox($(".location_map"), {
                         autoSize: true,
                         closeBtn: true,
@@ -73,7 +59,43 @@
                 $("#id_location_lat").on("change", function(){
                     user_lat = +($(this).val());
                 });            
-            },1000);  
+            },1000);            
+
+            function suggestVenueLine(){
+                $pacContainer = $(".pac-container");
+                if($pacContainer.length===0){
+                    setTimeout(function(){
+                        suggestVenueLine(); 
+                    },100);                    
+                } else {
+                    var newVenue = $("<div>").addClass("new-venue").html("suggest a new venue");
+                    $(".pac-container").append(newVenue);
+                    $(newVenue).on("mousedown", function() {
+                        $(".location-map-wrapper").append($(".location_map").show());
+                        $.fancybox($(".suggest"), {
+                            autoSize: true,
+                            closeBtn: true,
+                            hideOnOverlayClick: false
+                        });
+                        google.maps.event.trigger(map_location, 'resize');                        
+
+                        setTimeout(function(){
+                            panMapToCenter(user_lat, user_lng);
+                            infowindow.open(map_location, marker_location);
+                        },100);
+                    });
+                    // It need such strange init, arter that select will have true position
+                                        
+                    $("#id_place").on('focus', function(){
+                    
+                        setTimeout(function(){
+                            $(".pac-container").show();    
+                        },10);                        
+                    })
+                }
+            }
+            suggestVenueLine();
+
         },100);        
         
     });
