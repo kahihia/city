@@ -163,7 +163,7 @@ class JqSplitDateTimeWidget(MultiWidget):
             )
 
 
-class AjaxCropWidget(ImageCropWidget):
+class AjaxCropWidget(forms.TextInput):
     class Media:
         js = (
             "image_cropping/js/jquery.Jcrop.min.js",
@@ -184,11 +184,10 @@ class AjaxCropWidget(ImageCropWidget):
         return self.picture_src.value_from_datadict(data, files, 'picture_src')
 
     def render(self, name, value, *args, **kwargs):
-        html = super(ImageCropWidget, self).render(name, value, *args, **kwargs)
         if value:
-            html += self.picture_src.render("picture_src", "", {"id": 'id_picture_src', "value": "%s" % (value)})
+            html = self.picture_src.render("picture_src", "", {"id": 'id_picture_src', "value": "%s" % (value)})
         else:
-            html += self.picture_src.render("picture_src", "", {"id": 'id_picture_src'})
+            html = self.picture_src.render("picture_src", "", {"id": 'id_picture_src'})
         html += Template("""<div id="file-uploader" data-csrf-token="{{ csrf_token }}">
             <noscript>
                 <p>Please enable JavaScript to use file uploader.</p>

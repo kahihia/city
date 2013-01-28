@@ -106,7 +106,7 @@ def generate_form(*args):
             widget=WheelchairWidget(choices=YES_OR_NO),
             required=False
         )
-        picture = forms.ImageField(
+        picture_src = forms.CharField(
             widget=AjaxCropWidget(),
             required=False
         )
@@ -155,8 +155,7 @@ def generate_form(*args):
             self.fields['website'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['tickets'].widget.attrs['class'] = 'inputfield rborder'
 
-            self.fields['picture'].label = _(u'Image')
-            self.fields['picture'].widget.attrs['class'] = 'inputfield rborder'
+            self.fields['picture_src'].label = _(u'Image')            
 
         def clean(self):
             cleaned_data = self.cleaned_data
