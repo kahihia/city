@@ -9,11 +9,12 @@ import random
 from taggit_autosuggest.managers import TaggableManager
 import os
 import os.path
-from PIL import Image
+import re
+
 import datetime
-from event import EVENT_PICTURE_DIR, EVENT_RESIZE_METHOD, EVENT_DEFAULT_SIZES
-from StringIO import StringIO
-from django.core.files.base import ContentFile
+from event import EVENT_PICTURE_DIR
+
+
 from image_cropping import ImageCropField, ImageRatioField
 
 
@@ -101,6 +102,9 @@ class Event(models.Model):
     venue = models.ForeignKey('Venue', blank=True, null=True)    # a specific venue associated with the event
     price = models.CharField('event price (optional)', max_length=40, blank=True, default='Free')
     website = models.URLField(blank=True, null=True, default='')
+    tickets = models.CharField('tickets', max_length=250, blank=True, null=True)
+
+    audited = models.BooleanField(default=False)
     #-------------------------------------------------------------
     # django-taggit field for tags--------------------------------
     #=============================================================
@@ -155,56 +159,6 @@ class Event(models.Model):
         """
         return self.picture.storage.url(self.picture_name(size))
 
-    def create_resized(self, size):
-        """
-        Creates a resized image on the filesystem using EVENT_RESIZE_METHOD
-        Uses the self.picture_name method to determine the file path.
-
-        Pre: No file exists
-        Post: A resized file is created in the filesystem by the storage manager.
-        Returns: Nothing
-        """
-        try:
-            original = self.picture.storage.open(self.picture.name, 'rb').read()
-            image = Image.open(StringIO(original))
-        except IOError:
-            picture_thumb = ''  # we can't read the file, we don't have the codec support
-            return
-        #make the jpeg
-        (width,height) = image.size
-        if width != size or height != size:
-            if width > height:
-                difference = (width - height) / 2
-                image = image.crop( (difference, # <-----------#\
-                                     0,                         #\
-                                     width - difference,         #\
-                                     height)     # <------------- #\
-                                    )                              #\
-            else:                                                  #=-Symmetry is awesome
-                difference = (height - width) / 2                  #/
-                image = image.crop( (0,          # <--------------#/
-                                     difference,                 #/
-                                     width,                     #/
-                                     height - difference) # <--#/
-                                    )
-            image = image.resize( (size, size),
-                                  EVENT_RESIZE_METHOD
-                                  )
-            #convert to rgb
-            if image.mode != 'RGB':
-                image = image.convert('RGB')
-
-            #make the jpeg
-            resized_pic = StringIO()
-            image.save(resized_pic, 'JPEG')
-            resized_pic_file = ContentFile(resized_pic.getvalue())
-        else:
-            resized_pic_file = ContentFile(original)
-
-        # save the jpeg
-        thumb = self.picture.storage.save( self.picture_name(size),
-                                           resized_pic_file )
-
 
 class SingleEvent(models.Model):
     """
@@ -221,41 +175,6 @@ class SingleEvent(models.Model):
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
     end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
     description = models.TextField(null=True, blank=True)  # additional description
-
-
-def create_default_pictures(instance=None, created=False, **kwargs):
-    """
-    post_save
-
-    django.db.models.signals.post_save
-
-    Like pre_save, but sent at the end of the save() method.
-
-    Arguments sent with this signal:
-
-    sender
-      The model class.
-
-    instance
-      The actual instance being saved.
-
-    created
-      A boolean; True if a new record was created.
-
-    raw
-      A boolean; True if the model is saved exactly as presented
-      (i.e. when loading a fixture). One should not query/modify other
-      records in the database as the database might not be in a
-      consistent state yet.
-
-    using
-      The database alias being used.
-
-    """
-    if created:
-        for size in EVENT_DEFAULT_SIZES:
-            instance.create_resized(size)
-models.signals.post_save.connect(create_default_pictures, sender=Event)
 
 
 class Venue(models.Model):
@@ -282,3 +201,71 @@ class Reminder(models.Model):
 
     def __unicode__(self):
         return self.event
+
+
+class AuditPhrase(models.Model):
+    phrase = models.CharField(max_length=200)
+    active = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return self.phrase
+
+
+def phrases_query():
+    # TODO: add caching
+    phrases = AuditPhrase.objects.filter(active=True)
+    phrases = [pm.phrase for pm in phrases]
+    phrases = "|".join(phrases)
+
+    return "(%s)" % phrases
+
+
+class AuditEvent(Event):
+    phrases = models.ManyToManyField(AuditPhrase)
+
+
+class FakeAuditEvent(models.Model):
+    event_ptr_id = models.PositiveIntegerField(db_column="event_ptr_id", primary_key=True)
+
+    class Meta:
+        app_label = AuditEvent._meta.app_label
+        db_table = AuditEvent._meta.db_table
+        managed = False
+
+
+class AuditSingleEvent(models.Model):
+    phrases = models.ManyToManyField(AuditPhrase)
+
+
+def audit_event_catch(instance=None, created=False, **kwargs):
+    if instance.audited:
+        return
+    bad_phrases = phrases_query()
+    name_search_result = re.findall(bad_phrases, instance.name)
+    description_search_result = re.findall(bad_phrases, instance.description)
+    if name_search_result or description_search_result:
+        audit_event = AuditEvent(
+            event_ptr_id=instance.pk
+        )
+        audit_event.__dict__.update(instance.__dict__)
+        audit_event.save()
+        phrases = AuditPhrase.objects.filter(
+            phrase__in=(name_search_result + description_search_result)
+        )
+        for phrase in phrases:
+            audit_event.phrases.add(phrase)
+models.signals.post_save.connect(audit_event_catch, sender=Event)
+
+
+# def audit_single_event(instance=None, created=False, **kwargs):
+#     bad_phrases = phrases_query()
+#     description_search_result = re.findall(bad_phrases, instance.description)
+#     if description_search_result:
+#         audit_event = AuditSingleEvent(
+#             event=instance,
+#             phrases=AuditPhrase.objects.filter(
+#                 name__in=description_search_result
+#             )
+#         )
+#     audit_event.save()
+# models.signals.post_save.connect(audit_single_event, sender=SingleEvent)

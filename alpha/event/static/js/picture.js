@@ -52,47 +52,52 @@
                 element: this.element[0],
                 multiple: false,
                 allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+                sizeLimit: 33554432,
                 onComplete: function(id, fileName, responseJSON) {
                     if(responseJSON.success) {
-                        that.changeImage(responseJSON.path);
+                        $("#id_picture_src").val(responseJSON.path);
+                        that.changeImage(responseJSON.path);                        
                         
-                        // User must not see how jcrop widget rewriting itself when new image coming                        
                         $.fancybox($(that.popup), {
                             autoSize: true,                     
                             closeBtn: false,                        
                             hideOnOverlayClick: false
                         });                          
-                    } else {
+                    } else {                        
                         console.log && console.log("upload failed!");
                     }
-                },
-                onSubmit: function(id, fileName, input) {
-                    var picture = $("#id_picture");
-                    setTimeout(function() {
-                        picture.after(input);
-                        picture.remove();
-                    }, 10);
-                    $(input).attr("id", "id_picture");
-                    $(input).attr("name", "picture");                    
-                },
+                },                
                 params: {
                     'csrf_token': crsf_token,
                     'csrf_name': 'csrfmiddlewaretoken',
                     'csrf_xname': 'X-CSRFToken',
-                },
+                }
             });
+            if($("#id_picture_src").val()){
+                this.changeImage(
+                    $("#id_picture_src").val()
+                );
+            }
         },
         initJcrop: function() {
-            var that = this,
+            var that = this, selected,
                 style_img_warning = 'div.jcrop-image.size-warning .jcrop-vline{border:1px solid red; background: none;}' + 'div.jcrop-image.size-warning .jcrop-hline{border:1px solid red; background: none;}';
             $("<style type='text/css'>" + style_img_warning + "</style>").appendTo('head');
+
+            if($("#id_cropping").val()){
+                selected = _.map($("#id_cropping").val().split(","), function(val){
+                    return parseInt(val);
+                });                    
+            } else {
+                selected = [0, 0, $(this.popup).data("thumb-height"), $(this.popup).data("thumb-width")];
+            }
 
             $(this.cropping_image).Jcrop({
                 aspectRatio: 1,
                 minSize: [50, 50],
                 boxWidth: 800,
                 boxHeight: 500,
-                setSelect: [0, 0, $(this.popup).data("thumb-height"), $(this.popup).data("thumb-width")],                
+                setSelect: selected,
                 onSelect: function(selected) {
                     $(".picture-thumb").addClass("result");
                     that.selected = selected;
@@ -104,7 +109,13 @@
                 }
             }, function() {
                 that.jcrop = this;
-            });
+                that.showPreview({
+                    x:selected[0],
+                    y:selected[1],
+                    w:selected[2]-selected[0],
+                    h:selected[3]-selected[1]
+                }, that.jcrop.getWidgetSize());
+            });            
         },
         changeImage: function(image_path) {
             var that = this;            
@@ -144,8 +155,9 @@
             if(this.cropping.data('size-warning')) {
                 this.crop_indication(selected);
             }
-            this.cropping.val(new Array(
-            selected.x, selected.y, selected.x2, selected.y2).join(','));
+            this.cropping.val(
+                new Array(selected.x, selected.y, selected.x2, selected.y2).join(',')
+            );
         },
         showPreview: function(coords, widgetSize) {
             var rx = 180 / coords.w;

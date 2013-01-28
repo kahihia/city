@@ -27,7 +27,37 @@
                 $(that.popup).hide();
                 $(".modal-bg").hide();
                 $(".as-selections").removeClass("active");
-            });            
+            });
+
+            $("#id_tags__tagautosuggest").on("keydown", function(e){
+                that.setFreeAndWheelchair();                
+            });
+            $("#id_tags__tagautosuggest").on("focus", function(e){
+                that.setFreeAndWheelchair();                
+            });
+            $.post("/events/ctags", {}, function(data){
+                tags = _.map(data.tags, function(tag){ return tag.name });
+                that.loadTags(tags);
+            });
+            this.setFreeAndWheelchair();
+        },
+        setFreeAndWheelchair: function(){
+            var tags = $("#as-values-id_tags__tagautosuggest").val().split(",");
+            tags = _.filter(tags, function(tag){ return tag });
+            if(tags.indexOf("Free")!==-1){
+                $("#id_price_free").attr('checked', true);
+            } else {
+                $("#id_price_free").attr('checked', false);
+            }
+            setTimeout(function(){
+                $("#id_price_free").trigger("changeFromTags");    
+            },10);            
+
+            if(tags.indexOf("Wheelchair" )!==-1){
+                $("#id_wheelchair_0").attr('checked', true)
+            } else {
+                $("#id_wheelchair_1").attr('checked', true)
+            }
         },
         forCity: function(city){
             var data = {},that=this;
@@ -40,7 +70,6 @@
                 tags = _.map(data.tags, function(tag){ return tag.name });
                 that.loadTags(tags);
             });
-
         },
         loadTags: function(tags) {
             var that = this;
@@ -70,9 +99,10 @@
             $("#id_tags__tagautosuggest").trigger(e);
         }
     });
+
     $(document).ready(function() {
         setTimeout(function(){
-            $("#id_tags__tagautosuggest").tagspopup();
+            $("#id_tags__tagautosuggest").tagspopup();            
         },100);
     });
 })(jQuery);

@@ -253,3 +253,16 @@
     position: relative;
     padding: .5em 0;
 }
+
+#ui-timepicker-div {
+    z-index: 100000 !important;
+}
+
+.ui-timepicker-title{
+    text-align:center;
+}
+
+#ui-timepicker-div .ui-state-default{
+    background:none;
+    cursor:pointer;
+}

@@ -208,7 +208,7 @@ body
 .location-text-box input.location
 {
 	border:0;
-	width:180px;
+	width:175px;
 	background:none;
 	color:#454545;
 }
@@ -553,6 +553,11 @@ body
 	font-size:15px;
 	line-height:20px;
 }
+
+.menu-wrapper {
+	width:1200px;
+}
+
 #entry-form{
 	padding:20px 20px;
 }

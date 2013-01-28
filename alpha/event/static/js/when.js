@@ -101,7 +101,7 @@
 			$(this.resetButton).on("click", function() {
 				var agree = confirm("Are you sure you want to clear form?")
 				if(agree) {
-					that.clear();
+					that.clear(true);
 					//$.fancybox.close();
 				}
 			});
@@ -170,7 +170,10 @@
 		},
 		monthContainer: function(date, year, month) {
 			var that = this,
-				widget, daysTimePicker, multiSelectModeWrapper, removeButton, daysPicker, monthAndDaysWrapper, now = (new Date());
+				widget, daysTimePicker, multiSelectModeWrapper, removeButton, daysPicker, monthAndDaysWrapper, 
+				yesterday = (new Date());
+				yesterday = yesterday.setDate(yesterday.getDate() - 1);
+
 
 			multiSelectModeWrapper = $("<div>").addClass("multi-select-mode-wrapper");
 
@@ -204,7 +207,7 @@
 					that.addMonth(year, month);
 				},
 				beforeShowDay: function(date) {
-					return [date >= now];
+					return [date >= yesterday];
 				},
 				mode: 'normal',
 				defaultDate: date
@@ -299,15 +302,17 @@
 			}
 			return true;
 		},
-		clear: function() {
+		clear: function(open) {
 			$(this.deck).remove();
 			this.months = {};
 			this._initDeck();
-			$.fancybox($(this.deck), {
-				autoSize: true,
-				closeBtn: true,
-				hideOnOverlayClick: false
-			});
+			if(open){
+				$.fancybox($(this.deck), {
+					autoSize: true,
+					closeBtn: true,
+					hideOnOverlayClick: false
+				});
+			}			
 		}
 
 	});
@@ -393,11 +398,11 @@
 			}
 			if(previous) {
 				this.days.splice(
-				this.days.indexOf(previous) + 1, 0, $(timePicker).data("timepicker"));
+				this.days.indexOf(previous) + 1, 0, $(timePicker).data("myTimepicker"));
 				$(previous.element).after(timePicker)
 			} else {
 				this.days.splice(
-				0, 0, $(timePicker).data("timepicker"));
+				0, 0, $(timePicker).data("myTimepicker"));
 				$(this.daysContainer).prepend(timePicker);
 			}
 			if(this.days.length === 0) {
@@ -441,7 +446,7 @@
 			}
 		},
 		timePicker: function(day, month, year) {
-			return $("<div>").addClass("my-time-picker").timepicker({
+			return $("<div>").addClass("my-time-picker").myTimepicker({
 				day: day,
 				month: month,
 				year: year,
@@ -450,7 +455,7 @@
 		}
 	});
 
-	$.widget("ui.timepicker", {
+	$.widget("ui.myTimepicker", {
 		options: {
 			day: null,
 			container: null
@@ -472,62 +477,47 @@
 
 			function changeNext() {
 				if(that.next()) {
-					if(that.next().isAutoFill()) {
+					if(that.isAutoFill()) {
 						that.next().setValue(
-						that.getValue());
+							that.getValue()
+						);
 					}
-					that.next().changeNext()
+					that.next().changeNext(true);
 				}
 			};
 
-			this.startTime.ptTimeSelect({
+			this.startTime.timepicker({
 				onClose: changeNext
 			});
-			this.endTime.ptTimeSelect({
+			this.endTime.timepicker({
 				onClose: changeNext
 			});
 
 			$(this.removeButton).on('click', function() {
 				if(confirm("Do you realy want to remove day?")) {
 					var format_day = $.datepicker.formatDate($.datepicker._defaults.dateFormat, new Date(that.options.year, that.options.month - 1, that.options.day));
-					$(".days-picker", $(this).parents(".month-container")).multiDatesPicker('toggleDate', format_day);
-					//$(".days-time-picker", $(this).parents(".month-container")).data("daystimepicker").addDay(that.options.day, that.options.month, that.options.year);					
+					$(".days-picker", $(this).parents(".month-container")).multiDatesPicker('toggleDate', format_day);				
 				}
-			})
-
-			// oldTime =  $.timePicker(this.startTime).getTime();
-			// $(this.startTime).on("change", function(){
-			// 	if(that.endTime.val()){
-			// 		var duration = ($.timepicker(that.endTime).getTime()-oldTime),
-			//  					time = $.timePicker(that.startTime.getTime());
-			//  					// Calculate and update the time in the second input.
-			//  				$.timePicker(that.endTime).setTime(new Date(new Date(time.getTime() + duration)));
-			//  				oldTime = time;
-			// 	}
-			// });
-			// $(this.endTime).on("change", function() {
-			// 			if($.timePicker(this.startTime).getTime() > $.timePicker(this).getTime()) {
-			//  				$(this).addClass("error");
-			// 			}
-			// 			else {
-			//  				$(this).removeClass("error");
-			// 			}
-			// });
+			});
+			
 			$(this.autoFill).on("click", function() {
 				$(this).toggleClass("checked");
 				if($(this).hasClass("checked")) {
-					that.setValue(
-					that.previous().getValue());
+					that.next().setValue(
+						that.getValue()
+					);
+					that.next().changeNext(true);
 				}
 			});
 		},
-		changeNext: function() {
-			if(this.next()) {
-				if(this.next().isAutoFill()) {
+		changeNext: function(forward) {
+			if(this.next() && (this.isAutoFill() || forward)) {
+				if(!this.next().isAutoFill()) {
 					this.next().setValue(
-					this.getValue());
+						this.getValue()
+					)
 				}
-				this.next().changeNext()
+				this.next().changeNext(forward);
 			}
 		},
 		isAutoFill: function() {
@@ -561,8 +551,10 @@
 			$("#id_when").when();
 			if($("#id_when_json").val()) {
 				$("#id_when").data("when").setValue(
-				JSON.parse(
-				$("#id_when_json").val()));
+					JSON.parse(
+						$("#id_when_json").val()
+					)
+				);
 			};	
 		}, 100);		
 	});

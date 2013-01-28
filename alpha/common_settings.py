@@ -41,7 +41,7 @@ USE_L10N = True
 # Absolute filesystem path to the directory that will hold
 # user-uploaded files.  Example:
 # "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.abspath( os.path.join( os.path.dirname( os.path.abspath(__file__)), '..', 'media') )
+MEDIA_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'media'))
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use
 # a trailing slash.  Examples: "http://media.lawrence.com/media/",
@@ -52,7 +52,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static
 # files in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.abspath( os.path.join( os.path.dirname( os.path.abspath(__file__)), '..', 'static') )
+STATIC_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'static'))
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -149,7 +149,7 @@ LOGGING = {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'console':{
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler'
         }
@@ -166,6 +166,8 @@ LOGGING = {
         }
     }
 }
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 3355
 
 
 # django.registration settings, one week window to activate
@@ -199,7 +201,7 @@ CITIES_FILES = {
     'city': {
        'filename': 'CA.zip',
        'urls':     ['http://download.geonames.org/export/dump/CA.zip']
-    }    
+    }
 }
 
 CITIES_POSTAL_CODES = ['CA']

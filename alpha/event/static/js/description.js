@@ -108,7 +108,10 @@
             var value = $("#id_description_json").val();
             $("#id_description").description();
             if(value){
-                $("#id_description").data("description").setValue(JSON.parse(value));    
+                var json = JSON.parse(value);                
+                $("#id_description").html(json["default"]);
+                $("#id_description").data("description").setValue(json);
+
             }
         },100);
     });

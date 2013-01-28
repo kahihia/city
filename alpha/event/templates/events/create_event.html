@@ -263,7 +263,9 @@
                                         </tr>
                                         <tr>
                                             <td>Price</td>
-                                            <td class="price-td">{{form.price}}</td>
+                                            <td class="price-td">
+                                                {{form.price}}
+                                            </td>
                                             <td>
                                                 <a href="#" class="balloon">
                                                     <div class="buttonq"></div>
@@ -292,9 +294,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td>                                                
                                                 {{form.description}}
-                                                {{form.description_json}}                                                
+                                                {{form.description_json}}
+                                            </td>                                             
                                             <td>
                                                 <a href="#" class="balloon">
                                                     <div class="buttonq"></div>
@@ -368,7 +371,7 @@
                                         <tr>
                                             <td>Tickets</td>
                                             <td>
-                                                <input type="text" name="tickets" class="inputfield rborder" />
+                                                {{form.tickets}}
                                             </td>
                                             <td>
                                                 <a href="#" class="balloon">

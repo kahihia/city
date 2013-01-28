@@ -4,7 +4,6 @@ from django.core.mail.message import EmailMessage
 from django.utils.safestring import mark_safe
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
@@ -16,26 +15,26 @@ from cities.models import City, Country
 from django.db.models import Q
 
 from event import EVENTS_PER_PAGE, DEFAULT_FROM_EMAIL
-from event.models import Event, picture_file_path, Reminder, Venue, SingleEvent
-from event.forms import generate_form, reminderForm
+from event.models import Event, Venue, SingleEvent, Reminder, AuditEvent, AuditSingleEvent, AuditPhrase, FakeAuditEvent
 from event.utils import TagInfo, EventSet, find_nearest_city
 from event.templatetags.event_pictures import event_picture_url
+from event.forms import generate_form
+
 from citi_user.forms import CityAuthForm
 from taggit.models import Tag
 
 import datetime
 import time
-import calendar
-import copy
 import re
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
 import json
 import smtplib
-from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 
 from ajaxuploader.views import AjaxFileUploader
+
+from django.middleware.csrf import get_token
+import settings
 
 
 def start(request):
@@ -140,8 +139,8 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
             start_time__day=today.day)
         pages = todays_events.count() / EVENTS_PER_PAGE
         page_remainder = todays_events.count() % EVENTS_PER_PAGE
-        todays_events = todays_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Today's Events", todays_events ))
+        todays_events = todays_events.order_by('start_time')[int(num) * EVENTS_PER_PAGE:EVENTS_PER_PAGE]
+        event_sets.append(EventSet(u"Today's Events", todays_events))
     elif date == u'tomorrow':
         tomorrow = today + datetime.timedelta(days=1)
         start = tomorrow
@@ -283,53 +282,55 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
     if num < 2:
         page_more = 2
     else:
-        page_more = num +1
+        page_more = num + 1
 
-    return render_to_response('events/browse_events.html',
-                              { 'all_tags':all_tags,
-                                'current_tags':old_tags,
-                                'page_date':date,
-                                'page_num':int(num),
-                                'event_sets':event_sets,
-                                'pages':range(1, pages + 2),
-                                'form2':form2,
-                                'next':request.path,
-                                'page_remainder':page_remainder,
-                                'page_less':page_less,
-                                'page_more':page_more,
-                                'browsing':True,
-                                'browse_bar':True,
-                                'show_ads':show_ads,
-                                'locations':locations,
-                                'locs':locs,
-                                'locd':locd,
+    return render_to_response('events/browse_events.html', {
+                                'all_tags': all_tags,
+                                'current_tags': old_tags,
+                                'page_date': date,
+                                'page_num': int(num),
+                                'event_sets': event_sets,
+                                'pages': range(1, pages + 2),
+                                'form2': form2,
+                                'next': request.path,
+                                'page_remainder': page_remainder,
+                                'page_less': page_less,
+                                'page_more': page_more,
+                                'browsing': True,
+                                'browse_bar': True,
+                                'show_ads': show_ads,
+                                'locations': locations,
+                                'locs': locs,
+                                'locd': locd,
                                 },
-                              context_instance = RequestContext(request))
+                              context_instance=RequestContext(request))
+
+
 def view(request, slug=None, old_tags=None):
     try:
         event = Event.events.get(slug=slug)
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))
 
-    opengraph = { 'og:title' : event.name,
-                  'og:type' : 'event',
-                  'og:locale' : 'en_US',
-                  'og:image' : 'http://' + settings.EVENT_EMAIL_SITE + event_picture_url(event, size=200),
-                  'og:url' : 'http://' + settings.EVENT_EMAIL_SITE + reverse('event_view', args=(event.slug,)),
-                  'og:site_name' : 'Cityfusion',
-                  'fb:app_id' : '330171680330072',
+    opengraph = {'og:title': event.name,
+                  'og:type': 'event',
+                  'og:locale': 'en_US',
+                  'og:image': 'http://' + settings.EVENT_EMAIL_SITE + event_picture_url(event, size=200),
+                  'og:url': 'http://' + settings.EVENT_EMAIL_SITE + reverse('event_view', args=(event.slug,)),
+                  'og:site_name': 'Cityfusion',
+                  'fb:app_id': '330171680330072',
                   #'og:description' : '%s, %s' % (
                   #    event.start_time.strftime("%B %-1d"),
                   #    event.start_time.strftime('%-1I:%M %p'))
                   }
 
-    return render_to_response('events/event_description.html',
-                              { 'event': event,
-                                'browsing':True,
-                                'old_tags':old_tags,
-                                'opengraph' : opengraph
+    return render_to_response('events/event_description.html', {
+                                'event': event,
+                                'browsing': True,
+                                'old_tags': old_tags,
+                                'opengraph': opengraph
                                 },
-                              context_instance = RequestContext(request))
+                              context_instance=RequestContext(request))
 
 
 def create(request, form_class=None, success_url=None, template_name='events/create_event.html', send_email=True):
@@ -387,6 +388,9 @@ def create(request, form_class=None, success_url=None, template_name='events/cre
                 event_obj.owner = request.user
                 event_obj.email = request.user.email  # don't really need this line
 
+            if request.POST["picture_src"]:
+                event_obj.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
+
             event_obj = event_obj.save()  # save to the database
             form.save_m2m()  # needed for many-to-many fields (i.e. the event tags)
 
@@ -398,10 +402,10 @@ def create(request, form_class=None, success_url=None, template_name='events/cre
                             description = description_json['days'][date.strftime("%m/%d/%Y")]
                         else:
                             description = ""
-                        start_time = time.strptime(times["start"], '%I:%M %p')
+                        start_time = time.strptime(times["start"], '%H:%M')
                         start = datetime.datetime(int(year), int(month), int(day), start_time[3], start_time[4])
 
-                        end_time = time.strptime(times["end"], '%I:%M %p')
+                        end_time = time.strptime(times["end"], '%H:%M')
                         end = datetime.datetime(int(year), int(month), int(day), end_time[3], end_time[4])
 
                         single_event = SingleEvent(
@@ -489,55 +493,29 @@ def edit(request,
 
     # Set the return address
     if success_url is None:
-        success_url = reverse('event_view', kwargs={ 'slug':event_obj.slug})
+        success_url = reverse('event_view', kwargs={'slug': event_obj.slug})
 
     # Verify and save the form to model
     if request.method == 'POST':
-        form = form_class( instance = event_obj,
-                              files = request.FILES,
-                               data = request.POST )
+        form = form_class(instance=event_obj,
+                              files=request.FILES,
+                               data=request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(success_url)
     else:
-        form = form_class(instance = event_obj)
+        form = form_class(instance=event_obj)
 
     # Edit the event
     context = RequestContext(request)
-    return render_to_response(template_name,
-                              { 'form': form,
-                                'event':event_obj,
+    return render_to_response(template_name, {
+                                'form': form,
+                                'event': event_obj,
                                 'picture_exists': event_obj.picture_exists(40)},
                               context_instance=context)
 
 
-def create_recurrence(event):
-    """
-
-    Pre: event is an event object, populated with data from the form and saved
-         event has an 'end_time' attr which contains valid information
-         event has as 'recur' attr which is True
-    Post: a recurrence object is created, as well as a series of events
-    Returns: nothing
-    """
-    #create the recurrence
-    recurrence = Recurrence()
-    event.recurrence = recurrence
-    recurrence.save()
-    event.save()
-    #generate list of days based on start and end date
-    #TODO - add different functions for handling the daily, weekly, and monthly use cases
-    days = daily(event.start_time.date(), event.end_time.date())
-    #iterate through list and create events
-    for day in days:
-        next_event = copy.copy(event)
-        next_event.start_time = datetime.datetime.combine(day, next_event.start_time.time())
-        next_event.id = None
-        next_event.save() #this does not update the many to many attributes (the tags)
-        #TODO find out how to call the TaggitManager with the information
-        event = next_event
-
-def daily (start, end, weekday=False, day_delta=1):
+def daily(start, end, weekday=False, day_delta=1):
     """
     Pre: start is a date
          end is a date
@@ -551,11 +529,12 @@ def daily (start, end, weekday=False, day_delta=1):
         pass
     else:
         delta = datetime.timedelta(days=day_delta)
-    	current = start + delta
-    	while current <= end:
+        current = start + delta
+        while current <= end:
             date_list.append(current)
             current += delta
     return date_list
+
 
 def ason(request):
     tag_list = []
@@ -566,37 +545,112 @@ def ason(request):
 
     return HttpResponse(json.dumps(tag_list), mimetype="application/json")
 
+
 def reminder(request, event_id):
     if request.user.is_authenticated():
         mail = request.user.email
         search = Event.events.get(id=event_id)
-        saves = Reminder(event = search.name, email = mail, date=search.start_time)
+        saves = Reminder(event=search.name, email=mail, date=search.start_time)
         saves.save()
         messages.add_message(request, messages.SUCCESS, 'Event reminder will be sent')
     else:
         return HttpResponseRedirect('/accounts/register/')
     return HttpResponseRedirect(request.GET['next'])
 
+
 def city_tags(request):
     city = None
-    if request.method == 'POST':                                
+    if request.method == 'POST':
         if "city_identifier" in request.POST:
             city = City.objects.get(id=int(request.POST["city_identifier"]))
-            
+
         elif "geo_city" in request.POST:
             cities = City.objects.filter(
-                Q(name_std=request.POST["geo_city"].encode('utf8'))|
+                Q(name_std=request.POST["geo_city"].encode('utf8')) |
                 Q(name=request.POST["geo_city"])
             )
             if cities.count():
-                city=cities[0]
-        else:
-            return HttpResponse(json.dumps({'error':'City is not specified'}), mimetype="application/json")
-        
-        if not city:
-            return HttpResponse(json.dumps({'error':'City is not found'}), mimetype="application/json")
+                city = cities[0]
 
-        tags = Event.events.filter(venue__city=city).select_related('tags').values('tags')
-        tags = set([tag['tags'] for tag in tags if tag['tags']])
-        tags = Tag.objects.filter(id__in=tags).values()
-        return HttpResponse(json.dumps({"tags":list(tags)}), mimetype="application/json") 
+        if city:
+            tags = Event.events.filter(venue__city=city).select_related('tags').values('tags')
+            tags = set([tag['tags'] for tag in tags if tag['tags']])
+        else:
+            tags = []
+
+        tags = Tag.objects.filter(Q(id__in=tags) |
+            Q(name__in=["Free", "Wheelchair"])
+        ).values()
+        return HttpResponse(json.dumps({"tags": list(tags)}), mimetype="application/json")
+
+
+def audit_event_list(request):
+    audit_events = AuditEvent.objects.all()
+    return render_to_response("audit/event_list.html", {'audit_events': audit_events}, context_instance=RequestContext(request))
+
+
+def audit_event_remove(request, id):
+    audit_event = AuditEvent.objects.get(pk=id)
+    audit_event.delete()
+    return audit_event_list(request)
+
+
+def audit_event_edit(request, id):
+    audit_event = AuditEvent.objects.get(pk=id)
+    return render_to_response("audit/event_edit.html", {'audit_event': audit_event}, context_instance=RequestContext(request))
+
+
+def audit_event_update(request, id):
+    audit_event = AuditEvent.objects.get(pk=id)
+    audit_event_fake = FakeAuditEvent.objects.get(pk=id)
+    event_obj = Event.events.get(pk=id)
+    audit_event.phrases.clear()
+    audit_event_fake.delete()
+
+    event_obj.audited = True
+    event_obj.name = request.POST["name"]
+    event_obj.description = request.POST["description"]
+    event_obj.save()
+    return audit_event_list(request)
+
+
+def audit_event_admin_update(request, id):
+    audit_event = AuditEvent.objects.get(pk=id)
+    audit_event_fake = FakeAuditEvent.objects.get(pk=id)
+    event_obj = Event.events.get(pk=id)
+    audit_event.phrases.clear()
+    audit_event_fake.delete()
+
+    event_obj.audited = True
+    event_obj.name = request.POST["name"]
+    event_obj.description = request.POST["description"]
+    event_obj.save()
+    return HttpResponseRedirect('/admin/event/auditevent')
+
+
+def audit_event_approve(request, id):
+    audit_event = AuditEvent.objects.get(pk=id)
+    audit_event_fake = FakeAuditEvent.objects.get(pk=id)
+    event_obj = Event.events.get(pk=id)
+    audit_event.phrases.clear()
+    audit_event_fake.delete()
+
+    event_obj.audited = True
+    event_obj.save()
+    return audit_event_list(request)
+
+
+# def audit_single_event_list(request):
+#     pass
+
+
+# def audit_single_event_remove(request, id):
+#     pass
+
+
+# def audit_single_event_edit(request, id):
+#     pass
+
+
+# def audit_single_event_update(request, id):
+#     pass

@@ -14,6 +14,16 @@
 					that.removeFreeTag();
 				}
 			});
+			free.on("changeFromTags", function(){
+				if(this.checked) {
+					$(that.element).val("Free");
+					$(that.element).prop('disabled', true);					
+				} else {
+					$(that.element).prop('disabled', false);
+					$(that.element).val("");
+					
+				}
+			})
 			$(this.element).on("change", function() {
 				var price = $(that.element).val().trim();
 				if(!(/^\d*(?:\.\d{0,2})?$/.test(price))) {
