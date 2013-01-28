@@ -20,6 +20,9 @@
             $(this.element).on("change", function() {
                 that.save();
             });
+            $(this.element).on("blur", function(){
+                that.saveCurrentDay();
+            });
             this.data = {
                 "default":"", 
                 days: {}
@@ -111,7 +114,7 @@
                 var json = JSON.parse(value);                
                 $("#id_description").html(json["default"]);
                 $("#id_description").data("description").setValue(json);
-
+                $("#id_description").data("description").saveCurrentDay();
             }
         },100);
     });
