@@ -401,10 +401,10 @@ def create(request, form_class=None, success_url=None, template_name='events/cre
                             description = description_json['days'][date.strftime("%m/%d/%Y")]
                         else:
                             description = ""
-                        start_time = time.strptime(times["start"], '%H:%M')
+                        start_time = time.strptime(times["start"], '%I:%M %p')
                         start = datetime.datetime(int(year), int(month), int(day), start_time[3], start_time[4])
 
-                        end_time = time.strptime(times["end"], '%H:%M')
+                        end_time = time.strptime(times["end"], '%I:%M %p')
                         end = datetime.datetime(int(year), int(month), int(day), end_time[3], end_time[4])
 
                         single_event = SingleEvent(

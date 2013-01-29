@@ -495,6 +495,7 @@
 
 				},
 				rows: 2,
+				showPeriod: true,
 			});
 			this.endTime.timepicker({
 				onClose: changeNext,
@@ -506,6 +507,7 @@
 					ends: 11
 				},
 				rows: 2,
+				showPeriod: true
 			});
 
 			$(this.removeButton).on('click', function() {
