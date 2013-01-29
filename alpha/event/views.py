@@ -34,7 +34,6 @@ from django.contrib import messages
 from ajaxuploader.views import AjaxFileUploader
 
 from django.middleware.csrf import get_token
-import settings
 
 
 def start(request):
@@ -243,7 +242,7 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
             pages = exact_day_events.count() / EVENTS_PER_PAGE
             page_remainder = exact_day_events.count() % EVENTS_PER_PAGE
             exact_day_events = exact_day_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-            event_sets.append( EventSet( u'Events for ' + start.date().strftime('%A, %B %-1d') , exact_day_events))
+            event_sets.append(EventSet(u'Events for ' + start.date().strftime('%A, %B %-1d'), exact_day_events))
         else:
             #we need to 404 error here
             #URL overlap means the date might actually be a page number, so the 404 is actually checked above
@@ -251,19 +250,19 @@ def browse(request, old_tags=u'all', date=u'flow', num=1):
 
     #########################################################################################
     #packaging new tag information given split_tags list
-    tags = Tag.objects.all()
+    # tags = Tag.objects.all()
     all_tags = []
-    for tag in []:# tags:
+    for tag in []:  # tags:
         if end is None:
             number_of_events = Event.events.filter(start_time__gte=start, tags__name__in=[tag]).count()
         else:
-            number_of_events = Event.events.filter(start_time__range=(start,end), tags__name__in=[tag]).count()
+            number_of_events = Event.events.filter(start_time__range=(start, end), tags__name__in=[tag]).count()
         if number_of_events > 0:
             all_tags.append(
                 TagInfo(
-                    tag=tag, #the tag object
-                    previous_slugs=split_tags, #list of existing tags
-                    num=number_of_events #number of events which are tagged this way
+                    tag=tag,  # the tag object
+                    previous_slugs=split_tags,  # list of existing tags
+                    num=number_of_events  # number of events which are tagged this way
                     )
                 )
     all_tags.sort(key=lambda tag: tag.name)

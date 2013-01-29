@@ -265,4 +265,41 @@
 #ui-timepicker-div .ui-state-default{
     background:none;
     cursor:pointer;
+    position: relative;
+}
+
+#ui-timepicker-div .periods {
+    position: absolute;
+    cursor: pointer;
+    left: 10px;
+    top: 31px;
+    color: #222;
+    font-weight: bold;
+}
+#ui-timepicker-div .periods.active {
+    color: #1C94C4;
+}
+
+#ui-timepicker-div .periods.pm {
+    top: 51px;
+}
+.ui-timepicker-minutes {
+    width: 60px;
+    text-align: center;
+}
+
+.ui-timepicker-minutes .ui-timepicker{
+    margin:0 auto;
+}
+
+.ui-timepicker-hours .ui-timepicker {
+    margin-left: 40px;
+}
+
+.ui-timepicker-hours .ui-timepicker-title{
+    margin-left:40px;
+}
+
+#ui-timepicker-div .ui-state-active {
+    color: #1C94C4;
 }

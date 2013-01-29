@@ -56,7 +56,8 @@
                 onComplete: function(id, fileName, responseJSON) {
                     if(responseJSON.success) {
                         $("#id_picture_src").val(responseJSON.path);
-                        that.changeImage(responseJSON.path);                        
+                        that.changeImage(responseJSON.path);
+                        $(".modal-bg").hide();                      
                         
                         $.fancybox($(that.popup), {
                             autoSize: true,                     
@@ -65,8 +66,12 @@
                         });                          
                     } else {                        
                         console.log && console.log("upload failed!");
+                        $(".modal-bg").hide();
                     }
-                },                
+                }, 
+                onSubmit: function(){
+                    $(".modal-bg").show();
+                },
                 params: {
                     'csrf_token': crsf_token,
                     'csrf_name': 'csrfmiddlewaretoken',

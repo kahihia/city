@@ -379,6 +379,7 @@
             // reset clicked state
             inst._hoursClicked = false;
             inst._minutesClicked = false;
+            inst._periodsClicked = false;
 
             // fix width for dynamic number of time pickers
             // and adjust position before showing
@@ -461,6 +462,14 @@
             // after the picker html is appended bind the click & double click events (faster in IE this way
             // then letting the browser interpret the inline events)
             // the binding for the minute cells also exists in _updateMinuteDisplay
+            .find('.periods.am')
+                .unbind()
+                .bind("click", { period:'am' }, $.proxy($.timepicker.selectPeriods, this))
+            .end()
+            .find('.periods.pm')
+                .unbind()
+                .bind("click", { period:'pm' }, $.proxy($.timepicker.selectPeriods, this))
+            .end()
             .find('.ui-timepicker-minute-cell')
                 .unbind()
                 .bind("click", { fromDoubleClick:false }, $.proxy($.timepicker.selectMinutes, this))
@@ -529,7 +538,8 @@
                 nowButtonText = this._get(inst, 'nowButtonText'),
                 showDeselectButton = this._get(inst, 'showDeselectButton'),
                 deselectButtonText = this._get(inst, 'deselectButtonText'),
-                showButtonPanel = showCloseButton || showNowButton || showDeselectButton;
+                showButtonPanel = showCloseButton || showNowButton || showDeselectButton,
+                amActive, pmActive;
             
 
 
@@ -574,6 +584,8 @@
                 }
             }
 
+            amActive = (inst.period=='pm')?'':'active';
+            pmActive = (inst.period=='pm')?'active':'';
 
             html = '<table class="ui-timepicker-table ui-widget-content ui-corner-all"><tr>';
 
@@ -583,18 +595,13 @@
                         '<div class="ui-timepicker-title ui-widget-header ui-helper-clearfix ui-corner-all">' +
                         hourLabel +
                         '</div>' +
+                        '<div class="periods am '+amActive+'" data-timepicker-instance-id="#' + inst.id.replace(/\\\\/g,"\\")+'">' + amPmText[0] + '</div>' +
+                        '<div class="periods pm '+pmActive+'" data-timepicker-instance-id="#' + inst.id.replace(/\\\\/g,"\\")+'">' + amPmText[1] + '</div>' +
                         '<table class="ui-timepicker">';
 
                 for (row = 1; row <= rows; row++) {
                     html += '<tr>';
-                    // AM
-                    if (row == amFirstRow && showPeriodLabels) {
-                        html += '<th rowspan="' + amRows.toString() + '" class="periods" scope="row">' + amPmText[0] + '</th>';
-                    }
-                    // PM
-                    if (row == pmFirstRow && showPeriodLabels) {
-                        html += '<th rowspan="' + pmRows.toString() + '" class="periods" scope="row">' + amPmText[1] + '</th>';
-                    }
+
                     for (col = 1; col <= hoursPerRow; col++) {
                         if (showPeriodLabels && row < pmFirstRow && hours[hourCounter] >= 12) {
                             html += this._generateHTMLHourCell(inst, undefined, showPeriod, showLeadingZero);
@@ -1049,6 +1056,13 @@
                 } else {
                     var time = this.parseTime(inst, timeVal);
                     inst.hours = time.hours;
+                    if(inst.hours>11){
+                        inst.hours -= 12;
+                        inst.period = 'pm';
+                    } else {
+                        inst.period = 'am';
+                    }
+
                     inst.minutes = time.minutes;
                 }
             }
@@ -1199,6 +1213,21 @@
             this._hideTimepicker();
         },
 
+        selectPeriods: function(event){
+            var period = event.data.period,
+                id = $(event.target).attr("data-timepicker-instance-id"),
+                $target = $(id),
+                inst = this._getInst($target[0]);
+            inst.period = period;
+            if(period=='am'){
+                $(".periods.am").addClass('active');
+                $(".periods.pm").removeClass('active');
+            } else {
+                $(".periods.am").removeClass('active');
+                $(".periods.pm").addClass('active');
+            }
+        },
+
 
         selectHours: function (event) {
             var $td = $(event.currentTarget),
@@ -1315,6 +1344,10 @@
                         displayHours -= 12;
                     }
                 }
+            }
+
+            if(inst.period=="pm"){
+                displayHours+=12;
             }
 
             var h = displayHours.toString();

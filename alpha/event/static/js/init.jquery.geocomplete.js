@@ -12,7 +12,7 @@
                 $("#id_location_lat").val(lat);
             }
     
-            $("#id_place").val("");
+            //$("#id_place").val("");
             $("#id_place").geocomplete({
                 details: ".geo-details",
                 detailsAttribute: "data-geo",

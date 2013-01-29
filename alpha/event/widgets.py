@@ -64,14 +64,16 @@ class GeoCompleteWidget(forms.TextInput):
         self.geo_latitude = forms.widgets.HiddenInput()
 
     def render(self, name, value, *args, **kwargs):
-        html = super(GeoCompleteWidget, self).render(name, value, *args, **kwargs)
+        if not value:
+            value = {}
+        html = super(GeoCompleteWidget, self).render(name, value.get('full', ''), *args, **kwargs)
         html += "<div class='geo-details'>"
-        html += self.geo_venue.render("geo_venue", "", {"id": 'id_geo_venue', 'data-geo': "name"})
-        html += self.geo_street.render("geo_street", "", {"id": 'id_geo_street', 'data-geo': "route"})
-        html += self.geo_city.render("geo_city", "", {"id": 'id_geo_city', 'data-geo': "locality"})
-        html += self.geo_country.render("geo_country", "", {"id": 'id_geo_country', 'data-geo': "country"})
-        html += self.geo_longtitude.render("geo_longtitude", "", {"id": 'id_geo_longtitude', 'data-geo': "lng"})
-        html += self.geo_latitude.render("geo_latitude", "", {"id": 'id_geo_latitude', 'data-geo': "lat"})
+        html += self.geo_venue.render("geo_venue", "", {"id": 'id_geo_venue', 'data-geo': "name", 'value': value.get('venue', '')})
+        html += self.geo_street.render("geo_street", "", {"id": 'id_geo_street', 'data-geo': "route", 'value': value.get('street', '')})
+        html += self.geo_city.render("geo_city", "", {"id": 'id_geo_city', 'data-geo': "locality", 'value': value.get('city', '')})
+        html += self.geo_country.render("geo_country", "", {"id": 'id_geo_country', 'data-geo': "country", 'value': value.get('country', '')})
+        html += self.geo_longtitude.render("geo_longtitude", "", {"id": 'id_geo_longtitude', 'data-geo': "lng", 'value': value.get('longtitude', '')})
+        html += self.geo_latitude.render("geo_latitude", "", {"id": 'id_geo_latitude', 'data-geo': "lat", 'value': value.get('latitude', '')})
         html += "</div>"
         return mark_safe(html)
 

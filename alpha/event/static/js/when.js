@@ -170,9 +170,8 @@
 		},
 		monthContainer: function(date, year, month) {
 			var that = this,
-				widget, daysTimePicker, multiSelectModeWrapper, removeButton, daysPicker, monthAndDaysWrapper, 
-				yesterday = (new Date());
-				yesterday = yesterday.setDate(yesterday.getDate() - 1);
+				widget, daysTimePicker, multiSelectModeWrapper, removeButton, daysPicker, monthAndDaysWrapper, yesterday = (new Date());
+			yesterday = yesterday.setDate(yesterday.getDate() - 1);
 
 
 			multiSelectModeWrapper = $("<div>").addClass("multi-select-mode-wrapper");
@@ -306,13 +305,13 @@
 			$(this.deck).remove();
 			this.months = {};
 			this._initDeck();
-			if(open){
+			if(open) {
 				$.fancybox($(this.deck), {
 					autoSize: true,
 					closeBtn: true,
 					hideOnOverlayClick: false
 				});
-			}			
+			}
 		}
 
 	});
@@ -479,33 +478,51 @@
 				if(that.next()) {
 					if(that.isAutoFill()) {
 						that.next().setValue(
-							that.getValue()
-						);
+						that.getValue());
 					}
 					that.next().changeNext(true);
 				}
 			};
 
 			this.startTime.timepicker({
-				onClose: changeNext
+				onClose: changeNext,
+				minutes: {
+					interval: 15
+				},
+				hours: {
+					starts: 0,
+					ends: 11
+
+				},
+				rows: 2,
 			});
 			this.endTime.timepicker({
-				onClose: changeNext
+				onClose: changeNext,
+				minutes: {
+					interval: 15
+				},
+				hours: {
+					starts: 0,
+					ends: 11
+				},
+				rows: 2,
 			});
 
 			$(this.removeButton).on('click', function() {
 				if(confirm("Do you realy want to remove day?")) {
 					var format_day = $.datepicker.formatDate($.datepicker._defaults.dateFormat, new Date(that.options.year, that.options.month - 1, that.options.day));
-					$(".days-picker", $(this).parents(".month-container")).multiDatesPicker('toggleDate', format_day);				
+					$(".days-picker", $(this).parents(".month-container")).multiDatesPicker('toggleDate', format_day);
 				}
 			});
-			
+
 			$(this.autoFill).on("click", function() {
 				$(this).toggleClass("checked");
 				if($(this).hasClass("checked")) {
 					that.next().setValue(
-						that.getValue()
-					);
+					that.getValue());
+					that.next().changeNext(true);
+				} else {
+					that.next().setValue("");
 					that.next().changeNext(true);
 				}
 			});
@@ -514,8 +531,7 @@
 			if(this.next() && (this.isAutoFill() || forward)) {
 				if(!this.next().isAutoFill()) {
 					this.next().setValue(
-						this.getValue()
-					)
+					this.getValue())
 				}
 				this.next().changeNext(forward);
 			}
@@ -542,7 +558,7 @@
 	});
 
 	$(document).ready(function() {
-		setTimeout(function(){
+		setTimeout(function() {
 			$('[data-event="click"] a').live("mousemove", function(e) {
 				if(!('event' in window)) {
 					window.eventObj = e;
@@ -551,12 +567,10 @@
 			$("#id_when").when();
 			if($("#id_when_json").val()) {
 				$("#id_when").data("when").setValue(
-					JSON.parse(
-						$("#id_when_json").val()
-					)
-				);
-			};	
-		}, 100);		
+				JSON.parse(
+				$("#id_when_json").val()));
+			};
+		}, 100);
 	});
 
 })(jQuery);

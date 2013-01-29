@@ -13,6 +13,7 @@
             var that = this;
             this.element[0].tagspopup = this;
             this.tags = [];
+            this.autoTags = [];
             this.popup = $('.tags-popup');
             this.tagsContainer = $('.tags-container', this.popup);
             this.closeButton = $('.close-button', this.popup);
@@ -97,7 +98,40 @@
             e = jQuery.Event("keydown");
             e.keyCode = 9;
             $("#id_tags__tagautosuggest").trigger(e);
-        }
+        },
+        removeTag: function(tag) {
+            var button = $(".as-selections [data-value='"+tag+"'] a");
+            $(button).trigger("click");
+            $("#id_tags__tagautosuggest").blur();
+            $('.tags-popup').hide();
+            $(".modal-bg").hide();
+            $(".as-selections").removeClass("active");
+        },
+        autoTagsDetect: function(description){
+            var that=this;
+            _.each(this.tags, function(tag){
+                if(description.indexOf(tag)!==-1){
+                    that.addAutoTag(tag);
+                } else {
+                    that.removeAutoTag(tag);
+                }
+
+            });
+        },
+        addAutoTag: function(tag){
+            if($(".as-selection-item[data-value='"+tag+"']").length>0) return
+            if(this.autoTags.indexOf(tag)===-1){
+                this.autoTags.push(tag);
+                this.addTag(tag)
+            }
+        },
+        removeAutoTag: function(tag){
+            if(this.autoTags.indexOf(tag)!==-1){
+                this.autoTags = _.without(this.autoTags, tag);
+                this.removeTag(tag);
+            }
+
+        },
     });
 
     $(document).ready(function() {

@@ -1,5 +1,6 @@
 (function($) {
-    var format = $.datepicker._defaults.dateFormat;
+    var format = $.datepicker._defaults.dateFormat,
+        delimeter = /\b/;
     $.widget("ui.description", {
         _create: function() {
             var that = this;
@@ -23,6 +24,15 @@
             $(this.element).on("blur", function(){
                 that.saveCurrentDay();
             });
+            $("#id_description").on("keyup", function(e){                
+                if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
+                    $("#id_tags__tagautosuggest").data('tagspopup').autoTagsDetect(
+                        $("#id_description").val()
+                    );
+                    $("#id_description").focus();
+                }               
+            });
+
             this.data = {
                 "default":"", 
                 days: {}
