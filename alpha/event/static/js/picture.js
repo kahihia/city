@@ -66,6 +66,7 @@
                         });                          
                     } else {                        
                         console.log && console.log("upload failed!");
+                        alert("Something go wrong on server. Please contact administrator.")
                         $(".modal-bg").hide();
                     }
                 }, 

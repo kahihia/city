@@ -50,8 +50,7 @@
             user_lat = position.coords.latitude;
             user_lng = position.coords.longitude; 
         });
-    }  
-
+    }
 
     jQuery(document).ready(function(e) {
         jQuery('.search-lists ul li a').click(function(){
@@ -350,6 +349,7 @@
                                                     </div>
                                                 </div>
                                                 {{form.tags}}
+                                                <span class='info-label'>Use "Tab" to add new tag</span>
                                             </td>
                                             <td class="tags_bottom">
                                                 <a href="#" class="balloon">
@@ -393,6 +393,7 @@
                                             <td>Image</td>
                                             <td>
                                                 {{ form.picture_src }}
+                                                <span class='info-label'>You can download the picture no more than 32Mb</span>
                                                 <div class='full-screen-popup' data-thumb-width="180" data-thumb-height="180">
                                                     {{ form.cropping }}
                                                     <div class='save-button'>Save image</div>

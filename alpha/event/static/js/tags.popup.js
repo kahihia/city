@@ -119,6 +119,7 @@
             });
         },
         addAutoTag: function(tag){
+            if(tag==='Free') return;
             if($(".as-selection-item[data-value='"+tag+"']").length>0) return
             if(this.autoTags.indexOf(tag)===-1){
                 this.autoTags.push(tag);

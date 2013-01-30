@@ -475,14 +475,14 @@
 			append(this.removeButton);
 
 			function changeNext() {
-				if(that.next()) {
-					if(that.isAutoFill()) {
-						that.next().setValue(
-						that.getValue());
-					}
-					that.next().changeNext(true);
-				}
-			};
+                if(that.next()) {
+                    if(that.next().isAutoFill()) {
+                        that.next().setValue(
+                        that.getValue());
+                    }
+                    that.next().changeNext()
+                }
+            };
 
 			this.startTime.timepicker({
 				onClose: changeNext,
@@ -518,26 +518,55 @@
 			});
 
 			$(this.autoFill).on("click", function() {
-				$(this).toggleClass("checked");
-				if($(this).hasClass("checked")) {
-					that.next().setValue(
-					that.getValue());
-					that.next().changeNext(true);
+				if(that.isFirst()){
+					$(this).toggleClass("checked");
+					if($(this).hasClass("checked")) {
+						that.autoFillAll();
+					}
 				} else {
-					that.next().setValue("");
-					that.next().changeNext(true);
+					$(this).toggleClass("checked");
+					if($(this).hasClass("checked")) {
+						that.setValue(
+						that.previous().getValue());
+					} else {
+						that.setValue({
+							startTime: '',
+							endTime: ''
+						})
+
+					}
+				}				
+			});
+			
+		},
+		isFirst: function(){
+			return !this.previous();
+		},
+		autoFillAll: function(){
+			var that=this, first=true;
+
+			$('.autofill',this.daystimeContainer.daysContainer).each(function(){
+				if(first){
+					first = false;
+					return;
+				}
+				if($(this).hasClass('checked')){
+					return;
+				}
+				if(that!=this){
+					$(this).trigger("click");
 				}
 			});
 		},
-		changeNext: function(forward) {
-			if(this.next() && (this.isAutoFill() || forward)) {
-				if(!this.next().isAutoFill()) {
+		changeNext: function() {
+			if(this.next()) {
+				if(this.next().isAutoFill()) {
 					this.next().setValue(
-					this.getValue())
+					this.getValue());
 				}
-				this.next().changeNext(forward);
+				this.next().changeNext()
 			}
-		},
+		},		
 		isAutoFill: function() {
 			return $(this.autoFill).hasClass("checked")
 		},

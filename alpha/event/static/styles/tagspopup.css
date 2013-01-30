@@ -62,3 +62,10 @@
     position:relative;
     z-index:3;
 }
+
+td .info-label {
+    margin-left:15px;
+    color: #06C;
+    font-size:0.9em;
+
+}

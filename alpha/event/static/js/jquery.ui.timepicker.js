@@ -738,7 +738,7 @@
         /* Generate the content of a "Hour" cell */
         _generateHTMLHourCell: function (inst, hour, showPeriod, showLeadingZero) {
 
-            var displayHour = hour;
+            var displayHour = hour+1;
             if ((hour > 12) && showPeriod) {
                 displayHour = hour - 12;
             }            
@@ -760,9 +760,9 @@
             }
 
             if (enabled) {
-                html = '<td class="ui-timepicker-hour-cell" data-timepicker-instance-id="#' + inst.id.replace(/\\\\/g,"\\") + '" data-hour="' + hour.toString() + '">' +
+                html = '<td class="ui-timepicker-hour-cell" data-timepicker-instance-id="#' + inst.id.replace(/\\\\/g,"\\") + '" data-hour="' + (hour+1).toString() + '">' +
                    '<a class="ui-state-default ' +
-                   (hour == inst.hours ? 'ui-state-active' : '') +
+                   ((hour+1) == inst.hours ? 'ui-state-active' : '') +
                    '">' +
                    displayHour.toString() +
                    '</a></td>';
