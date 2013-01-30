@@ -270,6 +270,11 @@
     position: relative;
 }
 
+#ui-timepicker-div .ui-widget-header {
+    height: 22px;
+    line-height: 22px;
+}
+
 #ui-timepicker-div .periods {
     position: absolute;
     cursor: pointer;
