@@ -126,16 +126,16 @@ def generate_form(*args):
                 self.fields['email'].label = _(u'Email Address')
 
             self.fields['name'].widget.attrs['class'] = 'inputfield rborder'
-            self.fields['price'].widget.attrs['class'] = 'inputfield rborder'
-            self.fields['price'].label = _(u'Price')
-            self.fields['price'].widget.attrs['placeholder'] = "xx.xx"
+            self.fields['name'].widget.attrs['tabindex'] = 1
             self.fields['name'].error_messages['required'] = 'Event name is required'
             self.fields['name'].label = _(u'Event Name')
 
             self.fields['place'].error_messages['required'] = 'Your event cannot miss a location'
             self.fields['place'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['place'].label = _(u'Location')
+            self.fields['place'].widget.attrs['tabindex'] = 2
 
+            # Suggest venue popup
             self.fields['venue_name'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['street'].widget.attrs['class'] = 'inputfield rborder'
 
@@ -147,13 +147,25 @@ def generate_form(*args):
             self.fields['when'].widget.attrs['readonly'] = True
             self.fields['when'].widget.attrs['placeholder'] = "Click to select"
             self.fields['when'].error_messages['required'] = 'Please choose at least one date'
+            self.fields['when'].widget.attrs['tabindex'] = 3
+
             self.fields['when_json'].error_messages['required'] = 'Please choose at least one date'
 
-            self.fields['description'].widget = forms.widgets.Textarea(attrs={'class': 'textarea rborder'})
+            self.fields['price'].widget.attrs['class'] = 'inputfield rborder'
+            self.fields['price'].label = _(u'Price')
+            self.fields['price'].widget.attrs['placeholder'] = "xx.xx"
+            self.fields['price'].widget.attrs['tabindex'] = 4
+
+            self.fields['description'].widget = forms.widgets.Textarea(attrs={'class': 'textarea rborder', 'tabindex': 5})
+
+            self.fields['website'].widget.attrs['class'] = 'inputfield rborder'
+
             self.fields['tags'].error_messages['required'] = 'Please enter at least one tag'
             self.fields['tags'].widget.attrs['class'] = 'inputfield rborder'
-            self.fields['website'].widget.attrs['class'] = 'inputfield rborder'
+            self.fields['tags'].widget.attrs['tabindex'] = 6
+
             self.fields['tickets'].widget.attrs['class'] = 'inputfield rborder'
+            self.fields['tickets'].widget.attrs['tabindex'] = 6
 
             self.fields['picture_src'].label = _(u'Image')
 

@@ -49,7 +49,9 @@
                     position:"right bottom",
                     tipSize: 0,
                     offsetX:-25,
-                    offsetY:25                
+                    offsetY:25,
+                    showDuration: 500, hideDuration: 0,
+                    showAnimation: function(d) { this.fadeIn(d); }
                 });
             });
             

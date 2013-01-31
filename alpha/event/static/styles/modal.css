@@ -26,3 +26,14 @@
         border:3px solid #ccc; 
     }  
 }
+
+#entry-form table td.first{
+    width:120px;
+} 
+
+.balloon {    
+    position: relative;
+    top:-3px;
+    display:inline;
+    float:right;
+}

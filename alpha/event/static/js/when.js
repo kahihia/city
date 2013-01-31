@@ -83,6 +83,20 @@
 					});
 				}, 100);
 			});
+			$(this.element).on('focus', function(){
+				setTimeout(function() {
+					$.fancybox($(that.deck), {
+						autoSize: true,
+						closeBtn: true,
+						hideOnOverlayClick: false
+					});
+				}, 100);
+			});
+			$(this.element).on('blur', function(){
+				$.fancybox.close();
+				$(that.error).hide();
+			});
+
 			$(this.sumbitButton).on("click", function() {
 				var valid = that.validate();
 				if(valid) {

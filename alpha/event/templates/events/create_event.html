@@ -167,9 +167,8 @@
                                     <!-- end errors -->
                                     <table>
                                         <tr>
-                                            <td>Event Name</td>
-                                            <td>{{form.name}}</td>
-                                            <td>
+                                            <td class="first">                                                
+                                                Event Name                                                
                                                 <a href="#" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -182,9 +181,23 @@
                                                     </p>
                                                 </div>
                                             </td>
+                                            <td>{{form.name}}</td>                                            
                                         </tr>
                                         <tr>
-                                            <td>Location</td>
+                                            <td>
+                                                Location
+                                                <a href="#"  class="balloon">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                                <div class="balloon-content">
+                                                    <h3>
+                                                        Help - Enter event <i>[Location]:</i>
+                                                    </h3>
+                                                    <p> <strong>e.g:</strong>
+                                                        &ldquo;Sakstoon&rdquo;  or &ldquo;Ottawa&rdquo;
+                                                    </p>
+                                                </div>
+                                            </td>
                                             <td>
                                                 <div class="location">{{ form.place}}</div>
                                                 <div class="show_map"></div>                                                
@@ -223,28 +236,11 @@
                                                     <div class="submit-button">Submit</div>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <a href="#"  class="balloon">
-                                                    <div class="buttonq"></div>
-                                                </a>
-                                                <div class="balloon-content">
-                                                    <h3>
-                                                        Help - Enter event <i>[Location]:</i>
-                                                    </h3>
-                                                    <p> <strong>e.g:</strong>
-                                                        &ldquo;Sakstoon&rdquo;  or &ldquo;Ottawa&rdquo;
-                                                    </p>
-                                                </div>
-                                            </td>
                                         </tr>       
                                                                 
                                         <tr>
-                                            <td>When</td>
                                             <td>
-                                                {{form.when}}
-                                                {{form.when_json}}
-                                            </td>
-                                            <td>
+                                                When
                                                 <a href="#" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -259,13 +255,14 @@
                                                     </p>
                                                 </div>
                                             </td>
+                                            <td>
+                                                {{form.when}}
+                                                {{form.when_json}}
+                                            </td>
                                         </tr>
                                         <tr>
-                                            <td>Price</td>
-                                            <td class="price-td">
-                                                {{form.price}}
-                                            </td>
                                             <td>
+                                                Price
                                                 <a href="#" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -280,24 +277,13 @@
                                                     </p>
                                                 </div>
                                             </td>
+                                            <td class="price-td">
+                                                {{form.price}}
+                                            </td>                                            
                                         </tr>
                                         <tr>
                                             <td valign="top">
                                                 Description
-                                                <br>
-                                                <div class="description-select-day-widget">
-                                                    <div class="description-days-container active">
-                                                        <span class="result">Same for All Days</span>
-                                                        <div class="selected-result">Same for All</div>
-                                                        <ul class="days-list"></ul>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>                                                
-                                                {{form.description}}
-                                                {{form.description_json}}
-                                            </td>                                             
-                                            <td>
                                                 <a href="#" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -311,12 +297,23 @@
                                                         &ldquo;This is to celebrate my birthday&rdquo;
                                                     </p>
                                                 </div>
+                                                <br>
+                                                <div class="description-select-day-widget">
+                                                    <div class="description-days-container active">
+                                                        <span class="result">Same for All Days</span>
+                                                        <div class="selected-result">Same for All</div>
+                                                        <ul class="days-list"></ul>
+                                                    </div>
+                                                </div>
                                             </td>
+                                            <td>                                                
+                                                {{form.description}}
+                                                {{form.description_json}}
+                                            </td>                                            
                                         </tr>
                                         <tr>
-                                            <td>Website</td>
-                                            <td>{{form.website}}</td>
                                             <td>
+                                                Website
                                                 <a href="#" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -330,8 +327,8 @@
                                                         &ldquo;www.example.com&rdquo;  or &ldquo;www.example.mine.net&rdquo;
                                                     </p>
                                                 </div>
-
                                             </td>
+                                            <td>{{form.website}}</td>
                                         </tr>
                                         <tr>
                                             <td colspan="2" class="wheelchair-td">
@@ -340,17 +337,8 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="tags_bottom">Tags</td>
-                                            <td>
-                                                <div class="tags-popup-wrapper">
-                                                    <div class="tags-popup">
-                                                        <div class="tags-container"></div>
-                                                        <div class="close-button">Close</div>
-                                                    </div>
-                                                </div>
-                                                {{form.tags}}                                                
-                                            </td>
                                             <td class="tags_bottom">
+                                                Tags
                                                 <a href="#" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -364,15 +352,20 @@
                                                         Use "Tab" to add new tag
                                                     </p>
                                                 </div>
-
+                                            </td>
+                                            <td>
+                                                <div class="tags-popup-wrapper">
+                                                    <div class="tags-popup">
+                                                        <div class="tags-container"></div>
+                                                        <div class="close-button">Close</div>
+                                                    </div>
+                                                </div>
+                                                {{form.tags}}                                                
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Tickets</td>
                                             <td>
-                                                {{form.tickets}}
-                                            </td>
-                                            <td>
+                                                Tickets
                                                 <a href="#" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -386,19 +379,13 @@
                                                     </p>
                                                 </div>
                                             </td>
+                                            <td>
+                                                {{form.tickets}}
+                                            </td>                                            
                                         </tr>                                        
                                         <tr class="picture">
-                                            <td>Image</td>
                                             <td>
-                                                {{ form.picture_src }}                                                
-                                                <div class='full-screen-popup' data-thumb-width="180" data-thumb-height="180">
-                                                    {{ form.cropping }}
-                                                    <div class='save-button'>Save image</div>
-                                                </div>
-                                                <div class="picture-thumb">
-                                                    <img src="" class="preview"></div>
-                                            </td>
-                                            <td>
+                                                Image
                                                 <a href="#" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -412,7 +399,15 @@
                                                     </p>
                                                 </div>
                                             </td>
-
+                                            <td>
+                                                {{ form.picture_src }}                                                
+                                                <div class='full-screen-popup' data-thumb-width="180" data-thumb-height="180">
+                                                    {{ form.cropping }}
+                                                    <div class='save-button'>Save image</div>
+                                                </div>
+                                                <div class="picture-thumb">
+                                                    <img src="" class="preview"></div>
+                                            </td>
                                         </tr>
                                         <tr></tr>
                                         <tr>
