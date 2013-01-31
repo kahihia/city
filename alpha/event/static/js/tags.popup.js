@@ -110,11 +110,17 @@
         },
         removeTag: function(tag) {
             var button = $(".as-selections [data-value='"+tag+"'] a");
+            $('.tags-popup').css("opacity", 0);
             $(button).trigger("click");
             $("#id_tags__tagautosuggest").blur();
             $('.tags-popup').hide();
             $(".modal-bg").hide();
             $(".as-selections").removeClass("active");
+            setTimeout(function(){
+		$("#id_tags__tagautosuggest").blur();
+		$('.tags-popup').hide();
+		$('.tags-popup').css("opacity", 1);
+            });
         },
         autoTagsDetect: function(description){
             var that=this, 

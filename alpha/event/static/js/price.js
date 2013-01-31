@@ -53,10 +53,14 @@
 		},
 		removeFreeTag: function() {
 			var button = $(".as-selections [data-value=Free] a");
-			$(button).trigger("click");
-			$("#id_tags__tagautosuggest").blur();
-			$('.tags-popup').hide();
+			$('.tags-popup').css("opacity", 0);
+			$(button).trigger("click");			
 			$(".modal-bg").hide();
+			setTimeout(function(){
+				$("#id_tags__tagautosuggest").blur();
+				$('.tags-popup').hide();
+				$('.tags-popup').css("opacity", 1);
+			});
             $(".as-selections").removeClass("active");
 		}
 	});
