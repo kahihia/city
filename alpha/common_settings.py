@@ -8,7 +8,9 @@ ADMINS = (
     # ('sam', 'sam@peakxp.com'),
     # ('tony', 'tony@peakxp.com'),
     # ('levi', 'levi@peakxp.com'),
-    ('jaromudr', 'jaromudr@gmail.com')
+    ('jaromudr', 'jaromudr@gmail.com'),
+    ('tim', 'tim@cityfusion.ca'),
+    ('igor', 'info@silkcode.com'),
 )
 
 MANAGERS = ADMINS
