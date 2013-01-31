@@ -48,8 +48,7 @@
                     contents:content,
                     position:"right bottom",
                     tipSize: 0,
-                    offsetX:-25,
-                    offsetY:25,
+                    position: 'top',
                     showDuration: 500, hideDuration: 0,
                     showAnimation: function(d) { this.fadeIn(d); }
                 });

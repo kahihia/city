@@ -871,7 +871,7 @@ body
 
 .browse-result-bar-wrapper .pop-up-pointer
 {
-	/*background:url({{STATIC_URL}}images/pop-up-pointer.png) left no-repeat;*/
+	/*background:url(/static/images/pop-up-pointer.png) left no-repeat;*/
 	border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-top: 10px solid #3dc1ff;
@@ -1366,7 +1366,7 @@ body
 	border: 1px solid #ccc;
 	border-radius: 5px 5px 0 0;
 	color:#0066cc;
-	background:ur({{STATIC_URL}}images/edit_profile_bg.png) right-x;
+	background:ur(/static/images/edit_profile_bg.png) right-x;
 }
 .private-profile-events #tabs li a:hover {
 	background-color: #dddddd;
@@ -1452,7 +1452,7 @@ body
 }
 
 .private-comments-wrapper #tabs li a.icon_facebook {
-	background-image: url({{STATIC_URL}}images/facebook.png);
+	background-image: url(/static/images/facebook.png);
 	background-position: 5px;
 	background-repeat: no-repeat;
 	padding-top:10px;
@@ -1464,7 +1464,7 @@ body
 }
 
 .private-comments-wrapper #tabs li a.icon_twitter {
-	background-image: url({{STATIC_URL}}images/twitter.png);
+	background-image: url(/static/images/twitter.png);
 	background-position: 5px;
 	background-repeat: no-repeat;
 	padding-top:10px;
@@ -1607,7 +1607,7 @@ body
 }
 
 #tabs li a.icon_facebook {
-	background-image: url({{STATIC_URL}}images/facebook.png);
+	background-image: url(/static/images/facebook.png);
 	background-position: 5px;
 	background-repeat: no-repeat;
 	padding-top:10px;
@@ -1619,7 +1619,7 @@ body
 }
 
 #tabs li a.icon_twitter {
-	background-image: url({{STATIC_URL}}images/twitter.png);
+	background-image: url(/static/images/twitter.png);
 	background-position: 5px;
 	background-repeat: no-repeat;
 	padding-top:10px;
@@ -1647,11 +1647,11 @@ body
 
 /* zoom picture */
 .dg-picture-zoom{
-	/*cursor : url({{STATIC_URL}}images/magnify-plus.cur), pointer !important;*/
-	cursor: url({{STATIC_URL}}images/magnify-plus.png), pointer !important;;
+	/*cursor : url(/static/images/magnify-plus.cur), pointer !important;*/
+	cursor: url(/static/images/magnify-plus.png), pointer !important;;
 }
 .dg-picture-zoom-large{
-	cursor : url({{STATIC_URL}}images/magnify-minus.png), pointer !important;
+	cursor : url(/static/images/magnify-minus.png), pointer !important;
 
 }
 .dg-picture-zoom-border-container{
@@ -1874,7 +1874,7 @@ a
 	outline:none;
 }
 .backbtn{
-    background: url("{{STATIC_URL}}images/back-arrow.png") no-repeat scroll left center transparent;
+    background: url("/static/images/back-arrow.png") no-repeat scroll left center transparent;
     font-size: 15px;
     margin-left: 360px;
     padding-left: 20px;
@@ -1917,7 +1917,7 @@ a
 	border-radius: 5px;
 }
 .btnbg{
-	background: url({{STATIC_URL}}images/btn_bg.png) repeat-x;
+	background: url(/static/images/btn_bg.png) repeat-x;
 	cursor:pointer;
 }
 
@@ -1929,7 +1929,7 @@ a
 	text-align:left;
 	font-weight:bold;
 	text-decoration:none;
-	background: url({{STATIC_URL}}images/arrow-down.png) right no-repeat;
+	background: url(/static/images/arrow-down.png) right no-repeat;
 }
 .readmore a:hover
 {
@@ -1939,7 +1939,7 @@ a
 	text-align:left;
 	font-weight:bold;
 	color:#f4a615;
-	background: url({{STATIC_URL}}images/arrow-down-orange.png) right no-repeat;
+	background: url(/static/images/arrow-down-orange.png) right no-repeat;
 }
 .submit{
 	color:#454545;
@@ -1992,7 +1992,7 @@ a
 	padding:5px 5px;
 }
 .taggle{
-	background: url({{STATIC_URL}}images/blue_arrow.png)left no-repeat;
+	background: url(/static/images/blue_arrow.png)left no-repeat;
 	width:auto;
 	margin:5px 10px;
 	padding:0 20px;;
@@ -2014,7 +2014,7 @@ a
 	padding-left:25px;
 	font-size:11px;
 	color:#eb8a19;
-	background:url({{STATIC_URL}}images/tag_icon.png) left no-repeat;
+	background:url(/static/images/tag_icon.png) left no-repeat;
 }
 #hintbox{ /*CSS for pop up hint box */
 	position: absolute;
@@ -2048,7 +2048,7 @@ a
 	margin:3px 0;
 	height:35px;
 	line-height:40px;
-	background:url({{STATIC_URL}}images/edit_profile_bg.png) left repeat-x;
+	background:url(/static/images/edit_profile_bg.png) left repeat-x;
 }
 .profile-btn a{
 	color:#0066cc;
@@ -2063,7 +2063,7 @@ a
 	width:25px;
 }
 .buttonq:hover{
-	background: url({{STATIC_URL}}images/question_hover.png) no-repeat;
+	background: url(/static/images/question_hover.png) no-repeat;
 	height:25px;
 }
 .clr{
