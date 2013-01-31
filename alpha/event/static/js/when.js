@@ -91,11 +91,7 @@
 						hideOnOverlayClick: false
 					});
 				}, 100);
-			});
-			$(this.element).on('blur', function(){
-				$.fancybox.close();
-				$(that.error).hide();
-			});
+			});			
 
 			$(this.sumbitButton).on("click", function() {
 				var valid = that.validate();
@@ -551,7 +547,10 @@
 					}
 				}				
 			});
-			
+
+			if($($('.autofill', this.daystimeContainer.daysContainer)[0]).hasClass("checked")){
+				$(this.autoFill).trigger("click");
+			}			
 		},
 		isFirst: function(){
 			return !this.previous();
