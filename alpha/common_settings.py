@@ -5,9 +5,10 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('sam', 'sam@peakxp.com'),
-    ('tony', 'tony@peakxp.com'),
-    ('levi', 'levi@peakxp.com'),
+    # ('sam', 'sam@peakxp.com'),
+    # ('tony', 'tony@peakxp.com'),
+    # ('levi', 'levi@peakxp.com'),
+    ('jaromudr', 'jaromudr@gmail.com')
 )
 
 MANAGERS = ADMINS
@@ -188,7 +189,7 @@ EVENT_DEFAULT_PICTURE_URL = STATIC_URL + 'img/default.gif'
 #                      filter), or Image.BILINEAR (linear
 #                      interpolation in a 2x2 environment)
 
-EVENT_EMAIL_SITE = 'www.cityfusion.ca'
+EVENT_EMAIL_SITE = 'dev.cityfusion.ca'
 #instead of taking the hustles of configuring a simple mail server, use an established one instead
 
 EMAIL_USE_TLS = True

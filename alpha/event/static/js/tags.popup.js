@@ -10,7 +10,7 @@
     });
     $.widget("ui.tagspopup", {
         _create: function() {
-            var that = this;
+            var that = this, closing=false;
             this.element[0].tagspopup = this;
             this.tags = [];
             this.autoTags = [];
@@ -18,11 +18,15 @@
             this.tagsContainer = $('.tags-container', this.popup);
             this.closeButton = $('.close-button', this.popup);
             $(this.element).on("focus", function() {
-                if(that.tags.length>0){
+                if(that.tags.length>0 && !closing){
                     $(that.popup).show();
                     $(".modal-bg").show();
                     $(".as-selections").addClass("active");
-                }                
+                } else {                    
+                    closing = false;
+                    $(that.element).blur();
+                }
+                
             });
             $(this.closeButton).on("click", function() {
                 $(that.popup).hide();
@@ -36,6 +40,11 @@
             $("#id_tags__tagautosuggest").on("focus", function(e){
                 that.setFreeAndWheelchair();                
             });
+
+            $(".as-selections .as-close").live("mousedown", function(){
+                closing = true;
+            });
+
             $.post("/events/ctags", {}, function(data){
                 tags = _.map(data.tags, function(tag){ return tag.name });
                 that.loadTags(tags);
@@ -108,9 +117,11 @@
             $(".as-selections").removeClass("active");
         },
         autoTagsDetect: function(description){
-            var that=this;
+            var that=this, 
+                idescription = description.toLowerCase();
             _.each(this.tags, function(tag){
-                if(description.indexOf(tag)!==-1){
+                var itag = tag.toLowerCase();
+                if(idescription.indexOf(itag)!==-1){
                     that.addAutoTag(tag);
                 } else {
                     that.removeAutoTag(tag);

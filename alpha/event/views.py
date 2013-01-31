@@ -28,7 +28,6 @@ import time
 import re
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
-import smtplib
 from django.contrib import messages
 
 from ajaxuploader.views import AjaxFileUploader
@@ -437,16 +436,6 @@ def create(request, form_class=None, success_url=None, template_name='events/cre
             msg.content_subtype = 'html'
             msg.send()
 
-            #added Arlus
-            msgg = ("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (FROMADDR, ", ".join(event_obj.email), subject))
-            msgg += message
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.set_debuglevel(1)
-            server.ehlo()
-            server.starttls()
-            server.login(LOGIN, PASSWORD)
-            server.sendmail(FROMADDR, event_obj.email, msgg)
-            server.quit()
             # on success, redirect to the home page by default
             # if the user is authenticated, take them to their event page
             if success_url is None:

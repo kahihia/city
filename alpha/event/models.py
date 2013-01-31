@@ -3,6 +3,11 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
+from django.template.loader import render_to_string
+
+from django.conf import settings
+from django.core.mail.message import EmailMessage
+
 from cities.models import City, Country
 import string
 import random
@@ -254,6 +259,24 @@ def audit_event_catch(instance=None, created=False, **kwargs):
         )
         for phrase in phrases:
             audit_event.phrases.add(phrase)
+
+        current_site = settings.EVENT_EMAIL_SITE
+
+        subject = 'Bad phrases are catching'
+
+        message = render_to_string('audit/bad_phrases_email.txt', {
+            'site': current_site,
+            'event': audit_event,
+            'phrases': phrases
+        })
+
+        msg = EmailMessage(subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                settings.ADMINS)
+        msg.content_subtype = 'html'
+        msg.send()
+
 models.signals.post_save.connect(audit_event_catch, sender=Event)
 
 
