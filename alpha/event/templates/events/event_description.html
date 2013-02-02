@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %} > View > {{ event.name }}{% endblock %}
+
+{% block opengraph %}
+{% if opengraph %}
+  {% for prop, value in opengraph.items %}
+    <meta property="{{ prop }}" content="{{ value }}"/>
+  {% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block page %}
+
+{% block breadcrumb %}
+  {% load date_formatting %}
+  <nav id="back">
+    <p>
+      <a href="{% url 'event_browse' %}">
+        Browse Events
+      </a>
+      &gt; 
+      {% comment %}<a href="{% url event_browse_date event.start_time.date.isoformat %}">
+        {{ event.start_time|month_day }}
+      </a>
+      {% endcomment %}
+      
+      &gt; 
+      {% for tag in event.tags.all %}
+        <a href="{% url 'event_browse_tags' tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+      &gt; 
+        <span class="current">{{ event.name }}</span>
+    </p>
+  </nav>
+{% endblock %}
+
+<aside id="photo">
+  {% load event_pictures %}
+  <img align="left" style="border: solid thin #999; padding: 5px;" src="{% event_picture_url event 200 %}">
+</aside>
+<div style="width: 780px; float: right;">
+<section class="body noborder detail">
+  <h1>{{ event.name }}</h1>
+      {% comment %}<h4><a href="{% url event_browse_date date=event.start_time.date.isoformat %}">{{ event.start_time|just_day }}</a>
+      <br>{{ event.start_time|just_time }}
+      {% if event.end_time %}&mdash; {{ event.end_time|just_time }}{% endif %}</h4>
+      {% endcomment %}
+
+   
+      <p><h3 style="color: orange;">Location: {{ event.venue }}</p></h3>
+   
+      <h2 style="color: orange;">{{ event.price }}</h2>
+  
+  <p>{{ event.description|linebreaks }}</p>
+  {% if event.website %}<p><a href="{{ event.website }}">Website</a></p>{% endif %}
+<h4>Tags: 
+    {% for tag in event.tags.all %}<a href="{% url 'event_browse_tags' tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</h4>
+  </div>
+  <div style="clear: both;"></div>
+  <div class="fb-like" data-href="" data-send="true" data-width="450" data-show-faces="true"></div>
+</section>
+{% endblock %}

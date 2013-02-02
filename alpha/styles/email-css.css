@@ -1,0 +1,114 @@
+@charset "utf-8";
+
+/* Email Page CSS*/
+#email-wrapper{
+	margin:0 auto;
+	width:650px;
+}
+#email-wrapper .email-content{
+	padding:20px 0;
+	text-align:left;
+	background-color:#FFF;
+}
+
+.email-featured-area{
+    background: none repeat scroll 0 0 #247CC3;
+    border-radius: 10px 10px 10px 10px;
+    color: #FFFFFF;
+    margin: 0 5px;
+    padding: 10px 0 10px 10px;
+    width: 630px;
+}
+
+.email-featured-img-wrapper img {
+    border: 4px solid #EEEEEE;
+    width: 144px;
+	margin-top:5px;
+}
+.email-featured-img-details {
+    background: url("../images/featured-img-details-bg.png") repeat scroll 0 0 transparent;    
+	bottom: 4px;
+    left: 4px;
+    position: absolute;
+    width: 144px;
+}
+.email-main-content-wrapper{
+    padding: 30px 0 0;
+    width: auto;
+}
+.email-main-content{
+	margin:0 auto;
+	width: 630px;
+	border:#ccc solid thin;
+}
+.email-main-navigation{
+	width:490px;
+	margin:10px 5px;
+	float:left;
+}
+.email-right-navigation{
+	padding:10px 5px;
+	float:right;
+}
+
+#email-similar-events{
+	margin:50px 5px;
+	width:468px;
+}
+#email-similar-events .similar-title{
+	color:#0066cc;
+	font-weight:bold;
+}
+#email-similar-events .post{
+	margin:5px 0;
+	padding:10px 5px;
+	border:#ccc solid thin;
+	width:468px;
+}
+
+
+div.imgEventsCont {
+    border: 1px solid #CFCFCF;
+    color: #5B5B5B;
+    float: left;
+    height: 75px;
+    margin: 8px;
+    text-align: center;
+    width: 75px;
+}
+div.imgEventsCont img {
+    margin: 0;
+    padding: 3px;
+}
+div.imgEventsCont a:hover {
+    outline: medium none;
+    text-decoration: none;
+	opacity:0.5;
+}
+
+.email-footer-wrapper {
+    text-align: center;
+    width: auto;
+}
+.email-footer-container {
+    margin: 0 auto;
+    text-align: left;
+    width: 650px;
+	padding-bottom:5px;
+}
+.email-footer-ads-wrapper {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    width: 650px;
+}
+.email-footer-container {
+    margin: 0 auto;
+    text-align: left;
+    width: 650px;
+}
+.footer-social-links {
+    float: right;
+    padding-bottom: 10px;
+    width: 174px;
+}
+

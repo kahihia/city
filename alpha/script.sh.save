@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+LOGFILE=/root/cityfusion/cityfusion.log
+LOGDIR=$(dirname $LOGFILE)
+NUM_WORKERS=3
+
+USER=root
+GROUP=root
+ADDRESS=127.0.0.1:8002
+cd /root/cityfusion/alpha
+source /root/cityfusion/bin/activatetest -d $LOGDIR || mkdir -p $LOGDIR
+exec ../bin/gunicorn_django -w $NUM_WORKERS --bind=$ADDRESS \
+  --user=$USER --group=$GROUP --log-level=debug \
+  --log-file-$LOGFILE 2>>$LOGFILE

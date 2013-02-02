@@ -1,0 +1,8 @@
+Welcome to {{ site }}.
+
+You have {{ expiration_days }} days to activate your account by following the link:
+
+http://{{ site }}/accounts/activate/{{ activation_key }}
+
+Have a great day and thank you for using {{ site }}.
+

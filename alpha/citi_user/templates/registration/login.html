@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %} > Sign In{% endblock %}
+
+{% block page %}
+  <section class="body">
+    <h1>Sign In to Cityfusion</h1>
+    <form method="post">
+      {% csrf_token %}
+      <p {% if form.username.errors %}class="field-error"{% endif %}>
+	{{ form.username.label_tag }}<a href="{% url 'registration_register' %}" class="forgot">Don't have an account yet?</a><br>
+	{{ form.username }}
+	{% for error in form.username.errors %}
+	<span class="error">{{ error }}</span>
+	{% endfor %}
+      </p>
+      <p>
+	{{ form.password.label_tag }}<a href="{% url 'auth_password_reset' %}" class="forgot">Forgot your password?</a><br>
+	{{ form.password }}
+	{% for error in form.password.errors %}
+	<span class="error">{{ error }}</span>
+	{% endfor %}
+      </p>
+      <p class="remember">
+	{{ form.remember }} <label for="id_remember">Remember me</label><br>
+      </p>
+      <input type="submit" class="submit button close" value="Sign In" tabindex="10">
+    </form>
+  </section><!-- .body -->
+{% endblock%}

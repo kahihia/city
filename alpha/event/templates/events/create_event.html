@@ -1,0 +1,474 @@
+{% extends 'base.html' %}
+{% load cropping %}
+{% load selectable_tags %}
+{% block title %} > Post Event{% endblock %}
+{% block page %}
+<link href="{{STATIC_URL}}styles/tcal.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/create_event.css" rel="stylesheet" type="text/css" />
+{% include_ui_theme 'ui-lightness' %}
+<link href="{{STATIC_URL}}styles/datepicker.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}js/time/jquery.ptTimeSelect.css" rel="stylesheet" type="text/css" />
+
+<link href="{{STATIC_URL}}styles/when.css" rel="stylesheet" type="text/css" />
+
+<link href="{{STATIC_URL}}styles/tcal.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/place_autocomplete.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/autoSuggest.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/description.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/tagspopup.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/suggest.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}styles/modal.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}ajaxuploader/css/fileuploader.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}image_cropping/css/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
+<link href="{{STATIC_URL}}css/crop.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{{STATIC_URL}}fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+
+<script src="{{STATIC_URL}}js/create_event.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/jquery.balloon.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/jquery.dj.selectable.js" type="text/javascript"></script>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
+<script src="{{STATIC_URL}}js/jquery.geocomplete.js"></script>
+
+<script src="{{STATIC_URL}}js/validate.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/tcal.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/description.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/tags.popup.js" type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/suggest.js" type="text/javascript"></script>
+<script type="text/javascript" src="{{STATIC_URL}}fancybox/jquery.fancybox.js"></script>
+<!-- end time -->
+{{ form.map }}
+{{ form.media.js }}
+<script type="text/javascript">
+    var crsf_token = "{{ csrf_token }}", user_lat, user_long;
+    {% if location %}
+        user_lat = {{location.0}};
+        user_lng = {{location.1}};
+    {% endif %}
+
+    if (navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(function(position){
+            user_lat = position.coords.latitude;
+            user_lng = position.coords.longitude; 
+        });
+    }
+
+    jQuery(document).ready(function(e) {
+        jQuery('.search-lists ul li a').click(function(){
+            var v = jQuery(this).attr('rel');
+            jQuery('.location-text-box .location').val(v);
+        });
+        jQuery('.footer-site-map ul li').addClass('add-border-right-white');
+        jQuery('.footer-site-map ul li:last').removeClass('add-border-right-white');
+        //jQuery('.right-navigation-wrapper').height(jQuery('.main-navigation-content-nav').height());
+        function newParameters(query) {
+            query.foo = 'bar';
+        }
+    });
+</script>
+
+<div class="wrapper {% if form.city_required %}new_venue{% endif %}">
+    <div class="page-container">
+        <!--start.header-wrapper-->
+        <!--end.header-wrapper-->
+
+        <!--start.content-wrapper-->
+        <div class="content-wrapper">
+            <div class="content-wrapper-panel">
+                <!--start.featured-area-->
+
+                <!--end.featured-area-->
+
+                <!--start.main-content-wrapper-->
+
+                <div class="main-content-wrapper">
+                    <h1>Post Events</h1>
+                    <div class="main-content">
+                        <!--start.main-navigation-->
+                        <div class="main-navigation">
+                            <!--start.main-navigation-nav-->
+                            <div class="modal-bg"></div>
+                            <div id="entry-form">
+                                <form method="post" name="post-events" onsubmit="return validate_form_events(this)" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <!--errors -->
+                                    {%if form.errors %}
+                                    <!--{{ form.errors }}-->
+                                    <h3>Please correct the following:</h3>
+                                    <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                                        <ul style="list-style-type: none;">
+                                            <li id="all-info">
+                                                {% for error in form.non_field_errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                            <li id="all-info">
+                                                {% for error in form.venue_name.errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                            <li id="all-info">
+                                                {% for error in form.when.errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                            <li id="all-info">
+                                                {% for error in form.when_json.errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                            <li id="email-info">
+                                                {% for error in form.email.errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                            <li id="image-info">
+                                                {% for error in form.username.errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                            <li id="tag-info">
+                                                {% for error in form.tags.errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                            <li id="website-info">
+                                                {% for error in form.website.errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                            <li id="description-info">
+                                                {% for error in form.description.errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                            <li id="price-info">
+                                                {% for error in form.price.errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                            <li id="when-info">
+                                                {% for error in form.start_time.errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                            <li id="location-info">
+                                                {% for error in form.location.errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                            <li id="name-info">
+                                                {% for error in form.name.errors %}
+                                                <span class="error">{{ error }}</span>
+                                                {% endfor %}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                    <!-- end errors -->
+                                    <table>
+                                        <tr>
+                                            <td>Event Name</td>
+                                            <td>{{form.name}}</td>
+                                            <td>
+                                                <a href="javascript:void;" class="balloon">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                                <div class="balloon-content">
+                                                    <h3>
+                                                        Help - Enter event <i>[Event name]:</i>
+                                                    </h3>
+                                                    <p>
+                                                        Insert a name that will stand out
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Location</td>
+                                            <td>
+                                                <div class="location">{{ form.place}}</div>
+                                                <div class="show_map"></div>
+                                                <div class="suggest">
+                                                    <div class="error">
+                                                        All fields is required
+                                                    </div>
+                                                    <table>
+                                                        <tr>
+                                                            <td>Venue name</td>
+                                                            <td>{{form.venue_name}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Street address</td>
+                                                            <td>{{form.street}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>City</td>
+                                                            <td>
+                                                                {{form.city}}
+                                                                {{form.city_identifier}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Location</td>
+                                                            <td>
+                                                                <div class="location_map">{{form.location}}</div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <div class="cancel-button">Cancel</div>
+                                                    <div class="reset-button">Clear</div>
+                                                    <div class="submit-button">Submit</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void;"  class="balloon">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                                <div class="balloon-content">
+                                                    <h3>
+                                                        Help - Enter event <i>[Location]:</i>
+                                                    </h3>
+                                                    <p> 
+                                                        Type in the name of the venue. However, if you do not find your event, type it in manually by selecting “Suggest a New Venue”
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>                                        
+                                        <tr>
+                                            <td>When</td>
+                                            <td>
+                                                {{form.when}}
+                                                {{form.when_json}}
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void;" class="balloon">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                                <div class="balloon-content">
+                                                    <h3>
+                                                        Help - Enter event
+                                                        <i>[when]:</i>
+                                                    </h3>
+                                                    <p>
+                                                        Pick your dates and times
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="top" class="top-align">Price</td>
+                                            <td class="price-td">
+                                                {{form.price}}
+                                                <p class="help">
+
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void;" class="balloon">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                                <div class="balloon-content">
+                                                    <h3>
+                                                        Help - Enter event
+                                                        <i>[enterance]:</i>
+                                                    </h3>
+                                                    <p>
+                                                        Select Free if the event is free to the public. 
+                                                        Or you can use things like: $25 / Free before 8pm,
+                                                        then $10 after / $10 adults, 12 & under Free
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="top">
+                                                Description
+                                                <br>
+                                                <div class="description-select-day-widget">
+                                                    <div class="description-days-container">
+                                                        <span class="result">Same for All Days</span>
+                                                        <div class="selected-result">Same for All</div>
+                                                        <ul class="days-list active"></ul>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {{form.description}}
+                                                {{form.description_json}}
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void;" class="balloon">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                                <div class="balloon-content">
+                                                    <h3>
+                                                        Help - Enter event
+                                                        <i>[Description]:</i>
+                                                    </h3>
+                                                    <p>
+                                                        Type in your event with much detail for the public. Note that certain words will be inserted as tags to help you. Further, for events that are more than one day, you can change them individually by selecting them on the dropdown
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Website</td>
+                                            <td>{{form.website}}</td>
+                                            <td>
+                                                <a href="javascript:void;" class="balloon">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                                <div class="balloon-content">
+                                                    <h3>
+                                                        Help - Enter event
+                                                        <i>[Website]:</i>
+                                                    </h3>
+                                                    <p>
+                                                        Insert website of the event if they have one otherwise you can leave blank. <br/>
+                                                        <strong>E.g:</strong>. www.event.ca
+
+                                                    </p>
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="wheelchair-td">
+                                                Wheelchair  Accessible
+                                                {{form.wheelchair}}
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void;" class="balloon">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                                <div class="balloon-content">
+                                                    <h3>
+                                                        Help - Enter event
+                                                        <i>[Wheelchair]:</i>
+                                                    </h3>
+                                                    <p>
+                                                        Select yes or no
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tags_bottom">Tags</td>
+                                            <td>
+                                                <div class="tags-popup-wrapper">
+                                                    <div class="tags-popup">
+                                                        <div class="tags-container"></div>
+                                                        <div class="close-button">Close</div>
+                                                    </div>
+                                                </div>
+                                                {{form.tags}}
+                                            </td>
+                                            <td class="tags_bottom">
+                                                <a href="javascript:void;" class="balloon">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                                <div class="balloon-content">
+                                                    <h3>
+                                                        Help - Enter your
+                                                        <i>[tags]:</i>
+                                                    </h3>
+                                                    <p>
+                                                        Select tags that best describe your event. Insert your event by using the “tab” button or a comma
+                                                    </p>
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tickets</td>
+                                            <td>
+                                                <input type="text" name="tickets" class="inputfield rborder" />
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void;" class="balloon">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                                <div class="balloon-content">
+                                                    <h3>
+                                                        Help - Enter your
+                                                        <i>[tickets]:</i>
+                                                    </h3>
+                                                    <p>                                                        
+                                                        <strong>Eg.</strong> 
+                                                        Door / www.ticket.ca / (306)256- xxxxx
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>                                        
+                                        <tr class="picture">
+                                            <td>Images</td>
+                                            <td>
+                                                {{ form.picture_src }}
+                                                <div class='full-screen-popup' data-thumb-width="180" data-thumb-height="180">
+                                                    {{ form.cropping }}
+                                                    <div class='save-button'>Save image</div>
+                                                </div>
+                                                <div class="picture-thumb">
+                                                    <img src="" class="preview">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void;" class="balloon">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                                <div class="balloon-content">
+                                                    <h3>
+                                                        Help - Enter your
+                                                        <i>[image]:</i>
+                                                    </h3>
+                                                    <p>                                                        
+                                                        Upload an image used for your event. Max size is 32Mb.
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr></tr>
+                                        <tr>
+                                            <td colspan="3">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td>
+                                                <input type="submit" name="submitevents" class="btnbg rborder submit" value="{% block submit_button %}Post Event{% endblock %}" />
+                                            </td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                    </form>
+                                </div>
+
+                                <!--end.main-navigation-content-nav-->
+
+                                <div class="clr"></div>
+
+                            </div>
+
+                            <!--end.main-navigation-->
+
+                            <!--start.right-navigation-->
+
+                            <!--end.right-navigation-->
+
+                            <div class="clr"></div>
+
+                        </div>
+
+                    </div>
+
+                    <!--end.main-content-wrapper--> </div>
+
+            </div>
+
+            <!--end.content-wrapper--> </div>
+    </div>
+
+    <!--start.footer-wrapper-->
+
+    <!--end.footer-site-links-->
+
+    {% endblock %}

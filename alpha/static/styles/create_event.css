@@ -1,0 +1,24 @@
+.choose_location {
+  width:24px;
+  height:24px;
+  background: url('/static/images/map.png') no-repeat;
+  cursor: pointer;
+  display: inline-block;
+  margin-left:20px;
+  padding-top:5px;
+  position:relative;
+  top:10px;
+}
+
+[name=location_name_0] {
+  background:#fff; 
+}
+
+.location_map {
+  position:absolute;
+  display:none;
+  padding:10px;
+  border:1px solid #d8d8d8;
+  background: #fff;
+  margin-top:5px;
+}

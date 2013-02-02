@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} > Your Events{% endblock %}
+
+{% block page %}
+<section class="body">
+    <h1>Your Events</h1>
+  <section>
+    <ul class="events">
+    {% for event in user_events %}
+      {% include 'events/event_description_small.html' %}
+    {% endfor %}
+    </ul>
+  </section>
+</section>
+{% endblock %}

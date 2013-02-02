@@ -1,0 +1,12 @@
+{% comment %}
+no_events.html
+-----------------------------------------------
+This is included in the browse_events.html file
+when there are no events in event_sets.
+
+It should be used for a call to action to the user.
+
+{% endcomment %}
+
+<p>No events for this day.</p>
+<p>Why not <a href="{% url event_create %}">post your own</a>?</p>
