@@ -228,6 +228,9 @@ def phrases_query():
 class AuditEvent(Event):
     phrases = models.ManyToManyField(AuditPhrase)
 
+    def phrases_list(self):
+        return [phrase.phrase for phrase in self.phrases.all()]
+
 
 class FakeAuditEvent(models.Model):
     event_ptr_id = models.PositiveIntegerField(db_column="event_ptr_id", primary_key=True)

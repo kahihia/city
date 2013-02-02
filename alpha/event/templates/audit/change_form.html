@@ -66,9 +66,10 @@
 
         {% block field_sets %}
             {% for fieldset in adminform %}
-                {% include "admin/includes/fieldset.html" %}
-            {% endfor %}
+                {% include "audit/bad_phrases_fields.html" %}
+            {% endfor %}            
         {% endblock %}
+
 
         {% block after_field_sets %}{% endblock %}
 

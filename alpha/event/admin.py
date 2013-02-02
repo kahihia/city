@@ -18,7 +18,7 @@ approve_events.short_description = "Approve selected events"
 
 class AuditEventAdmin(admin.ModelAdmin):
     actions = [approve_events]
-    fields = ('name', 'description', 'owner', 'picture', 'venue', 'phrases', )
+    fields = ('name', 'description', 'owner', 'picture', 'venue', )
     list_display = ('name', 'description', 'owner')
 
     change_form_template = "audit/change_form.html"
