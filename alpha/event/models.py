@@ -262,7 +262,7 @@ def audit_event_catch(instance=None, created=False, **kwargs):
 
         current_site = settings.EVENT_EMAIL_SITE
 
-        subject = 'Bad phrases are catching'
+        subject = 'Bad phrases have been caught!'
 
         message = render_to_string('audit/bad_phrases_email.txt', {
             'site': current_site,

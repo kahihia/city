@@ -1,10 +1,10 @@
 <html>
 <head></head>
 <body>
-<h1>{{ event.email }} post event that need to be reviewed</h1>
+<h1>{{ event.email }} has just posted an Event that needs your attention & moderation!"</h1>
 
 <h2>You can review it in admin interface:</h2>
-<a href = "http://{{ site }}/admin/event/auditevent/">Audit events</a>
+<a href = "http://{{ site }}/admin/event/auditevent/{{ event.id }}/">{{ event.name }}</a>
 
 <h2>Event title:</h2>
 <p>{{ event.name }}</p>
@@ -12,7 +12,7 @@
 <h2>Event description:</h2>
 <p>{{ event.description }}</p>
 
-<h2>Phrases that we catch:</h2>
+<h2>Phrases caught inside this Event:</h2>
 <p>{{ phrases|join:", " }}</p>
 
 </body>
