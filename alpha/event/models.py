@@ -273,7 +273,8 @@ def audit_event_catch(instance=None, created=False, **kwargs):
         msg = EmailMessage(subject,
                 message,
                 settings.DEFAULT_FROM_EMAIL,
-                settings.ADMINS)
+                map(lambda x: x[1], settings.ADMINS))
+
         msg.content_subtype = 'html'
         msg.send()
 
