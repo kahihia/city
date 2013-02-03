@@ -62,12 +62,13 @@
                     contents:content,
                     position:"right bottom",
                     tipSize: 0,
-                    offsetX:25,                    
+                    offsetX:$.browser.msie?0:25,
+		    offsetY:$.browser.msie?25:0,
                     showDuration: 500, hideDuration: 0,
                     showAnimation: function(d) { this.fadeIn(d); }
                 });
             });
             
-        },100);        
+        },1000);        
     });
 })(jQuery);
