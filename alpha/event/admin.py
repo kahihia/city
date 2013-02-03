@@ -16,6 +16,10 @@ def approve_events(modeladmin, request, queryset):
 approve_events.short_description = "Approve selected events"
 
 
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description', 'venue', 'tags_representation')
+
+
 class AuditEventAdmin(admin.ModelAdmin):
     actions = [approve_events]
     fields = ('name', 'description', 'owner', 'picture', 'venue', )
@@ -26,7 +30,7 @@ class AuditEventAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
-admin.site.register(Event)
+admin.site.register(Event, EventAdmin)
 admin.site.register(SingleEvent)
 
 admin.site.register(AuditPhrase)
