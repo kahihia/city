@@ -23,6 +23,12 @@
             });
             $(this.element).on("blur", function(){
                 that.saveCurrentDay();
+                if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
+                    $("#id_tags__tagautosuggest").data('tagspopup').autoTagsDetect(
+                        $("#id_description").val()
+                    );
+                    //$("#id_description").focus();
+                }
             });
             $("#id_description").on("keyup", function(e){                
                 if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
