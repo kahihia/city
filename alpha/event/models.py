@@ -122,6 +122,9 @@ class Event(models.Model):
         super(Event, self).save(*args, **kwargs)
         return self
 
+    def tags_representation(self):
+        return ", ".join([tag.name for tag in self.tags.all()])
+
     def clean(self):
         #if self.end_time:
         #    if self.start_time > self.end_time:
