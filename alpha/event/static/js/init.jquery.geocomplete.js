@@ -42,6 +42,15 @@
     
             $("#id_place").on("blur", function() {
                 $(".pac-container").removeClass("show");
+                setTimeout(function(){
+                    var address = $("#id_geo_address").val(),
+                        venue = $("#id_geo_venue").val();
+                    if(address.indexOf(venue)===-1){
+                        $("#id_place").val(
+                            $("#id_geo_venue").val()+", "+$("#id_geo_address").val()
+                        );    
+                    }                    
+                },10);
             });
             $("#id_place").on("focus", function() {
                 $(".pac-container").addClass("show");            

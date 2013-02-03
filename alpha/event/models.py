@@ -225,7 +225,7 @@ def phrases_query():
     phrases = [pm.phrase for pm in phrases]
     phrases = "|".join(phrases)
 
-    return "(%s)" % phrases
+    return r"(%s)" % phrases
 
 
 class AuditEvent(Event):
@@ -252,8 +252,8 @@ def audit_event_catch(instance=None, created=False, **kwargs):
     if instance.audited:
         return
     bad_phrases = phrases_query()
-    name_search_result = re.findall(bad_phrases, instance.name)
-    description_search_result = re.findall(bad_phrases, instance.description)
+    name_search_result = re.findall(bad_phrases, instance.name, re.I)
+    description_search_result = re.findall(bad_phrases, instance.description, re.I)
     if name_search_result or description_search_result:
         audit_event = AuditEvent(
             event_ptr_id=instance.pk
@@ -282,7 +282,7 @@ def audit_event_catch(instance=None, created=False, **kwargs):
                 map(lambda x: x[1], settings.ADMINS))
 
         msg.content_subtype = 'html'
-        msg.send()
+        #msg.send()
 
 models.signals.post_save.connect(audit_event_catch, sender=Event)
 

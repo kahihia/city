@@ -147,6 +147,9 @@
             if(this.autoTags.indexOf(tag)!==-1){
                 this.autoTags = _.without(this.autoTags, tag);
                 this.removeTag(tag);
+                if(tag==="Wheelchair"){
+                    $("#id_wheelchair_1")[0].checked = true;
+                }
             }
 
         },
