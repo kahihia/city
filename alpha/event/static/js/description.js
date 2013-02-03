@@ -29,7 +29,7 @@
                     $("#id_tags__tagautosuggest").data('tagspopup').autoTagsDetect(
                         $("#id_description").val()
                     );
-                    $("#id_description").focus();
+                    //$("#id_description").focus();
                 }               
             });
 
