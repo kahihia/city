@@ -21,7 +21,7 @@
             $(this.element).on("change", function() {
                 that.save();
             });
-            $(this.element).on("blur", function(){
+            $(this.element).on("blur", function(e){
                 that.saveCurrentDay();
                 if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
                     $("#id_tags__tagautosuggest").data('tagspopup').autoTagsDetect(
