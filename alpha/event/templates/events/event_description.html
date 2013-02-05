@@ -36,7 +36,11 @@
 
 <aside id="photo">
   {% load event_pictures %}
-  <img align="left" style="border: solid thin #999; padding: 5px;" src="{% event_picture_url event 200 %}">
+  {% comment %}
+    <img align="left" style="border: solid thin #999; padding: 5px;" src="{% event_picture_url event 200 %}">
+    TODO: change to croped image
+
+  {% endcomment %}
 </aside>
 <div style="width: 780px; float: right;">
 <section class="body noborder detail">

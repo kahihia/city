@@ -127,6 +127,7 @@
 						var start = days[di].start,
 							end = days[di].end,
 							daysTimePicker = this.months[yi][mi];
+
 						daysTimePicker.addDay(parseInt(di), parseInt(mi), parseInt(yi));
 						var format_day = $.datepicker.formatDate($.datepicker._defaults.dateFormat, new Date(yi, mi - 1, di));
 						$(".days-picker", $(daysTimePicker.element).parents(".months-container")).multiDatesPicker('addDates', format_day);
@@ -139,6 +140,7 @@
 					}
 				}
 			}
+			$(this.element).val(this.getText());
 
 		},
 		addMonth: function(year, month) {
@@ -194,9 +196,9 @@
 				onToggle: function(dateText) {
 					var timepicker = $(daysTimePicker).data("daystimepicker");
 					var dateArray = dateText.split("/");
-					var month = dateArray[0];
-					var day = dateArray[1];
-					var year = dateArray[2];
+					var month = parseInt(dateArray[0]);
+					var day = parseInt(dateArray[1]);
+					var year = parseInt(dateArray[2]);
 					timepicker.addDay(day, month, year);
 					if(timepicker.days.length === 0) {
 						$(timepicker.labels).removeClass("active");

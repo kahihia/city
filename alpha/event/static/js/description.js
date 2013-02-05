@@ -1,6 +1,34 @@
 (function($) {
     var format = $.datepicker._defaults.dateFormat,
         delimeter = /\b/;
+
+    sortByDays = function(obj){
+        var keys = [];
+        var sorted_obj = {};
+
+        for(var key in obj){
+            if(obj.hasOwnProperty(key)){
+                keys.push(key);
+            }
+        }
+
+        // sort keys
+        keys.sort(function(first, second){
+            var date1 = new Date(first),
+                date2 = new Date(second);
+            if (date1 > date2) return 1;
+            if (date1 < date2) return -1;
+            return 0;
+        });
+
+        // create new array based on Sorted Keys
+        jQuery.each(keys, function(i, key){
+            sorted_obj[key] = obj[key];
+        });
+
+        return sorted_obj;
+    };
+
     $.widget("ui.description", {
         _create: function() {
             var that = this;
@@ -61,9 +89,15 @@
             this.drawWidget();
             this.save();
         },
+        sortDays: function(){            
+            this.data.days = sortByDays(this.data.days);
+        },
         drawWidget: function() {
+            this.sortDays();
+            
             var days = this.data.days,
                 that = this;
+            
             $(this.daysListContainer).empty();
             defaultWidget = $("<li>").attr("data-value", "default").html("Same for All");
             $(this.daysListContainer).append(defaultWidget);
@@ -127,7 +161,7 @@
             var value = $("#id_description_json").val();
             $("#id_description").description();
             if(value){
-                var json = JSON.parse(value);                
+                var json = JSON.parse(value);                              
                 $("#id_description").html(json["default"]);
                 $("#id_description").data("description").setValue(json);
                 $("#id_description").data("description").saveCurrentDay();

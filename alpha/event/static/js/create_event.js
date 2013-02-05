@@ -26,13 +26,6 @@
                 map_location.panTo(new google.maps.LatLng(parseFloat(lat.value), parseFloat(lng.value)));
             }
         });
-
-        function panMapToCenter(){
-            var lng = document.getElementById("id_location_lng"),
-                lat = document.getElementById("id_location_lat");            
-            google.maps.event.trigger(map_location, 'resize');
-            map_location.panTo(new google.maps.LatLng(parseFloat(lat.value), parseFloat(lng.value)));
-        }
     }
 
     $(document).ready(function () {        
@@ -63,7 +56,7 @@
                     position:"right bottom",
                     tipSize: 0,
                     offsetX:$.browser.msie?0:25,
-		    offsetY:$.browser.msie?25:0,
+                    offsetY:$.browser.msie?25:0,
                     showDuration: 500, hideDuration: 0,
                     showAnimation: function(d) { this.fadeIn(d); }
                 });

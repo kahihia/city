@@ -313,7 +313,7 @@ def view(request, slug=None, old_tags=None):
     opengraph = {'og:title': event.name,
                   'og:type': 'event',
                   'og:locale': 'en_US',
-                  'og:image': 'http://' + settings.EVENT_EMAIL_SITE + event_picture_url(event, size=200),
+                  # 'og:image': 'http://' + settings.EVENT_EMAIL_SITE + event_picture_url(event, size=200),
                   'og:url': 'http://' + settings.EVENT_EMAIL_SITE + reverse('event_view', args=(event.slug,)),
                   'og:site_name': 'Cityfusion',
                   'fb:app_id': '330171680330072',
@@ -331,7 +331,113 @@ def view(request, slug=None, old_tags=None):
                               context_instance=RequestContext(request))
 
 
-def create(request, form_class=None, success_url=None, template_name='events/create_event.html', send_email=True):
+def save_venue(request):
+    if request.POST["venue_name"]:
+        name = request.POST["venue_name"]
+        street = request.POST["street"]
+        city = City.objects.get(id=int(request.POST["city_identifier"]))
+        country = Country.objects.get(name='Canada')
+        location = Point((
+            float(request.POST["location_lng"]),
+            float(request.POST["location_lat"])
+        ))
+        venue = Venue(name=name, street=street, city=city, country=country, location=location)
+        venue.save()
+    elif request.POST["place"]:
+        name = request.POST["geo_venue"]
+        street = request.POST["geo_street"]
+        city = City.objects.filter(
+            Q(name_std=request.POST["geo_city"].encode('utf8')) |
+            Q(name=request.POST["geo_city"])
+        )
+        country = Country.objects.get(name='Canada')
+        location = Point((
+            float(request.POST["geo_longtitude"]),
+            float(request.POST["geo_latitude"])
+        ))
+        if city.count() > 1:
+            city = find_nearest_city(city, location)
+        else:
+            city = city[0]
+        venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, location=location)
+    return venue
+
+
+def save_when_and_description(request, event_obj):
+    when_json = json.loads(request.POST["when_json"])
+    description_json = json.loads(request.POST["description_json"])
+
+    event_obj.description = description_json['default']
+
+    for year, months in when_json.iteritems():
+        for month, days in months.iteritems():
+            for day, times in days.iteritems():
+                date = datetime.datetime(int(year), int(month), int(day), 0, 0)
+                if date.strftime("%m/%d/%Y") in description_json['days']:
+                    description = description_json['days'][date.strftime("%m/%d/%Y")]
+                else:
+                    description = ""
+                start_time = time.strptime(times["start"], '%I:%M %p')
+                start = datetime.datetime(int(year), int(month), int(day), start_time[3], start_time[4])
+
+                end_time = time.strptime(times["end"], '%I:%M %p')
+                end = datetime.datetime(int(year), int(month), int(day), end_time[3], end_time[4])
+
+                single_event = SingleEvent(
+                    event=event_obj,
+                    start_time=start.strftime('%Y-%m-%d %H:%M'),
+                    end_time=end.strftime('%Y-%m-%d %H:%M'),
+                    description=description
+                )
+                single_event.save()
+
+
+def send_event_details_email(event_obj):
+    #email the user
+    current_site = settings.EVENT_EMAIL_SITE
+    subject = render_to_string('events/creation_email_subject.txt', {
+            'site': current_site,
+            'title': mark_safe(event_obj.name)
+        })
+
+    subject = ''.join(subject.splitlines())  # Email subjects are all on one line
+
+    message = render_to_string('events/creation_email.txt', {
+            'authentication_key': event_obj.authentication_key,
+            'slug': event_obj.slug,
+            'site': current_site
+        })
+
+    msg = EmailMessage(subject,
+               message,
+               DEFAULT_FROM_EMAIL,
+               [event_obj.email])
+    msg.content_subtype = 'html'
+    msg.send()
+
+
+def save_event(request, form):
+    # Find or create new venue
+    venue = save_venue(request)
+
+    event_obj = form.save(commit=False)
+    event_obj.venue = venue
+    save_when_and_description(request, event_obj)
+
+    if request.user.is_authenticated():
+        #if logged in, use the users info to complete form
+        event_obj.owner = request.user
+        event_obj.email = request.user.email  # don't really need this line
+
+    if request.POST["picture_src"]:
+        event_obj.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
+
+    event_obj = event_obj.save()  # save to the database
+    form.save_m2m()  # needed for many-to-many fields (i.e. the event tags)
+    return event_obj
+
+
+def create(request, form_class=None, success_url=None, template_name='events/create_event.html'):
     if form_class == None:
         exclude = ['owner', 'authentication_key', 'slug']
         if request.user.is_authenticated():
@@ -341,100 +447,10 @@ def create(request, form_class=None, success_url=None, template_name='events/cre
         form_class = generate_form(*exclude)
 
     if request.method == 'POST':
-        form = form_class(data=request.POST, files=request.FILES)
+        form = form_class(data=request.POST)
         if form.is_valid():
-            # Find or create new venue
-            if request.POST["venue_name"]:
-                name = request.POST["venue_name"]
-                street = request.POST["street"]
-                city = City.objects.get(id=int(request.POST["city_identifier"]))
-                country = Country.objects.get(name='Canada')
-                location = Point((
-                    float(request.POST["location_lng"]),
-                    float(request.POST["location_lat"])
-                ))
-                venue = Venue(name=name, street=street, city=city, country=country, location=location)
-                venue.save()
-            elif request.POST["place"]:
-                name = request.POST["geo_venue"]
-                street = request.POST["geo_street"]
-                city = City.objects.filter(
-                    Q(name_std=request.POST["geo_city"].encode('utf8')) |
-                    Q(name=request.POST["geo_city"])
-                )
-                country = Country.objects.get(name='Canada')
-                location = Point((
-                    float(request.POST["geo_longtitude"]),
-                    float(request.POST["geo_latitude"])
-                ))
-                if city.count() > 1:
-                    city = find_nearest_city(city, location)
-                else:
-                    city = city[0]
-                venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, location=location)
-
-            event_obj = form.save(commit=False)
-            event_obj.venue = venue
-
-            when_json = json.loads(request.POST["when_json"])
-            description_json = json.loads(request.POST["description_json"])
-
-            event_obj.description = description_json['default']
-
-            if request.user.is_authenticated():
-                #if logged in, use the users info to complete form
-                event_obj.owner = request.user
-                event_obj.email = request.user.email  # don't really need this line
-
-            if request.POST["picture_src"]:
-                event_obj.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
-
-            event_obj = event_obj.save()  # save to the database
-            form.save_m2m()  # needed for many-to-many fields (i.e. the event tags)
-
-            for year, months in when_json.iteritems():
-                for month, days in months.iteritems():
-                    for day, times in days.iteritems():
-                        date = datetime.datetime(int(year), int(month), int(day), 0, 0)
-                        if date.strftime("%m/%d/%Y") in description_json['days']:
-                            description = description_json['days'][date.strftime("%m/%d/%Y")]
-                        else:
-                            description = ""
-                        start_time = time.strptime(times["start"], '%I:%M %p')
-                        start = datetime.datetime(int(year), int(month), int(day), start_time[3], start_time[4])
-
-                        end_time = time.strptime(times["end"], '%I:%M %p')
-                        end = datetime.datetime(int(year), int(month), int(day), end_time[3], end_time[4])
-
-                        single_event = SingleEvent(
-                            event=event_obj,
-                            start_time=start.strftime('%Y-%m-%d %H:%M'),
-                            end_time=end.strftime('%Y-%m-%d %H:%M'),
-                            description=description
-                        )
-                        single_event.save()
-
-            #email the user
-            current_site = settings.EVENT_EMAIL_SITE
-            subject = render_to_string('events/creation_email_subject.txt', {
-                    'site': current_site,
-                    'title': mark_safe(event_obj.name)
-                })
-
-            subject = ''.join(subject.splitlines())  # Email subjects are all on one line
-
-            message = render_to_string('events/creation_email.txt', {
-                    'authentication_key': event_obj.authentication_key,
-                    'slug': event_obj.slug,
-                    'site': current_site
-                })
-
-            msg = EmailMessage(subject,
-                       message,
-                       DEFAULT_FROM_EMAIL,
-                       [event_obj.email])
-            msg.content_subtype = 'html'
-            msg.send()
+            event_obj = save_event(request, form)
+            send_event_details_email(event_obj)
 
             # on success, redirect to the home page by default
             # if the user is authenticated, take them to their event page
@@ -463,6 +479,58 @@ def created(request, slug=None):
         }, context_instance=RequestContext(request))
 
 
+def initial_for_event_form(event_obj):
+    venue = event_obj.venue
+
+    full_parts = [x for x in [venue.name, venue.street, venue.city.name, venue.country.name] if x]
+    place = {
+        "full": ", ".join(full_parts),
+        "venue": venue.name,
+        "street": venue.street,
+        "city": venue.city.name,
+        "country": venue.country.name,
+        "longtitude": venue.location.y,
+        "latitude": venue.location.x
+    }
+
+    location = (venue.location.y, venue.location.x)
+
+    when_json = {}
+    description_json = {
+        "default": event_obj.description,
+        "days": {}
+    }
+
+    single_events = SingleEvent.objects.filter(event=event_obj)
+
+    for se in single_events:
+        start_time = se.start_time
+        year = start_time.year
+        month = start_time.month
+        day = start_time.day
+
+        if not year in when_json:
+            when_json[year] = {}
+
+        if not month in when_json[year]:
+            when_json[year][month] = {}
+
+        when_json[year][month][day] = {
+            "start": start_time.strftime('%I:%M %p'),
+            "end": se.end_time.strftime('%I:%M %p')
+        }
+
+        description_json["days"][start_time.strftime("%m/%d/%Y")] = se.description
+
+    return {
+            "place": place,
+            "location": location,
+            "picture_src": "/media/%s" % event_obj.picture,
+            "when_json": json.dumps(when_json),
+            "description_json": json.dumps(description_json)
+        }
+
+
 def edit(request,
          form_class=None, success_url=None, authentication_key=None,
          template_name='events/edit_event.html'):
@@ -485,22 +553,27 @@ def edit(request,
 
     # Verify and save the form to model
     if request.method == 'POST':
-        form = form_class(instance=event_obj,
-                              files=request.FILES,
-                               data=request.POST)
+        form = form_class(instance=event_obj, data=request.POST)
         if form.is_valid():
-            form.save()
+            # Remove existing single events
+            SingleEvent.objects.filter(event=event_obj).delete()
+
+            event_obj = save_event(request, form)
             return HttpResponseRedirect(success_url)
     else:
-        form = form_class(instance=event_obj)
+        form = form_class(
+            instance=event_obj,
+            initial=initial_for_event_form(event_obj)
+        )
 
     # Edit the event
     context = RequestContext(request)
     return render_to_response(template_name, {
                                 'form': form,
                                 'event': event_obj,
-                                'picture_exists': event_obj.picture_exists(40)},
-                              context_instance=context)
+                                'location': request.location,
+                            },
+                            context_instance=context)
 
 
 def daily(start, end, weekday=False, day_delta=1):

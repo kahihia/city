@@ -4,6 +4,9 @@
 			var that = this,
 				free = $("#id_price_free"),
 				atFirst = true;
+			if($(this.element).val()==='Free'){
+				$(free).prop('checked', true);
+			}
 			free.on("change", function() {
 				if(this.checked) {
 					$(that.element).val("Free");
@@ -60,7 +63,7 @@
 
 	$(document).ready(function() {
 		setTimeout(function(){
-			$("#id_price").price();
+			$("#id_price").price();			
 		},100);		
 	});
 })(jQuery);

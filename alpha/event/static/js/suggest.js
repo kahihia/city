@@ -48,7 +48,10 @@
                     });
                 google.maps.event.trigger(map_location, 'resize');
                 setTimeout(function(){
-                    panMapToCenter(user_lat, user_lng);
+                    panMapToCenter(
+                        document.getElementById("id_location_lat").value||user_lat,
+                        document.getElementById("id_location_lng").value||user_lng
+                    );
                 },100);
             });
 
