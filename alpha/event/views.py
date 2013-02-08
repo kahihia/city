@@ -17,7 +17,7 @@ from django.db.models import Q
 from event import EVENTS_PER_PAGE, DEFAULT_FROM_EMAIL
 from event.models import Event, Venue, SingleEvent, Reminder, AuditEvent, AuditSingleEvent, AuditPhrase, FakeAuditEvent
 from event.utils import TagInfo, EventSet, find_nearest_city
-from event.templatetags.event_pictures import event_picture_url
+
 from event.forms import generate_form
 
 from citi_user.forms import CityAuthForm
@@ -62,8 +62,18 @@ def events_from_paginator(paginator, page_num):
     return events
 
 
+from django.db.models import Count, Min
+
+
 def search_pad(request, old_tags=u'all', date=u'flow'):
-    events = Event.events.all()
+    events = Event.events.all() \
+        .prefetch_related('single_events') \
+        .annotate(nearest_time=Min('single_events__start_time')) \
+        .filter(single_events__start_time__gte=datetime.datetime.now())
+
+    events.query.order_by = ['nearest_time']
+    events.query.group_by = ['event_event.id']
+
     featured_paginator = Paginator(events, 6)
     featured_page = request.GET.get('featured_page', '1')
     featured_events = events_from_paginator(featured_paginator, featured_page)
@@ -72,7 +82,7 @@ def search_pad(request, old_tags=u'all', date=u'flow'):
     search_pad_page = request.GET.get('search_pad_page', '1')
     search_pad_events = events_from_paginator(search_pad_paginator, search_pad_page)
 
-    return render_to_response('events/browse.html', {
+    return render_to_response('events/search_pad.html', {
                                 'featured_events': featured_events,
                                 'search_pad_events': search_pad_events,
                                 'events': events,
@@ -420,7 +430,7 @@ def save_event(request, form):
     # Find or create new venue
     venue = save_venue(request)
 
-    event_obj = form.save(commit=False)
+    event_obj = form.save()
     event_obj.venue = venue
     save_when_and_description(request, event_obj)
 
@@ -433,7 +443,7 @@ def save_event(request, form):
         event_obj.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
 
     event_obj = event_obj.save()  # save to the database
-    form.save_m2m()  # needed for many-to-many fields (i.e. the event tags)
+    # form.save_m2m()  # needed for many-to-many fields (i.e. the event tags)
     return event_obj
 
 

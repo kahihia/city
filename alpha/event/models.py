@@ -147,25 +147,8 @@ class Event(models.Model):
                 return potential
             suffix = suffix + 1
 
-    def picture_exists(self, size):
-        """
-        Returns: True or False, the status of a size of picture. Used
-                 to tell if we need to create one.
-        """
-        return self.picture.storage.exists(self.picture_name(size))
-
-    def picture_name(self, size):
-        """
-        Returns: The file name of the picture of a given size.
-        """
-        return os.path.join(EVENT_PICTURE_DIR, str(self.pk), 'resized_pic',
-                            str(size), os.path.basename(self.picture.name))
-
-    def picture_url(self, size):
-        """
-        Returns: The url of the picture of a certain size.
-        """
-        return self.picture.storage.url(self.picture_name(size))
+    def next_day(self):
+        return SingleEvent.objects.filter(start_time__gte=datetime.datetime.now(), event=self).order_by("start_time")[0]
 
 
 class SingleEvent(models.Model):
@@ -179,7 +162,7 @@ class SingleEvent(models.Model):
 
     def __unicode__(self):
         return u'%s/// %s' % (self.event, self.start_time)
-    event = models.ForeignKey(Event, blank=False, null=False)
+    event = models.ForeignKey(Event, blank=False, null=False, related_name='single_events')
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
     end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
     description = models.TextField(null=True, blank=True)  # additional description

@@ -49,8 +49,8 @@
                 google.maps.event.trigger(map_location, 'resize');
                 setTimeout(function(){
                     panMapToCenter(
-                        document.getElementById("id_location_lat").value||user_lat,
-                        document.getElementById("id_location_lng").value||user_lng
+                        parseInt(document.getElementById("id_location_lat").value)||user_lat,
+                        parseInt(document.getElementById("id_location_lng").value)||user_lng
                     );
                 },100);
             });

@@ -45,10 +45,16 @@
                 closing = true;
             });
 
-            $.post("/events/ctags", {}, function(data){
-                tags = _.map(data.tags, function(tag){ return tag.name });
-                that.loadTags(tags);
-            });
+            if($("#id_geo_city").val()){
+                this.forCity($("#id_geo_city").val());
+            } else {
+                $.post("/events/ctags", {}, function(data){
+                    tags = _.map(data.tags, function(tag){ return tag.name });
+                    that.loadTags(tags);
+                });
+
+            }
+            
             this.setFreeAndWheelchair();
         },
         setFreeAndWheelchair: function(){

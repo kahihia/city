@@ -1,0 +1,27 @@
+.featured-title, .featured-date, .featured-details-link {
+    text-overflow: ellipsis;
+    overflow:hidden;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.features-navigation .step-links a {
+    display: inline-block;
+    width: 19px;
+    height: 20px;
+    line-height: 20px;
+    background: #fff;
+    border-right: 1px solid #e1e6eb;
+    text-decoration: none;
+    color: #7f7f7f;    
+    text-align: center;
+    font-weight: bold;
+}
+
+.features-navigation .step-links a.current, .features-navigation .step-links a:hover{
+    color: #000;
+}
+
+.features-navigation .step-links a.prev, .features-navigation .step-links a.next {
+    width: 45px;
+}

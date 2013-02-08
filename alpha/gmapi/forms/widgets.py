@@ -7,8 +7,8 @@ from django.contrib.gis.geos import Point
 DEFAULT_WIDTH = 400
 DEFAULT_HEIGHT = 400
 
-DEFAULT_LNG = -79.4163
-DEFAULT_LAT = 43.70011
+DEFAULT_LNG = 0
+DEFAULT_LAT = 0
 
 
 JSMIN = getattr(settings, 'GMAPI_JSMIN', not settings.DEBUG) and '.min' or ''

@@ -5,14 +5,14 @@ from event import views as event
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-                       url(r'^$',
+                      url(r'^$',
+                           event.search_pad,
+                           name='search_pad'
+                           ),
+                       url(r'^browse/$',
                            event.browse,
                            kwargs={'date': u'flow'},
                            name='event_browse'
-                           ),
-                       url(r'^browse/$',
-                           event.search_pad,
-                           name='search_pad'
                            ),
                        url(r'^edit/(?P<authentication_key>\w+)/$',
                            event.edit,
