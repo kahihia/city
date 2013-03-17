@@ -14,6 +14,8 @@ from django.contrib.gis.geos import Point
 from cities.models import City, Country
 from django.db.models import Q
 
+from event import DEFAULT_FROM_EMAIL
+
 from event.models import Event, Venue, SingleEvent, Reminder, AuditEvent, AuditSingleEvent, AuditPhrase, FakeAuditEvent
 from event.utils import TagInfo, find_nearest_city
 
