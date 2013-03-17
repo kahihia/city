@@ -149,7 +149,10 @@ INSTALLED_APPS = (
     'feedback',
     'easy_thumbnails',
     'image_cropping',
-    'ajaxuploader'
+    'ajaxuploader',
+    'endless_pagination',
+    'django_filters'
+
 )
 
 # A sample logging configuration. The only tangible logging performed

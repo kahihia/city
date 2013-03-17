@@ -1,0 +1,101 @@
+{% load date_formatting %}
+{% load endless %}
+{% load cropping %}
+{% load event_pictures %}
+
+<div class="entry-wrapper">
+    <header>
+        Total search numbers found ({{eventsFilter.qs.count}})
+    </header>
+    {% paginate 5 eventsFilter.qs as events %}
+    {% for event in events %}    
+        <div class="entry-info">
+            <div class="entry-img-prev">
+                {% if event.event.picture %}
+                    <img src="{% cropped_thumbnail event.event "cropping" width=60 %}" height="60px" weight="60px">
+                {% else %}
+                    <img src="{{STATIC_URL}}images/default-event.jpg" height="60px" weight="60px">
+                {% endif %}
+            </div>
+            <div class="entry-details-wrapper">                                  
+                <div class="title">
+                    <a href="/events/view/{{event.event.slug}}/">
+                        {{event.event.name}}&nbsp;
+                    </a>                    
+                </div>
+                <div class="entry-date">
+                    {{event.start_time|date:"l, F d, Y"}}
+                    <span class="delimeter">|</span>
+                    {{event.start_time|just_time}} - {{event.end_time|just_time}}
+                </div>
+                <div class="entry-description">                    
+                    {{ event.event.venue.name }}, {{ event.event.venue.street }}, {{ event.event.venue.city.name_std }}
+                </div>                
+            </div>
+            <div class="auctions-wrapper">
+                <div class="auctions-content">
+                    <div class="auctions-img-prev">
+                        {% if event.event.picture %}
+                            <img src="{% cropped_thumbnail event.event "cropping" width=87 %}" height="87px" weight="87px">
+                        {% else %}
+                            <img src="{{STATIC_URL}}images/default-event.jpg" height="87px" weight="87px">
+                        {% endif %}
+                    </div>
+                    <div class="auctions-details-wrapper">
+                        <div class="title">
+                            {{event.event.name}}&nbsp;
+                        </div>
+                        <div class="entry-date">
+                            {{event.start_time|date:"l, F d, Y"}}
+                            <br>
+                            {{event.start_time|contextualize_date}} - {{event.end_time|just_time}}                                
+                        </div>
+                        <div class="auctions-additional">
+                            {{ event.event.venue.name }}
+                        </div>
+                    </div>
+                    <div class="auctions-actions"> 
+                        {% if event.event.tickets %}                       
+                            <a href="{% if_url event.event.tickets event.event.tickets "javascript:void;" %}" class="button">
+                                Buy Tickets
+                            </a>
+                            <div class="tickets-popup">
+                                <b>{{event.event.tickets}}</b>
+                            </div>
+                        {% endif %}
+                        
+                        <a class="button">
+                            Remind Me
+                        </a>
+                        <a class="button">
+                            In The Loop
+                        </a>
+                        <div href="http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}/" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}/" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {%endfor%}
+</div>
+
+<div class="entry-navigation-np">
+    <p>
+        <ul>
+            {% get_pages %} 
+
+            <span class="step-links">
+                {% if not pages.current.is_first %}                
+                    <a href="{{ pages.previous.url }}">
+                        <img src="{{STATIC_URL}}images/entry-prev.png">
+                    </a>
+                {% endif %}
+
+                {% if not pages.current.is_last %}                
+                    <a href="{{ pages.next.url }}">
+                        <img src="{{STATIC_URL}}images/entry-next.png">
+                    </a>
+                {% endif %}                
+            </span>
+        </ul>
+    </p>
+</div>

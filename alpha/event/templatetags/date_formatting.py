@@ -4,6 +4,7 @@ import string
 
 register = template.Library()
 
+
 @register.filter(name='contextualize_date')
 def contextualize_date(dense_date=None):
     """
@@ -27,9 +28,10 @@ def contextualize_date(dense_date=None):
     difference = dense_date.date() - now.date()
     if difference == datetime.timedelta(days=1):
         return hour.strftime('Tomorrow, ' + hour_format)
-    if difference < datetime.timedelta(days=7-now.weekday()):
+    if difference < datetime.timedelta(days=7 - now.weekday()):
         return dense_date.strftime('%A, ' + hour_format)
     return dense_date.strftime('%A %B %-1d, ' + hour_format)
+
 
 @register.filter(name='just_day')
 def just_day(dense_date=None):
@@ -42,11 +44,13 @@ def just_day(dense_date=None):
         return ''
     return dense_date.strftime('%A %B %-1d')
 
+
 @register.filter(name='month_day')
 def month_day(dense_date=None):
     if not dense_date:
         return ''
     return dense_date.strftime('%B %-1d')
+
 
 @register.filter(name='just_time')
 def just_time(dense_date=None):
@@ -59,6 +63,7 @@ def just_time(dense_date=None):
         return ''
     return dense_date.strftime('%-1I:%M %p')
 
+
 @register.filter(name='just_time_levi_is_a_good_designer')
 def just_time_levi_is_a_good_designer(dense_date=None):
     """
@@ -70,6 +75,7 @@ def just_time_levi_is_a_good_designer(dense_date=None):
         return ''
     return dense_date.strftime('%-1I:%M%p')
 
+
 @register.filter(name='slug_to_title')
 def slug_to_title(slug=None):
     """
@@ -79,5 +85,20 @@ def slug_to_title(slug=None):
     """
     if not slug:
         return ''
-    slug = slug.replace('-',' ')
-    return string.capwords(slug) 
+    slug = slug.replace('-', ' ')
+    return string.capwords(slug)
+
+
+@register.filter(name='hour12')
+def hour12(hour):
+    hour = int(hour)
+    if hour > 12:
+        hour -= 12
+    return "%02d:00" % hour
+
+@register.filter(name='meredian')
+def meredian(hour):
+    if int(hour) > 12:
+        return "p.m."
+    else:
+        return "a.m."

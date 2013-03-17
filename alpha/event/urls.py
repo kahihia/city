@@ -11,7 +11,6 @@ urlpatterns = patterns('',
                            ),
                        url(r'^browse/$',
                            event.browse,
-                           kwargs={'date': u'flow'},
                            name='event_browse'
                            ),
                        url(r'^edit/(?P<authentication_key>\w+)/$',

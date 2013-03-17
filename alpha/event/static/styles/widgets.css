@@ -1,0 +1,145 @@
+.dropdown {
+    display: inline-block;
+    position: relative;
+    border: 1px solid #dbdbdb;
+    background: #fff;
+    width: 45px;
+    padding-left: 5px;
+    padding-right: 15px;
+    height: 15px;
+    line-height: 15px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.dropdown input {
+    background: transparent !important;
+    border: 0 !important;
+    outline: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    height: 100%;
+    width:100%;
+    padding: 0;
+    font-size: 12px;
+}
+.dropdown:after{
+    content: " ";
+    position:absolute;
+    right: 0;
+    top: 0;
+    width: 15px;
+    height: 15px;
+    background: url("/static/images/widgets/dropdown.png") no-repeat;
+}
+
+.dropdown select {
+    display: none;
+}
+
+.dropdown-content {
+    display: none;
+    width: 100px;
+    position: absolute;
+    background: #fff;
+    z-index: 1000;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.dropdown-content.toggled {
+    display: block;
+}
+
+.dropdown-content .dropdown-child{
+    padding-left : 5px;
+    cursor: pointer;
+}
+
+.dropdown-content .dropdown-child:hover {
+    background: #eee;
+}
+
+
+/* Checkbox and radiobutton */
+
+div.checkbox {
+    display:inline-block;
+    margin-right:10px;
+    
+}
+
+input[type=checkbox] {
+    display: none !important;
+}
+input[type=checkbox] + label {
+    position:relative;
+    background: url("/static/images/widgets/checkbox-bg.png") no-repeat;;
+    width: 15px;
+    height: 15px;  
+    display: inline-block;  
+}
+
+input[type=checkbox]:checked + label:after {
+    content: '';
+    position: absolute;
+    background: url("/static/images/widgets/checked.png") no-repeat;  
+    top: 2px;
+    left: 2px;
+    width: 11px;
+    height: 10px;
+}
+
+input[type=radio] {
+  display: none !important;
+}
+input[type=radio] + label {
+    display: inline-block;
+    cursor: pointer;
+    vertical-align: middle;
+    width: 21px;
+    height: 21px;
+    background: url("/static/images/widgets/radio.png") top left no-repeat;
+}
+input[type=radio]:checked + label {
+    background: url("/static/images/widgets/radio.png") top right no-repeat;
+}
+
+.button {
+    cursor: pointer;
+    -webkit-box-shadow: inset 0 1px 0 0 #fff;
+    -moz-box-shadow: inset 0 1px 0 0 #fff;
+    box-shadow: inset 0 1px 0 0 #fff;
+    background-image: url("/static/images/widgets/ie9_button.svg");
+    background: -webkit-gradient(linear, center top, center bottom, color-stop(0.05, #fff), color-stop(1, #f6f6f6));
+    background: -webkit-linear-gradient(center top, #fff 5%, #f6f6f6 100%);
+    background: -moz-linear-gradient(center top, #fff 5%, #f6f6f6 100%);
+    background: -o-linear-gradient(center top, #fff 5%, #f6f6f6 100%);
+    background: -ms-linear-gradient(center top, #fff 5%, #f6f6f6 100%);
+    background: linear-gradient(center top, #fff 5%, #f6f6f6 100%);
+    background-color: #fff;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    border: 1px solid #ebebeb;
+    display: inline-block;
+    color: #454545;
+    font-size: 1em;    
+    padding: 4px 5px 4px 5px;;
+    text-decoration: none;
+    text-shadow: 1px 1px 0 #fff;    
+    margin-top: 0;
+}
+
+.button:hover {
+  /*background-image: url("/images/ie9_button_hovered.svg");*/
+  background: -webkit-gradient(linear, center top, center bottom, color-stop(0.05, #f6f6f6), color-stop(1, #fff));
+  background: -webkit-linear-gradient(center top, #f6f6f6 5%, #fff 100%);
+  background: -moz-linear-gradient(center top, #f6f6f6 5%, #fff 100%);
+  background: -o-linear-gradient(center top, #f6f6f6 5%, #fff 100%);
+  background: -ms-linear-gradient(center top, #f6f6f6 5%, #fff 100%);
+  background: linear-gradient(center top, #f6f6f6 5%, #fff 100%);
+  background-color: #f6f6f6;
+  margin-top: 0;
+}

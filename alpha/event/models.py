@@ -60,6 +60,16 @@ def picture_file_path(instance=None, filename=None):
     return os.path.join(EVENT_PICTURE_DIR, datetime.date.today().isoformat(), filename)
 
 
+# class FutureManager(models.Manager):
+#     def get_query_set(self):
+#         return super(FutureManager, self).get_query_set().filter(single_events__start_time__gte=datetime.datetime.now())
+
+
+# class FeaturedManager(FutureManager):
+#     def get_query_set(self):
+#         return super(FeaturedManager, self).get_query_set().filter(featured=True).order_by("featured_on")
+
+
 class Event(models.Model):
     class Meta:
         verbose_name_plural = 'Events'
@@ -75,6 +85,8 @@ class Event(models.Model):
     # example usage: Event.events.all() will provide a list of all event objects
 
     events = models.Manager()
+    # future_events = FutureManager()
+    # featured_events = FeaturedManager()
     # timestamps
     created = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now())
     modified = models.DateTimeField(auto_now=True, default=datetime.datetime.now())
@@ -110,6 +122,13 @@ class Event(models.Model):
     tickets = models.CharField('tickets', max_length=250, blank=True, null=True)
 
     audited = models.BooleanField(default=False)
+
+    # featured_on need to be set, when we add event to featured list
+    featured = models.BooleanField(default=False)
+    featured_on = models.DateTimeField('featured on', auto_now=False, auto_now_add=False, blank=True, null=True)
+
+    viewed_times = models.IntegerField(default=0)
+
     #-------------------------------------------------------------
     # django-taggit field for tags--------------------------------
     #=============================================================
@@ -151,6 +170,16 @@ class Event(models.Model):
         return SingleEvent.objects.filter(start_time__gte=datetime.datetime.now(), event=self).order_by("start_time")[0]
 
 
+class FutureManager(models.Manager):
+    def get_query_set(self):
+        return super(FutureManager, self).get_query_set().filter(start_time__gte=datetime.datetime.now())
+
+
+class FeaturedManager(FutureManager):
+    def get_query_set(self):
+        return super(FeaturedManager, self).get_query_set().filter(event__featured=True).order_by("event__featured_on")
+
+
 class SingleEvent(models.Model):
     """
         Single event is event that occur only once.
@@ -162,6 +191,12 @@ class SingleEvent(models.Model):
 
     def __unicode__(self):
         return u'%s/// %s' % (self.event, self.start_time)
+
+    objects = models.Manager()
+
+    future_events = FutureManager()
+    featured_events = FeaturedManager()
+
     event = models.ForeignKey(Event, blank=False, null=False, related_name='single_events')
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
     end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)

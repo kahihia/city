@@ -1,0 +1,104 @@
+{% load date_formatting %}
+{% load cropping %}
+{% load event_pictures %}
+{% load endless %}
+
+{% paginate 1 eventsFilter.qs using "search_pad" as events %}
+{% for event in events %}
+    <div class="event-details-block">
+        <div class="event-img">
+            {% if event.event.picture %}
+                <img src="{% cropped_thumbnail event.event "cropping" width=175 %}" height="175px" weight="175px">
+            {% else %}
+                <img src="{{STATIC_URL}}images/default-event.jpg" height="175px" weight="175px">
+            {% endif %}
+        </div>
+        <div class="event-details">
+            <div class="title-wrapper">
+                <div class="title">
+                    <a href="/events/view/{{event.event.slug}}/">{{event.event.name}}</a>
+                </div>
+                {% if event.price %}
+                    <div class="event-price {% if event.event.price|length < 9 %} short {% endif %}">{{event.event.price}}</div>
+                {% endif %}
+            </div>
+            <div class="event-date-wrapper">{{event.start_time|date:"N d, Y f a | l"}}</div>
+            {{event.signle_events}}
+            <div class="event-description">
+                {{ event.event.venue.name }}<br>
+                {{ event.event.venue.street }}<br>
+                {{ event.event.venue.city.name_std }}
+            </div>
+            <div class="event-actions">                
+                <table>
+                    {% if event.event.tickets %}
+                    <tr>
+                        <td>
+                            <a href='{% if_url event.event.tickets event.event.tickets "javascript:searchPadPage.showTicketsPopup();" %}' class="action-buy-tickets">
+                                Buy tickets
+                            </a>
+                            <div class="tickets-popup">                                
+                                <b>{{event.event.tickets}}</b>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td>
+                            <a href="#" class="action-remind-me">Remind Me</a>
+                        </td>
+                        <td>
+                            <a href="#" class="action-in-the-loop">In the Loop</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="javascript:void;" class="action-facebook-like">                                
+                                <div href="http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}/" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}/" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>                                
+                            </a>
+                        </td>
+                        <td>
+                            <a href="https://twitter.com/intent/tweet?original_referer=http://{{ request.META.HTTP_HOST }}/events/&text={{event.event.name}}&tw_p=tweetbutton&url=http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}" class="action-tweet">
+                                Tweet
+                            </a>                            
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="event-description">
+            {% if event.description %}
+                {{event.description}}
+            {% else %}
+                {{event.event.description}}
+            {% endif %}
+            {{event.event.tags_representation}}
+        </div>
+    </div>
+{%endfor%}
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+<div class="clr"></div>
+<div class="entry-navigation-np">
+    <p>
+        <ul>
+            {% get_pages %} 
+
+            <span class="step-links">
+                {% if not pages.current.is_first %}                
+                    <a href="{{ pages.previous.url }}">
+                        <img src="{{STATIC_URL}}images/entry-prev.png">
+                    </a>
+                {% endif %}
+
+                {% if not pages.current.is_last %}                
+                    <a href="{{ pages.next.url }}">
+                        <img src="{{STATIC_URL}}images/entry-next.png">
+                    </a>
+                {% endif %}                
+            </span>
+        </ul>
+    </p>
+</div>
+<!--end.entry-->

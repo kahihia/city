@@ -92,7 +92,7 @@
                                     {% csrf_token %}
                                     <!--errors -->
                                     {%if form.errors %}
-                                    <!--{{ form.errors }}-->
+                                    {{ form.errors }}
                                     <h3>Please correct the following:</h3>
                                     <div class="errors" style="border:1px solid RED;border-radius:4px;">
                                         <ul style="list-style-type: none;">
@@ -167,9 +167,8 @@
                                     <!-- end errors -->
                                     <table>
                                         <tr>
-                                            <td>Event Name</td>
-                                            <td>{{form.name}}</td>
-                                            <td>
+                                            <td class="create-event-td">
+                                                Event Name
                                                 <a href="javascript:void;" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -181,10 +180,24 @@
                                                         Insert a name that will stand out
                                                     </p>
                                                 </div>
-                                            </td>
+                                            </td>                                            
+                                            <td>{{form.name}}</td>                                            
                                         </tr>
                                         <tr>
-                                            <td>Location</td>
+                                            <td>
+                                                Location
+                                                <a href="javascript:void;"  class="balloon">
+                                                    <div class="buttonq"></div>
+                                                </a>
+                                                <div class="balloon-content">
+                                                    <h3>
+                                                        Help - Enter event <i>[Location]:</i>
+                                                    </h3>
+                                                    <p> 
+                                                        Type in the name of the venue. However, if you do not find your event, type it in manually by selecting “Suggest a New Venue”
+                                                    </p>
+                                                </div>
+                                            </td>
                                             <td>
                                                 <div class="location">{{ form.place}}</div>
                                                 <div class="show_map"></div>
@@ -220,27 +233,11 @@
                                                     <div class="submit-button">Submit</div>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <a href="javascript:void;"  class="balloon">
-                                                    <div class="buttonq"></div>
-                                                </a>
-                                                <div class="balloon-content">
-                                                    <h3>
-                                                        Help - Enter event <i>[Location]:</i>
-                                                    </h3>
-                                                    <p> 
-                                                        Type in the name of the venue. However, if you do not find your event, type it in manually by selecting “Suggest a New Venue”
-                                                    </p>
-                                                </div>
-                                            </td>
+                                            
                                         </tr>                                        
                                         <tr>
-                                            <td>When</td>
                                             <td>
-                                                {{form.when}}
-                                                {{form.when_json}}
-                                            </td>
-                                            <td>
+                                                When
                                                 <a href="javascript:void;" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -254,16 +251,15 @@
                                                     </p>
                                                 </div>
                                             </td>
+                                            <td>
+                                                {{form.when}}
+                                                {{form.when_json}}
+                                            </td>
+                                            
                                         </tr>
                                         <tr>
-                                            <td valign="top" class="top-align">Price</td>
-                                            <td class="price-td">
-                                                {{form.price}}
-                                                <p class="help">
-
-                                                </p>
-                                            </td>
-                                            <td>
+                                            <td valign="top" class="top-align">
+                                                Price
                                                 <a href="javascript:void;" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -279,24 +275,13 @@
                                                     </p>
                                                 </div>
                                             </td>
+                                            <td class="price-td">
+                                                {{form.price}}
+                                            </td>                                            
                                         </tr>
                                         <tr>
                                             <td valign="top">
                                                 Description
-                                                <br>
-                                                <div class="description-select-day-widget">
-                                                    <div class="description-days-container">
-                                                        <span class="result">Same for All Days</span>
-                                                        <div class="selected-result">Same for All</div>
-                                                        <ul class="days-list active"></ul>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                {{form.description}}
-                                                {{form.description_json}}
-                                            </td>
-                                            <td>
                                                 <a href="javascript:void;" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -309,12 +294,24 @@
                                                         Type in your event with much detail for the public. Note that certain words will be inserted as tags to help you. Further, for events that are more than one day, you can change them individually by selecting them on the dropdown
                                                     </p>
                                                 </div>
+                                                <br>
+                                                <div class="description-select-day-widget">
+                                                    <div class="description-days-container">
+                                                        <span class="result">Same for All Days</span>
+                                                        <div class="selected-result">Same for All</div>
+                                                        <ul class="days-list active"></ul>
+                                                    </div>
+                                                </div>                                           
+                                                
                                             </td>
+                                            <td>
+                                                {{form.description}}
+                                                {{form.description_json}}
+                                            </td>                                            
                                         </tr>
                                         <tr>
-                                            <td>Website</td>
-                                            <td>{{form.website}}</td>
                                             <td>
+                                                Website
                                                 <a href="javascript:void;" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -329,16 +326,13 @@
 
                                                     </p>
                                                 </div>
-
                                             </td>
+                                            <td>{{form.website}}</td>                                            
                                         </tr>
                                         <tr>
                                             <td colspan="2" class="wheelchair-td">
-                                                Wheelchair  Accessible
-                                                {{form.wheelchair}}
-                                            </td>
-                                            <td>
-                                                <a href="javascript:void;" class="balloon">
+                                                Wheelchair Accessible
+                                                <a href="javascript:void;" class="balloon wheelchair">
                                                     <div class="buttonq"></div>
                                                 </a>
                                                 <div class="balloon-content">
@@ -350,20 +344,12 @@
                                                         Select yes or no
                                                     </p>
                                                 </div>
-                                            </td>
+                                                {{form.wheelchair}}
+                                            </td>                                            
                                         </tr>
                                         <tr>
-                                            <td class="tags_bottom">Tags</td>
-                                            <td>
-                                                <div class="tags-popup-wrapper">
-                                                    <div class="tags-popup">
-                                                        <div class="tags-container"></div>
-                                                        <div class="close-button">Close</div>
-                                                    </div>
-                                                </div>
-                                                {{form.tags}}
-                                            </td>
                                             <td class="tags_bottom">
+                                                Tags
                                                 <a href="javascript:void;" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -376,15 +362,20 @@
                                                         Select tags that best describe your event. Insert your event by using the “tab” button or a comma
                                                     </p>
                                                 </div>
-
                                             </td>
+                                            <td>
+                                                <div class="tags-popup-wrapper">
+                                                    <div class="tags-popup">
+                                                        <div class="tags-container"></div>
+                                                        <div class="close-button">Close</div>
+                                                    </div>
+                                                </div>
+                                                {{form.tags}}
+                                            </td>                                            
                                         </tr>
                                         <tr>
-                                            <td>Tickets</td>
                                             <td>
-                                                <input type="text" name="tickets" class="inputfield rborder" />
-                                            </td>
-                                            <td>
+                                                Tickets
                                                 <a href="javascript:void;" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -399,20 +390,13 @@
                                                     </p>
                                                 </div>
                                             </td>
+                                            <td>
+                                                <input type="text" name="tickets" class="inputfield rborder" />
+                                            </td>                                            
                                         </tr>                                        
                                         <tr class="picture">
-                                            <td>Images</td>
                                             <td>
-                                                {{ form.picture_src }}
-                                                <div class='full-screen-popup' data-thumb-width="180" data-thumb-height="180">
-                                                    {{ form.cropping }}
-                                                    <div class='save-button'>Save image</div>
-                                                </div>
-                                                <div class="picture-thumb">
-                                                    <img src="" class="preview">
-                                                </div>
-                                            </td>
-                                            <td>
+                                                Images
                                                 <a href="javascript:void;" class="balloon">
                                                     <div class="buttonq"></div>
                                                 </a>
@@ -426,6 +410,16 @@
                                                     </p>
                                                 </div>
                                             </td>
+                                            <td>
+                                                {{ form.picture_src }}
+                                                <div class='full-screen-popup' data-thumb-width="180" data-thumb-height="180">
+                                                    {{ form.cropping }}
+                                                    <div class='save-button'>Save image</div>
+                                                </div>
+                                                <div class="picture-thumb">
+                                                    <img src="" class="preview">
+                                                </div>
+                                            </td>                                            
                                         </tr>
                                         <tr></tr>
                                         <tr>

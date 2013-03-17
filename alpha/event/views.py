@@ -14,19 +14,16 @@ from django.contrib.gis.geos import Point
 from cities.models import City, Country
 from django.db.models import Q
 
-from event import EVENTS_PER_PAGE, DEFAULT_FROM_EMAIL
 from event.models import Event, Venue, SingleEvent, Reminder, AuditEvent, AuditSingleEvent, AuditPhrase, FakeAuditEvent
-from event.utils import TagInfo, EventSet, find_nearest_city
+from event.utils import TagInfo, find_nearest_city
 
 from event.forms import generate_form
 
-from citi_user.forms import CityAuthForm
-from taggit.models import Tag
+from taggit.models import Tag, TaggedItem
 
 import datetime
 import time
-import re
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import EmptyPage, PageNotAnInteger
 import json
 from django.contrib import messages
 
@@ -49,274 +46,122 @@ PASSWORD = "19553b2008"
 
 
 def redirect(request):
-    return HttpResponseRedirect(reverse('event_browse'))
+    return HttpResponseRedirect(reverse('search_pad'))
 
 
-def events_from_paginator(paginator, page_num):
-    try:
-        events = paginator.page(page_num)
-    except PageNotAnInteger:
-        events = paginator.page(1)
-    except EmptyPage:
-        events = paginator.page(paginator.num_pages)
-    return events
+from django.db.models import Min, Count, Q
+from event.filters import EventFilter
 
 
-from django.db.models import Count, Min
+def get_dates_from_request(request):
+    start_date = request.GET.get("start_date", None)
+    end_date = request.GET.get("end_date", None)
+
+    if start_date:
+        start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S")
+    else:
+        start_date = datetime.datetime.now()
+
+    if end_date:
+        end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S")
+    else:
+        end_date = datetime.datetime.now()
+
+    return start_date, end_date
 
 
-def search_pad(request, old_tags=u'all', date=u'flow'):
-    events = Event.events.all() \
-        .prefetch_related('single_events') \
-        .annotate(nearest_time=Min('single_events__start_time')) \
-        .filter(single_events__start_time__gte=datetime.datetime.now())
+def get_times_from_request(request):
+    start_time = request.GET.get("start_time", 13)
+    end_time = request.GET.get("end_time", 20)
+    return start_time, end_time
 
-    events.query.order_by = ['nearest_time']
-    events.query.group_by = ['event_event.id']
 
-    featured_paginator = Paginator(events, 6)
-    featured_page = request.GET.get('featured_page', '1')
-    featured_events = events_from_paginator(featured_paginator, featured_page)
+def search_pad(request):
+    # featured_events = Event.featured_events.all() \
+    #    .prefetch_related('single_events') \
+    #    .annotate(nearest_time=Min('single_events__start_time'))
 
-    search_pad_paginator = Paginator(events, 1)
-    search_pad_page = request.GET.get('search_pad_page', '1')
-    search_pad_events = events_from_paginator(search_pad_paginator, search_pad_page)
+    # featured_events.query.order_by = ['nearest_time']
+
+    start_date, end_date = get_dates_from_request(request)
+    start_time, end_time = get_times_from_request(request)
+
+    featured_events = SingleEvent.featured_events.all() \
+        .select_related('event')
+
+    featured_events.query.order_by = ['start_time']
+    featuredEventsFilter = EventFilter({}, queryset=featured_events)
+
+    # events = Event.future_events.all() \
+    #     .prefetch_related('single_events').all() \
+    #     .annotate(nearest_time=Min('single_events__start_time'))
+
+    # events.query.order_by = ['start_time']
+    # events.query.group_by = ['event_event.id']
+
+    events = SingleEvent.future_events.all() \
+        .select_related('event')
+
+    events.query.order_by = ['start_time']
+
+    events_all_count = events.values("event_id").distinct().count()
+
+    eventsFilter = EventFilter(request.GET, queryset=events)
+    print eventsFilter.qs()
+
+    top5_tags = TaggedItem.objects.filter(object_id__in=map(lambda x: x.event.id, events)) \
+        .values('tag', 'tag__name') \
+        .annotate(count=Count('id')) \
+        .order_by('-count')[0:5]
 
     return render_to_response('events/search_pad.html', {
                                 'featured_events': featured_events,
-                                'search_pad_events': search_pad_events,
+                                'featuredEventsFilter': featuredEventsFilter,
                                 'events': events,
-                                'all_tags': Tag.objects.all(),
+                                'eventsFilter': eventsFilter,
+                                'top5_tags': top5_tags,
+                                'events_all_count': events_all_count,
+                                'start_date': start_date,
+                                'end_date': end_date,
+                                'start_time': start_time,
+                                'end_time': end_time
                             }, context_instance=RequestContext(request))
 
 
-def browse(request, old_tags=u'all', date=u'flow', num=1):
+def browse(request):
 
-    locations = []
-    locs = Event.events.all()
-    feature = Paginator(locs, 6)
-    page = request.GET.get('page', '1')
+    start_date, end_date = get_dates_from_request(request)
+    start_time, end_time = get_times_from_request(request)
 
-    try:
-        locd = feature.page(page)
-    except PageNotAnInteger:
-        locd = feature.page(1)
-    except EmptyPage:
-        locd = feature.page(feature.num_pages)
-    for y in locs:
-        locations.append(y.location)
-    form2 = CityAuthForm
-    pages = 0  # used in date filter code for determining if we have pagination
-    page_remainder = 0  # used for pagination
-    try:
-        num = int(num) - 1  # see comment labeled NUMCODE
-    except ValueError:
-        raise Http404
-    today = datetime.datetime(*(datetime.date.today().timetuple()[:6]))  # isnt python so easy to read?
-    show_ads = False  # this is set to True in the flow
+    events = SingleEvent.future_events.all() \
+        .select_related('event')
 
-    ################################################################
-    #parsing the tags string
-    split_tags = []
-    if old_tags != u'all':
-        split_tags = old_tags.split(',')
-        # Right now we query based on tags, and then later split this up based on date.
-        # Does django make a query every time? If so this could be an expensive, inefficient way of
-        # doing the job.
-        #upcoming_events = Event.events.filter(start_time__gte=today, tags__slug__in=split_tags).distinct()
-        upcoming_events = Event.events.filter(tags__slug__in=split_tags).distinct()
-    else:
-        #upcoming_events = Event.events.filter(start_time__gte=today)
-        upcoming_events = Event.events
+    events.query.order_by = ['start_time']
 
-    ##############################################################
-    #now we filter based on the date selected
-    event_sets = []
+    eventsFilter = EventFilter(request.GET, queryset=events)
 
-    # error checking for num argument
-    if int(num) < 0:
-        num = 0
-
-    # I should really combine this all into a function... there's a lot of shared code here
-    if date == u'today':
-        start = today
-        end = today.replace(hour=23, minute=59, second=59)
-        todays_events = upcoming_events.filter(
-            start_time__year=today.year,
-            start_time__month=today.month,
-            start_time__day=today.day)
-        pages = todays_events.count() / EVENTS_PER_PAGE
-        page_remainder = todays_events.count() % EVENTS_PER_PAGE
-        todays_events = todays_events.order_by('start_time')[int(num) * EVENTS_PER_PAGE:EVENTS_PER_PAGE]
-        event_sets.append(EventSet(u"Today's Events", todays_events))
-    elif date == u'tomorrow':
-        tomorrow = today + datetime.timedelta(days=1)
-        start = tomorrow
-        end = tomorrow.replace(hour=23, minute=59, second=59)
-        tomorrows_events = upcoming_events.filter(start_time__year=tomorrow.year,
-                                                 start_time__month=tomorrow.month,
-                                                 start_time__day=tomorrow.day)
-        pages = tomorrows_events.count() / EVENTS_PER_PAGE
-        page_remainder = tomorrows_events.count() % EVENTS_PER_PAGE
-        tomorrows_events = tomorrows_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u"Tomorrow's Events", tomorrows_events ))
-    elif date == u'this-weekend':
-        #weekday 6 5 4 sun sat fri
-        end = today + datetime.timedelta(days=6-today.weekday())
-        end = end.replace(hour=23,minute=59,second=59,microsecond=0)
-        #sat is 5
-        if today.weekday() == 5:
-            start = today + datetime.timedelta(days=5-today.weekday())
-            start = start.replace(hour=0,minute=0,second=0,microsecond=0)
-        #friday at 5pm is the weekend.
-        else:
-            start = today + datetime.timedelta(days=4-today.weekday())
-            start = start.replace(hour=17,minute=0,second=0,microsecond=0)
-        this_weekends_events = upcoming_events.filter(start_time__range=(start,end))
-        pages = this_weekends_events.count() / EVENTS_PER_PAGE
-        page_remainder = this_weekends_events.count() % EVENTS_PER_PAGE
-        this_weekends_events = this_weekends_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u'Events This Weekend', this_weekends_events) )
-    elif date == u'this-week':
-        end = today + datetime.timedelta(days=6-today.weekday())
-        end = end.replace(hour=23, minute=59,second=59, microsecond=0)
-        start = today
-        this_weeks_events = upcoming_events.filter(start_time__range=(start,end))
-        pages = this_weeks_events.count() / EVENTS_PER_PAGE
-        page_remainder = this_weeks_events.count() % EVENTS_PER_PAGE
-        this_weeks_events = this_weeks_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u'Events This Week', this_weeks_events ) )
-    elif date == u'next-week':
-        end = today + datetime.timedelta(days=13-today.weekday())
-        start = today + datetime.timedelta(days=7-today.weekday())
-        next_weeks_events = upcoming_events.filter(start_time__range=(start,end))
-        pages = next_weeks_events.count() / EVENTS_PER_PAGE
-        page_remainder = next_weeks_events.count() % EVENTS_PER_PAGE
-        next_weeks_events = next_weeks_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-        event_sets.append( EventSet(u'Events Next Week', next_weeks_events) )
-    elif date == u'flow':
-        show_ads = True
-        pages = upcoming_events.count() / EVENTS_PER_PAGE
-        page_remainder = upcoming_events.count() % EVENTS_PER_PAGE
-        #flow_events = list( upcoming_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE] )
-        flow_events = list( upcoming_events.all()[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE] )
-        #title = flow_events[0].start_time.strftime('%A, %B %-1d')
-        #event_sets.append( EventSet(title, flow_events) )
-        num_on_page = len(flow_events)
-        #if flow_events:
-        #    flow_start = flow_events[0].start_time.replace(hour=0, minute=0, second=0)
-        #else:
-        flow_start = today
-        flow_end = flow_start.replace(hour=23,minute=59,second=59)
-        keep_flowing = len(flow_events) > 0
-        i = -1
-        while False:#keep_flowing == True:
-            i = i + 1
-            if i > 0: #advance to the next day
-                flow_start = flow_start + datetime.timedelta(days=1)
-                flow_end = flow_end + datetime.timedelta(days=1)
-            current_days_events = flow_events#[ x for x in flow_events if flow_start <= x.start_time < flow_end ]
-            if len(current_days_events) == 0:
-                continue
-            # pull the title from the first event on the list
-            title = current_days_events[0].start_time.strftime('%A, %B %-1d')
-            # make the eventset
-            event_sets.append( EventSet(title, current_days_events) )
-            #update the tally
-            num_on_page -= len(event_sets[-1].events)
-            #check for pagination!
-            if num_on_page <= 0:
-                keep_flowing = False
-        start = today
-        end = None
-    else:
-        ISO8601_REGEX = re.compile(r'(?P<year>[0-9]{4})-(?P<month>[0-9]{1,2})-(?P<day>[0-9]{1,2})')
-        exact_date = ISO8601_REGEX.match(date)
-        if exact_date:
-            group = exact_date.groupdict()
-            start = datetime.datetime(year=int(group['year']),
-                             month=int(group['month']),
-                             day=int(group['day']))
-            end = start + datetime.timedelta(days=1)
-            if old_tags != u'all':
-                split_tags = old_tags.split(',')
-                # Right now we query based on tags, and then later split this up based on date.
-                # Does django make a query every time? If so this could be an expensive, inefficient way of
-                # doing the job.
-                upcoming_events = Event.events.filter(start_time__gte=start, tags__slug__in=split_tags).distinct()
-            else:
-                upcoming_events = Event.events.filter(start_time__gte=start)
-
-            exact_day_events = upcoming_events.filter(start_time__range=(start,end))
-            pages = exact_day_events.count() / EVENTS_PER_PAGE
-            page_remainder = exact_day_events.count() % EVENTS_PER_PAGE
-            exact_day_events = exact_day_events.order_by('start_time')[int(num)*EVENTS_PER_PAGE:int(num)*EVENTS_PER_PAGE + EVENTS_PER_PAGE]
-            event_sets.append(EventSet(u'Events for ' + start.date().strftime('%A, %B %-1d'), exact_day_events))
-        else:
-            #we need to 404 error here
-            #URL overlap means the date might actually be a page number, so the 404 is actually checked above
-            return browse(request, old_tags=old_tags, num=date)
-
-    #########################################################################################
-    #packaging new tag information given split_tags list
-    # tags = Tag.objects.all()
-    all_tags = []
-    for tag in []:  # tags:
-        if end is None:
-            number_of_events = Event.events.filter(start_time__gte=start, tags__name__in=[tag]).count()
-        else:
-            number_of_events = Event.events.filter(start_time__range=(start, end), tags__name__in=[tag]).count()
-        if number_of_events > 0:
-            all_tags.append(
-                TagInfo(
-                    tag=tag,  # the tag object
-                    previous_slugs=split_tags,  # list of existing tags
-                    num=number_of_events  # number of events which are tagged this way
-                    )
-                )
-    all_tags.sort(key=lambda tag: tag.name)
-    all_tags.sort(key=lambda tag: tag.number, reverse=True)
-    #if end is None:
-    #    all_tags.insert(0, TagInfo( num=Event.events.filter(start_time__gte=start).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
-    #else:
-   # 	all_tags.insert(0, TagInfo( num=Event.events.filter(start_time__range=(start,end)).count(), previous_slugs=split_tags)) #this is the fake "all catagories" tag
-
-    #############################################################################################
-    # NUMCODE: This code is here because the page numbers start at 1 (which is never displayed or linked to)
-    # and according to the resident HCI guru, people like counting from 1
-    # but I use it in the date filter code as a multiplier, which I want to start at 0
-    num = num + 1
-    page_less = num - 1
-    if num < 2:
-        page_more = 2
-    else:
-        page_more = num + 1
+    tags = TaggedItem.objects.filter(object_id__in=map(lambda x: x.event.id, events)) \
+        .values('tag', 'tag__name') \
+        .annotate(count=Count('id')) \
+        .order_by('-count')
 
     return render_to_response('events/browse_events.html', {
-                                'all_tags': all_tags,
-                                'current_tags': old_tags,
-                                'page_date': date,
-                                'page_num': int(num),
-                                'event_sets': event_sets,
-                                'pages': range(1, pages + 2),
-                                'form2': form2,
-                                'next': request.path,
-                                'page_remainder': page_remainder,
-                                'page_less': page_less,
-                                'page_more': page_more,
-                                'browsing': True,
-                                'browse_bar': True,
-                                'show_ads': show_ads,
-                                'locations': locations,
-                                'locs': locs,
-                                'locd': locd,
-                                },
-                              context_instance=RequestContext(request))
+                                'events': events,
+                                'eventsFilter': eventsFilter,
+                                'tags': tags,
+                                'start_date': start_date,
+                                'end_date': end_date,
+                                'start_time': start_time,
+                                'end_time': end_time
+                            }, context_instance=RequestContext(request))
 
 
 def view(request, slug=None, old_tags=None):
     try:
         event = Event.events.get(slug=slug)
+        # TODO: add filter by IP
+        event.viewed_times = event.viewed_times + 1
+        event.save()
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))
 

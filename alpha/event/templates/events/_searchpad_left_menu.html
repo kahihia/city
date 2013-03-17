@@ -1,0 +1,37 @@
+{% load query_filter %}
+<div class="main-navigation-nav">
+   <div class="main-navigation-nav-wrapper">
+        <ul class="categories">
+            <li class="header">
+                <a href="{% events_filter_url request eventsFilter function="all" exclude="tag|datetime" %}" class="all">
+                    Browse All Events({{events_all_count}})
+                </a>
+            </li>
+            <li class="subcat">
+
+                <a href="{% events_filter_url request eventsFilter function="random" exclude="tag" %}">
+                    Random Events
+                </a>
+            </li>
+            <li class="subcat top5">
+                <a href="javascript:void;" >Top 5 Categories</a>
+                <a href="{% events_filter_url request eventsFilter function="tags"  exclude="tag" %}" class="toggler" > </a>
+            </li>
+            <ul class="top5-tags">
+                {%for tag in top5_tags%}                
+                <li>
+                    <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"  {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}>
+                        {{tag.tag__name}}
+                    </a>
+                </li>                                            
+                {%endfor%}
+            </ul> 
+
+            <li class="subcat">
+                <a href="{% events_filter_url request eventsFilter function="recently_featured" exclude="tag" %}">
+                    Recently Featured
+                </a>
+            </li>                                        
+        </ul>
+    </div>
+</div>   

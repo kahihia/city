@@ -16,12 +16,30 @@
     color: #7f7f7f;    
     text-align: center;
     font-weight: bold;
+    vertical-align: top;
 }
 
-.features-navigation .step-links a.current, .features-navigation .step-links a:hover{
+.features-navigation .step-links a img {
+    margin-top: 4px;
+}
+
+.features-navigation .step-links a.current{
+    background: none;
+    border-right: 1px solid rgba(0,0,0,0)
+}
+
+.features-navigation .step-links a:hover{
     color: #000;
 }
 
 .features-navigation .step-links a.prev, .features-navigation .step-links a.next {
     width: 45px;
+}
+
+.entry-navigation-np ul {
+    padding-left: 0;
+}
+
+.entry-navigation-np .step-links a {
+    text-decoration: none;
 }
