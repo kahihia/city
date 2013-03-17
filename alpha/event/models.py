@@ -127,7 +127,7 @@ class Event(models.Model):
     featured = models.BooleanField(default=False)
     featured_on = models.DateTimeField('featured on', auto_now=False, auto_now_add=False, blank=True, null=True)
 
-    viewed_times = models.IntegerField(default=0, null=True)
+    viewed_times = models.IntegerField(default=0, blank=True, null=True)
 
     #-------------------------------------------------------------
     # django-taggit field for tags--------------------------------
