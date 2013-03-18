@@ -1,6 +1,5 @@
 .event-details-block{
-    width: 470px;    
-    white-space: nowrap;
+    width: 470px;
 }
 
 .event-details-block .event-img {
@@ -15,6 +14,7 @@
     vertical-align: top;
     margin-top: 15px;
     padding-right: 3px;    
+    white-space: nowrap;
 }
 
 .event-details-block .event-details .title a {
