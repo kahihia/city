@@ -15,7 +15,9 @@ urlpatterns = patterns(
     url(r'^channel.html$', 'home.views.channelfile'),
     url(r'^$', 'event.views.redirect', name='home'),
     url(r'^events/', include('event.urls')),
-    url(r'^accounts/', include('citi_user.urls')),
+    url(r'^accounts/', include('userena.urls')),
+    url(r'^account-actions/', include('accounts.urls')),
+    url(r'^old-accounts/', include('citi_user.urls')),
     url(r'^feedback/', include('feedback.urls')),
     url(r'^advertise/$', 'home.views.redirect', name='advertise'),
     # url(r'^alpha/', include('alpha.foo.urls')),
@@ -30,11 +32,9 @@ urlpatterns = patterns(
 if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^static/(?P<path>.*)$', 'django.views.static.serve',
-        { 'document_root': settings.STATIC_ROOT, 'show_indexes': True }),
+        {'document_root': settings.STATIC_ROOT, 'show_indexes': True}),
    )
     urlpatterns += patterns('',
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',
-        { 'document_root': settings.MEDIA_ROOT, 'show_indexes': True }),
+        {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
     )
-
-

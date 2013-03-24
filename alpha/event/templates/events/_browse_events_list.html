@@ -64,12 +64,24 @@
                             </div>
                         {% endif %}
                         
-                        <a class="button">
+                        <a href="javascript:void()"  class="action-remind-me button" data-event-id="{{ event.id }}">
                             Remind Me
                         </a>
-                        <a class="button">
-                            In The Loop
-                        </a>
+                        <div class="in-the-loop-wrapper">
+                            <a href="javascript:void()" class="button action-in-the-loop">In the Loop</a>
+                            <div class="in-the-loop-tags-popup">
+                                {% for tag in event.event.tags.all %}
+                                <span class="button tag" data-tag="{{ tag.name }}">
+                                    {{ tag.name }}
+                                </span>
+                                {% endfor %}                                
+                                <div class="add-in-the-loop-wrapper">
+                                    <span class="button add-in-the-loop active">
+                                        Add in the loop
+                                    </span>
+                                </div>                                
+                            </div>
+                        </div>                        
                         <div href="http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}/" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}/" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>
                     </div>
                 </div>

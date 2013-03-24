@@ -37,6 +37,7 @@
 .jump-popup .inline {
     display: inline-block;
     width: 166px;
+    text-align: left;
 }
 
 .jump-popup .inline[disabled] {

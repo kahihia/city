@@ -4,11 +4,20 @@
 
     var SearchPadPage = function(){
         this.initJumpToDate();
+        this.initEventActions();
+        $("#searchTags").tagit({
+            afterTagRemoved: function(e, ui){
+                window.location = $(ui.tag).data("remove-url");
+            }
+        });
     };
 
     SearchPadPage.prototype = {
         initJumpToDate: function(){
             this.jumpToDate = new window.JumpToDate();
+        },
+        initEventActions: function(){
+            this.eventActions = new window.EventActions($(".event-details-block"));
         },
         showTicketsPopup: function(){
             $(".tickets-popup").dialog({

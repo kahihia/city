@@ -1,6 +1,6 @@
 from models import Event
-import datetime, time
-from django.db.models import Q, Count
+import datetime
+from django.db.models import Count
 
 
 class Filter(object):
@@ -31,6 +31,9 @@ class Filter(object):
             return querydict[self.name]
         return default
 
+    def search_tags(self):
+        return None
+
 
 class DateFilter(Filter):
     def filter(self, qs, value):
@@ -59,8 +62,6 @@ class TimeFilter(Filter):
 
 class TagsFilter(Filter):
     def filter(self, qs, tags):
-#        import pdb; pdb.set_trace()
-
         return qs.filter(event__tagged_items__tag__name__in=tags) \
             .annotate(repeat_count=Count('id')) \
             .filter(repeat_count=len(tags))
@@ -68,7 +69,7 @@ class TagsFilter(Filter):
     def url_query(self, querydict):
         tags = querydict["tag"]
         if isinstance(tags, basestring):
-            tags = [tags]
+            tags = querydict.getlist(self.name)
         return "&".join(["tag=%s" % tag for tag in tags])
 
     def upgrade_value(self, querydict, value):
@@ -88,15 +89,31 @@ class TagsFilter(Filter):
             return querydict.getlist(self.name)
         return default
 
+    def search_tags(self, tags):
+        tags_to_return = []
+        for tag in tags:
+            tags_to_return.append({
+                "name": tag,
+                "remove_url": "?" + self.parent.url_query(tag=tag)
+            })
+        return tags_to_return
+
 
 class BooleanFilter(Filter):
     pass
 
 
+search_tags_for_filters = {
+    "recently_featured": "Recently featured",
+    "random": "Random",
+    "top_viewed": "Top viewed",
+    "latest": "Recently added"
+}
+
+
 class FunctionFilter(Filter):
     def __init__(self, name):
         self.name = name
-        pass
 
     def filter(self, qs, value):
         return getattr(self, "%s_filter" % value)(qs)
@@ -121,8 +138,89 @@ class FunctionFilter(Filter):
     def latest_filter(self, qs):
         return qs.order_by("-event__created")
 
+    def search_tags(self, function):
+        name = search_tags_for_filters.get(function)
+        print name
+        if name:
+            return [{
+                "name": name,
+                "remove_url": "?" + self.parent.url_query(exclude="function")
+            }]
+        else:
+            return None
+
+
+search_tags_for_periods = {
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "this-weekend": "This weekend",
+    "next-week": "Next week"
+}
+
+
+class PeriodFilter(Filter):
+    def __init__(self, name, start_filter, end_filter):
+        self.name = name
+        self.start_filter = start_filter
+        self.end_filter = end_filter
+
+    def filter(self, qs, value):
+        return getattr(self, "%s_filter" % value.replace("-", "_"))(qs)
+
+    def today_filter(self, qs):
+        today = datetime.datetime(*(datetime.date.today().timetuple()[:6]))
+        start = today
+        end = today.replace(hour=23, minute=59, second=59)
+
+        return self.period_filter(qs, start, end)
+
+    def tomorrow_filter(self, qs):
+        today = datetime.datetime(*(datetime.date.today().timetuple()[:6]))
+        tomorrow = today + datetime.timedelta(days=1)
+        start = tomorrow
+        end = tomorrow.replace(hour=23, minute=59, second=59)
+
+        return self.period_filter(qs, start, end)
+
+    def this_weekend_filter(self, qs):
+        today = datetime.datetime(*(datetime.date.today().timetuple()[:6]))
+        end = today + datetime.timedelta(days=6 - today.weekday())
+        end = end.replace(hour=23, minute=59, second=59, microsecond=0)
+        #sat is 5
+        if today.weekday() == 5:
+            start = today + datetime.timedelta(days=5 - today.weekday())
+            start = start.replace(hour=0, minute=0, second=0, microsecond=0)
+        #friday at 5pm is the weekend.
+        else:
+            start = today + datetime.timedelta(days=4 - today.weekday())
+            start = start.replace(hour=17, minute=0, second=0, microsecond=0)
+
+        return self.period_filter(qs, start, end)
+
+    def next_week_filter(self, qs):
+        today = datetime.datetime(*(datetime.date.today().timetuple()[:6]))
+        end = today + datetime.timedelta(days=13 - today.weekday())
+        start = today + datetime.timedelta(days=7 - today.weekday())
+
+        return self.period_filter(qs, start, end)
+
+    def period_filter(self, qs, start, end):
+        qs = self.start_filter.filter(qs, start)
+        qs = self.end_filter.filter(qs, end)
+        return qs
+
+    def search_tags(self, period):
+        name = search_tags_for_periods.get(period)
+        if name:
+            return [{
+                "name": name,
+                "remove_url": "?" + self.parent.url_query(exclude="period")
+            }]
+        else:
+            return None
+
 exclude_shortcuts = {
-    "datetime": ["start_date", "end_date", "start_time", "end_time"]
+    "datetime": ["start_date", "end_date", "start_time", "end_time", "period"]
 }
 
 
@@ -139,12 +237,17 @@ class EventFilter(object):
             "featured": BooleanFilter("featured", "event__featured"),
             "function": FunctionFilter("function")
         }
+        self.filters["period"] = PeriodFilter("period", self.filters["start_date"], self.filters["end_date"])
+
+        for key, queryFilter in self.filters.iteritems():
+            queryFilter.parent = self
 
     def qs(self):
         qs = self.queryset
         for key, queryFilter in self.filters.iteritems():
             if self.data.get(key):
                 qs = queryFilter.filter(qs, queryFilter.filter_data(self.data))
+        return qs
         return self.select_first_days(qs)
 
     def select_first_days(self, qs):
@@ -222,3 +325,12 @@ class EventFilter(object):
 
     def tags(self):
         return self.data.getlist("tag", [])
+
+    def search_tags(self):
+        tags = []
+        for key, queryFilter in self.filters.iteritems():
+            if self.data.get(key):
+                new_tags = queryFilter.search_tags(queryFilter.filter_data(self.data))
+                if new_tags:
+                    tags += new_tags
+        return tags

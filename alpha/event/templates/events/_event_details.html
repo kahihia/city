@@ -46,10 +46,22 @@
                     {% endif %}
                     <tr>
                         <td>
-                            <a href="#" class="action-remind-me">Remind Me</a>
+                            <a href="javascript:void()" class="action-remind-me" data-event-id="{{ event.id }}">Remind Me</a>
                         </td>
-                        <td>
-                            <a href="#" class="action-in-the-loop">In the Loop</a>
+                        <td class="in-the-loop-wrapper">
+                            <a href="javascript:void()" class="action-in-the-loop">In the Loop</a>
+                            <div class="in-the-loop-tags-popup">
+                                {% for tag in event.event.tags.all %}
+                                <span class="button tag" data-tag="{{ tag.name }}">
+                                    {{ tag.name }}
+                                </span>
+                                {% endfor %}                                
+                                <div class="add-in-the-loop-wrapper">
+                                    <span class="button add-in-the-loop active">
+                                        Add in the loop
+                                    </span>
+                                </div>                                
+                            </div>
                         </td>
                     </tr>
                     <tr>

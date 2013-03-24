@@ -1,0 +1,118 @@
+.content-wrapper-panel {
+    padding-top:0;
+}
+
+.main-content-wrapper {
+    text-align: left;
+    padding-top: 10px;
+}
+
+.main-content-wrapper .main-navigation {
+    padding-top: 13px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-right: 3px;
+
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+
+    border-right: 2px solid #e7e7e7;
+    border-bottom: 2px solid #e7e7e7;
+}
+
+.account-left {
+    float: left;
+}
+
+.account-avatar {
+    width: 205px;
+    height: 187px;
+    line-height: 187px;
+    border: 1px solid #d3d3d3;
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.account-avatar img{
+    vertical-align: middle;
+}
+
+.account-details {
+    float: left;
+    margin-left:23px;
+    width: 453px;
+    font-size: 1.2em;
+}
+
+.account-details hr {
+    border: none;
+    border-top: 1px solid #ddd;    
+}
+
+.account-details .block-header {
+    color: #06c;
+    font-weight: bold;    
+    width:100%;
+    font-size:1em;
+}
+
+.account-details span {
+    color: #454545;    
+    font-size: 0.9em;
+    font-weight: normal;
+}
+
+.account-details .block-header a {
+    text-decoration: none;
+}
+
+.account-details .block-header a:hover {
+    text-decoration: underline;
+}
+
+.account-details .view-site {
+    height: 20px;
+    background: url("/static/images/view-site.png") left center no-repeat;
+    padding-left:25px;
+}
+
+.account-settings {
+    width: 205px;
+    border: 1px solid #d3d3d3;
+    margin-top: 17px;
+}
+
+.account-settings header {
+    font-size:1.2em;
+    color: #022e52;
+    padding-left: 33px;
+    background: url("/static/images/accounts/account-settings.png") 4px center no-repeat #eee;
+    height: 25px;
+    line-height: 25px;    
+    vertical-align: middle;
+}
+
+.account-settings ul {
+    margin: 8px;
+    margin-top: 0;
+    background-color: #f6f6f6;
+    padding: 10px 24px;    
+    font-size:1em;
+}
+
+.account-settings ul li {
+    list-style: none;
+    margin-top: 7px;
+
+}
+
+.account-settings ul li a {
+    color: #454545;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.account-settings ul li a:hover{
+    color: #5dacfd;    
+}

@@ -74,6 +74,7 @@
 .event-details-block .event-details .event-actions td {
     border-bottom: 1px solid #ddd;
     width: 50%;
+    max-width: 80px;
 }
 
 .event-details-block .event-details .event-actions td a {
@@ -96,8 +97,12 @@
     -webkit-transform-origin: top left;    
 }
 
+.event-details-block .event-details .event-actions td a.action-facebook-like{
+    padding-left:0;
+}
+
 .event-details-block .event-details .event-actions td a .fb-like {
-    /*left: 22px;*/
+    left: 22px;
 }
 
 .event-details-block .event-details .event-actions td a:hover {
@@ -131,4 +136,41 @@
 .tickets-popup {
     display:none;
     padding-top:20px;    
+}
+
+
+.in-the-loop-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.in-the-loop-tags-popup {
+    display: none;
+    position: absolute;
+    left: 0;
+    width: 200px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background: #f4f4f4;
+    z-index:2;
+    white-space: normal;
+}
+
+.entry-info .in-the-loop-tags-popup {
+    bottom: 30px;
+}
+
+.in-the-loop-tags-popup .tag {
+    font-size: 1.2em;
+    padding-left:10px;
+    padding-right: 10px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+.in-the-loop-tags-popup .add-in-the-loop-wrapper {
+    text-align: center;
+}
+.in-the-loop-tags-popup .add-in-the-loop { 
+    font-size:1.5em;
 }

@@ -17,7 +17,7 @@ from django.db.models import Q
 from event import DEFAULT_FROM_EMAIL
 
 from event.models import Event, Venue, SingleEvent, Reminder, AuditEvent, AuditSingleEvent, AuditPhrase, FakeAuditEvent
-from event.utils import TagInfo, find_nearest_city
+from event.utils import find_nearest_city
 
 from event.forms import generate_form
 
@@ -25,7 +25,6 @@ from taggit.models import Tag, TaggedItem
 
 import datetime
 import time
-from django.core.paginator import EmptyPage, PageNotAnInteger
 import json
 from django.contrib import messages
 
@@ -51,7 +50,7 @@ def redirect(request):
     return HttpResponseRedirect(reverse('search_pad'))
 
 
-from django.db.models import Min, Count, Q
+from django.db.models import Count
 from event.filters import EventFilter
 
 

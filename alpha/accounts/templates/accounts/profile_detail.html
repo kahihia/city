@@ -1,0 +1,134 @@
+{% extends 'base.html' %} 
+{% load i18n %} 
+{% load url from future %} 
+
+{% block title %}
+    {% blocktrans with profile.user.username as username %}
+        {{username }}'s profile.
+    {% endblocktrans %}
+{% endblock %} 
+
+{% block content_title %}
+    <h2>
+        {{ profile.user.username }} 
+        {% if profile.user.get_full_name %}
+            ({{ profile.user.get_full_name }})
+        {% endif %}
+    </h2>
+{% endblock %} 
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/browse/search_pad.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/accounts.css" rel="stylesheet" type="text/css" />
+
+    <script src="{{STATIC_URL}}js/tabs.js" type="text/javascript" ></script>
+    <script src="{{STATIC_URL}}js/accounts/account.js" type="text/javascript" ></script>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <div class="content-wrapper">
+        <div class="content-wrapper-panel">
+            <!--start.main-content-wrapper-->
+            <div class="main-content-wrapper">
+                <h1>
+                    My account
+                </h1>
+                <div class="main-content">
+                    <div class="main-navigation">
+                        <div class="account-left">
+                            <div class="account-avatar">
+                                <img class="mugshot" src="{{ profile.get_mugshot_url }}" alt="{% trans "
+                                Your mugshot " %}" />
+                            </div>
+                            <div class="account-settings">
+                                <header>
+                                    My setting
+                                </header>
+                                <ul>
+                                    <li>
+                                        <a>Edit my Preferences</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'userena_profile_edit' user.username %}">Edit my Account</a>
+                                    </li>
+                                    <li>
+                                        <a>Edit Reminder Settings</a>
+                                    </li>
+                                    <li>
+                                        <a>Edit In the Loop tags</a>
+                                    </li>
+                                    <li>
+                                        <a>Manage my Profile(s)</a>
+                                    </li>
+                                    <li>
+                                        <a>View my order history</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="account-details">
+                            <header class="block-header">
+                                {% if profile.user.get_full_name %}
+                                    Vladimir Myskov <span class="nickname">({{ profile.user.username }})</span>
+                                {% else %}
+                                    <span class="nickname">{{ profile.user.username }})</span>
+                                {% endif %}
+                                
+                                <!--{{ profile.user.get_full_name }}({{ profile.nickname }})-->
+                            </header>
+                            <hr />
+                            <span>
+                                Members since {{ profile.user.date_joined|date:"F d, Y" }}  <!--January 01, 2011-->
+                            </span>
+                            {% if profile.venue %}
+                                <h2 class="block-header"> 
+                                    Location
+                                </h2>
+                                <span>
+                                    <b>
+                                        {{ profile.venue.name }}
+                                        <!--{{ profile.venue }}-->
+                                    </b>                                
+                                </span>
+                            {% endif %}
+                            {% if profile.website %}
+                                <h2 class="block-header">
+                                    <a href="{{ profile.website }}" class="block-header view-site">
+                                      View Site
+                                    </a>
+                                </h2>
+                            {% endif %}
+
+                            {% if profile.venue %}
+                                <hr />
+                                <div class="map">
+                                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{profile.venue.location.y}},{{profile.venue.location.x}}&zoom=13&size=350x150&maptype=roadmap&sensor=false&markers=color:blue%7C{{profile.venue.location.y}},{{profile.venue.location.x}}">
+                                </div>
+                                <hr />                            
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="clr"></div>
+
+                    <div class="tabs-container">
+                        <ul class="tabs">
+                            <li class="current" data-tab-id="reminder"><span>Reminder</span></li>
+                            <li  data-tab-id="in-the-loop"><span>In the Loop</span></li>
+                        </ul>
+                        <div class="box visible">
+                            {% include 'accounts/_reminder_events_table.html' %}                            
+                        </div>
+                        <div class="box">
+                            {% include 'accounts/_in_the_loop_events_table.html' %}
+                        </div>
+                    </div>
+                </div>                
+            </div>
+            <!--end.main-content-wrapper-->
+        </div>
+    </div>
+</div>
+{% endblock %}

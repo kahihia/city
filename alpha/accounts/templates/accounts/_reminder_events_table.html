@@ -1,0 +1,52 @@
+{% load endless %}
+
+{% paginate 6 profile.reminder_events.all  using "reminder_page" as events %}
+
+<table class="profile-table" celpadding="0" cellspacing="0">
+    <tr>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Event</th>
+        <th class="action">Option</th>
+    </tr>
+    {% for event in events %}
+    <tr>
+        <td>
+            {{ event.start_time|date:"b d" }}
+        </td>
+        <td>
+            {{ event.start_time|date:"P" }}
+        </td>
+        <td>
+            <a href="/events/view/{{event.event.slug}}/">
+                {{ event.event.name }}
+            </a>            
+        </td>
+        <td class="action">
+            <a href="#">edit</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if pages|length > 1 %}
+    <div class="profile-table-pagination">
+        <span class="pagintation-wrapper">
+            {% get_pages %}
+            {% if pages.current.is_first %}
+                <span class="prev"></span>                    
+            {% else %}                
+                <a class="prev" href="{{ pages.previous.url }}"></a>
+            {% endif %}
+            <span class="page-info">
+                {{ pages.current }} of {{ pages|length }}
+            </span>
+
+            {% if pages.current.is_last %}
+                <span class="next"></span>                    
+            {% else %}
+                <a class="next" href="{{ pages.next.url }}"></a>
+            {% endif %}
+        </span>        
+    </div>
+{% endif %}

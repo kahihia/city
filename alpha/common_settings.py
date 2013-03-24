@@ -151,8 +151,10 @@ INSTALLED_APPS = (
     'image_cropping',
     'ajaxuploader',
     'endless_pagination',
-    'django_filters'
-
+    'django_filters',
+    'guardian',
+    'userena',
+    'accounts'
 )
 
 # A sample logging configuration. The only tangible logging performed
@@ -238,3 +240,21 @@ THUMBNAIL_PROCESSORS = (
 ) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
 GEOIP_PATH = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'geoip'))
+
+AUTHENTICATION_BACKENDS = (
+    'userena.backends.UserenaAuthenticationBackend',
+    'guardian.backends.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+LOGIN_REDIRECT_URL = '/accounts/%(username)s/'
+LOGIN_URL = '/accounts/signin/'
+LOGOUT_URL = '/accounts/signout/'
+
+ANONYMOUS_USER_ID = -1
+
+AUTH_PROFILE_MODULE = 'accounts.Account'
+
+USERENA_PROFILE_DETAIL_TEMPLATE = 'accounts/profile_detail.html'

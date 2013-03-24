@@ -54,6 +54,11 @@ class CustomIndexDashboard(Dashboard):
             models=('taggit.*',)
         ))
 
+        self.children.append(modules.AppList(
+            _('Accounts'),
+            models=('accounts.*',)
+        ))
+
         # append an app list module for "Administration"
         self.children.append(modules.AppList(
             _('Administration'),
