@@ -1,0 +1,229 @@
+{% extends 'base-new.html' %}
+{% load date_formatting %}
+{% load cropping %}
+{% load event_pictures %}
+{% load endless %}
+
+{% block head %}
+    <meta property="og:title" content="{{event_day.event.name}}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event_day.id %}" />
+    {% if event_day.event.picture %}
+        <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{% cropped_thumbnail event_day.event "cropping" width=200 %}" />    
+    {% else %}
+        <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{{STATIC_URL}}images/default-event.jpg" />
+    {% endif %}
+    <meta property="og:site_name" content="Cityfusion" />
+    <meta property="og:description" content="{{event_day.event.description}}" />
+    <meta property="fb:admins" content="100000796428679" />
+
+    <link href="{{STATIC_URL}}styles/browse/event_details.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/styles-new.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/event/conversation.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{STATIC_URL}}fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
+
+    <script src="{{STATIC_URL}}js/searchpad/event-actions.js" type="text/javascript"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}fancybox/jquery.fancybox.js"></script>
+    <script src="{{STATIC_URL}}js/event/eventpage.js" type="text/javascript"></script>
+{% endblock %}    
+
+
+{% block page %}
+    <div id="fb-root"></div>
+    <script>
+        (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=241160805895511";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script> 
+
+    <div class="primary-content">
+        <h1>Event details</h1>
+        <div class="content">
+            <div class="event-wrapper">
+                <div class="event-photo">
+                    {% if event_day.event.picture %}
+                        <a id="photoFancy" href="/media/{{ event_day.event.picture }}">
+                            <div class="center-cropped" 
+                                style="background-image: url('{% cropped_thumbnail event_day.event "cropping" height=265 %}');">
+                            </div>​
+                        </a>
+                    {% else %}
+                        <div class="center-cropped" 
+                            style="background-image: url('{{STATIC_URL}}images/default-event.jpg');">
+                        </div>
+                    {% endif %}
+                    <footer>
+                        Submitted by <span class="accented">{{ event_day.event.owner }}</span>
+                    </footer>                
+                </div>
+                <div class="event-details">
+                    <div class="title-wrapper">
+                        <div class="title">
+                            <a class="accented" href="{% url 'view_event_day' event_day.id %}">{{event_day.event.name}}</a>
+                        </div>
+                        {% if event_day.event.price %}
+                            <div class="event-price {% if event_day.event.price|length < 9 %} short {% endif %}">{{event_day.event.price}}</div>
+                        {% endif %}
+                    </div>
+                    <div class="event-date-wrapper">
+                        {{event_day.start_time|contextualize_date}} - {{event_day.end_time|just_time}}                    
+                    </div>
+                    <div class="event-description">
+                        <span class="accented">{{ event_day.event.venue.name }}</span>
+                        <br>                    
+                        {{ event_day.event.venue.city.name_std }},
+                        {{ event_day.event.venue.city.region.name_std }}
+                    </div>
+                    <div class="event-actions">
+                        <table>
+                            {% if event_day.event.tickets %}
+                            <tr>
+                                <td>
+                                    <a href='{% if_url event_day.event.tickets event_day.event.tickets "javascript:searchPadPage.showTicketsPopup();" %}' class="action-buy-tickets">
+                                        Buy tickets
+                                    </a>
+                                    <div class="tickets-popup">                                
+                                        <b>{{event_day.event.tickets}}</b>
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td>
+                                    <a href="javascript:void()" class="action-remind-me accented" data-event-id="{{ event_day.id }}">Remind Me</a>
+                                </td>
+                                <td class="in-the-loop-td">
+                                    <a href="javascript:void()" class="action-in-the-loop accented">In the Loop</a>
+                                    <div class="in-the-loop-tags-popup">
+                                        {% for tag in event_day.event.tags.all %}
+                                        <span class="button tag" data-tag="{{ tag.name }}">
+                                            {{ tag.name }}
+                                        </span>
+                                        {% endfor %}                                
+                                        <div class="add-in-the-loop-wrapper">
+                                            <span class="button add-in-the-loop active">
+                                                Add in the loop
+                                            </span>
+                                        </div>                                
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="javascript:void;" class="action-facebook-like accented">                                
+                                        <div 
+                                            href="http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event_day.id %}" 
+                                            class="fb-like" 
+                                            data-href="http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event_day.id %}" 
+                                            data-send="false" 
+                                            data-layout="button_count" 
+                                            data-width="20" 
+                                            data-show-faces="false" 
+                                            data-font="arial">
+                                        </div>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="https://twitter.com/intent/tweet?original_referer=http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event_day.id %}&text={{event_day.event.name}}&tw_p=tweetbutton&url=http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event_day.id %}" class="action-tweet accented">
+                                        Tweet
+                                    </a>                            
+                                </td>
+                            </tr>
+                            
+                            {% if event_day.event.website %}
+                                <tr>
+                                    <td colspan="2">
+                                        <a href="{{ event_day.event.website }}" class="block-header accented view-site">
+                                            View Site
+                                        </a>
+                                    </td>                            
+                                </tr>
+                            {% endif %}                        
+                        </table>
+                    </div>
+                    {% if event_day.event.venue %}
+                        <div class="map">
+                            <img src="http://maps.googleapis.com/maps/api/staticmap?center={{event_day.event.venue.location.y}},{{event_day.event.venue.location.x}}&zoom=13&size=350x150&maptype=roadmap&sensor=false&markers=color:blue%7C{{event_day.event.venue.location.y}},{{event_day.event.venue.location.x}}">
+                        </div>
+                    {% endif %}
+                </div>
+                <p>{{ event_day.event_description|linebreaks }}</p>
+                <h4 class="tags">
+                    {% for tag in event_day.event.tags.all %}
+                        <a href="{% url 'event_browse_tags' tag.slug %}">
+                            {{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </h4>  
+            </div>
+        </div>
+
+        <header class="event-conversation-header">
+            Join a conversation about "{{ event_day.event.name }}"
+        </header>
+        <div class="event-conversation content">
+            
+
+            <div class="fb-comments" data-href="http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event_day.id %}" data-width="630" data-num-posts="5"></div>
+        </div>
+    </div>
+
+    <div class="secondary-content">
+        <header>
+            Event at {{ event_day.event.venue.name }} in {{ event_day.event.venue.city.name_std }}
+        </header>
+        <div class="content">
+            <table class="secondary-content-table" celpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Event</th>
+                    </tr>                    
+                    {% if event_day.event.venue.future_events|length > 0 %}
+                        {% paginate 5 event_day.event.venue.future_events using "tcu_place_events" as venue_events %}
+                        {% for venue_event_day in venue_events %}
+                            <tr>
+                                <td>{{ venue_event_day.start_time|date:"M d" }}</td>
+                                <td>{{ venue_event_day.start_time|date:"f a" }}</td>
+                                <td>
+                                    <a href="{% url 'view_event_day' venue_event_day.id %}">
+                                        {{ venue_event_day.event.name }}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+            {% if event_day.event.venue.future_events|length > 0 and pages|length > 1 %}
+                <div class="secondary-content-table-pagination">
+                    <span class="pagintation-wrapper">
+                        {% get_pages %}
+                        {% if pages.current.is_first %}
+                            <span class="prev"></span>                    
+                        {% else %}                
+                            <a class="prev" href="{{ pages.previous.url }}"></a>
+                        {% endif %}
+                        <span class="page-info">
+                            {{ pages.current }} of {{ pages|length }}
+                        </span>
+
+                        {% if pages.current.is_last %}
+                            <span class="next"></span>                    
+                        {% else %}
+                            <a class="next" href="{{ pages.next.url }}"></a>
+                        {% endif %}
+                    </span>        
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+<div class="sign-up-and-facebook">                       
+    <!--start login-->
+    <div class="login-entry-info">
+        <ul>
+            {% if user.is_authenticated %}
+                <li>
+                    <a class="user-profile-link" href="{% url 'userena_profile_detail' user.username %}">
+                        {{ user.username }}
+                    </a><span>&nbsp; | &nbsp;</span>
+                </li>
+                <li>
+                    <a href="{% url 'userena_signout' %}">Sign out</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'userena_signin' %}">Sign In</a><span>&nbsp; | &nbsp;</span>
+                </li>
+                <li>
+                    <a href="{% url 'userena_signup' %}">Sign up</a>
+                </li>
+                <li>
+                    <form action="{% url 'facebook_connect' %}?facebook_login=1" method="post">
+                        <a class="login_with_facebook" href="javascript:void(0);" style="font-size: 20px;" onclick="F.connect(this.parentNode);">
+                            
+                        </a>
+                        <input type="hidden" value="{{ request.path }}" name="next" />
+                        <input type="hidden" value="{{ request.path }}" name="register_next" />
+                        <input type="hidden" value="{{ request.path }}" name="error_next" />
+                        {% csrf_token %} 
+                    </form>
+                </li>                   
+            {% endif %}
+        </ul>
+        <div class="clr"></div>
+   </div>
+</div>

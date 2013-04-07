@@ -1,0 +1,134 @@
+{% extends 'base-new.html' %} 
+{% load i18n %} 
+{% load url from future %} 
+
+{% block title %}
+    {% blocktrans with profile.user.username as username %}
+        {{username }} reminder options
+    {% endblocktrans %}
+{% endblock %} 
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />    
+    <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
+    <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>    
+    <script src="{{STATIC_URL}}js/accounts/reminder-options.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block page %}
+    <div class="primary-content">
+        <h1>
+            Reminder Options
+        </h1>
+        <div class="content account-options-wrapper">            
+            <div class="main-content account-options">
+                {%if form.errors %}
+                    <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                        <ul style="list-style-type: none;">
+                            <li id="all-info">
+                                {% for error in form.non_field_errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </li>
+                            <li id="all-info">
+                                {% for error in form.reminder_email.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </li>
+
+                            <li id="all-info">
+                                {% for error in form.reminder_phonenumber.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </li>
+                            
+                        </ul>
+                    </div>
+                    
+                {% endif %}
+                <form method="post" name="reminder-options" >
+                    {% csrf_token %}
+                    <div class="reminder-types options options-white">
+                        <header>
+                            Please select the way(s) you would like to reminded about your saved event(s)
+                        </header>
+                        <table>
+                            <tr>
+                                <td class="first">
+                                    <div class="checkbox">
+                                        {{ form.reminder_with_website }}
+                                        {{ form.reminder_with_website.label_tag }}
+                                    </div>
+                                    Website:
+                                </td>
+                                <td>
+                                    I will check for my updates on the website
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="first">
+                                    <div class="checkbox">
+                                        {{ form.reminder_with_email }}
+                                        {{ form.reminder_with_email.label_tag }}
+                                    </div>
+                                    Email:
+                                </td>
+                                <td>
+                                    {{ form.reminder_email }}
+                                    Send to this address
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="first">
+                                    <div class="checkbox">
+                                        {{ form.reminder_with_sms }}
+                                        {{ form.reminder_with_sms.label_tag }}
+                                    </div>
+                                    SMS:
+                                </td>
+                                <td>
+                                    {{ form.reminder_phonenumber }}
+                                    Send to this number
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="reminder-time-options options options-gray">
+                        <header>
+                            Please select the amount of time to remind you about your event(s)
+                        </header>
+                        <table>
+                            <tr>
+                                <td class="first">
+                                    {{ form.reminder_days_before_event }}
+                                </td>
+                                <td>
+                                    Day(s) before the event begins
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="first">
+                                    {{ form.reminder_hours_before_event }}
+                                </td>
+                                <td>
+                                    Hour(s) before the event begins
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="first">
+                                    <div class="dropdown week-day-reminder" data-dropdown-class="week-day-reminder-list">
+                                        {{ form.reminder_on_week_day }}
+                                    </div>                                        
+                                </td>
+                                <td>
+                                    Send me reminder on this day every week
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <input type="submit" name="submitoptions" class="button submit" value="Save" />
+                </form>
+            </div>                
+        </div>
+    </div>
+{% endblock %}

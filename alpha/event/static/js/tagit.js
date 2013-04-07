@@ -210,8 +210,9 @@
             // Add existing tags from the list, if any.
             if (!addedExistingFromSingleFieldNode) {
                 this.tagList.children('li').each(function() {
-                    if (!$(this).hasClass('tagit-new')) {                        
-                        that.createTag($(this).text(), $(this).attr('class'), true, $(this).data("remove-url"));
+                    if (!$(this).hasClass('tagit-new')) {
+                        var text = $(".tagit-label", this).html()||$(this).text();
+                        that.createTag(text, $(this).attr('class'), true, $(this).data("remove-url"));
                         $(this).remove();
                     }
                 });

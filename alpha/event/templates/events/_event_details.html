@@ -16,9 +16,9 @@
         <div class="event-details">
             <div class="title-wrapper">
                 <div class="title">
-                    <a href="/events/view/{{event.event.slug}}/">{{event.event.name}}</a>
+                    <a href="{% url 'view_event_day' event.id %}">{{event.event.name}}</a>
                 </div>
-                {% if event.price %}
+                {% if event.event.price %}
                     <div class="event-price {% if event.event.price|length < 9 %} short {% endif %}">{{event.event.price}}</div>
                 {% endif %}
             </div>
@@ -48,7 +48,7 @@
                         <td>
                             <a href="javascript:void()" class="action-remind-me" data-event-id="{{ event.id }}">Remind Me</a>
                         </td>
-                        <td class="in-the-loop-wrapper">
+                        <td class="in-the-loop-td">
                             <a href="javascript:void()" class="action-in-the-loop">In the Loop</a>
                             <div class="in-the-loop-tags-popup">
                                 {% for tag in event.event.tags.all %}
@@ -67,11 +67,11 @@
                     <tr>
                         <td>
                             <a href="javascript:void;" class="action-facebook-like">                                
-                                <div href="http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}/" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}/" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>                                
+                                <div href="http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event.id %}" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event.id %}" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>                                
                             </a>
                         </td>
                         <td>
-                            <a href="https://twitter.com/intent/tweet?original_referer=http://{{ request.META.HTTP_HOST }}/events/&text={{event.event.name}}&tw_p=tweetbutton&url=http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}" class="action-tweet">
+                            <a href="https://twitter.com/intent/tweet?original_referer=http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event.id %}&text={{event.event.name}}&tw_p=tweetbutton&url=http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event.id %}" class="action-tweet">
                                 Tweet
                             </a>                            
                         </td>

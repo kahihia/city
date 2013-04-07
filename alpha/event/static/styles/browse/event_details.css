@@ -75,6 +75,9 @@
     border-bottom: 1px solid #ddd;
     width: 50%;
     max-width: 80px;
+    height: 18px;
+    max-height: 18px;
+    min-height: 18px;    
 }
 
 .event-details-block .event-details .event-actions td a {
@@ -82,14 +85,17 @@
     padding-left: 22px;
     color: #0168cd;
     position: relative;
+    min-width: 30px;
+    height:100%;
+    display: inline-block;
 }
 
-.event-details-block .event-details .event-actions td a #fbiframe {
-    transform: scale(0.8);
-    -ms-transform: scale(0.8); 
-    -webkit-transform: scale(0.8); 
-    -o-transform: scale(0.8); 
-    -moz-transform: scale(0.8); 
+.event-details-block .event-details .event-actions td a iframe {
+    transform: scale(0.9);
+    -ms-transform: scale(0.9); 
+    -webkit-transform: scale(0.9); 
+    -o-transform: scale(0.9); 
+    -moz-transform: scale(0.9); 
     transform-origin: top left;
     -ms-transform-origin: top left;
     -webkit-transform-origin: top left;
@@ -103,6 +109,7 @@
 
 .event-details-block .event-details .event-actions td a .fb-like {
     left: 22px;
+    max-height: 17px;
 }
 
 .event-details-block .event-details .event-actions td a:hover {
@@ -142,6 +149,10 @@
 .in-the-loop-wrapper {
     position: relative;
     display: inline-block;
+}
+
+.in-the-loop-td {
+    position: relative;
 }
 
 .in-the-loop-tags-popup {

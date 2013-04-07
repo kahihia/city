@@ -1,0 +1,157 @@
+{% extends 'base-new.html' %} 
+{% load i18n %} 
+{% load url from future %} 
+
+{% block title %}
+    {% blocktrans with profile.user.username as username %}
+        {{username }} reminder options
+    {% endblocktrans %}
+{% endblock %} 
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/autoSuggest.css" rel="stylesheet" type="text/css" />
+
+    <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>    
+    <script src="{{STATIC_URL}}js/accounts/reminder-options.js" type="text/javascript"></script>
+
+    {{ form.map }}
+    {{ form.media.js }}
+{% endblock %}
+
+{% block page %}
+    <div class="primary-content">
+        <h1>
+            In the Loop Options
+        </h1>
+        <div class="content account-options-wrapper">                    
+            <div class="main-content account-options">
+                {%if form.errors %}
+                    <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                        <ul style="list-style-type: none;">
+                            <li id="all-info">
+                                {% for error in form.non_field_errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </li>                                
+                        </ul>
+                    </div>
+                    
+                {% endif %}
+                <form method="post" name="in-the-loop-options" >
+                    {% csrf_token %}
+                    <h3>
+                        My tags
+                        <a href="javascript:void;"  class="balloon">
+                            <div class="buttonq"></div>
+                        </a>
+                        <div class="balloon-content" style="display:none">
+                            <h3>
+                                Help - Enter your
+                                <i>[tags]:</i>
+                            </h3>
+                            <p>
+                                Select tags that best describe your event. Insert your event by using the “tab” button or a comma
+                            </p>
+                        </div>
+                    </h3>
+                    <div class="saved-tags">
+                        {{ form.in_the_loop_tags }} 
+                        <input type="button" class="button add-tag-button" value="Add" />
+                    </div>
+                    <h3 class="notifications">
+                        Notifications
+                        <a href="javascript:void;"  class="balloon">
+                            <div class="buttonq"></div>
+                        </a>
+                        <div class="balloon-content" style="display:none">
+                            <h3>
+                                Help - Enter your
+                                <i>[tags]:</i>
+                            </h3>
+                            <p>
+                                Select tags that best describe your event. Insert your event by using the “tab” button or a comma
+                            </p>
+                        </div>
+                    </h3>
+                    <div class="in-the-loop-types options options-white">                            
+                        <table>
+                            <tr>
+                                <td class="first">
+                                    <div class="checkbox">
+                                        {{ form.in_the_loop_with_website }}
+                                        {{ form.in_the_loop_with_website.label_tag }}
+                                    </div>
+                                    Website:
+                                </td>
+                                <td>
+                                    I will check for my updates on the website
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="first">
+                                    <div class="checkbox">
+                                        {{ form.in_the_loop_with_email }}
+                                        {{ form.in_the_loop_with_email.label_tag }}
+                                    </div>
+                                    Email:
+                                </td>
+                                <td>
+                                    {{ form.in_the_loop_email }}
+                                    Send to this address
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="first">
+                                    <div class="checkbox">
+                                        {{ form.in_the_loop_with_sms }}
+                                        {{ form.in_the_loop_with_sms.label_tag }}
+                                    </div>
+                                    SMS:
+                                </td>
+                                <td>
+                                    {{ form.in_the_loop_phonenumber }}
+                                    Send to this number
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="in-the-loop-time-options options options-gray">
+                        <table>
+                            <tr>
+                                <td class="first">
+                                    {{ form.in_the_loop_days_before_event }}
+                                </td>
+                                <td>
+                                    Day(s) before the event begins
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="first">
+                                    {{ form.in_the_loop_hours_before_event }}
+                                </td>
+                                <td>
+                                    Hour(s) before the event begins
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="first">
+                                    <div class="dropdown week-day-reminder" data-dropdown-class="week-day-reminder-list">
+                                        {{ form.in_the_loop_on_week_day }}
+                                    </div>                                        
+                                </td>
+                                <td>
+                                    Send me reminder on this day every week
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <input type="submit" name="submitoptions" class="button submit" value="Save" />
+                </form>
+            </div>                
+        </div>
+    </div>
+{% endblock %}

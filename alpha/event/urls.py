@@ -21,6 +21,10 @@ urlpatterns = patterns('',
                            event.view,
                            name='event_view'
                            ),
+                       url(r'^view-event-day/(?P<id>[^/]+)/$',
+                           event.view_event_day,
+                           name='view_event_day'
+                           ),
                        url(r'^remind/(?P<event_id>\d+)/$',
                            event.reminder,
                            name='event_reminder'
@@ -47,6 +51,8 @@ urlpatterns = patterns('',
                        url(r'^audit-event-update/(?P<id>\d+)/$', event.audit_event_update, name="audit_event_update"),
                        url(r'^audit-event-admin-update/(?P<id>\d+)/$', event.audit_event_admin_update, name="audit_event_admin_update"),
                        url(r'^audit-event-approve/(?P<id>\d+)/$', event.audit_event_approve, name="audit_event_approve"),
+
+                       url(r'^nearest_venues/$', event.nearest_venues, name='nearest_venues'),
 
                        # url(r'^audit-single-event/', event.audit_single_event_list),
                        # url(r'^audit-single-remove/(?P<id>\d+)', event.audit_single_event_remove),

@@ -34,8 +34,8 @@
         <span class="pagintation-wrapper">
             {% get_pages %}
             {% if pages.current.is_first %}
-                <span class="prev"></span>                    
-            {% else %}                
+                <span class="prev"></span>            
+            {% else %}
                 <a class="prev" href="{{ pages.previous.url }}"></a>
             {% endif %}
             <span class="page-info">

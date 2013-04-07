@@ -1,6 +1,9 @@
-from models import Event
+from models import Event, Venue
 import datetime
 from django.db.models import Count
+import re
+import string
+import nltk
 
 
 class Filter(object):
@@ -97,10 +100,6 @@ class TagsFilter(Filter):
                 "remove_url": "?" + self.parent.url_query(tag=tag)
             })
         return tags_to_return
-
-
-class BooleanFilter(Filter):
-    pass
 
 
 search_tags_for_filters = {
@@ -219,9 +218,46 @@ class PeriodFilter(Filter):
         else:
             return None
 
+
 exclude_shortcuts = {
     "datetime": ["start_date", "end_date", "start_time", "end_time", "period"]
 }
+
+
+class VenueFilter(Filter):
+    def search_tags(self, id):
+        if id:
+            venue = Venue.objects.get(id=id)
+            return [{
+                "name": venue.name,
+                "remove_url": "?" + self.parent.url_query(exclude="venue")
+            }]
+        else:
+            return None
+
+
+class SearchFilter(Filter):
+    def search_tags(self, search_string):
+        # TODO: use nslt to split words
+        search_string = search_string.strip()
+        if search_string:
+            return [{
+                "name": word,
+                "remove_url": "?" + self.parent.url_query(search=search_string.replace(word, ""))
+            } for word in nltk.word_tokenize(
+                re.sub('[%s]' % re.escape(string.punctuation), '', search_string)
+            )]
+        else:
+            return None
+
+    def filter(self, qs, search_string):
+        # TODO: test for time for sql query
+        # import pdb; pdb.set_trace()
+
+        return qs.extra(
+            where=["event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', %s) OR event_event.search_index @@ plainto_tsquery('pg_catalog.english', %s)"], 
+            params=[search_string, search_string]
+        )
 
 
 class EventFilter(object):
@@ -234,9 +270,12 @@ class EventFilter(object):
             "start_time": TimeFilter("start_time", "start_time", lookup="gte"),
             "end_time": TimeFilter("end_time", "start_time", lookup="lte"),
             "tag": TagsFilter("tag", "event__tags"),
-            "featured": BooleanFilter("featured", "event__featured"),
-            "function": FunctionFilter("function")
+            "featured": Filter("featured", "event__featured"),
+            "function": FunctionFilter("function"),
+            "venue": VenueFilter("venue", "event__venue__id"),
+            "search": SearchFilter("search", "search_index")
         }
+
         self.filters["period"] = PeriodFilter("period", self.filters["start_date"], self.filters["end_date"])
 
         for key, queryFilter in self.filters.iteritems():

@@ -13,4 +13,16 @@ urlpatterns = patterns('',
         accounts.add_in_the_loop,
         name='add_in_the_loop'
     ),
+    url(r'^reminder-settings/$',
+        accounts.reminder_settings,
+        name="reminder_settings"
+    ),
+    url(r'^in-the-loop-settings/$',
+        accounts.in_the_loop_settings,
+        name="in_the_loop_settings"
+    ),
+    url(r'^in-the-loop-tags/$',
+        accounts.in_the_loop_tags,
+        name="in_the_loop_tags"
+    ),
 )

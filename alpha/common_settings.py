@@ -5,9 +5,6 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('sam', 'sam@peakxp.com'),
-    # ('tony', 'tony@peakxp.com'),
-    # ('levi', 'levi@peakxp.com'),
     ('jaromudr', 'jaromudr@gmail.com'),
     ('tim', 'tim@cityfusion.ca'),
     ('igor', 'info@silkcode.com'),
@@ -97,6 +94,8 @@ from django.conf import global_settings
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     # required by django-admin-tools
     'django.core.context_processors.request',
+    'event.context_processors.nearest_locations',
+    'django_facebook.context_processors.facebook',
 )
 
 ADMIN_TOOLS_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
@@ -153,8 +152,9 @@ INSTALLED_APPS = (
     'endless_pagination',
     'django_filters',
     'guardian',
+    'accounts',
     'userena',
-    'accounts'
+    'django_facebook',
 )
 
 # A sample logging configuration. The only tangible logging performed
@@ -245,16 +245,21 @@ AUTHENTICATION_BACKENDS = (
     'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'django_facebook.auth_backends.FacebookBackend',
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LOGIN_REDIRECT_URL = '/accounts/%(username)s/'
 LOGIN_URL = '/accounts/signin/'
 LOGOUT_URL = '/accounts/signout/'
+USERENA_REDIRECT_ON_SIGNOUT = "/events/"
 
 ANONYMOUS_USER_ID = -1
 
 AUTH_PROFILE_MODULE = 'accounts.Account'
 
-USERENA_PROFILE_DETAIL_TEMPLATE = 'accounts/profile_detail.html'
+FACEBOOK_APP_ID = "241160805895511"
+FACEBOOK_APP_SECRET = "aacc6191a48ff2c251f6e69b1d4ba1c1"
+# FACEBOOK_REGISTRATION_BACKEND = 'django_facebook.registration_backends.UserenaBackend'
+AUTH_PROFILE_MODULE = 'accounts.Account'

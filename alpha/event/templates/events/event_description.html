@@ -1,8 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'base-new.html' %}
+{% load date_formatting %}
 {% load cropping %}
-{% block title %} > View > {{ event.name }}{% endblock %}
+{% load event_pictures %}
+{% load endless %}
 
 {% block head %}
+    <link href="{{STATIC_URL}}styles/styles-new.css" rel="stylesheet" type="text/css" />
+
     <meta property="og:title" content="{{event.name}}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="http://{{ request.META.HTTP_HOST }}/events/view/{{event.slug}}/" />
@@ -18,60 +22,92 @@
 
 
 {% block page %}
-
-{% block breadcrumb %}
-    {% load date_formatting %}
-    <nav id="back">
-        <p>
-            <a href="{% url 'event_browse' %}">
-                Browse Events
-            </a>
-            &gt;             
-      
-            &gt; 
-            {% for tag in event.tags.all %}
-                <a href="{% url 'event_browse_tags' tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-            &gt; 
-            <span class="current">{{ event.name }}</span>
-        </p>
-    </nav>
-{% endblock %}
-
-<aside id="photo">
-    {% load event_pictures %}
-</aside>
-<div style="width: 780px; float: right;">
-    <section class="body noborder detail">
-        <h1>{{ event.name }}</h1>
-        <p> 
-            {% for se in event.single_events.all %}
-                {{ se.start_time }}
-            {% endfor %}
-        </p>
-              {% comment %}<h4><a href="{% url event_browse_date date=event.start_time.date.isoformat %}">{{ event.start_time|just_day }}</a>
-              <br>{{ event.start_time|just_time }}
-              {% if event.end_time %}&mdash; {{ event.end_time|just_time }}{% endif %}</h4>
-              {% endcomment %}
-
-   
-        <p>
-            <h3 style="color: orange;">Location: {{ event.venue }}</h3>
-        </p>
-   
-        <h2 style="color: orange;">{{ event.price }}</h2>
-  
-        <p>{{ event.description|linebreaks }}</p>
-        {% if event.website %}
-            <p>
-                <a href="{{ event.website }}">Website</a>
-            </p>
-        {% endif %}
-        <h4>Tags: 
-            {% for tag in event.tags.all %}<a href="{% url 'event_browse_tags' tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
-        </h4>  
-        <div style="clear: both;"></div>
-        <div class="fb-like" data-href="" data-send="true" data-width="450" data-show-faces="true"></div>
-    </section>
-</div>
+    <h1>Event details</h1>
+    <div class="content">
+        <div class="event-wrapper">
+            <div class="event-photo">
+                {% if event.event.picture %}
+                    <img src="{% cropped_thumbnail event.event "cropping" width=215 %}" height="215px" weight="215px">
+                {% else %}
+                    <img src="{{STATIC_URL}}images/default-event.jpg" height="215px" weight="215px">
+                {% endif %}
+                <footer>
+                    Submitted by <span>{{ event.event.owner }}</span>
+                </footer>                
+            </div>
+            <div class="event-details">
+                <div class="title-wrapper">
+                    <div class="title">
+                        <a href="/events/view/{{event.event.slug}}/">{{event.event.name}}</a>
+                    </div>
+                    {% if event.price %}
+                        <div class="event-price {% if event.event.price|length < 9 %} short {% endif %}">{{event.event.price}}</div>
+                    {% endif %}
+                </div>
+                <div class="event-date-wrapper">{{event.start_time|date:"N d, Y f a | l"}}</div>
+                {{event.signle_events}}
+                <div class="event-description">
+                    {{ event.event.venue.name }}<br>
+                    {{ event.event.venue.street }}<br>
+                    {{ event.event.venue.city.name_std }}
+                </div>
+                <div class="event-actions">
+                    <table>
+                        {% if event.event.tickets %}
+                        <tr>
+                            <td>
+                                <a href='{% if_url event.event.tickets event.event.tickets "javascript:searchPadPage.showTicketsPopup();" %}' class="action-buy-tickets">
+                                    Buy tickets
+                                </a>
+                                <div class="tickets-popup">                                
+                                    <b>{{event.event.tickets}}</b>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <td>
+                                <a href="javascript:void()" class="action-remind-me" data-event-id="{{ event.id }}">Remind Me</a>
+                            </td>
+                            <td class="in-the-loop-td">
+                                <a href="javascript:void()" class="action-in-the-loop">In the Loop</a>
+                                <div class="in-the-loop-tags-popup">
+                                    {% for tag in event.event.tags.all %}
+                                    <span class="button tag" data-tag="{{ tag.name }}">
+                                        {{ tag.name }}
+                                    </span>
+                                    {% endfor %}                                
+                                    <div class="add-in-the-loop-wrapper">
+                                        <span class="button add-in-the-loop active">
+                                            Add in the loop
+                                        </span>
+                                    </div>                                
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="javascript:void;" class="action-facebook-like">                                
+                                    <div href="http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}/" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}/" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>                                
+                                </a>
+                            </td>
+                            <td>
+                                <a href="https://twitter.com/intent/tweet?original_referer=http://{{ request.META.HTTP_HOST }}/events/&text={{event.event.name}}&tw_p=tweetbutton&url=http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}" class="action-tweet">
+                                    Tweet
+                                </a>                            
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <p>{{ event.description|linebreaks }}</p>
+            <h4>
+                Tags: 
+                {% for tag in event.tags.all %}
+                    <a href="{% url 'event_browse_tags' tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </h4>  
+        </div>            
+    </div>
 {% endblock %}

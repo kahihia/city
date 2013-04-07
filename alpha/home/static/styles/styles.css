@@ -238,7 +238,7 @@ body
 	top:30px;
 	background:#fff;
 	left:3px;
-	width:200px;
+	width:195px;
 	border-left:1px solid #ddd;
 	border-right:1px solid #ddd;
 	border-bottom:1px solid #ddd;
@@ -324,6 +324,7 @@ body
 .features-wrapper
 {
 	width:auto;
+	min-height: 161px;
 }
 
 .features
@@ -1941,22 +1942,27 @@ a
 	line-height:40px;
 	background:url(/static/images/edit_profile_bg.png) left repeat-x;
 }
-.profile-btn a{
+.profile-btn a {
 	color:#0066cc;
 	text-decoration:none;
 }
-#hintbox p{
+#hintbox p {
 	padding: 5px 10px 10px 10px;
 }
 .buttonq{
 	background: url(/static/images/question.png) no-repeat;
-	height:25px;
-	width:25px;
+	height: 25px;
+	width: 25px;
 }
 .buttonq:hover{
 	background: url(/static/images/question_hover.png) no-repeat;
-	height:25px;
+	height: 25px;
 }
 .clr{
-	clear:both;
+	clear: both;
 }
+
+.messages {
+	display: none;
+}
+

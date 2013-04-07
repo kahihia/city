@@ -18,7 +18,7 @@
             setTimeout(function(){
                 popup.remove();
             }, 1000);
-        }, 1000);
+        }, 2000);
     }
 
     window.ajaxPopup = ajaxPopup;

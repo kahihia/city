@@ -17,7 +17,7 @@
                 <div class="featured-img-details">
                     <div class="featured-img-details-wrapper">
                         <div class="featured-title">
-                            <a href="/events/view/{{event.event.slug}}">{{event.event.name}}</a>
+                            <a href="{% url 'view_event_day' event.id %}">{{event.event.name}}</a>
                         </div>
                         <div class="featured-date">                                                                            
                             {{ event.start_time|date:"b d"|title }} | {{ event.event.venue.name }}                                        

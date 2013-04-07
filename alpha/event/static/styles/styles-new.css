@@ -1,0 +1,352 @@
+.content-wrapper {
+    padding: 25px 15px 0px;
+    color: #454545;
+}
+
+.content-wrapper h1 {
+    margin:0px;
+    padding:0px 0px 10px;
+    font-size:20px;
+    color:#022e52;
+}
+
+.content-wrapper .content {    
+    width: 690px;
+    border: 1px solid #ccc;
+}
+
+.content-wrapper .event-wrapper {
+    padding-left: 9px;
+    padding-top: 13px;
+    padding-right: 15px;
+    padding-bottom: 12px;
+    vertical-align: top;
+}
+
+.content-wrapper .event-wrapper .event-photo {
+    display: inline-block;
+    padding: 7px;
+    border: 1px solid #d3d3d3;
+    vertical-align: top;
+}
+
+.content-wrapper .event-wrapper .event-photo .center-cropped{
+    cursor: pointer;
+    position: relative;
+    background-position: center center;
+    width: 265px;
+    height: 265px;
+}
+
+.content-wrapper .event-wrapper .event-photo .center-cropped:after {
+    position: absolute;
+    content: "";
+    width: 80px;
+    height: 70px;
+    left: 90px;
+    top: 100px;
+    background: url("/static/images/event/loop.png") no-repeat;    
+}
+
+.content-wrapper .event-wrapper .event-photo footer {
+    font-size:1.0em;
+    color: #454545;
+    font-weight: bold;
+}
+
+.content-wrapper .event-wrapper .event-photo footer span {
+    color:#0260bb;
+}
+
+.content-wrapper .event-wrapper .event-details {
+    display: inline-block;
+    width: 345px;
+    vertical-align: top;
+    margin-left: 24px;
+}
+
+.content-wrapper .event-details .event-date-wrapper {
+    color: #0260bb;
+    margin-top: 7px;
+}
+
+.content-wrapper .event-details .event-description {
+    margin-top: 11px;
+    font-weight: bold;
+}
+
+.content-wrapper span.accented,
+.content-wrapper a.accented {
+    color: #06c;
+    font-size: 1.0em;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.content-wrapper .event-details .title-wrapper {
+    position: relative;    
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    padding-bottom: 5px;
+}
+
+.content-wrapper .event-details .event-price {
+    background: url("/static/images/ticket_icon.png") 5px 0px no-repeat;
+    color: #ff6601;
+    padding-left: 30px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.content-wrapper .event-details .event-price.short {
+    position: absolute;
+    right: 2px;
+    bottom: 5px;
+}
+
+.content-wrapper .event-details .event-actions {
+    margin-top: 12px;
+}
+
+.content-wrapper .event-details .event-actions table {
+    width: 100%;
+    border-spacing:0;
+    border-collapse:collapse;
+}
+
+.content-wrapper .event-details .event-actions td {
+    border-bottom: 1px solid #ddd;
+    width: 50%;
+    max-width: 80px;
+    height: 23px;
+    max-height: 23px;
+    min-height: 23px;
+}
+
+.content-wrapper .event-details .event-actions td a {
+    text-decoration: none;
+    padding-left: 25px;
+    color: #0168cd;
+    position: relative;
+    min-width: 30px;
+    height:100%;
+    display: inline-block;
+    padding-top: 3px;
+}
+
+.content-wrapper .event-details .event-actions td a iframe {
+    transform: scale(0.9);
+    -ms-transform: scale(0.9); 
+    -webkit-transform: scale(0.9); 
+    -o-transform: scale(0.9); 
+    -moz-transform: scale(0.9); 
+    transform-origin: top left;
+    -ms-transform-origin: top left;
+    -webkit-transform-origin: top left;
+    -moz-transform-origin: top left;
+    -webkit-transform-origin: top left;    
+}
+
+.content-wrapper .event-wrapper .map {
+    margin-top: 20px;
+}
+
+.content-wrapper .event-details .event-actions td a.action-facebook-like{
+    padding-left:0;
+}
+
+.content-wrapper .event-details .event-actions td a .fb-like {
+    left: 25px;
+    max-height: 17px;
+}
+
+.content-wrapper .event-details .event-actions td a:hover {
+    text-decoration: underline;
+}
+
+.content-wrapper .event-details .event-actions .action-buy-tickets {      
+    background: url("/static/images/buy-ticket.png") 5px center no-repeat;
+}
+
+.content-wrapper .event-details .event-actions .action-remind-me {    
+    background: url("/static/images/remind-me.png") 5px center no-repeat;
+}
+
+.content-wrapper .event-details .event-actions .action-in-the-loop {    
+    background: url("/static/images/in-the-loop.png") 5px center no-repeat;    
+}
+
+.content-wrapper .event-details .event-actions .action-facebook-like {    
+    background: url("/static/images/like.png") 5px center no-repeat;    
+}
+
+.content-wrapper .event-details .event-actions .action-tweet {    
+    background: url("/static/images/tweet.png") 5px center no-repeat;    
+}
+
+.content-wrapper .event-details .event-actions .view-site {    
+    background: url("/static/images/view-site.png") 2px center no-repeat;
+}
+
+.content-wrapper .event-wrapper .tags{
+    padding-left:25px;
+    font-size:11px;
+    color:#5dacfd;
+    background:url(/static/images/tag_icon.png) left no-repeat;
+}
+
+.content-wrapper .event-wrapper .tags a {
+    color:#5dacfd;
+    text-decoration: none;
+}
+.content-wrapper .event-wrapper .tags a:hover {
+    color: #0168cd;
+}
+
+.primary-content {
+    float:left;
+}
+
+.secondary-content {
+    float:right;
+    width: 290px;
+}
+
+.secondary-content header{
+    text-align: center;
+    color: #022e52;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 6px;
+    margin-bottom: 13px;
+}
+
+.secondary-content .content {
+    width: 290px;
+}
+
+.secondary-content-table {
+    width: 100%;
+    text-align: left;  
+    color: #454545;
+}
+
+.secondary-content-table th {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.secondary-content-table th.action,
+.secondary-content-table td.action {
+    padding-left: 0;
+    text-align: center;
+}
+
+.secondary-content-table tr:nth-child(even) {background: #f4f4f4}
+.secondary-content-table tr:nth-child(odd) {background: #fff}
+
+.secondary-content-table th,
+.secondary-content-table td {
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 1.0em;
+    border-bottom: 1px solid #ccc;
+}
+
+.secondary-content-table th a,
+.secondary-content-table td a {
+    color: #5dacfd;
+    text-decoration: none;
+}
+
+.secondary-content-table th a:hover,
+.secondary-content-table td a:hover {
+    color: #022e52;
+}
+
+.secondary-content-table-pagination {
+    color: #454545;
+    height: 47px;
+    line-height: 47px;
+    vertical-align: middle;
+    text-align: center;
+    background: #fff;
+    font-size: 1.2em;
+}
+
+.secondary-content-table-pagination .pagintation-wrapper{
+    vertical-align: middle;
+}
+
+.secondary-content-table-pagination span.prev,
+.secondary-content-table-pagination a.prev,
+.secondary-content-table-pagination span.next,
+.secondary-content-table-pagination a.next {
+    display: inline-block;
+    width: 26px;
+    height: 18px;    
+    margin:0 10px;
+    vertical-align: middle;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.secondary-content-table-pagination span.prev:hover,
+.secondary-content-table-pagination span.next:hover {
+    box-shadow: 0px 0px 5px #777;
+}
+
+.secondary-content-table-pagination a.prev:hover,
+.secondary-content-table-pagination a.next:hover {
+    box-shadow: 0px 0px 5px #3ff;
+}
+
+.secondary-content-table-pagination .page-info {
+    height: 18px;    
+    line-height: 18px;
+    vertical-align: middle;
+}
+
+.secondary-content-table-pagination span.prev {
+    background: url("/static/images/accounts/prev.png") no-repeat;
+}
+
+.secondary-content-table-pagination a.prev {
+    background: url("/static/images/accounts/prev-active.png") no-repeat;
+}
+
+.secondary-content-table-pagination span.next {
+    background: url("/static/images/accounts/next.png") no-repeat;
+}
+
+.secondary-content-table-pagination a.next {
+    background: url("/static/images/accounts/next-active.png") no-repeat;
+}
+
+a {
+    color: #5dacfd;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover{
+    color: #0066cc;
+}
+
+.primary-content p {
+    color: #454545;
+    font-size: 20px;
+}
+
+ul.errorlist {
+    padding-left: 0;
+    margin: 0;
+}
+
+ul.errorlist li {
+    list-style:none;
+    color: red;
+}
+

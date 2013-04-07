@@ -121,7 +121,7 @@
 [for=id_price_free] {
     position: relative;
     display: inline-block;
-    height: 26px;
+    height: 25px;
     -webkit-border-top-left-radius: 5px;
     -webkit-border-bottom-left-radius: 5px;
     -moz-border-radius-topleft: 5px;
@@ -131,13 +131,14 @@
     background: whiteSmoke;
     border: 1px solid #EEE;
     margin-left: 10px;
-    padding-top: 3px;
-    width: 64px;
+    padding-top: 4px;
+    padding-left: 6px;
+    width: 60px;
     z-index:1;
 }
-[for=id_price_free] input{
-    position:relative;
-    top:2px;    
+[for=id_price_free] label{    
+    top: 3px;    
+    left: -1px;
 }
 
 .top-align {

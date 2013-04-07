@@ -1,3 +1,8 @@
+import datetime
+import time
+import json
+import utils
+
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail.message import EmailMessage
@@ -9,10 +14,14 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
+from django.contrib import messages
+
+from django.middleware.csrf import get_token
 
 from django.contrib.gis.geos import Point
 from cities.models import City, Country
-from django.db.models import Q
+from django.db.models import Q, Count
+from event.filters import EventFilter
 
 from event import DEFAULT_FROM_EMAIL
 
@@ -23,20 +32,14 @@ from event.forms import generate_form
 
 from taggit.models import Tag, TaggedItem
 
-import datetime
-import time
-import json
-from django.contrib import messages
-
 from ajaxuploader.views import AjaxFileUploader
-
-from django.middleware.csrf import get_token
 
 
 def start(request):
     csrf_token = get_token(request)
     return render_to_response('import.html',
         {'csrf_token': csrf_token}, context_instance=RequestContext(request))
+
 
 import_uploader = AjaxFileUploader()
 
@@ -50,55 +53,15 @@ def redirect(request):
     return HttpResponseRedirect(reverse('search_pad'))
 
 
-from django.db.models import Count
-from event.filters import EventFilter
-
-
-def get_dates_from_request(request):
-    start_date = request.GET.get("start_date", None)
-    end_date = request.GET.get("end_date", None)
-
-    if start_date:
-        start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S")
-    else:
-        start_date = datetime.datetime.now()
-
-    if end_date:
-        end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S")
-    else:
-        end_date = datetime.datetime.now()
-
-    return start_date, end_date
-
-
-def get_times_from_request(request):
-    start_time = request.GET.get("start_time", 13)
-    end_time = request.GET.get("end_time", 20)
-    return start_time, end_time
-
-
 def search_pad(request):
-    # featured_events = Event.featured_events.all() \
-    #    .prefetch_related('single_events') \
-    #    .annotate(nearest_time=Min('single_events__start_time'))
-
-    # featured_events.query.order_by = ['nearest_time']
-
-    start_date, end_date = get_dates_from_request(request)
-    start_time, end_time = get_times_from_request(request)
+    start_date, end_date = utils.get_dates_from_request(request)
+    start_time, end_time = utils.get_times_from_request(request)
 
     featured_events = SingleEvent.featured_events.all() \
         .select_related('event')
 
     featured_events.query.order_by = ['start_time']
     featuredEventsFilter = EventFilter({}, queryset=featured_events)
-
-    # events = Event.future_events.all() \
-    #     .prefetch_related('single_events').all() \
-    #     .annotate(nearest_time=Min('single_events__start_time'))
-
-    # events.query.order_by = ['start_time']
-    # events.query.group_by = ['event_event.id']
 
     events = SingleEvent.future_events.all() \
         .select_related('event')
@@ -130,9 +93,8 @@ def search_pad(request):
 
 
 def browse(request):
-
-    start_date, end_date = get_dates_from_request(request)
-    start_time, end_time = get_times_from_request(request)
+    start_date, end_date = utils.get_dates_from_request(request)
+    start_time, end_time = utils.get_times_from_request(request)
 
     events = SingleEvent.future_events.all() \
         .select_related('event')
@@ -140,6 +102,8 @@ def browse(request):
     events.query.order_by = ['start_time']
 
     eventsFilter = EventFilter(request.GET, queryset=events)
+
+    print eventsFilter.search_tags()
 
     tags = TaggedItem.objects.filter(object_id__in=map(lambda x: x.event.id, events)) \
         .values('tag', 'tag__name') \
@@ -161,8 +125,8 @@ def view(request, slug=None, old_tags=None):
     try:
         event = Event.events.get(slug=slug)
         # TODO: add filter by IP
-        event.viewed_times = event.viewed_times + 1
-        event.save()
+        # event.viewed_times = event.viewed_times + 1
+        # event.save()
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))
 
@@ -185,6 +149,15 @@ def view(request, slug=None, old_tags=None):
                                 'opengraph': opengraph
                                 },
                               context_instance=RequestContext(request))
+
+
+def view_event_day(request, id):
+    event_day = SingleEvent.objects.get(id=id)
+
+    return render_to_response('events/event_day_description.html', {
+                                'event_day': event_day
+                            },
+                            context_instance=RequestContext(request))
 
 
 def save_venue(request):
@@ -571,3 +544,17 @@ def audit_event_approve(request, id):
 
 # def audit_single_event_update(request, id):
 #     pass
+
+def nearest_venues(request):
+    if request.method == 'GET':
+        search = request.GET.get("search", "")
+
+        venues = Venue.with_active_events.all()
+        if search:
+            venues = venues.filter(Q(name__icontains=search) | Q(city__name__icontains=search))
+        if request.location:
+            venues = venues.distance(request.location).order_by('-distance')[10]
+
+        return HttpResponse(json.dumps({
+            "venues": list(venues.values_list("id", "name", "city__name_std"))
+        }), mimetype="application/json")

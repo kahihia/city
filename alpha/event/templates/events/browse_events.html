@@ -75,10 +75,13 @@
 
                                 <ul id="searchTags">
                                     {% for tag in eventsFilter.search_tags %}
-                                        <li data-remove-url="{{ tag.remove_url }}">{{ tag.name }}</li>
-                                    {% endfor %}
+                                        <li data-remove-url="{{ tag.remove_url }}">
+                                            {{ tag.name }}
+                                        </li>
+                                    {% endfor %}                                    
                                     <span class="search-button"></span>
                                 </ul>
+
                                 
                                 {% include 'events/_browse_events_list.html' %}
                             </div>

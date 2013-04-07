@@ -19,8 +19,14 @@ import re
 import datetime
 from event import EVENT_PICTURE_DIR
 
-
 from image_cropping import ImageCropField, ImageRatioField
+
+from djorm_pgfulltext.models import SearchManagerMixIn, SearchManager
+from djorm_pgfulltext.fields import VectorField
+
+
+class SearchGeoDjangoManager(SearchManagerMixIn, models.GeoManager):
+    pass
 
 
 def picture_file_path(instance=None, filename=None):
@@ -84,7 +90,12 @@ class Event(models.Model):
     # The manager is the interface for making database query operations on all models
     # example usage: Event.events.all() will provide a list of all event objects
 
-    events = models.Manager()
+    events = SearchManager(
+        fields=('name', 'description'),
+        config='pg_catalog.english',
+        search_field='search_index',
+        auto_update_search_field=True
+    )
     # future_events = FutureManager()
     # featured_events = FeaturedManager()
     # timestamps
@@ -129,6 +140,8 @@ class Event(models.Model):
 
     viewed_times = models.IntegerField(default=0, blank=True, null=True)
 
+    search_index = VectorField()
+
     #-------------------------------------------------------------
     # django-taggit field for tags--------------------------------
     #=============================================================
@@ -170,7 +183,7 @@ class Event(models.Model):
         return SingleEvent.objects.filter(start_time__gte=datetime.datetime.now(), event=self).order_by("start_time")[0]
 
 
-class FutureManager(models.Manager):
+class FutureManager(SearchManager):
     def get_query_set(self):
         return super(FutureManager, self).get_query_set().filter(start_time__gte=datetime.datetime.now())
 
@@ -194,13 +207,34 @@ class SingleEvent(models.Model):
 
     objects = models.Manager()
 
-    future_events = FutureManager()
-    featured_events = FeaturedManager()
+    future_events = FutureManager(fields=('description'),
+        config='pg_catalog.english',
+        search_field='search_index',
+        auto_update_search_field=True)
+
+    featured_events = FeaturedManager(fields=('description'),
+        config='pg_catalog.english',
+        search_field='search_index',
+        auto_update_search_field=True)
 
     event = models.ForeignKey(Event, blank=False, null=False, related_name='single_events')
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
     end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
     description = models.TextField(null=True, blank=True)  # additional description
+    search_index = VectorField()
+
+    def event_description(self):
+        description = self.description
+        if not description:
+            description = self.event.description
+        return description
+
+
+class VenueWithActiveEventsManager(models.GeoManager):
+    def get_query_set(self):
+        ids = list(set(SingleEvent.future_events.values_list('event__venue__id', flat=True)))
+        return super(models.GeoManager, self).get_query_set().\
+            filter(id__in=ids)
 
 
 class Venue(models.Model):
@@ -211,8 +245,13 @@ class Venue(models.Model):
     country = models.ForeignKey(Country)
     objects = models.GeoManager()
 
+    with_active_events = VenueWithActiveEventsManager()
+
     def __unicode__(self):
         return "%s, %s, %s" % (self.name, self.street, self.city)
+
+    def future_events(self):
+        return SingleEvent.future_events.filter(event__venue=self.id).order_by("start_time")
 
 
 class CanadianVenue(Venue):

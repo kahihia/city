@@ -1,0 +1,45 @@
+{% block menuhead %}    
+    <script src="{{STATIC_URL}}js/event/purl.js" type="text/javascript"></script>    
+    <script src="{{STATIC_URL}}js/event/query_filters.js" type="text/javascript"></script>    
+    <script src="{{STATIC_URL}}js/event/search_by_location.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/event/full_text_search.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/event/search.js" type="text/javascript"></script>
+{% endblock %}
+
+<div class="menu-wrapper">
+    <ul class="main-menu">
+        <li class="addBorderRight"><a href="/events/browse/">Browse Events</a></li>
+        <li class="addBorderRight"><a href="{% url 'event_create' %}">Post Events</a></li>
+        <li class="addBorderRight"><a href="/events/browse/?function=top_viewed">Popular</a></li>
+        <div class="clr"></div>
+    </ul>
+    <div class="location-wrapper">
+        <form action="/events/browse" method="get" name="sform">  
+        <div class="location-label">Location : </div>
+        <div class="location-selection-wrapper">
+            <div class="location-text-box"><input type="text" name="location" class="location" value=""></div>
+            <div class="search-lists">
+                <ul>
+                    <h3>Pick a Location</h3>
+                    {%for location in nearest_locations %}
+                        <li>
+                            <a href="#" data-venue-id="{{ location.id }}">{{location.name}}, {{location.city.name_std}}</a>
+                        </li>
+                    {%endfor%}
+                </ul>
+            </div>
+        </div>
+        
+        <div class="search-label">Search For : </div>
+         <div class="search-selection-wrapper">
+            <div class="search-text-box">
+                <input class="search" type="text" name="search" value="(e.g. jazz, Zumanity, Coldplay)" onBlur="onBlur(this)" onFocus="onFocus(this)">
+                <div class="search-submission"></div>
+                <div class="clr"></div>
+            </div>
+        </div>
+        </form>
+        <div class="clr"></div>
+    </div>
+    <div class="clr"></div>
+</div>

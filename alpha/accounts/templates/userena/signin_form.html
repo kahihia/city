@@ -1,0 +1,57 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block title %}{% trans "Signin" %}{% endblock %}
+
+{% block content %}
+    <h1>
+        {% trans "Signin" %}
+    </h1>
+    <div class="content account-options-wrapper">
+        <div class="main-content account-options">
+            <form action="" method="post">
+                {% csrf_token %}            
+                {{ form.non_field_errors }}
+                <div class="options options-userena">
+                    <table>                                
+                        {% for field in form %}
+                            <tr>
+                                <td colspan=2 >
+                                    {{ field.errors }}
+                                </td>
+                            </tr>
+                            <tr>
+                                {% if field.name == 'remember_me' %}
+                                    <td colspan=2 class="first">
+                                        {{ field.label }}                            
+                                        <div class="checkbox">
+                                            {{ field }}
+                                            <label for="id_{{ field.name }}"></label>
+                                        </div>
+                                    </td>                            
+                                {% else %}
+                                    <td class="first">
+                                        {{ field.label_tag }}
+                                    </td>
+                                    <td>
+                                        {{ field }}
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </table>                    
+                    <p class="forgot-password">
+                        <a href="{% url 'userena_password_reset' %}" title="{% trans 'Forgot your password?' %}">
+                            {% trans "Forgot your password?" %}
+                        </a>
+                    </p>
+                    {% if next %}
+                        <input type="hidden" name="next" value="{{ next }}" />
+                    {% endif %}
+                </div>
+                <input type="submit" class="submit" value="{% trans "Signin" %}" />
+            </form>
+        </div>
+    </div>
+{% endblock %}

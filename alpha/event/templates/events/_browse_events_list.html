@@ -19,7 +19,7 @@
             </div>
             <div class="entry-details-wrapper">                                  
                 <div class="title">
-                    <a href="/events/view/{{event.event.slug}}/">
+                    <a href="{% url 'view_event_day' event.id %}">
                         {{event.event.name}}&nbsp;
                     </a>                    
                 </div>
@@ -82,7 +82,7 @@
                                 </div>                                
                             </div>
                         </div>                        
-                        <div href="http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}/" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}/events/view/{{event.event.slug}}/" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>
+                        <div href="http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event.id %}" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event.id %}" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@
             {% get_pages %} 
 
             <span class="step-links">
-                {% if not pages.current.is_first %}                
+                {% if not pages.current.is_first %}                    
                     <a href="{{ pages.previous.url }}">
                         <img src="{{STATIC_URL}}images/entry-prev.png">
                     </a>

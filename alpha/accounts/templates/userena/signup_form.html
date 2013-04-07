@@ -1,0 +1,36 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+<h1>{% trans "Signup" %}</h1>
+<div class="content account-options-wrapper">
+    <div class="main-content account-options">
+        <form action="" method="post">
+            {% csrf_token %}            
+            {{ form.non_field_errors }}
+            <div class="options options-userena">
+                <table>                                
+                    {% for field in form %}
+                        <tr>
+                            <td colspan=2 >
+                                {{ field.errors }}
+                            </td>
+                        </tr>
+                        <tr>                            
+                            <td class="first">
+                                {{ field.label_tag }}
+                            </td>
+                            <td>
+                                {{ field }}
+                            </td>                            
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>          
+            <input type="submit" class="submit" value="{% trans "Signup"%}" />
+        </form>
+    </div>
+</div>
+{% endblock %}
