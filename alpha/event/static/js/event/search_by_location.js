@@ -44,8 +44,8 @@
             _.forEach(data.venues, function(venue){
                 var link, li;
 
-                link = $("<a href='javascript:void;'>").html(venue[1] + ", " + venue[2]);
-                link.attr("data-venue-id", venue[0]);
+                link = $("<a href='javascript:void;'>").html(venue.name + ", " + venue.city);
+                link.attr("data-venue-id", venue.id);
 
                 li = $("<li>").append(link);
 

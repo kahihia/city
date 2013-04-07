@@ -230,13 +230,6 @@ class SingleEvent(models.Model):
         return description
 
 
-class VenueWithActiveEventsManager(models.GeoManager):
-    def get_query_set(self):
-        ids = list(set(SingleEvent.future_events.values_list('event__venue__id', flat=True)))
-        return super(models.GeoManager, self).get_query_set().\
-            filter(id__in=ids)
-
-
 class Venue(models.Model):
     name = models.CharField(max_length=250, default='Default Venue')
     street = models.CharField(max_length=250, blank=True)
@@ -245,13 +238,16 @@ class Venue(models.Model):
     country = models.ForeignKey(Country)
     objects = models.GeoManager()
 
-    with_active_events = VenueWithActiveEventsManager()
-
     def __unicode__(self):
         return "%s, %s, %s" % (self.name, self.street, self.city)
 
     def future_events(self):
         return SingleEvent.future_events.filter(event__venue=self.id).order_by("start_time")
+
+    @staticmethod
+    def with_active_events():
+        ids = list(set(SingleEvent.future_events.values_list('event__venue__id', flat=True)))
+        return Venue.objects.filter(id__in=ids)
 
 
 class CanadianVenue(Venue):

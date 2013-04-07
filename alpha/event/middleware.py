@@ -25,7 +25,8 @@ def get_location(request):
     if not hasattr(request, '_cached_location'):
         g = GeoIP()
         ip = get_real_ip(request)
-        request._cached_location = g.lat_lon(ip);
+        ip = "31.43.27.44"
+        request._cached_location = g.lat_lon(ip)
     return request._cached_location
 
 

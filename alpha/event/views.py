@@ -34,6 +34,8 @@ from taggit.models import Tag, TaggedItem
 
 from ajaxuploader.views import AjaxFileUploader
 
+from django.contrib.gis.geos import Point
+
 
 def start(request):
     csrf_token = get_token(request)
@@ -549,12 +551,16 @@ def nearest_venues(request):
     if request.method == 'GET':
         search = request.GET.get("search", "")
 
-        venues = Venue.with_active_events.all()
+        venues = Venue.with_active_events()
         if search:
             venues = venues.filter(Q(name__icontains=search) | Q(city__name__icontains=search))
         if request.location:
-            venues = venues.distance(request.location).order_by('-distance')[10]
+            venues = venues.distance(Point(request.location)).order_by('-distance')[:10]
 
         return HttpResponse(json.dumps({
-            "venues": list(venues.values_list("id", "name", "city__name_std"))
+            "venues": [{
+                "id": venue.id,
+                "name": venue.name,
+                "city": venue.city.name_std
+            } for venue in venues.select_related("city")]
         }), mimetype="application/json")
