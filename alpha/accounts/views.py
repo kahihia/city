@@ -112,7 +112,7 @@ def remind_preview(request):
             "events": events,
             "similar_events": similar_events,
             "STATIC_URL": "/static/",
-            "site": "http://localhost:8000"
+            "site": "http://dev.cityfusion.ca"
         })
 
     msg = EmailMessage(subject,
@@ -126,7 +126,7 @@ def remind_preview(request):
         "featured_events": featured_events,
         "events": events,
         "similar_events": similar_events,
-        "site": "http://localhost:8000s"
+        "site": "http://dev.cityfusion.ca"
     }, context_instance=RequestContext(request))
 
 
