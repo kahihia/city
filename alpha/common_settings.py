@@ -1,4 +1,6 @@
 import os.path
+import djcelery
+djcelery.setup_loader()
 # Django settings for alpha project.
 
 DEBUG = True
@@ -155,6 +157,7 @@ INSTALLED_APPS = (
     'accounts',
     'userena',
     'django_facebook',
+    'djcelery',
 )
 
 # A sample logging configuration. The only tangible logging performed
@@ -210,13 +213,15 @@ EVENT_DEFAULT_PICTURE_URL = STATIC_URL + 'img/default.gif'
 #                      filter), or Image.BILINEAR (linear
 #                      interpolation in a 2x2 environment)
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 EVENT_EMAIL_SITE = 'dev.cityfusion.ca'
 #instead of taking the hustles of configuring a simple mail server, use an established one instead
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'arlusishmael@gmail.com'
-EMAIL_HOST_PASSWORD = '19553b2008'
+EMAIL_HOST_USER = 'cityfusion.smtp@gmail.com'
+EMAIL_HOST_PASSWORD = 'forfusion'
 EMAIL_PORT = 587
 
 CITIES_FILES = {
@@ -248,8 +253,6 @@ AUTHENTICATION_BACKENDS = (
     'django_facebook.auth_backends.FacebookBackend',
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 LOGIN_REDIRECT_URL = '/accounts/%(username)s/'
 LOGIN_URL = '/accounts/signin/'
 LOGOUT_URL = '/accounts/signout/'
@@ -263,3 +266,24 @@ FACEBOOK_APP_ID = "241160805895511"
 FACEBOOK_APP_SECRET = "aacc6191a48ff2c251f6e69b1d4ba1c1"
 # FACEBOOK_REGISTRATION_BACKEND = 'django_facebook.registration_backends.UserenaBackend'
 AUTH_PROFILE_MODULE = 'accounts.Account'
+
+BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+
+
+from datetime import timedelta
+from celery.schedules import crontab
+
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+
+CELERYBEAT_SCHEDULE = {
+    'reminding-about-events-every-5-minutes': {
+        'task': 'accounts.tasks.remind_accounts_about_events',
+        'schedule': timedelta(seconds=30)
+    },
+    'reminding-about-event-every-day': {
+        'task': 'accounts.tasks.remind_accounts_about_events_on_week_day',
+        'schedule': crontab(hour=6, minute=0),
+    },
+}
+
+CELERY_TIMEZONE = 'UTC'

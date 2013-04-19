@@ -34,8 +34,6 @@ from taggit.models import Tag, TaggedItem
 
 from ajaxuploader.views import AjaxFileUploader
 
-from django.contrib.gis.geos import Point
-
 
 def start(request):
     csrf_token = get_token(request)
@@ -44,11 +42,6 @@ def start(request):
 
 
 import_uploader = AjaxFileUploader()
-
-#Email params -Arlus
-FROMADDR = "arlusishmael@gmail.com"
-LOGIN = FROMADDR
-PASSWORD = "19553b2008"
 
 
 def redirect(request):

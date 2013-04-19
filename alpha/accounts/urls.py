@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls.defaults import patterns, url
 from accounts import views as accounts
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -25,4 +25,6 @@ urlpatterns = patterns('',
         accounts.in_the_loop_tags,
         name="in_the_loop_tags"
     ),
+    url(r'^remind-email-preview/$', accounts.remind_preview, name="remind_preview"),
+    url(r'^in-the-loop-email-preview/$', accounts.in_the_loop_preview)
 )

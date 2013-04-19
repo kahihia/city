@@ -1,3 +1,5 @@
+import datetime
+from datetime import timedelta
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from userena.models import UserenaBaseProfile
@@ -10,7 +12,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from django_facebook.models import FacebookProfileModel
 
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, m2m_changed
 
 DAYS_OF_WEEK = (
     ('0', 'Monday'),
@@ -90,4 +92,73 @@ def create_facebook_profile(sender, instance, created, **kwargs):
     if created:
         Account.objects.create(user=instance)
 
+
+def add_event_days_to_schedule(account, event_days):
+    for event_day in event_days:
+        if account.reminder_days_before_event:
+            notification_time = event_day.start_time - timedelta(days=int(account.reminder_days_before_event))
+            reminding = AccountReminding(
+                account=account,
+                event_day=event_day,
+                notification_time=notification_time,
+                notification_type='DAYS_BEFORE_EVENT'
+            )
+            reminding.save()
+        if account.reminder_hours_before_event:
+            notification_time = event_day.start_time - timedelta(hours=int(account.reminder_hours_before_event))
+            reminding = AccountReminding(
+                account=account,
+                event_day=event_day,
+                notification_time=notification_time,
+                notification_type='HOURS_BEFORE_EVENT'
+            )
+            reminding.save()
+
+
+def sync_schedule_after_reminder_events_was_modified(sender, **kwargs):
+    if kwargs['action'] == 'post_add':
+        event_days = SingleEvent.objects.filter(id__in=kwargs["pk_set"])
+
+        add_event_days_to_schedule(kwargs['instance'], event_days)
+
+    if kwargs['action'] == 'post_remove':
+        AccountReminding.hots.filter(event_day__id__in=kwargs["pk_set"]).delete()
+
+
+def sync_schedule_after_reminder_settings_was_changed(sender, instance, created, **kwargs):
+    RemindingManager.hots.filter(account_id=instance.id).delete()
+    add_event_days_to_schedule(instance, instance.reminder_events)
+
+
 post_save.connect(create_facebook_profile, sender=User)
+post_save.connect(sync_schedule_after_reminder_settings_was_changed, sender=User)
+
+m2m_changed.connect(sync_schedule_after_reminder_events_was_modified, sender=Account.reminder_events.through)
+
+
+class RemindingManager(models.Manager):
+    def get_query_set(self):
+        return super(RemindingManager, self).get_query_set().filter(notification_time__gte=datetime.datetime.now(), done=False)
+
+
+NOTIFICATION_TYPES = (
+    ('DAYS_BEFORE_EVENT', 'Days before event'),
+    ('HOURS_BEFORE_EVENT', 'Hours before event'),
+    ('ON_WEEK_DAY', 'On week day'),
+)
+
+
+class AccountReminding(models.Model):
+    account = models.ForeignKey(Account)
+    event_day = models.ForeignKey('event.SingleEvent')
+    notification_time = models.DateTimeField('notification time', auto_now=False, auto_now_add=False)
+    notification_type = models.CharField(max_length=25, choices=NOTIFICATION_TYPES)
+    done = models.BooleanField(default=False)
+
+    hots = RemindingManager()
+
+    objects = models.Manager()
+
+    def processed(self):
+        self.done = True
+        self.save()
