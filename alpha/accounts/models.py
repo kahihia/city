@@ -126,12 +126,12 @@ def sync_schedule_after_reminder_events_was_modified(sender, **kwargs):
 
 
 def sync_schedule_after_reminder_settings_was_changed(sender, instance, created, **kwargs):
-    RemindingManager.hots.filter(account_id=instance.id).delete()
+    AccountReminding.hots.filter(account_id=instance.id).delete()
     add_event_days_to_schedule(instance, instance.reminder_events)
 
 
 post_save.connect(create_facebook_profile, sender=User)
-post_save.connect(sync_schedule_after_reminder_settings_was_changed, sender=User)
+post_save.connect(sync_schedule_after_reminder_settings_was_changed, sender=Account)
 
 m2m_changed.connect(sync_schedule_after_reminder_events_was_modified, sender=Account.reminder_events.through)
 
