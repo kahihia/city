@@ -4,9 +4,9 @@
 
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <style type="text/css">
-    .appleLinksWhite a {color:#ffffff;}
-    .appleLinksBlack a {color:#000000;}
-    .appleLinksBlue a {color:#247cc3;}
+    .appleLinksWhite a {color:#ffffff; text-decoration: none;}
+    .appleLinksBlack a {color:#000000; text-decoration: none;}
+    .appleLinksBlue a {color:#247cc3; text-decoration: none;}
 </style>
 
 <!-- Header -->
@@ -75,96 +75,105 @@
                                 </td>
                                 <!-- List of featured events -->
                                 {% for event in featured_events %}
-                                    <td style="border: 5px solid #ffffff">
-                                        <table width="147px" height="147px" cellpadding="0" cellapscing="0" background="{% if event.event.picture %}{{site}}{% cropped_thumbnail event.event "cropping" width=147 %}{% else %}{{site}}{{STATIC_URL}}images/default-event-147x147.jpg{% endif %}" style="border-collapse:collapse;">
-                                            <tr><td></td></tr>
-                                            <tr>
-                                                <td height="34">
-                                                    <table width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;"  background="{{site}}{{STATIC_URL}}images/featured-img-details-bg.png">
-                                                        <tr>
-                                                            <td colspan="3" height="5" width="147">
-                                                                <div style="line-height:0;">
-                                                                    <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="147" height="5" alt="" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td width="4" height="15">
-                                                                <div style="line-height:0;">
-                                                                    <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="4" height="15" alt="" />
-                                                                </div>
-                                                            </td>
+                                    <td height="147" style="border: 5px solid #ffffff" background="{% if event.event.picture %}{{site}}{% cropped_thumbnail event.event "cropping" width=147 %}{% else %}{{site}}{{STATIC_URL}}images/default-event-147x147.jpg{% endif %}" valign="top">
+                                        <!--[if gte mso 9]>
+                                            <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:147px;height:147px;">
+                                            <v:fill type="tile" src="{% if event.event.picture %}{{site}}{% cropped_thumbnail event.event "cropping" width=147 %}{% else %}{{site}}{{STATIC_URL}}images/default-event-147x147.jpg{% endif %}" color="#f6f6f6" />
+                                            <v:textbox inset="0,0,0,0">
+                                        <![endif]-->
+                                        <div>
+                                            <table width="147px" height="147px" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+                                                <tr><td></td></tr>
+                                                <tr>
+                                                    <td height="34">
+                                                        <table width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;"  background="{{site}}{{STATIC_URL}}images/featured-img-details-bg.png">
+                                                            <tr>
+                                                                <td colspan="3" height="5" width="147">
+                                                                    <div style="line-height:0;">
+                                                                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="147" height="5" alt="" />
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td width="4" height="15">
+                                                                    <div style="line-height:0;">
+                                                                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="4" height="15" alt="" />
+                                                                    </div>
+                                                                </td>
 
-                                                            <td width="100%" height="10" align="left">
-                                                                <span stye="color: #eb8a19; font-size: 10px; font-weight: bold; font-family: sans-serif;">
-                                                                    <a target="_blank" href="{% url 'view_event_day' event.id %}" style="color: #eb8a19; font-size: 10px; font-weight: bold; text-decoration: none; font-family: sans-serif; white-space: nowrap; overflow:hidden; text-overflow: ellipsis;">
-                                                                        {{ event.event.name|truncatesmart:25 }}
-                                                                    </a>
-                                                                </span>
-                                                            </td>
+                                                                <td width="100%" height="10" align="left">
+                                                                    <span stye="color: #eb8a19; font-size: 10px; font-weight: bold; font-family: sans-serif;">
+                                                                        <a target="_blank" href="{% url 'view_event_day' event.id %}" style="color: #eb8a19; font-size: 10px; font-weight: bold; text-decoration: none; font-family: sans-serif; white-space: nowrap; overflow:hidden; text-overflow: ellipsis;">
+                                                                            {{ event.event.name|truncatesmart:25 }}
+                                                                        </a>
+                                                                    </span>
+                                                                </td>
 
-                                                            <td width="4">
-                                                                <div style="line-height:0;">
-                                                                    <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="4" height="10" alt="" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
+                                                                <td width="4">
+                                                                    <div style="line-height:0;">
+                                                                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="4" height="10" alt="" />
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
 
-                                                        <tr>
-                                                            <td width="4" height="15">
-                                                                <div style="line-height:0;">
-                                                                    <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="4" height="15" alt="" />
-                                                                </div>
-                                                            </td>
+                                                            <tr>
+                                                                <td width="4" height="15">
+                                                                    <div style="line-height:0;">
+                                                                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="4" height="15" alt="" />
+                                                                    </div>
+                                                                </td>
 
-                                                            <td width="100%" height="10" align="left">
-                                                                <span class="appleLinksWhite" style="color: #ffffff; font-size: 10px; font-weight: bold; font-family: sans-serif; white-space: nowrap; overflow:hidden; text-overflow: ellipsis;">
-                                                                    {{ event.start_time|date:"b d"|title }} | {{ event.event.venue.name|truncatesmart:13 }}
-                                                                </span>
-                                                            </td>
+                                                                <td width="100%" height="10" align="left">
+                                                                    <span class="appleLinksWhite" style="color: #ffffff; font-size: 10px; font-weight: bold; font-family: sans-serif; white-space: nowrap; overflow:hidden; text-overflow: ellipsis;">
+                                                                        {{ event.start_time|date:"b d"|title }} | {{ event.event.venue.name|truncatesmart:13 }}
+                                                                    </span>
+                                                                </td>
 
-                                                            <td width="4">
-                                                                <div style="line-height:0;">
-                                                                    <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="4" height="10" alt="" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
+                                                                <td width="4">
+                                                                    <div style="line-height:0;">
+                                                                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="4" height="10" alt="" />
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
 
-                                                        <tr>
-                                                            <td width="4" height="15">
-                                                                <div style="line-height:0;">
-                                                                    <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="4" height="15" alt="" />
-                                                                </div>
-                                                            </td>
+                                                            <tr>
+                                                                <td width="4" height="15">
+                                                                    <div style="line-height:0;">
+                                                                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="4" height="15" alt="" />
+                                                                    </div>
+                                                                </td>
 
-                                                            <td width="100%" height="10" align="left">
-                                                                <span stye="color: #247cc3; font-size: 10px; font-weight: bold; font-family: sans-serif;">
-                                                                    <a target="_blank" href="{% url 'view_event_day' event.id %}" style="color: #247cc3; font-size: 10px; font-weight: bold; text-decoration: none; font-family: sans-serif;">
-                                                                        event details
-                                                                    </a>
-                                                                </span>
-                                                            </td>
+                                                                <td width="100%" height="10" align="left">
+                                                                    <span stye="color: #247cc3; font-size: 10px; font-weight: bold; font-family: sans-serif;">
+                                                                        <a target="_blank" href="{% url 'view_event_day' event.id %}" style="color: #247cc3; font-size: 10px; font-weight: bold; text-decoration: none; font-family: sans-serif;">
+                                                                            event details
+                                                                        </a>
+                                                                    </span>
+                                                                </td>
 
-                                                            <td width="4">
-                                                                <div style="line-height:0;">
-                                                                    <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="4" height="10" alt="" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
+                                                                <td width="4">
+                                                                    <div style="line-height:0;">
+                                                                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="4" height="10" alt="" />
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
 
-                                                        <tr>
-                                                            <td colspan="3" height="5">
-                                                                <div style="line-height:0;">
-                                                                    <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="5" alt="" />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            
-
-                                        </table>
+                                                            <tr>
+                                                                <td colspan="3" height="5">
+                                                                    <div style="line-height:0;">
+                                                                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="5" alt="" />
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <!--[if gte mso 9]>
+                                            </v:textbox>
+                                            </v:rect>
+                                        <![endif]-->
                                     </td>
                                     <td width="10" align="left">
                                         <div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div>
