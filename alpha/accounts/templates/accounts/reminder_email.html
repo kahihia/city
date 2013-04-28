@@ -11,24 +11,26 @@
 
 <!-- Header -->
 <table bgcolor="#022e52" width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">    
-    <tr><td align="center" height="120px">
-        <table width="670px" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
-            <tr>
-                <td align="left">
-                    <img alt="" style="border: none;" src="{{site}}{{STATIC_URL}}images/logo.png">
-                </td>
-            </tr>
-        </table>
-    </td></tr>    
+    <tr>
+        <td align="left" height="120">
+            <table width="670" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+                <tr>
+                    <td align="left">
+                        <img alt="" style="border: none;" src="{{site}}{{STATIC_URL}}images/logo.png">
+                    </td>
+                </tr>
+            </table>    
+        </td>
+    </tr>
 </table>
 
 <!-- Content -->
 <table bgcolor="#e3e3e3" width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
     <tr>
         <td align="center">
-            <table bgcolor="#ffffff" width="670px" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+            <table bgcolor="#ffffff" width="670" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
                 <tr>
-                    <td height="10">
+                    <td height="10" colspan="3">
                         <div style="line-height:0;">
                             <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" style="border: none;" />
                         </div>
@@ -41,9 +43,9 @@
                     </td>
 
                     <td>                
-                        <table bgcolor="#022e52" width="670px" cellpadding="0" cellapscing="0" style="border-collapse:collapse; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px;">
+                        <table bgcolor="#022e52" width="670" cellpadding="0" cellapscing="0" style="border-collapse:collapse; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px;">
                             <tr>
-                                <td height="10">
+                                <td height="10" colspan="9">
                                     <div style="line-height:0;">
                                         <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" />
                                     </div>
@@ -83,10 +85,17 @@
                                         <![endif]-->
                                         <div>
                                             <table width="147px" height="147px" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
-                                                <tr><td></td></tr>
                                                 <tr>
-                                                    <td height="34">
-                                                        <table width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;"  background="{{site}}{{STATIC_URL}}images/featured-img-details-bg.png">
+                                                    <td height="100%"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td height="34" background="{{site}}{{STATIC_URL}}images/featured-img-details-bg.png">
+                                                        <!--[if gte mso 9]>
+                                                            <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:147px;height:147px;">
+                                                            <v:fill type="tile" src="{{site}}{{STATIC_URL}}images/featured-img-details-bg.png" color="#f6f6f6" />
+                                                            <v:textbox inset="0,0,0,0">
+                                                        <![endif]-->
+                                                        <table width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;" >
                                                             <tr>
                                                                 <td colspan="3" height="5" width="147">
                                                                     <div style="line-height:0;">
@@ -166,6 +175,10 @@
                                                                 </td>
                                                             </tr>
                                                         </table>
+                                                        <!--[if gte mso 9]>
+                                                            </v:textbox>
+                                                            </v:rect>
+                                                        <![endif]-->
                                                     </td>
                                                 </tr>
                                             </table>
@@ -246,10 +259,7 @@
                                                                     <td width="60" valign="top">
                                                                         <div style="border: 1px solid #cccccc;">
                                                                             <div style="border: 4px solid #ffffff;">
-                                                                                <table width="100%" cellpadding="0" cellapscing="0" background="{% if event.event.picture %}{{site}}{% cropped_thumbnail event.event "cropping" width=61 %}{% else %}{{site}}{{STATIC_URL}}images/default-event-61x61.jpg{% endif %}" style="border-collapse:collapse;">
-                                                                                    <tr><td width="60"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="60" height="60" alt="" /></div></td></tr>
-
-                                                                                </table>
+                                                                                <img src="{% if event.event.picture %}{{site}}{% cropped_thumbnail event.event "cropping" width=61 %}{% else %}{{site}}{{STATIC_URL}}images/default-event-61x61.jpg{% endif %}" />
                                                                             </div>
                                                                         </div>                                                                    
                                                                     </td>
@@ -403,10 +413,10 @@
 <!-- Footer -->
 <table bgcolor="#022e52" width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">    
     <tr>
-        <td align="center" height="55px">
-            <table width="670px" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+        <td align="center" height="55">
+            <table width="670" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
                 <tr>
-                    <td>
+                    <td align="left">
                         <span style="color:#ffffff; font-size: 14px; font-family: sans-serif;">
                             © 2012 Cityfusion
                         </span>
