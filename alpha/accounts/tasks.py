@@ -1,14 +1,7 @@
 from datetime import datetime, timedelta
 from celery import task
-from utils import remind_account_about_events, create_reminding_schedule_for_account
+from utils import remind_account_about_events
 from models import AccountReminding, Account
-
-
-@task
-def refresh_reminder_schedule_for_account(account):
-    "When user change account reminder settings"
-    AccountReminding.hots.filter(account_id=account.id).delete()
-    create_reminding_schedule_for_account(account)
 
 
 @task

@@ -5,7 +5,7 @@ from event.models import SingleEvent, Event
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 
 from accounts.forms import ReminderSettingsForm, InTheLoopSettingsForm
@@ -17,6 +17,8 @@ from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
 
 from django.core.mail.message import EmailMessage
+
+from utils import remind_account_about_events
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 20)
 
@@ -97,37 +99,12 @@ def in_the_loop_tags(request):
 
 
 def remind_preview(request):
-    featured_events = SingleEvent.featured_events.all().select_related('event')[:4]
+    message = remind_account_about_events(
+        Account.objects.get(user__email="jaromudr@gmail.com"),
+        SingleEvent.future_events.all().select_related('event')[0:1]
+    )
 
-    events = SingleEvent.future_events.all() \
-        .select_related('event')[0:5]
-
-    similar_events = SingleEvent.future_events.all() \
-        .select_related('event')[0:10]
-
-    subject = "Remind from cityfusion for test"
-
-    message = render_to_string('accounts/reminder_email.html', {
-            "featured_events": featured_events,
-            "events": events,
-            "similar_events": similar_events,
-            "STATIC_URL": "/static/",
-            "site": "http://dev.cityfusion.ca"
-        })
-
-    msg = EmailMessage(subject,
-               message,
-               "jaromudr@gmail.com",
-               ["jaromudr@gmail.com", "vom@qapint.com", "jaromudr@mail.ru"])
-    msg.content_subtype = 'html'
-    msg.send()
-
-    return render_to_response('accounts/reminder_email.html', {
-        "featured_events": featured_events,
-        "events": events,
-        "similar_events": similar_events,
-        "site": "http://dev.cityfusion.ca"
-    }, context_instance=RequestContext(request))
+    return HttpResponse(message)
 
 
 def in_the_loop_preview(request):

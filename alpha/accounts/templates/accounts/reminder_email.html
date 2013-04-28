@@ -3,13 +3,18 @@
 {% load date_formatting %}
 
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<style type="text/css">
+    .appleLinksWhite a {color:#ffffff;}
+    .appleLinksBlack a {color:#000000;}
+    .appleLinksBlue a {color:#247cc3;}
+</style>
 
 <!-- Header -->
 <table bgcolor="#022e52" width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">    
     <tr><td align="center" height="120px">
         <table width="670px" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
             <tr>
-                <td>
+                <td align="left">
                     <img alt="" style="border: none;" src="{{site}}{{STATIC_URL}}images/logo.png">
                 </td>
             </tr>
@@ -50,7 +55,7 @@
                                         <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" />
                                     </div>
                                 </td>
-                                <td colspan="8">
+                                <td colspan="8" align="left">
                                     <span style="color:#ffffff; font-size: 20px; font-weight: bold;">Featured Events</span>
                                 </td>
                             </tr>
@@ -77,9 +82,9 @@
                                                 <td height="34">
                                                     <table width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;"  background="{{site}}{{STATIC_URL}}images/featured-img-details-bg.png">
                                                         <tr>
-                                                            <td colspan="3" height="5">
+                                                            <td colspan="3" height="5" width="147">
                                                                 <div style="line-height:0;">
-                                                                    <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="5" alt="" />
+                                                                    <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="147" height="5" alt="" />
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -90,9 +95,9 @@
                                                                 </div>
                                                             </td>
 
-                                                            <td width="42" height="10">
+                                                            <td width="100%" height="10" align="left">
                                                                 <span stye="color: #eb8a19; font-size: 10px; font-weight: bold; font-family: sans-serif;">
-                                                                    <a target="_blank" href="{% url 'view_event_day' event.id %}" style="color: #eb8a19; font-size: 10px; font-weight: bold; text-decoration: none; font-family: sans-serif;">
+                                                                    <a target="_blank" href="{% url 'view_event_day' event.id %}" style="color: #eb8a19; font-size: 10px; font-weight: bold; text-decoration: none; font-family: sans-serif; white-space: nowrap; overflow:hidden; text-overflow: ellipsis;">
                                                                         {{ event.event.name|truncatesmart:25 }}
                                                                     </a>
                                                                 </span>
@@ -112,8 +117,8 @@
                                                                 </div>
                                                             </td>
 
-                                                            <td height="10">
-                                                                <span style="color: #ffffff; font-size: 10px; font-weight: bold; font-family: sans-serif;">
+                                                            <td width="100%" height="10" align="left">
+                                                                <span class="appleLinksWhite" style="color: #ffffff; font-size: 10px; font-weight: bold; font-family: sans-serif; white-space: nowrap; overflow:hidden; text-overflow: ellipsis;">
                                                                     {{ event.start_time|date:"b d"|title }} | {{ event.event.venue.name|truncatesmart:13 }}
                                                                 </span>
                                                             </td>
@@ -132,7 +137,7 @@
                                                                 </div>
                                                             </td>
 
-                                                            <td height="10">
+                                                            <td width="100%" height="10" align="left">
                                                                 <span stye="color: #247cc3; font-size: 10px; font-weight: bold; font-family: sans-serif;">
                                                                     <a target="_blank" href="{% url 'view_event_day' event.id %}" style="color: #247cc3; font-size: 10px; font-weight: bold; text-decoration: none; font-family: sans-serif;">
                                                                         event details
@@ -161,10 +166,12 @@
 
                                         </table>
                                     </td>
-                                    <td width="10">
+                                    <td width="10" align="left">
                                         <div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div>
                                     </td>
-                                {% endfor %}                            
+                                {% endfor %}
+                                <!-- Space if we have less that 4 items -->
+                                <td width="100%"></td>
                             </tr>
 
                             <tr>
@@ -199,7 +206,7 @@
                     <td>
                         <table width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
                             <tr>
-                                <td collspan="3">
+                                <td collspan="3" align="left">
                                     <span style="font-size:20px; font-weight: bold; color: #022e52; font-family: sans-serif;">
                                         Email Reminders
                                     </span>
@@ -242,7 +249,7 @@
                                                                         <div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="12" height="10" alt="" /></div>
                                                                     </td>
 
-                                                                    <td width="325" valign="top">
+                                                                    <td width="325" valign="top" align="left">
                                                                         <div>
                                                                             <span style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif;">
                                                                                 <a target="_blank" href="{% url 'view_event_day' event.id %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none;">
@@ -252,13 +259,13 @@
                                                                         </div>
 
                                                                         <div>
-                                                                            <span style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|date:"l, F d, Y"}}</span>
-                                                                            <span style="color: #cdcdcd; font-size: 12px; font-family: sans-serif;">|</span>
-                                                                            <span style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|just_time}} - {{event.end_time|just_time}}</span>
+                                                                            <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|date:"l, F d, Y"}}</span>
+                                                                            <span class="appleLinksBlue" style="color: #cdcdcd; font-size: 12px; font-family: sans-serif;">|</span>
+                                                                            <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|just_time}} - {{event.end_time|just_time}}</span>
                                                                         </div>                                                                    
 
                                                                         <div>
-                                                                            <span style="color: #000000; font-size: 12px; font-weight: bold; font-family: sans-serif;">
+                                                                            <span class="appleLinksBlack" style="color: #000000; font-size: 12px; font-weight: bold; font-family: sans-serif;">
                                                                                 {{ event.event.venue.name }}, {{ event.event.venue.street }}, {{ event.event.venue.city.name_std }}
                                                                             </span>
                                                                         </div>                                                                    
@@ -285,7 +292,7 @@
 
                                         <tr>
                                             <td width="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td>
-                                            <td>
+                                            <td align="left">
                                                 <span style="font-size: 16px; font-weight: bold; color: #022e52; font-family: sans-serif;">
                                                     Similar Events
                                                 </span>
@@ -303,8 +310,8 @@
                                                             <td>
                                                                 <div style="border: 1px solid #cccccc;">
                                                                     <div style="border: 5px solid #ffffff;">
-                                                                        <a target="_blank" href="{% url 'view_event_day' event.id %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none; border: none; display: block; line-height:0px;">
-                                                                            <img src="{% if event.event.picture %}{{site}}{% cropped_thumbnail event.event "cropping" width=61 %}{% else %}{{site}}{{STATIC_URL}}images/default-event-61x61.jpg{% endif %}"  style="border-collapse:collapse; border: none;" />
+                                                                        <a target="_blank" href="{% url 'view_event_day' event.next_day.id %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none; border: none; display: block; line-height:0px;">
+                                                                            <img src="{% if event.picture %}{{site}}{% cropped_thumbnail event "cropping" width=61 %}{% else %}{{site}}{{STATIC_URL}}images/default-event-61x61.jpg{% endif %}"  style="border-collapse:collapse; border: none;" />
                                                                         </a>
                                                                         
                                                                     </div>
@@ -321,7 +328,9 @@
                                                         
                                                             {% endif %}
                                                         {% endfor %}
-                                                    </tr>                                                
+                                                        <td width="100%"></td>
+                                                    </tr>
+                                                    <tr><td height="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td></tr>
                                                 </table></div>
                                             </td>
                                             <td width="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td>
@@ -362,7 +371,7 @@
                             </tr>
 
                             <tr>
-                                <td>
+                                <td align="left">
                                     <img src="{{site}}{{STATIC_URL}}images/adds/adds_472x58.png">
                                 </td>
                             </tr>
