@@ -98,8 +98,6 @@ def browse(request):
 
     eventsFilter = EventFilter(request.GET, queryset=events)
 
-    print eventsFilter.search_tags()
-
     tags = TaggedItem.objects.filter(object_id__in=map(lambda x: x.event.id, events)) \
         .values('tag', 'tag__name') \
         .annotate(count=Count('id')) \

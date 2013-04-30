@@ -32,7 +32,6 @@
         this.baseUrlQuery = this.jumpLink.data("base-url-query");
 
         this.bindChangeLinkEvents();
-        this.changeLink();
 
         this.timeJumpToDateCheckbox = $("#timeJumpToDateCheckbox");
         this.dateJumpToDateCheckbox = $("#dateJumpToDateCheckbox");
@@ -52,7 +51,10 @@
                 $(".date-row .inline, .date-row  .inline input").attr("disabled", true);
             }
         });
-        
+
+        this.jumpLink.on("click", function(){
+            that.changeLink();
+        });
     };
 
     JumpToDate.prototype = {
