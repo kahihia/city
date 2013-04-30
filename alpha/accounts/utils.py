@@ -30,7 +30,7 @@ def remind_account_about_events(account, events):
         GROUP BY taggit_taggeditem.object_id, event_event.id
         ORDER BY similiarity DESC
         LIMIT 10
-    """ % (basic_event_ids, basic_event_ids))
+    """, [basic_event_ids, basic_event_ids])
     print similar_events.query
 
     subject = "Upcoming events from cityfusion"
