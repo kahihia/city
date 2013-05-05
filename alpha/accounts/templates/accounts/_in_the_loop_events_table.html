@@ -11,14 +11,14 @@
     {% for event in in_the_loop_events %}
     <tr>
         <td>
-            {{ event.start_time|date:"b d" }}
+            {{ event.nearest_start_time|date:"b d" }}
         </td>
         <td>
-            {{ event.start_time|date:"P" }}
+            {{ event.nearest_start_time|date:"fA"|title }}-{{ event.nearest_end_time|date:"fA"|title }}
         </td>
         <td>
-            <a href="/events/view/{{event.event.slug}}/">
-                {{ event.event.name }}
+            <a href="{% url 'event_view' event.slug %}">
+                {{ event.name }}
             </a>            
         </td>        
     </tr>

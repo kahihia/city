@@ -1,0 +1,48 @@
+{% load cropping %}
+
+<tr>
+    <td width="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td>
+    <td align="left">
+        <span style="font-size: 16px; font-weight: bold; color: #022e52; font-family: sans-serif;">
+            Similar Events
+        </span>
+    </td>
+</tr>
+<tr>
+    <td width="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td>
+    <td>
+        <div style="border: 1px solid #e7e7e7;"><table width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+            <tr><td height="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td></tr>
+            <tr>
+                {% for event in similar_events %}
+                    <td width="25"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="25" height="10" alt="" /></div></td>
+
+                    <td>
+                        <div style="border: 1px solid #cccccc;">
+                            <div style="border: 5px solid #ffffff;">
+                                <a target="_blank" href="{{site}}{% url 'event_view' event.slug %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none; border: none; display: block; line-height:0px;">
+                                    <img src="{% if event.picture %}{{site}}{% cropped_thumbnail event "cropping" width=61 %}{% else %}{{site}}{{STATIC_URL}}images/default-event-61x61.jpg{% endif %}"  style="border-collapse:collapse; border: none;" />
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    
+                    {% if forloop.counter|divisibleby:5 %}
+                            <td width="25"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="25" height="15" alt="" /></div></td>
+
+                        <tr><td height="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td></tr>
+
+                        </tr>
+                        <tr>
+                
+                    {% endif %}
+                {% endfor %}
+                <td width="100%"></td>
+            </tr>
+            <tr><td height="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td></tr>
+        </table></div>
+    </td>
+    <td width="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td>
+</tr>
+
+<tr><td height="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td></tr>

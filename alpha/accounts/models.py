@@ -59,7 +59,7 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
     reminder_phonenumber = PhoneNumberField(blank=True, null=True)
 
     # events for remind
-    reminder_events = models.ManyToManyField("event.SingleEvent", blank=True, null=True)
+    reminder_events = models.ManyToManyField("event.Event", blank=True, null=True)
 
     in_the_loop_tags = TaggableManager(blank=True)
 
@@ -84,7 +84,10 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
     in_the_loop_phonenumber = PhoneNumberField(blank=True, null=True)
 
     def in_the_loop_events(self):
-        return SingleEvent.objects.filter(event__tagged_items__tag__name__in=self.in_the_loop_tags.all().values("name"))
+        return Event.future_events.filter(tagged_items__tag__name__in=self.in_the_loop_tags.all().values("name"))
+
+    def reminder_events_in_future(self):
+        return Event.future_events.filter(id__in=self.reminder_events.values("id"))
 
 
 #Make sure we create a Account when creating a User
@@ -93,41 +96,45 @@ def create_facebook_profile(sender, instance, created, **kwargs):
         Account.objects.create(user=instance)
 
 
-def add_event_days_to_schedule(account, event_days):
-    for event_day in event_days:
-        if account.reminder_days_before_event:
-            notification_time = event_day.start_time - timedelta(days=int(account.reminder_days_before_event))
-            reminding = AccountReminding(
-                account=account,
-                event_day=event_day,
-                notification_time=notification_time,
-                notification_type='DAYS_BEFORE_EVENT'
-            )
-            reminding.save()
-        if account.reminder_hours_before_event:
-            notification_time = event_day.start_time - timedelta(hours=int(account.reminder_hours_before_event))
-            reminding = AccountReminding(
-                account=account,
-                event_day=event_day,
-                notification_time=notification_time,
-                notification_type='HOURS_BEFORE_EVENT'
-            )
-            reminding.save()
+def add_events_to_schedule(account, events):
+    for event in events:
+        event_days = SingleEvent.future_days.filter(event_id=event.id)
+        for event_day in event_days:
+            if account.reminder_days_before_event:
+                notification_time = event_day.start_time - timedelta(days=int(account.reminder_days_before_event))
+                if notification_time > datetime.datetime.now():
+                    reminding = AccountReminding(
+                        account=account,
+                        event=event,
+                        notification_time=notification_time,
+                        notification_type='DAYS_BEFORE_EVENT'
+                    )
+                    reminding.save()
+            if account.reminder_hours_before_event:
+                notification_time = event_day.start_time - timedelta(hours=int(account.reminder_hours_before_event))
+                if notification_time > datetime.datetime.now():
+                    reminding = AccountReminding(
+                        account=account,
+                        event=event,
+                        notification_time=notification_time,
+                        notification_type='HOURS_BEFORE_EVENT'
+                    )
+                    reminding.save()
 
 
 def sync_schedule_after_reminder_events_was_modified(sender, **kwargs):
     if kwargs['action'] == 'post_add':
-        event_days = SingleEvent.objects.filter(id__in=kwargs["pk_set"])
+        events = Event.future_events.filter(id__in=kwargs["pk_set"])
 
-        add_event_days_to_schedule(kwargs['instance'], event_days)
+        add_events_to_schedule(kwargs['instance'], events)
 
     if kwargs['action'] == 'post_remove':
-        AccountReminding.hots.filter(event_day__id__in=kwargs["pk_set"]).delete()
+        AccountReminding.hots.filter(event__id__in=kwargs["pk_set"]).delete()
 
 
 def sync_schedule_after_reminder_settings_was_changed(sender, instance, created, **kwargs):
-    AccountReminding.hots.filter(account_id=instance.id).delete()
-    add_event_days_to_schedule(instance, instance.reminder_events)
+    AccountReminding.objects.filter(account_id=instance.id).delete()
+    add_events_to_schedule(instance, instance.reminder_events.all())
 
 
 post_save.connect(create_facebook_profile, sender=User)
@@ -138,7 +145,7 @@ m2m_changed.connect(sync_schedule_after_reminder_events_was_modified, sender=Acc
 
 class RemindingManager(models.Manager):
     def get_query_set(self):
-        return super(RemindingManager, self).get_query_set().filter(notification_time__gte=datetime.datetime.now(), done=False)
+        return super(RemindingManager, self).get_query_set().filter(notification_time__lte=datetime.datetime.now(), done=False)
 
 
 NOTIFICATION_TYPES = (
@@ -150,15 +157,57 @@ NOTIFICATION_TYPES = (
 
 class AccountReminding(models.Model):
     account = models.ForeignKey(Account)
-    event_day = models.ForeignKey('event.SingleEvent')
+    event = models.ForeignKey('event.Event')
     notification_time = models.DateTimeField('notification time', auto_now=False, auto_now_add=False)
     notification_type = models.CharField(max_length=25, choices=NOTIFICATION_TYPES)
     done = models.BooleanField(default=False)
 
-    hots = RemindingManager()
-
     objects = models.Manager()
+    hots = RemindingManager()
 
     def processed(self):
         self.done = True
         self.save()
+
+    def __unicode__(self):
+        status = "QUEUE"
+        if self.done:
+            status = "DONE"
+        return "%s at (%s) - %s" % (self.event.name, self.notification_time, status)
+
+
+class NewInTheLoopEventManager(models.Manager):
+    def get_query_set(self):
+        return super(NewInTheLoopEventManager, self).get_query_set().filter(processed=False)
+
+
+class InTheLoopSchedule(models.Model):
+    event = models.ForeignKey('event.Event')
+    processed = models.BooleanField(default=False)
+
+    objects = models.Manager()
+    new_events = NewInTheLoopEventManager()
+
+    def process(self):
+        self.processed = True
+        self.save()
+
+    @staticmethod
+    def unprocessed_for_account(account):
+        tags = account.in_the_loop_tags.values_list("name", flat=True)
+        event_ids = InTheLoopSchedule.new_events.filter(event__tagged_items__tag__name__in=tags).values_list("event_id", flat=True)
+        return Event.future_events.filter(id__in=event_ids)
+
+    def __unicode__(self):
+        status = "QUEUE"
+        if self.processed:
+            status = "PROCESSED"
+        return "%s - %s" % (self.event.name, status)
+
+
+def add_to_in_the_loop_schedule(sender, instance, created, **kwargs):
+    InTheLoopSchedule.objects.filter(event_id=instance.id).delete()
+    InTheLoopSchedule(event=instance).save()
+
+
+models.signals.post_save.connect(add_to_in_the_loop_schedule, sender=Event)

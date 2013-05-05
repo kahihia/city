@@ -9,8 +9,7 @@ from django.core.mail.message import EmailMessage
 from django.utils.safestring import mark_safe
 
 from django.conf import settings
-from django.http import Http404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
@@ -52,23 +51,17 @@ def search_pad(request):
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
-    featured_events = SingleEvent.featured_events.all() \
-        .select_related('event')
+    featured_events = Event.featured_events.all()
 
-    featured_events.query.order_by = ['start_time']
     featuredEventsFilter = EventFilter({}, queryset=featured_events)
 
-    events = SingleEvent.future_events.all() \
-        .select_related('event')
+    events = Event.future_events.all()
 
-    events.query.order_by = ['start_time']
-
-    events_all_count = events.values("event_id").distinct().count()
+    events_all_count = events.count()
 
     eventsFilter = EventFilter(request.GET, queryset=events)
-    print eventsFilter.qs()
 
-    top5_tags = TaggedItem.objects.filter(object_id__in=map(lambda x: x.event.id, events)) \
+    top5_tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.id, events)) \
         .values('tag', 'tag__name') \
         .annotate(count=Count('id')) \
         .order_by('-count')[0:5]
@@ -91,14 +84,11 @@ def browse(request):
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
-    events = SingleEvent.future_events.all() \
-        .select_related('event')
-
-    events.query.order_by = ['start_time']
+    events = Event.future_events.all()
 
     eventsFilter = EventFilter(request.GET, queryset=events)
 
-    tags = TaggedItem.objects.filter(object_id__in=map(lambda x: x.event.id, events)) \
+    tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.id, events)) \
         .values('tag', 'tag__name') \
         .annotate(count=Count('id')) \
         .order_by('-count')
@@ -116,7 +106,7 @@ def browse(request):
 
 def view(request, slug=None, old_tags=None):
     try:
-        event = Event.events.get(slug=slug)
+        event = Event.future_events.get(slug=slug)
         # TODO: add filter by IP
         # event.viewed_times = event.viewed_times + 1
         # event.save()

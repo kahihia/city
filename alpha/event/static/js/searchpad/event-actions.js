@@ -88,8 +88,6 @@
         }
     };
 
-
-
     window.EventActions = EventActions;
 
 })(jQuery, window, document);
