@@ -8,3 +8,4 @@ django-cities
 django-image-cropping
 django-taggit
 simplejson==1.9.3
+py-moneyed
