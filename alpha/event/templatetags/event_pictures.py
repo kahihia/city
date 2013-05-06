@@ -85,8 +85,8 @@ def feature_event_as_image(event):
     venue_pos = (5, 121)
     event_details_pos = (5, 131)
 
-    arial = ImageFont.truetype("%s/event/static/fonts/Arial.ttf" % settings.BASE_PATH, 10)
-    arial_bold = ImageFont.truetype("%s/event/static/fonts/Arial_Bold.ttf" % settings.BASE_PATH, 10)
+    arial = ImageFont.truetype("%s/alpha/event/static/fonts/Arial.ttf" % settings.BASE_PATH, 10)
+    arial_bold = ImageFont.truetype("%s/alpha/event/static/fonts/Arial_Bold.ttf" % settings.BASE_PATH, 10)
 
     time_period = "%s - %s" % (filters.title(filters.date(event.nearest_start_time, "b d, Y | fA")), filters.title(filters.date(event.nearest_end_time, "fA")))
 
