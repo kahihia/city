@@ -286,9 +286,6 @@ CELERYBEAT_SCHEDULE = {
     },
     'inform-accounts-about-new-events-with-tags-every-3-hours': {
         'task': 'accounts.tasks.inform_accounts_about_new_events_with_tags',
-        'schedule': timedelta(minutes=1)
-        # 'schedule': crontab(hours=6)
+        'schedule': crontab(hours=6)
     }
 }
-
-CELERY_TIMEZONE = 'UTC'
