@@ -158,6 +158,7 @@ INSTALLED_APPS = (
     'userena',
     'django_facebook',
     'djcelery',
+    'venue_profile',
 )
 
 # A sample logging configuration. The only tangible logging performed

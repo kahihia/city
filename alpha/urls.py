@@ -28,6 +28,7 @@ urlpatterns = patterns(
     url(r'^selectable/', include('selectable.urls')),
     url(r'^admin_tools/', include('admin_tools.urls')),
     url(r'^facebook/', include('django_facebook.urls')),
+    url(r'^prprofile/', include('venue_profile.urls'))
 )
 
 if settings.DEBUG:
