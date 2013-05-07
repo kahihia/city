@@ -32,6 +32,8 @@ class AdvertisingCampaign(models.Model):
     started = models.DateTimeField()
     ended = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
 
+    objects = money_manager(models.Manager())
+
 
 PAYMENT_TYPE = (
     ('CPM', 'CPM'),
