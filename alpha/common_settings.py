@@ -158,6 +158,7 @@ INSTALLED_APPS = (
     'userena',
     'django_facebook',
     'djcelery',
+    'django_twilio',
 )
 
 # A sample logging configuration. The only tangible logging performed
@@ -289,3 +290,7 @@ CELERYBEAT_SCHEDULE = {
         'schedule': timedelta(hours=6)
     }
 }
+
+TWILIO_ACCOUNT_SID = 'AC1a554e71d3c0921faa3732bd495f5878'
+TWILIO_AUTH_TOKEN = '89eec7d9c48d4d3f3809ed8edb17a48d'
+TWILIO_NUMBER = "+12026013648"
