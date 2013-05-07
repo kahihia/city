@@ -1,0 +1,137 @@
+ul.tagit {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #C6C6C6;
+    background: inherit;
+}
+ul.tagit li.tagit-choice {
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border: 1px solid #CAD8F3;
+
+    background: none;
+    background-color: #DEE7F8;
+
+    font-weight: normal;
+}
+ul.tagit li.tagit-choice .tagit-label:not(a) {
+    color: #555;
+}
+ul.tagit li.tagit-choice a.tagit-close {
+    text-decoration: none;
+}
+ul.tagit li.tagit-choice .tagit-close {
+    right: .4em;
+}
+ul.tagit li.tagit-choice .ui-icon {
+    display: none;
+}
+ul.tagit li.tagit-choice .tagit-close .text-icon {
+    display: inline;
+    font-family: arial, sans-serif;
+    font-size: 16px;
+    line-height: 16px;
+    color: #777;
+}
+ul.tagit li.tagit-choice:hover, ul.tagit li.tagit-choice.remove {
+    background-color: #bbcef1;
+    border-color: #6d95e0;
+}
+ul.tagit li.tagit-choice a.tagLabel:hover,
+ul.tagit li.tagit-choice a.tagit-close .text-icon:hover {
+    color: #222;
+}
+ul.tagit input[type="text"] {
+    color: #333333;
+    background: none;
+}
+.ui-widget {
+    font-size: 1.1em;
+}
+
+
+
+ul#searchTags {
+    position: relative;
+    padding-left: 4px;
+    padding-top: 4px;
+    padding-right: 70px;
+    border: 1px solid #e3e3e3;
+    width: 388px;
+    min-height: 33px;
+    text-align: left;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-size:0;
+    margin-top: 5px;
+}
+
+ul#searchTags .search-button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 66px;
+    height: 33px;
+    background: url("/static/images/searchpad/search-button.png") no-repeat;
+}
+
+ul#searchTags li {
+    position: relative;
+    display: inline-block;
+    list-style: none;
+    min-width: 60px;
+
+    padding-left: 10px;
+    padding-right: 30px;
+    height: 26px;
+    max-height: 26px;
+    min-height: 26px;
+    line-height: 26px;
+    border: 1px solid #ededed;
+    vertical-align: top;
+    background: #f6f6f6;
+    margin-right: 4px;
+    margin-bottom: 4px;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+ul#searchTags .ui-effects-wrapper {
+    display: inline-block;
+}
+
+ul#searchTags li span.tagit-label {    
+    color: #454545;
+}
+
+ul#searchTags li a.tagit-close {
+    position: absolute;
+    text-align: center;
+    cursor: pointer;
+    top: 5px;
+    right: 5px;
+    width: 15px;
+    height: 15px;   
+    background: #dcdcdc; 
+
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+}
+
+ul#searchTags li a.tagit-close:hover {
+    
+}
+
+/*ul#searchTags li a.tagit-close .text-icon,
+ul#searchTags li a.tagit-close .ui-icon-close,*/
+ul#searchTags li.tagit-new {
+    display:none;
+}
+

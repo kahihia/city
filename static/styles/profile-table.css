@@ -1,0 +1,102 @@
+.profile-table {
+    width: 100%;
+    text-align: left;  
+    color: #454545;
+}
+
+.profile-table th {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.profile-table th.action,
+.profile-table td.action {
+    padding-left: 0;
+    text-align: center;
+}
+
+.profile-table tr:nth-child(even) {background: #f4f4f4}
+.profile-table tr:nth-child(odd) {background: #fff}
+
+.profile-table th,
+.profile-table td {
+    padding-left: 35px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 1.1em;
+    border-bottom: 1px solid #ccc;
+}
+
+.profile-table th a,
+.profile-table td a {
+    color: #5dacfd;
+    text-decoration: none;
+}
+
+.profile-table th a:hover,
+.profile-table td a:hover {
+    color: #022e52;
+}
+
+.profile-table-pagination {
+    color: #454545;
+    height: 47px;
+    line-height: 47px;
+    vertical-align: middle;
+    text-align: right;
+    background: #f4f4f4;
+    font-size: 1.2em;
+}
+
+.profile-table-pagination .pagintation-wrapper{
+    vertical-align: middle;
+}
+
+.profile-table-pagination span.prev,
+.profile-table-pagination a.prev,
+.profile-table-pagination span.next,
+.profile-table-pagination a.next {
+    display: inline-block;
+    width: 26px;
+    height: 18px;    
+    margin:0 10px;
+    vertical-align: middle;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.profile-table-pagination span.prev:hover,
+.profile-table-pagination span.next:hover {
+    box-shadow: 0px 0px 5px #777;
+}
+
+.profile-table-pagination a.prev:hover,
+.profile-table-pagination a.next:hover {
+    box-shadow: 0px 0px 5px #3ff;
+}
+
+.profile-table-pagination .page-info {
+    height: 18px;    
+    line-height: 18px;
+    vertical-align: middle;
+}
+
+.profile-table-pagination span.prev {
+    background: url("/static/images/accounts/prev.png") no-repeat;
+}
+
+.profile-table-pagination a.prev {
+    background: url("/static/images/accounts/prev-active.png") no-repeat;
+}
+
+.profile-table-pagination span.next {
+    background: url("/static/images/accounts/next.png") no-repeat;
+}
+
+.profile-table-pagination a.next {
+    background: url("/static/images/accounts/next-active.png") no-repeat;
+}
+
+
+
