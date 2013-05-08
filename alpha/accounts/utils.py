@@ -3,7 +3,10 @@ from django.contrib.sites.models import Site
 from django.core.mail.message import EmailMessage
 from django.template.loader import render_to_string
 from twilio.rest import TwilioRestClient
+from twilio import TwilioRestException
 from django.conf import settings
+import logging
+logger = logging.getLogger(__name__)
 
 
 def remind_account_about_events(account, events):
@@ -75,11 +78,14 @@ def remind_account_about_events_with_sms(account, events):
             "event": event
         })
 
-        client.sms.messages.create(
-            to=str(account.reminder_phonenumber),
-            from_=settings.TWILIO_NUMBER,
-            body=body
-        )
+        try:
+            client.sms.messages.create(
+                to=str(account.reminder_phonenumber),
+                from_=settings.TWILIO_NUMBER,
+                body=body
+            )
+        except TwilioRestException as e:
+            logger.error(e)
 
 
 def inform_account_about_events_with_tag(account, events, tags_in_venues):
@@ -131,8 +137,11 @@ def inform_account_about_events_with_tag_with_sms(account, events, tags_in_venue
             "tags": tags_intersection
         })
 
-        client.sms.messages.create(
-            to=str(account.reminder_phonenumber),
-            from_=settings.TWILIO_NUMBER,
-            body=body
-        )
+        try:
+            client.sms.messages.create(
+                to=str(account.reminder_phonenumber),
+                from_=settings.TWILIO_NUMBER,
+                body=body
+            )
+        except TwilioRestException as e:
+            logger.error(e)
