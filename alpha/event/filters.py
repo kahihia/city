@@ -58,16 +58,14 @@ class TimeFilter(Filter):
         else:
             operation = "<="
 
-        where = 'EXTRACT(hour from %s) %s %s' % (self.field, operation, value)
+        where = 'EXTRACT(hour from %s) %s %s' % (self.field.replace("single_events__", "event_singleevent."), operation, value)
 
         return qs.extra(where=[where])
 
 
 class TagsFilter(Filter):
     def filter(self, qs, tags):
-        return qs.filter(event__tagged_items__tag__name__in=tags) \
-            .annotate(repeat_count=Count('id')) \
-            .filter(repeat_count=len(tags))
+        return qs.filter(tagged_items__tag__name__in=tags)
 
     def url_query(self, querydict):
         tags = querydict["tag"]
@@ -125,17 +123,17 @@ class FunctionFilter(Filter):
         return qs
 
     def recently_featured_filter(self, qs):
-        return qs.order_by("event__featured_on")
+        return qs.order_by("featured_on")
 
     def all_filter(self, qs):
         return qs
 
     def top_viewed_filter(self, qs):
         # TODO: add view statistic and sort by it
-        return qs.order_by("-event__viewed_times")
+        return qs.order_by("-viewed_times")
 
     def latest_filter(self, qs):
-        return qs.order_by("-event__created")
+        return qs.order_by("-created")
 
     def search_tags(self, function):
         name = search_tags_for_filters.get(function)
@@ -255,7 +253,10 @@ class SearchFilter(Filter):
         # import pdb; pdb.set_trace()
 
         return qs.extra(
-            where=["event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', %s) OR event_event.search_index @@ plainto_tsquery('pg_catalog.english', %s)"], 
+            where=["""
+                event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', %s)
+                OR event_event.search_index @@ plainto_tsquery('pg_catalog.english', %s)
+            """],
             params=[search_string, search_string]
         )
 
@@ -265,14 +266,14 @@ class EventFilter(object):
         self.data = data.copy()
         self.queryset = queryset
         self.filters = {
-            "start_date": DateFilter("start_date", "start_time", lookup="gte"),
-            "end_date": DateFilter("end_date", "start_time", lookup="lte"),
-            "start_time": TimeFilter("start_time", "start_time", lookup="gte"),
-            "end_time": TimeFilter("end_time", "start_time", lookup="lte"),
-            "tag": TagsFilter("tag", "event__tags"),
-            "featured": Filter("featured", "event__featured"),
+            "start_date": DateFilter("start_date", "single_events__start_time", lookup="gte"),
+            "end_date": DateFilter("end_date", "single_events__start_time", lookup="lte"),
+            "start_time": TimeFilter("start_time", "single_events__start_time", lookup="gte"),
+            "end_time": TimeFilter("end_time", "single_events__start_time", lookup="lte"),
+            "tag": TagsFilter("tag", "tags"),
+            "featured": Filter("featured", "featured"),
             "function": FunctionFilter("function"),
-            "venue": VenueFilter("venue", "event__venue__id"),
+            "venue": VenueFilter("venue", "venue__id"),
             "search": SearchFilter("search", "search_index")
         }
 
@@ -287,7 +288,6 @@ class EventFilter(object):
             if self.data.get(key):
                 qs = queryFilter.filter(qs, queryFilter.filter_data(self.data))
         return qs
-        return self.select_first_days(qs)
 
     def select_first_days(self, qs):
         days = qs.values_list("id", flat=True)

@@ -29,14 +29,19 @@
     &gt; Browse 
     {% if page_date != "flow" %}&gt; {{page_date|slug_to_title }}{% endif %}{% endblock %}
 {% block page %}
-<h1 id="tpl">{{ venues_profile.name }}</h1>
+<h1 class="tpl">{{ venues_profile.name }}</h1>
 <div id="prprofile_content">
     <div id="prpr_cont_info">
-        <!--<img width="154px" height="153px" id="venue_logo" src="{{ venues_profile.cv_picture.url }}"/>-->
         <img id="venue_logo" src="{% cropped_thumbnail venues_profile "cv_cropping" %}">
-        <!--<div id="pr_edit_btnf"></div>-->
         <div id="ci">
-            <h2 id="h_contact_info">Contact Information</h2>
+            <a href="#">
+                <div id="gray_btn_top">Edit Profile</div>
+            </a>
+            <div id="gray_btn_bot">
+                <!--<input type="radio" value="public" name="public" style="display: block !important; width: 1px; height: 1px; float: left;">-->Public<br/>
+                <!--<input type="radio" value="private" name="private" style="display: block !important; width: 1px; height: 1px; float: left;">-->Private
+            </div>
+            <h2 class="h_contact_info">Contact Information</h2>
             <div class="infoPees"><img src="{{ STATIC_URL }}/images/phone-profile_icon.png"/><span class="infoPeesSpan">Phone:</span><span id="info_values_phone">{{ venues_profile.cv_phone }}</span></div>
             <div class="infoPees"><img src="{{ STATIC_URL }}/images/fax_profile_icon.png"/><span class="infoPeesSpan">Fax:</span><span id="info_values_fax">{{ venues_profile.cv_fax }}</div>
             <div class="infoPees"><img src="{{ STATIC_URL }}/images/email_profile_icon.png"/><span class="infoPeesSpan">Email:</span><span id="info_values_email"><a href="mailto:{{ venues_profile.cv_email }}">{{ venues_profile.cv_email }}</a></span></div>
@@ -44,10 +49,26 @@
             <div class="infoPees"><img src="{{ STATIC_URL }}/images/fb_profile_icon.png"/><span class="infoPeesSpan">Facebook:</span><span id="info_values_fb"><a href="{{ venues_profile.cv_fcb }}">{{ venues_profile.cv_fcb }}</span></a></div>
             <div class="infoPees"><img src="{{ STATIC_URL }}/images/twitter.png"/><span class="infoPeesSpan">Twitter:</span><span id="info_values_twitter"><a href="{{ venues_profile.cv_twt }}">{{ venues_profile.cv_twt }}</a></span></div>
             <div class="infoPees"><img src="{{ STATIC_URL }}/images/map_profile_icon.png"/><span class="infoPeesSpan">Map:</span></div>
-            <div id = "infoMapImg"></div>
+                {% if venues_profile.location %}
+                    <hr />
+                    <div class="map">
+                        <img src="http://maps.googleapis.com/maps/api/staticmap?center={{venues_profile.location.y}},{{venues_profile.location.x}}&zoom=13&size=400x150&maptype=roadmap&sensor=false&markers=color:blue%7C{{venues_profile.location.y}},{{pvenues_profile.location.x}}">
+                    </div>
+                    <hr />                            
+                {% endif %}
+            <div id="about_us">
+                <h2 class="h_contact_info">About Us</h2>
+                {{ venues_profile.cv_about }}
+            </div>
         </div>
     </div>
-    
+    <div id="venue_events_wrapper">
+    </div>
+    <ul>
+    {% for event in venues_profile.events %}
+        <li>{{ event.name }}</li>
+    {% endfor %}
+    </ul>
     
     
     

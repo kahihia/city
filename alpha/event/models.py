@@ -24,6 +24,9 @@ from image_cropping import ImageCropField, ImageRatioField
 from djorm_pgfulltext.models import SearchManagerMixIn, SearchManager
 from djorm_pgfulltext.fields import VectorField
 
+from django.db.models import Min
+# from accounts.models import InTheLoopSchedule
+
 
 class SearchGeoDjangoManager(SearchManagerMixIn, models.GeoManager):
     pass
@@ -66,14 +69,29 @@ def picture_file_path(instance=None, filename=None):
     return os.path.join(EVENT_PICTURE_DIR, datetime.date.today().isoformat(), filename)
 
 
-# class FutureManager(models.Manager):
-#     def get_query_set(self):
-#         return super(FutureManager, self).get_query_set().filter(single_events__start_time__gte=datetime.datetime.now())
+class FutureManager(SearchManager):
+    def get_query_set(self):
+        queryset = super(FutureManager, self).get_query_set()\
+            .filter(single_events__start_time__gte=datetime.datetime.now())\
+            .prefetch_related('single_events')\
+            .annotate(nearest_start_time=Min('single_events__start_time'))\
+            .annotate(nearest_end_time=Min('single_events__end_time'))
+
+        queryset.query.group_by = ["event_event.id"]
+
+        return queryset
 
 
-# class FeaturedManager(FutureManager):
-#     def get_query_set(self):
-#         return super(FeaturedManager, self).get_query_set().filter(featured=True).order_by("featured_on")
+        # .extra(
+        #     select={
+        #         "start_time": "SELECT MIN(start_time) FROM event_singleevent WHERE event_singleevent.event_id=event_event.id AND start_time>now()"
+        #     }
+        # )
+
+
+class FeaturedManager(FutureManager):
+    def get_query_set(self):
+        return super(FeaturedManager, self).get_query_set().filter(featured=True).order_by("featured_on")
 
 
 class Event(models.Model):
@@ -96,8 +114,19 @@ class Event(models.Model):
         search_field='search_index',
         auto_update_search_field=True
     )
-    # future_events = FutureManager()
-    # featured_events = FeaturedManager()
+
+    future_events = FutureManager(
+        fields=('name', 'description'),
+        config='pg_catalog.english',
+        search_field='search_index',
+        auto_update_search_field=True)
+
+    featured_events = FeaturedManager(
+        fields=('name', 'description'),
+        config='pg_catalog.english',
+        search_field='search_index',
+        auto_update_search_field=True)
+
     # timestamps
     created = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now())
     modified = models.DateTimeField(auto_now=True, default=datetime.datetime.now())
@@ -183,14 +212,14 @@ class Event(models.Model):
         return SingleEvent.objects.filter(start_time__gte=datetime.datetime.now(), event=self).order_by("start_time")[0]
 
 
-class FutureManager(SearchManager):
+class FutureEventDayManager(models.Manager):
     def get_query_set(self):
-        return super(FutureManager, self).get_query_set().filter(start_time__gte=datetime.datetime.now())
+        return super(FutureEventDayManager, self).get_query_set().filter(start_time__gte=datetime.datetime.now())
 
 
-class FeaturedManager(FutureManager):
-    def get_query_set(self):
-        return super(FeaturedManager, self).get_query_set().filter(event__featured=True).order_by("event__featured_on")
+# class FeaturedManager(FutureManager):
+#     def get_query_set(self):
+#         return super(FeaturedManager, self).get_query_set().filter(event__featured=True).order_by("event__featured_on")
 
 
 class SingleEvent(models.Model):
@@ -207,15 +236,17 @@ class SingleEvent(models.Model):
 
     objects = models.Manager()
 
-    future_events = FutureManager(fields=('description'),
-        config='pg_catalog.english',
-        search_field='search_index',
-        auto_update_search_field=True)
+    future_days = FutureEventDayManager()
 
-    featured_events = FeaturedManager(fields=('description'),
-        config='pg_catalog.english',
-        search_field='search_index',
-        auto_update_search_field=True)
+    # future_events = FutureManager(fields=('description'),
+    #     config='pg_catalog.english',
+    #     search_field='search_index',
+    #     auto_update_search_field=True)
+
+    # featured_events = FeaturedManager(fields=('description'),
+    #     config='pg_catalog.english',
+    #     search_field='search_index',
+    #     auto_update_search_field=True)
 
     event = models.ForeignKey(Event, blank=False, null=False, related_name='single_events')
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
@@ -242,11 +273,11 @@ class Venue(models.Model):
         return "%s, %s, %s" % (self.name, self.street, self.city)
 
     def future_events(self):
-        return SingleEvent.future_events.filter(event__venue=self.id).order_by("start_time")
+        return Event.future_events.filter(venue__id=self.id)
 
     @staticmethod
     def with_active_events():
-        ids = list(set(SingleEvent.future_events.values_list('event__venue__id', flat=True)))
+        ids = list(set(Event.future_events.values_list('venue__id', flat=True)))
         return Venue.objects.filter(id__in=ids)
 
 
@@ -337,8 +368,8 @@ def audit_event_catch(instance=None, created=False, **kwargs):
         msg.content_subtype = 'html'
         #msg.send()
 
-models.signals.post_save.connect(audit_event_catch, sender=Event)
 
+models.signals.post_save.connect(audit_event_catch, sender=Event)
 
 # def audit_single_event(instance=None, created=False, **kwargs):
 #     bad_phrases = phrases_query()

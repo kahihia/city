@@ -1,0 +1,59 @@
+{% load cropping %}
+{% load date_formatting %}
+<!-- List of events -->
+<table width="510" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+    {% for event in events %}
+        <tr><td>
+            <table  bgcolor="#f6f6f6" width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+                <tr>
+                    <td height="5"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="15" height="5" alt="" /></div></td>
+                </tr>
+                <tr>
+                    <td width="15"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="15" height="10" alt="" /></div></td>
+
+                    <td width="60" valign="top">
+                        <div style="border: 1px solid #cccccc;">
+                            <div style="border: 4px solid #ffffff;">
+                                <img src="{% if event.picture %}{{site}}{% cropped_thumbnail event "cropping" width=61 %}{% else %}{{site}}{{STATIC_URL}}images/default-event-61x61.jpg{% endif %}" style="display: block;"/>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td width="12">
+                        <div style="line-height:0;">
+                            <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="12" height="10" alt="" />
+                        </div>
+                    </td>
+
+                    <td width="325" valign="top" align="left">
+                        <div>
+                            <span style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif;">
+                                <a target="_blank" href="{{site}}{% url 'event_view' event.slug %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none;">
+                                    {{ event.name }}
+                                </a>          
+                            </span>
+                        </div>
+
+                        <div>
+                            <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.nearest_start_time|date:"l, F d, Y"}}</span>
+                            <span class="appleLinksBlue" style="color: #cdcdcd; font-size: 12px; font-family: sans-serif;">|</span>
+                            <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.nearest_start_time|just_time}} - {{event.nearest_end_time|just_time}}</span>
+                        </div>
+
+                        <div>
+                            <span class="appleLinksBlack" style="color: #000000; font-size: 12px; font-weight: bold; font-family: sans-serif;">
+                                {{ event.venue.name }}, {{ event.venue.street }}, {{ event.venue.city.name_std }}
+                            </span>
+                        </div>
+                    </td>
+
+                    <td width="85"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="85" height="10" alt="" /></div></td>
+                </tr>
+                <tr>
+                    <td height="5"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="15" height="5" alt="" /></div></td>
+                </tr>
+            </table>
+        </td></tr>
+        <tr><td height="3"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="3" alt="" /></div></td></tr>
+    {% endfor %}
+</table>

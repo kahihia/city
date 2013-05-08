@@ -7,8 +7,8 @@
 {% for event in events %}
     <div class="event-details-block">
         <div class="event-img">
-            {% if event.event.picture %}
-                <img src="{% cropped_thumbnail event.event "cropping" width=175 %}" height="175px" weight="175px">
+            {% if event.picture %}
+                <img src="{% cropped_thumbnail event "cropping" width=175 %}" height="175px" weight="175px">
             {% else %}
                 <img src="{{STATIC_URL}}images/default-event.jpg" height="175px" weight="175px">
             {% endif %}
@@ -16,29 +16,28 @@
         <div class="event-details">
             <div class="title-wrapper">
                 <div class="title">
-                    <a href="{% url 'view_event_day' event.id %}">{{event.event.name}}</a>
+                    <a href="{% url 'event_view' event.slug %}">{{event.name}}</a>
                 </div>
-                {% if event.event.price %}
-                    <div class="event-price {% if event.event.price|length < 9 %} short {% endif %}">{{event.event.price}}</div>
+                {% if event.price %}
+                    <div class="event-price {% if event.price|length < 9 %} short {% endif %}">{{event.price}}</div>
                 {% endif %}
             </div>
-            <div class="event-date-wrapper">{{event.start_time|date:"N d, Y f a | l"}}</div>
-            {{event.signle_events}}
+            <div class="event-date-wrapper">{{event.nearest_start_time|date:"N d, Y fA | l"|title}}</div>                
             <div class="event-description">
-                {{ event.event.venue.name }}<br>
-                {{ event.event.venue.street }}<br>
-                {{ event.event.venue.city.name_std }}
+                {{ event.venue.name }}<br>
+                {{ event.venue.street }}<br>
+                {{ event.venue.city.name_std }}
             </div>
             <div class="event-actions">                
                 <table>
-                    {% if event.event.tickets %}
+                    {% if event.tickets %}
                     <tr>
                         <td>
-                            <a href='{% if_url event.event.tickets event.event.tickets "javascript:searchPadPage.showTicketsPopup();" %}' class="action-buy-tickets">
+                            <a href='{% if_url event.tickets event.tickets "javascript:searchPadPage.showTicketsPopup();" %}' class="action-buy-tickets">
                                 Buy tickets
                             </a>
                             <div class="tickets-popup">                                
-                                <b>{{event.event.tickets}}</b>
+                                <b>{{event.tickets}}</b>
                             </div>
                         </td>
                         <td></td>
@@ -51,7 +50,7 @@
                         <td class="in-the-loop-td">
                             <a href="javascript:void()" class="action-in-the-loop">In the Loop</a>
                             <div class="in-the-loop-tags-popup">
-                                {% for tag in event.event.tags.all %}
+                                {% for tag in event.tags.all %}
                                 <span class="button tag" data-tag="{{ tag.name }}">
                                     {{ tag.name }}
                                 </span>
@@ -67,11 +66,11 @@
                     <tr>
                         <td>
                             <a href="javascript:void;" class="action-facebook-like">                                
-                                <div href="http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event.id %}" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event.id %}" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>                                
+                                <div href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>                                
                             </a>
                         </td>
                         <td>
-                            <a href="https://twitter.com/intent/tweet?original_referer=http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event.id %}&text={{event.event.name}}&tw_p=tweetbutton&url=http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event.id %}" class="action-tweet">
+                            <a href="https://twitter.com/intent/tweet?original_referer=http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}&text={{event.name}}&tw_p=tweetbutton&url=http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" class="action-tweet">
                                 Tweet
                             </a>                            
                         </td>
@@ -82,10 +81,7 @@
         <div class="event-description">
             {% if event.description %}
                 {{event.description}}
-            {% else %}
-                {{event.event.description}}
-            {% endif %}
-            {{event.event.tags_representation}}
+            {% endif %}            
         </div>
     </div>
 {%endfor%}

@@ -8,8 +8,8 @@
         {% for event in featured_events %}
             <div class="features">
                 <div class="featured-img-wrapper">
-                    {% if event.event.picture %}
-                        <img src="{% cropped_thumbnail event.event "cropping" width=154 %}" height="153px" weight="154px">
+                    {% if event.picture %}
+                        <img src="{% cropped_thumbnail event "cropping" width=154 %}" height="153px" weight="154px">
                     {% else %}
                         <img src="{{STATIC_URL}}images/default-event.jpg" height="153px" weight="154px">
                     {% endif %}
@@ -17,13 +17,17 @@
                 <div class="featured-img-details">
                     <div class="featured-img-details-wrapper">
                         <div class="featured-title">
-                            <a href="{% url 'view_event_day' event.id %}">{{event.event.name}}</a>
+                            <a href="{% url 'event_view' event.slug %}">{{event.name}}</a>
                         </div>
                         <div class="featured-date">                                                                            
-                            {{ event.start_time|date:"b d"|title }} | {{ event.event.venue.name }}                                        
+                            <!-- TODO: use event date range and time range -->
+                            {{ event.nearest_start_time|date:"b d, Y | fA"|title }}-{{event.nearest_end_time|date:"fA"|title}}
+                        </div>
+                        <div class="feature-venue">
+                            {{ event.venue.name }}
                         </div>
                         <div class="featured-details-link">
-                            <a href="/events/view/{{event.event.slug}}/">
+                            <a href="{% url 'event_view' event.slug %}">
                                 event details
                             </a>
                         </div>

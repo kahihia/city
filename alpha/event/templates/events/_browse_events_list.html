@@ -11,56 +11,56 @@
     {% for event in events %}    
         <div class="entry-info">
             <div class="entry-img-prev">
-                {% if event.event.picture %}
-                    <img src="{% cropped_thumbnail event.event "cropping" width=60 %}" height="60px" weight="60px">
+                {% if event.picture %}
+                    <img src="{% cropped_thumbnail event "cropping" width=60 %}" height="60px" weight="60px">
                 {% else %}
                     <img src="{{STATIC_URL}}images/default-event.jpg" height="60px" weight="60px">
                 {% endif %}
             </div>
             <div class="entry-details-wrapper">                                  
                 <div class="title">
-                    <a href="{% url 'view_event_day' event.id %}">
-                        {{event.event.name}}&nbsp;
+                    <a href="{% url 'event_view' event.slug %}">
+                        {{event.name}}&nbsp;
                     </a>                    
                 </div>
                 <div class="entry-date">
-                    {{event.start_time|date:"l, F d, Y"}}
+                    {{event.nearest_start_time|date:"l, F d, Y"}}
                     <span class="delimeter">|</span>
-                    {{event.start_time|just_time}} - {{event.end_time|just_time}}
+                    {{event.nearest_start_time|just_time}} - {{event.nearest_end_time|just_time}}
                 </div>
                 <div class="entry-description">                    
-                    {{ event.event.venue.name }}, {{ event.event.venue.street }}, {{ event.event.venue.city.name_std }}
+                    {{ event.venue.name }}, {{ event.venue.street }}, {{ event.venue.city.name_std }}
                 </div>                
             </div>
             <div class="auctions-wrapper">
                 <div class="auctions-content">
                     <div class="auctions-img-prev">
-                        {% if event.event.picture %}
-                            <img src="{% cropped_thumbnail event.event "cropping" width=87 %}" height="87px" weight="87px">
+                        {% if event.picture %}
+                            <img src="{% cropped_thumbnail event "cropping" width=87 %}" height="87px" weight="87px">
                         {% else %}
                             <img src="{{STATIC_URL}}images/default-event.jpg" height="87px" weight="87px">
                         {% endif %}
                     </div>
                     <div class="auctions-details-wrapper">
                         <div class="title">
-                            {{event.event.name}}&nbsp;
+                            {{event.name}}&nbsp;
                         </div>
                         <div class="entry-date">
-                            {{event.start_time|date:"l, F d, Y"}}
+                            {{event.nearest_start_time|date:"l, F d, Y"}}
                             <br>
-                            {{event.start_time|contextualize_date}} - {{event.end_time|just_time}}                                
+                            {{event.nearest_start_time|contextualize_date}} - {{event.nearest_end_time|just_time}}                                
                         </div>
                         <div class="auctions-additional">
-                            {{ event.event.venue.name }}
+                            {{ event.venue.name }}
                         </div>
                     </div>
                     <div class="auctions-actions"> 
-                        {% if event.event.tickets %}                       
-                            <a href="{% if_url event.event.tickets event.event.tickets "javascript:void;" %}" class="button">
+                        {% if event.tickets %}                       
+                            <a href="{% if_url event.tickets event.tickets "javascript:void;" %}" class="button">
                                 Buy Tickets
                             </a>
                             <div class="tickets-popup">
-                                <b>{{event.event.tickets}}</b>
+                                <b>{{event.tickets}}</b>
                             </div>
                         {% endif %}
                         
@@ -70,7 +70,7 @@
                         <div class="in-the-loop-wrapper">
                             <a href="javascript:void()" class="button action-in-the-loop">In the Loop</a>
                             <div class="in-the-loop-tags-popup">
-                                {% for tag in event.event.tags.all %}
+                                {% for tag in event.tags.all %}
                                 <span class="button tag" data-tag="{{ tag.name }}">
                                     {{ tag.name }}
                                 </span>
@@ -82,7 +82,7 @@
                                 </div>                                
                             </div>
                         </div>                        
-                        <div href="http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event.id %}" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}{% url 'view_event_day' event.id %}" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>
+                        <div href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>
                     </div>
                 </div>
             </div>
