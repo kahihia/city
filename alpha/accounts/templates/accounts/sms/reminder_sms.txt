@@ -1,0 +1,1 @@
+{% load date_formatting %}{{event.name}} in {{event.venue.name}} will start at {{event.nearest_start_time|just_time}} on {{event.nearest_start_time|date:"l, F d"}}
