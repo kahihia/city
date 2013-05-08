@@ -76,7 +76,7 @@ def remind_account_about_events_with_sms(account, events):
         })
 
         client.sms.messages.create(
-            to=account.reminder_phonenumber,
+            to=str(account.reminder_phonenumber),
             from_=settings.TWILIO_NUMBER,
             body=body
         )
@@ -132,7 +132,7 @@ def inform_account_about_events_with_tag_with_sms(account, events, tags_in_venue
         })
 
         client.sms.messages.create(
-            to=account.reminder_phonenumber,
+            to=str(account.reminder_phonenumber),
             from_=settings.TWILIO_NUMBER,
             body=body
         )

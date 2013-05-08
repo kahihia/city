@@ -279,7 +279,7 @@ CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 CELERYBEAT_SCHEDULE = {
     'reminding-about-events-every-5-minutes': {
         'task': 'accounts.tasks.remind_accounts_about_events',
-        'schedule': timedelta(minutes=30)
+        'schedule': timedelta(minutes=5)
     },
     'reminding-about-event-every-day': {
         'task': 'accounts.tasks.remind_accounts_about_events_on_week_day',

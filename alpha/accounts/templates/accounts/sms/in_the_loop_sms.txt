@@ -1,1 +1,1 @@
-{{event.name}} with tags {{tags|join:", "}} in {{event.venue.name}}({{event.venue.city.name_std}}) will start at {{event.nearest_start_time|just_time}} on {{event.nearest_start_time|date:"l, F d"}}
+{% load date_formatting %}{{event.name}} with tags {{tags|join:", "}} in {{event.venue.name}}({{event.venue.city.name_std}}) will start at {{event.nearest_start_time|just_time}} on {{event.nearest_start_time|date:"l, F d"}}
