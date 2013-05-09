@@ -15,7 +15,6 @@ def prprofile(request, prof_slug):
     return render_to_response('prprofile.html', {
                 'venues_profile' : venues_profile,
         },context_instance=RequestContext(request))
-    #return HttpResponse(venues_profile.location.x)
     
     
     
