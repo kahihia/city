@@ -3,10 +3,15 @@
 
     function ReminderOptionsPage(){
         $(".dropdown").qap_dropdown();
+
+        $("input[name=reminder_active_type]").on("click", function(){
+            $(".reminder-time-options .active").removeClass("active");
+            $(this).parents("tr").addClass("active");
+        });
     }
 
 
-    $(window).load(function(){
+    $(document).on("ready page:load", function(){
         window.reminderOptionsPage = new ReminderOptionsPage();
     });
 

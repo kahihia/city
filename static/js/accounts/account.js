@@ -19,7 +19,7 @@
         }
     };
 
-    $(window).load(function(){
+    $(document).on("ready page:load", function(){
         window.accountPage = new AccountPage();
     });
 

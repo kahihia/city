@@ -2,7 +2,7 @@
 
     'use strict';
 
-    $(window).load(function(){
+    $(document).on("ready page:load", function(){
         window.setTimeout(function(){
             if($(".messages").length>0){
                 window.ajaxPopup($(".messages")[0].outerHTML, 'success');

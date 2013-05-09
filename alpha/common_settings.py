@@ -110,6 +110,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'event.middleware.LocationMiddleware',
+    'turbolinks.middleware.TurbolinksMiddleware'
 )
 
 ROOT_URLCONF = 'urls'
@@ -160,6 +161,7 @@ INSTALLED_APPS = (
     'djcelery',
     'venue_profile',
     'django_twilio',
+    'turbolinks',
 )
 
 # A sample logging configuration. The only tangible logging performed

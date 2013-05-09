@@ -10,3 +10,4 @@ django-taggit
 simplejson==1.9.3
 twilio
 django-money
+django-turbolinks

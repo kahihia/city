@@ -14,7 +14,9 @@
 
     <script type="text/javascript" src="{{STATIC_URL}}js/libs/underscore-min.js"></script>
     <script type="text/javascript" src="{{STATIC_URL}}date/js/jquery-1.8.0.min.js"></script>
-    <script type="text/javascript" src="{{STATIC_URL}}date/js/jquery-ui-1.8.23.custom.min.js"></script>    
+    <script type="text/javascript" src="{{STATIC_URL}}date/js/jquery-ui-1.8.23.custom.min.js"></script>
+
+    <script type="text/javascript" src="{{STATIC_URL}}js/restore-scroll-position.js"></script>
 
     <script src="{{STATIC_URL}}js/validate.js" type="text/javascript"></script>
 
@@ -41,7 +43,7 @@
 <div class="wrapper">
     <div class="page-container">    
         <!--start.header-wrapper-->  
-        <div class="header-wrapper">
+        <div class="header-wrapper" data-no-turbolink>
             <div class="header">
                 <div class="primary-header-wrapper">
                     <div class="logo">
@@ -78,7 +80,7 @@
         </div>
 
         <!--start.footer-wrapper-->
-        <div class="footer-wrapper">
+        <div class="footer-wrapper" data-no-turbolink>
             <div class="footer-container">
                 <div class="footer-ads-wrapper">
                     <div class="footer-ads-container"> 
@@ -104,7 +106,7 @@
 
         <!--start.footer-site-links-->
 
-        <div class="footer-site-links">
+        <div class="footer-site-links" data-no-turbolink>
             <div class="footer-container">
                 <div class="copyright">&copy; 2012 Cityfusion</div>
                 <div class="footer-site-map">

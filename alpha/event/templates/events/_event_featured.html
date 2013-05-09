@@ -2,7 +2,7 @@
 {% load cropping %}
 <div class="featured-area">
     <h2>Featured Events</h2>
-    <div class="features-wrapper">
+    <div class="features-wrapper" data-no-turbolink>
         <!--start.featured_events-->
         {% paginate 6 featuredEventsFilter.qs using "featured_page" as featured_events %}        
         {% for event in featured_events %}

@@ -9,12 +9,12 @@
             if(document.documentElement.clientHeight) {
                 return document.documentElement.clientHeight;
             } else {
-                document.body.offsetHeight;
+                return document.body.offsetHeight;
             }
         }
     }
     screen_height = getClientHeight();
-    $(window).load(function() {
+    $(document).on("ready page:load", function() {
         screen_height = getClientHeight();
     });
     $(window).resize(function() {
@@ -32,7 +32,7 @@
             }
             this.popup = $(".full-screen-popup");
             this.save_button = $(".save-button", this.popup);
-            $(this.save_button).on('click', function() {                
+            $(this.save_button).on('click', function() {
                 $.fancybox.close();
                 that.saveThumbnail();
             });
@@ -40,10 +40,10 @@
             $(".picture-thumb").on("click", function(){
                 if(that.cropping_image) {
                     $.fancybox($(that.popup), {
-                        autoSize: true,                     
-                        closeBtn: false,                        
-                        hideOnOverlayClick: false                        
-                    });                    
+                        autoSize: true,
+                        closeBtn: false,
+                        hideOnOverlayClick: false
+                    });
                 }
             });
             

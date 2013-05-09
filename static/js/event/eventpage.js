@@ -15,7 +15,7 @@
         }
     };
 
-    $(window).load(function(){
+    $(document).on("ready page:load", function(){
         window.eventPage = new EventPage();
     });
 
