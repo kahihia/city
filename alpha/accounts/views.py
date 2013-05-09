@@ -1,24 +1,21 @@
 # Create your views here.
 
 from models import Account
-from event.models import SingleEvent, Event
+from event.models import SingleEvent, Event, Venue
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 
 from accounts.forms import ReminderSettingsForm, InTheLoopSettingsForm
 
 from django.conf import settings
-from django.http import HttpResponse
+
 from django.utils import simplejson as json
 from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
 
-from django.core.mail.message import EmailMessage
-
-from utils import remind_account_about_events
+from utils import remind_account_about_events, inform_account_about_events_with_tag
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 20)
 
@@ -26,15 +23,23 @@ TAG_MODEL = getattr(settings, 'TAGGIT_AUTOSUGGEST_MODEL', ('taggit', 'Tag'))
 TAG_MODEL = get_model(*TAG_MODEL)
 
 
-def remind_me(request, single_event_id):
+def remind_me(request, event_id):
     profile = Account.objects.get(user_id=request.user.id)
-    event = SingleEvent.objects.get(id=single_event_id)
+    event = Event.future_events.get(id=event_id)
 
     profile.reminder_events.add(event)
 
     return render_to_response('accounts/ajax_result_remind_me.html', {
         "event": event
     }, context_instance=RequestContext(request))
+
+
+def remove_remind_me(request, event_id):
+    profile = Account.objects.get(user_id=request.user.id)
+    event = Event.future_events.get(id=event_id)
+    profile.reminder_events.remove(event)
+
+    return HttpResponseRedirect("/accounts/%s/" % request.user.username)
 
 
 def add_in_the_loop(request):
@@ -101,25 +106,20 @@ def in_the_loop_tags(request):
 def remind_preview(request):
     message = remind_account_about_events(
         Account.objects.get(user__email="jaromudr@gmail.com"),
-        SingleEvent.future_events.all().select_related('event')[0:1]
+        Event.future_events.all()[0:1]
     )
 
     return HttpResponse(message)
 
 
 def in_the_loop_preview(request):
-    featured_events = SingleEvent.featured_events.all().select_related('event')[:4]
+    message = inform_account_about_events_with_tag(
+        Account.objects.get(user__email="jaromudr@gmail.com"),
+        Event.future_events.all()[0:1],
+        {
+            "opa": ["Montreal"],
+            "hmm": ["Ottava", "Odessa"]
+        }
+    )
 
-    events = SingleEvent.future_events.all() \
-        .select_related('event')[0:5]
-
-    similar_events = SingleEvent.future_events.all() \
-        .select_related('event')[0:10]
-
-    return render_to_response('accounts/in_the_loop_email.html', {
-        "featured_events": featured_events,
-        "events": events,
-        "similar_events": similar_events,
-        "tag": "Aboriginal",
-        "tcu_place": "Saskatoon"
-    }, context_instance=RequestContext(request))
+    return HttpResponse(message)

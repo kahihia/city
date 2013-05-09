@@ -1,29 +1,31 @@
 {% load endless %}
 
-{% paginate 6 profile.reminder_events.all  using "reminder_page" as events %}
+{% paginate 6 profile.reminder_events_in_future  using "reminder_page" as events %}
 
 <table class="profile-table" celpadding="0" cellspacing="0">
     <tr>
         <th>Date</th>
         <th>Time</th>
         <th>Event</th>
-        <th class="action">Option</th>
+        <th class="action">Remove</th>
     </tr>
     {% for event in events %}
     <tr>
         <td>
-            {{ event.start_time|date:"b d" }}
+            {{ event.nearest_start_time|date:"b d" }}
         </td>
         <td>
-            {{ event.start_time|date:"P" }}
+            {{ event.nearest_start_time|date:"fA"|title }}-{{ event.nearest_end_time|date:"fA"|title }}
         </td>
         <td>
-            <a href="/events/view/{{event.event.slug}}/">
-                {{ event.event.name }}
+            <a href="{% url 'event_view' event.slug %}">
+                {{ event.name }}
             </a>            
         </td>
         <td class="action">
-            <a href="#">edit</a>
+            <a href="{% url 'remove_remind_me' event.id %}" class="remove-button">
+
+            </a>
         </td>
     </tr>
     {% endfor %}

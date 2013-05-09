@@ -1,0 +1,14 @@
+{% for prof in venue_profiles %}
+    <a class="mngp" href="{% url 'prprofile' prof_slug=prof.cv_slug %}"><li class="mngp" style="display: none; margin-left: 5px;">{{ prof.name }}</li></a>
+{% endfor %}
+<script>
+    $(document).ready(function() {
+      $('.mng').hover(
+            function(){
+              $('.mngp').css({'display' : 'block'});
+            },
+            function(){
+              $('.mngp').css({'display' : 'none'});
+            });
+    });
+</script>

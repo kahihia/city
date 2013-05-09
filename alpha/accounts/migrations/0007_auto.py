@@ -1,47 +1,25 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
-        # Adding model 'VenueProfile'
-        db.create_table('venue_profile', (
-            (u'venue_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['event.Venue'], unique=True, primary_key=True)),
-            ('cv_phone', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('cv_fax', self.gf('django.db.models.fields.CharField')(max_length=20)),
-            ('cv_email', self.gf('django.db.models.fields.EmailField')(max_length=75)),
-            ('cv_site', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('cv_fcb', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('cv_twt', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('cv_about', self.gf('django.db.models.fields.TextField')(default='Not provided')),
-            ('cv_picture', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
-            ('cv_cropping', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('cv_slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50, db_index=True)),
-        ))
-        db.send_create_signal(u'venue_profile', ['VenueProfile'])
-
-        # Adding M2M table for field cv_user on 'VenueProfile'
-        db.create_table('venue_profile_cv_user', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('venueprofile', models.ForeignKey(orm[u'venue_profile.venueprofile'], null=False)),
-            ('account', models.ForeignKey(orm[u'accounts.account'], null=False))
-        ))
-        db.create_unique('venue_profile_cv_user', ['venueprofile_id', 'account_id'])
+        # Removing M2M table for field reminder_events on 'Account'
+        db.delete_table('accounts_account_reminder_events')
 
 
     def backwards(self, orm):
-        
-        # Deleting model 'VenueProfile'
-        db.delete_table('venue_profile')
-
-        # Removing M2M table for field cv_user on 'VenueProfile'
-        db.delete_table('venue_profile_cv_user')
+        # Adding M2M table for field reminder_events on 'Account'
+        db.create_table(u'accounts_account_reminder_events', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('account', models.ForeignKey(orm[u'accounts.account'], null=False)),
+            ('singleevent', models.ForeignKey(orm[u'event.singleevent'], null=False))
+        ))
+        db.create_unique(u'accounts_account_reminder_events', ['account_id', 'singleevent_id'])
 
 
     models = {
@@ -73,7 +51,6 @@ class Migration(SchemaMigration):
             'raw_data': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'reminder_days_before_event': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'reminder_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
-            'reminder_events': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['event.Event']", 'null': 'True', 'blank': 'True'}),
             'reminder_hours_before_event': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'reminder_on_week_day': ('django.db.models.fields.CharField', [], {'default': '0', 'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'reminder_on_week_day_at_time': ('django.db.models.fields.TimeField', [], {'null': 'True', 'blank': 'True'}),
@@ -86,6 +63,15 @@ class Migration(SchemaMigration):
             'venue': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['event.Venue']", 'null': 'True', 'blank': 'True'}),
             'website': ('django.db.models.fields.URLField', [], {'default': "''", 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'website_url': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
+        },
+        u'accounts.accountreminding': {
+            'Meta': {'object_name': 'AccountReminding'},
+            'account': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.Account']"}),
+            'done': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'event_day': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['event.SingleEvent']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'notification_time': ('django.db.models.fields.DateTimeField', [], {}),
+            'notification_type': ('django.db.models.fields.CharField', [], {'max_length': '25'})
         },
         u'auth.group': {
             'Meta': {'object_name': 'Group'},
@@ -102,7 +88,7 @@ class Migration(SchemaMigration):
         },
         u'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 8, 2, 49, 34, 483286)'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -110,7 +96,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 8, 2, 49, 34, 482690)'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -168,7 +154,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Event'},
             'audited': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'authentication_key': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 8, 2, 49, 33, 625609)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 5, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
             'cropping': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'email': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -176,17 +162,26 @@ class Migration(SchemaMigration):
             'featured_on': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'location': ('django.contrib.gis.db.models.fields.PointField', [], {}),
-            'modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 8, 2, 49, 33, 625682)', 'auto_now': 'True', 'blank': 'True'}),
+            'modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 5, 0, 0)', 'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '250'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
             'picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'price': ('django.db.models.fields.CharField', [], {'default': "'Free'", 'max_length': '40', 'blank': 'True'}),
             'search_index': ('djorm_pgfulltext.fields.VectorField', [], {'default': "''", 'null': 'True', 'db_index': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
             'tickets': ('django.db.models.fields.CharField', [], {'max_length': '250', 'null': 'True', 'blank': 'True'}),
             'venue': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['event.Venue']", 'null': 'True', 'blank': 'True'}),
             'viewed_times': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),
             'website': ('django.db.models.fields.URLField', [], {'default': "''", 'max_length': '200', 'null': 'True', 'blank': 'True'})
+        },
+        u'event.singleevent': {
+            'Meta': {'object_name': 'SingleEvent'},
+            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'end_time': ('django.db.models.fields.DateTimeField', [], {}),
+            'event': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'single_events'", 'to': u"orm['event.Event']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'search_index': ('djorm_pgfulltext.fields.VectorField', [], {'default': "''", 'null': 'True', 'db_index': 'True'}),
+            'start_time': ('django.db.models.fields.DateTimeField', [], {})
         },
         u'event.venue': {
             'Meta': {'object_name': 'Venue'},
@@ -201,7 +196,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Tag'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '100', 'db_index': 'True'})
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '100'})
         },
         u'taggit.taggeditem': {
             'Meta': {'object_name': 'TaggedItem'},
@@ -209,24 +204,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'object_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
             'tag': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'taggit_taggeditem_items'", 'to': u"orm['taggit.Tag']"})
-        },
-        u'venue_profile.venueprofile': {
-            'Meta': {'ordering': "['created_at']", 'object_name': 'VenueProfile', 'db_table': "'venue_profile'", '_ormbases': [u'event.Venue']},
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'cv_about': ('django.db.models.fields.TextField', [], {'default': "'Not provided'"}),
-            'cv_cropping': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'cv_email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
-            'cv_fax': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'cv_fcb': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
-            'cv_phone': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'cv_picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'cv_site': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
-            'cv_slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'}),
-            'cv_twt': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
-            'cv_user': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['accounts.Account']", 'symmetrical': 'False'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            u'venue_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['event.Venue']", 'unique': 'True', 'primary_key': 'True'})
         }
     }
 
-    complete_apps = ['venue_profile']
+    complete_apps = ['accounts']

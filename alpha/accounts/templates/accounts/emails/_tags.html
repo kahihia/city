@@ -1,0 +1,42 @@
+<table bgcolor="#f3f3f3" width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+    <tr>
+        <td width="15">
+            <div style="line-height:0;">
+                <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="15" alt="" />
+            </div>
+        </td>
+
+        <td>
+            {% for tag, venues in tags_in_venues.items %}
+                <span style="color: #000000; font-family: sans-serif; font-size:16px">
+                    Your tag 
+                </span>
+                <span style="color: #8cc2fa; font-family: sans-serif; font-weight: bold; font-style: italic; font-size:16px">
+                    <a target="_blank" href="will_be_later" style="color: #8cc2fa; font-family: sans-serif; font-weight: bold; font-style: italic; font-size:16px; text-decoration: none; border: none;">
+                        {{ tag }}
+                    </a>
+                </span>
+                <span style="color: #000000; font-family: sans-serif; font-size:16px">
+                    was used in an event in
+                </span>
+                <span style="color: #8cc2fa; font-family: sans-serif; font-weight: bold; font-style: italic; font-size:16px">
+                    <a target="_blank" href="will_be_later" style="color: #8cc2fa; font-family: sans-serif; font-weight: bold; font-style: italic; font-size:16px; text-decoration: none; border: none;">
+                        {{venues|join:", "}}.
+                    </a>
+                </span>
+                <br/>
+
+            {% endfor %}
+        </td>
+
+        <td>
+            <img src="{{site}}{{STATIC_URL}}images/emails/in-the-loop.png" width="85" height="59" >
+        </td>
+
+        <td width="15">
+            <div style="line-height:0;">
+                <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="15" height="62" alt="" />
+            </div>
+        </td>
+    </tr>
+</table>

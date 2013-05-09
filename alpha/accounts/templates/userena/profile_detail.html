@@ -1,6 +1,7 @@
 {% extends 'userena/base_userena.html' %} 
 {% load i18n %} 
-{% load url from future %} 
+{% load url from future %}
+{% load v_profiles %}
 
 {% block title %}
     {% blocktrans with profile.user.username as username %}
@@ -22,9 +23,17 @@
     <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/browse/search_pad.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/emb_vnprf.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/browse_event_list.css" rel="stylesheet" type="text/css" />
 
     <script src="{{STATIC_URL}}js/tabs.js" type="text/javascript" ></script>
     <script src="{{STATIC_URL}}js/accounts/account.js" type="text/javascript" ></script>
+    <script src="{{STATIC_URL}}js/browse/jquery.hoverIntent.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/searchpad/ajax-popup.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/searchpad/event-actions.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/searchpad/jump-to-date.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/browse/auctions-popup.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/browse/browse-page.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block content %}
@@ -55,9 +64,12 @@
                         <li>
                             <a href="{% url 'in_the_loop_settings' %}">Edit In the Loop tags</a>
                         </li>
+                        <div class="mng">
                         <li>
                             <a>Manage my Profile(s)</a>
                         </li>
+                            {% v_profiles %}
+                        </div>
                         <li>
                             <a>View my order history</a>
                         </li>
@@ -121,4 +133,6 @@
             {% include 'accounts/_in_the_loop_events_table.html' %}
         </div>
     </div>
+    {% v_profiles %}
+    
 {% endblock %}

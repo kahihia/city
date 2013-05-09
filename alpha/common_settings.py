@@ -279,12 +279,14 @@ CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 CELERYBEAT_SCHEDULE = {
     'reminding-about-events-every-5-minutes': {
         'task': 'accounts.tasks.remind_accounts_about_events',
-        'schedule': timedelta(seconds=30)
+        'schedule': timedelta(minutes=30)
     },
     'reminding-about-event-every-day': {
         'task': 'accounts.tasks.remind_accounts_about_events_on_week_day',
         'schedule': crontab(hour=6, minute=0),
     },
+    'inform-accounts-about-new-events-with-tags-every-3-hours': {
+        'task': 'accounts.tasks.inform_accounts_about_new_events_with_tags',
+        'schedule': timedelta(hours=6)
+    }
 }
-
-CELERY_TIMEZONE = 'UTC'

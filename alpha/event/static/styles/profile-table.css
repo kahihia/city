@@ -33,6 +33,13 @@
     text-decoration: none;
 }
 
+.profile-table td a.remove-button {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url("/static/images/accounts/remove16x16.png") no-repeat;
+}
+
 .profile-table th a:hover,
 .profile-table td a:hover {
     color: #022e52;

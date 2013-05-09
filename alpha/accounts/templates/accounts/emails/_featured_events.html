@@ -1,0 +1,87 @@
+{% load event_pictures %}
+<tr>
+    <td height="10">
+        <div style="line-height:0;">
+            <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" style="border: none;" />
+        </div>
+    </td>
+</tr>
+<!-- Featured events -->
+<tr>
+    <td width="10">
+        <div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div>
+    </td>
+
+    <td>                
+        <table bgcolor="#022e52" width="670" cellpadding="0" cellapscing="0" style="border-collapse:collapse; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px;">
+            <tr>
+                <td height="10" colspan="9">
+                    <div style="line-height:0;">
+                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="10">
+                    <div style="line-height:0;">
+                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" />
+                    </div>
+                </td>
+                <td colspan="8" align="left">
+                    <span style="color:#ffffff; font-size: 20px; font-weight: bold;">Featured Events</span>
+                </td>
+            </tr>
+            <tr>
+                <td height="10">
+                    <div style="line-height:0;">
+                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" />
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td width="10">
+                    <div style="line-height:0;">
+                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" />
+                    </div>
+                </td>
+                <!-- List of featured events -->
+                {% for event in featured_events %}
+                    <td height="147" style="border: 5px solid #ffffff" valign="top">
+                        <a target="_blank" href="{{site}}{% url 'event_view' event.slug %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none; border: none; display: block; line-height:0px;">
+                            <img src="{{site}}{% feature_event_as_image event %}" style="border-collapse:collapse; border: none;" />
+                        </a>
+                        
+                    </td>
+                    <td width="10" align="left">
+                        <div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div>
+                    </td>
+                {% endfor %}
+                <!-- Space if we have less that 4 items -->
+                <td width="100%"></td>
+            </tr>
+
+            <tr>
+                <td height="20">
+                    <div style="line-height:0;">
+                        <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="20" alt="" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </td>
+
+    <td width="10">
+        <div style="line-height:0;">
+            <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" />
+        </div>
+    </td>
+</tr>
+
+<tr>
+    <td height="10">
+        <div style="line-height:0;">
+            <img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" />
+        </div>
+    </td>
+</tr>

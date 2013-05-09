@@ -9,5 +9,4 @@ special_keys = ["today", "tomorrow", "this-weekend", "next-week"]
 
 @register.simple_tag
 def events_filter_url(request, filter, **kwargs):
-    print request
     return "%s?%s" % (request.path, filter.url_query(**kwargs))

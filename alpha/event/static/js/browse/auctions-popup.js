@@ -15,11 +15,11 @@
         hoverConfig = {
             sensitivity: 3,
             interval: 200,
-            over: function(){
+            over: function(e){
                 that.openPopup();
             },
             timeout: 500,
-            out: function(){
+            out: function(e){
                 that.closePopup();
             }
         };
@@ -31,7 +31,7 @@
         openPopup: function(e){
             $(".auctions-wrapper").hide();
             this.popup.show();
-            e.stopPropagation();
+            e && e.stopPropagation();
         },
         closePopup: function(e){
             this.popup.hide();
