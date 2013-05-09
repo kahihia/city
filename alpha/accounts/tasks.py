@@ -19,7 +19,7 @@ def remind_accounts_about_events():
 @task
 def remind_accounts_about_events_on_week_day():
     # TODO: select related
-    for account in Account.objects.filter(reminder_on_week_day=str(datetime.now().weekday())):
+    for account in Account.objects.filter(reminder_active_type="WEEKDAY", reminder_on_week_day=str(datetime.now().weekday())):
         event_ids = account.reminder_events.filter(single_events__start_time__gte=datetime.now(), single_events__start_time__lte=(datetime.now() + timedelta(days=7))).values_list("id", flat=True)
         events = Event.future_events.filter(id__in=event_ids)
         if len(events) > 0:
@@ -38,6 +38,7 @@ def inform_accounts_about_new_events_with_tags():
                 event_tags = event.tags.values_list('name', flat=True)
 
                 tags_intersection = list(set(account_tags) & set(event_tags))
+
                 for tag in tags_intersection:
                     if tag in tags_in_venues:
                         tags_in_venues[tag].append(event.venue.city.name_std)
