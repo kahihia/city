@@ -2,7 +2,7 @@
 
     'use strict';
 
-    var EventPage = function(){        
+    var EventPage = function(){
         this.initEventActions();
         $("a#photoFancy").fancybox({
             'hideOnContentClick': true
@@ -15,7 +15,7 @@
         }
     };
 
-    $(window).load(function(){
+    $(document).on("ready page:load", function(){
         window.eventPage = new EventPage();
     });
 

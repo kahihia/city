@@ -110,6 +110,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'event.middleware.LocationMiddleware',
+    'turbolinks.middleware.TurbolinksMiddleware'
 )
 
 ROOT_URLCONF = 'urls'
@@ -158,6 +159,10 @@ INSTALLED_APPS = (
     'userena',
     'django_facebook',
     'djcelery',
+    'venue_profile',
+    'django_twilio',
+    'turbolinks',
+	'advertising'
 )
 
 # A sample logging configuration. The only tangible logging performed
@@ -278,7 +283,7 @@ CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 CELERYBEAT_SCHEDULE = {
     'reminding-about-events-every-5-minutes': {
         'task': 'accounts.tasks.remind_accounts_about_events',
-        'schedule': timedelta(minutes=30)
+        'schedule': timedelta(minutes=5)
     },
     'reminding-about-event-every-day': {
         'task': 'accounts.tasks.remind_accounts_about_events_on_week_day',
@@ -289,3 +294,7 @@ CELERYBEAT_SCHEDULE = {
         'schedule': timedelta(hours=6)
     }
 }
+
+TWILIO_ACCOUNT_SID = 'AC1a554e71d3c0921faa3732bd495f5878'
+TWILIO_AUTH_TOKEN = '89eec7d9c48d4d3f3809ed8edb17a48d'
+TWILIO_NUMBER = "+12026013648"

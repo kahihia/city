@@ -1,0 +1,71 @@
+- model: advertising.AdvertisingType
+  pk: 1
+  fields:
+    name: Big Box
+    width: 300
+    height: 250
+    cpm_price: 50
+    cpc_price: 50
+
+- model: advertising.AdvertisingType
+  pk: 2
+  fields:
+    name: Rectangle
+    width: 300
+    height: 100
+    cpm_price: 50
+    cpc_price: 50
+
+- model: advertising.AdvertisingType
+  pk: 3
+  fields:
+    name: Half Page
+    width: 300
+    height: 600
+    cpm_price: 50
+    cpc_price: 50
+
+- model: advertising.AdvertisingType
+  pk: 4
+  fields:
+    name: Sky Scraper
+    width: 160
+    height: 600
+    cpm_price: 50
+    cpc_price: 50
+
+- model: advertising.AdvertisingType
+  pk: 5
+  fields:
+    name: Leader Board
+    width: 728
+    height: 90
+    cpm_price: 50
+    cpc_price: 50
+
+- model: advertising.AdvertisingType
+  pk: 6
+  fields:
+    name: Email Button
+    width: 120
+    height: 60
+    cpm_price: 50
+    cpc_price: 50
+
+- model: advertising.AdvertisingType
+  pk: 7
+  fields:
+    name: Email Banner
+    width: 468
+    height: 60
+    cpm_price: 50
+    cpc_price: 50
+
+- model: advertising.AdvertisingType
+  pk: 8
+  fields:
+    name: Email Sky Scrapper
+    width: 120
+    height: 600
+    cpm_price: 50
+    cpc_price: 50  

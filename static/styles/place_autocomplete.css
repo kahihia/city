@@ -1,0 +1,42 @@
+.pac-container::after {
+    content:none;
+}
+
+.pac-container.suggest-new{
+    padding-bottom:25px;    
+}
+
+.pac-container.show {
+    display:block !important;
+}
+
+.pac-item,.new-venue {
+    cursor: pointer;
+    padding: 5px 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pac-container .new-venue {
+    display:none;
+}
+
+.pac-container.suggest-new .new-venue {
+    position:absolute;
+    bottom:0px;
+    color:#06C;
+    background:#fafafa;
+    font-weight: bold;
+    width:100%;
+    display:block;
+}
+
+.tags_title {
+    vertical-align:bottom;
+    padding-bottom: 13px;
+}
+
+.error {
+    padding-left:15px;
+    color:red;
+}

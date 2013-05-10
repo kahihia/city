@@ -59,6 +59,11 @@ class CustomIndexDashboard(Dashboard):
             models=('accounts.*', 'accounts.AccountReminding')
         ))
 
+        self.children.append(modules.AppList(
+            _('Advertising'),
+            models=('advertising.*', )
+        ))
+
         # append an app list module for "Administration"
         self.children.append(modules.AppList(
             _('Administration'),

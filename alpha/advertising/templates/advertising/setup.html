@@ -1,0 +1,122 @@
+{% extends 'base-new.html' %} 
+{% load i18n %} 
+{% load url from future %} 
+
+{% block title %}
+    {% blocktrans with profile.user.username as username %}
+        {{username }} reminder options
+    {% endblocktrans %}
+{% endblock %} 
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />    
+    <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page %}
+    <div class="primary-content">
+        <h1>
+            Advertising - Setup
+        </h1>
+        <div class="content account-options-wrapper">            
+            <div class="main-content account-options">
+                {%if form.errors %}
+                    <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                        <ul style="list-style-type: none;">
+                            <li id="all-info">
+                                {% for error in form.non_field_errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </li>
+                            <li id="all-info">
+                                {% for error in form.name.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </li>
+                        </ul>
+                    </div>
+                    
+                {% endif %}
+                <form method="post" name="advertising-setup" >
+                    {% csrf_token %}
+                    <div class="campaign-name options">
+                        Name of Campaign
+                        <!--a href="javascript:void;" class="balloon">
+                            <div class="buttonq"></div>
+                        </a-->
+                        {{ form.name }}
+                        Enter the name of your campaign.
+                    </div>
+
+                    Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner, etc.
+                    <!--a href="javascript:void;" class="balloon">
+                        <div class="buttonq"></div>
+                    </a-->
+                    <div class="advertising-types options options-white">
+                        
+                        <table>
+                            <tr>
+                                <th>
+                                    CPM
+                                    <!--a href="javascript:void;" class="balloon">
+                                        <div class="buttonq"></div>
+                                    </a-->
+                                </th>
+                                <th>
+                                    CMC
+                                    <!--a href="javascript:void;" class="balloon">
+                                        <div class="buttonq"></div>
+                                    </a-->
+                                </th>
+                                <th>
+                                    Size of Ad
+                                    <!--a href="javascript:void;" class="balloon">
+                                        <div class="buttonq"></div>
+                                    </a-->
+                                </th>
+                                <th>
+                                    CPM Prices
+                                    <!--a href="javascript:void;" class="balloon">
+                                        <div class="buttonq"></div>
+                                    </a-->
+                                </th>
+                                <th>
+                                    CPC Prices
+                                    <!--a href="javascript:void;" class="balloon">
+                                        <div class="buttonq"></div>
+                                    </a-->
+                                </th>                                
+                            </tr>
+                            {% for advertising_type in advertising_types %}
+                            <tr>
+                                <td>
+                                    <div class="radio">                                        
+                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cpm" value="HOURS" name="advertising_type_{{ advertising_type.id }}_payment_type">
+                                        <label for="advertising_type_{{ advertising_type.id }}_cpm"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="radio">                                        
+                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cmc" value="HOURS" name="advertising_type_{{ advertising_type.id }}_payment_type">
+                                        <label for="advertising_type_{{ advertising_type.id }}_cmc"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    {{ advertising_type }}
+                                </td>
+                                <td>
+                                    {{ advertising_type.cpm_price }}
+                                </td>
+                                <td>
+                                    {{ advertising_type.cpc_price }}
+                                </td>
+                            </tr>
+                            {% endfor %}                            
+                        </table>
+                    </div>
+                    <input type="submit" name="submitoptions" class="button submit" value="Save" />
+                </form>
+            </div>                
+        </div>
+    </div>
+{% endblock %}

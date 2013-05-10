@@ -3,12 +3,14 @@ from accounts.models import Account
 
 from widgets import InTheLoopTagAutoSuggest
 from taggit.forms import TagField
+from accounts.models import REMINDER_TYPES
 
 
 class ReminderSettingsForm(forms.ModelForm):
     reminder_with_website = forms.BooleanField(required=False, label="")
     reminder_with_email = forms.BooleanField(required=False, label="")
     reminder_with_sms = forms.BooleanField(required=False, label="")
+    reminder_active_type = forms.ChoiceField(widget=forms.RadioSelect, choices=REMINDER_TYPES)
 
     class Meta:
         model = Account
@@ -20,7 +22,8 @@ class ReminderSettingsForm(forms.ModelForm):
             'reminder_phonenumber',
             'reminder_days_before_event',
             'reminder_hours_before_event',
-            'reminder_on_week_day'
+            'reminder_on_week_day',
+            'reminder_active_type'
         )
 
     def __init__(self, *args, **kwargs):
@@ -44,8 +47,5 @@ class InTheLoopSettingsForm(forms.ModelForm):
             'in_the_loop_with_email',
             'in_the_loop_with_sms',
             'in_the_loop_email',
-            'in_the_loop_phonenumber',
-            'in_the_loop_days_before_event',
-            'in_the_loop_hours_before_event',
-            'in_the_loop_on_week_day'
+            'in_the_loop_phonenumber'
         )

@@ -22,6 +22,7 @@
 
         $(".time, .meridian").qap_dropdown();
 
+        $.datepicker.initialized = false;
         $(".start-date .date, .end-date .date").on("click", function(){
             $("input", this).datepicker("show");
         });

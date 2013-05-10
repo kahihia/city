@@ -12,15 +12,3 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
-
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# alpha.event settings
-EVENTS_PER_PAGE = 2
-#added by aurlus
-#EMAIL_USE_TLS = True
-#EMAIL_HOST = 'smtp.gmail.com'
-#EMAIL_HOST_USER = 'arlusishmael@gmail.com'
-#EMAIL_HOST_PASSWORD = '19553b2008'
-#EMAIL_PORT = 587
-
-

@@ -14,6 +14,14 @@ from django_facebook.models import FacebookProfileModel
 
 from django.db.models.signals import post_save, m2m_changed
 
+
+REMINDER_TYPES = (
+    ("HOURS", "Hours before event"),
+    ("DAYS", "Days before event"),
+    ("WEEKDAY", "On week day")
+)
+
+
 DAYS_OF_WEEK = (
     ('0', 'Monday'),
     ('1', 'Tuesday'),
@@ -41,13 +49,14 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
 
     # remind options
     # remind time before event
-    reminder_time_before_event = models.TimeField(blank=True, null=True)
     reminder_days_before_event = models.IntegerField(blank=True, null=True)
     reminder_hours_before_event = models.IntegerField(blank=True, null=True)
 
     # remind on week day
     reminder_on_week_day = models.CharField(max_length=1, choices=DAYS_OF_WEEK, blank=True, null=True, default=0)
     reminder_on_week_day_at_time = models.TimeField(blank=True, null=True)
+
+    reminder_active_type = models.CharField(max_length=10, choices=REMINDER_TYPES, default="HOURS")
 
     # remind types
 
@@ -64,17 +73,6 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
     in_the_loop_tags = TaggableManager(blank=True)
 
     # In the Loop
-
-    # in the loop options
-    # in the loop time before event
-    in_the_loop_days_before_event = models.IntegerField(blank=True, null=True)
-    in_the_loop_hours_before_event = models.IntegerField(blank=True, null=True)
-
-    # in the loop on week day
-    in_the_loop_on_week_day = models.CharField(max_length=1, choices=DAYS_OF_WEEK, blank=True, null=True, default=0)
-    in_the_loop_on_week_day_at_time = models.TimeField(blank=True, null=True)
-
-    # in the loop types
 
     in_the_loop_with_website = models.BooleanField(default=True)
     in_the_loop_with_email = models.BooleanField(default=True)
@@ -97,27 +95,22 @@ def create_facebook_profile(sender, instance, created, **kwargs):
 
 
 def add_events_to_schedule(account, events):
-    for event in events:
-        event_days = SingleEvent.future_days.filter(event_id=event.id)
-        for event_day in event_days:
-            if account.reminder_days_before_event:
-                notification_time = event_day.start_time - timedelta(days=int(account.reminder_days_before_event))
+    if account.reminder_active_type in ["DAYS", "HOURS"]:
+        for event in events:
+            event_days = SingleEvent.future_days.filter(event_id=event.id)
+
+            for event_day in event_days:
+                if account.reminder_active_type == "DAYS":
+                    notification_time = event_day.start_time - timedelta(days=int(account.reminder_days_before_event))
+                if account.reminder_active_type == "HOURS":
+                    notification_time = event_day.start_time - timedelta(hours=int(account.reminder_hours_before_event))
+
                 if notification_time > datetime.datetime.now():
                     reminding = AccountReminding(
                         account=account,
                         event=event,
                         notification_time=notification_time,
-                        notification_type='DAYS_BEFORE_EVENT'
-                    )
-                    reminding.save()
-            if account.reminder_hours_before_event:
-                notification_time = event_day.start_time - timedelta(hours=int(account.reminder_hours_before_event))
-                if notification_time > datetime.datetime.now():
-                    reminding = AccountReminding(
-                        account=account,
-                        event=event,
-                        notification_time=notification_time,
-                        notification_type='HOURS_BEFORE_EVENT'
+                        notification_type=("%s_BEFORE_EVENT" % account.reminder_active_type)
                     )
                     reminding.save()
 
@@ -129,7 +122,7 @@ def sync_schedule_after_reminder_events_was_modified(sender, **kwargs):
         add_events_to_schedule(kwargs['instance'], events)
 
     if kwargs['action'] == 'post_remove':
-        AccountReminding.hots.filter(event__id__in=kwargs["pk_set"]).delete()
+        AccountReminding.objects.filter(event__id__in=kwargs["pk_set"]).delete()
 
 
 def sync_schedule_after_reminder_settings_was_changed(sender, instance, created, **kwargs):

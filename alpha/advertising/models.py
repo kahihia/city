@@ -7,12 +7,16 @@ from accounts.models import Account
 
 class AdvertisingType(models.Model):
     name = models.CharField(max_length=128)
-    width = models.DecimalField()
-    height = models.DecimalField()
-    cpm_price =  MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
-    cpc_price =  MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+    width = models.IntegerField()
+    height = models.IntegerField()
+    cpm_price = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+    cpc_price = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+    active = models.BooleanField(default=True)
 
     objects = money_manager(models.Manager())
+
+    def __unicode__(self):
+        return "%s(%d x %d)" % (self.name, self.width, self.height)
 
 
 class AdvertisingCampaign(models.Model):
@@ -24,10 +28,6 @@ class AdvertisingCampaign(models.Model):
 
     ammount_spent = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
     ammount_remaining = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
-
-    # Copy when create campaign. We should not change price after creating
-    cpm_price =  MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
-    cpc_price =  MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
 
     started = models.DateTimeField()
     ended = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
@@ -45,5 +45,9 @@ class Advertising(models.Model):
     ad_type = models.ForeignKey(AdvertisingType)
     ad_company = models.ForeignKey(AdvertisingCampaign)
     payment_type = models.CharField(max_length=3, choices=PAYMENT_TYPE)
-    ads_image = models.ImageField()
+    ads_image = models.ImageField(upload_to="advertising")
     reviewed = models.BooleanField(default=False)
+
+    # Copy when create campaign. We should not change price after creating
+    cpm_price = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+    cpc_price = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')

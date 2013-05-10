@@ -22,6 +22,7 @@
         </h1>
         <div class="content account-options-wrapper">            
             <div class="main-content account-options">
+                {{form.errors}}
                 {%if form.errors %}
                     <div class="errors" style="border:1px solid RED;border-radius:4px;">
                         <ul style="list-style-type: none;">
@@ -98,24 +99,42 @@
                             Please select the amount of time to remind you about your event(s)
                         </header>
                         <table>
-                            <tr>
+                            <tr {% if form.reminder_active_type.value == "HOURS" %}class="active"{% endif %}>                                
                                 <td class="first">
+                                    <div class="radio">                                        
+                                        <input {% if form.reminder_active_type.value == "HOURS" %}checked="checked"{% endif %} type="radio" id="id_reminder_active_type_0" value="HOURS" name="reminder_active_type">
+                                        <label for="id_reminder_active_type_0"></label>
+                                    </div>
+                                </td>
+                                <td class="second">
                                     {{ form.reminder_days_before_event }}
                                 </td>
                                 <td>
                                     Day(s) before the event begins
                                 </td>
                             </tr>
-                            <tr>
+                            <tr {% if form.reminder_active_type.value == "DAYS" %}class="active"{% endif %}>
                                 <td class="first">
+                                    <div class="radio">                                        
+                                        <input {% if form.reminder_active_type.value == "DAYS" %}checked="checked"{% endif %} type="radio" id="id_reminder_active_type_1" value="DAYS" name="reminder_active_type">
+                                        <label for="id_reminder_active_type_1"></label>
+                                    </div>
+                                </td>
+                                <td class="second">
                                     {{ form.reminder_hours_before_event }}
                                 </td>
                                 <td>
                                     Hour(s) before the event begins
                                 </td>
                             </tr>
-                            <tr>
+                            <tr {% if form.reminder_active_type.value == "WEEKDAY" %}class="active"{% endif %}>
                                 <td class="first">
+                                    <div class="radio">                                        
+                                        <input {% if form.reminder_active_type.value == "WEEKDAY" %}checked="checked"{% endif %} type="radio" id="id_reminder_active_type_2" value="WEEKDAY" name="reminder_active_type">
+                                        <label for="id_reminder_active_type_2"></label>
+                                    </div>
+                                </td>
+                                <td class="second">
                                     <div class="dropdown week-day-reminder" data-dropdown-class="week-day-reminder-list">
                                         {{ form.reminder_on_week_day }}
                                     </div>                                        

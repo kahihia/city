@@ -1,7 +1,7 @@
 # Create your views here.
 
 from models import Account
-from event.models import SingleEvent, Event, Venue
+from event.models import Event
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse

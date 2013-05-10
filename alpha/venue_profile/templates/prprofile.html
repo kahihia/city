@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load date_formatting %}
+{% load cropping %}
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/prprofile.css" rel="stylesheet" type="text/css" />
+    
+    <link href="{{STATIC_URL}}styles/browse/browse.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/browse/browse_event_list.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/browse/featured_events.css" rel="stylesheet" type="text/css" />
+
+    <link href="{{STATIC_URL}}styles/browse/search_tags.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/browse/search_pad.css" rel="stylesheet" type="text/css" />    
+    <link href="{{STATIC_URL}}styles/browse/event_details.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/browse/jump_popup.css" rel="stylesheet" type="text/css" />    
+
+    <script src="{{STATIC_URL}}js/tagit.js" type="text/javascript"></script>    
+    <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/browse/jquery.hoverIntent.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/searchpad/ajax-popup.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/searchpad/event-actions.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/searchpad/jump-to-date.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/browse/auctions-popup.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/browse/browse-page.js" type="text/javascript"></script>
+{% endblock %}
+
+
+{% block title %} 
+    &gt; Browse 
+    {% if page_date != "flow" %}&gt; {{page_date|slug_to_title }}{% endif %}{% endblock %}
+{% block page %}
+<h1 class="tpl">{{ venues_profile.name }}</h1>
+<div id="prprofile_content">
+    <div id="prpr_cont_info">
+        <img id="venue_logo" src="{% cropped_thumbnail venues_profile "cv_cropping" %}">
+        <div id="ci">
+            <a href="#">
+                <div id="gray_btn_top">Edit Profile</div>
+            </a>
+            <div id="gray_btn_bot">
+                <!--<input type="radio" value="public" name="public" style="display: block !important; width: 1px; height: 1px; float: left;">-->Public<br/>
+                <!--<input type="radio" value="private" name="private" style="display: block !important; width: 1px; height: 1px; float: left;">-->Private
+            </div>
+            <h2 class="h_contact_info">Contact Information</h2>
+            <div class="infoPees"><img src="{{ STATIC_URL }}/images/phone-profile_icon.png"/><span class="infoPeesSpan">Phone:</span><span id="info_values_phone">{{ venues_profile.cv_phone }}</span></div>
+            <div class="infoPees"><img src="{{ STATIC_URL }}/images/fax_profile_icon.png"/><span class="infoPeesSpan">Fax:</span><span id="info_values_fax">{{ venues_profile.cv_fax }}</div>
+            <div class="infoPees"><img src="{{ STATIC_URL }}/images/email_profile_icon.png"/><span class="infoPeesSpan">Email:</span><span id="info_values_email"><a href="mailto:{{ venues_profile.cv_email }}">{{ venues_profile.cv_email }}</a></span></div>
+            <div class="infoPees"><img src="{{ STATIC_URL }}/images/website_profile_icon.png"/><span class="infoPeesSpan">Website:</span><span id="info_values_website"><a href="{{ venues_profile.cv_site }}">{{ venues_profile.cv_site }}</a></span></div>
+            <div class="infoPees"><img src="{{ STATIC_URL }}/images/fb_profile_icon.png"/><span class="infoPeesSpan">Facebook:</span><span id="info_values_fb"><a href="{{ venues_profile.cv_fcb }}">{{ venues_profile.cv_fcb }}</span></a></div>
+            <div class="infoPees"><img src="{{ STATIC_URL }}/images/twitter.png"/><span class="infoPeesSpan">Twitter:</span><span id="info_values_twitter"><a href="{{ venues_profile.cv_twt }}">{{ venues_profile.cv_twt }}</a></span></div>
+            <div class="infoPees"><img src="{{ STATIC_URL }}/images/map_profile_icon.png"/><span class="infoPeesSpan">Map:</span></div>
+                {% if venues_profile.location %}
+                    <hr />
+                    <div class="map">
+                        <img src="http://maps.googleapis.com/maps/api/staticmap?center={{venues_profile.location.y}},{{venues_profile.location.x}}&zoom=13&size=400x150&maptype=roadmap&sensor=false&markers=color:blue%7C{{venues_profile.location.y}},{{pvenues_profile.location.x}}">
+                    </div>
+                    <hr />                            
+                {% endif %}
+            <div id="about_us">
+                <h2 class="h_contact_info">About Us</h2>
+                {{ venues_profile.cv_about }}
+            </div>
+        </div>
+    </div>
+
+    <div id="venue_events_wrapper">
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+{% endblock %}
