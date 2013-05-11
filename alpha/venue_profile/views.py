@@ -17,4 +17,3 @@ def prprofile(request, prof_slug):
         },context_instance=RequestContext(request))
     
     
-    
