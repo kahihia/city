@@ -5,6 +5,8 @@
 {% load endless %}
 
 {% block head %}
+    <link href="{{STATIC_URL}}styles/styles-new.css" rel="stylesheet" type="text/css" />
+
     <meta property="og:title" content="{{event.name}}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="http://{{ request.META.HTTP_HOST }}/events/view/{{event.slug}}/" />

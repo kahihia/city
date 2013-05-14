@@ -17,8 +17,8 @@ urlpatterns = patterns(
     url(r'^events/', include('event.urls')),
     url(r'^accounts/', include('userena.urls')),
     url(r'^account-actions/', include('accounts.urls')),
-    url(r'^old-accounts/', include('citi_user.urls')),
     url(r'^feedback/', include('feedback.urls')),
+    url(r'^advertise/$', 'home.views.redirect', name='advertise'),
     # url(r'^alpha/', include('alpha.foo.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -28,7 +28,6 @@ urlpatterns = patterns(
     url(r'^admin_tools/', include('admin_tools.urls')),
     url(r'^facebook/', include('django_facebook.urls')),
     url(r'^advertising/', include('advertising.urls')),
-    url(r'^prprofile/', include('venue_profile.urls'))
 )
 
 if settings.DEBUG:

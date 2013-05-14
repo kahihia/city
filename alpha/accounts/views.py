@@ -1,9 +1,10 @@
 # Create your views here.
 
-from models import Account
+from models import Account, VenueAccount
 from event.models import Event
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 
@@ -16,6 +17,7 @@ from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
 
 from utils import remind_account_about_events, inform_account_about_events_with_tag
+from django.contrib.auth.decorators import login_required
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 20)
 
@@ -123,3 +125,31 @@ def in_the_loop_preview(request):
     )
 
     return HttpResponse(message)
+
+
+@login_required
+def private_venue_account(request, slug):
+    # user = request.user
+    # account = get_object_or_404(Account, user=user)
+
+    venue_account = VenueAccount.objects.get(slug=slug)
+
+    return render_to_response('venue_accounts/private_venue_account.html', {
+                'venue_account': venue_account,
+        }, context_instance=RequestContext(request))
+
+
+def edit_venue_account(request, slug):
+    venue_account = VenueAccount.objects.get(slug=slug)
+
+    return render_to_response('venue_accounts/edit_venue_account.html', {
+                'venue_account': venue_account,
+        }, context_instance=RequestContext(request))
+
+
+def public_venue_account(request, slug):
+    venue_account = VenueAccount.objects.get(slug=slug)
+
+    return render_to_response('venue_accounts/public_venue_account.html', {
+                'venue_account': venue_account,
+        }, context_instance=RequestContext(request))

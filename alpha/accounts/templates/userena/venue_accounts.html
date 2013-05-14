@@ -1,0 +1,5 @@
+{% for venue_account in venue_accounts %}
+    <a class="mngp" href="{% url 'private_venue_account' slug=venue_account.slug %}">      
+        {{ venue_account.venue.name }}
+    </a>
+{% endfor %}

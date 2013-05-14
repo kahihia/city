@@ -16,7 +16,8 @@
     float: left;
 }
 
-.account-avatar {
+.account-avatar,
+.venue-account-avatar {
     width: 205px;
     height: 187px;
     line-height: 187px;
@@ -24,6 +25,12 @@
     text-align: center;
     vertical-align: middle;
     display: table-cell;
+}
+
+.venue-account-avatar {
+    width: 154px;
+    height: 154px;    
+    line-height: 154px;
 }
 
 .account-avatar img{
@@ -42,11 +49,16 @@
     border-top: 1px solid #ddd;    
 }
 
-.account-details .block-header {
+.account-details .block-header,
+.about-us .block-header {
     color: #06c;
     font-weight: bold;    
     width:100%;
     font-size:1em;
+}
+
+.about-us .block-header {
+    font-size: 1.3em;
 }
 
 .account-details span {
@@ -346,4 +358,65 @@
 .account-options .in-the-loop-types {
     margin-top: 0;
     padding-top: 0;
+}
+
+/* Venue account */
+
+.edit-event-account-button {
+    margin-top: 12px;
+    width: 144px;
+    height: 34px;
+    line-height: 34px;
+    color: #0066cc;
+    text-align: center;
+    vertical-align: middle;
+    font-size:16px;
+}
+
+.public-or-private .button {
+    width: 144px;
+    height: 34px;
+    line-height: 34px;
+    margin-top: 5px;
+}
+
+.public-or-private .radio {
+    display: inline-block;
+    width: 70px;
+    height: 34px;
+    line-height: 34px;
+    vertical-align: middle
+}
+
+.public-or-private input[type=radio] + label,
+.public-or-private input[type=radio]:checked + label,
+.public-or-private label {
+    color: #0066cc;    
+    height: 34px;
+    line-height: 34px;
+    font-size: 14px;
+    vertical-align: top;
+    display: inline-block;
+    background-position: center center;
+}
+
+.contact-info-table {
+    margin-top: 10px;
+}
+
+.contact-info-table td {
+    vertical-align:top;
+    padding-top: 5px;
+}
+
+.contact-info-table td:first-child {
+    padding-top: 0px;
+}
+
+.contact-info-table td:nth-of-type(2){
+    width:75px;
+}
+
+.about-us {
+    margin-bottom: 30px;
 }

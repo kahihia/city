@@ -31,4 +31,17 @@ urlpatterns = patterns('',
     ),
     url(r'^remind-email-preview/$', accounts.remind_preview, name="remind_preview"),
     url(r'^in-the-loop-email-preview/$', accounts.in_the_loop_preview),
+
+    url(r'^venue/(?P<slug>[-\w]+)/$',
+        accounts.public_venue_account,
+        name='public_venue_account'
+    ),
+    url(r'^venue-private/(?P<slug>[-\w]+)/$',
+        accounts.private_venue_account,
+        name='private_venue_account'
+    ),
+    url(r'^venue-edit/(?P<slug>[-\w]+)/$',
+        accounts.edit_venue_account,
+        name='edit_venue_account'
+    ),
 )

@@ -159,7 +159,6 @@ INSTALLED_APPS = (
     'userena',
     'django_facebook',
     'djcelery',
-    'venue_profile',
     'django_twilio',
     'turbolinks',
 	'advertising'

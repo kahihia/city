@@ -6,13 +6,15 @@ from userena.models import UserenaBaseProfile
 from django.contrib.gis.db import models
 from taggit_autosuggest.managers import TaggableManager
 
-from event.models import Event, SingleEvent
+from event.models import Event, SingleEvent, Venue
 
 from phonenumber_field.modelfields import PhoneNumberField
 
 from django_facebook.models import FacebookProfileModel
 
 from django.db.models.signals import post_save, m2m_changed
+
+from image_cropping import ImageCropField, ImageRatioField
 
 
 REMINDER_TYPES = (
@@ -49,6 +51,7 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
 
     # remind options
     # remind time before event
+    reminder_time_before_event = models.TimeField(blank=True, null=True)
     reminder_days_before_event = models.IntegerField(blank=True, null=True)
     reminder_hours_before_event = models.IntegerField(blank=True, null=True)
 
@@ -204,3 +207,22 @@ def add_to_in_the_loop_schedule(sender, instance, created, **kwargs):
 
 
 models.signals.post_save.connect(add_to_in_the_loop_schedule, sender=Event)
+
+
+class VenueAccount(models.Model):
+    venue = models.ForeignKey(Venue)
+    phone = PhoneNumberField(blank=True, null=True)
+    fax = models.CharField(verbose_name='Custom Venue Fax', max_length=20, blank=True, null=True)
+    email = models.EmailField(verbose_name='Custom Venue Email', blank=True, null=True)
+    site = models.URLField(verbose_name='Custom Venue Website Address', blank=True, null=True)
+    facebook = models.URLField(verbose_name='Custom Venue Facebook page', blank=True, null=True)
+    twitter = models.URLField(verbose_name='Custom Venue Twitter page', blank=True, null=True)
+    account = models.ManyToManyField(Account, verbose_name='User profile')
+    about = models.TextField(verbose_name='Text for "About Us" block', default='Not provided', blank=True, null=True)
+    picture = ImageCropField(upload_to='venue_profile_imgs', blank=True, null=True, help_text='Custom Venue Profile picture')
+    cropping = ImageRatioField('picture', '154x154', size_warning=True, allow_fullsize=True)
+    slug = models.SlugField(verbose_name='Unique URL for custom Venue, created from name', unique=True)
+    public = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return self.venue.__unicode__()
