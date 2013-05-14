@@ -2,7 +2,6 @@ from django.contrib.gis.db import models
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
 from cities.models import Region
-from accounts.models import Account
 
 
 class AdvertisingType(models.Model):
@@ -21,7 +20,7 @@ class AdvertisingType(models.Model):
 
 class AdvertisingCampaign(models.Model):
     name = models.CharField(max_length=128)
-    account = models.ForeignKey(Account)
+    account = models.ForeignKey('accounts.Account')
     all_of_canada = models.BooleanField()
     regions = models.ManyToManyField(Region)
     budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')

@@ -158,7 +158,7 @@ INSTALLED_APPS = (
     'accounts',
     'userena',
     'django_facebook',
-    'djcelery',    
+    'djcelery',
     'turbolinks',
 	'advertising'
 )
