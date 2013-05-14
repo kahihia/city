@@ -158,8 +158,7 @@ INSTALLED_APPS = (
     'accounts',
     'userena',
     'django_facebook',
-    'djcelery',
-    'django_twilio',
+    'djcelery',    
     'turbolinks',
 	'advertising'
 )
