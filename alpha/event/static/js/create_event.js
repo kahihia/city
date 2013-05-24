@@ -2,7 +2,7 @@
     var SearchLocation = function(location_name, location_point, map){
         this.location_name = location_name;
         this.location_point = location_point;
-        this.map = map;        
+        this.map = map;
         $(location_name).on("autocompletechange", function(event, ui){
             if ($(location_point).val()) {
                 var point = $(location_point).val().split(','), identifier;
@@ -26,11 +26,11 @@
                 map_location.panTo(new google.maps.LatLng(parseFloat(lat.value), parseFloat(lng.value)));
             }
         });
-    }
+    };
 
-    $(document).ready(function () {        
-        var keyStop = {            
-            13: "input, textarea", // stop enter = submit 
+    $(document).ready(function () {
+        var keyStop = {
+            13: "input, textarea", // stop enter = submit
 
             end: null
         };

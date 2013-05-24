@@ -1,9 +1,15 @@
 from django import forms
-from accounts.models import Account
+from accounts.models import Account, VenueAccount, VenueType
+
+from django.utils.html import format_html
 
 from widgets import InTheLoopTagAutoSuggest
 from taggit.forms import TagField
 from accounts.models import REMINDER_TYPES
+
+from event.widgets import AjaxCropWidget
+from django.utils.safestring import mark_safe
+from django.utils.encoding import force_text
 
 
 class ReminderSettingsForm(forms.ModelForm):
@@ -48,4 +54,36 @@ class InTheLoopSettingsForm(forms.ModelForm):
             'in_the_loop_with_sms',
             'in_the_loop_email',
             'in_the_loop_phonenumber'
+        )
+
+
+class FusionCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
+    pass
+
+
+class VenueAccountForm(forms.ModelForm):
+    picture_src = forms.CharField(
+        widget=AjaxCropWidget(),
+        required=False
+    )
+
+    types = forms.ModelMultipleChoiceField(
+        widget=FusionCheckboxSelectMultiple,
+        queryset=VenueType.active_types.all(),
+        required=False
+    )
+
+    class Meta:
+        model = VenueAccount
+
+        fields = (
+            'phone',
+            'fax',
+            'email',
+            'site',
+            'facebook',
+            'twitter',
+            'about',
+            'cropping',
+            'types'
         )

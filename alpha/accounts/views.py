@@ -1,14 +1,14 @@
 # Create your views here.
 
 from models import Account, VenueAccount
-from event.models import Event
+from event.models import Event, FeaturedEvent
+from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 
-from accounts.forms import ReminderSettingsForm, InTheLoopSettingsForm
+from accounts.forms import ReminderSettingsForm, InTheLoopSettingsForm, VenueAccountForm
 
 from django.conf import settings
 
@@ -129,27 +129,85 @@ def in_the_loop_preview(request):
 
 @login_required
 def private_venue_account(request, slug):
-    # user = request.user
-    # account = get_object_or_404(Account, user=user)
-
     venue_account = VenueAccount.objects.get(slug=slug)
+    request.session['venue_account_id'] = venue_account.id
+
+    venue_events = Event.future_events.filter(venue=venue_account.venue)
+    venue_featured_events = Event.featured_events.filter(venue=venue_account.venue)
+    venue_archived_events = Event.archived_events.filter(venue=venue_account.venue)
+    featured_events_stats = FeaturedEvent.objects.filter(venue_account=venue_account)
+
+    tabs_page = "private-venue-account"
+
+    active_tab = request.session.get(tabs_page, "venue-events")
 
     return render_to_response('venue_accounts/private_venue_account.html', {
                 'venue_account': venue_account,
-        }, context_instance=RequestContext(request))
+                'venue_events': venue_events,
+                'venue_featured_events': venue_featured_events,
+                'venue_archived_events': venue_archived_events,
+                'featured_events_stats': featured_events_stats,
+                'tabs_page': tabs_page,
+                'active_tab': active_tab,
+                'private': True
 
-
-def edit_venue_account(request, slug):
-    venue_account = VenueAccount.objects.get(slug=slug)
-
-    return render_to_response('venue_accounts/edit_venue_account.html', {
-                'venue_account': venue_account,
         }, context_instance=RequestContext(request))
 
 
 def public_venue_account(request, slug):
     venue_account = VenueAccount.objects.get(slug=slug)
 
+    venue_events = Event.future_events.filter(venue=venue_account.venue)
+    venue_featured_events = Event.featured_events.filter(venue=venue_account.venue)
+
+    tabs_page = "public-venue-account"
+
+    active_tab = request.session.get(tabs_page, "venue-events")
+
     return render_to_response('venue_accounts/public_venue_account.html', {
                 'venue_account': venue_account,
+                'venue_events': venue_events,
+                'venue_featured_events': venue_featured_events,
+                'tabs_page': tabs_page,
+                'active_tab': active_tab,
+                'private': False
         }, context_instance=RequestContext(request))
+
+
+@login_required
+def edit_venue_account(request, slug):
+    venue_account = VenueAccount.objects.get(slug=slug)
+    form = VenueAccountForm(
+        instance=venue_account,
+        initial={
+            "picture_src": "/media/%s" % venue_account.picture,
+        }
+    )
+
+    if request.method == 'POST':
+        if request.POST["picture_src"]:
+            venue_account.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
+
+        form = VenueAccountForm(instance=venue_account, data=request.POST)
+
+        if form.is_valid():
+            form.save()
+            types = form.cleaned_data['types']
+            venue_account.types = types
+            return HttpResponseRedirect(reverse('private_venue_account', args=(venue_account.slug, )))
+
+    return render_to_response('venue_accounts/edit_venue_account.html', {
+            'venue_account': venue_account,
+            'form': form
+        }, context_instance=RequestContext(request))
+
+
+def set_venue_privacy(request, venue_account_id, privacy):
+    public = (privacy == "public")
+    venue_account = VenueAccount.objects.get(id=venue_account_id)
+    venue_account.public = public
+    venue_account.save()
+
+    return HttpResponse(
+        "You make %s venue %s" % (venue_account.venue.name, privacy)
+    )

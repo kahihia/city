@@ -4,6 +4,7 @@ from django.db.models import Count
 import re
 import string
 import nltk
+from accounts.models import VenueType
 
 
 class Filter(object):
@@ -249,9 +250,6 @@ class SearchFilter(Filter):
             return None
 
     def filter(self, qs, search_string):
-        # TODO: test for time for sql query
-        # import pdb; pdb.set_trace()
-
         return qs.extra(
             where=["""
                 event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', %s)
@@ -259,6 +257,23 @@ class SearchFilter(Filter):
             """],
             params=[search_string, search_string]
         )
+
+
+class NightLifeFilter(Filter):
+    def __init__(self, name):
+        self.name = name
+
+    def search_tags(self, value):
+        if value:
+            return [{
+                "name": "Night Life",
+                "remove_url": "?" + self.parent.url_query(exclude="night_life")
+            }]
+        else:
+            return None
+
+    def filter(self, qs, value=None):
+        return qs.filter(venue__venueaccount__types=VenueType.active_types.get(name="Nightclub"))
 
 
 class EventFilter(object):
@@ -274,7 +289,8 @@ class EventFilter(object):
             "featured": Filter("featured", "featured"),
             "function": FunctionFilter("function"),
             "venue": VenueFilter("venue", "venue__id"),
-            "search": SearchFilter("search", "search_index")
+            "search": SearchFilter("search", "search_index"),
+            "night_life": NightLifeFilter("night_life"),
         }
 
         self.filters["period"] = PeriodFilter("period", self.filters["start_date"], self.filters["end_date"])

@@ -4,17 +4,25 @@
 
 {% block head %}
     <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/browse/browse_event_list.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/browse/event_details.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
     <!--link href="{{STATIC_URL}}styles/venue_accounts.css" rel="stylesheet" type="text/css" /-->
+
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
+    <script>
+        var venue_account_id = {{ venue_account.id }}
+            venue_account_latitude = {{ venue_account.venue.location.y }},
+            venue_account_longtitude = {{ venue_account.venue.location.x }};
+    </script>
+    <script src="{{STATIC_URL}}js/browse/jquery.hoverIntent.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/searchpad/event-actions.js"></script>
+    <script src="{{STATIC_URL}}js/browse/auctions-popup.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/accounts/venue_account.js"></script>
+    <script src="{{STATIC_URL}}js/tabs.js"></script>
     
     <!--script src="{{ STATIC_URL }}js/prprofile.js" type="text/javascript"></script-->
-{% endblock %}
-
-
-{% block title %} 
-    &gt; Browse 
-    {% if page_date != "flow" %}&gt; {{page_date|slug_to_title }}{% endif %}
 {% endblock %}
 
 
@@ -40,12 +48,12 @@
                         <div class="public-or-private">
                             <div class="button">
                                 <div class="radio">
-                                    <input id="venue_account_make_public" type="radio" value="public" name="public_or_private"> 
+                                    <input {% if venue_account.public %}checked="checked"{% endif %} id="venue_account_make_public" type="radio" value="public" name="public_or_private"> 
                                     <label for="venue_account_make_public"></label>
                                     <label for="venue_account_make_public">Public</label>
                                 </div>
                                 <div class="radio">
-                                    <input id="venue_account_make_private" type="radio" value="private" name="public_or_private"> 
+                                    <input {% if not venue_account.public %}checked="checked"{% endif %} id="venue_account_make_private" type="radio" value="private" name="public_or_private"> 
                                     <label for="venue_account_make_private"></label>
                                     <label for="venue_account_make_private">Private</label>
                                 </div>
@@ -146,8 +154,7 @@
                                 Map:
                             </td>
                             <td>
-                                <div class="map">
-                                    <iframe width="300" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q={{ venue_account.venue.city }},{{ venue_account.venue.street }}&amp;aq=t&amp;sll={{ venue_account.venue.location.y }},{{ venue_account.venue.locacation.x }}&amp;sspn=0.00157,0.004128&amp;ie=UTF8&amp;hq=&amp;hnear={{ venue_account.venue.city }},{{ venue_account.venue.street }},+%D0%9A%D0%B0%D0%BD%D0%B0%D0%B4%D0%B0&amp;t=m&amp;z=14&amp;iwloc=A&amp;output=embed"></iframe><br /><small></small>
+                                <div id="venue_account_map" class="map">
                                 </div>
                             </td>
                         </tr>
@@ -156,40 +163,42 @@
 
                 <div class="clr"></div>
 
-                <div class="about-us">
-                    <header class="block-header">
-                        About Us
-                    </header>
-                    {{ venue_account.about }}
-                </div>                 
+                {% if venue_account.about %}
+                    <div class="about-us">
+                        <header class="block-header">
+                            About Us
+                        </header>
+                        {{ venue_account.about }}
+                    </div>
+                {% endif %}
             </div>            
         </div>
 
         <div class="tabs-container">
-            <ul class="tabs">
-                <li class="current" data-tab-id="venue-events">
+            <ul class="tabs" data-page-id="private-venue-account">
+                <li data-tab-id="venue-events" {% if active_tab == "venue-events" %}class="current"{% endif %}>
                     <span>{{ venue_account.venue.name }} Events</span>
                 </li>
-                <li data-tab-id="venue-featured-events">
+                <li data-tab-id="venue-featured-events" {% if active_tab == "venue-featured-events" %}class="current"{% endif %}>
                     <span>Featured Events</span>
                 </li>
-                <li data-tab-id="venue-archived-events">
+                <li data-tab-id="venue-archived-events" {% if active_tab == "venue-archived-events" %}class="current"{% endif %}>
                     <span>Archived events</span>
                 </li>
-                <li data-tab-id="venue-featured-stats">
+                <li data-tab-id="venue-featured-stats" {% if active_tab == "venue-featured-stats" %}class="current"{% endif %}>
                     <span>Featured stats</span>
                 </li>
             </ul>
-            <div class="box visible">
+            <div class="box{% if active_tab == "venue-events" %} visible{% endif %}">
                 {% include 'venue_accounts/_venue_events_table.html' %}
             </div>
-            <div class="box">
+            <div class="box{% if active_tab == "venue-featured-events" %} visible{% endif %}">
                 {% include 'venue_accounts/_venue_featured_events_table.html' %}
             </div>
-            <div class="box">
+            <div class="box{% if active_tab == "venue-archived-events" %} visible{% endif %}">
                 {% include 'venue_accounts/_venue_archived_events_table.html' %}
             </div>
-            <div class="box">
+            <div class="box{% if active_tab == "venue-featured-stats" %} visible{% endif %}">
                 {% include 'venue_accounts/_venue_featured_stats_table.html' %}
             </div>
         </div>

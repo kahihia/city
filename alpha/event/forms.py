@@ -1,5 +1,5 @@
 from django import forms
-from event.models import Event
+from event.models import Event, FeaturedEvent
 from event.widgets import WhenWidget, PriceWidget, GeoCompleteWidget, WheelchairWidget, DescriptionWidget, AjaxCropWidget
 from django.utils.translation import ugettext_lazy as _
 import string
@@ -9,37 +9,13 @@ from gmapi.forms.widgets import LocationWidget
 import json
 
 
-class reminderForm(forms.Form):
-    event = forms.CharField(label='', max_length=100, required=False)
-    email = forms.EmailField(label='')
-    date = forms.DateTimeField(label='', required=False)
-
-    def __init__(self, *args, **kwargs):
-        super(reminderForm, self).__init__(*args, **kwargs)
-        self.fields['event'].widget.attrs['class'] = 'hide'
-        self.fields['date'].widget.attrs['class'] = 'hide'
-        self.fields['email'].widget.attrs['class'] = 'nice'
-        #self.fields['name'].widget.attrs['value'] = {{'name'}}
-        #self.fields['event'].widget.attrs['value'] = {{'event'}}
-
-
-class StyledSplitDateTimeWidget(forms.SplitDateTimeWidget):
-    def __init__(self, attrs=None, date_format=None, time_format=None):
-        if attrs:
-            date_attrs = attrs.copy()
-            time_attrs = attrs.copy()
-        else:
-            date_attrs = {}
-            time_attrs = {}
-        date_attrs['class'] = 'inputfield rborder tcal'
-        time_attrs['class'] = 'inputfield rborder'
-        widgets = (forms.DateInput(attrs=date_attrs, format=date_format),
-                   forms.TimeInput(attrs=time_attrs, format=time_format))
-        super(forms.SplitDateTimeWidget, self).__init__(widgets, attrs)
-
-
-class StyledSplitDateTimeField(forms.SplitDateTimeField):
-    widget = StyledSplitDateTimeWidget(time_format="%I:%M %p")
+class SetupFeaturedForm(forms.ModelForm):
+    class Meta:
+        model = FeaturedEvent
+        fields = (
+            'start_time',
+            'end_time'
+        )
 
 
 class JSONCharField(forms.CharField):

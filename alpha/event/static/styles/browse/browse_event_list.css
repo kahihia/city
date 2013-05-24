@@ -30,7 +30,7 @@
 .entry-wrapper .entry-info .entry-details-wrapper .title,
 .entry-wrapper .entry-info .entry-details-wrapper .entry-date,
 .entry-wrapper .entry-info .entry-details-wrapper .entry-description {
-    width: 330px;
+    width: 315px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;    

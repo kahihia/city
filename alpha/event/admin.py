@@ -1,5 +1,5 @@
 from django.contrib import admin
-from event.models import Event, SingleEvent, AuditEvent, AuditSingleEvent, AuditPhrase, FakeAuditEvent
+from event.models import Event, SingleEvent, AuditEvent, AuditSingleEvent, AuditPhrase, FakeAuditEvent, FeaturedEvent
 from event.models import Venue
 from event.models import Reminder
 
@@ -30,11 +30,16 @@ class AuditEventAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+
+class VenueAdmin(admin.ModelAdmin):
+    search_fields = ['name']
+
 admin.site.register(Event, EventAdmin)
 admin.site.register(SingleEvent)
 
 admin.site.register(AuditPhrase)
 admin.site.register(AuditEvent, AuditEventAdmin)
 admin.site.register(AuditSingleEvent)
-admin.site.register(Venue)
+admin.site.register(Venue, VenueAdmin)
 admin.site.register(Reminder)
+admin.site.register(FeaturedEvent)

@@ -44,4 +44,8 @@ urlpatterns = patterns('',
         accounts.edit_venue_account,
         name='edit_venue_account'
     ),
+    url(r'^set-venue-privacy/(?P<venue_account_id>[\d]+)/(?P<privacy>(public|private))/$',
+        accounts.set_venue_privacy,
+        name='save_venue_privacy'
+    )
 )

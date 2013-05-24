@@ -24,8 +24,10 @@ from image_cropping import ImageCropField, ImageRatioField
 from djorm_pgfulltext.models import SearchManagerMixIn, SearchManager
 from djorm_pgfulltext.fields import VectorField
 
-from django.db.models import Min
-# from accounts.models import InTheLoopSchedule
+from django.db.models import Min, Max
+
+from djmoney.models.fields import MoneyField
+from djmoney.models.managers import money_manager
 
 
 class SearchGeoDjangoManager(SearchManagerMixIn, models.GeoManager):
@@ -91,7 +93,25 @@ class FutureManager(SearchManager):
 
 class FeaturedManager(FutureManager):
     def get_query_set(self):
-        return super(FeaturedManager, self).get_query_set().filter(featured=True).order_by("featured_on")
+        return super(FeaturedManager, self).get_query_set()\
+            .filter(
+                featuredevent__start_time__lte=datetime.datetime.now(),
+                featuredevent__end_time__gte=datetime.datetime.now(),
+                featuredevent__active=True
+            )
+
+
+class ArchivedManager(SearchManager):
+    def get_query_set(self):
+        queryset = super(ArchivedManager, self).get_query_set()\
+            .filter(single_events__start_time__lte=datetime.datetime.now())\
+            .prefetch_related('single_events')\
+            .annotate(nearest_start_time=Max('single_events__start_time'))\
+            .annotate(nearest_end_time=Max('single_events__end_time'))
+
+        queryset.query.group_by = ["event_event.id"]
+
+        return queryset
 
 
 class Event(models.Model):
@@ -122,6 +142,12 @@ class Event(models.Model):
         auto_update_search_field=True)
 
     featured_events = FeaturedManager(
+        fields=('name', 'description'),
+        config='pg_catalog.english',
+        search_field='search_index',
+        auto_update_search_field=True)
+
+    archived_events = ArchivedManager(
         fields=('name', 'description'),
         config='pg_catalog.english',
         search_field='search_index',
@@ -162,10 +188,6 @@ class Event(models.Model):
     tickets = models.CharField('tickets', max_length=250, blank=True, null=True)
 
     audited = models.BooleanField(default=False)
-
-    # featured_on need to be set, when we add event to featured list
-    featured = models.BooleanField(default=False)
-    featured_on = models.DateTimeField('featured on', auto_now=False, auto_now_add=False, blank=True, null=True)
 
     viewed_times = models.IntegerField(default=0, blank=True, null=True)
 
@@ -383,3 +405,21 @@ models.signals.post_save.connect(audit_event_catch, sender=Event)
 #         )
 #     audit_event.save()
 # models.signals.post_save.connect(audit_single_event, sender=SingleEvent)
+
+
+class FeaturedEvent(models.Model):
+    event = models.ForeignKey(Event, blank=False, null=False)
+    venue_account = models.ForeignKey("accounts.VenueAccount", blank=True, null=True)
+    start_time = models.DateTimeField('starting time')
+    end_time = models.DateTimeField('ending time', auto_now=False, auto_now_add=False)
+    active = models.BooleanField(default=True)
+
+    views = models.IntegerField(default=0)
+    clicks = models.IntegerField(default=0)
+
+    cost = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+
+    objects = money_manager(models.Manager())
+
+    def __unicode__(self):
+        return self.event.name

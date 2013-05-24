@@ -187,6 +187,8 @@ class AjaxCropWidget(forms.TextInput):
         return self.picture_src.value_from_datadict(data, files, 'picture_src')
 
     def render(self, name, value, *args, **kwargs):
+        if value == "/media/":
+            value = ""
         if value:
             html = self.picture_src.render("picture_src", "", {"id": 'id_picture_src', "value": "%s" % (value)})
         else:

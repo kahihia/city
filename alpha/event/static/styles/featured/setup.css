@@ -1,0 +1,170 @@
+.balloon {
+    top: 0;
+}
+
+.dropdown {
+    width: 140px;
+    height: 24px;
+}
+
+.dropdown:after { 
+    top: 5px;
+    right: 4px;
+}
+
+.featured-setup .datetime-table {
+    margin: 20px;    
+}
+
+.featured-setup .datetime-table td {
+    height: 40px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.featured-setup .datetime-table td.long {
+    padding-left: 10px;
+}
+
+.featured-setup .datetime-table tr:first-child td:nth-of-type(1){
+    width: 100px;
+}
+
+.featured-setup .datetime-table tr:first-child td:nth-of-type(2){
+    width: 25px;
+}
+
+.featured-setup .datetime-table tr:first-child td:nth-of-type(3){
+    width: 150px;
+}
+
+.featured-setup .datetime-table tr:first-child td:nth-of-type(4){
+    width: 30px;
+}
+
+.featured-setup .datetime-table tr:first-child td:nth-of-type(5){
+    width: 70px;
+}
+
+.featured-setup .datetime-table tr:first-child td:nth-of-type(6){
+    width: 150px;
+}
+
+.featured-setup .datetime-table tr:first-child td:nth-of-type(7){
+    width: 30px;
+}
+
+.featured-setup input[type=text]{
+    border: 1px solid #dbdbdb;
+    color: #454545;
+    background: #fff;
+
+    outline: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    padding: 0 10px;
+    width: 140px;
+    height: 24px;
+    font-size: 12px;
+}
+
+.featured-setup .pay-now-header {
+    color: #022e52;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: bold;
+    margin-left: 360px;
+}
+
+.pay-now-widget {
+    margin-left: 20px; 
+    margin-top: 5px;  
+    width: 635px;
+    height: 125px;
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+
+    background: rgb(250,250,250); /* Old browsers */
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZhZmFmYSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlYWVhZWEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top, rgba(250,250,250,1) 0%, rgba(234,234,234,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(250,250,250,1)), color-stop(100%,rgba(234,234,234,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(250,250,250,1) 0%,rgba(234,234,234,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(250,250,250,1) 0%,rgba(234,234,234,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(250,250,250,1) 0%,rgba(234,234,234,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(250,250,250,1) 0%,rgba(234,234,234,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fafafa', endColorstr='#eaeaea',GradientType=0 ); /* IE6-8 */
+}
+
+.pay-now-widget .info {
+    float: left;
+    margin: 35px;    
+    width: 265px;
+    color: #000;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.pay-now-widget .info .only {
+    font-style: normal;
+    font-size: 24px;
+    color: #9c1a00;
+}
+
+.pay-now-widget .choose-payment-system {
+    float: left;
+}
+
+.pay-now-widget .choose-payment-system td {
+    vertical-align: middle;    
+}
+
+.pay-now-widget .choose-payment-system td label {
+    display: inline-block;
+    height: 46px;
+    vertical-align: middle;
+    background-position: left center;
+    margin-top: 5px;
+}
+
+.pay-now-widget .choose-payment-system td img {
+    display: inline-block;
+    height: 46px;
+}
+
+.featured-setup .pay-now-footer {
+    margin-left: 265px;
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+.featured-setup .pay-now-footer .button {
+    width: 137px;
+    height: 30px;
+    font-size: 18px;
+    color: #5d5d5d;
+}
+
+.hintbox {
+    width: 300px;
+}
+
+.ui-datepicker .ui-datepicker-header {
+    position: relative;
+    padding: .5em 0;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+    border: 1px solid #79b7e7;
+    background: #f5f8f9 url(images/ui-bg_inset-hard_100_f5f8f9_1x100.png) 50% 50% repeat-x;
+    font-weight: bold;
+    color: #e17009;
+}
+
+.tabs-container {
+    width: 695px;
+}

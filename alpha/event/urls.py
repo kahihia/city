@@ -17,6 +17,18 @@ urlpatterns = patterns('',
                            event.edit,
                            name='event_edit'
                            ),
+                       url(r'^remove/(?P<authentication_key>\w+)/$',
+                            event.remove,
+                            name='event_remove'
+                           ),
+                       url(r'^setup_featured/(?P<authentication_key>\w+)/$',
+                            event.setup_featured,
+                            name='event_setup_featured'
+                           ),
+                       url(r'^make_featured/(?P<authentication_key>\w+)/$',
+                            event.make_featured,
+                            name='event_make_featured'
+                           ),
                        url(r'^view/(?P<slug>[^/]+)/$',
                            event.view,
                            name='event_view'
@@ -45,6 +57,7 @@ urlpatterns = patterns('',
                            event.created,
                            name='event_created'
                            ),
+                       url(r'^save-active-tab/(?P<page>[^/]+)/(?P<tab>[^/]+)/$', event.save_active_tab, name="save_active_tab"),
                        url(r'^audit-event/$', event.audit_event_list, name="audit_event_list"),
                        url(r'^audit-event-remove/(?P<id>\d+)/$', event.audit_event_remove, name="audit_event_remove"),
                        url(r'^audit-event-edit/(?P<id>\d+)/$', event.audit_event_edit, name="audit_event_edit"),

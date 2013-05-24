@@ -57,19 +57,19 @@
                     if(responseJSON.success) {
                         $("#id_picture_src").val(responseJSON.path);
                         that.changeImage(responseJSON.path);
-                        $(".modal-bg").hide();                      
+                        $(".modal-bg").hide();
                         
                         $.fancybox($(that.popup), {
-                            autoSize: true,                     
-                            closeBtn: false,                        
+                            autoSize: true,
+                            closeBtn: false,
                             hideOnOverlayClick: false
-                        });                          
-                    } else {                        
+                        });
+                    } else {
                         console.log && console.log("upload failed!");
-                        alert("Something go wrong on server. Please contact administrator.")
+                        alert("Something go wrong on server. Please contact administrator.");
                         $(".modal-bg").hide();
                     }
-                }, 
+                },
                 onSubmit: function(){
                     $(".modal-bg").show();
                 },

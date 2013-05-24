@@ -1,0 +1,134 @@
+- model: accounts.VenueType
+  pk: 1
+  fields:
+    name: Concerts & Tour Dates
+
+- model: accounts.VenueType
+  pk: 2
+  fields:
+    name: Conferences & Tradeshows
+
+- model: accounts.VenueType
+  pk: 3
+  fields:
+    name: Education
+
+- model: accounts.VenueType
+  pk: 4
+  fields:
+    name: Kids & Family
+
+- model: accounts.VenueType
+  pk: 5
+  fields:
+    name: Festivals
+
+- model: accounts.VenueType
+  pk: 6
+  fields:
+    name: Film
+
+- model: accounts.VenueType
+  pk: 7
+  fields:
+    name: Food & Wine
+
+- model: accounts.VenueType
+  pk: 8
+  fields:
+    name: Fundraising & Charity
+
+- model: accounts.VenueType
+  pk: 9
+  fields:
+    name: Art Galleries & Exhibits
+
+- model: accounts.VenueType
+  pk: 10
+  fields:
+    name: Health & Wellness
+
+- model: accounts.VenueType
+  pk: 11
+  fields:
+    name: Literary & Books
+
+- model: accounts.VenueType
+  pk: 12
+  fields:
+    name: Museums & Attractions
+
+- model: accounts.VenueType
+  pk: 13
+  fields:
+    name: Neighborhood
+
+- model: accounts.VenueType
+  pk: 14
+  fields:
+    name: Business & Networking
+
+- model: accounts.VenueType
+  pk: 15
+  fields:
+    name: Nightlife & Singles
+
+- model: accounts.VenueType
+  pk: 16
+  fields:
+    name: University & Alumni
+
+- model: accounts.VenueType
+  pk: 17
+  fields:
+    name: Organizations & Meetups
+
+- model: accounts.VenueType
+  pk: 18
+  fields:
+    name: Outdoors & Recreation
+
+- model: accounts.VenueType
+  pk: 19
+  fields:
+    name: Performing Arts
+
+- model: accounts.VenueType
+  pk: 20
+  fields:
+    name: Pets
+
+- model: accounts.VenueType
+  pk: 21
+  fields:
+    name: Politics & Activism
+
+- model: accounts.VenueType
+  pk: 22
+  fields:
+    name: Sales & Retail
+
+- model: accounts.VenueType
+  pk: 23
+  fields:
+    name: Science
+
+- model: accounts.VenueType
+  pk: 24
+  fields:
+    name: Religion & Spirituality
+
+- model: accounts.VenueType
+  pk: 25
+  fields:
+    name: Sports
+
+- model: accounts.VenueType
+  pk: 26
+  fields:
+    name: Technology
+
+- model: accounts.VenueType
+  pk: 27
+  fields:
+    name: Other & Miscellaneous

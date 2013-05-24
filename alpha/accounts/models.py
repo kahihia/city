@@ -16,6 +16,10 @@ from django.db.models.signals import post_save, m2m_changed
 
 from image_cropping import ImageCropField, ImageRatioField
 
+from django.template.defaultfilters import slugify
+
+from django.core.exceptions import ObjectDoesNotExist
+
 
 REMINDER_TYPES = (
     ("HOURS", "Hours before event"),
@@ -209,6 +213,21 @@ def add_to_in_the_loop_schedule(sender, instance, created, **kwargs):
 models.signals.post_save.connect(add_to_in_the_loop_schedule, sender=Event)
 
 
+class ActiveVenueTypeManager(models.Manager):
+    def get_query_set(self):
+        return super(ActiveVenueTypeManager, self).get_query_set().filter(active=True)
+
+
+class VenueType(models.Model):
+    name = models.CharField(max_length=255)
+    active = models.BooleanField(default=True)
+
+    active_types = ActiveVenueTypeManager()
+
+    def __unicode__(self):
+        return self.name
+
+
 class VenueAccount(models.Model):
     venue = models.ForeignKey(Venue)
     phone = PhoneNumberField(blank=True, null=True)
@@ -217,12 +236,34 @@ class VenueAccount(models.Model):
     site = models.URLField(verbose_name='Custom Venue Website Address', blank=True, null=True)
     facebook = models.URLField(verbose_name='Custom Venue Facebook page', blank=True, null=True)
     twitter = models.URLField(verbose_name='Custom Venue Twitter page', blank=True, null=True)
-    account = models.ManyToManyField(Account, verbose_name='User profile')
-    about = models.TextField(verbose_name='Text for "About Us" block', default='Not provided', blank=True, null=True)
+    accounts = models.ManyToManyField(Account, verbose_name='User profile')
+    about = models.TextField(verbose_name='Text for "About Us" block', blank=True, null=True)
     picture = ImageCropField(upload_to='venue_profile_imgs', blank=True, null=True, help_text='Custom Venue Profile picture')
     cropping = ImageRatioField('picture', '154x154', size_warning=True, allow_fullsize=True)
     slug = models.SlugField(verbose_name='Unique URL for custom Venue, created from name', unique=True)
     public = models.BooleanField(default=True)
+    types = models.ManyToManyField(VenueType)
 
     def __unicode__(self):
         return self.venue.__unicode__()
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.slug = self.uniqueSlug()
+        super(VenueAccount, self).save(*args, **kwargs)
+        return self
+
+    def uniqueSlug(self):
+        """
+        Returns: A unique (to database) slug name
+        """
+        suffix = 0
+        potential = base = slugify(self.venue.name)
+        while True:
+            if suffix:
+                potential = base + str(suffix)
+            try:
+                VenueAccount.objects.get(slug=potential)
+            except ObjectDoesNotExist:
+                return potential
+            suffix = suffix + 1

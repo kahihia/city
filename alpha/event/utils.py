@@ -2,7 +2,7 @@ import datetime
 
 
 def find_nearest_city(cities, location):
-    return cities.distance(location).order_by('-distance')[0]
+    return cities.distance(location).order_by('distance')[0]
 
 
 def get_dates_from_request(request):

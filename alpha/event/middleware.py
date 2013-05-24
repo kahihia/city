@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.utils.functional import SimpleLazyObject
 from django.contrib.gis.geoip import GeoIP
+
 
 def get_real_ip(request):
         """

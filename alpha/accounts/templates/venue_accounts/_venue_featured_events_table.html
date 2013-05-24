@@ -1,0 +1,82 @@
+{% load date_formatting %}
+{% load endless %}
+{% load cropping %}
+{% load event_pictures %}
+
+
+{% paginate 6 venue_featured_events %}
+<div class="account-entry-wrapper entry-wrapper">
+{% for event in venue_featured_events %}    
+    <div class="entry-info">
+        <div class="entry-img-prev">
+            {% if event.picture %}
+                <img src="{% cropped_thumbnail event "cropping" width=60 %}" height="60px" weight="60px">
+            {% else %}
+                <img src="{{STATIC_URL}}images/default-event.jpg" height="60px" weight="60px">
+            {% endif %}
+        </div>
+        <div class="entry-details-wrapper">                                  
+            <div class="title">
+                <a href="{% url 'event_view' event.slug %}">
+                    {{event.name}}&nbsp;
+                </a>                    
+            </div>
+            <div class="entry-date">
+                {{event.nearest_start_time|date:"l, F d, Y"}}
+                <span class="delimeter">|</span>
+                {{event.nearest_start_time|just_time}} - {{event.nearest_end_time|just_time}}
+            </div>
+            <div class="entry-description">                    
+                {{ event.venue.name }}, {{ event.venue.street }}, {{ event.venue.city.name_std }}
+            </div>                
+        </div>
+        <div class="auctions-wrapper">
+            <div class="auctions-content">
+                <div class="auctions-img-prev">
+                    {% if event.picture %}
+                        <img src="{% cropped_thumbnail event "cropping" width=87 %}" height="87px" weight="87px">
+                    {% else %}
+                        <img src="{{STATIC_URL}}images/default-event.jpg" height="87px" weight="87px">
+                    {% endif %}
+                </div>
+                <div class="auctions-details-wrapper">
+                    <div class="title">
+                        {{event.name}}&nbsp;
+                    </div>
+                    <div class="entry-date">
+                        {{event.nearest_start_time|date:"l, F d, Y"}}
+                        <br>
+                        {{event.nearest_start_time|contextualize_date}} - {{event.nearest_end_time|just_time}}                                
+                    </div>
+                    <div class="auctions-additional">
+                        {{ event.venue.name }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clr"></div>
+    </div>
+{%endfor%}
+</div>
+
+<div class="entry-navigation-np">
+    <p>
+        <ul>
+            {% get_pages %} 
+
+            <span class="step-links">
+                {% if not pages.current.is_first %}                    
+                    <a href="{{ pages.previous.url }}">
+                        <img src="{{STATIC_URL}}images/entry-prev.png">
+                    </a>
+                {% endif %}
+
+                {% if not pages.current.is_last %}                
+                    <a href="{{ pages.next.url }}">
+                        <img src="{{STATIC_URL}}images/entry-next.png">
+                    </a>
+                {% endif %}                
+            </span>
+        </ul>
+    </p>
+</div>

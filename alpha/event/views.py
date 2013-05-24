@@ -24,10 +24,11 @@ from event.filters import EventFilter
 
 from event import DEFAULT_FROM_EMAIL
 
-from event.models import Event, Venue, SingleEvent, Reminder, AuditEvent, AuditSingleEvent, AuditPhrase, FakeAuditEvent
+from event.models import Event, Venue, SingleEvent, Reminder, AuditEvent, FakeAuditEvent, FeaturedEvent
+from accounts.models import VenueAccount, Account
 from event.utils import find_nearest_city
 
-from event.forms import generate_form
+from event.forms import generate_form, SetupFeaturedForm
 
 from taggit.models import Tag, TaggedItem
 
@@ -167,8 +168,11 @@ def save_venue(request):
             float(request.POST["geo_longtitude"]),
             float(request.POST["geo_latitude"])
         ))
+
         if city.count() > 1:
             city = find_nearest_city(city, location)
+        elif not city.count():
+            city = City.objects.distance(location).order_by('distance')[0]
         else:
             city = city[0]
         venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, location=location)
@@ -228,12 +232,22 @@ def send_event_details_email(event_obj):
     msg.send()
 
 
+def link_venue_with_account(venue, account):
+    venue_account, created = VenueAccount.objects.get_or_create(venue=venue)
+    venue_account.accounts.add(account)
+
+
 def save_event(request, form):
     # Find or create new venue
     venue = save_venue(request)
 
     event_obj = form.save()
     event_obj.venue = venue
+
+    account = Account.objects.get(user=request.user)
+
+    link_venue_with_account(venue, account)
+
     save_when_and_description(request, event_obj)
 
     if request.user.is_authenticated():
@@ -386,6 +400,51 @@ def edit(request,
                                 'location': request.location,
                             },
                             context_instance=context)
+
+
+def remove(request, authentication_key):
+    event_obj = Event.events.get(authentication_key__exact=authentication_key)
+    event_obj.delete()
+
+    return HttpResponseRedirect(reverse('private_venue_account', args=(request.current_venue_account.slug, )))
+
+
+def setup_featured(request, authentication_key):
+    event_obj = Event.events.get(authentication_key__exact=authentication_key)
+    venue_account = VenueAccount.objects.get(venue=event_obj.venue)
+    featured_event = FeaturedEvent(
+        event=event_obj,
+        venue_account=venue_account,
+        start_time=datetime.date.today(),
+        end_time=datetime.date.today() + datetime.timedelta(days=15)
+    )
+
+    venue_account_featured_stats = FeaturedEvent.objects.filter(venue_account=venue_account)
+
+    form = SetupFeaturedForm(
+        instance=featured_event
+    )
+
+    if request.method == 'POST':
+        form = SetupFeaturedForm(instance=featured_event, data=request.POST)
+
+        if form.is_valid():
+            form.save()
+            # TODO: here will be redirect to payments
+            return HttpResponseRedirect(reverse('private_venue_account', args=(request.current_venue_account.slug, )))
+
+    return render_to_response('events/setup_featured_event.html', {
+            'form': form,
+            'featured_events_stats': venue_account_featured_stats
+        }, context_instance=RequestContext(request))
+
+
+def make_featured(request, authentication_key):
+    event_obj = Event.events.get(authentication_key__exact=authentication_key)
+    event_obj.featured = True
+    event_obj.save()
+
+    return HttpResponseRedirect(reverse('private_venue_account', args=(request.current_venue_account.slug, )))
 
 
 def daily(start, end, weekday=False, day_delta=1):
@@ -545,3 +604,8 @@ def nearest_venues(request):
                 "city": venue.city.name_std
             } for venue in venues.select_related("city")]
         }), mimetype="application/json")
+
+
+def save_active_tab(request, page, tab):
+    request.session[page] = tab
+    return HttpResponse("OK")

@@ -66,7 +66,8 @@
 				} else {
 					$($(that.monthPicker).data("newMonthPicker").monthValue).monthpicker('disableMonths', []);
 				}
-			}
+			};
+
 			setTimeout(disabledOrEnableMonths, 100);
 
 			$($(this.monthPicker).data("newMonthPicker").monthValue).monthpicker().bind("monthpicker-change-year", function(e, year) {

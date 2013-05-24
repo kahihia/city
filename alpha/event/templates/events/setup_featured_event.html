@@ -1,0 +1,165 @@
+{% extends 'base-new.html' %}
+{% load date_formatting %}
+{% load cropping %}
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />    
+    <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/modal.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}css/crop.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/datepicker.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/featured/setup.css" rel="stylesheet" type="text/css" />
+    
+    <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js"></script>
+    <script src="{{STATIC_URL}}js/jquery.balloon.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/featured/setup-page.js" type="text/javascript"></script>
+    
+    <!--script src="{{ STATIC_URL }}js/prprofile.js" type="text/javascript"></script-->
+{% endblock %}
+
+{% block page %}
+    <div class="primary-content">
+        <h1>
+            Featured Events
+            <span class="right">
+                $2.00/Day
+            </span>
+        </h1>
+        <div class="content featured-setup">
+            <form method="post" name="featured-events-setup" >
+                {% csrf_token %}
+                <table class="datetime-table">
+                    <tr>
+                        <td>
+                            Start Date:
+                        </td>
+                        <td>
+                            <a href="javascript:void;" class="balloon">
+                                <div class="buttonq"></div>
+                            </a>
+                            <div class="balloon-content">
+                                <h3>
+                                    Help - Featured Events
+                                    <i>[Start Date, End Date]:</i>
+                                </h3>
+                                <p>
+                                    Pick your dates and times
+                                </p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="date dropdown">
+                                <input id="start_time_id" type="text" name="start_time" value="{{ form.start_time.value|date:"SHORT_DATE_FORMAT"}}">
+                            </div>
+                        </td>
+                        <td class="space">&nbsp;</td>
+                        <td>
+                            End Date:
+                        </td>
+                        <td>
+                            <div class="date dropdown">
+                                <input id="end_time_id" type="text" name="end_time" value="{{ form.end_time.value|date:"SHORT_DATE_FORMAT"}}">
+                            </div>
+                        </td>
+                        <td class="space">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Days to display:
+                        </td>
+                        <td>
+                            <a href="javascript:void;" class="balloon">
+                                <div class="buttonq"></div>
+                            </a>
+                            <div class="balloon-content">
+                                <h3>
+                                    Help - Featured Events
+                                    <i>[Days to display]:</i>
+                                </h3>
+                                <p>
+                                    Pick days to display
+                                </p>
+                            </div>
+                        </td>
+                        <td>
+                            <input id="days_to_display" type="text" name="days_to_display" value="15">
+                        </td>
+                        <td colspan="4" class="long">
+                            <!-- TODO: change text -->
+                            Enter the amount of day event will be featured
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="pay-now-header">
+                    Pay Now With
+                </div>
+                <div class="pay-now-widget">
+                    <div class="info">
+                        <div class="only">ONLY $28</div>
+                        <div>for 15 days</div>
+                    </div>
+                    <div class="choose-payment-system">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="checkbox">
+                                        <input id="payment_paypal_id" type="radio" name="payment_system" value="paypal">
+                                        <label for="payment_paypal_id"></label>
+                                        <label for="payment_paypal_id">
+                                            <img src="{{ STATIC_URL }}/images/featured/paypal.png"/>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="checkbox">
+                                        <input id="payment_visa_id" type="radio" name="payment_system" value="visa">
+                                        <label for="payment_visa_id"></label>
+                                        <label for="payment_visa_id">
+                                            <img src="{{ STATIC_URL }}/images/featured/visa.png"/>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="checkbox">
+                                        <input id="payment_email_money_id" type="radio" name="payment_system" value="email_money_transfer">
+                                        <label for="payment_email_money_id"></label>
+                                        <label for="payment_email_money_id">
+                                            <img src="{{ STATIC_URL }}/images/featured/email_money_transfer.png"/>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="checkbox">
+                                        <input id="payment_master_card_id" type="radio" name="payment_system" value="master_card">
+                                        <label for="payment_master_card_id"></label>
+                                        <label for="payment_master_card_id">
+                                            <img src="{{ STATIC_URL }}/images/featured/master_card.png"/>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="pay-now-footer">
+                    <input type="submit" name="submitoptions" class="button submit" value="Save">
+                </div>    
+            </form>
+        </div>
+
+        <div class="tabs-container">
+            <ul class="tabs" data-page-id="featured-event-setup">                    
+                <li data-tab-id="venue-featured-stats" class="current">
+                    <span>Featured Stats</span>
+                </li>
+            </ul>                
+            <div class="box visible">
+                {% include 'venue_accounts/_venue_featured_stats_table.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

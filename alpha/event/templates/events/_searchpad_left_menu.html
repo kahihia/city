@@ -28,10 +28,32 @@
             </ul> 
 
             <li class="subcat">
-                <a href="{% events_filter_url request eventsFilter function="recently_featured" exclude="tag" %}">
+                <a href="{% events_filter_url request eventsFilter function="recently_featured" exclude="all" %}">
                     Recently Featured
                 </a>
-            </li>                                        
+            </li>
+            <br>
+
+            <li class="special">
+                <a href="{% events_filter_url request eventsFilter night_life="true" exclude="tag" %}">
+                    Night life
+                </a>
+            </li>
+            <li class="special">
+                <a href="{% events_filter_url request eventsFilter function="tags" tag="Date Night" exclude="tag|night_life" %}">
+                    Date Night
+                </a>
+            </li>
+            <li class="special">
+                <a href="{% events_filter_url request eventsFilter function="tags" tag="Free" exclude="tag|night_life" %}">
+                    Free
+                </a>
+            </li>
+            <li class="special">
+                <a href="{% events_filter_url request eventsFilter function="tags" tag="Family" exclude="tag|night_life" %}">
+                    Family
+                </a>
+            </li>
         </ul>
     </div>
 </div>   
