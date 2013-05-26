@@ -5,13 +5,13 @@ from django.contrib import admin
 admin.autodiscover()
 
 from django.conf import settings
+from accounts.forms import AccountForm
 
 handler404 = 'home.views.custom_404'
 
 urlpatterns = patterns(
     '',
     # Examples:
-    #url(r'^$', 'alpha.home.views.home', name='home'),
     url(r'^channel.html$', 'home.views.channelfile'),
     url(r'^$', 'event.views.redirect', name='home'),
     url(r'^events/', include('event.urls')),
@@ -28,14 +28,33 @@ urlpatterns = patterns(
     url(r'^admin_tools/', include('admin_tools.urls')),
     url(r'^facebook/', include('django_facebook.urls')),
     url(r'^advertising/', include('advertising.urls')),
+    url(r'^accounts/(?P<username>[\.\w-]+)/edit-profile/$',
+       'userena.views.profile_edit',
+        {
+            'edit_profile_form': AccountForm
+        },
+       name='user_profile_edit',
+    ),
 )
 
 if settings.DEBUG:
     urlpatterns += patterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': settings.STATIC_ROOT, 'show_indexes': True}),
+        (
+            r'^static/(?P<path>.*)$',
+            'django.views.static.serve',
+            {
+                'document_root': settings.STATIC_ROOT,
+                'show_indexes': True
+            }
+        ),
    )
     urlpatterns += patterns('',
-    (r'^media/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
+        (
+            r'^media/(?P<path>.*)$',
+            'django.views.static.serve',
+            {
+                'document_root': settings.MEDIA_ROOT,
+                'show_indexes': True
+            }
+        ),
     )

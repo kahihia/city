@@ -41,7 +41,7 @@ class PriceWidget(forms.TextInput):
         )
 
     def render(self, name, value, *args, **kwargs):
-        html = """<label for="id_price_free" class="checkbox"><input type='checkbox' id="id_price_free"><label></label>Free</label>"""
+        html = """<div class="checkbox"><input type='checkbox' id="id_price_free"><label for="id_price_free"></label><label for="id_price_free">Free</label></div>"""
         html += super(forms.TextInput, self).render(name, value, *args, **kwargs)
         return mark_safe(html)
 

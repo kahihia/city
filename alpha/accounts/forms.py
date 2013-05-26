@@ -1,15 +1,12 @@
 from django import forms
 from accounts.models import Account, VenueAccount, VenueType
 
-from django.utils.html import format_html
-
 from widgets import InTheLoopTagAutoSuggest
 from taggit.forms import TagField
 from accounts.models import REMINDER_TYPES
 
 from event.widgets import AjaxCropWidget
-from django.utils.safestring import mark_safe
-from django.utils.encoding import force_text
+from userena.forms import EditProfileForm
 
 
 class ReminderSettingsForm(forms.ModelForm):
@@ -87,3 +84,12 @@ class VenueAccountForm(forms.ModelForm):
             'cropping',
             'types'
         )
+
+
+class AccountForm(EditProfileForm):
+    class Meta:
+        model = Account
+        fields = [
+            'mugshot',
+            'date_of_birth'
+        ]

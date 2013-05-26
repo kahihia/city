@@ -28,10 +28,13 @@ class AdvertisingCampaign(models.Model):
     ammount_spent = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
     ammount_remaining = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
 
-    started = models.DateTimeField()
+    started = models.DateTimeField(auto_now=True, auto_now_add=True)
     ended = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
 
     objects = money_manager(models.Manager())
+
+    def __unicode__(self):
+        return self.name
 
 
 PAYMENT_TYPE = (

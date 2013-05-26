@@ -1,3 +1,25 @@
+.modern input[type="text"] {
+    color: #454545;
+    background: #fff;
+    border: 1px solid #ababab;
+    outline: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    padding: 0 5px;
+    height: 20px;
+}
+
+.modern textarea {
+    color: #454545;
+    background: #fff;
+    border: 1px solid #ababab;
+    outline: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;    
+}
+
 .dropdown {
     display: inline-block;
     position: relative;
@@ -66,11 +88,17 @@
 
 div.checkbox {
     display:inline-block;
-    margin-right:10px;   
+    margin-right:10px; 
+    vertical-align: middle;  
 }
 
-div.checkbox label {
-    /*vertical-align: top;*/
+div.checkbox label, 
+div.radio label{
+    display: inline-block;
+    height: 21px;
+    line-height: 21px;
+    vertical-align: middle;
+    cursor: pointer;
 }
 
 input[type=checkbox] {
@@ -78,18 +106,16 @@ input[type=checkbox] {
 }
 input[type=checkbox] + label {
     position:relative;
-    background: url("/static/images/widgets/checkbox-bg.png") no-repeat;;
-    width: 15px;
-    height: 15px;  
-    display: inline-block;  
+    background: url("/static/images/widgets/checkbox-bg.png") center center no-repeat;;
+    width: 16px;
 }
 
 input[type=checkbox]:checked + label:after {
     content: '';
     position: absolute;
-    background: url("/static/images/widgets/checked.png") no-repeat;  
-    top: 2px;
-    left: 2px;
+    background: url("/static/images/widgets/checked.png") center center no-repeat;
+    top: 5px;
+    left: 3px;
     width: 11px;
     height: 10px;
 }
@@ -103,15 +129,17 @@ input[type=radio] + label {
     vertical-align: middle;
     width: 21px;
     height: 21px;
-    background: url("/static/images/widgets/radio-bg.png") top center no-repeat;
+    background: url("/static/images/widgets/radio-bg.png") center center no-repeat;
 }
 input[type=radio]:checked + label {
-    background: url("/static/images/widgets/radio-bg-selected.png") top center no-repeat;
+    background: url("/static/images/widgets/radio-bg-selected.png") center center no-repeat;
 }
 
-.button, 
+body .button, 
 ul#box-nav li,
-input[type=submit] {
+input[type=submit],
+#file-uploader .qq-upload-button {
+    display: inline-block;
     cursor: pointer;
     -webkit-box-shadow: inset 0 1px 0 0 #fff;
     -moz-box-shadow: inset 0 1px 0 0 #fff;
@@ -128,18 +156,24 @@ input[type=submit] {
     -moz-border-radius: 7px;
     border-radius: 7px;
     border: 1px solid #ebebeb;
-    display: inline-block;
-    color: #454545;
-    font-size: 1em;    
-    padding: 4px 5px 4px 5px;;
     text-decoration: none;
-    text-shadow: 1px 1px 0 #fff;    
-    margin-top: 0;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+body .button.standart,
+#file-uploader .qq-upload-button {
+    width: 137px;
+    height: 30px;
+    font-size: 16px;
+    color: #5d5d5d;
+    margin-top: 10px;
+    padding: 5px auto;
 }
 
 .button:hover,
 ul#box-nav li:hover,
-input[type=submit]:hover {
+input[type=submit]:hover
+#file-uploader .qq-upload-button:hover {
   /*background-image: url("/images/ie9_button_hovered.svg");*/
   background: -webkit-gradient(linear, center top, center bottom, color-stop(0.05, #f6f6f6), color-stop(1, #fff));
   background: -webkit-linear-gradient(center top, #f6f6f6 5%, #fff 100%);
@@ -148,6 +182,7 @@ input[type=submit]:hover {
   background: -ms-linear-gradient(center top, #f6f6f6 5%, #fff 100%);
   background: linear-gradient(center top, #f6f6f6 5%, #fff 100%);
   background-color: #f6f6f6;  
+  color: #000;
 }
 
 .button.active,
@@ -319,7 +354,6 @@ ul#box-nav li.selected a {
 }
 
 
-
 fieldset {
     border:none;
 }
@@ -327,4 +361,47 @@ fieldset {
 fieldset legend{
     color: #00457d;
     font-size: 1.2em;
-}    
+}
+
+/* File ajax upload */
+.qq-upload-list {
+    display:none;
+}
+
+.picture {
+    position:relative;
+}
+
+#id_picture {
+    display:none;
+}
+
+#file-uploader {
+    margin-left:10px;
+}
+
+#file-uploader .qq-upload-button {
+    margin-top: 0px;
+    line-height: 30px;
+    vertical-align: middle;
+    border: 1px solid #E6E6E6;
+    -moz-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#file-uploader .qq-upload-drop-area {
+    display: none !important;
+}
+
+#file-uploader .qq-upload-button input {
+    height: 100%;
+    width: 100%;
+}
+
+#file-uploader .qq-upload-button:hover {
+    color: #234;
+    border:1px solid #79B7E7;
+}

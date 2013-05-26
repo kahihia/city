@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base-new.html' %}
 {% load date_formatting %}
 {% load cropping %}
 
@@ -26,67 +26,56 @@
     &gt; Browse {% if page_date != "flow" %}&gt; {{page_date|slug_to_title }}{% endif %}
 {% endblock %}
 
+{% block featured %}
+    {% include 'events/_event_featured.html' %}
+{% endblock %}
+
 {% block page %}
-    <div id="fb-root"></div>    
+    <div id="fb-root"></div>
+    <div class="primary-content">
+        <div class="main-content">   
+            <h1>Search Pad</h1>
+            <div class="main-content">
+                <!--start.main-navigation-->
+            
+                <div class="main-navigation">
+                    <!--start.main-navigation-nav-->
+                    {% include 'events/_searchpad_left_menu.html' %}
+                    <!--end.main-navigation-nav-->
+                
+                    <!--start.main-navigation-content-nav-->
+                
+                    <div class="main-navigation-content-nav">
+                        <div class="main-navigation-content-nav-wrapper">
+                            <!--start.schedule-bar-->
+                            {% include 'events/_searchpad_datetime_menu.html' %}
 
-    <div class="wrapper">
-        <div class="page-container">
-            {% include 'events/_event_featured.html' %}       
-
-            <div class="content-wrapper">
-            	<div class="content-wrapper-panel">
-                    <!--start.main-content-wrapper-->
-                    <div class="main-content-wrapper">
-                    	<h1>Search Pad</h1>
-                        <div class="main-content">
-                    	   <!--start.main-navigation-->
-                        
-                            <div class="main-navigation">
-                                <!--start.main-navigation-nav-->
-                                {% include 'events/_searchpad_left_menu.html' %}
-                                <!--end.main-navigation-nav-->
-                            
-                                <!--start.main-navigation-content-nav-->
-                            
-                                <div class="main-navigation-content-nav">
-                                    <div class="main-navigation-content-nav-wrapper">
-                                        <!--start.schedule-bar-->
-                                        {% include 'events/_searchpad_datetime_menu.html' %}
-
-                                        <ul id="searchTags" class="tagit ui-widget ui-widget-content ui-corner-all">
-                                            {% for tag in eventsFilter.search_tags %}
-                                                <li data-remove-url="{{ tag.remove_url }}" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable">
-                                                    <span class="tagit-label">{{ tag.name }}</span>
-                                                    <a class="tagit-close">
-                                                        <span class="text-icon">×</span>
-                                                        <span class="ui-icon ui-icon-close"></span>
-                                                    </a>
-                                                </li>
-                                            {% endfor %}
-                                            <span class="search-button"></span>
-                                        </ul>
-                                        <!--end.schedule-bar-->
-                          
-                                        <!--start.entry-wrapper-->
-                                        {% include 'events/_event_details.html' %}
-                                    </div>
-                                </div>
-                                <!--end.main-navigation-content-nav-->                        
-                                <div class="clr"></div>                    
-                            </div>
-                            <!--end.main-navigation-->
-                        
-                            <!--start.right-navigation-->                    
-                            <!--<?php include("rightside.php");?>-->                    
-                            <!--end.right-navigation-->
-                    
-                            <div class="clr"></div>                
+                            <ul id="searchTags" class="tagit ui-widget ui-widget-content ui-corner-all">
+                                {% for tag in eventsFilter.search_tags %}
+                                    <li data-remove-url="{{ tag.remove_url }}" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable">
+                                        <span class="tagit-label">{{ tag.name }}</span>
+                                        <a class="tagit-close">
+                                            <span class="text-icon">×</span>
+                                            <span class="ui-icon ui-icon-close"></span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                                <span class="search-button"></span>
+                            </ul>
+                            <!--end.schedule-bar-->
+              
+                            <!--start.entry-wrapper-->
+                            {% include 'events/_event_details.html' %}
                         </div>
                     </div>
-                    <!--end.main-content-wrapper-->        
-                </div>    
+                    <!--end.main-navigation-content-nav-->                        
+                    <div class="clr"></div>                    
+                </div>
+                <!--end.main-navigation-->
+            
+                <div class="clr"></div>                
             </div>
         </div>
-        <!--end.content-wrapper-->             
     </div>
+
 {% endblock %}

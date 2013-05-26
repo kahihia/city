@@ -25,9 +25,9 @@
         end_date_input.datepicker({
             minDate: new Date(),
             onSelect: function(){
-                that.calculate_days_to_display();                
+                that.calculate_days_to_display();
             }
-        });  
+        });
 
         days_to_display.on("change", function(){
             that.calculate_end_date();

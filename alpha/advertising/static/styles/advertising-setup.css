@@ -1,87 +1,82 @@
-.balloon {
-    top: 0;
+.advertising-setup {
+    font-size: 14px;
 }
 
-.dropdown {
-    width: 140px;
-    height: 24px;
+.advertising-setup .content {
+    padding-left: 22px;
 }
 
-.dropdown:after { 
-    top: 5px;
-    right: 4px;
+.advertising-setup .options {
+    border: 1px solid #d3d3d3;
+    margin-top: 7px;
+    margin-bottom: 30px;
+    padding-left: 15px;
+    padding-top: 15px;
 }
 
-.featured-setup .datetime-table {
-    margin: 20px;    
+body .hintbox {
+    width: 300px;
 }
 
-.featured-setup .datetime-table td {
-    height: 40px;
-    vertical-align: middle;
+.campaign-name {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#id_name {
+    width: 190px;
+    margin-left: 20px;
     margin-right: 10px;
 }
 
-.featured-setup .datetime-table td.long {
-    padding-left: 10px;
+.advertising-types th {
+    color: #022e52;
+    vertical-align: top;
 }
 
-.featured-setup .datetime-table tr:first-child td:nth-of-type(1){
-    width: 100px;
+.advertising-types th .balloon {
+    position: relative;
+    display: inline-block;
+    top: -3px;
 }
 
-.featured-setup .datetime-table tr:first-child td:nth-of-type(2){
-    width: 25px;
+.advertising-types td {
+    vertical-align: top;
 }
 
-.featured-setup .datetime-table tr:first-child td:nth-of-type(3){
-    width: 150px;
+.advertising-types td.center {
+    text-align: center;
+    padding-right: 32px;
 }
 
-.featured-setup .datetime-table tr:first-child td:nth-of-type(4){
-    width: 30px;
+.advertising-uploads {
+    margin-bottom: 20px;
 }
 
-.featured-setup .datetime-table tr:first-child td:nth-of-type(5){
-    width: 70px;
+.advertising-uploads tr {
+    display: none;
 }
 
-.featured-setup .datetime-table tr:first-child td:nth-of-type(6){
-    width: 150px;
+.teritory-node {
+    display: block;
+    float: left;
+    min-width: 200px;
 }
 
-.featured-setup .datetime-table tr:first-child td:nth-of-type(7){
-    width: 30px;
-}
-
-.featured-setup input[type=text]{
-    border: 1px solid #dbdbdb;
-    color: #454545;
-    background: #fff;
-
-    outline: 0;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    padding: 0 10px;
-    width: 140px;
-    height: 24px;
-    font-size: 12px;
-}
-
-.featured-setup .pay-now-header {
+.pay-now-header {
     color: #022e52;
     font-size: 16px;
     font-style: italic;
     font-weight: bold;
-    margin-left: 360px;
+    margin-left: 545px;
 }
 
 .pay-now-widget {
-    margin-left: 20px; 
     margin-top: 5px;  
-    width: 635px;
-    height: 125px;
+    padding-left: 15px;
+    padding-top: 15px;
+    width: 650px;
+    height: 110px;
     border: 1px solid #d3d3d3;
     border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -99,28 +94,26 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fafafa', endColorstr='#eaeaea',GradientType=0 ); /* IE6-8 */
 }
 
-.pay-now-widget .info {
-    float: left;
-    margin: 35px;    
-    width: 265px;
-    color: #000;
-    font-size: 20px;
-    font-style: italic;
-    font-weight: bold;
+.pay-now-widget .budget table {
+    width: 270px;
 }
 
-.pay-now-widget .info .only {
-    font-style: normal;
-    font-size: 24px;
-    color: #9c1a00;
+.pay-now-widget .budget table td {
+    text-align: right;
 }
 
-.pay-now-widget .choose-payment-system {
-    float: left;
+.pay-now-widget .budget table td:first-child {
+    text-align: left;
+}
+
+.pay-now-widget .budget table td:last-child {
+    width: 30px;
 }
 
 .pay-now-widget .choose-payment-system td {
-    vertical-align: middle;    
+    vertical-align: middle;
+    text-align: center;  
+    width: 25%;  
 }
 
 .pay-now-widget .choose-payment-system td label {
@@ -136,28 +129,7 @@
     height: 46px;
 }
 
-.featured-setup .pay-now-footer {
-    margin-left: 265px;
-    margin-top: 10px;
-    margin-bottom: 50px;
-}
-
-.hintbox {
-    width: 300px;
-}
-
-.ui-datepicker .ui-datepicker-header {
-    position: relative;
-    padding: .5em 0;
-}
-
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
-    border: 1px solid #79b7e7;
-    background: #f5f8f9 url(images/ui-bg_inset-hard_100_f5f8f9_1x100.png) 50% 50% repeat-x;
-    font-weight: bold;
-    color: #e17009;
-}
-
-.tabs-container {
-    width: 695px;
+.pay-now-footer {
+    margin-left: 265px;    
+    margin-bottom: 30px;
 }

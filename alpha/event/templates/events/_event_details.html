@@ -5,7 +5,7 @@
 
 {% paginate 1 eventsFilter.qs using "search_pad" as events %}
 {% for event in events %}
-    <div class="event-details-block">
+    <div class="event-details-block" data-no-turbolink>
         <div class="event-img">
             {% if event.picture %}
                 <img src="{% cropped_thumbnail event "cropping" width=175 %}" height="175px" weight="175px">

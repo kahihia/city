@@ -46,17 +46,15 @@
                             Edit Profile
                         </a>
                         <div class="public-or-private">
-                            <div class="button">
-                                <div class="radio">
-                                    <input {% if venue_account.public %}checked="checked"{% endif %} id="venue_account_make_public" type="radio" value="public" name="public_or_private"> 
-                                    <label for="venue_account_make_public"></label>
-                                    <label for="venue_account_make_public">Public</label>
-                                </div>
-                                <div class="radio">
-                                    <input {% if not venue_account.public %}checked="checked"{% endif %} id="venue_account_make_private" type="radio" value="private" name="public_or_private"> 
-                                    <label for="venue_account_make_private"></label>
-                                    <label for="venue_account_make_private">Private</label>
-                                </div>
+                            <div class="radio">
+                                <input {% if venue_account.public %}checked="checked"{% endif %} id="venue_account_make_public" type="radio" value="public" name="public_or_private"> 
+                                <label for="venue_account_make_public"></label>
+                                <label for="venue_account_make_public">Public</label>
+                            </div>
+                            <div class="radio">
+                                <input {% if not venue_account.public %}checked="checked"{% endif %} id="venue_account_make_private" type="radio" value="private" name="public_or_private"> 
+                                <label for="venue_account_make_private"></label>
+                                <label for="venue_account_make_private">Private</label>
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base-new.html' %} 
 {% load date_formatting %}
 {% load cropping %}
 
@@ -30,67 +30,58 @@
 
 {% block title %} 
     &gt; Browse 
-    {% if page_date != "flow" %}&gt; {{page_date|slug_to_title }}{% endif %}{% endblock %}
+    {% if page_date != "flow" %}&gt; {{page_date|slug_to_title }}{% endif %}
+{% endblock %}
+
+
 {% block page %}
-<div id="fb-root"></div>
+    <div id="fb-root"></div>
 
-{% if messages %}
-    <div class="msg">
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><h3>{{ message }}</h3></li>
-            {% endfor %}
-        </ul>
-    </div>
-{% endif %}
-
-<div class="wrapper">
-    <div class="content-wrapper">
-    	<div class="content-wrapper-panel">
-            <!--start.main-content-wrapper-->
+    {% if messages %}
+        <div class="msg">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><h3>{{ message }}</h3></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div class="primary-content">
+        <h1>Browse Events</h1>
+        <div class="content">
             
-            <div class="main-content-wrapper">
-            	<h1>Browse Events</h1>
-                <div class="main-content">
-                	<!--start.main-navigation-->
-                    
-                    <div class="main-navigation">
-                        <!--start.main-navigation-nav-->
-                        {% include 'events/_browse_left_menu.html' %}
-                        <!--end.main-navigation-nav-->
-                    
-                        <!--start.main-navigation-content-nav-->
-                    
-                        <div class="main-navigation-content-nav">
-                            <div class="main-navigation-content-nav-wrapper">
-                                <!--start.schedule-bar-->
-                                {% include 'events/_searchpad_datetime_menu.html' %}
-                                <!--end.schedule-bar-->
-
-                                <ul id="searchTags">
-                                    {% for tag in eventsFilter.search_tags %}
-                                        <li data-remove-url="{{ tag.remove_url }}">
-                                            {{ tag.name }}
-                                        </li>
-                                    {% endfor %}                                    
-                                    <span class="search-button"></span>
-                                </ul>
-
-                                
-                                {% include 'events/_browse_events_list.html' %}
-                            </div>
-                        </div>
-                        <!--end.main-navigation-content-nav-->                        
-                        <div class="clr"></div>                    
-                    </div>
-                    
-                    <!--end.main-navigation-->                    
+            <div class="main-content">                
+                    {% include 'events/_browse_left_menu.html' %}
                 
-                	<div class="clr"></div>                
-                </div>            
-            </div>            
-            <!--end.main-content-wrapper-->        
-        </div>    
-    </div>    
-</div>
+                
+                    <!--start.main-navigation-content-nav-->
+                
+                    <div class="main-navigation-content-nav">
+                        <div class="main-navigation-content-nav-wrapper">
+                            <!--start.schedule-bar-->
+                            {% include 'events/_searchpad_datetime_menu.html' %}
+                            <!--end.schedule-bar-->
+
+                            <ul id="searchTags">
+                                {% for tag in eventsFilter.search_tags %}
+                                    <li data-remove-url="{{ tag.remove_url }}">
+                                        {{ tag.name }}
+                                    </li>
+                                {% endfor %}                                    
+                                <span class="search-button"></span>
+                            </ul>
+
+                            
+                            {% include 'events/_browse_events_list.html' %}
+                        </div>
+                    </div>
+                    <!--end.main-navigation-content-nav-->                        
+                    <div class="clr"></div>                    
+                
+
+            
+                <div class="clr"></div>                
+            </div>
+        </div>
+    </div>
 {% endblock %}

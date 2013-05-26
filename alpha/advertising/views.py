@@ -13,7 +13,7 @@ def setup(request):
 
     form = AdvertisingSetupForm(instance=campaign)
 
-    advertising_types = AdvertisingType.objects.filter(active=True)
+    advertising_types = AdvertisingType.objects.filter(active=True).order_by("id")
 
     if request.method == 'POST':
         form = AdvertisingSetupForm(instance=campaign, data=request.POST)

@@ -32,7 +32,7 @@
     {% endblock %}
     {% block userena_head %}{% endblock %}
 </head>
-<body>
+<body {% block body_attributes %}class="modern"{% endblock %}>
 {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -42,37 +42,31 @@
 {% endif %}    
 <div class="wrapper">
     <div class="page-container">    
-        <!--start.header-wrapper-->  
-        <div class="header-wrapper" data-no-turbolink>
-            <div class="header">
-                <div class="primary-header-wrapper">
-                    <div class="logo">
-                        <a href="/">
-                            <img src="{{STATIC_URL}}images/logo.png" />
+        <div class="header"  data-no-turbolink>
+            <div class="primary-header">
+                <div class="logo">
+                    <a href="/">
+                        <img src="{{STATIC_URL}}images/logo.png" />
+                    </a>
+                </div>
+
+                <div class="sign-up-wrapper-top">
+                    {% include '_signin_signup.html' %}
+                    <div class="post-events-for-free">
+                        <a href="{% url 'event_create' %}">
+                            <img src="{{STATIC_URL}}images/post-events-for-free.png" />
                         </a>
                     </div>
+                </div>
 
-                    <!--start.sign-up-wrapper-top-->
-                    <div class="sign-up-wrapper-top">
-                        {% include '_signin_signup.html' %}
-                        <div class="post-events-for-free">
-                            <a href="{% url 'event_create' %}">
-                                <img src="{{STATIC_URL}}images/post-events-for-free.png" />
-                            </a>
-                        </div>
-                    </div>
-                    <!--end.sign-up-wrapper-top-->        
-
-                    <div class="clr"></div>
-                </div>        
-
-                <!--start.menu-wrapper-->
-                {% include '_main_navigation.html' %}
-                <!--end.menu-wrapper-->
-    
+                <div class="clr"></div>
             </div>
-        </div>  
-        <!--end.header-wrapper-->   
+            {% include '_main_navigation.html' %}
+        </div>
+
+
+        
+        {% block featured %}{% endblock %}        
         
         <!--start.content-wrapper-->
         <div class="content-wrapper">
