@@ -16,7 +16,7 @@ def setup(request):
     advertising_types = AdvertisingType.objects.filter(active=True).order_by("id")
 
     if request.method == 'POST':
-        form = AdvertisingSetupForm(instance=campaign, data=request.POST)
+        form = AdvertisingSetupForm(instance=campaign, data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, 'Advertasing created.')

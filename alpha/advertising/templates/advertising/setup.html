@@ -144,19 +144,19 @@
                             <tr>
                                 <td class="center">
                                     <div class="radio">                                        
-                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cpm" value="CPM" name="advertising_type_{{ advertising_type.id }}_payment_type" data-ad-type="{{ advertising_type.id }}">
+                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cpm" value="CPM" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}">
                                         <label for="advertising_type_{{ advertising_type.id }}_cpm"></label>
                                     </div>
                                 </td>
                                 <td class="center">
                                     <div class="radio">                                        
-                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cmc" value="CMC" name="advertising_type_{{ advertising_type.id }}_payment_type" data-ad-type="{{ advertising_type.id }}">
+                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cmc" value="CMC" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}">
                                         <label for="advertising_type_{{ advertising_type.id }}_cmc"></label>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="checkbox">
-                                        <input type="checkbox" id="id_advertising_type_{{ advertising_type.id }}" value="{{ advertising_type.id }}" name="types" data-ad-type="{{ advertising_type.id }}">
+                                        <input type="checkbox" id="id_advertising_type_{{ advertising_type.id }}" value="{{ advertising_type.id }}" name="advertising_types" data-ad-type="{{ advertising_type.id }}">
                                         <label for="id_advertising_type_{{ advertising_type.id }}"></label>
                                         <label for="id_advertising_type_{{ advertising_type.id }}">{{ advertising_type }}</label>
                                     </div>                                    
@@ -178,7 +178,7 @@
                             <tr data-ad-type="{{ advertising_type.id }}">
                                 <td>Upload {{advertising_type}}</td>
                                 <td>
-                                    <input type="file" name="{{advertising_type}}">
+                                    <input type="file" name="advertising_image.{{advertising_type.id}}">
                                 </td>
                                 <td>
                                     <span {% if advertising_type.reviewed %}class="reviewed"{% endif %}>
@@ -199,7 +199,7 @@
                     <div class="advertising-territories options">
                         <div class="teritory-node">
                             <div class="checkbox">
-                                <input {% if form.all_off_canada.value %}checked="checked"{% endif %} type="checkbox" id="id_all_of_canada" value="true" name="all_of_canada" />
+                                <input {% if form.all_of_canada.value %}checked="checked"{% endif %} type="checkbox" id="id_all_of_canada" value="true" name="all_of_canada" />
                                 <label for="id_all_of_canada"></label>
                                 <label for="id_all_of_canada">All of Canada</label>
                             </div>
@@ -207,7 +207,7 @@
                         {% for region in form.fields.regions.queryset %}
                         <div class="teritory-node region">
                             <div class="checkbox">
-                                <input {% for current_region in campaign.regions.all %}{% if region.pk == current_region.pk %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_regions_{{ forloop.counter0 }}" value="{{ region.id }}" name="regions" />
+                                <input {% for current_region in form.regions.value %}{% if region.pk = current_region|add:0 %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_regions_{{ forloop.counter0 }}" value="{{ region.id }}" name="regions" />
                                 <label for="id_regions_{{ forloop.counter0 }}"></label>
                                 <label for="id_regions_{{ forloop.counter0 }}">
                                     {{ region.name }}
