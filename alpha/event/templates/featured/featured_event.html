@@ -5,7 +5,7 @@
         {% if event.picture %}
             <img src="{% cropped_thumbnail event "cropping" width=154 %}" height="153px" weight="154px">
         {% else %}
-            <img src="{{STATIC_URL}}images/default-event.jpg" height="153px" weight="154px">
+            <img src="/static/images/default-event.jpg" height="153px" weight="154px">
         {% endif %}
     </div>
     <div class="featured-img-details">
