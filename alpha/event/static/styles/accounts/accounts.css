@@ -1,5 +1,5 @@
 .primary-content .content.account-profile {
-    width: 715px;
+    width: 658px;
     padding-top: 13px;
     padding-left: 10px;
     padding-bottom: 10px;
@@ -40,7 +40,7 @@
 .account-details {
     float: left;
     margin-left:23px;
-    width: 453px;
+    width: 415px;
     font-size: 1.2em;
 }
 
@@ -220,10 +220,11 @@
 
 .account-options {
     padding: 10px;
+    padding-left: 0;
 }
 
 .account-options ul.as-selections {
-    width: 570px;
+    width: 555px;
     border-radius: 0;
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
@@ -419,7 +420,7 @@
 }
 
 .account-entry-wrapper .entry-info {
-    width: 690px;
+    width: 635px;
     padding-right: 7px;
 }
 .account-entry-wrapper .event-edit-actions {

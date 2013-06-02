@@ -75,9 +75,9 @@
     border-bottom: 1px solid #ddd;
     width: 50%;
     max-width: 80px;
-    height: 18px;
-    max-height: 18px;
-    min-height: 18px;    
+    height: 22px;
+    max-height: 22px;
+    min-height: 22px;    
 }
 
 .event-details-block .event-details .event-actions td a {

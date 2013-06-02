@@ -114,6 +114,9 @@ def view(request, slug=None, old_tags=None):
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))
 
+    if request.GET.get("featured_click", False):
+        event.featuredevent_set.all()[0].click()
+
     opengraph = {'og:title': event.name,
                   'og:type': 'event',
                   'og:locale': 'en_US',
@@ -299,6 +302,7 @@ def create(request, form_class=None, success_url=None, template_name='events/cre
 def created(request, slug=None):
     if slug is None:
         raise Http404
+
     return render_to_response('events/creation_complete.html', {
             'slug': slug,
             'posting': True,

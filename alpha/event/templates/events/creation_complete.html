@@ -1,12 +1,16 @@
-{% extends 'base.html' %}
+{% extends 'base-new.html' %}
 {% block title %} >| Event Created{% endblock %}
 {% block page %}
-  <section class="body noborder">
-    <h1>Event Posted!</h1>
-    <p><a href="{% url 'event_view' slug %}">See event in action &rarr;</a></p>
-    <p>An email has been sent to you with the details. Please check your spam filter if it does not arrive.</p>
-    {% if user.is_authenticated %}
-    <p>To edit your event anytime, go to <a href="">View your events</a>.</p>
-    {% endif %}
-  </section><!-- .body -->
+    <section class="body noborder">
+        <h1>Event Posted!</h1>
+        <p>
+            <a href="{% url 'event_view' slug %}">See event in action &rarr;</a>
+        </p>
+        <p>An email has been sent to you with the details. Please check your spam filter if it does not arrive.</p>
+        {% if user.is_authenticated %}
+            <p>
+                To edit your event anytime, go to your <a href="{% url 'userena_profile_detail' user.username %}">user account</a> and choose venue account.
+            </p>
+        {% endif %}
+    </section>
 {% endblock %}

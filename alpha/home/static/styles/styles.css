@@ -439,6 +439,7 @@ body
 .main-content
 {
 	width:auto;
+	margin-bottom: 20px;
 }
 
 .main-navigation-content-nav
@@ -878,31 +879,7 @@ body
 	width:auto;
 	padding-top:10px;
 	padding-bottom:10px;
-}
-
-.footer-ads-container
-{
-	float:left;
-}
-
-.footer-social-links
-{
-	width:255px;
-	float:right;
-	padding-bottom:10px;
-}
-
-.footer-social-links h3
-{
-	margin:0px;
-	padding:10px 0px;
-	font:14px Arial, Helvetica, sans-serif;
-	font-weight:normal;
-}
-
-.social-links img
-{
-	margin-right:5px;
+	text-align: center;
 }
 
 .footer-site-links

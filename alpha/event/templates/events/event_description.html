@@ -3,6 +3,7 @@
 {% load cropping %}
 {% load event_pictures %}
 {% load endless %}
+{% load advertising_tags %}
 
 {% block head %}
     <link href="{{STATIC_URL}}styles/styles-new.css" rel="stylesheet" type="text/css" />
@@ -219,7 +220,15 @@
                 </div>
             {% endif %}
         </div>
-    </div>
+    </div>    
     
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+{% endblock %}
+
+{% block advertising %}
+    <div class="advertising-right-container">
+        <div class="advertising-right">
+            {% advertising "300x250" %}
+        </div>
+    </div>
 {% endblock %}

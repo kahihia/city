@@ -1,4 +1,5 @@
-.modern input[type="text"] {
+.modern .content-wrapper input[type="text"],
+.modern .content-wrapper input[type="password"] {
     color: #454545;
     background: #fff;
     border: 1px solid #ababab;
@@ -221,7 +222,7 @@ ul#box-nav li.selected {
 
 .tabs-container {
     margin-top: 10px;
-    width: 730px;
+    width: 675px;
     margin-bottom: 10px;
 }
 

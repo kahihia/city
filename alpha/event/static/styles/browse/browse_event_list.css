@@ -36,6 +36,12 @@
     text-overflow: ellipsis;    
 }
 
+.entry-wrapper .entry-info.with-actions .entry-details-wrapper .title,
+.entry-wrapper .entry-info.with-actions .entry-details-wrapper .entry-date,
+.entry-wrapper .entry-info.with-actions .entry-details-wrapper .entry-description {
+    width: 250px;
+}
+
 .entry-wrapper .entry-info .auctions-details-wrapper .title,
 .entry-wrapper .entry-info .auctions-details-wrapper .entry-date {
     width:200px;

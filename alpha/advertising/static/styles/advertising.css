@@ -1,0 +1,11 @@
+.advertising-right-container {
+    float:right;
+    margin-top: 35px;
+}
+
+.advertising-right {    
+    padding: 4px;
+    border: 1px solid #e2e2e2;
+    margin-bottom: 4px;
+    text-align: center;
+}

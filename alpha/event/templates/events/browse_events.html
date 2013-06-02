@@ -51,36 +51,26 @@
         <div class="content">
             
             <div class="main-content">                
-                    {% include 'events/_browse_left_menu.html' %}
-                
-                
-                    <!--start.main-navigation-content-nav-->
-                
-                    <div class="main-navigation-content-nav">
-                        <div class="main-navigation-content-nav-wrapper">
-                            <!--start.schedule-bar-->
-                            {% include 'events/_searchpad_datetime_menu.html' %}
-                            <!--end.schedule-bar-->
+                {% include 'events/_browse_left_menu.html' %}                
 
-                            <ul id="searchTags">
-                                {% for tag in eventsFilter.search_tags %}
-                                    <li data-remove-url="{{ tag.remove_url }}">
-                                        {{ tag.name }}
-                                    </li>
-                                {% endfor %}                                    
-                                <span class="search-button"></span>
-                            </ul>
+                <div class="main-navigation-content-nav">
+                    <div class="main-navigation-content-nav-wrapper">
+                        {% include 'events/_searchpad_datetime_menu.html' %}
 
-                            
-                            {% include 'events/_browse_events_list.html' %}
-                        </div>
+                        <ul id="searchTags">
+                            {% for tag in eventsFilter.search_tags %}
+                                <li data-remove-url="{{ tag.remove_url }}">
+                                    {{ tag.name }}
+                                </li>
+                            {% endfor %}
+                            <span class="search-button"></span>
+                        </ul>
+
+                        
+                        {% include 'events/_browse_events_list.html' %}
                     </div>
-                    <!--end.main-navigation-content-nav-->                        
-                    <div class="clr"></div>                    
-                
-
-            
-                <div class="clr"></div>                
+                </div>
+                <div class="clr"></div>
             </div>
         </div>
     </div>

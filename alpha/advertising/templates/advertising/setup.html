@@ -1,6 +1,7 @@
 {% extends 'base-new.html' %} 
 {% load i18n %} 
 {% load url from future %} 
+{% load dictionary_tags %}
 
 {% block title %}
     {% blocktrans with profile.user.username as username %}
@@ -39,6 +40,11 @@
                                 {% endfor %}
                             </li>
                             <li id="all-info">
+                                {% for error in form.website.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </li>
+                            <li id="all-info">
                                 {% for error in form.budget.errors %}
                                     <span class="error">{{ error }}</span>
                                 {% endfor %}
@@ -53,6 +59,11 @@
                         Name of Campaign                        
                         {{ form.name }}
                         Enter the name of your campaign.
+                    </div>
+
+                    <div class="campaign-name">
+                        Campaign website URL
+                        {{ form.website }}
                     </div>
                     
                     Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner, etc.
@@ -144,19 +155,19 @@
                             <tr>
                                 <td class="center">
                                     <div class="radio">                                        
-                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cpm" value="CPM" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}">
+                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cpm" value="CPM" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}" {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CPM" %}checked="checked"{% endifequal %}>
                                         <label for="advertising_type_{{ advertising_type.id }}_cpm"></label>
                                     </div>
                                 </td>
                                 <td class="center">
                                     <div class="radio">                                        
-                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cmc" value="CMC" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}">
+                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cmc" value="CMC" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}" {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CMC" %}checked="checked"{% endifequal %}>
                                         <label for="advertising_type_{{ advertising_type.id }}_cmc"></label>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="checkbox">
-                                        <input type="checkbox" id="id_advertising_type_{{ advertising_type.id }}" value="{{ advertising_type.id }}" name="advertising_types" data-ad-type="{{ advertising_type.id }}">
+                                        <input type="checkbox" id="id_advertising_type_{{ advertising_type.id }}" value="{{ advertising_type.id }}" name="advertising_types" data-ad-type="{{ advertising_type.id }}" {% if advertising_type.id in chosen_advertising_types %}checked="checked"{% endif %}>
                                         <label for="id_advertising_type_{{ advertising_type.id }}"></label>
                                         <label for="id_advertising_type_{{ advertising_type.id }}">{{ advertising_type }}</label>
                                     </div>                                    
@@ -175,7 +186,7 @@
                     <div class="advertising-uploads">
                         <table>
                         {% for advertising_type in advertising_types %}                        
-                            <tr data-ad-type="{{ advertising_type.id }}">
+                            <tr data-ad-type="{{ advertising_type.id }}"  {% if advertising_type.id in chosen_advertising_types %}class="chosen"{% endif %}>
                                 <td>Upload {{advertising_type}}</td>
                                 <td>
                                     <input type="file" name="advertising_image.{{advertising_type.id}}">
@@ -299,3 +310,5 @@
         </div>
     </div>
 {% endblock %}
+
+{% block advertising %} {% endblock %}

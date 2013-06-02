@@ -43,9 +43,9 @@
 #entry-form {
     padding: 20px 20px;
     border: 1px solid #ccc;
-    width:650px;
+    width: 635px;
 }
 
 #entry-form table tr td:nth-of-type(2){
-    padding-left:30px;
+    padding-left: 30px;
 }

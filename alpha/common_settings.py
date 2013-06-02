@@ -111,8 +111,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'event.middleware.LocationMiddleware',
     'accounts.middleware.VenueAccountMiddleware',
-    'turbolinks.middleware.TurbolinksMiddleware'
+    'turbolinks.middleware.TurbolinksMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
+
+# INTERNAL_IPS = ('127.0.0.1',)
 
 ROOT_URLCONF = 'urls'
 
@@ -129,7 +132,6 @@ INSTALLED_APPS = (
     'admin_tools.menu',
     'admin_tools.dashboard',
 
-    'citi_user',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -161,7 +163,7 @@ INSTALLED_APPS = (
     'django_facebook',
     'djcelery',
     'turbolinks',
-	'advertising'
+    'advertising',
 )
 
 # A sample logging configuration. The only tangible logging performed

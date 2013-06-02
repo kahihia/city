@@ -423,3 +423,12 @@ class FeaturedEvent(models.Model):
 
     def __unicode__(self):
         return self.event.name
+
+    def click(self):
+        # TODO: calculate cost
+        self.clicks = self.clicks + 1
+        self.save()
+
+    def view(self):
+        self.views = self.views + 1
+        self.save()

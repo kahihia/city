@@ -7,6 +7,10 @@ from advertising import views
 urlpatterns = patterns('',
     url(r'^setup/$',
         views.setup,
-        name='advertisin_setup'
+        name='advertising_setup'
     ),
+    url(r'^open/(?P<advertising_id>\d+)/$',
+        views.open,
+        name='advertising_open'
+    )
 )

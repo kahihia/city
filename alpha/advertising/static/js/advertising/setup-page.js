@@ -9,6 +9,18 @@
     AdvertisingSetupPage.prototype = {
         initAdTypeSelection: function(){
             var that=this;
+
+            // Init rows
+            $(".advertising-types .checkbox input").each(function(){
+                var ad_type_id = $(this).data("ad-type"),
+                    checked = $(this).prop("checked");
+
+                that.showOrHideUploadRow(
+                    ad_type_id,
+                    $("#id_advertising_type_" + ad_type_id).prop('checked')
+                );
+            });
+
             $(".advertising-types .radio input").on("click", function(){
                 var ad_type_id = $(this).data("ad-type");
                 $("#id_advertising_type_"+ad_type_id).prop('checked', true);
@@ -46,6 +58,10 @@
             }
         },
         initRegionSelection: function(){
+            if($("#id_all_of_canada").prop("checked")){
+                $(".advertising-territories .region").hide();
+            }
+
             $("#id_all_of_canada").on("change", function(){
                 if($(this).prop("checked")){
                     $(".advertising-territories .region").hide();

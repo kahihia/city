@@ -11,7 +11,7 @@
 }
 
 .content-wrapper .content {    
-    width: 690px;
+    width: 675px;
     border: 1px solid #ccc;
 }
 
@@ -62,7 +62,7 @@
     display: inline-block;
     width: 345px;
     vertical-align: top;
-    margin-left: 24px;
+    margin-left: 20px;
 }
 
 .content-wrapper .event-details .event-date-wrapper {
@@ -205,11 +205,12 @@
 
 .primary-content {
     float:left;
+    margin-bottom: 20px;
 }
 
 .secondary-content {
     float:right;
-    width: 290px;
+    width: 308px;
 }
 
 .secondary-content header{
@@ -222,7 +223,7 @@
 }
 
 .secondary-content .content {
-    width: 290px;
+    width: 308px;
 }
 
 .secondary-content-table {

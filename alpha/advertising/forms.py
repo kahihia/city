@@ -13,8 +13,11 @@ from django.core.files.images import get_image_dimensions
 #     widget = AdvertisingsWidget
 
 #     def __init__(self, advertising_types=AdvertisingType.objects.filter(active=True), *args, **kwargs):
-#         super(ModelMultipleChoiceField, self).__init__(required, *args, **kwargs)
+#         super(ModelAdvertisingsField, self).__init__(*args, **kwargs)
 #         self.advertising_types = advertising_types
+
+#     def to_python(self, value):
+#         pass
 
 #     def clean(self, value):
 #         pass
@@ -41,13 +44,15 @@ class AdvertisingSetupForm(forms.ModelForm):
             'name',
             'regions',
             'all_of_canada',
-            'budget'
+            'budget',
+            'website'
         )
 
     def __init__(self, *args, **kwargs):
         super(AdvertisingSetupForm, self).__init__(*args, **kwargs)
 
         self.fields['name'].error_messages['required'] = 'Campaign name is required'
+        self.fields['website'].error_messages['required'] = 'Website URL is required'
 
     def clean(self):
         cleaned_data = self.cleaned_data

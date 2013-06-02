@@ -23,7 +23,8 @@ body .hintbox {
     margin-bottom: 20px;
 }
 
-#id_name {
+#id_name,
+#id_website {
     width: 190px;
     margin-left: 20px;
     margin-right: 10px;
@@ -55,6 +56,10 @@ body .hintbox {
 
 .advertising-uploads tr {
     display: none;
+}
+
+.advertising-uploads tr.chosen {
+    display: table-row;
 }
 
 .teritory-node {
