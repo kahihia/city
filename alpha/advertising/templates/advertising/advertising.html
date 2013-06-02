@@ -1,3 +1,5 @@
-<a href="{% url 'advertising_open' advertising.id %}">
-    <img src="/media/{{ advertising.image }}" />
-</a>
+{% if advertising %}
+    <a href="{% url 'advertising_open' advertising.id %}">
+        <img src="/media/{{ advertising.image }}" />
+    </a>
+{% endif %}

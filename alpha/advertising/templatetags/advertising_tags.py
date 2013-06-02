@@ -53,9 +53,11 @@ def advertising(context, dimensions):
 
     width, height = map(lambda x: int(x), dimensions.split("x"))
 
-    advertising = Advertising.objects.filter(ad_type__width=width, ad_type__height=height).order_by('?')[0]
-
-    advertising.view()
+    try:
+        advertising = Advertising.objects.filter(ad_type__width=width, ad_type__height=height).order_by('?')[0]
+        advertising.view()
+    except:
+        advertising = None
 
     return {
         'advertising': advertising
