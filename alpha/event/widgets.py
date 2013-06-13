@@ -47,12 +47,6 @@ class PriceWidget(forms.TextInput):
 
 
 class GeoCompleteWidget(forms.TextInput):
-    class Media(object):
-        js = (
-            u'%sjs/jquery.geocomplete.js' % STATIC_PREFIX,
-            u'%sjs/init.jquery.geocomplete.js' % STATIC_PREFIX,
-        )
-
     def __init__(self, *args, **kw):
         super(GeoCompleteWidget, self).__init__(*args, **kw)
         self.geo_venue = forms.widgets.HiddenInput()

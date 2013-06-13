@@ -5,8 +5,13 @@ from widgets import InTheLoopTagAutoSuggest
 from taggit.forms import TagField
 from accounts.models import REMINDER_TYPES
 
-from event.widgets import AjaxCropWidget
+from event.widgets import AjaxCropWidget, GeoCompleteWidget
 from userena.forms import EditProfileForm
+
+from event.forms import JSONCharField
+from gmapi.forms.widgets import LocationWidget
+import selectable.forms as selectable
+from event.lookups import CityLookup
 
 
 class ReminderSettingsForm(forms.ModelForm):
@@ -93,3 +98,19 @@ class AccountForm(EditProfileForm):
             'mugshot',
             'date_of_birth'
         ]
+
+
+class NewVenueAccountForm(forms.Form):
+    place = JSONCharField(
+        widget=GeoCompleteWidget(),
+        required=False
+    )
+
+    location = forms.Field(widget=LocationWidget(), required=False)
+    venue_name = forms.CharField(required=False)
+    street = forms.CharField(required=False)
+    city = forms.CharField(
+        widget=selectable.AutoCompleteSelectWidget(CityLookup, allow_new=True),
+        required=False
+    )
+    city_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())

@@ -35,6 +35,10 @@ urlpatterns = patterns(
         },
        name='user_profile_edit',
     ),
+    url(r'^account/(?P<username>[\.\w-]+)/$',
+       'accounts.views.profile_detail',
+       name='account_profile_detail',
+    ),
 )
 
 if settings.DEBUG:

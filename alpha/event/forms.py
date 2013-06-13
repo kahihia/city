@@ -121,7 +121,7 @@ def generate_form(*args):
             self.fields['city'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['city'].label = _(u'City')
 
-            self.fields['when'].widget.attrs['class'] = 'inputfield rborder tcalInput'
+            self.fields['when'].widget.attrs['class'] = 'inputfield rborder'
             self.fields['when'].widget.attrs['readonly'] = True
             self.fields['when'].widget.attrs['placeholder'] = "Click to select"
             self.fields['when'].error_messages['required'] = 'Please choose at least one date'

@@ -33,11 +33,19 @@
     text-decoration: none;
 }
 
-.profile-table td a.remove-button {
+a.remove-button {
     display: inline-block;
     width: 16px;
     height: 16px;
     background: url("/static/images/accounts/remove16x16.png") no-repeat;
+}
+
+a.add-button {
+    min-width: 16px;
+    height: 16px;
+    padding-left: 20px;
+
+    background: url("/static/images/accounts/add16x16.png") no-repeat;
 }
 
 .profile-table th a:hover,
@@ -105,5 +113,11 @@
     background: url("/static/images/accounts/next-active.png") no-repeat;
 }
 
+.venue-accounts-table tr {
+    height: 25px;
+}
 
-
+.venue-accounts-table .remove-td {
+    width: 50px;
+    text-align: center;
+}

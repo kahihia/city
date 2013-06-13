@@ -3,12 +3,13 @@
 from models import Account, VenueAccount
 from event.models import Event, FeaturedEvent
 from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.contrib import messages
+from django.utils.translation import ugettext as _
 
-from accounts.forms import ReminderSettingsForm, InTheLoopSettingsForm, VenueAccountForm
+from accounts.forms import ReminderSettingsForm, InTheLoopSettingsForm, VenueAccountForm, NewVenueAccountForm
 
 from django.conf import settings
 
@@ -18,6 +19,10 @@ from django.contrib.contenttypes.models import ContentType
 
 from utils import remind_account_about_events, inform_account_about_events_with_tag
 from django.contrib.auth.decorators import login_required
+
+from userena import settings as userena_settings
+from userena.utils import get_profile_model, get_user_model
+from userena.views import ExtraContextTemplateView
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 20)
 
@@ -98,8 +103,11 @@ def in_the_loop_tags(request):
     except ValueError:
         limit = MAX_SUGGESTIONS
 
-    tag_name_qs = TAG_MODEL.objects.filter(name__icontains=query, taggit_taggeditem_items__content_type=ContentType.objects.get_for_model(Event)).\
-        values_list('name', flat=True).distinct()
+    tag_name_qs = TAG_MODEL.objects.filter(
+        name__icontains=query,
+        taggit_taggeditem_items__content_type=ContentType.objects.get_for_model(Event)
+    ).values_list('name', flat=True).distinct()
+
     data = [{'name': n, 'value': n} for n in tag_name_qs[:limit]]
 
     return HttpResponse(json.dumps(data), mimetype='application/json')
@@ -211,3 +219,62 @@ def set_venue_privacy(request, venue_account_id, privacy):
     return HttpResponse(
         "You make %s venue %s" % (venue_account.venue.name, privacy)
     )
+
+
+def unlink_venue_account_from_user_profile(request, venue_account_id):
+    profile = Account.objects.get(user_id=request.user.id)
+    venue_account = VenueAccount.objects.get(id=venue_account_id)
+
+    venue_account.accounts.remove(profile)
+
+    return HttpResponseRedirect(
+        reverse('userena_profile_detail', args=(request.user.username, ))
+    )
+
+
+def profile_detail(request, username, template_name=userena_settings.USERENA_PROFILE_DETAIL_TEMPLATE, extra_context=None, **kwargs):
+    """
+    Detailed view of an user.
+
+    :param username:
+        String of the username of which the profile should be viewed.
+
+    :param template_name:
+        String representing the template name that should be used to display
+        the profile.
+
+    :param extra_context:
+        Dictionary of variables which should be supplied to the template. The
+        ``profile`` key is always the current profile.
+
+    **Context**
+
+    ``profile``
+        Instance of the currently viewed ``Profile``.
+
+    """
+    user = get_object_or_404(get_user_model(),
+                             username__iexact=username)
+
+    profile_model = get_profile_model()
+    try:
+        profile = user.get_profile()
+    except profile_model.DoesNotExist:
+        profile = profile_model.objects.create(user=user)
+
+    if not profile.can_view_profile(request.user):
+        return HttpResponseForbidden(_("You don't have permission to view this profile."))
+    if not extra_context:
+        extra_context = dict()
+    extra_context['profile'] = user.get_profile()
+    extra_context['hide_email'] = userena_settings.USERENA_HIDE_EMAIL
+    extra_context['new_venue_account_form'] = NewVenueAccountForm()
+
+    return ExtraContextTemplateView.as_view(
+        template_name=template_name,
+        extra_context=extra_context
+    )(request)
+
+
+def new_venue_account(request):
+    pass

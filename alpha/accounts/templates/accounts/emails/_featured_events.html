@@ -1,4 +1,5 @@
 {% load event_pictures %}
+{% load featured_event %}
 <tr>
     <td height="10">
         <div style="line-height:0;">
@@ -48,10 +49,7 @@
                 <!-- List of featured events -->
                 {% for event in featured_events %}
                     <td height="147" style="border: 5px solid #ffffff" valign="top">
-                        <a target="_blank" href="{{site}}{% url 'event_view' event.slug %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none; border: none; display: block; line-height:0px;">
-                            <img src="{{site}}{% feature_event_as_image event %}" style="border-collapse:collapse; border: none;" />
-                        </a>
-                        
+                        {% featured_event event True %}
                     </td>
                     <td width="10" align="left">
                         <div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div>

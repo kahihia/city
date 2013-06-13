@@ -3,7 +3,6 @@
 {% load selectable_tags %}
 
 {% block head %}
-    <link href="{{STATIC_URL}}styles/tcal.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/create_event.css" rel="stylesheet" type="text/css" />
     {% include_ui_theme 'ui-lightness' %}
     <link href="{{STATIC_URL}}styles/datepicker.css" rel="stylesheet" type="text/css" />
@@ -11,7 +10,6 @@
 
     <link href="{{STATIC_URL}}styles/when.css" rel="stylesheet" type="text/css" />
 
-    <link href="{{STATIC_URL}}styles/tcal.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/place_autocomplete.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/autoSuggest.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/description.css" rel="stylesheet" type="text/css" />
@@ -21,49 +19,31 @@
     <link href="{{STATIC_URL}}ajaxuploader/css/fileuploader.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}image_cropping/css/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}css/crop.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="{{STATIC_URL}}fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+    <link href="{{STATIC_URL}}fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
 
-    <script src="{{STATIC_URL}}js/create_event.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/jquery.balloon.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/jquery.dj.selectable.js" type="text/javascript"></script>
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
-    <script src="{{STATIC_URL}}js/jquery.geocomplete.js"></script>
+    
 
-    <script src="{{STATIC_URL}}js/validate.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/tcal.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/description.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/tags.popup.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/suggest.js" type="text/javascript"></script>
-    <script type="text/javascript" src="{{STATIC_URL}}fancybox/jquery.fancybox.js"></script>
+    <script src="{{STATIC_URL}}js/tags.popup.js" type="text/javascript"></script>    
+    <script src="{{STATIC_URL}}fancybox/jquery.fancybox.js" type="text/javascript"></script>
     <!-- end time -->
     {{ form.map }}
     {{ form.media.js }}
     <script type="text/javascript">
         var crsf_token = "{{ csrf_token }}", user_lat, user_long;
         {% if location %}
-            user_lat = {{location.0}};
-            user_lng = {{location.1}};
+            window.user_lat = {{location.0}};
+            window.user_lng = {{location.1}};
         {% endif %}
-
-        if (navigator.geolocation){
-            navigator.geolocation.getCurrentPosition(function(position){
-                user_lat = position.coords.latitude;
-                user_lng = position.coords.longitude; 
-            });
-        }
-
-        jQuery(document).ready(function(e) {
-            jQuery('.search-lists ul li a').click(function(){
-                var v = jQuery(this).attr('rel');
-                jQuery('.location-text-box .location').val(v);
-            });
-            jQuery('.footer-site-map ul li').addClass('add-border-right-white');
-            jQuery('.footer-site-map ul li:last').removeClass('add-border-right-white');
-            function newParameters(query) {
-                query.foo = 'bar';
-            }
-        });
     </script>
+
+    <script src="{{STATIC_URL}}js/location/jquery.geocomplete.js"></script>
+    <script src="{{STATIC_URL}}js/location/suggest_map.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/location/suggest_form.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/location/venue_autocomplete.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/create_event/description.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/create_event/create_event_page.js" type="text/javascript"></script>
 {% endblock %}
 
  {% block body_attributes %}class="old"{% endblock %}
@@ -188,7 +168,7 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="location">{{ form.place}}</div>
+                                <div class="location">{{ form.place }}</div>
                                 <div class="show_map"></div>
                                 <div class="suggest">
                                     <div class="error">

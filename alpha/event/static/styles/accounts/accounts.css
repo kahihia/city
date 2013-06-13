@@ -466,3 +466,20 @@
 .account-entry-wrapper .event-edit-actions .make-featured-action {
     background: url("/static/images/prof_event_feature_icon.png") left center no-repeat;
 }
+
+.new-venue-button {
+    display: block;
+    background: url("/static/images/accounts/new-venue-bg-repeat-y.jpg") repeat-x;
+    border: 1px solid #bebebe;
+    font-size: 16px;
+    vertical-align: middle;
+    height: 34px;
+    line-height: 34px;
+    margin-top: 12px;
+    color: #545454;
+}
+
+.new-venue-button img {
+    float: left;
+    margin-right: 20px;
+}

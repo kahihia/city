@@ -247,10 +247,6 @@ def save_event(request, form):
     event_obj = form.save()
     event_obj.venue = venue
 
-    account = Account.objects.get(user=request.user)
-
-    link_venue_with_account(venue, account)
-
     save_when_and_description(request, event_obj)
 
     if request.user.is_authenticated():

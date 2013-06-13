@@ -4,7 +4,7 @@
         <ul>
             {% if user.is_authenticated %}
                 <li>
-                    <a class="user-profile-link" href="{% url 'userena_profile_detail' user.username %}">
+                    <a class="user-profile-link" href="{% url 'account_profile_detail' user.username %}">
                         {{ user.username }}
                     </a><span>&nbsp; | &nbsp;</span>
                 </li>

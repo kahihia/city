@@ -1,0 +1,38 @@
+{{ new_venue_account_form }}
+<div class="new-venue-popup">
+    <form method="post" name="reminder-options" action="{% url 'new_venue_account' %}">
+        <div class="location">{{ new_venue_account_form.place }}</div>
+        <div class="show_map"></div>
+        <div class="suggest">
+            <div class="error">
+                All fields is required
+            </div>
+            <table>
+                <tr>
+                    <td>Venue name</td>
+                    <td>{{ new_venue_account_form.venue_name }}</td>
+                </tr>
+                <tr>
+                    <td>Street address</td>
+                    <td>{{ new_venue_account_form.street }}</td>
+                </tr>
+                <tr>
+                    <td>City</td>
+                    <td>
+                        {{ new_venue_account_form.city }}
+                        {{ new_venue_account_form.city_identifier }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Location</td>
+                    <td>
+                        <div class="location_map">{{new_venue_account_form.location}}</div>
+                    </td>
+                </tr>
+            </table>
+            <div class="cancel-button">Cancel</div>
+            <div class="reset-button">Clear</div>
+            <div class="submit-button">Submit</div>
+        </div>
+    </form>
+</div>
