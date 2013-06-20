@@ -72,7 +72,10 @@
             }
         },
         showSuggestPopup: function(){
-            var that = this;
+            var that = this,
+                map = this.suggestMap.map,
+                marker = this.suggestMap.marker;
+
             $(".location-map-wrapper").append(
                 $(".location_map").show()
             );
@@ -80,15 +83,13 @@
             $.fancybox($(".suggest"), {
                 autoSize: true,
                 closeBtn: true,
-                hideOnOverlayClick: false
+                hideOnOverlayClick: false,
+                afterShow: function(){
+                    google.maps.event.trigger(map, 'resize');
+                    that.suggestMap.setLocation(window.user_lat, window.user_lng);
+                    that.suggestMap.infowindow.open(map, marker);
+                }
             });
-
-            google.maps.event.trigger(this.map, 'resize');
-
-            setTimeout(function(){
-                that.suggestMap.setLocation(window.user_lat, window.user_lng);
-                that.suggestMap.infowindow.open(that.map, that.marker);
-            },100);
         }
     };
 

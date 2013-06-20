@@ -1,10 +1,10 @@
 from models import Event, Venue
 import datetime
-from django.db.models import Count
 import re
 import string
 import nltk
 from accounts.models import VenueType
+from django.db.models import Q
 
 
 class Filter(object):
@@ -105,7 +105,11 @@ search_tags_for_filters = {
     "recently_featured": "Recently featured",
     "random": "Random",
     "top_viewed": "Top viewed",
-    "latest": "Recently added"
+    "latest": "Recently added",
+    "night_life": "Night life",
+    "date_night": "Date night",
+    "free": "Free",
+    "family": "Family"
 }
 
 
@@ -135,6 +139,34 @@ class FunctionFilter(Filter):
 
     def latest_filter(self, qs):
         return qs.order_by("-created")
+
+    def night_life_filter(self, qs):
+        return qs.filter(
+            Q(tagged_items__tag__name__in=["19+", "Night Life", "DJ", "Party", "Rave"]) | Q(venue__venueaccount__types=VenueType.active_types.get(name="Nightlife & Singles"))
+        )
+
+    def date_night_filter(self, qs):
+        return qs.filter(tagged_items__tag__name__in=["Date Night"])
+
+    def free_filter(self, qs):
+        ids = qs.extra(
+            where=["""
+                event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', 'free')
+                OR event_event.search_index @@ plainto_tsquery('pg_catalog.english', 'free')
+            """]
+        ).values_list("id", flat=True)
+
+        return qs.filter(Q(tagged_items__tag__name__in=["Free"]) | Q(id__in=list(ids)))
+
+    def family_filter(self, qs):
+        ids = qs.extra(
+            where=["""
+                event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', 'family')
+                OR event_event.search_index @@ plainto_tsquery('pg_catalog.english', 'family')
+            """]
+        ).values_list("id", flat=True)
+
+        return qs.filter(Q(tagged_items__tag__name__in=["Family"]) | Q(id__in=list(ids)))
 
     def search_tags(self, function):
         name = search_tags_for_filters.get(function)
@@ -290,7 +322,6 @@ class EventFilter(object):
             "function": FunctionFilter("function"),
             "venue": VenueFilter("venue", "venue__id"),
             "search": SearchFilter("search", "search_index"),
-            "night_life": NightLifeFilter("night_life"),
         }
 
         self.filters["period"] = PeriodFilter("period", self.filters["start_date"], self.filters["end_date"])

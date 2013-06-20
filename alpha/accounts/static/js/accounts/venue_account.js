@@ -1,5 +1,9 @@
 ;(function($, window, document, undefined) {
     'use strict';
+    var venue_account_id = window.venue_account_id,
+        google = window.google,
+        venue_account_latitude = window.venue_account_latitude,
+        venue_account_longtitude = window.venue_account_longtitude;
 
     function VenueAccountPage(){
         this.showMap();

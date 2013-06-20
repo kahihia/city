@@ -44,6 +44,10 @@ urlpatterns = patterns('',
         accounts.edit_venue_account,
         name='edit_venue_account'
     ),
+    url(r'^venue-create/$',
+        accounts.create_venue_account,
+        name='create_venue_account'
+    ),
     url(r'^set-venue-privacy/(?P<venue_account_id>[\d]+)/(?P<privacy>(public|private))/$',
         accounts.set_venue_privacy,
         name='save_venue_privacy'
@@ -51,9 +55,5 @@ urlpatterns = patterns('',
     url(r'^unlink-venue-account/(?P<venue_account_id>[\d]+)/$',
         accounts.unlink_venue_account_from_user_profile,
         name="unlink_venue_account_from_user_profile"
-    ),
-    url(r'^new-venue-account/$',
-        accounts.new_venue_account,
-        name="new_venue_account"
     )
 )

@@ -35,22 +35,22 @@
             <br>
 
             <li class="special">
-                <a href="{% events_filter_url request eventsFilter night_life="true" exclude="tag" %}">
+                <a href="{% events_filter_url request eventsFilter function="night_life"  exclude="tag" %}">
                     Night life
                 </a>
             </li>
             <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="tags" tag="Date Night" exclude="tag|night_life" %}">
+                <a href="{% events_filter_url request eventsFilter function="date_night"  exclude="tag" %}">
                     Date Night
                 </a>
             </li>
             <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="tags" tag="Free" exclude="tag|night_life" %}">
+                <a href="{% events_filter_url request eventsFilter function="free"  exclude="tag" %}">
                     Free
                 </a>
             </li>
             <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="tags" tag="Family" exclude="tag|night_life" %}">
+                <a href="{% events_filter_url request eventsFilter function="family"  exclude="tag" %}">
                     Family
                 </a>
             </li>

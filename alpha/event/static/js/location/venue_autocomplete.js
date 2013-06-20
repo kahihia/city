@@ -2,8 +2,11 @@
     'use strict';
     var google = window.google;
 
-    function VenueAutocomplete(location_name_input, location_point_input, map_container){
-        var that = this;
+    function VenueAutocomplete(){
+        var that = this,
+            location_name_input = $('#id_city_0'),
+            location_point_input = $('#id_city_1'),
+            map_container = $('.location_map');
 
         if (window.navigator.geolocation){
             window.navigator.geolocation.getCurrentPosition(function(position){
@@ -17,7 +20,7 @@
 
         $("#id_place").on("blur", function() {
             $(".pac-container").removeClass("show");
-            window.setTimeout(that.setVenueText.bind(that), 10);
+            // window.setTimeout(that.setVenueText.bind(that), 10);
         });
 
         $("#id_place").on("focus", function() {

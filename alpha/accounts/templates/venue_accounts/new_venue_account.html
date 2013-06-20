@@ -1,38 +1,61 @@
-{{ new_venue_account_form }}
-<div class="new-venue-popup">
-    <form method="post" name="reminder-options" action="{% url 'new_venue_account' %}">
-        <div class="location">{{ new_venue_account_form.place }}</div>
-        <div class="show_map"></div>
-        <div class="suggest">
-            <div class="error">
-                All fields is required
+<div class="new-venue-popup popup">
+    <div class="popup-content">
+        <form method="post" name="reminder-options" action="{% url 'new_venue_account' %}">
+            <div class="venue-autocomplete active">
+                <h2>Please, choose venue that you want manage</h2>               
+
+                <table>
+                    <tr>
+                        <td>Venue</td>
+                        <td>{{ new_venue_account_form.place }}</td>
+                    </tr>                    
+                </table>
+
+                <br />
+
+                or <a href="javascript: void" class="switch-to-suggestion">
+                    you can suggest new venue
+                </a>
             </div>
-            <table>
-                <tr>
-                    <td>Venue name</td>
-                    <td>{{ new_venue_account_form.venue_name }}</td>
-                </tr>
-                <tr>
-                    <td>Street address</td>
-                    <td>{{ new_venue_account_form.street }}</td>
-                </tr>
-                <tr>
-                    <td>City</td>
-                    <td>
-                        {{ new_venue_account_form.city }}
-                        {{ new_venue_account_form.city_identifier }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Location</td>
-                    <td>
-                        <div class="location_map">{{new_venue_account_form.location}}</div>
-                    </td>
-                </tr>
-            </table>
-            <div class="cancel-button">Cancel</div>
-            <div class="reset-button">Clear</div>
-            <div class="submit-button">Submit</div>
-        </div>
-    </form>
+
+            <div class="venue-suggest">
+                <h2>You can create new venue</h2>
+                
+                <div class="error">
+                    All fields is required
+                </div>
+                <table>
+                    <tr>
+                        <td>Venue name</td>
+                        <td>{{ new_venue_account_form.venue_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Street address</td>
+                        <td>{{ new_venue_account_form.street }}</td>
+                    </tr>
+                    <tr>
+                        <td>City</td>
+                        <td>
+                            {{ new_venue_account_form.city }}
+                            {{ new_venue_account_form.city_identifier }}
+                        </td>
+                    </tr>                    
+                </table>
+
+                <br />
+
+                or <a href="javascript: void;" class="switch-to-autocomplete">
+                    you can choose venue from existing
+                </a>
+            </div>
+
+            <div class="location_map">{{new_venue_account_form.location}}</div>
+            
+            <div class="cancel-button button standart">Cancel</div>
+            <div class="reset-button button standart">Clear</div>
+            <div class="submit-button button standart">Submit</div>
+        </form>
+
+    </div>
+    
 </div>

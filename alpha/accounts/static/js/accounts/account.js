@@ -10,6 +10,8 @@
         window.onbeforeunload = this.saveOpenedTab.bind(this);
 
         $(".entry-info").auction_popup();
+
+        // this.initLinkVenueToAccount();
     }
 
     AccountPage.prototype = {
@@ -38,6 +40,10 @@
                 ]
             });
             return false;
+        },
+        initLinkVenueToAccount: function(){
+            this.linkVenueToAccount = new window.LinkVenueToAccount();
+
         }
     };
 

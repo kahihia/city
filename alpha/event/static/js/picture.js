@@ -65,7 +65,8 @@
                             hideOnOverlayClick: false
                         });
                     } else {
-                        console.log && console.log("upload failed!");
+                        if(console.log) console.log("upload failed!");
+
                         alert("Something go wrong on server. Please contact administrator.");
                         $(".modal-bg").hide();
                     }
@@ -76,7 +77,7 @@
                 params: {
                     'csrf_token': crsf_token,
                     'csrf_name': 'csrfmiddlewaretoken',
-                    'csrf_xname': 'X-CSRFToken',
+                    'csrf_xname': 'X-CSRFToken'
                 }
             });
             if($("#id_picture_src").val()){
@@ -93,7 +94,7 @@
             if($("#id_cropping").val()){
                 selected = _.map($("#id_cropping").val().split(","), function(val){
                     return parseInt(val);
-                });                    
+                });
             } else {
                 selected = [0, 0, $(this.popup).data("thumb-height"), $(this.popup).data("thumb-width")];
             }
@@ -108,10 +109,14 @@
                     $(".picture-thumb").addClass("result");
                     that.selected = selected;
                     that.update_selection(selected);
-                    that.jcrop && that.showPreview(selected, that.jcrop.getWidgetSize());
+                    if(that.jcrop) {
+                        that.showPreview(selected, that.jcrop.getWidgetSize());
+                    }
                 },
                 onChange: function(selected) {
-                    that.jcrop && that.showPreview(selected, that.jcrop.getWidgetSize());
+                    if(that.jcrop) {
+                        that.showPreview(selected, that.jcrop.getWidgetSize());
+                    }
                 }
             }, function() {
                 that.jcrop = this;
@@ -121,12 +126,12 @@
                     w:selected[2]-selected[0],
                     h:selected[3]-selected[1]
                 }, that.jcrop.getWidgetSize());
-            });            
+            });
         },
         changeImage: function(image_path) {
-            var that = this;            
+            var that = this;
             if(this.cropping_image) {
-                $(this.cropping_image).attr('src', image_path); 
+                $(this.cropping_image).attr('src', image_path);
                 this.jcrop.setImage(image_path);
             } else {
                 this.cropping_image = $("<img id='id_cropping-image'>");
@@ -134,13 +139,11 @@
                 this.cropping_image.attr('src', image_path);
                 $(this.cropping).after(this.cropping_image);
                 that.initJcrop();
-            }            
+            }
             this.changeImagePosition();
         },
         saveThumbnail: function() {
-            $(this.cropping).val(
-
-            );
+            $(this.cropping).val();
         },
         changeImagePosition: function() {
             var image_height = $(this.image_cropping).height();
@@ -180,7 +183,7 @@
     });
     $(document).ready(function() {
         setTimeout(function(){
-            $("#file-uploader").picture();    
-        },100);        
+            $("#file-uploader").picture();
+        },100);
     });
 })(jQuery);

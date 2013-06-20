@@ -210,6 +210,36 @@ def edit_venue_account(request, slug):
         }, context_instance=RequestContext(request))
 
 
+@login_required
+def create_venue_account(request):
+    venue_account = VenueAccount()
+    form = VenueAccountForm(
+        initial={
+            "picture_src": "/media/%s" % venue_account.picture,
+        }
+    )
+
+    if request.method == 'POST':
+        if request.POST["picture_src"]:
+            venue_account.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
+
+        form = VenueAccountForm(instance=venue_account, data=request.POST)
+
+        if form.is_valid():
+            form.save()
+            types = form.cleaned_data['types']
+            venue_account.types = types
+            return HttpResponseRedirect(reverse('private_venue_account', args=(venue_account.slug, )))
+
+    return render_to_response('venue_accounts/create_venue_account.html', {
+            'venue_account': venue_account,
+            'form': form
+        }, context_instance=RequestContext(request))
+
+
+
+
+
 def set_venue_privacy(request, venue_account_id, privacy):
     public = (privacy == "public")
     venue_account = VenueAccount.objects.get(id=venue_account_id)
@@ -269,12 +299,9 @@ def profile_detail(request, username, template_name=userena_settings.USERENA_PRO
     extra_context['profile'] = user.get_profile()
     extra_context['hide_email'] = userena_settings.USERENA_HIDE_EMAIL
     extra_context['new_venue_account_form'] = NewVenueAccountForm()
+    extra_context['location'] = request.location
 
     return ExtraContextTemplateView.as_view(
         template_name=template_name,
         extra_context=extra_context
     )(request)
-
-
-def new_venue_account(request):
-    pass

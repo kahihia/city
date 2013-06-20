@@ -25,7 +25,7 @@ from event.filters import EventFilter
 from event import DEFAULT_FROM_EMAIL
 
 from event.models import Event, Venue, SingleEvent, Reminder, AuditEvent, FakeAuditEvent, FeaturedEvent
-from accounts.models import VenueAccount, Account
+from accounts.models import VenueAccount
 from event.utils import find_nearest_city
 
 from event.forms import generate_form, SetupFeaturedForm
@@ -85,6 +85,10 @@ def browse(request):
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
+    featured_events = Event.featured_events.all()
+
+    featuredEventsFilter = EventFilter({}, queryset=featured_events)
+
     events = Event.future_events.all()
 
     eventsFilter = EventFilter(request.GET, queryset=events)
@@ -95,6 +99,8 @@ def browse(request):
         .order_by('-count')
 
     return render_to_response('events/browse_events.html', {
+                                'featured_events': featured_events,
+                                'featuredEventsFilter': featuredEventsFilter,
                                 'events': events,
                                 'eventsFilter': eventsFilter,
                                 'tags': tags,

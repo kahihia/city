@@ -18,31 +18,32 @@
     <link href="{{STATIC_URL}}styles/modal.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}ajaxuploader/css/fileuploader.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}image_cropping/css/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}css/crop.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
 
-    <script src="{{STATIC_URL}}js/jquery.dj.selectable.js" type="text/javascript"></script>
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
     
 
-    <script src="{{STATIC_URL}}js/tags.popup.js" type="text/javascript"></script>    
+    <script src="{{STATIC_URL}}js/tags.popup.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}fancybox/jquery.fancybox.js" type="text/javascript"></script>
     <!-- end time -->
     {{ form.map }}
     {{ form.media.js }}
     <script type="text/javascript">
-        var crsf_token = "{{ csrf_token }}", user_lat, user_long;
+        var crsf_token = "{{ csrf_token }}";
         {% if location %}
             window.user_lat = {{location.0}};
             window.user_lng = {{location.1}};
         {% endif %}
     </script>
 
+    <script src="{{STATIC_URL}}js/jquery.dj.selectable.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/location/jquery.geocomplete.js"></script>
     <script src="{{STATIC_URL}}js/location/suggest_map.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/location/suggest_form.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/location/venue_autocomplete.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/create_event/description.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/create_event/boolean_tags.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/create_event/create_event_page.js" type="text/javascript"></script>
 {% endblock %}
 
@@ -169,7 +170,7 @@
                             </td>
                             <td>
                                 <div class="location">{{ form.place }}</div>
-                                <div class="show_map"></div>
+                                <div class="show-map"></div>
                                 <div class="suggest">
                                     <div class="error">
                                         All fields is required
@@ -330,6 +331,48 @@
                                     </li>
                                 </ul>                                                
                             </td>                                            
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="wheelchair-td">
+                                Would you take a date to this event?
+                                <ul>
+                                    <li>
+                                        <div class="radio">
+                                            <input value="True" type="radio" id="id_date_night_0" name="date_night" tabindex="7">
+                                            <label for="id_date_night_0"></label> 
+                                            <label for="id_date_night_0">Yes</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div  class="radio">
+                                            <input value="False" type="radio" id="id_date_night_1" name="date_night" tabindex="7" checked="checked"> 
+                                            <label for="id_date_night_1"></label>
+                                            <label for="id_date_night_1">No</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="wheelchair-td">
+                                Is this event Family Friendly?
+                                <ul>
+                                    <li>
+                                        <div class="radio">
+                                            <input value="True" type="radio" id="id_family_0" name="family" tabindex="8">
+                                            <label for="id_family_0"></label> 
+                                            <label for="id_family_0">Yes</label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div  class="radio">
+                                            <input value="False" type="radio" id="id_family_1" name="family" tabindex="8" checked="checked"> 
+                                            <label for="id_family_1"></label>
+                                            <label for="id_family_1">No</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </td>
                         </tr>
                         <tr>
                             <td class="tags_bottom">

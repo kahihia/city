@@ -146,7 +146,7 @@
                 $(this.textarea).val(this.data["default"]);
                 $(this.result).html(label + " Days");
             } else {
-                $(this.textarea).val(this.data.days[value] || "");                
+                $(this.textarea).val(this.data.days[value] || "");
             }
             $(this.textarea).attr("placeholder",this.data.days[value]||this.data["default"]);
             $("[data-value='" + value + "']").addClass("selected");
@@ -162,7 +162,7 @@
             var value = $("#id_description_json").val();
             $("#id_description").description();
             if(value){
-                var json = JSON.parse(value);                              
+                var json = JSON.parse(value);
                 $("#id_description").html(json["default"]);
                 $("#id_description").data("description").setValue(json);
                 $("#id_description").data("description").saveCurrentDay();

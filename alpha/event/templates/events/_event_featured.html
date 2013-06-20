@@ -14,42 +14,43 @@
     <div class="features-navigation">
         {% get_pages %}    
         <ul>
-            <span class="step-links">
+            <span class="step-links">                
+                <a href="{{ pages.first.url }}">
+                    first
+                </a>
+
                 {% if pages.current.is_first %}
                     <a class="prev" href="{{ pages.first.url }}">
-                        Prev
+                        prev
                     </a>
                     
                 {% else %}
                     <a class="prev" href="{{ pages.previous.url }}">
-                        Prev
+                        prev
                     </a>                
                 {% endif %}
-                <a href="{{ pages.first.url }}">
-                    <img src="{{STATIC_URL}}images/featured/left.png">
-                </a>
 
                 {% for page in pages %}
                     <a href="{{ page.url }}" 
                         {% if page.is_current %}class="current"{%endif%}>
                         {{ page.number }}
                     </a>
-                {% endfor %}                        
-                
-                <a href="{{ pages.last.url }}">
-                    <img src="{{STATIC_URL}}images/featured/right.png">
-                </a>
+                {% endfor %}
 
                 {% if pages.current.is_last %}                            
                     <a class="next" href="{{ pages.last.url }}">
-                        Next
+                        next
                     </a>
                     
                 {% else %}
                     <a class="next" href="{{ pages.next.url }}">
-                        Next
+                        next
                     </a>            
                 {% endif %}
+
+                <a href="{{ pages.last.url }}">
+                    last
+                </a>
             </span>
         </ul>
     </div>

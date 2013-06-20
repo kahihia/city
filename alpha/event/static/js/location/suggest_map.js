@@ -11,7 +11,7 @@
         initSuggestPopup: function(){
             var that = this;
 
-            $(".show_map").on("click", function(){
+            $(".show-map").on("click", function(){
                 that.infowindow.close();
                 $.fancybox($(".location_map"), {
                     autoSize: true,
@@ -54,21 +54,21 @@
                 draggable: true
             });
 
-            google.maps.event.addListener(marker, 'dragend', function(mouseEvent) {
+            google.maps.event.addListener(this.marker, 'dragend', function(mouseEvent) {
                 that.setLocationFromMap(mouseEvent.latLng);
             });
             
-            google.maps.event.addListener(map, 'click', function(mouseEvent){
+            google.maps.event.addListener(this.map, 'click', function(mouseEvent){
                 that.marker.setPosition(mouseEvent.latLng);
                 that.setLocationFromMap(mouseEvent.latLng);
             });
         },
         setLocationFromMap: function(point){
-            var lng = point.lng().toFixed(6),
-                lat = point.lat().toFixed(6);
+            var lng = point.lng(),
+                lat = point.lat();
 
             $("#id_location_lng").val(lng);
-            $("#id_location_lng").val(lat);
+            $("#id_location_lat").val(lat);
 
             this.marker.setPosition(point);
             this.map.panTo(point);
@@ -89,7 +89,6 @@
 
             window.user_lng = lng;
             window.user_lat = lat;
-
         }
     };
 

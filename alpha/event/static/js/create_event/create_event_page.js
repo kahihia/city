@@ -42,11 +42,7 @@
             });
         },
         initVenueAutocomplete: function(){
-            this.venueAutocomplete = new window.VenueAutocomplete(
-                $('#id_city_0'),
-                $('#id_city_1'),
-                $('.location_map')
-            );
+            this.venueAutocomplete = new window.VenueAutocomplete();
 
         },
         initDescriptionField: function(){

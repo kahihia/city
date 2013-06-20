@@ -22,8 +22,8 @@ class WhenWidget(forms.TextInput):
     class Media(object):
         css = {
             'all': (
-                u'%scss/datepicker.css' % STATIC_PREFIX,
-                u'%scss/when.css' % STATIC_PREFIX,
+                u'%sstyles/datepicker.css' % STATIC_PREFIX,
+                u'%sstyles/when.css' % STATIC_PREFIX,
             )
         }
         js = (

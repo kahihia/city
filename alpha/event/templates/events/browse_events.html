@@ -33,6 +33,9 @@
     {% if page_date != "flow" %}&gt; {{page_date|slug_to_title }}{% endif %}
 {% endblock %}
 
+{% block featured %}
+    {% include 'events/_event_featured.html' %}
+{% endblock %}
 
 {% block page %}
     <div id="fb-root"></div>

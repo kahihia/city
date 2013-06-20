@@ -220,7 +220,6 @@
 
 .account-options {
     padding: 10px;
-    padding-left: 0;
 }
 
 .account-options ul.as-selections {
@@ -482,4 +481,41 @@
 .new-venue-button img {
     float: left;
     margin-right: 20px;
+}
+
+.new-venue-popup input {
+    width: 180px;
+}
+
+.new-venue-popup {
+    width: 450px;
+}
+
+.new-venue-popup h2 {
+    color: #022e52
+}
+
+.venue-autocomplete, .venue-suggest {
+    display: none;    
+}
+
+.venue-autocomplete.active,
+.venue-suggest.active {
+    display: block;
+}
+
+.venue-place-autocomplete-wrapper {
+    position: relative;
+    width: 255px;
+}
+
+.venue-place-autocomplete-wrapper .show-map {
+    float: none;
+    position: absolute;
+    right: 0;
+    top: -2px;
+}
+
+#id_city_0 {
+    border-radius: 0;
 }

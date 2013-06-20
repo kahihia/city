@@ -6,12 +6,12 @@ from event import views as event
 
 urlpatterns = patterns('',
                       url(r'^$',
-                           event.search_pad,
-                           name='search_pad'
-                           ),
-                       url(r'^browse/$',
                            event.browse,
                            name='event_browse'
+                           ),
+                       url(r'^search/$',
+                           event.search_pad,
+                           name='search_pad'
                            ),
                        url(r'^edit/(?P<authentication_key>\w+)/$',
                            event.edit,

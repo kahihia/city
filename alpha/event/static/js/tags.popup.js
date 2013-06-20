@@ -5,7 +5,7 @@
                 // Send the token to same-origin, relative URLs only.
                 // Send the token only if the method warrants CSRF protection
                 // Using the CSRFToken value acquired earlier
-                xhr.setRequestHeader("X-CSRFToken", crsf_token);            
+                xhr.setRequestHeader("X-CSRFToken", crsf_token);
         }
     });
     $.widget("ui.tagspopup", {
@@ -22,7 +22,7 @@
                     $(that.popup).show();
                     $(".modal-bg").show();
                     $(".as-selections").addClass("active");
-                } else {                    
+                } else {
                     closing = false;
                     $(that.element).blur();
                 }
@@ -35,10 +35,10 @@
             });
 
             $("#id_tags__tagautosuggest").on("keydown", function(e){
-                that.setFreeAndWheelchair();                
+                that.setFreeAndWheelchair();
             });
             $("#id_tags__tagautosuggest").on("focus", function(e){
-                that.setFreeAndWheelchair();                
+                that.setFreeAndWheelchair();
             });
 
             $(".as-selections .as-close").live("mousedown", function(){
@@ -49,7 +49,7 @@
                 this.forCity($("#id_geo_city").val());
             } else {
                 $.post("/events/ctags", {}, function(data){
-                    tags = _.map(data.tags, function(tag){ return tag.name });
+                    tags = _.map(data.tags, function(tag){ return tag.name; });
                     that.loadTags(tags);
                 });
 
@@ -59,20 +59,20 @@
         },
         setFreeAndWheelchair: function(){
             var tags = $("#as-values-id_tags__tagautosuggest").val().split(",");
-            tags = _.filter(tags, function(tag){ return tag });
+            tags = _.filter(tags, function(tag){ return tag; });
             if(tags.indexOf("Free")!==-1){
                 $("#id_price_free").attr('checked', true);
             } else {
                 $("#id_price_free").attr('checked', false);
             }
             setTimeout(function(){
-                $("#id_price_free").trigger("changeFromTags");    
-            },10);            
+                $("#id_price_free").trigger("changeFromTags");
+            },10);
 
             if(tags.indexOf("Wheelchair" )!==-1){
-                $("#id_wheelchair_0").attr('checked', true)
+                $("#id_wheelchair_0").attr('checked', true);
             } else {
-                $("#id_wheelchair_1").attr('checked', true)
+                $("#id_wheelchair_1").attr('checked', true);
             }
         },
         forCity: function(city){
@@ -83,7 +83,7 @@
                 data.city_identifier = city;
             }
             $.post("/events/ctags", data, function(data){
-                tags = _.map(data.tags, function(tag){ return tag.name });
+                tags = _.map(data.tags, function(tag){ return tag.name; });
                 that.loadTags(tags);
             });
         },
@@ -107,7 +107,7 @@
             }
         },
         addTag: function(tag) {
-            if($(".as-selection-item[data-value='"+tag+"']").length>0) return
+            if($(".as-selection-item[data-value='"+tag+"']").length>0) return;
             var e;
             $("#id_tags__tagautosuggest").val(tag);
             e = jQuery.Event("keydown");
@@ -129,7 +129,7 @@
             });
         },
         autoTagsDetect: function(description){
-            var that=this, 
+            var that=this,
                 idescription = description.toLowerCase();
             _.each(this.tags, function(tag){
                 var itag = tag.toLowerCase();
@@ -143,10 +143,10 @@
         },
         addAutoTag: function(tag){
             if(tag==='Free') return;
-            if($(".as-selection-item[data-value='"+tag+"']").length>0) return
+            if($(".as-selection-item[data-value='"+tag+"']").length>0) return;
             if(this.autoTags.indexOf(tag)===-1){
                 this.autoTags.push(tag);
-                this.addTag(tag)
+                this.addTag(tag);
             }
         },
         removeAutoTag: function(tag){
@@ -158,12 +158,12 @@
                 }
             }
 
-        },
+        }
     });
 
     $(document).ready(function() {
         setTimeout(function(){
-            $("#id_tags__tagautosuggest").tagspopup();            
+            $("#id_tags__tagautosuggest").tagspopup();
         },100);
     });
 })(jQuery);

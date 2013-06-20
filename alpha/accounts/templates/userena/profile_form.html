@@ -9,17 +9,29 @@
 {% block content %}
 
 <form action="" enctype="multipart/form-data" method="post">
-  <ul id="box-nav">
-    <li class="first"><a href="{% url 'userena_profile_detail' user.username %}"><span>{% trans 'View profile' %}</span></a></li>
-    <li class="selected"><a href="{% url 'userena_profile_edit' user.username %}">{% trans "Edit profile" %}</a></li>
-    <li><a href="{% url 'userena_password_change' user.username %}">{% trans "Change password" %}</a></li>
-    <li class="last"><a href="{% url 'userena_email_change' user.username %}">{% trans "Change email" %}</a></li>
-  </ul>
-  {% csrf_token %}
-  <fieldset>
-    <legend>{% trans "Edit Profile" %}</legend>
-    {{ form.as_p }}
-  </fieldset>
-  <input type="submit" class="submit standart button" value="{% trans "Save changes" %}" />
+    <div class="tabs-container">
+        <ul class="tabs right-tabs">
+            <li class="first"><a href="{% url 'userena_profile_detail' user.username %}"><span>{% trans 'View profile' %}</span></a></li>
+            <li class="current"><a href="{% url 'user_profile_edit' user.username %}">{% trans "Edit profile" %}</a></li>
+            <li><a href="{% url 'userena_password_change' user.username %}">{% trans "Change password" %}</a></li>
+            <li class="last"><a href="{% url 'userena_email_change' user.username %}">{% trans "Change email" %}</a></li>
+        </ul>
+
+        {% csrf_token %}
+        <div class="box account-form visible">            
+            <p><label for="id_first_name">First name:</label>{{form.first_name}}</p>
+            <p><label for="id_last_name">Last name:</label>{{form.last_name}}</p>
+            <p>
+                <label for="id_mugshot">Mugshot:</label> 
+                <input type="file" name="mugshot" id="id_mugshot"> 
+                <span class="helptext">A personal image displayed in your profile.</span>
+            </p>
+            <p>
+                <label for="id_date_of_birth">Date of birth:</label>
+                {{form.date_of_birth}}
+            </p>
+            <input type="submit" class="submit standart button" value="{% trans "Save changes" %}" />
+        </div>        
+    </div>    
 </form>
 {% endblock %}

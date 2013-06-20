@@ -1,5 +1,7 @@
 .modern .content-wrapper input[type="text"],
-.modern .content-wrapper input[type="password"] {
+.modern .content-wrapper input[type="password"],
+.modern .popup input[type="text"],
+.modern .popup input[type="password"] {
     color: #454545;
     background: #fff;
     border: 1px solid #ababab;
@@ -171,6 +173,10 @@ body .button.standart,
     padding: 5px auto;
 }
 
+body .button.big-button {
+    width: 160px;
+}
+
 .button:hover,
 ul#box-nav li:hover,
 input[type=submit]:hover
@@ -289,6 +295,17 @@ ul#box-nav li.selected {
   display: block;
 }
 
+ .tabs-container .box.account-form {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 45px;
+    height: 275px;
+ }
+
+ .right-tabs {
+    text-align: right;
+ }
+
 .ajax-popup {
     position: fixed;
     padding: 40px;
@@ -405,4 +422,55 @@ fieldset legend{
 #file-uploader .qq-upload-button:hover {
     color: #234;
     border:1px solid #79B7E7;
+}
+
+.popup {
+    display: none;
+}
+
+.popup-content {
+    margin: 0 auto;
+    border: 1px solid #CCC;
+    padding: 15px;
+    background: #fff;
+    margin-top:10px;
+    z-index: 2;
+    padding-bottom:50px;
+}
+
+.popup-content .error {
+    display:none;
+    color: red;
+    margin-bottom: 10px;
+}
+
+.popup .popup-content .reset-button, 
+.popup .popup-content .submit-button, 
+.popup .popup-content .cancel-button  {    
+    position:absolute;
+    right:10px;    
+    cursor: pointer;
+    width: 70px;
+    line-height: 30px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.popup-content .reset-button:hover, 
+.popup-content .submit-button:hover, 
+.popup-content .cancel-button:hover {
+    color: #022e52;
+
+}
+
+.popup .popup-content .reset-button {
+    right:90px;
+}
+
+.popup .popup-content .cancel-button {
+    right:170px;
+}
+
+.pac-container {
+    z-index: 9000 !important;
 }

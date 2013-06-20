@@ -1,4 +1,4 @@
-.suggest {    
+.suggest {
     width:600px;
     border:1px solid #CCC;
     padding:10px 5px;
@@ -41,8 +41,7 @@
     right:160px;
 }
 
-
-.show_map {
+.show-map {
     width:24px;
     height:24px;
     background: url('/static/images/map.png') no-repeat;
