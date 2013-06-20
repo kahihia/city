@@ -79,6 +79,9 @@ def get_canadian_region(request):
             code = region_code_table_of_concordance[region_data["region"]]
             request._cached_canadian_region = Region.objects.get(code=code)
 
+        else:
+            request._cached_canadian_region = None
+
     return request._cached_canadian_region
 
 
