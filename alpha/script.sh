@@ -6,7 +6,7 @@ NUM_WORKERS=3
 # user/group to run as
 USER=root
 GROUP=root
-ADDRESS=127.0.0.1:8002
+ADDRESS=127.0.0.1:8003
 cd /root/cityfusion_git/alpha
 #source ../bin/activate
 test -d $LOGDIR || mkdir -p $LOGDIR
