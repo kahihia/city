@@ -64,7 +64,10 @@ def get_is_canada(request):
 
         region_data = geoip.region_by_addr(ip)
 
-        request._cashed_is_canada = (region_data["country_code"] == "CA")
+        if region_data:
+            request._cashed_is_canada = (region_data["country_code"] == "CA")
+        else:
+            request._cashed_is_canada = False
 
     return request._cashed_is_canada
 
@@ -75,7 +78,7 @@ def get_canadian_region(request):
 
         region_data = geoip.region_by_addr(ip)
 
-        if region_data["country_code"] == "CA":
+        if region_data and region_data["country_code"] == "CA":
             code = region_code_table_of_concordance[region_data["region"]]
             request._cached_canadian_region = Region.objects.get(code=code)
 
