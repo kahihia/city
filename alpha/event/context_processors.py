@@ -11,7 +11,10 @@ def user_location(request):
 
     if request.user_location_type == "city":
         city = City.objects.get(id=request.user_location_id)
-        user_location_name = "%s, %s" % (city.name, city.region.name)
+        if city.region:            
+            user_location_name = "%s, %s" % (city.name, city.region.name)
+        else:
+            user_location_name = city.name
 
     return {
         "user_location_id": request.user_location_id,
