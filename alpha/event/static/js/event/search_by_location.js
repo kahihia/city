@@ -1,6 +1,7 @@
 ;(function($, window, document, undefined) {
-
     'use strict';
+
+    var _ = window._;
 
     var SearchByLocation = function(){
         var that = this, request,
@@ -8,51 +9,62 @@
         this.searchList = $(".search-lists ul");
         this.searchInput = $(".location-text-box input");
 
-        this.initVenueLinks();
+        this.initLocationLinks();
 
         setInterval(function(){
             if(that.searchInput.val() !== currentSearchValue) {
-                request && request.abort();
+                if(request) request.abort();
+
                 currentSearchValue = that.searchInput.val();
                 request = $.ajax({
-                    url: "/events/nearest_venues?search=" + currentSearchValue,
+                    url: "/events/locations?search=" + currentSearchValue,
                     success: function(data) {
-                        window.ajaxPopup(data, 'success');
-                        that.refreshVenueList(data);
+                        that.refreshLocationList(data);
                     }
                 });
             }
         }, 500);
+
+        request = $.ajax({
+            url: "/events/locations?search=" + currentSearchValue,
+            success: function(data) {
+                that.refreshLocationList(data);
+            }
+        });
     };
 
     SearchByLocation.prototype = {
-        initVenueLinks: function(){
+        initLocationLinks: function(){
             var that=this;
             $("li a", this.searchList).each(function(){
                 $(this).on("click", function(){
-                    that.findByVenue($(this).data("venue-id"));
+                    that.findByLocation(
+                        $(this).data("location-id"),
+                        $(this).data("location-type")
+                    );
                 });
             });
         },
-        findByVenue: function(id){
-            window.location = window.filters.setFilter("venue", id).getURL();
+        findByLocation: function(id, type){
+            window.location = window.filters.setFilter("location", type+"|"+id).getURL();
         },
 
-        refreshVenueList: function(data){
+        refreshLocationList: function(data){
             $("li a", this.searchList).remove();
 
-            _.forEach(data.venues, function(venue){
+            _.forEach(data.locations, function(location){
                 var link, li;
 
-                link = $("<a href='javascript:void;'>").html(venue.name + ", " + venue.city);
-                link.attr("data-venue-id", venue.id);
+                link = $("<a href='javascript:void;'>").html(location.name);
+                link.attr("data-location-id", location.id);
+                link.attr("data-location-type", location.type);
 
                 li = $("<li>").append(link);
 
                 this.searchList.append(li);
             }, this);
 
-            this.initVenueLinks();
+            this.initLocationLinks();
         }
         
     };

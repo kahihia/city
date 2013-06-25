@@ -1,0 +1,24 @@
+{% extends 'mamona/base.html' %}
+{% load i18n %}
+
+{% block title %}
+    Advertising payment
+{% endblock %} 
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page %}
+    <div class="content account-options">
+        {% include 'mamona/snippets/payment_details.html' %}        
+
+        <form action="{{ formdata.action }}" method="{{ formdata.method }}">
+            {{ formdata.form }}
+            <button type="submit" class="submit standart button">{% trans "Confirm" %}</button>
+        </form>
+    </div>
+{% endblock %}

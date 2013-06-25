@@ -18,7 +18,7 @@ from django.contrib import messages
 from django.middleware.csrf import get_token
 
 from django.contrib.gis.geos import Point
-from cities.models import City, Country
+from cities.models import City, Country, Region
 from django.db.models import Q, Count
 from event.filters import EventFilter
 
@@ -60,7 +60,15 @@ def search_pad(request):
 
     events_all_count = events.count()
 
-    eventsFilter = EventFilter(request.GET, queryset=events)
+    params = request.GET.copy()
+
+    if not "location" in params:
+        params["location"] = "%s|%s" % (
+            request.session.get('user_location_type'),
+            request.session.get('user_location_id')
+        )
+
+    eventsFilter = EventFilter(params, queryset=events)
 
     top5_tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.id, events)) \
         .values('tag', 'tag__name') \
@@ -91,7 +99,15 @@ def browse(request):
 
     events = Event.future_events.all()
 
-    eventsFilter = EventFilter(request.GET, queryset=events)
+    params = request.GET.copy()
+
+    if not "location" in params:
+        params["location"] = "%s|%s" % (
+            request.session.get('user_location_type'),
+            request.session.get('user_location_id')
+        )
+
+    eventsFilter = EventFilter(params, queryset=events)
 
     tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.id, events)) \
         .values('tag', 'tag__name') \
@@ -111,17 +127,28 @@ def browse(request):
                             }, context_instance=RequestContext(request))
 
 
-def view(request, slug=None, old_tags=None):
+def view_featured(request, slug=None):
     try:
         event = Event.future_events.get(slug=slug)
         # TODO: add filter by IP
         # event.viewed_times = event.viewed_times + 1
         # event.save()
     except ObjectDoesNotExist:
-        return HttpResponseRedirect(reverse('event_browse'))
+        return HttpResponseRedirect(reverse('event_browse'))   
+        
+    event.featuredevent_set.all()[0].click() 
 
-    if request.GET.get("featured_click", False):
-        event.featuredevent_set.all()[0].click()
+    return HttpResponseRedirect(reverse('event_view', args=(slug, ))) 
+
+
+def view(request, slug=None):
+    try:
+        event = Event.future_events.get(slug=slug)
+        # TODO: add filter by IP
+        # event.viewed_times = event.viewed_times + 1
+        # event.save()
+    except ObjectDoesNotExist:
+        return HttpResponseRedirect(reverse('event_browse'))    
 
     opengraph = {'og:title': event.name,
                   'og:type': 'event',
@@ -138,7 +165,6 @@ def view(request, slug=None, old_tags=None):
     return render_to_response('events/event_description.html', {
                                 'event': event,
                                 'browsing': True,
-                                'old_tags': old_tags,
                                 'opengraph': opengraph
                                 },
                               context_instance=RequestContext(request))
@@ -578,21 +604,6 @@ def audit_event_approve(request, id):
     return audit_event_list(request)
 
 
-# def audit_single_event_list(request):
-#     pass
-
-
-# def audit_single_event_remove(request, id):
-#     pass
-
-
-# def audit_single_event_edit(request, id):
-#     pass
-
-
-# def audit_single_event_update(request, id):
-#     pass
-
 def nearest_venues(request):
     if request.method == 'GET':
         search = request.GET.get("search", "")
@@ -615,3 +626,57 @@ def nearest_venues(request):
 def save_active_tab(request, page, tab):
     request.session[page] = tab
     return HttpResponse("OK")
+
+
+def location_autocomplete(request):
+    """
+        I should give user opportunity to choose region where from events is interesting for him. It can be whole Canada, regions or city
+    """
+
+    if request.method == 'GET':
+        canada = Country.objects.get(name="Canada")
+
+        locations = []
+
+        kwargs = {
+            "country": canada
+        }
+
+        search = request.GET.get("search", "")
+
+        if search:
+            kwargs["name__icontains"] = search
+
+        cities = City.objects.filter(**kwargs)
+
+        if request.location:
+            cities = cities.distance(Point(request.location)).order_by('-distance')
+
+        cities = cities[0:5]
+
+        for city in cities:
+            locations.append({
+                "id": city.id,
+                "type": "city",
+                "name": "%s, %s, %s" % (city.name, city.region.name, city.country.name)
+            })
+
+        regions = Region.objects.filter(**kwargs)[:5]
+
+        for region in regions:
+            locations.append({
+                "id": region.id,
+                "type": "region",
+                "name": "%s, %s" % (region.name, region.country.name)
+            })
+
+        if not search or search.lower() in "canada":
+            locations.append({
+                "id": canada.id,
+                "type": "country",
+                "name": "Canada"
+            })
+
+        return HttpResponse(json.dumps({
+            "locations": locations
+        }), mimetype="application/json")

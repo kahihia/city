@@ -5,6 +5,7 @@ import string
 import nltk
 from accounts.models import VenueType
 from django.db.models import Q
+from cities.models import Region, City
 
 
 class Filter(object):
@@ -128,7 +129,7 @@ class FunctionFilter(Filter):
         return qs
 
     def recently_featured_filter(self, qs):
-        return qs.order_by("featured_on")
+        return qs.filter(featuredevent__isnull=False).order_by("featuredevent__start_time")
 
     def all_filter(self, qs):
         return qs
@@ -267,6 +268,58 @@ class VenueFilter(Filter):
             return None
 
 
+class LocationFilter(Filter):
+    def __init__(self, name):
+        self.name = name
+
+    def search_tags(self, location):
+        return []
+        location_type, location_id = location.split("|")
+        location_id = int(location_id)
+
+        if location_type == "country":
+            return [{
+                "name": "Canada",
+                "remove_url": "?" + self.parent.url_query(exclude="location")
+            }]
+
+        if location_type == "region":
+            region = Region.objects.get(id=location_id)
+            return [{
+                "name": region.name,
+                "remove_url": "?" + self.parent.url_query(exclude="location")
+            }]
+
+        if location_type == "city":
+            city = City.objects.get(id=location_id)
+            return [{
+                "name": city.name,
+                "remove_url": "?" + self.parent.url_query(exclude="location")
+            }]
+
+    def filter(self, qs, location):
+        location_type, location_id = location.split("|")
+        location_id = int(location_id)
+
+        if location_type == "country":
+            return self.filter_by_country(qs, location_id)
+
+        if location_type == "region":
+            return self.filter_by_region(qs, location_id)
+
+        if location_type == "city":
+            return self.filter_by_city(qs, location_id)
+
+    def filter_by_country(self, qs, id):
+        return qs.filter(venue__country__id=id)
+
+    def filter_by_region(self, qs, id):
+        return qs.filter(Q(venue__city__region__id=id) | Q(venue__city__subregion__id=id))
+
+    def filter_by_city(self, qs, id):
+        return qs.filter(venue__city__id=id)
+
+
 class SearchFilter(Filter):
     def search_tags(self, search_string):
         # TODO: use nslt to split words
@@ -320,8 +373,8 @@ class EventFilter(object):
             "tag": TagsFilter("tag", "tags"),
             "featured": Filter("featured", "featured"),
             "function": FunctionFilter("function"),
-            "venue": VenueFilter("venue", "venue__id"),
             "search": SearchFilter("search", "search_index"),
+            "location": LocationFilter("location")
         }
 
         self.filters["period"] = PeriodFilter("period", self.filters["start_date"], self.filters["end_date"])

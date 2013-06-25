@@ -11,7 +11,7 @@
 
         $(".entry-info").auction_popup();
 
-        // this.initLinkVenueToAccount();
+        this.advertising_stats = new AdvertisingStats();
     }
 
     AccountPage.prototype = {

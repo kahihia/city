@@ -1,0 +1,32 @@
+{% extends 'mamona/base.html' %}
+{% load i18n %}
+
+{% block title %}
+    Advertising payment
+{% endblock %} 
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page %}
+    <div class="content account-options">
+		<p>
+			{% if payment.status == 'paid' %}
+				{% trans "Your payment has been successful!" %}
+			{% endif %}
+			{% if payment.status == 'failed' %}
+				{% trans "Your payment has failed!" %}
+			{% endif %}
+			{% if payment.status == 'in_progress' %}
+				{% blocktrans %}
+				Your payment was passed to the gateway, but we have not received the response yet.
+				Please be patient. The status of your payment should be updated soon.
+				{% endblocktrans %}
+			{% endif %}
+		</p>
+    </div>
+{% endblock %}

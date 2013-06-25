@@ -26,6 +26,7 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
     url(r'^selectable/', include('selectable.urls')),
     url(r'^admin_tools/', include('admin_tools.urls')),
+    url(r'^mamona/', include('mamona.urls')),
     url(r'^facebook/', include('django_facebook.urls')),
     url(r'^advertising/', include('advertising.urls')),
     url(r'^accounts/(?P<username>[\.\w-]+)/edit-profile/$',

@@ -4,23 +4,8 @@ from cities.models import Region
 
 from django.core.files.images import get_image_dimensions
 
-
-# class AdvertisingsWidget(forms.Widget):
-#     pass
-
-
-# class ModelAdvertisingsField(forms.MultiValueField):
-#     widget = AdvertisingsWidget
-
-#     def __init__(self, advertising_types=AdvertisingType.objects.filter(active=True), *args, **kwargs):
-#         super(ModelAdvertisingsField, self).__init__(*args, **kwargs)
-#         self.advertising_types = advertising_types
-
-#     def to_python(self, value):
-#         pass
-
-#     def clean(self, value):
-#         pass
+from djmoney.forms.fields import MoneyField
+from moneyed import Money, CAD
 
 
 class AdvertisingSetupForm(forms.ModelForm):
@@ -35,6 +20,8 @@ class AdvertisingSetupForm(forms.ModelForm):
         queryset=AdvertisingType.objects.filter(active=True),
         required=False
     )
+
+    budget = MoneyField(min_value=Money(10, CAD))
 
     # advertisings = ModelAdvertisingsField()
 
@@ -53,6 +40,7 @@ class AdvertisingSetupForm(forms.ModelForm):
 
         self.fields['name'].error_messages['required'] = 'Campaign name is required'
         self.fields['website'].error_messages['required'] = 'Website URL is required'
+        self.fields['budget'].error_messages['min_value'] = 'Ensure budget is greater than or equal to %(limit_value)s'
 
     def clean(self):
         cleaned_data = self.cleaned_data

@@ -1,11 +1,13 @@
 from accounts.models import Account
 from django.shortcuts import render_to_response, get_object_or_404
+from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
-from advertising.models import AdvertisingCampaign, AdvertisingType, Advertising
+from advertising.models import AdvertisingCampaign, AdvertisingType, Advertising, AdvertisingOrder
 from advertising.forms import AdvertisingSetupForm
 from django.contrib import messages
 from advertising.utils import parse_advertisings_data_from_request
+from mamona.backends.paypal.forms import PaypalConfirmationForm
 
 
 def open(request, advertising_id):
@@ -32,18 +34,26 @@ def setup(request):
             chosen_advertising_types, chosen_advertising_payment_types, chosen_advertising_images = parse_advertisings_data_from_request(request)
 
             for advertising_type_id in chosen_advertising_types:
+                advertising_type = AdvertisingType.objects.get(id=advertising_type_id)
                 advertising = Advertising(
-                    ad_type=AdvertisingType.objects.get(id=advertising_type_id),
+                    ad_type=advertising_type,
                     campaign=advertising_campaign,
                     payment_type=chosen_advertising_payment_types[advertising_type_id],
-                    image=chosen_advertising_images[advertising_type_id]
+                    image=chosen_advertising_images[advertising_type_id],
+                    cpm_price=advertising_type.cpm_price,
+                    cpc_price=advertising_type.cpc_price
                 )
 
                 advertising.save()
 
-            messages.success(request, 'Advertising created.')
+            order = AdvertisingOrder(
+                budget=request.POST["budget"],
+                campaign=advertising_campaign
+            )
 
-            return HttpResponseRedirect('/accounts/%s/' % request.user.username)
+            order.save()
+
+            return HttpResponseRedirect(reverse('advertising_payment', args=(str(order.id),)))
 
     chosen_advertising_types, chosen_advertising_payment_types, chosen_advertising_images = parse_advertisings_data_from_request(request)
 
@@ -54,4 +64,14 @@ def setup(request):
         "chosen_advertising_payment_types": chosen_advertising_payment_types,
         "chosen_advertising_images": chosen_advertising_images
 
+    }, context_instance=RequestContext(request))
+
+
+def payment(request, order_id):
+    order = get_object_or_404(AdvertisingOrder, pk=order_id)
+
+    # form = PaypalConfirmationForm()
+
+    return render_to_response('advertising/payment.html', {
+        "order": order
     }, context_instance=RequestContext(request))

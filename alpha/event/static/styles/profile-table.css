@@ -13,10 +13,16 @@
 .profile-table td.action {
     padding-left: 0;
     text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .profile-table tr:nth-child(even) {background: #f4f4f4}
 .profile-table tr:nth-child(odd) {background: #fff}
+
+.profile-table tr.selected { background: #c5f9f9; }
+
+
 
 .profile-table th,
 .profile-table td {

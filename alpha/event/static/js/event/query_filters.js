@@ -12,7 +12,7 @@
             return this;
         },
         getURL: function(){
-            return "/events/browse?" + $.param(this.params, true);
+            return "/events?" + $.param(this.params, true);
         }
         
     };

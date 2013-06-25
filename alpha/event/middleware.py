@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.contrib.gis.geoip import GeoIP
+from django.contrib.gis.geos import Point
+from cities.models import City
+from event.utils import find_nearest_city
 from cities.models import Region
 
 
@@ -88,8 +91,36 @@ def get_canadian_region(request):
     return request._cached_canadian_region
 
 
+def get_user_location(request):
+    user_location_type = request.session.get('user_location_type', "city")
+    user_location_id = request.session.get('user_location_id', None)
+
+    if "location" in request.GET:
+        user_location_type, user_location_id = request.GET["location"].split("|")
+        user_location_id = int(user_location_id)
+
+        request.session['user_location_type'] = user_location_type
+        request.session['user_location_id'] = user_location_id
+
+    elif not user_location_id:
+        location = get_location(request)
+
+        user_location_type = "city"
+        user_location_id = find_nearest_city(City.objects.all(), Point(location)).id
+
+    return {
+        "type": user_location_type,
+        "id": user_location_id
+    }
+
+
 class LocationMiddleware(object):
     def process_request(self, request):
         request.location = get_location(request)
         request.is_canada = get_is_canada(request)
         request.region = get_canadian_region(request)
+
+        user_location = get_user_location(request)
+
+        request.user_location_type = user_location["type"]
+        request.user_location_id = user_location["id"]

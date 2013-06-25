@@ -1,0 +1,138 @@
+{% load endless %}
+
+{% if profile.ads|length %}
+    {% paginate 6 profile.ads using "ads_page" as ads %}
+
+
+    {% with ads|first as ad %}
+    <div class="detailed-view" >
+        <div class="left">
+            <table>
+                <tr>
+                    <td>Campaign Name:</td>
+                    <td data-stat-key="campaign">{{ ad.campaign.name }}</td>
+                </tr>
+                <tr>
+                    <td>Started:</td>
+                    <td data-stat-key="started">{{ ad.campaign.started|date:"b j, Y"|capfirst }}</td>
+                </tr>
+                <tr>
+                    <td>Ended:</td>
+                    <td data-stat-key="ended">
+                        {% if ad.campaign.ended %}
+                            {{ ad.campaign.ended|date:"b j, Y"|capfirst }}
+                        {% else %}
+                            Ongoing
+                        {% endif %}  
+                    </td>
+                </tr>
+                <tr>
+                    <td>Size of Ad:</td>
+                    <td data-stat-key="type">{{ ad.ad_type }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="right">
+            <table>
+                <tr>
+                    <td>Impressions:</td>
+                    <td data-stat-key="impressions">{{ ad.views }}</td>
+                </tr>
+                <tr>
+                    <td>Clicks:</td>
+                    <td data-stat-key="clicks">{{ ad.clicks }}</td>
+                </tr>
+                <tr>
+                    <td>Ammount Spend:</td>
+                    <td data-stat-key="spent">{{ ad.campaign.ammount_spent }}</td>
+                </tr>
+                <tr>
+                    <td>Ammount Remaining:</td>
+                    <td  data-stat-key="remaining">{{ ad.campaign.ammount_remaining }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    {% endwith %}
+
+    <table class="profile-table ads-stats" celpadding="0" cellspacing="0">
+        <tr>
+            <th class="action">Campaign Name</th>
+            <th class="action">Started</th>
+            <th class="action">Ended</th>
+            <th class="action">Size of Ad</th>
+            <th class="action">Impressions</th>
+            <th class="action">Clicks</th>
+            <th class="action">Dollars Spend</th>
+            <th class="action">Dollars Remaining</th>
+            <th class="action">Edit</th>
+        </tr>
+        {% for ad in ads %}
+        <tr class="ad-line {% if forloop.first %}selected{% endif %}">
+            <td class="action" data-stat-key="campaign">
+                {{ ad.campaign.name }}
+            </td>
+            <td class="action" data-stat-key="started">
+                {{ ad.campaign.started|date:"b j, Y"|capfirst }}
+            </td>
+            <td class="action" data-stat-key="ended">
+                {% if ad.campaign.ended %}
+                    {{ ad.campaign.ended|date:"b j, Y"|capfirst }}
+                {% else %}
+                    Ongoing
+                {% endif %}            
+            </td>
+            <td class="action" data-stat-key="type" data-stat-value="{{ ad.ad_type }}">
+                {{ ad.ad_type.name }}<br>
+                {{ ad.ad_type.width }}x{{ ad.ad_type.height }}
+            </td>
+            <td class="action" data-stat-key="impressions">
+                {{ ad.views }}
+            </td>
+            <td class="action" data-stat-key="clicks">
+                {{ ad.clicks }}
+            </td>
+            <td class="action" data-stat-key="spent">
+                {{ ad.campaign.ammount_spent }}
+            </td>
+            <td class="action" data-stat-key="remaining">
+                {{ ad.campaign.ammount_remaining }}
+            </td>
+            
+            <td class="action">
+                <a href="">
+                    Edit
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if pages|length > 1 %}
+        <div class="profile-table-pagination">
+            <span class="pagintation-wrapper">
+                {% get_pages %}
+                {% if pages.current.is_first %}
+                    <span class="prev"></span>            
+                {% else %}
+                    <a class="prev" href="{{ pages.previous.url }}"></a>
+                {% endif %}
+                <span class="page-info">
+                    {{ pages.current }} of {{ pages|length }}
+                </span>
+
+                {% if pages.current.is_last %}
+                    <span class="next"></span>                    
+                {% else %}
+                    <a class="next" href="{{ pages.next.url }}"></a>
+                {% endif %}
+            </span>        
+        </div>
+    {% endif %}
+{% else %}
+    <div class="empty">
+        <p>You have no ads.</p>
+        <p>You can <a href="{% url 'advertising_setup' %}">create</a> new advertising campaign</p>
+    </div>    
+{% endif %}
+

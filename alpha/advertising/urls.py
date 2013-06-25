@@ -12,5 +12,9 @@ urlpatterns = patterns('',
     url(r'^open/(?P<advertising_id>\d+)/$',
         views.open,
         name='advertising_open'
+    ),
+    url(r'^payment/(?P<order_id>\d+)/$',
+        views.payment,
+        name='advertising_payment'
     )
 )

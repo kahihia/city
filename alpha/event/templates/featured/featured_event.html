@@ -1,36 +1,38 @@
 {% load cropping %}
 {% load featured_event %}
 {% if in_email %}
-    <a target="_blank" href="{{site}}{% url 'event_view' event.slug %}?featured=1" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none; border: none; display: block; line-height:0px;">
+    <a target="_blank" href="{{site}}{% url 'event_view_featured' event.slug %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none; border: none; display: block; line-height:0px;">
         <img src="{{site}}{% feature_event_as_image event %}" style="border-collapse:collapse; border: none;" />
     </a>
 {% else %}
     <div class="features">
-        <div class="featured-img-wrapper">
-            {% if event.picture %}
-                <img src="{% cropped_thumbnail event "cropping" width=154 %}" height="153px" weight="154px">
-            {% else %}
-                <img src="/static/images/default-event.jpg" height="153px" weight="154px">
-            {% endif %}
-        </div>
-        <div class="featured-img-details">
-            <div class="featured-img-details-wrapper">
-                <div class="featured-title">
-                    <a href="{% url 'event_view' event.slug %}?featured=1">{{event.name}}</a>
-                </div>
-                <div class="featured-date">                                                                            
-                    <!-- TODO: use event date range and time range -->
-                    {{ event.nearest_start_time|date:"b d, Y | fA"|title }}-{{event.nearest_end_time|date:"fA"|title}}
-                </div>
-                <div class="feature-venue">
-                    {{ event.venue.name }}
-                </div>
-                <div class="featured-details-link">
-                    <a href="{% url 'event_view' event.slug %}?featured=1">
-                        event details
-                    </a>
+        <a href="{% url 'event_view_featured' event.slug %}">
+            <div class="featured-img-wrapper">
+                {% if event.picture %}
+                    <img src="{% cropped_thumbnail event "cropping" width=154 %}" height="153px" weight="154px">
+                {% else %}
+                    <img src="/static/images/default-event.jpg" height="153px" weight="154px">
+                {% endif %}
+            </div>
+            <div class="featured-img-details">
+                <div class="featured-img-details-wrapper">
+                    <div class="featured-title">
+                        <a href="{% url 'event_view' event.slug %}?featured=1">{{event.name}}</a>
+                    </div>
+                    <div class="featured-date">                                                                            
+                        <!-- TODO: use event date range and time range -->
+                        {{ event.nearest_start_time|date:"b d, Y | fA"|title }}-{{event.nearest_end_time|date:"fA"|title}}
+                    </div>
+                    <div class="feature-venue">
+                        {{ event.venue.name }}
+                    </div>
+                    <div class="featured-details-link">
+                        <a href="{% url 'event_view' event.slug %}?featured=1">
+                            event details
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>        
     </div>
 {% endif %}

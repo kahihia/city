@@ -49,12 +49,14 @@ register.tag('random', do_random)
 
 @register.inclusion_tag('advertising/advertising.html', takes_context=True)
 def advertising(context, dimensions):
-    # request = context['request']
+    """
+        {% advertising "300x250" %}
+    """
 
     width, height = map(lambda x: int(x), dimensions.split("x"))
 
     try:
-        advertising = Advertising.objects.filter(ad_type__width=width, ad_type__height=height).order_by('?')[0]
+        advertising = Advertising.active.filter(ad_type__width=width, ad_type__height=height).order_by('?')[0]
         advertising.view()
     except:
         advertising = None
@@ -62,3 +64,38 @@ def advertising(context, dimensions):
     return {
         'advertising': advertising
     }
+
+
+@register.inclusion_tag('advertising/advertising_group.html', takes_context=True)
+def advertising_group(context, dimensions):
+    """
+        {% advertising_group "300x250|300x250|300x250" %}
+
+    """
+    ads_to_return = []
+    dimensions_set = dimensions.split("|")
+
+    dimensions_hash = {}
+
+    for dimensions in dimensions_set:
+        if dimensions in dimensions_hash:
+            dimensions_hash[dimensions] = dimensions_hash[dimensions] + 1
+        else:
+            dimensions_hash[dimensions] = 1
+
+    for dimensions, nums in dimensions_hash.iteritems():
+        width, height = map(lambda x: int(x), dimensions.split("x"))
+
+        ads = Advertising.active.filter(ad_type__width=width, ad_type__height=height).order_by('?')[:nums]
+
+        for ad in list(ads):
+            ad.view()
+            ads_to_return.append(ad)
+
+    return {
+        'ads': ads_to_return
+    } 
+
+
+
+

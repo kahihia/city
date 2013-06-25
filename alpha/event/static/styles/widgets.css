@@ -95,6 +95,10 @@ div.checkbox {
     vertical-align: middle;  
 }
 
+div.checkbox.disabled {
+    opacity: 0.3;
+}
+
 div.checkbox label, 
 div.radio label{
     display: inline-block;
@@ -287,9 +291,14 @@ ul#box-nav li.selected {
   border-left: 1px solid #d4d4d4;
   border-top: 1px solid #d4d4d4;
   border-right: 2px solid #e1e1e1;
-  border-bottom: 2px solid #e1e1e1;
-  
+  border-bottom: 2px solid #e1e1e1;  
 }
+
+.tabs-container .box .empty {
+    margin: 20px;
+}
+
+
 
 .tabs-container .box.visible {
   display: block;

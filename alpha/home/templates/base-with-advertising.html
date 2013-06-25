@@ -1,0 +1,25 @@
+{% extends 'base-new.html' %} 
+{% load advertising_tags %}
+
+{% block advertising %}
+    <div>
+        {% random %}
+            <div class="advertising-right-container">
+                {% advertising_group "300x250|300x600|300x100" %}
+            </div>
+        {% or %}
+            <div class="advertising-right-container">
+                {% advertising_group "300x250|300x250|300x250" %}
+            </div>
+        {% endrandom %}
+    </div>
+{% endblock%}
+
+{% block advertising_footer %}
+    <div class="footer-ads-wrapper">
+        <div class="footer-ads-container">
+            {% advertising "728x90" %}
+        </div>
+        <div class="clr"></div>
+    </div>    
+{% endblock %}

@@ -1,12 +1,19 @@
-from models import Venue
-from django.contrib.gis.geos import Point
+from cities.models import City, Region
 
 
-def nearest_locations(request):
-    venues = Venue.with_active_events()
-    if request.location:
-        venues = venues.distance(Point(request.location)).order_by('-distance')[:10]
+def user_location(request):
+    if request.user_location_type == "country":
+        user_location_name = "Canada"
+
+    if request.user_location_type == "region":
+        region = Region.objects.get(id=request.user_location_id)
+        user_location_name = "%s" % (region.name)
+
+    if request.user_location_type == "city":
+        city = City.objects.get(id=request.user_location_id)
+        user_location_name = "%s, %s" % (city.name, city.region.name)
 
     return {
-        "nearest_locations": venues
+        "user_location_id": request.user_location_id,
+        "user_location_name": user_location_name
     }

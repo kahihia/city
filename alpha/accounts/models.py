@@ -20,6 +20,8 @@ from django.template.defaultfilters import slugify
 
 from django.core.exceptions import ObjectDoesNotExist
 
+from advertising.models import Advertising
+
 
 REMINDER_TYPES = (
     ("HOURS", "Hours before event"),
@@ -93,6 +95,9 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
 
     def reminder_events_in_future(self):
         return Event.future_events.filter(id__in=self.reminder_events.values("id"))
+
+    def ads(self):
+        return Advertising.objects.filter(campaign__account__id=self.id)
 
 
 #Make sure we create a Account when creating a User

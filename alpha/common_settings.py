@@ -96,7 +96,7 @@ from django.conf import global_settings
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     # required by django-admin-tools
     'django.core.context_processors.request',
-    'event.context_processors.nearest_locations',
+    'event.context_processors.user_location',
     'django_facebook.context_processors.facebook',
 )
 
@@ -163,6 +163,7 @@ INSTALLED_APPS = (
     'django_facebook',
     'djcelery',
     'turbolinks',
+    'mamona',
     'advertising',
 )
 
@@ -299,3 +300,15 @@ CELERYBEAT_SCHEDULE = {
 TWILIO_ACCOUNT_SID = 'AC1a554e71d3c0921faa3732bd495f5878'
 TWILIO_AUTH_TOKEN = '89eec7d9c48d4d3f3809ed8edb17a48d'
 TWILIO_NUMBER = "+12026013648"
+
+
+MAMONA_ACTIVE_BACKENDS = (
+    'paypal',
+)
+
+MAMONA_BACKENDS_SETTINGS = {
+    'paypal': {
+        'url': 'https://www.sandbox.paypal.com/cgi-bin/webscr',
+        'email': 'sellet@cityfusion.ca',
+    }
+}
