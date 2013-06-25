@@ -81,7 +81,7 @@ def get_canadian_region(request):
 
         region_data = geoip.region_by_addr(ip)
 
-        if region_data and region_data["country_code"] == "CA":
+        if region_data and region_data["country_code"] == "CA" and "region" in region_data:
             code = region_code_table_of_concordance[region_data["region"]]
             request._cached_canadian_region = Region.objects.get(code=code)
 
@@ -118,7 +118,7 @@ class LocationMiddleware(object):
     def process_request(self, request):
         request.location = get_location(request)
         request.is_canada = get_is_canada(request)
-        request.region = get_canadian_region(request)
+        # request.region = get_canadian_region(request)
 
         user_location = get_user_location(request)
 
