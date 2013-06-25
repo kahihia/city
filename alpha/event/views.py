@@ -64,8 +64,8 @@ def search_pad(request):
 
     if not "location" in params:
         params["location"] = "%s|%s" % (
-            request.session.get('user_location_type'),
-            request.session.get('user_location_id')
+            request.user_location_type,
+            request.user_location_id
         )
 
     eventsFilter = EventFilter(params, queryset=events)
@@ -103,8 +103,8 @@ def browse(request):
 
     if not "location" in params:
         params["location"] = "%s|%s" % (
-            request.session.get('user_location_type'),
-            request.session.get('user_location_id')
+            request.user_location_type,
+            request.user_location_id
         )
 
     eventsFilter = EventFilter(params, queryset=events)
