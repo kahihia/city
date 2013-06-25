@@ -655,10 +655,14 @@ def location_autocomplete(request):
         cities = cities[0:5]
 
         for city in cities:
+            if city.region:
+                name = "%s, %s, %s" % (city.name, city.region.name, city.country.name)
+            else:
+                name = "%s, %s" % (city.name, city.country.name)
             locations.append({
                 "id": city.id,
                 "type": "city",
-                "name": "%s, %s, %s" % (city.name, city.region.name, city.country.name)
+                "name": name
             })
 
         regions = Region.objects.filter(**kwargs)[:5]
