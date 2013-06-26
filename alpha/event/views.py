@@ -34,6 +34,8 @@ from taggit.models import Tag, TaggedItem
 
 from ajaxuploader.views import AjaxFileUploader
 
+from accounts.models import Account
+
 
 def start(request):
     csrf_token = get_token(request)
