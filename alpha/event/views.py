@@ -442,8 +442,9 @@ def remove(request, authentication_key):
 
 
 def setup_featured(request, authentication_key):
+    account = Account.objects.get(user_id=request.user.id)
     event_obj = Event.events.get(authentication_key__exact=authentication_key)
-    venue_account = VenueAccount.objects.get(venue=event_obj.venue)
+    venue_account = account.venueaccount_set.get(venue=event_obj.venue)
     featured_event = FeaturedEvent(
         event=event_obj,
         venue_account=venue_account,
