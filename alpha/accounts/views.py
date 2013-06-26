@@ -28,6 +28,7 @@ from django.contrib.gis.geos import Point
 from cities.models import City, Country
 from django.db.models import Q
 from event.utils import find_nearest_city
+from advertising.models import AdvertisingOrder
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 20)
 
@@ -247,6 +248,8 @@ def save_venue(request):
         else:
             city = city[0]
         venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, location=location)
+    else:
+        venue = None
     return venue    
 
 
@@ -256,8 +259,7 @@ def create_venue_account(request):
     venueAccount = VenueAccount()
     form = VenueAccountForm(
         initial={
-            "picture_src": "/media/%s" % venueAccount.picture,
-            "account": account
+            "picture_src": "/media/%s" % venueAccount.picture
         }
     )
 
@@ -269,15 +271,17 @@ def create_venue_account(request):
 
         if form.is_valid():
             venue = save_venue(request)
-            venueAccount.venue = venue
-            venueAccount = form.save()
 
-            types = form.cleaned_data['types']
-            venueAccount.types = types
+            if not account.venueaccount_set.filter(venue_id=venue.id).count():
+                venueAccount.venue = venue
+                venueAccount = form.save()
 
-            venueAccount.accounts.add(account)
+                types = form.cleaned_data['types']
+                venueAccount.types = types
 
-            venueAccount.save()
+                venueAccount.accounts.add(account)
+
+                venueAccount.save()
 
             # return HttpResponseRedirect(reverse('private_venue_account', args=(venueAccount.slug, )))
             return HttpResponseRedirect('/accounts/%s/' % request.user.username)
@@ -356,3 +360,14 @@ def profile_detail(request, username, template_name=userena_settings.USERENA_PRO
         template_name=template_name,
         extra_context=extra_context
     )(request)
+
+def orders(request):
+    account = Account.objects.get(user_id=request.user.id)
+
+    advertising_orders = AdvertisingOrder.objects.filter(campaign__account_id=account.id)
+
+    return render_to_response('accounts/orders.html', {
+            'account': account,
+            'advertising_orders': advertising_orders,
+            'featured_orders': []
+        }, context_instance=RequestContext(request))

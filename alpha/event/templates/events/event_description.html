@@ -29,6 +29,12 @@
 
     <script type="text/javascript" src="{{STATIC_URL}}js/facebook-for-turbolinks.js"></script>
 
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
+    <script>
+        var venue_latitude = {{ event.venue.location.y }},
+            venue_longtitude = {{ event.venue.location.x }};
+    </script>
+
     <script src="{{STATIC_URL}}js/searchpad/event-actions.js" type="text/javascript"></script>
     <script type="text/javascript" src="{{STATIC_URL}}fancybox/jquery.fancybox.js"></script>
     <script src="{{STATIC_URL}}js/event/eventpage.js" type="text/javascript"></script>
@@ -145,15 +151,13 @@
                         </table>
                     </div>
                     {% if event.venue %}
-                        <div class="map">
-                            <img src="http://maps.googleapis.com/maps/api/staticmap?center={{event.venue.location.y}},{{event.venue.location.x}}&zoom=13&size=350x150&maptype=roadmap&sensor=false&markers=color:blue%7C{{event.venue.location.y}},{{event.venue.location.x}}">
-                        </div>
+                        <div id="venue_map" class="map"></div>                        
                     {% endif %}
                 </div>
                 <p>{{ event_description|linebreaks }}</p>
                 <h4 class="tags">
                     {% for tag in event.tags.all %}
-                        <a href="{% url 'event_browse_tags' tag.slug %}">
+                        <a href="{% url 'event_browse' %}?function=tags&tag={{ tag }}">
                             {{ tag }}</a>{% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </h4>  

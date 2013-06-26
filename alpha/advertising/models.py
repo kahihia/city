@@ -4,7 +4,7 @@ from djmoney.models.managers import money_manager
 from cities.models import Region
 from mamona import signals
 from mamona.models import build_payment_model
-from django.db.models import F
+# from django.db.models import F
 
 
 class AdvertisingType(models.Model):

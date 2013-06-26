@@ -97,6 +97,18 @@ class VenueAccountForm(forms.ModelForm):
             'types'
         )
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+
+        place = cleaned_data["place"]
+
+        if not place["venue"] or \
+           not place["latitude"] or \
+           not place["longtitude"]:
+            raise forms.ValidationError(u'You should choose venue from list')
+
+        return cleaned_data
+
 
 class AccountForm(EditProfileForm):
     class Meta:

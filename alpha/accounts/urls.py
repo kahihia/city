@@ -55,5 +55,9 @@ urlpatterns = patterns('',
     url(r'^unlink-venue-account/(?P<venue_account_id>[\d]+)/$',
         accounts.unlink_venue_account_from_user_profile,
         name="unlink_venue_account_from_user_profile"
+    ),
+    url(r'^orders/$',
+        accounts.orders,
+        name='account_orders'
     )
 )

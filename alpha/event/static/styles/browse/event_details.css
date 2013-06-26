@@ -185,3 +185,8 @@
 .in-the-loop-tags-popup .add-in-the-loop { 
     font-size:1.5em;
 }
+
+#venue_map {
+    width: 330px;
+    height: 300px;
+}
