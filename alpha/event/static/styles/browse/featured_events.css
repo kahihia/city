@@ -1,4 +1,4 @@
-.featured-title, .featured-date, .featured-details-link {
+.featured-title, .featured-date, .featured-details-link, .featured-venue {
     text-overflow: ellipsis;
     overflow:hidden;
     width: 100%;

@@ -393,6 +393,14 @@
     margin: 0;
 }
 
+.edit-contact-info-table .checkbox {
+    min-width: 160px;
+}
+
+.edit-contact-info-table input[type=text] {
+    width: 200px;
+}
+
 .about-us {
     margin-top: 20px;
     margin-bottom: 30px;
@@ -401,6 +409,25 @@
 #venue_account_map {
     width: 300px;
     height: 200px;
+}
+
+.edit-contact-info-table .location_map {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    display: none;
+}
+
+.edit-contact-info-table .place-td {
+    position: relative;
+}
+
+.edit-contact-info-table .show-map {
+    float: right;
+    position: absolute;
+    right: 30px;
+    top: 5px;
+
 }
 
 .edit-contact-info-table ul {

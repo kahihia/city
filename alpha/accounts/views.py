@@ -1,7 +1,7 @@
 # Create your views here.
 
 from models import Account, VenueAccount
-from event.models import Event, FeaturedEvent
+from event.models import Event, FeaturedEvent, Venue
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -23,6 +23,11 @@ from django.contrib.auth.decorators import login_required
 from userena import settings as userena_settings
 from userena.utils import get_profile_model, get_user_model
 from userena.views import ExtraContextTemplateView
+
+from django.contrib.gis.geos import Point
+from cities.models import City, Country
+from django.db.models import Q
+from event.utils import find_nearest_city
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 20)
 
@@ -210,29 +215,75 @@ def edit_venue_account(request, slug):
         }, context_instance=RequestContext(request))
 
 
+def save_venue(request):
+    if "venue_name" in request.POST and request.POST["venue_name"]:
+        name = request.POST["venue_name"]
+        street = request.POST["street"]
+        city = City.objects.get(id=int(request.POST["city_identifier"]))
+        country = Country.objects.get(name='Canada')
+        location = Point((
+            float(request.POST["location_lng"]),
+            float(request.POST["location_lat"])
+        ))
+        venue = Venue(name=name, street=street, city=city, country=country, location=location)
+        venue.save()
+    elif "place" in request.POST and request.POST["place"]:
+        name = request.POST["geo_venue"]
+        street = request.POST["geo_street"]
+        city = City.objects.filter(
+            Q(name_std=request.POST["geo_city"].encode('utf8')) |
+            Q(name=request.POST["geo_city"])
+        )
+        country = Country.objects.get(name='Canada')
+        location = Point((
+            float(request.POST["geo_longtitude"]),
+            float(request.POST["geo_latitude"])
+        ))
+
+        if city.count() > 1:
+            city = find_nearest_city(city, location)
+        elif not city.count():
+            city = City.objects.distance(location).order_by('distance')[0]
+        else:
+            city = city[0]
+        venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, location=location)
+    return venue    
+
+
 @login_required
 def create_venue_account(request):
-    venue_account = VenueAccount()
+    account = Account.objects.get(user_id=request.user.id)
+    venueAccount = VenueAccount()
     form = VenueAccountForm(
         initial={
-            "picture_src": "/media/%s" % venue_account.picture,
+            "picture_src": "/media/%s" % venueAccount.picture,
+            "account": account
         }
     )
 
     if request.method == 'POST':
         if request.POST["picture_src"]:
-            venue_account.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
+            venueAccount.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
 
-        form = VenueAccountForm(instance=venue_account, data=request.POST)
+        form = VenueAccountForm(instance=venueAccount, data=request.POST)
 
         if form.is_valid():
-            form.save()
+            venue = save_venue(request)
+            venueAccount.venue = venue
+            venueAccount = form.save()
+
             types = form.cleaned_data['types']
-            venue_account.types = types
-            return HttpResponseRedirect(reverse('private_venue_account', args=(venue_account.slug, )))
+            venueAccount.types = types
+
+            venueAccount.accounts.add(account)
+
+            venueAccount.save()
+
+            # return HttpResponseRedirect(reverse('private_venue_account', args=(venueAccount.slug, )))
+            return HttpResponseRedirect('/accounts/%s/' % request.user.username)
 
     return render_to_response('venue_accounts/create_venue_account.html', {
-            'venue_account': venue_account,
+            'venue_account': venueAccount,
             'form': form
         }, context_instance=RequestContext(request))
 

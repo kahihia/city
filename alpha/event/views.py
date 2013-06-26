@@ -273,7 +273,7 @@ def link_venue_with_account(venue, account):
 
 
 def save_event(request, form):
-    # Find or create new venue
+
     venue = save_venue(request)
 
     event_obj = form.save()

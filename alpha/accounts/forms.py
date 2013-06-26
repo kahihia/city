@@ -75,6 +75,13 @@ class VenueAccountForm(forms.ModelForm):
         required=False
     )
 
+    place = JSONCharField(
+        widget=GeoCompleteWidget(),
+        required=False
+    )
+
+    location = forms.Field(widget=LocationWidget(), required=False)
+
     class Meta:
         model = VenueAccount
 
