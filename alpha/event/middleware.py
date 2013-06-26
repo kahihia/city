@@ -56,7 +56,7 @@ def get_location(request):
     if not hasattr(request, '_cached_location'):
         geoip, ip = get_geoip_and_ip(request)
 
-        request._cached_location = geoip.lat_lon(ip)[::1]
+        request._cached_location = geoip.lon_lat(ip)
 
     return request._cached_location
 
