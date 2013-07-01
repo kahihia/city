@@ -6,6 +6,12 @@ from event.utils import find_nearest_city
 from cities.models import Region
 
 
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
+
 region_code_table_of_concordance = {
     "AB": "CA.01",
     "BC": "CA.02",
@@ -106,7 +112,12 @@ def get_user_location(request):
         location = get_location(request)
 
         user_location_type = "city"
-        user_location_id = find_nearest_city(City.objects.all(), Point(location)).id
+        try:
+            raise
+            user_location_id = find_nearest_city(City.objects.all(), Point(location)).id
+        except:
+            logger.critical("Bad location %s fror point initialization ")
+            user_location_id = find_nearest_city(City.objects.all(), Point(-106, 54.4))
 
     return {
         "type": user_location_type,
