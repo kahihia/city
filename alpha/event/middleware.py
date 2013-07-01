@@ -113,10 +113,9 @@ def get_user_location(request):
 
         user_location_type = "city"
         try:
-            raise
             user_location_id = find_nearest_city(City.objects.all(), Point(location)).id
         except:
-            logger.critical("Bad location %s fror point initialization ")
+            logger.critical("Bad location %s fror point initialization " % location)
             user_location_id = find_nearest_city(City.objects.all(), Point(-106, 54.4))
 
     return {
