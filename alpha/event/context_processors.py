@@ -1,4 +1,7 @@
 from cities.models import City, Region
+from event.models import Event
+from taggit.models import TaggedItem
+from django.db.models import Count
 
 
 
@@ -30,10 +33,22 @@ def user_location(request):
         }
 
     except:
-        logger.critical("def user_location(request): %s, %s " % (request.user_location_id, user_location_name))
+        logger.critical("def user_location(request): %s " % (request.user_location_id))
         return {
             "user_location_id": 1,
             "user_location_name": "country"
 
         }
         
+
+def top5_tags(request):
+    events = Event.future_events.all()
+
+    top5_tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.id, events)) \
+        .values('tag', 'tag__name') \
+        .annotate(count=Count('id')) \
+        .order_by('-count')[0:5]
+
+    return {
+        "top5_tags": top5_tags
+    }

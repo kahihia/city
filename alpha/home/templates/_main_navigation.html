@@ -9,7 +9,11 @@
 <div class="menu-wrapper" data-no-turbolink>
     <ul class="main-menu">
         <li class="addBorderRight"><a href="{% url 'event_browse' %}">Home</a></li>
-        <li class="addBorderRight"><a href="{% url 'search_pad' %}">Browse Events</a></li>
+        <li class="addBorderRight">
+            <a href="javascript: void;" class="search-pad-popup-opener">
+                Browse Events
+            </a>
+        </li>
         <li class="addBorderRight"><a href="{% url 'event_create' %}">Post Events</a></li>        
         <div class="clr"></div>
     </ul>

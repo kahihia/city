@@ -97,6 +97,7 @@ TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     # required by django-admin-tools
     'django.core.context_processors.request',
     'event.context_processors.user_location',
+    'event.context_processors.top5_tags',
     'django_facebook.context_processors.facebook',
 )
 
