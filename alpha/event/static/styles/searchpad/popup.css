@@ -1,8 +1,6 @@
 .search-pad-popup {
     display: none;
     width: 1024px;
-    max-height: 620px;
-    min-height: 530px;
 }
 
 .search-pad-menu, .search-pad-content, .search-pad-advertising {
@@ -12,7 +10,7 @@
 .search-pad-popup .loader {
     vertical-align: middle;
     text-align: center;
-    min-height: 530px;
+    min-height: 620px;
     width: 1024px;
 }
 
@@ -23,4 +21,26 @@
 
 .search-pad-popup .main-navigation-nav-wrapper {
     padding: 0;
+
+}
+
+.search-pad-content-wrapper {
+    min-height: 540px;
+    height: 100%;
+    float: left;
+
+    margin-right: 10px;
+    padding-left: 15px;
+    padding-top: 20px;
+    padding-right: 5px;
+    padding-bottom: 45px;
+    border: 1px solid #e3e3e3;
+}
+
+.fancybox-skin {
+    background: #fff;
+}
+
+#ui-datepicker-div {
+    z-index:8031 !important;
 }

@@ -3,24 +3,24 @@
    <div class="main-navigation-nav-wrapper">
         <ul class="categories">
             <li class="header">
-                <a href="{% events_filter_url request eventsFilter function="all" exclude="tag|datetime" %}" class="all">
+                <a href="{% events_filter_url request eventsFilter function="all" exclude="tag|datetime" %}" class="all ajax">
                     Browse All Events({{events_all_count}})
                 </a>
             </li>
             <li class="subcat">
 
-                <a href="{% events_filter_url request eventsFilter function="random" exclude="tag" %}">
+                <a href="{% events_filter_url request eventsFilter function="random" exclude="tag" %}" class="ajax">
                     Random Events
                 </a>
             </li>
             <li class="subcat top5">
                 <a href="javascript:void;" >Top 5 Categories</a>
-                <a href="{% events_filter_url request eventsFilter function="tags"  exclude="tag" %}" class="toggler" > </a>
+                <a href="{% events_filter_url request eventsFilter function="tags"  exclude="tag" %}" class="toggler ajax"></a>
             </li>
             <ul class="top5-tags">
                 {%for tag in top5_tags%}                
                 <li>
-                    <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"  {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}>
+                    <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}" class="ajax{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}"  >
                         {{tag.tag__name}}
                     </a>
                 </li>                                            
@@ -28,29 +28,29 @@
             </ul> 
 
             <li class="subcat">
-                <a href="{% events_filter_url request eventsFilter function="recently_featured" exclude="all" %}">
+                <a href="{% events_filter_url request eventsFilter function="recently_featured" exclude="all" %}" class="ajax">
                     Recently Featured
                 </a>
             </li>
             <br>
 
             <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="night_life"  exclude="tag" %}">
+                <a href="{% events_filter_url request eventsFilter function="night_life"  exclude="tag" %}" class="ajax">
                     Night life
                 </a>
             </li>
             <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="date_night"  exclude="tag" %}">
+                <a href="{% events_filter_url request eventsFilter function="date_night"  exclude="tag" %}" class="ajax">
                     Date Night
                 </a>
             </li>
             <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="free"  exclude="tag" %}">
+                <a href="{% events_filter_url request eventsFilter function="free"  exclude="tag" %}" class="ajax">
                     Free
                 </a>
             </li>
             <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="family"  exclude="tag" %}">
+                <a href="{% events_filter_url request eventsFilter function="family"  exclude="tag" %}" class="ajax">
                     Family
                 </a>
             </li>

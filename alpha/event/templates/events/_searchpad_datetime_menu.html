@@ -3,10 +3,10 @@
 <div class="schedule-bar">
     <div class="schedule-bar-wrapper">
         <ul>
-            <li><a href="{% events_filter_url request eventsFilter period="today" exclude="datetime" %}" class="jump">Today</a></li>
-            <li><a href="{% events_filter_url request eventsFilter period="tomorrow"  exclude="datetime" %}" class="jump">Tomorrow</a></li>
-            <li><a href="{% events_filter_url request eventsFilter period="this-weekend"  exclude="datetime" %}"  class="jump">This weekend</a></li>
-            <li><a href="{% events_filter_url request eventsFilter period="next-week"  exclude="datetime" %}" class="jump">Next week</a></li>
+            <li><a href="{% events_filter_url request eventsFilter period="today" exclude="datetime" %}" class="jump ajax">Today</a></li>
+            <li><a href="{% events_filter_url request eventsFilter period="tomorrow"  exclude="datetime" %}" class="jump ajax">Tomorrow</a></li>
+            <li><a href="{% events_filter_url request eventsFilter period="this-weekend"  exclude="datetime" %}"  class="jump ajax">This weekend</a></li>
+            <li><a href="{% events_filter_url request eventsFilter period="next-week"  exclude="datetime" %}" class="jump ajax">Next week</a></li>
             <li>
                 <a href="javascript:void;"  class="jump jump-popup-opener">
                     Jump to date
@@ -99,7 +99,7 @@
             </div>
             <div class="jump-to-date-wrapper">
                 <a 
-                    class="jump-to-date-button" href="{% events_filter_url request eventsFilter exclude="datetime" %}" 
+                    class="jump-to-date-button ajax" href="{% events_filter_url request eventsFilter exclude="datetime" %}" 
                     data-base-url-query="{% events_filter_url request eventsFilter exclude="datetime" %}"
                 >
                     Jump to Date

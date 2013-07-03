@@ -15,7 +15,9 @@
 
     BrowsePage.prototype = {
         initJumpToDate: function(){
-            this.jumpToDate = new window.JumpToDate();
+            this.jumpToDate = new window.JumpToDate(
+                $(".main-content")
+            );
         },
         initEventActions: function(){
             $(".entry-info").each(function(){

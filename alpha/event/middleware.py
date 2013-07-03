@@ -53,12 +53,12 @@ def get_geoip_and_ip(request):
     ip = get_real_ip(request)
 
     if ip == "127.0.0.1":
-        ip = "192.206.151.131"
+        ip = "198.245.113.94"
 
     return geoip, ip
 
 
-def get_location(request):
+def get_lon_lat(request):
     if not hasattr(request, '_cached_location'):
         geoip, ip = get_geoip_and_ip(request)
 
@@ -81,25 +81,9 @@ def get_is_canada(request):
     return request._cashed_is_canada
 
 
-def get_canadian_region(request):
-    if not hasattr(request, '_cached_canadian_region'):
-        geoip, ip = get_geoip_and_ip(request)
-
-        region_data = geoip.region_by_addr(ip)
-
-        if region_data and region_data["country_code"] == "CA" and "region" in region_data:
-            code = region_code_table_of_concordance[region_data["region"]]
-            request._cached_canadian_region = Region.objects.get(code=code)
-
-        else:
-            request._cached_canadian_region = None
-
-    return request._cached_canadian_region
-
-
 def get_user_location(request):
-    # user_location_type = request.session.get('user_location_type', "city")
-    # user_location_id = request.session.get('user_location_id', None)
+    user_location_type = request.session.get('user_location_type', "city")
+    user_location_id = request.session.get('user_location_id', None)
 
     if "location" in request.GET:
         user_location_type, user_location_id = request.GET["location"].split("|")
@@ -108,8 +92,9 @@ def get_user_location(request):
         request.session['user_location_type'] = user_location_type
         request.session['user_location_id'] = user_location_id
 
-    else:# elif not user_location_id:
-        location = get_location(request)
+    elif not user_location_id:
+
+        location = get_lon_lat(request)
 
         user_location_type = "city"
         try:
@@ -126,9 +111,8 @@ def get_user_location(request):
 
 class LocationMiddleware(object):
     def process_request(self, request):
-        request.location = get_location(request)
+        request.location = get_lon_lat(request)
         request.is_canada = get_is_canada(request)
-        # request.region = get_canadian_region(request)
 
         user_location = get_user_location(request)
 

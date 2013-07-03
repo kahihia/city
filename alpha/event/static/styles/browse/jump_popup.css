@@ -61,6 +61,10 @@
     width: 144px;
 }
 
+.jump-popup .date.dropdown input {
+    height: 14px;
+}
+
 .jump-popup .start-time span, .jump-popup .end-time span {
     display: inline-block;
     line-height: 17px;

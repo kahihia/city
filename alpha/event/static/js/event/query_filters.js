@@ -13,8 +13,7 @@
         },
         getURL: function(){
             return "/events?" + $.param(this.params, true);
-        }
-        
+        }        
     };
 
     $(document).on("ready page:load", function(){

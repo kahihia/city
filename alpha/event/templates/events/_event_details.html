@@ -84,6 +84,8 @@
             {% endif %}            
         </div>
     </div>
+{% empty %}
+    <h2>No upcoming events</h2>
 {%endfor%}
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
@@ -95,13 +97,13 @@
 
             <span class="step-links">
                 {% if not pages.current.is_first %}                
-                    <a href="{{ pages.previous.url }}">
+                    <a href="/events/search/{{ pages.previous.url }}" class="ajax">
                         <img src="{{STATIC_URL}}images/entry-prev.png">
                     </a>
                 {% endif %}
 
                 {% if not pages.current.is_last %}                
-                    <a href="{{ pages.next.url }}">
+                    <a href="/events/search/{{ pages.next.url }}" class="ajax">
                         <img src="{{STATIC_URL}}images/entry-next.png">
                     </a>
                 {% endif %}                

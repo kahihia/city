@@ -12,44 +12,45 @@
         return s;
     };
 
-    var JumpToDate = function(){
+    var JumpToDate = function(scope){
         var that=this;
-        this.openButton = $(".jump-popup-opener");
-        this.popup = $(".jump-popup");
+        this.scope = scope;
+        this.openButton = $(".jump-popup-opener", this.scope);
+        this.popup = $(".jump-popup", this.scope);
 
         this.openButton.on("click", this.openPopup.bind(this));
         $(document).on("click", this.closeIfNotPopup.bind(this));
 
-        $(".time, .meridian").qap_dropdown();
+        $(".time, .meridian", this.scope).qap_dropdown();
 
         $.datepicker.initialized = false;
-        $(".start-date .date, .end-date .date").on("click", function(){
+        $(".start-date .date, .end-date .date", this.scope).on("click", function(){
             $("input", this).datepicker("show");
         });
 
-        $(".start-date .date input, .end-date .date input").datepicker();
+        $(".start-date .date input, .end-date .date input", this.scope).datepicker();
 
-        this.jumpLink = $(".jump-to-date-button");
+        this.jumpLink = $(".jump-to-date-button", this.scope);
         this.baseUrlQuery = this.jumpLink.data("base-url-query");
 
         this.bindChangeLinkEvents();
 
-        this.timeJumpToDateCheckbox = $("#timeJumpToDateCheckbox");
-        this.dateJumpToDateCheckbox = $("#dateJumpToDateCheckbox");
+        this.timeJumpToDateCheckbox = $(".time-checkbox", this.scope);
+        this.dateJumpToDateCheckbox = $(".date-checkbox", this.scope);
 
         this.timeJumpToDateCheckbox.on("change", function(){
             if($(this).is(':checked')) {
-                $(".time-row .inline, .time-row .dropdown").removeAttr("disabled");
+                $(".time-row .inline, .time-row .dropdown", that.scope).removeAttr("disabled");
             } else {
-                $(".time-row .inline, .time-row .dropdown").attr("disabled", true);
+                $(".time-row .inline, .time-row .dropdown", that.scope).attr("disabled", true);
             }
         });
 
         this.dateJumpToDateCheckbox.on("change", function(){
             if($(this).is(':checked')) {
-                $(".date-row .inline, .date-row .inline input").removeAttr("disabled");
+                $(".date-row .inline, .date-row .inline input", that.scope).removeAttr("disabled");
             } else {
-                $(".date-row .inline, .date-row  .inline input").attr("disabled", true);
+                $(".date-row .inline, .date-row  .inline input", that.scope).attr("disabled", true);
             }
         });
 
@@ -87,12 +88,12 @@
 
         },
         changeLink: function(){
-            var startTime = $(".start-time .time select").val(),
-                startMeridian = $(".start-time .meridian select").val(),
-                endTime = $(".end-time .time select").val(),
-                endMeridian = $(".end-time .meridian select").val(),
-                startDate = $(".start-date .date input").val(),
-                endDate = $(".end-date .date input").val(),
+            var startTime = $(".start-time .time select", this.scope).val(),
+                startMeridian = $(".start-time .meridian select", this.scope).val(),
+                endTime = $(".end-time .time select", this.scope).val(),
+                endMeridian = $(".end-time .meridian select", this.scope).val(),
+                startDate = $(".start-date .date input", this.scope).val(),
+                endDate = $(".end-date .date input", this.scope).val(),
                 href;
 
             if(startMeridian==="p.m."){
