@@ -302,7 +302,7 @@ def create(request, form_class=None, success_url=None, template_name='events/cre
         if request.user.is_authenticated():
             exclude.append('email')
         else:
-            return HttpResponseRedirect('/accounts/login/')
+            return HttpResponseRedirect('/accounts/signin/')
         form_class = generate_form(*exclude)
 
     if request.method == 'POST':
