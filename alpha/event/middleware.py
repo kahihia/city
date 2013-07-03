@@ -108,7 +108,7 @@ def get_user_location(request):
         request.session['user_location_type'] = user_location_type
         request.session['user_location_id'] = user_location_id
 
-    elif not user_location_id:
+    else:# elif not user_location_id:
         location = get_location(request)
 
         user_location_type = "city"
