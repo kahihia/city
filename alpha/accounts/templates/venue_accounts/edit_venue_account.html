@@ -5,12 +5,10 @@
 {% block head %}
     <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
     <link href="{{STATIC_URL}}ajaxuploader/css/fileuploader.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}image_cropping/css/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
 
-    <script type="text/javascript" src="{{STATIC_URL}}fancybox/jquery.fancybox.js"></script>
     <script type="text/javascript">
         var crsf_token = "{{ csrf_token }}";
     </script>

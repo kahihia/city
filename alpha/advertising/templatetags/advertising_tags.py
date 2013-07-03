@@ -67,7 +67,7 @@ def advertising(context, dimensions):
 
 
 @register.inclusion_tag('advertising/advertising_group.html', takes_context=True)
-def advertising_group(context, dimensions):
+def advertising_group(context, dimensions, css_class="advertising-right"):
     """
         {% advertising_group "300x250|300x250|300x250" %}
 
@@ -93,7 +93,8 @@ def advertising_group(context, dimensions):
             ads_to_return.append(ad)
 
     return {
-        'ads': ads_to_return
+        'ads': ads_to_return,
+        'css_class': css_class
     } 
 
 

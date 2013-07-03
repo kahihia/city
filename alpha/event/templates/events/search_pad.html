@@ -1,81 +1,36 @@
-{% extends 'base-with-advertising.html' %}
-{% load date_formatting %}
-{% load cropping %}
+{% load advertising_tags %}
 
-{% block head %}
-    
-    <link href="{{STATIC_URL}}styles/browse/browse.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/browse/featured_events.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/browse/search_tags.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/browse/search_pad.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/browse/event_details.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/browse/jump_popup.css" rel="stylesheet" type="text/css" />    
-
-    <script src="{{STATIC_URL}}js/tagit.js" type="text/javascript"></script>
-
-    <script type="text/javascript" src="{{STATIC_URL}}turbolinks/turbolinks.js"></script>
-    <script type="text/javascript" src="{{STATIC_URL}}js/facebook-for-turbolinks.js"></script>
-    
-    <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>        
-    <script src="{{STATIC_URL}}js/searchpad/event-actions.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/searchpad/jump-to-date.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/searchpad/searchpad.js" type="text/javascript"></script>
-{% endblock %}
-
-{% block title %} 
-    &gt; Browse {% if page_date != "flow" %}&gt; {{page_date|slug_to_title }}{% endif %}
-{% endblock %}
-
-{% block featured %}
-    {% include 'events/_event_featured.html' %}
-{% endblock %}
-
-{% block page %}
-    <div id="fb-root"></div>
-    <div class="primary-content">
-        <div class="main-content">   
-            <h1>Search Pad</h1>
-            <div class="main-content">
-                <!--start.main-navigation-->
-            
-                <div class="main-navigation">
-                    <!--start.main-navigation-nav-->
-                    {% include 'events/_searchpad_left_menu.html' %}
-                    <!--end.main-navigation-nav-->
-                
-                    <!--start.main-navigation-content-nav-->
-                
-                    <div class="main-navigation-content-nav">
-                        <div class="main-navigation-content-nav-wrapper">
-                            <!--start.schedule-bar-->
-                            {% include 'events/_searchpad_datetime_menu.html' %}
-
-                            <ul id="searchTags" class="tagit ui-widget ui-widget-content ui-corner-all">
-                                {% for tag in eventsFilter.search_tags %}
-                                    <li data-remove-url="{{ tag.remove_url }}" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable">
-                                        <span class="tagit-label">{{ tag.name }}</span>
-                                        <a class="tagit-close">
-                                            <span class="text-icon">×</span>
-                                            <span class="ui-icon ui-icon-close"></span>
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                                <span class="search-button"></span>
-                            </ul>
-                            <!--end.schedule-bar-->
-              
-                            <!--start.entry-wrapper-->
-                            {% include 'events/_event_details.html' %}
-                        </div>
-                    </div>
-                    <!--end.main-navigation-content-nav-->                        
-                    <div class="clr"></div>                    
-                </div>
-                <!--end.main-navigation-->
-            
-                <div class="clr"></div>                
-            </div>
-        </div>
+<!-- Search Pad popup-->
+<!--div class="search-pad-popup"-->
+    <div class="search-pad-menu">
+        {% include 'events/_searchpad_left_menu.html' %}
     </div>
+    <div class="search-pad-content">
+        {% include 'events/_searchpad_datetime_menu.html' %}
 
-{% endblock %}
+        <ul id="searchTags" class="tagit ui-widget ui-widget-content ui-corner-all">
+            {% for tag in eventsFilter.search_tags %}
+                <li data-remove-url="{{ tag.remove_url }}" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable">
+                    <span class="tagit-label">{{ tag.name }}</span>
+                    <a class="tagit-close">
+                        <span class="text-icon">×</span>
+                        <span class="ui-icon ui-icon-close"></span>
+                    </a>
+                </li>
+            {% endfor %}
+            <span class="search-button"></span>
+        </ul>
+        {% include 'events/_event_details.html' %}
+    </div>
+    <div class="search-pad-advertising">
+        {% random %}
+            <div class="advertising-container">
+                {% advertising "300x600" %}
+            </div>
+        {% or %}
+            <div class="advertising-container">
+                {% advertising_group "300x250|300x250" "simple" %}
+            </div>
+        {% endrandom %}
+    </div>
+<!--/div-->

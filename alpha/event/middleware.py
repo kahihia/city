@@ -98,8 +98,8 @@ def get_canadian_region(request):
 
 
 def get_user_location(request):
-    user_location_type = request.session.get('user_location_type', "city")
-    user_location_id = request.session.get('user_location_id', None)
+    # user_location_type = request.session.get('user_location_type', "city")
+    # user_location_id = request.session.get('user_location_id', None)
 
     if "location" in request.GET:
         user_location_type, user_location_id = request.GET["location"].split("|")
@@ -116,7 +116,7 @@ def get_user_location(request):
             user_location_id = find_nearest_city(City.objects.all(), Point(location)).id
         except:
             logger.critical("Bad location %s fror point initialization " % location)
-            user_location_id = find_nearest_city(City.objects.all(), Point(-106, 54.4))
+            user_location_id = find_nearest_city(City.objects.all(), Point(-106, 54.4)).id
 
     return {
         "type": user_location_type,

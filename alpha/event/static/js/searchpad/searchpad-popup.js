@@ -12,14 +12,20 @@
         });
     };
 
-    SearchPadPage.prototype = {
+    SearchPadPopup.prototype = {
         open: function(){
-            this.prepareSearchPad();            
-            this.popup.show();
+            this.prepareSearchPad();      
+            $.fancybox($(this.popup), {                
+                closeBtn: true,
+                hideOnOverlayClick: false,
+                width: 600
+            });
 
         },
         prepareSearchPad: function(){
+            this.popup.load('/events/search/', function() {
 
+            });
         }
     };
 

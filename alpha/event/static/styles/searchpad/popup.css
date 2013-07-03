@@ -1,0 +1,26 @@
+.search-pad-popup {
+    display: none;
+    width: 1024px;
+    max-height: 620px;
+    min-height: 530px;
+}
+
+.search-pad-menu, .search-pad-content, .search-pad-advertising {
+    float: left;
+}
+
+.search-pad-popup .loader {
+    vertical-align: middle;
+    text-align: center;
+    min-height: 530px;
+    width: 1024px;
+}
+
+.search-pad-popup .loader img {
+    vertical-align: middle;
+    margin-top: 230px;
+}
+
+.search-pad-popup .main-navigation-nav-wrapper {
+    padding: 0;
+}
