@@ -47,7 +47,7 @@ import_uploader = AjaxFileUploader()
 
 
 def redirect(request):
-    return HttpResponseRedirect(reverse('search_pad'))
+    return HttpResponseRedirect(reverse('event_browse'))
 
 
 def search_pad(request):
