@@ -28,7 +28,7 @@ class AdvertisingCampaign(models.Model):
     regions = models.ManyToManyField(Region)
     budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
 
-    ammount_spent = MoneyField(max_digits=10, decimal_places=10, default_currency='CAD')
+    ammount_spent = MoneyField(max_digits=18, decimal_places=10, default_currency='CAD')
 
     started = models.DateTimeField(auto_now=True, auto_now_add=True)
     ended = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
