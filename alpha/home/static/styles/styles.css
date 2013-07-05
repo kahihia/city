@@ -41,36 +41,9 @@ body
 	height: 110px;
 }
 
-.sign-up-wrapper-top
-{
-	width:288px;
-	min-height:60px;
-	background:url(/static/images/login-bg.png) no-repeat;
-	float:right;
-}
-
-.sign-up-and-facebook
-{
-	width:auto;
-	padding:7px 15px;
-	color:#797979;
-	text-decoration:none;
-}
-
-.sign-up-and-facebook a
-{
-	color:#797979;
-	text-decoration:none;
-}
-
-.sign-up-and-facebook img
-{
-	margin-left:18px;
-}
-
 .post-events-for-free
 {
-	padding-top:30px;
+	padding-top:20px;
 }
 
 .menu-wrapper ul

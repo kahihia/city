@@ -28,7 +28,6 @@
         ajaxifyLinks: function(){
             var links = $("a.ajax", this.popup),
                 that = this;
-            console.log(links);
             links.on("click", function(e){
                 var href = $(this).attr("href");               
 

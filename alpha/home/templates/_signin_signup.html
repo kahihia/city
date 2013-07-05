@@ -1,13 +1,32 @@
-<div class="sign-up-and-facebook">                       
+{% load cropping %}
+<div class="sign-up-and-facebook">
     <!--start login-->
     <div class="login-entry-info">
         <ul>
             {% if user.is_authenticated %}
-                <li>
-                    <a class="user-profile-link" href="{% url 'account_profile_detail' user.username %}">
-                        {{ user.username }}
-                    </a><span>&nbsp; | &nbsp;</span>
-                </li>
+                <li class="user-profile">
+                    {% if not current_venue_account %} 
+                        <a href="{% url 'account_profile_detail' user.username %}">
+                            <img src="{{ request.profile.get_mugshot_url }}" alt="Your mugshot" widrh="29" height="29" />
+                            <span>
+                                {{ user.username }}
+                            </span>                            
+                        </a>
+                    {% else %}
+                        <a href="{% url 'private_venue_account' slug=current_venue_account.slug %}">
+                            {% if current_venue_account.picture %}
+                                <img src="{% cropped_thumbnail current_venue_account "cropping" width=29 %}" widrh="29" height="29" />
+                            {% else %}
+                                <img src="{{STATIC_URL}}images/default-event.jpg" height="29px" weight="29px">
+                            {% endif %}
+                            <span>
+                                {{ current_venue_account.venue.name }} opa-opa-opa pa
+                            </span>
+                        </a>
+                    {% endif %}
+                    <div class="choose-user-profile-button">
+                    </div>                                        
+                </li>                
                 <li>
                     <a href="{% url 'userena_signout' %}">Sign out</a>
                 </li>
@@ -32,5 +51,32 @@
             {% endif %}
         </ul>
         <div class="clr"></div>
+
+        <ul class="choose-user-profile-popup">
+            <li class="{% if not current_venue_account %} active{% endif %}">
+                <a href="{% url 'account_set_context' "root" %}">
+                    <img src="{{ profile.get_mugshot_url }}" alt="Your mugshot" widrh="29" height="29" />
+                    {{ user.username }}
+                </a>
+            </li>
+            {% for venue_account in profile.venueaccount_set.all %}
+                <li class="{% ifequal venue_account.id current_venue_account.id %} active{% endifequal %}">
+                    <a href="{% url 'account_set_context' venue_account.slug %}">
+                        {% if venue_account.picture %}
+                            <img src="{% cropped_thumbnail venue_account "cropping" width=29 %}" widrh="29" height="29" />
+                        {% else %}
+                            <img src="{{STATIC_URL}}images/default-event.jpg" height="29px" weight="29px">
+                        {% endif %}
+                        {{ venue_account.venue.name }}
+                    </a>
+                </li>
+            {% empty %}
+                <li>
+                    <a href="{% url 'create_venue_account' %}">
+                        New venue
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
    </div>
 </div>

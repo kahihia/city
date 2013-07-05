@@ -1,3 +1,25 @@
+.sign-up-wrapper-top
+{
+    width:288px;
+    min-height:60px;
+    background:url(/static/images/login-bg.png) no-repeat;
+    float:right;
+}
+
+.sign-up-and-facebook
+{
+    width:auto;
+    padding:7px 15px;
+    color:#797979;
+    text-decoration:none;
+}
+
+.sign-up-and-facebook a
+{
+    color:#797979;
+    text-decoration:none;
+}
+
 .sign-up-wrapper-top .sign-up-and-facebook {
     position: relative;
     padding: 7px 13px;
@@ -28,17 +50,72 @@
     vertical-align: top;
 }
 
-.user-profile-link {    
-    width: 134px;
-    height: 29px;
-    padding-left: 40px;
-    margin-left: 10px;
-    background: url("/static/images/accounts/user-icon.png") left top no-repeat;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .sign-up-and-facebook .login-entry-info ul li a.login_with_facebook {
     top: 2px;
 }
+
+.user-profile {
+    width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 20px;
+
+}
+
+.user-profile a span{
+    width: 125px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 2px;
+    margin-left: 5px;
+}
+
+.login-entry-info {
+    position: relative;
+}
+
+.login-entry-info .choose-user-profile-popup {
+    display: none;
+    position: absolute;
+    top: 40px;
+    left: -20px;
+    background: #fff;
+    width: 300px;
+    z-index:20;
+    border: 1px solid #e3e3e3;
+}
+
+.login-entry-info .choose-user-profile-popup li {
+    display: block;
+    float: none;
+    height: 35px;
+    line-height: 35px;
+    vertical-align: middle;
+    padding: 0 10px;
+}
+
+.sign-up-and-facebook .login-entry-info .choose-user-profile-popup li a {
+    top: 3px;
+    display: block;    
+}
+
+.login-entry-info .choose-user-profile-popup li.active {
+    background-color: #c5f9f9;
+}
+
+.login-entry-info .choose-user-profile-popup li img {
+    margin-right: 10px;
+}
+
+.user-profile .choose-user-profile-button {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    background: url("/static/images/widgets/dropdown.png") no-repeat;
+    display: inline-block;
+    float: right;  
+    margin-top: 5px;  
+}
+

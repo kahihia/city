@@ -98,6 +98,7 @@ TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.request',
     'event.context_processors.user_location',
     'event.context_processors.top5_tags',
+    'accounts.context_processors.user_context',
     'django_facebook.context_processors.facebook',
 )
 
@@ -112,6 +113,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'event.middleware.LocationMiddleware',
     'accounts.middleware.VenueAccountMiddleware',
+    'accounts.middleware.UserProfileMiddleware',
     'turbolinks.middleware.TurbolinksMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 )

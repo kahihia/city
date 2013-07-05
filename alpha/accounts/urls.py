@@ -59,5 +59,9 @@ urlpatterns = patterns('',
     url(r'^orders/$',
         accounts.orders,
         name='account_orders'
+    ),
+    url(r'^set-user-context/(?P<context>[-\w]+)/$',
+        accounts.set_context,
+        name="account_set_context"
     )
 )

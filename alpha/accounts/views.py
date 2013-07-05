@@ -144,7 +144,6 @@ def in_the_loop_preview(request):
 @login_required
 def private_venue_account(request, slug):
     venue_account = VenueAccount.objects.get(slug=slug)
-    request.session['venue_account_id'] = venue_account.id
 
     venue_events = Event.future_events.filter(venue=venue_account.venue)
     venue_featured_events = Event.featured_events.filter(venue=venue_account.venue)
@@ -361,6 +360,7 @@ def profile_detail(request, username, template_name=userena_settings.USERENA_PRO
         extra_context=extra_context
     )(request)
 
+
 def orders(request):
     account = Account.objects.get(user_id=request.user.id)
 
@@ -371,3 +371,14 @@ def orders(request):
             'advertising_orders': advertising_orders,
             'featured_orders': []
         }, context_instance=RequestContext(request))
+
+
+def set_context(request, context="root"):
+    if context=="root":
+        request.session['venue_account_id'] = None
+    else:
+        venue_account = VenueAccount.objects.get(slug=context)
+        request.session['venue_account_id'] = venue_account.id
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+
