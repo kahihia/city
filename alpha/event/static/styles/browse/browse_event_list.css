@@ -21,6 +21,11 @@
     display: inline-block;    
 }
 
+.entry-wrapper .entry-info .entry-img-prev img {
+    width: 60px;
+    height: 60px;
+}
+
 .entry-wrapper .entry-info .entry-details-wrapper,
 .entry-wrapper .entry-info .auctions-details-wrapper {
     display: inline-block;    
@@ -146,6 +151,9 @@
 
 .entry-info .auctions-wrapper .auctions-content .button {
     margin-right: 3px;
+    padding: 2px 3px;
+    top: -3px;
+    position: relative;
 }
 
 .entry-info .auctions-wrapper .auctions-content .auctions-img-prev {

@@ -225,3 +225,25 @@ body {
 .main-navigation-nav-wrapper ul.categories li.category.selected:after {
     background: url("/static/images/searchpad/subcat-active.png") no-repeat;
 }
+
+.more-button, .less-button {
+    cursor: pointer;
+    color: #000;
+    margin-top: 20px;
+    text-align: center;
+    background: url('/static/images/arrow-down.png') 95px 4px no-repeat;
+    padding-right: 25px;
+    font-weight: bold;
+}
+
+.less-button {
+    background: url('/static/images/arrow-up-gray.png') 95px 4px no-repeat;
+}
+
+.more-button, .main-navigation-nav-wrapper.more .less-button {
+    display: block;
+}
+
+.less-button, .main-navigation-nav-wrapper.more .more-button {
+    display: none;
+}

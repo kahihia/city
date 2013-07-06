@@ -11,6 +11,8 @@
         });
 
         this.initEventActions();
+
+        this.initMoreLessButtons();
     };
 
     BrowsePage.prototype = {
@@ -38,6 +40,15 @@
                 ]
             });
             return false;
+        },
+        initMoreLessButtons: function(){
+            $(".more-button").on("click", function(){
+                $(".main-navigation-nav-wrapper").addClass('more');
+            });
+
+            $(".less-button").on("click", function(){
+                $(".main-navigation-nav-wrapper").removeClass('more');
+            });
         }
     };
 
