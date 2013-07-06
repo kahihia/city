@@ -7,7 +7,7 @@
     <header>
         Total search numbers found ({{eventsFilter.qs.count}})
     </header>
-    {% paginate 5 eventsFilter.qs as events %}
+    {% paginate 9 eventsFilter.qs as events %}
     {% for event in events %}    
         <div class="entry-info" data-no-turbolink>
             <div class="entry-img-prev">

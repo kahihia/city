@@ -50,14 +50,23 @@
                 <a href="{% events_filter_url request eventsFilter function="tags" exclude="tag|datetime" %}" >All Categories</a>                
             </li>
             <ul class="categories">
-                {%for tag in tags%}                
-                <li class="category{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}">
-                    <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"  {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}>
-                        {{tag.tag__name}} ({{ tag.count }})
-                    </a>
-                </li>                                            
-                {%endfor%}
+                {% for tag in tags %}                
+                    <li class="category{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}{% if forloop.counter > 21 %} more{% endif %}" >
+                        <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"  {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}>
+                            {{tag.tag__name}}
+                        </a>
+                    </li>
+                {%endfor%}                
             </ul>
+            {% if tags|length > 21 %}
+                <div class="more-button">
+                    more
+                </li>
+                <li class="less-button">
+                    less
+                </li>
+            {% endif %}
+
         </ul>
     </div>
 </div>   

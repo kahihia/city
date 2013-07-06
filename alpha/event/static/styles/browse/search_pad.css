@@ -61,6 +61,9 @@
     -webkit-border-radius:6px;
     border-radius:6px;
     height:16px;    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .main-navigation-nav-wrapper ul.categories li a.all {
     padding: 0;
@@ -177,6 +180,14 @@ body {
 
 .main-navigation-nav-wrapper ul.categories li.category {
     list-style: none;    
+}
+
+.main-navigation-nav-wrapper ul.categories li.category.more {
+    display: none;
+}
+
+.main-navigation-nav-wrapper.more ul.categories li.category.more {
+    display: block;
 }
 
 .main-navigation-nav-wrapper ul.categories li.category a {
