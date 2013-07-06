@@ -229,7 +229,7 @@ body {
 .more-button, .less-button {
     cursor: pointer;
     color: #000;
-    margin-top: 20px;
+    margin-top: 38px;
     text-align: center;
     background: url('/static/images/arrow-down.png') 95px 4px no-repeat;
     padding-right: 25px;
