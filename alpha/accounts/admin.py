@@ -1,12 +1,12 @@
 from django.contrib import admin
-from accounts.forms import FusionCheckboxSelectMultiple
+from django import forms
 from accounts.models import AccountReminding, InTheLoopSchedule, VenueAccount, VenueType
 
 
 class VenueAccountAdmin(admin.ModelAdmin):
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == 'types':
-            kwargs['widget'] = FusionCheckboxSelectMultiple
+            kwargs['widget'] = forms.CheckboxSelectMultiple
             kwargs['help_text'] = ''
 
         return db_field.formfield(**kwargs)

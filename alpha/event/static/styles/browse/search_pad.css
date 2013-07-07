@@ -191,7 +191,7 @@ body {
 }
 
 .main-navigation-nav-wrapper ul.categories li.category a {
-    padding-left: 25px;        
+    padding-left: 10px;        
 }
 .main-navigation-nav-wrapper ul.categories li.category a:hover,
 .main-navigation-nav-wrapper ul.categories li.category a.selected {
@@ -217,13 +217,7 @@ body {
     left: 10px;
     top: 8px;
     content: " ";
-    background: url("/static/images/searchpad/subcat.png") no-repeat;
     z-index: 2;
-}
-
-.main-navigation-nav-wrapper ul.categories li.category:hover:after,
-.main-navigation-nav-wrapper ul.categories li.category.selected:after {
-    background: url("/static/images/searchpad/subcat-active.png") no-repeat;
 }
 
 .more-button, .less-button {

@@ -57,9 +57,9 @@
                                 <td class="first">
                                     <div class="checkbox">
                                         {{ form.reminder_with_website }}
-                                        {{ form.reminder_with_website.label_tag }}
-                                    </div>
-                                    Website:
+                                        {{ form.reminder_with_website.label_tag }}                                        
+                                    </div>                                    
+                                    <label class="label" for="id_reminder_with_website">Website:</label>
                                 </td>
                                 <td>
                                     I will check for my updates on the website
@@ -71,7 +71,7 @@
                                         {{ form.reminder_with_email }}
                                         {{ form.reminder_with_email.label_tag }}
                                     </div>
-                                    Email:
+                                    <label class="label" for="id_reminder_with_email">Email:</label>
                                 </td>
                                 <td>
                                     {{ form.reminder_email }}
@@ -84,7 +84,7 @@
                                         {{ form.reminder_with_sms }}
                                         {{ form.reminder_with_sms.label_tag }}
                                     </div>
-                                    SMS:
+                                    <label class="label" for="id_reminder_with_sms">SMS:</label>
                                 </td>
                                 <td>
                                     {{ form.reminder_phonenumber }}

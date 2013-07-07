@@ -12,15 +12,14 @@ from django.conf import settings
 register = template.Library()
 
 
-@register.inclusion_tag('featured/featured_event.html')
-def featured_event(event, in_email=False):
-    # TODO: use image for email
-
+@register.inclusion_tag('featured/featured_event.html', takes_context=True)
+def featured_event(context, event, in_email=False):
     event.featuredevent_set.all()[0].view()
 
     return {
         'event': event,
-        'in_email': in_email
+        'in_email': in_email,
+        'site': context.get("site", "")
     }
 
 
@@ -53,8 +52,8 @@ def truncatesmart(value, limit=80):
     return value + '...'
 
 
-@register.simple_tag
-def feature_event_as_image(event):
+@register.simple_tag(takes_context=True)
+def feature_event_as_image(context, event):
     script_version = "1.0"
 
     image_filename = "%s_feature_event_as_image_%s.png" % (event.slug, script_version)
@@ -105,4 +104,4 @@ def feature_event_as_image(event):
 
         image_filename = default_storage.save(image_filename, in_memory_file)
 
-    return "/media/%s" % image_filename
+    return "media/%s" % image_filename

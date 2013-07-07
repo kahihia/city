@@ -947,6 +947,16 @@ a {
 	background: url(/static/images/question_hover.png) no-repeat;
 	height: 25px;
 }
+
+.buttonq.mini{
+	background: url(/static/images/question-mini.png) no-repeat;
+	height: 13px;
+	width: 13px;
+}
+.buttonq.mini:hover{
+	background: url(/static/images/question_hover-mini.png) no-repeat;
+}
+
 .clr{
 	clear: both;
 }

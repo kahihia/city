@@ -29,6 +29,10 @@ urlpatterns = patterns('',
         accounts.in_the_loop_tags,
         name="in_the_loop_tags"
     ),
+    url(r'^cities-autosuggest/$',
+        accounts.cities_autosuggest,
+        name="cities_autosuggest"
+    ),
     url(r'^remind-email-preview/$', accounts.remind_preview, name="remind_preview"),
     url(r'^in-the-loop-email-preview/$', accounts.in_the_loop_preview),
 

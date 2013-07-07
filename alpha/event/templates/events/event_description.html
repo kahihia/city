@@ -52,7 +52,7 @@
                     {% if event.picture %}
                         <a id="photoFancy" href="/media/{{ event.picture }}">
                             <div class="center-cropped" 
-                                style="background-image: url('{% cropped_thumbnail event "cropping" height=265 %}');">
+                                style="background: url('{% cropped_thumbnail event "cropping" height=265 %}') center center no-repeat;">
                             </div>​
                         </a>
                     {% else %}
@@ -61,7 +61,10 @@
                         </div>
                     {% endif %}
                     <footer>
-                        Submitted by <span class="accented">{{ event.owner }}</span>
+                        Submitted by 
+                        <span class="accented">
+                            {{ event.owner }}
+                        </span>
                     </footer>                
                 </div>
                 <div class="event-details">

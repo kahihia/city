@@ -21,6 +21,8 @@ from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
 
 from advertising.models import Advertising
+from cities.models import Region, City
+from django.db.models import Q
 
 
 REMINDER_TYPES = (
@@ -48,7 +50,6 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
                                 related_name='my_profile')
     # here will be location, site, reminder settings, loop tags, order
 
-    location = models.PointField(blank=True, null=True)
     venue = models.ForeignKey('event.Venue', blank=True, null=True)
 
     website = models.URLField(blank=True, null=True, default='')
@@ -90,6 +91,10 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
     in_the_loop_email = models.EmailField(blank=True, null=True)
     in_the_loop_phonenumber = PhoneNumberField(blank=True, null=True)
 
+    all_of_canada = models.BooleanField()
+    regions = models.ManyToManyField(Region)
+    cities = models.ManyToManyField(City)
+
     def in_the_loop_events(self):
         return Event.future_events.filter(tagged_items__tag__name__in=self.in_the_loop_tags.all().values("name"))
 
@@ -100,7 +105,6 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
         return Advertising.objects.filter(campaign__account__id=self.id)
 
 
-#Make sure we create a Account when creating a User
 def create_facebook_profile(sender, instance, created, **kwargs):
     if created:
         Account.objects.create(user=instance)
@@ -200,8 +204,22 @@ class InTheLoopSchedule(models.Model):
     @staticmethod
     def unprocessed_for_account(account):
         tags = account.in_the_loop_tags.values_list("name", flat=True)
-        event_ids = InTheLoopSchedule.new_events.filter(event__tagged_items__tag__name__in=tags).values_list("event_id", flat=True)
-        return Event.future_events.filter(id__in=event_ids)
+        region_ids = account.regions.all().values_list("id", flat=True)
+        city_ids = account.cities.all().values_list("id", flat=True)
+
+        if account.all_of_canada:
+            location_query = Q(venue__country__name="Canada")
+        else:
+            location_query = Q(venue__city__id__in=city_ids) | Q(venue__city__region__id__in=region_ids) | Q(venue__city__subregion__id__in=region_ids)
+
+        event_ids = InTheLoopSchedule.new_events.filter(
+            event__tagged_items__tag__name__in=tags
+        ).values_list("event_id", flat=True)
+
+        return Event.future_events.filter(
+            Q(id__in=event_ids),
+            location_query
+        )
 
     def __unicode__(self):
         status = "QUEUE"

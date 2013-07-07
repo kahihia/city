@@ -30,7 +30,7 @@ from django.db.models import Q
 from event.utils import find_nearest_city
 from advertising.models import AdvertisingOrder
 
-MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 20)
+MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
 
 TAG_MODEL = getattr(settings, 'TAGGIT_AUTOSUGGEST_MODEL', ('taggit', 'Tag'))
 TAG_MODEL = get_model(*TAG_MODEL)
@@ -115,6 +115,23 @@ def in_the_loop_tags(request):
     ).values_list('name', flat=True).distinct()
 
     data = [{'name': n, 'value': n} for n in tag_name_qs[:limit]]
+
+    return HttpResponse(json.dumps(data), mimetype='application/json')
+
+def cities_autosuggest(request):
+    query = request.GET.get('q', '')
+    limit = request.GET.get('limit', MAX_SUGGESTIONS)
+    try:
+        request.GET.get('limit', MAX_SUGGESTIONS)
+        limit = min(int(limit), MAX_SUGGESTIONS)  # max or less
+    except ValueError:
+        limit = MAX_SUGGESTIONS
+
+    cities = City.objects.filter(
+        name__icontains=query
+    )
+
+    data = [{'name': city.__unicode__(), 'value': str(city.id) } for city in cities[:limit]]
 
     return HttpResponse(json.dumps(data), mimetype='application/json')
 
@@ -289,9 +306,6 @@ def create_venue_account(request):
             'venue_account': venueAccount,
             'form': form
         }, context_instance=RequestContext(request))
-
-
-
 
 
 def set_venue_privacy(request, venue_account_id, privacy):

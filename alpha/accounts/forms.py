@@ -1,7 +1,7 @@
 from django import forms
 from accounts.models import Account, VenueAccount, VenueType
 
-from widgets import InTheLoopTagAutoSuggest
+from widgets import InTheLoopTagAutoSuggest, CityAutoSuggest
 from taggit.forms import TagField
 from accounts.models import REMINDER_TYPES
 
@@ -12,6 +12,7 @@ from event.forms import JSONCharField
 from gmapi.forms.widgets import LocationWidget
 import selectable.forms as selectable
 from event.lookups import CityLookup
+from cities.models import Region, City
 
 
 class ReminderSettingsForm(forms.ModelForm):
@@ -47,6 +48,14 @@ class InTheLoopSettingsForm(forms.ModelForm):
     in_the_loop_with_email = forms.BooleanField(required=False, label="")
     in_the_loop_with_sms = forms.BooleanField(required=False, label="")
 
+    regions = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        queryset=Region.objects.filter(country__code="CA"),
+        required=False
+    )
+
+    cities = TagField(widget=CityAutoSuggest())
+
     class Meta:
         model = Account
         fields = (
@@ -55,12 +64,10 @@ class InTheLoopSettingsForm(forms.ModelForm):
             'in_the_loop_with_email',
             'in_the_loop_with_sms',
             'in_the_loop_email',
-            'in_the_loop_phonenumber'
+            'in_the_loop_phonenumber',
+            'regions',
+            'cities'
         )
-
-
-class FusionCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
-    pass
 
 
 class VenueAccountForm(forms.ModelForm):
@@ -70,7 +77,7 @@ class VenueAccountForm(forms.ModelForm):
     )
 
     types = forms.ModelMultipleChoiceField(
-        widget=FusionCheckboxSelectMultiple,
+        widget=forms.CheckboxSelectMultiple,
         queryset=VenueType.active_types.all(),
         required=False
     )

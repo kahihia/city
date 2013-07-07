@@ -124,6 +124,7 @@
 .options {
     padding: 24px 18px;
     color: #454545;
+    position: relative;
 }
 
 .options header {
@@ -148,6 +149,12 @@
 
 .options table td {
     vertical-align: middle;
+}
+
+.options table td.first .label {
+    position: relative;
+    top: 2px;
+    font-weight: bold;
 }
 
 .reminder-time-options table td.first {
@@ -223,7 +230,7 @@
 }
 
 .account-options ul.as-selections {
-    width: 555px;
+    width: 600px;
     border-radius: 0;
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
@@ -253,9 +260,9 @@
     background: #f6f6f6;
     margin-right: 4px;
     margin-bottom: 4px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
     font-size: 12px;
     font-weight: normal;
 
@@ -314,15 +321,16 @@
     position: relative;    
 }
 
-.account-options h3.notifications {
-    margin-top: 40px;
-}
-
 .account-options h3 .buttonq {
     position: absolute;
     display: inline-block;
     top: -2px;
     margin-left: 3px;
+}
+
+.account-options h3 .buttonq.mini {
+    top: 16px;
+    margin-left: 5px;
 }
 
 .account-options .in-the-loop-types {
@@ -588,3 +596,48 @@
  .detailed-view div table td:first-child {
     font-weight: bold;
  }
+
+ .options-block {
+    margin-top: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 1px solid #e3e3e3;
+ }
+
+.options-block h3 {
+    display: block;
+    padding: 15px 20px;
+    margin: 0;
+    border: 1px solid #fff;
+    background: #f1f1f1;
+}
+
+.options-block .options-description {
+    font-size: 14px;    
+    font-style: italic;
+}
+
+.teritory-node {
+    display: block;
+    float: left;
+    min-width: 200px;
+}
+
+.cities-node {
+    border: 1px solid #e3e3e3;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-top: 0;    
+}
+
+.cities-node .cities-node-prefix {
+    float: left;
+    height: 33px;
+    line-height: 33px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.account-options .cities-node ul.as-selections {
+    width: 520px;
+}
