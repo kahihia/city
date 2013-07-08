@@ -12,7 +12,7 @@ from event.forms import JSONCharField
 from gmapi.forms.widgets import LocationWidget
 import selectable.forms as selectable
 from event.lookups import CityLookup
-from cities.models import Region, City
+from cities.models import Region
 
 
 class ReminderSettingsForm(forms.ModelForm):
@@ -54,7 +54,10 @@ class InTheLoopSettingsForm(forms.ModelForm):
         required=False
     )
 
-    cities = TagField(widget=CityAutoSuggest())
+    cities = TagField(
+        widget=CityAutoSuggest(),
+        required=False
+    )
 
     class Meta:
         model = Account

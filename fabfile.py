@@ -30,8 +30,8 @@ def upgrade():
     run("killall -9 gunicorn_django") 
     
     with cd(env.alpha_folder):
-        run("python manage.py runserver collectstatic")
-        run("sh script.sh &")
+        run("python manage.py collectstatic")
+        run("sh script.sh")
 
 def make_virtualenv():
     local("virtualenv --no-site-packages venv")
