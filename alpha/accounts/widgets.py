@@ -124,7 +124,8 @@ class CityAutoSuggest(forms.TextInput):
                         neverSubmit: true,
                         selectedValuesProp: "value",
                         selectedItemProp: "name",
-                        searchObjProps: "name"
+                        searchObjProps: "name",
+                        canGenerateNewSelections: false
                     });
 
                     $('.as-selections').addClass('vTextField');
