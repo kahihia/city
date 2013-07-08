@@ -230,6 +230,7 @@
 }
 
 .account-options ul.as-selections {
+    min-height: 27px;
     width: 600px;
     border-radius: 0;
     -moz-border-radius: 0;
