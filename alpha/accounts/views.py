@@ -273,7 +273,7 @@ def save_venue(request):
 def create_venue_account(request):
     account = Account.objects.get(user_id=request.user.id)
     venueAccount = VenueAccount()
-    form = VenueAccountForm(
+    form = NewVenueAccountForm(
         initial={
             "picture_src": "/media/%s" % venueAccount.picture
         }
@@ -283,7 +283,7 @@ def create_venue_account(request):
         if request.POST["picture_src"]:
             venueAccount.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
 
-        form = VenueAccountForm(instance=venueAccount, data=request.POST)
+        form = NewVenueAccountForm(instance=venueAccount, data=request.POST)
 
         if form.is_valid():
             venue = save_venue(request)
@@ -366,7 +366,6 @@ def profile_detail(request, username, template_name=userena_settings.USERENA_PRO
         extra_context = dict()
     extra_context['profile'] = user.get_profile()
     extra_context['hide_email'] = userena_settings.USERENA_HIDE_EMAIL
-    extra_context['new_venue_account_form'] = NewVenueAccountForm()
     extra_context['location'] = request.location
 
     return ExtraContextTemplateView.as_view(

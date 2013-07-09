@@ -85,12 +85,6 @@ class VenueAccountForm(forms.ModelForm):
         required=False
     )
 
-    place = JSONCharField(
-        widget=GeoCompleteWidget(),
-        required=False
-    )
-
-    location = forms.Field(widget=LocationWidget(), required=False)
 
     class Meta:
         model = VenueAccount
@@ -106,6 +100,22 @@ class VenueAccountForm(forms.ModelForm):
             'cropping',
             'types'
         )
+
+
+class NewVenueAccountForm(VenueAccountForm):
+    place = JSONCharField(
+        widget=GeoCompleteWidget(),
+        required=False
+    )
+
+    location = forms.Field(widget=LocationWidget(), required=False)
+    venue_name = forms.CharField(required=False)
+    street = forms.CharField(required=False)
+    city = forms.CharField(
+        widget=selectable.AutoCompleteSelectWidget(CityLookup, allow_new=True),
+        required=False
+    )
+    city_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
 
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -129,17 +139,17 @@ class AccountForm(EditProfileForm):
         ]
 
 
-class NewVenueAccountForm(forms.Form):
-    place = JSONCharField(
-        widget=GeoCompleteWidget(),
-        required=False
-    )
+# class NewVenueAccountForm(forms.Form):
+#     place = JSONCharField(
+#         widget=GeoCompleteWidget(),
+#         required=False
+#     )
 
-    location = forms.Field(widget=LocationWidget(), required=False)
-    venue_name = forms.CharField(required=False)
-    street = forms.CharField(required=False)
-    city = forms.CharField(
-        widget=selectable.AutoCompleteSelectWidget(CityLookup, allow_new=True),
-        required=False
-    )
-    city_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
+#     location = forms.Field(widget=LocationWidget(), required=False)
+#     venue_name = forms.CharField(required=False)
+#     street = forms.CharField(required=False)
+#     city = forms.CharField(
+#         widget=selectable.AutoCompleteSelectWidget(CityLookup, allow_new=True),
+#         required=False
+#     )
+#     city_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
