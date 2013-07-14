@@ -16,5 +16,17 @@ urlpatterns = patterns('',
     url(r'^payment/(?P<order_id>\d+)/$',
         views.payment,
         name='advertising_payment'
+    ),
+    url(r'^campaign/(?P<campaign_id>\d+)/edit/$',
+        views.edit_campaign,
+        name='advertising_edit_campaign'
+    ),
+    url(r'^campaign/(?P<campaign_id>\d+)/remove/$',
+        views.remove_campaign,
+        name='advertising_remove_campaign'
+    ),
+    url(r'^campaign/(?P<campaign_id>\d+)/deposit/$',
+        views.deposit_funds_for_campaign,
+        name='advertising_deposit_funds_for_campaign'
     )
 )

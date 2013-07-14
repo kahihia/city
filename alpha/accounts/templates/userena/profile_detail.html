@@ -80,7 +80,7 @@
                             <a href="{% url 'account_orders' %}">View my order history</a>
                         </li>
                         <li>
-                            <a href="{% url 'advertising_setup' %}">Deposit funds for advertising</a>
+                            <a href="{% url 'advertising_setup' %}">Create New Ad</a>
                         </li>
                     </ul>
                 </div>
@@ -100,32 +100,27 @@
                 <hr />
                 <span>
                     Members since {{ profile.user.date_joined|date:"F d, Y" }}
-                </span>
-
-                {% if profile.venue %}
-                    <h2 class="block-header"> 
-                        My Venues
-                    </h2>
-                    {% venue_accounts %}                    
-                {% endif %}
+                </span>                
+                
+                {% venue_accounts %}
             </div>
             <div class="clr"></div>
         </div>
     </div>
 
     <div class="tabs-container">
-        <ul class="tabs" data-page-id="account">
-            <li class="current" data-tab-id="reminder"><span>Reminder</span></li>
-            <li data-tab-id="in-the-loop"><span>In the Loop</span></li>
-            <li data-tab-id="advertising-stats"><span>Advertising Stats</span></li>
+        <ul class="tabs" data-page-id="profile-detail">
+            <li data-tab-id="reminder" {% if active_tab == "reminder" %}class="current"{% endif %}><span>Reminder</span></li>
+            <li data-tab-id="in-the-loop" {% if active_tab == "in-the-loop" %}class="current"{% endif %}><span>In the Loop</span></li>
+            <li data-tab-id="advertising-stats" {% if active_tab == "advertising-stats" %}class="current"{% endif %}><span>Advertising Stats</span></li>
         </ul>
-        <div class="box visible">
+        <div class="box{% if active_tab == "reminder" %} visible{% endif %}">
             {% include 'accounts/_reminder_events_table.html' %}                            
         </div>
-        <div class="box">
+        <div class="box{% if active_tab == "in-the-loop" %} visible{% endif %}">
             {% include 'accounts/_in_the_loop_events_table.html' %}
         </div>
-        <div class="box advertising-stats">
+        <div class="box{% if active_tab == "advertising-stats" %} visible{% endif %} advertising-stats">
             {% include 'advertising/stats/list.html' %}
         </div>
     </div>

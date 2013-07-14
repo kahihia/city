@@ -3,7 +3,7 @@
 from models import Account, VenueAccount
 from event.models import Event, FeaturedEvent, Venue
 from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.contrib import messages
@@ -29,6 +29,7 @@ from cities.models import City, Country
 from django.db.models import Q
 from event.utils import find_nearest_city
 from advertising.models import AdvertisingOrder
+from accounts.forms import AccountForm
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
 
@@ -364,14 +365,19 @@ def profile_detail(request, username, template_name=userena_settings.USERENA_PRO
         return HttpResponseForbidden(_("You don't have permission to view this profile."))
     if not extra_context:
         extra_context = dict()
+    
     extra_context['profile'] = user.get_profile()
     extra_context['hide_email'] = userena_settings.USERENA_HIDE_EMAIL
-    extra_context['location'] = request.location
+    extra_context['location'] = request.user_location["location"]
+
+    tabs_page = "profile-detail"
+    active_tab = request.session.get(tabs_page, "reminder")
+    extra_context['active_tab'] = active_tab
 
     return ExtraContextTemplateView.as_view(
         template_name=template_name,
         extra_context=extra_context
-    )(request)
+    )(request)    
 
 
 def orders(request):
@@ -394,4 +400,89 @@ def set_context(request, context="root"):
         request.session['venue_account_id'] = venue_account.id
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+
+
+from userena.decorators import secure_required
+from guardian.decorators import permission_required_or_403
+
+
+@secure_required
+@permission_required_or_403('change_profile', (get_profile_model(), 'user__username', 'username'))
+def profile_edit(request, username, edit_profile_form=AccountForm,
+                 template_name='userena/profile_form.html', success_url=None, why_message=None, 
+                 extra_context=None, **kwargs):
+    """
+    Edit profile.
+
+    Edits a profile selected by the supplied username. First checks
+    permissions if the user is allowed to edit this profile, if denied will
+    show a 404. When the profile is successfully edited will redirect to
+    ``success_url``.
+
+    :param username:
+        Username of the user which profile should be edited.
+
+    :param edit_profile_form:
+
+        Form that is used to edit the profile. The :func:`EditProfileForm.save`
+        method of this form will be called when the form
+        :func:`EditProfileForm.is_valid`.  Defaults to :class:`EditProfileForm`
+        from userena.
+
+    :param template_name:
+        String of the template that is used to render this view. Defaults to
+        ``userena/edit_profile_form.html``.
+
+    :param success_url:
+        Named URL which will be passed on to a django ``reverse`` function after
+        the form is successfully saved. Defaults to the ``userena_detail`` url.
+
+    :param extra_context:
+        Dictionary containing variables that are passed on to the
+        ``template_name`` template.  ``form`` key will always be the form used
+        to edit the profile, and the ``profile`` key is always the edited
+        profile.
+
+    **Context**
+
+    ``form``
+        Form that is used to alter the profile.
+
+    ``profile``
+        Instance of the ``Profile`` that is edited.
+
+    """
+    user = get_object_or_404(get_user_model(),
+                             username__iexact=username)
+
+    profile = user.get_profile()
+
+    user_initial = {'first_name': user.first_name,
+                    'last_name': user.last_name}
+
+    form = edit_profile_form(instance=profile, initial=user_initial)
+
+    if request.method == 'POST':
+        form = edit_profile_form(request.POST, request.FILES, instance=profile,
+                                 initial=user_initial)
+
+        if form.is_valid():
+            profile = form.save()
+
+            if userena_settings.USERENA_USE_MESSAGES:
+                messages.success(request, _('Your profile has been updated.'),
+                                 fail_silently=True)
+
+            if success_url: redirect_to = success_url
+            else: redirect_to = reverse('userena_profile_detail', kwargs={'username': username})
+            return redirect(redirect_to)
+
+    if not extra_context: extra_context = dict()
+    extra_context['form'] = form
+    extra_context['profile'] = profile
+    extra_context['why_message'] = why_message
+
+
+    return ExtraContextTemplateView.as_view(template_name=template_name,
+                                            extra_context=extra_context)(request)    
 

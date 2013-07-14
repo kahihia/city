@@ -4,7 +4,7 @@ import re
 import string
 import nltk
 from accounts.models import VenueType
-from django.db.models import Q
+from django.db.models import Q, Count
 from cities.models import Region, City
 
 
@@ -67,7 +67,13 @@ class TimeFilter(Filter):
 
 class TagsFilter(Filter):
     def filter(self, qs, tags):
-        return qs.filter(tagged_items__tag__name__in=tags)
+        return qs.filter( 
+            tagged_items__tag__name__in=tags 
+        ).annotate(
+            repeat_count=Count('id') 
+        ).filter( 
+            repeat_count=len(tags) 
+        )
 
     def url_query(self, querydict):
         tags = querydict["tag"]

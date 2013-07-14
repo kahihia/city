@@ -2,6 +2,10 @@
     font-size: 14px;
 }
 
+.advertising-setup .tabs-container {
+    margin-bottom: 0;
+}
+
 .advertising-setup .content {
     padding-left: 22px;
 }
@@ -30,24 +34,53 @@ body .hintbox {
     margin-right: 10px;
 }
 
+.advertising-types {
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.advertising-types table {
+    border: 1px solid #d3d3d3;
+    background: #ddd;
+    width: 100%;
+}
+
+.advertising-types table .ad-type-col {
+    background: #acacac;
+}
+
+.advertising-types table .empty-tr td {
+    height: 15px;
+}
+
 .advertising-types th {
-    color: #022e52;
-    vertical-align: top;
+    color: #000;
+    vertical-align: middle;
+    border-bottom: 1px solid #9f9f9f;
+    height: 40px;
+    text-align: center;
+    padding: 0 10px;
 }
 
 .advertising-types th .balloon {
     position: relative;
     display: inline-block;
-    top: -3px;
+    top: 0px;
 }
 
 .advertising-types td {
-    vertical-align: top;
+    vertical-align: middle;
+    text-align: center;
+    height: 25px;
 }
 
-.advertising-types td.center {
-    text-align: center;
-    padding-right: 32px;
+.advertising-types td.ad-type-description-col {
+    text-align: left;
+    padding-left: 20px;
+}
+
+.advertising-types td.ad-type-description-col .checkbox label {
+    margin-right: 10px;
 }
 
 .advertising-uploads {
@@ -78,10 +111,8 @@ body .hintbox {
 
 .pay-now-widget {
     margin-top: 5px;  
-    padding-left: 15px;
-    padding-top: 15px;
     width: 650px;
-    height: 110px;
+    height: 125px;
     border: 1px solid #d3d3d3;
     border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -99,8 +130,32 @@ body .hintbox {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fafafa', endColorstr='#eaeaea',GradientType=0 ); /* IE6-8 */
 }
 
+.pay-now-widget .info {
+    float: left;
+    margin-top:  15px;
+    margin-left: 15px;
+    width: 365px;
+    color: #000;
+    font-size: 16px;    
+    
+}
+
+.pay-now-widget .info table.taxes {
+    width: 250px;
+    font-weight: bold;
+}
+
+.pay-now-widget .info table.taxes .total-price-row {
+    color: #9c1a00;
+}
+
+.pay-now-widget .choose-payment-system {
+    float: left;
+}
+
+
 .pay-now-widget .budget table {
-    width: 270px;
+    width: 300px;
 }
 
 .pay-now-widget .budget table td {
@@ -117,8 +172,6 @@ body .hintbox {
 
 .pay-now-widget .choose-payment-system td {
     vertical-align: middle;
-    text-align: center;  
-    width: 25%;  
 }
 
 .pay-now-widget .choose-payment-system td label {
@@ -137,4 +190,8 @@ body .hintbox {
 .pay-now-footer {
     margin-left: 265px;    
     margin-bottom: 30px;
+}
+
+.advertising-deposit-funds .pay-now-header {
+    margin-left: 375px;
 }

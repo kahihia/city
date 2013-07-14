@@ -52,7 +52,7 @@ ul.tagit input[type="text"] {
 
 
 
-ul#searchTags {
+ul.searchTags {
     position: relative;
     padding-left: 4px;
     padding-top: 4px;
@@ -68,7 +68,7 @@ ul#searchTags {
     margin-top: 5px;
 }
 
-ul#searchTags .search-button {
+ul.searchTags .search-button {
     position: absolute;
     top: 2px;
     right: 2px;
@@ -77,7 +77,7 @@ ul#searchTags .search-button {
     background: url("/static/images/searchpad/search-button.png") no-repeat;
 }
 
-ul#searchTags li {
+ul.searchTags li.tagit-choice {
     position: relative;
     display: inline-block;
     list-style: none;
@@ -102,15 +102,15 @@ ul#searchTags li {
     font-weight: normal;
 }
 
-ul#searchTags .ui-effects-wrapper {
+ul.searchTags .ui-effects-wrapper {
     display: inline-block;
 }
 
-ul#searchTags li span.tagit-label {    
+ul.searchTags li span.tagit-label {    
     color: #454545;
 }
 
-ul#searchTags li a.tagit-close {
+ul.searchTags li a.tagit-close {
     position: absolute;
     text-align: center;
     cursor: pointer;
@@ -125,13 +125,13 @@ ul#searchTags li a.tagit-close {
     border-radius: 15px;
 }
 
-ul#searchTags li a.tagit-close:hover {
+ul.searchTags li a.tagit-close:hover {
     
 }
 
-/*ul#searchTags li a.tagit-close .text-icon,
-ul#searchTags li a.tagit-close .ui-icon-close,*/
-ul#searchTags li.tagit-new {
+/*.l#searchTags li a.tagit-close .text-icon,
+ul.searchTags li a.tagit-close .ui-icon-close,*/
+ul.searchTags li.tagit-new {
     display:none;
 }
 

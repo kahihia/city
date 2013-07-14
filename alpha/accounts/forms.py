@@ -12,6 +12,7 @@ from event.forms import JSONCharField
 from gmapi.forms.widgets import LocationWidget
 import selectable.forms as selectable
 from event.lookups import CityLookup
+from accounts.lookups import RegionLookup
 from cities.models import Region
 
 
@@ -131,11 +132,18 @@ class NewVenueAccountForm(VenueAccountForm):
 
 
 class AccountForm(EditProfileForm):
+    native_region = selectable.AutoCompleteSelectField(
+        lookup_class=RegionLookup,
+        required=False
+    )    
+
     class Meta:
         model = Account
         fields = [
             'mugshot',
-            'date_of_birth'
+            'date_of_birth',
+            'native_region',
+            'not_from_canada'
         ]
 
 

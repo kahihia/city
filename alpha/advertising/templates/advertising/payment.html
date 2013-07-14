@@ -31,7 +31,7 @@
                 
                 {% for advertising in order.campaign.advertising_set.all %}
                     <p>
-                        <a href="/media/{{ advertising.image }}" class="advertising-image">
+                        <a href="/media/{{ advertising.image }}" class="advertising-image" target="_blank">
                             <!-- Advertising preview -->
                             View {{ advertising.ad_type }}
                         </a>
@@ -53,7 +53,8 @@
             <div>
                 <form action="{% url 'mamona-process-order' %}" method="POST">
                     <p>
-                        Budget: {{ order.budget }}
+                        Budget: {{ order.budget }}<br />
+                        Total price: {{ order.total_price }}
                     </p>
 
                     {% csrf_token %}

@@ -38,7 +38,12 @@
     <link href="{{STATIC_URL}}styles/browse/search_pad.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/browse/search_tags.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/browse/event_details.css" rel="stylesheet" type="text/css" />
+    <link href="{{ STATIC_URL }}js/trip/trip.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="{{ STATIC_URL }}styles/location-debug-panel.css" type="text/css" rel="stylesheet" media="all" />
 
+    <script src="{{STATIC_URL}}js/location-debug-panel.js" type="text/javascript"></script>
+
+    <script src="{{STATIC_URL}}js/trip/trip.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/event-actions.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/searchpad-popup.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/tagit.js" type="text/javascript"></script>    
@@ -47,6 +52,8 @@
     <script src="{{STATIC_URL}}js/searchpad/ajax-popup.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/event-actions.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/jump-to-date.js" type="text/javascript"></script>
+
+
 
     <!-- end -->
 
@@ -59,6 +66,34 @@
     {% block userena_head %}{% endblock %}
 </head>
 <body {% block body_attributes %}class="modern"{% endblock %}>
+<!--<div class="location-debug-panel">
+    <table>
+        <tr>
+            <td>ip</td>
+            <td>{{ ip }}</td>
+        </tr>
+        <tr>
+            <td>(latitude, longtitude)</td>
+            <td>{{ lat_lon }}</td>
+            <td>
+                <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ lat_lon }}&zoom=10&size=600x300&sensor=false">
+
+            </td>
+        </tr>
+        <tr>
+            <td>IP Info</td>
+            <td>{{ ip_info }}</td>
+        </tr>        
+        <tr>
+            <td>user_location_id</td>
+            <td>{{ user_location_id }}</td>
+        </tr>
+        <tr>
+            <td>user_location_name</td>
+            <td>{{ user_location_name }}</td>
+        </tr>
+    </table>
+</div>-->    
 {% if messages %}
     <ul class="messages">
         {% for message in messages %}

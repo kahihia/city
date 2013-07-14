@@ -50,7 +50,9 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
                                 related_name='my_profile')
     # here will be location, site, reminder settings, loop tags, order
 
-    venue = models.ForeignKey('event.Venue', blank=True, null=True)
+    native_region = models.ForeignKey(Region, blank=True, null=True, related_name="native_for_accounts")
+    not_from_canada = models.BooleanField(default=False)
+
 
     website = models.URLField(blank=True, null=True, default='')
 
@@ -103,6 +105,12 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
 
     def ads(self):
         return Advertising.objects.filter(campaign__account__id=self.id)
+
+    def taxes(self):
+        if self.native_region:
+            return AccountTax.objects.filter(regions__id=self.native_region.id)
+        else:
+            return []
 
 
 def create_facebook_profile(sender, instance, created, **kwargs):
@@ -290,3 +298,16 @@ class VenueAccount(models.Model):
             except ObjectDoesNotExist:
                 return potential
             suffix = suffix + 1
+
+
+class AccountTax(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    regions = models.ManyToManyField(Region)
+    tax = models.DecimalField(max_digits=10, decimal_places=4)
+
+    def __unicode__(self):
+        return "%s(%s) %s" % (self.name, self.tax, self.regions.all())
+
+    def pretty_tax(self):
+        return "%g" % (self.tax*100)

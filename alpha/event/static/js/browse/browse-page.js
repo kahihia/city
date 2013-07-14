@@ -4,7 +4,7 @@
     var BrowsePage = function(){
         this.initJumpToDate();
         $(".entry-info").auction_popup();
-        $("#searchTags").tagit({
+        $(".browse.searchTags").tagit({
             afterTagRemoved: function(e, ui){
                 window.location = $(ui.tag).data("remove-url");
             }

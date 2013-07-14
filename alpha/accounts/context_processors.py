@@ -17,3 +17,16 @@ def user_context(request):
         "current_venue_account": current_venue_account,
         "profile": profile
     }
+
+
+def taxes_context(request):
+    account_taxes = []
+
+    if request.user.id:
+        account = Account.objects.get(user_id=request.user.id)
+        if not account.not_from_canada:
+            account_taxes = account.taxes
+
+    return {
+        "account_taxes": account_taxes
+    }

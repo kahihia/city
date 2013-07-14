@@ -10,7 +10,7 @@
 {% endblock %} 
 
 {% block head %}
-    <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />    
+    <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/advertising-setup.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
@@ -22,9 +22,17 @@
 {% block page %}
     <div class="primary-content advertising-setup">
         <h1>
-            Advertising - Setup
+            {{ campaign.name }}({{ campaign.website }})
         </h1>
-        <div class="content account-options-wrapper">            
+
+        <div class="tabs-container">
+            <ul class="tabs right-tabs">
+                <li class="current"><a href="{% url 'advertising_edit_campaign' campaign.id %}"><span>Edit</span></a></li>
+                <li><a href="{% url 'advertising_deposit_funds_for_campaign' campaign.id %}">Deposit Funds</a></li>
+                <li><a href="{% url 'advertising_remove_campaign' campaign.id %}" class="danger-action" data-confirm-message="Are you sure? All ads and statistics will be lost">Remove</a></li>                
+            </ul>
+        </div>
+        <div class="content box visible">            
             <div class="main-content account-options">
                 {%if form.errors %}
                     <div class="errors" style="border:1px solid RED;border-radius:4px;">
@@ -43,17 +51,12 @@
                                 {% for error in form.website.errors %}
                                     <span class="error">{{ error }}</span>
                                 {% endfor %}
-                            </li>
-                            <li id="all-info">
-                                {% for error in form.order_budget.errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
+                            </li>                            
                         </ul>
                     </div>
                     
                 {% endif %}
-                <form  enctype="multipart/form-data" method="post" name="advertising-setup" >
+                <form  enctype="multipart/form-data" method="post" name="advertising-campaign-edit" >
                     {% csrf_token %}
                     <div class="campaign-name">
                         Name of Campaign                        
@@ -66,11 +69,7 @@
                         {{ form.website }}
                     </div>
                     
-                    Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner, etc.
-                    
-                    <!--a href="javascript:void;" class="balloon">
-                        <div class="buttonq"></div>
-                    </a-->
+                    Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner, etc.                    
                     <div class="advertising-types">
                         <table cellspacing="0" cellpadding="0">
                             <tr>
@@ -199,14 +198,19 @@
 
                     <div class="advertising-uploads">
                         <table>
-                        {% for advertising_type in advertising_types %}                        
-                            <tr data-ad-type="{{ advertising_type.id }}"  {% if advertising_type.id in chosen_advertising_types %}class="chosen"{% endif %}>
-                                <td>Upload {{advertising_type}}</td>
+                        {% for advertising_type in advertising_types %}
+                            <tr data-ad-type="{{ advertising_type.id }}" {% if advertising_type.id in chosen_advertising_types %}class="chosen"{% endif %}>
+                                <td>Upload {{advertising_type}}</td>                                
                                 <td>
                                     <input type="file" name="advertising_image.{{advertising_type.id}}">
                                 </td>
                                 <td>
-                                    
+                                    {% if advertising_type.id in advertising_images %}
+                                        <a href="/media/{{ advertising_images|keyvalue:advertising_type.id }}" class="advertising-image" target="_blank">
+                                            <!-- Advertising preview -->
+                                            view actual ad
+                                        </a>
+                                    {% endif %}                                    
                                 </td>
                             </tr>
                         {% endfor %}
@@ -237,114 +241,7 @@
                         <div class="clr"></div>
                     </div>
 
-                    <div class="pay-now-header">
-                        Pay Now With
-                    </div>
-                    <div class="pay-now-widget">                        
-                        <div class="info">
-                            <div class="budget">
-                                <table>
-                                    <tr>
-                                        <td>Budget(CAD):</td>
-                                        <td>
-                                            <input type="text" id="id_budget" name="order_budget" value="0.0">
-
-                                            <input type="hidden" name="order_budget_currency" value="CAD">
-                                        </td>
-                                        <td>
-                                            <a href="javascript:void;" class="balloon">
-                                                <div class="buttonq"></div>
-                                            </a>
-                                            <div class="balloon-content">
-                                                <h3>
-                                                    Help - Advertising Campaign
-                                                    <i>[Budget]:</i>
-                                                </h3>
-                                                <p>
-                                                    Budget for campaign
-                                                </p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <table class="taxes">
-                                {% if account_taxes %}                                
-                                    {% for tax in account_taxes %}
-                                        <tr class="tax-row">
-                                            <td>
-                                                <input type="hidden" value="{{ tax.tax }}" class="tax-input">
-                                                {{ tax.name }} ({{ tax.pretty_tax }}%):
-                                            </td>
-                                            <td>
-                                                C$<span class="tax-price">
-                                                    0
-                                                </span>                                                
-                                            </td>
-                                        </tr>                                        
-                                    {% endfor %}                                
-                                {% endif %}
-                                <tr class="total-price-row">
-                                    <td>
-                                        Total:
-                                    </td>
-                                    <td>
-                                        C$<span class="total-price-output">
-                                            0
-                                        </span>                                        
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                        </div>
-                        <div class="choose-payment-system">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <input id="payment_paypal_id" type="radio" name="payment_system" value="paypal" checked="checked" >
-                                            <label for="payment_paypal_id"></label>
-                                            <label for="payment_paypal_id">
-                                                <img src="{{ STATIC_URL }}/images/featured/paypal.png"/>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox disabled">
-                                            <input id="payment_visa_id" type="radio" name="payment_system" value="visa" disabled>
-                                            <label for="payment_visa_id"></label>
-                                            <label for="payment_visa_id">
-                                                <img src="{{ STATIC_URL }}/images/featured/visa.png"/>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="checkbox disabled">
-                                            <input id="payment_email_money_id" type="radio" name="payment_system" value="email_money_transfer" disabled>
-                                            <label for="payment_email_money_id"></label>
-                                            <label for="payment_email_money_id">
-                                                <img src="{{ STATIC_URL }}/images/featured/email_money_transfer.png"/>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox disabled">
-                                            <input id="payment_master_card_id" type="radio" name="payment_system" value="master_card" disabled>
-                                            <label for="payment_master_card_id"></label>
-                                            <label for="payment_master_card_id">
-                                                <img src="{{ STATIC_URL }}/images/featured/master_card.png"/>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="pay-now-footer">
-                        <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
-                    </div>
+                    <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
                 </form>
             </div>                
         </div>

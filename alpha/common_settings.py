@@ -98,7 +98,9 @@ TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.request',
     'event.context_processors.user_location',
     'event.context_processors.top5_tags',
+    # 'event.context_processors.location_debug_context_processor',
     'accounts.context_processors.user_context',
+    'accounts.context_processors.taxes_context',
     'django_facebook.context_processors.facebook',
 )
 
@@ -315,3 +317,5 @@ MAMONA_BACKENDS_SETTINGS = {
         'email': 'sellet@cityfusion.ca',
     }
 }
+
+IPADRESSLAB_KEY = "SAK44B55F864BQ627A4Z"

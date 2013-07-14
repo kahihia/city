@@ -97,10 +97,9 @@
             </td>
             <td class="action" data-stat-key="remaining">
                 {{ ad.campaign.ammount_remaining }}
-            </td>
-            
+            </td>            
             <td class="action">
-                <a href="">
+                <a href="{% url 'advertising_edit_campaign' ad.campaign.id %}">
                     Edit
                 </a>
             </td>

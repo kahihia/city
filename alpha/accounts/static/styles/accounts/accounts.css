@@ -642,3 +642,19 @@
 .account-options .cities-node ul.as-selections {
     width: 520px;
 }
+
+[name="foreign_region_0"] {
+    width: 140px;
+    margin-left: 2px;
+}
+
+.edit-profile-table td:first-child {
+    width: 100px;
+}
+
+.why-message {
+    margin-bottom: 15px;
+    font-style: italic;
+    font-size: 14px;
+    color: red;
+}

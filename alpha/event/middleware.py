@@ -1,33 +1,12 @@
-# -*- coding: utf-8 -*-
-from django.contrib.gis.geoip import GeoIP
-from django.contrib.gis.geos import Point
-from cities.models import City
+from cities.models import City, Region
+from ipaddresslab import IPAdressLab
 from event.utils import find_nearest_city
-from cities.models import Region
-
+from django.contrib.gis.geos import Point
 
 import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
-
-
-region_code_table_of_concordance = {
-    "AB": "CA.01",
-    "BC": "CA.02",
-    "MB": "CA.03",
-    "NB": "CA.04",
-    "NL": "CA.05",
-    "NT": "CA.13",
-    "NS": "CA.07",
-    "NU": "CA.14",
-    "ON": "CA.08",
-    "PE": "CA.09",
-    "QC": "CA.10",
-    "SK": "CA.11",
-    "YT": "CA.12",
-}
-
 
 def get_real_ip(request):
     """
@@ -40,81 +19,73 @@ def get_real_ip(request):
     try:
         # Trying to work with most common proxy headers
         real_ip = request.META['HTTP_X_FORWARDED_FOR']
-        return real_ip.split(',')[0]
+        real_ip = real_ip.split(',')[0]
     except KeyError:
-        return request.META['REMOTE_ADDR']
+        real_ip = request.META['REMOTE_ADDR']
     except Exception:
         # Unknown IP
-        return None
+        real_ip = "198.245.113.94"
 
+    if real_ip == "127.0.0.1":
+        real_ip = "198.245.113.94"
 
-def get_geoip_and_ip(request):
-    geoip = GeoIP()
-    ip = get_real_ip(request)
-
-    if ip == "127.0.0.1":
-        ip = "198.245.113.94"
-
-    return geoip, ip
-
-
-def get_lon_lat(request):
-    if not hasattr(request, '_cached_location'):
-        geoip, ip = get_geoip_and_ip(request)
-
-        request._cached_location = geoip.lon_lat(ip)
-
-    return request._cached_location
-
-
-def get_is_canada(request):
-    if not hasattr(request, '_cashed_is_canada'):
-        geoip, ip = get_geoip_and_ip(request)
-
-        region_data = geoip.region_by_addr(ip)
-
-        if region_data:
-            request._cashed_is_canada = (region_data["country_code"] == "CA")
-        else:
-            request._cashed_is_canada = False
-
-    return request._cashed_is_canada
-
-
-def get_user_location(request):
-    user_location_type = request.session.get('user_location_type', "city")
-    user_location_id = request.session.get('user_location_id', None)
-
-    if "location" in request.GET:
-        user_location_type, user_location_id = request.GET["location"].split("|")
-        user_location_id = int(user_location_id)
-
-        request.session['user_location_type'] = user_location_type
-        request.session['user_location_id'] = user_location_id
-
-    elif not user_location_id:
-
-        location = get_lon_lat(request)
-
-        user_location_type = "city"
-        try:
-            user_location_id = find_nearest_city(City.objects.all(), Point(location)).id
-        except:
-            logger.critical("Bad location %s fror point initialization " % location)
-            user_location_id = find_nearest_city(City.objects.all(), Point(-106, 54.4)).id
-
-    return {
-        "type": user_location_type,
-        "id": user_location_id
-    }
+    return real_ip
 
 
 class LocationMiddleware(object):
     def process_request(self, request):
-        request.location = get_lon_lat(request)
-        request.is_canada = get_is_canada(request)
+        user_location_data = request.session.get('user_location_data', False)
+        if not user_location_data:
+            user_location_data = {}
 
-        user_location = get_user_location(request)
+            ip = get_real_ip(request)
+            ipinfo = IPAdressLab(ip=ip)
+            location = ipinfo.lon_lat()
 
-        request.user_location_type = user_location["type"]
-        request.user_location_id = user_location["id"]
+            user_location_type = "city"
+            nearest_city = find_nearest_city(City.objects.all(), Point(location))
+            user_location_id = find_nearest_city(City.objects.all(), Point(location)).id
+
+            user_location_data["location"] = location
+            user_location_data["user_location_id"] = nearest_city.id
+
+            if nearest_city.region:
+                user_location_data["user_location_name"] = "%s, %s" % (nearest_city.name, nearest_city.region.name)
+            else:
+                user_location_data["user_location_name"] = nearest_city.name
+
+            user_location_data["user_location_type"] = "city"
+
+        if "location" in request.GET:
+            user_location_type, user_location_id = request.GET["location"].split("|")
+            user_location_id = int(user_location_id)
+
+            if user_location_type == "country":
+                user_location_name = "Canada"
+
+            if user_location_type == "region":
+                region = Region.objects.get(id=user_location_id)
+                user_location_name = "%s" % (region.name)
+
+            if user_location_type == "city":
+                city = City.objects.get(id=user_location_id)
+                if city.region:
+                    user_location_name = "%s, %s" % (city.name, city.region.name)
+                else:
+                    user_location_name = city.name
+
+            user_location_data["user_location_id"] = user_location_id
+            user_location_data["user_location_name"] = user_location_name
+            user_location_data["user_location_type"] = user_location_type
+
+        request.session["user_location_data"] = user_location_data
+
+        request.user_location = user_location_data            
+
+        # except:
+        #     logger.critical("def user_location(request): %s " % (request.user_location_id))
+        #     request.user_location = {
+        #         "user_location_id": 1,
+        #         "user_location_name": "Canada",
+        #         "location": (-106.6667, 52.1333)
+        #     }

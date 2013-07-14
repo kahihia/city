@@ -4,6 +4,7 @@ from djmoney.models.managers import money_manager
 from cities.models import Region
 from mamona import signals
 from mamona.models import build_payment_model
+from decimal import Decimal
 # from django.db.models import F
 
 
@@ -105,7 +106,9 @@ class Advertising(models.Model):
 
 class AdvertisingOrder(models.Model):
     budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+    total_price = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD') # with taxes
     campaign = models.ForeignKey(AdvertisingCampaign)
+    account = models.ForeignKey('accounts.Account')
 
     status = models.CharField(
             max_length=1,
@@ -132,12 +135,21 @@ def get_items(self):
         """
         items = []
         signals.order_items_query.send(sender=type(self), instance=self, items=items)
-        
-        return [{
-            "unit_price": self.amount,
+
+        items.append({
+            "unit_price": self.order.budget.amount,
             "name": "Advertising campaign %s" % self.order.campaign,
             "quantity": 1
-        }]
+        })
+
+        for tax in self.order.account.taxes():
+            items.append({
+                "unit_price": (self.order.budget.amount * tax.tax).quantize(Decimal("0.01")),
+                "name": tax.name,
+                "quantity": 1
+            })
+        
+        return items
 Payment.get_items = get_items
 
 import listeners

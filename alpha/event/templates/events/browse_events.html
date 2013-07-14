@@ -48,7 +48,7 @@
                     <div class="main-navigation-content-nav-wrapper">
                         {% include 'events/_searchpad_datetime_menu.html' %}
 
-                        <ul id="searchTags">
+                        <ul class="searchTags browse">
                             {% for tag in eventsFilter.search_tags %}
                                 <li data-remove-url="{{ tag.remove_url }}">
                                     {{ tag.name }}

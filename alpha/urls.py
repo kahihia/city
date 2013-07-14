@@ -40,6 +40,11 @@ urlpatterns = patterns(
        'accounts.views.profile_detail',
        name='account_profile_detail',
     ),
+
+    url(r'^accounts/(?P<username>[\.\w-]+)/edit-profile/(?P<why_message>[\.\w-]+)/(?P<success_url>.*)$',
+       'accounts.views.profile_edit',        
+       name='user_profile_required',
+    ),
 )
 
 if settings.DEBUG:

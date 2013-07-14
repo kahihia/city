@@ -66,13 +66,13 @@ def search_pad(request):
 
     if not "location" in params:
         params["location"] = "%s|%s" % (
-            request.user_location_type,
-            request.user_location_id
+            request.user_location["user_location_type"],
+            request.user_location["user_location_id"]
         )
 
     eventsFilter = EventFilter(params, queryset=events)
 
-    top5_tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.id, events)) \
+    top5_tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.id, eventsFilter.qs())) \
         .values('tag', 'tag__name') \
         .annotate(count=Count('id')) \
         .order_by('-count')[0:5]
@@ -105,13 +105,13 @@ def browse(request):
 
     if not "location" in params:
         params["location"] = "%s|%s" % (
-            request.user_location_type,
-            request.user_location_id
+            request.user_location["user_location_type"],
+            request.user_location["user_location_id"]
         )
 
     eventsFilter = EventFilter(params, queryset=events)
 
-    tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.id, events)) \
+    tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.id, eventsFilter.qs())) \
         .values('tag', 'tag__name') \
         .annotate(count=Count('id')) \
         .order_by('-count')
@@ -325,7 +325,7 @@ def create(request, form_class=None, success_url=None, template_name='events/cre
     return render_to_response(template_name, {
             'form': form,
             'posting': True,
-            'location': request.location,
+            'location': request.user_location["location"],
         }, context_instance=context)
 
 
@@ -482,27 +482,6 @@ def make_featured(request, authentication_key):
     return HttpResponseRedirect(reverse('private_venue_account', args=(request.current_venue_account.slug, )))
 
 
-def daily(start, end, weekday=False, day_delta=1):
-    """
-    Pre: start is a date
-         end is a date
-         weekday is a boolean, to pick if we are skipping saturdays and sundays
-         day_delta is an integer, to pick how many days to skip between events.
-    Returns: a list of days specified by the inputs
-    """
-    date_list = []
-    if weekday:
-        #TODO: implement week day recurrance
-        pass
-    else:
-        delta = datetime.timedelta(days=day_delta)
-        current = start + delta
-        while current <= end:
-            date_list.append(current)
-            current += delta
-    return date_list
-
-
 def ason(request):
     tag_list = []
     all_events = Event.events.all()
@@ -647,13 +626,13 @@ def location_autocomplete(request):
 
         search = request.GET.get("search", "")
 
-        if search:
+        if search: 
             kwargs["name__icontains"] = search
 
         cities = City.objects.filter(**kwargs)
 
-        if request.location:
-            cities = cities.distance(Point(request.location)).order_by('-distance')
+        if request.user_location:
+            cities = cities.distance(Point(request.user_location["location"])).order_by('-distance')
 
         cities = cities[0:5]
 

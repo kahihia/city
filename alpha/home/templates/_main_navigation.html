@@ -11,7 +11,7 @@
         <li class="addBorderRight"><a href="{% url 'event_browse' %}">Home</a></li>
         <li class="addBorderRight">
             <a href="javascript: void;" class="search-pad-popup-open-button">
-                Browse Events
+                Search Pad
             </a>
         </li>
         <li class="addBorderRight"><a href="{% url 'event_create' %}">Post Events</a></li>        
@@ -21,15 +21,10 @@
         <form action="/events/browse" method="get" name="sform">  
         <div class="location-label">Location : </div>
         <div class="location-selection-wrapper">
-            <div class="location-text-box"><input type="text" name="location" class="location" value="" placeholder="{{ user_location_name }}"></div>
+            <div class="location-text-box"><input type="text" name="location" class="location" value="" placeholder="{{ user_location.user_location_name }}"></div>
             <div class="search-lists">
                 <ul>
-                    <h3>Pick a Location</h3>
-                    <!--for location in nearest_locations
-                        <li>
-                            <a href="#" data-venue-id="{{ location.id }}">{{location.name}}, {{location.city.name_std}}</a>
-                        </li>
-                    endfor-->
+                    <h3>Pick a Location</h3>                    
                 </ul>
             </div>
         </div>

@@ -95,8 +95,9 @@ def advertising_group(context, dimensions, css_class="advertising-right"):
     return {
         'ads': ads_to_return,
         'css_class': css_class
-    } 
+    }
 
 
-
-
+@register.filter
+def getbykey(dict, key):    
+    return dict[key]

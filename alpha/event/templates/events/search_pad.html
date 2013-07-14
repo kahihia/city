@@ -9,7 +9,7 @@
         <div class="search-pad-content">
             {% include 'events/_searchpad_popup_datetime_menu.html' %}
 
-            <ul id="searchTags" class="tagit ui-widget ui-widget-content ui-corner-all">
+            <ul class="searchTags tagit ui-widget ui-widget-content ui-corner-all">
                 {% for tag in eventsFilter.search_tags %}
                     <li data-remove-url="{{ tag.remove_url }}" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable">
                         <span class="tagit-label">{{ tag.name }}</span>
