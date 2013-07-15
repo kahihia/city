@@ -431,7 +431,7 @@ def edit(request,
     return render_to_response(template_name, {
                                 'form': form,
                                 'event': event_obj,
-                                'location': request.location,
+                                'location': request.user_location["location"],
                             },
                             context_instance=context)
 

@@ -6,6 +6,7 @@ import nltk
 from accounts.models import VenueType
 from django.db.models import Q, Count
 from cities.models import Region, City
+import urllib
 
 
 class Filter(object):
@@ -67,19 +68,23 @@ class TimeFilter(Filter):
 
 class TagsFilter(Filter):
     def filter(self, qs, tags):
-        return qs.filter( 
+        # TODO: It is code with bad performance
+
+        event_ids = qs.values_list("id", flat=True)
+        event_ids_with_tags = Event.events.filter(id__in=list(event_ids)).filter( 
             tagged_items__tag__name__in=tags 
         ).annotate(
             repeat_count=Count('id') 
         ).filter( 
             repeat_count=len(tags) 
-        )
+        ).values_list("id", flat=True)
+        return qs.filter(id__in=list(event_ids_with_tags))
 
     def url_query(self, querydict):
         tags = querydict["tag"]
         if isinstance(tags, basestring):
             tags = querydict.getlist(self.name)
-        return "&".join(["tag=%s" % tag for tag in tags])
+        return "&".join(["tag=%s" % urllib.quote(tag) for tag in tags])
 
     def upgrade_value(self, querydict, value):
         return_value = []

@@ -48,6 +48,10 @@
     background: url("/static/images/event/loop.png") no-repeat;    
 }
 
+.content-wrapper .event-wrapper .event-photo .center-cropped.default:after {
+    display: none;
+}
+
 .content-wrapper .event-wrapper .event-photo footer {
     font-size:1.0em;
     color: #454545;

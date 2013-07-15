@@ -7,7 +7,7 @@
 {% paginate 6 venue_events %}
 <div class="account-entry-wrapper entry-wrapper">
 {% for event in venue_events %}    
-    <div class="entry-info {% if private %}with-actions{% endif %}">
+    <div class="entry-info {% if private %}with-actions{% endif %}{% if event.is_featured %} featured{% endif %}">
         <div class="entry-img-prev">
             {% if event.picture %}
                 <img src="{% cropped_thumbnail event "cropping" width=60 %}" height="60px" weight="60px">
@@ -90,12 +90,14 @@
                 <a href="{% url 'event_edit' event.authentication_key %}" class="edit-action">
                     Edit
                 </a>
-                <a href="{% url 'event_remove' event.authentication_key %}" class="delete-action">
+                <a href="{% url 'event_remove' event.authentication_key %}" class="delete-action danger-action">
                     Delete
                 </a>
-                <a href="{% url 'event_setup_featured' event.authentication_key %}" class="make-featured-action">
-                    Make Featured Event
-                </a>
+                {% if not event.is_featured %}
+                    <a href="{% url 'event_setup_featured' event.authentication_key %}" class="make-featured-action">
+                        Make Featured Event
+                    </a>
+                {% endif %}                
             </div>
         {% endif %}        
         <div class="clr"></div>

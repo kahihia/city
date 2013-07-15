@@ -77,18 +77,12 @@ class FutureManager(SearchManager):
             .filter(single_events__start_time__gte=datetime.datetime.now())\
             .prefetch_related('single_events')\
             .annotate(nearest_start_time=Min('single_events__start_time'))\
-            .annotate(nearest_end_time=Min('single_events__end_time'))
+            .annotate(nearest_end_time=Min('single_events__end_time'))\
+            .order_by("nearest_start_time")
 
         queryset.query.group_by = ["event_event.id"]
 
         return queryset
-
-
-        # .extra(
-        #     select={
-        #         "start_time": "SELECT MIN(start_time) FROM event_singleevent WHERE event_singleevent.event_id=event_event.id AND start_time>now()"
-        #     }
-        # )
 
 
 class FeaturedManager(FutureManager):
@@ -99,7 +93,6 @@ class FeaturedManager(FutureManager):
                 featuredevent__end_time__gte=datetime.datetime.now(),
                 featuredevent__active=True
             )
-
 
 class ArchivedManager(SearchManager):
     def get_query_set(self):
@@ -119,14 +112,7 @@ class Event(models.Model):
         verbose_name_plural = 'Events'
 
     def __unicode__(self):
-        return u'%s/// %s' % (self.owner, self.name)
-    #--------------------------------------------------------------
-    # Django set fields - these are set by django -----------------
-    #==============================================================
-    # id = models.AutoField(primary_key=True)
-
-    # The manager is the interface for making database query operations on all models
-    # example usage: Event.events.all() will provide a list of all event objects
+        return u'%s/// %s' % (self.owner, self.name)    
 
     events = SearchManager(
         fields=('name', 'description'),
@@ -153,36 +139,23 @@ class Event(models.Model):
         search_field='search_index',
         auto_update_search_field=True)
 
-    # timestamps
+
     created = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now())
     modified = models.DateTimeField(auto_now=True, default=datetime.datetime.now())
-    #--------------------------------------------------------------
-    # Save set fields - these are set in the save -----------------
-    #==============================================================
-    # private key
+
     authentication_key = models.CharField(max_length=40)
-    # public key is a 'slug' generated from the name of the event
     slug = models.SlugField(unique=True, max_length=255)
-    # event picture
+
     picture = ImageCropField(upload_to=picture_file_path, blank=True, null=True, help_text='The event picture')
     cropping = ImageRatioField('picture', '180x180', size_warning=True, allow_fullsize=True)
-    #--------------------------------------------------------------
-    # View set fields - these are set in the view -----------------
-    #==============================================================
-    # the user which that created the event, or no event
-    # only one user can own an event
+    
     owner = models.ForeignKey(User, blank=True, null=True)
-    # a recurrence is a set of events, combined with some user defined rule
-    #commented by Arlus
-    #recurrence = models.ForeignKey('Recurrence', null=True, blank=True)
-    #--------------------------------------------------------------
-    # User set fields - these are input by the user and validated -
-    #==============================================================
-    email = models.CharField('email address', max_length=100)  # the event must have an email
-    name = models.CharField('event title', max_length=250)  # the title of the event
-    description = models.TextField(blank=True)  # the longer description of the event
+    
+    email = models.CharField('email address', max_length=100)
+    name = models.CharField('event title', max_length=250)
+    description = models.TextField(blank=True)
     location = models.PointField()
-    venue = models.ForeignKey('Venue', blank=True, null=True)    # a specific venue associated with the event
+    venue = models.ForeignKey('Venue', blank=True, null=True)
     price = models.CharField('event price (optional)', max_length=40, blank=True, default='Free')
     website = models.URLField(blank=True, null=True, default='')
     tickets = models.CharField('tickets', max_length=250, blank=True, null=True)
@@ -193,9 +166,6 @@ class Event(models.Model):
 
     search_index = VectorField()
 
-    #-------------------------------------------------------------
-    # django-taggit field for tags--------------------------------
-    #=============================================================
     tags = TaggableManager()
 
     def save(self, *args, **kwargs):
@@ -233,15 +203,18 @@ class Event(models.Model):
     def next_day(self):
         return SingleEvent.objects.filter(start_time__gte=datetime.datetime.now(), event=self).order_by("start_time")[0]
 
+    def is_featured(self):
+        return self.featuredevent_set.filter(
+            start_time__lte=datetime.datetime.now(),
+            end_time__gte=datetime.datetime.now(),
+            active=True
+        ).count() > 0
+
+
 
 class FutureEventDayManager(models.Manager):
     def get_query_set(self):
         return super(FutureEventDayManager, self).get_query_set().filter(start_time__gte=datetime.datetime.now())
-
-
-# class FeaturedManager(FutureManager):
-#     def get_query_set(self):
-#         return super(FeaturedManager, self).get_query_set().filter(event__featured=True).order_by("event__featured_on")
 
 
 class SingleEvent(models.Model):
@@ -259,16 +232,6 @@ class SingleEvent(models.Model):
     objects = models.Manager()
 
     future_days = FutureEventDayManager()
-
-    # future_events = FutureManager(fields=('description'),
-    #     config='pg_catalog.english',
-    #     search_field='search_index',
-    #     auto_update_search_field=True)
-
-    # featured_events = FeaturedManager(fields=('description'),
-    #     config='pg_catalog.english',
-    #     search_field='search_index',
-    #     auto_update_search_field=True)
 
     event = models.ForeignKey(Event, blank=False, null=False, related_name='single_events')
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
@@ -388,7 +351,6 @@ def audit_event_catch(instance=None, created=False, **kwargs):
                 map(lambda x: x[1], settings.ADMINS))
 
         msg.content_subtype = 'html'
-        #msg.send()
 
 
 models.signals.post_save.connect(audit_event_catch, sender=Event)
@@ -412,7 +374,7 @@ class FeaturedEvent(models.Model):
     venue_account = models.ForeignKey("accounts.VenueAccount", blank=True, null=True)
     start_time = models.DateTimeField('starting time')
     end_time = models.DateTimeField('ending time', auto_now=False, auto_now_add=False)
-    active = models.BooleanField(default=True)
+    active = models.BooleanField(default=False)
 
     views = models.IntegerField(default=0)
     clicks = models.IntegerField(default=0)

@@ -32,6 +32,10 @@
     vertical-align: top;
 }
 
+.entry-wrapper .entry-info.featured .entry-details-wrapper {
+    width: 400px;
+}
+
 .entry-wrapper .entry-info .entry-details-wrapper .title,
 .entry-wrapper .entry-info .entry-details-wrapper .entry-date,
 .entry-wrapper .entry-info .entry-details-wrapper .entry-description {
@@ -45,6 +49,13 @@
 .entry-wrapper .entry-info.with-actions .entry-details-wrapper .entry-date,
 .entry-wrapper .entry-info.with-actions .entry-details-wrapper .entry-description {
     width: 250px;
+}
+
+.entry-wrapper .entry-info.featured .entry-details-wrapper .title,
+.entry-wrapper .entry-info.featured .entry-details-wrapper .entry-date,
+.entry-wrapper .entry-info.featured .entry-details-wrapper .entry-description {
+    width: 380px;
+
 }
 
 .entry-wrapper .entry-info .auctions-details-wrapper .title,

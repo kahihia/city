@@ -1,6 +1,7 @@
 {% extends 'base-new.html' %}
 {% load date_formatting %}
 {% load cropping %}
+{% load query_filter %}
 {% load event_pictures %}
 {% load endless %}
 {% load advertising_tags %}
@@ -56,9 +57,7 @@
                             </div>​
                         </a>
                     {% else %}
-                        <div class="center-cropped" 
-                            style="background-image: url('{{STATIC_URL}}images/default-event.jpg');">
-                        </div>
+                        <div class="center-cropped default" style="background-image: url('{{STATIC_URL}}images/default-event.jpg');"></div>
                     {% endif %}
                     <footer>
                         Submitted by 
@@ -160,7 +159,7 @@
                 <p>{{ event_description|linebreaks }}</p>
                 <h4 class="tags">
                     {% for tag in event.tags.all %}
-                        <a href="{% url 'event_browse' %}?function=tags&tag={{ tag }}">
+                        <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">
                             {{ tag }}</a>{% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </h4>  
