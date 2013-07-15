@@ -64,5 +64,6 @@ def confirm_payment(request, payment_id, order_class):
 		payment = get_object_or_404(FeaturedEventPayment, id=payment_id)
 
 	formdata = payment.get_processor().get_confirmation_form(payment)
+	formdata["form"].fields['invoice'].initial = "%s-%d" % (order_class, payment.pk)
 	return render(request, 'mamona/confirm.html',
 			{'formdata': formdata, 'payment': payment})
