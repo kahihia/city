@@ -144,7 +144,7 @@
                             {% if event.website %}
                                 <tr>
                                     <td colspan="2">
-                                        <a href="{{ event.website }}" class="block-header accented view-site">
+                                        <a href="{{ event.website }}" class="block-header accented view-site" target="_blank">
                                             View Site
                                         </a>
                                     </td>                            
@@ -156,7 +156,7 @@
                         <div id="venue_map" class="map"></div>                        
                     {% endif %}
                 </div>
-                <p>{{ event_description|linebreaks }}</p>
+                <p>{{ event.description|linebreaks }}</p>
                 <h4 class="tags">
                     {% for tag in event.tags.all %}
                         <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">
