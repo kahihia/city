@@ -101,4 +101,4 @@ class LocationMiddleware(object):
 
 class SetupMiddleware(object):
     def process_request(self, request):
-        request.was_setuped = request.session.get('was_setup', False)
+        request.was_setup = request.session.get('was_setup', False)

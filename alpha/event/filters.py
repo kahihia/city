@@ -321,6 +321,7 @@ class LocationFilter(Filter):
             return self.filter_by_city(qs, location_id)
 
     def filter_by_country(self, qs, id):
+        import pdb; pdb.set_trace()
         return qs.filter(venue__country__id=id)
 
     def filter_by_region(self, qs, id):
