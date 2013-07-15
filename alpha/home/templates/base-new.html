@@ -82,15 +82,15 @@
 
             setTimeout(function(){
                 $(".suggest-city").on("click", function(){
-                    window.location = window.filters.setFilter("location", "city|"+$(this).data("suggest-city-id")).getURL();
-                    trip.stop();
                     $.ajax("/finish-setup");
+                    trip.stop();
+                    window.location = window.filters.setFilter("location", "city|"+$(this).data("suggest-city-id")).getURL();                    
                 });
 
                 $(".suggest-region").on("click", function(){
-                    window.location = window.filters.setFilter("location", "region|"+$(this).data("suggest-region-id")).getURL();
                     trip.stop();
                     $.ajax("/finish-setup");
+                    window.location = window.filters.setFilter("location", "region|"+$(this).data("suggest-region-id")).getURL();                    
                 });
 
                 $('.location-selection-wrapper').on("click", function(){

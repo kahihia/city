@@ -15,5 +15,4 @@ def channelfile(request):
 
 def finish_setup(request):
 	request.session['was_setup'] = True
-
-	return HttpResponse('OK')
+	return HttpResponse(request.session['was_setup'])
