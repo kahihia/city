@@ -61,7 +61,7 @@ class LocationMiddleware(object):
 
             user_location_data["user_location_type"] = "country"
             user_location_data["user_location_name"] = "Canada"
-            user_location_data["user_location_id"] = 251999
+            user_location_data["user_location_id"] = 6251999
 
         if "location" in request.GET:
             user_location_type, user_location_id = request.GET["location"].split("|")
