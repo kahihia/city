@@ -55,6 +55,13 @@ class LocationMiddleware(object):
                 user_location_data["user_location_name"] = nearest_city.name
 
             user_location_data["user_location_type"] = "city"
+            user_location_data["nearest_city"] = nearest_city
+            if nearest_city.region:
+                user_location_data["nearest_region"] = nearest_city.region
+
+            user_location_data["user_location_type"] = "country"
+            user_location_data["user_location_name"] = "Canada"
+            user_location_data["user_location_id"] = 251999
 
         if "location" in request.GET:
             user_location_type, user_location_id = request.GET["location"].split("|")
@@ -78,6 +85,8 @@ class LocationMiddleware(object):
             user_location_data["user_location_name"] = user_location_name
             user_location_data["user_location_type"] = user_location_type
 
+
+
         request.session["user_location_data"] = user_location_data
 
         request.user_location = user_location_data            
@@ -89,3 +98,7 @@ class LocationMiddleware(object):
         #         "user_location_name": "Canada",
         #         "location": (-106.6667, 52.1333)
         #     }
+
+class SetupMiddleware(object):
+    def process_request(self, request):
+        request.was_setuped = request.session.get('was_setup', False)

@@ -29,6 +29,10 @@ from django.db.models import Min, Max
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
 
+from mamona import signals
+from mamona.models import build_featured_event_payment_model
+from decimal import Decimal
+
 
 class SearchGeoDjangoManager(SearchManagerMixIn, models.GeoManager):
     pass
@@ -394,3 +398,54 @@ class FeaturedEvent(models.Model):
     def view(self):
         self.views = self.views + 1
         self.save()
+
+
+class FeaturedEventOrder(models.Model):
+    cost = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+    total_price = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD') # with taxes
+    featured_event = models.ForeignKey(FeaturedEvent)
+    account = models.ForeignKey('accounts.Account')
+
+    status = models.CharField(
+            max_length=1,
+            choices=(('s', 'success'), ('f', 'failure'), ('p', 'incomplete')),
+            blank=True,
+            default=''
+    )
+
+    def __unicode__(self):
+        return "Order to make %s featured from %s to %s" % (self.featured_event, self.featured_event.start_time.date(), self.featured_event.end_time.date())
+
+FeaturedEventPayment = build_featured_event_payment_model(FeaturedEventOrder, unique=True)
+
+def get_items(self):
+        """Retrieves item list using signal query. Listeners must fill
+        'items' list with at least one item. Each item is expected to be
+        a dictionary, containing at least 'name' element and optionally
+        'unit_price' and 'quantity' elements. If not present, 'unit_price'
+        and 'quantity' default to 0 and 1 respectively.
+
+        Listener is responsible for providing item list with sum of prices
+        consistient with Payment.amount. Otherwise the final amount may
+        differ and lead to unpredictable results, depending on the backend used.
+        """
+        items = []
+        signals.order_items_query.send(sender=type(self), instance=self, items=items)
+
+        items.append({
+            "unit_price": self.order.cost.amount,
+            "name": self.order,
+            "quantity": 1
+        })
+
+        for tax in self.order.account.taxes():
+            items.append({
+                "unit_price": (self.order.cost.amount * tax.tax).quantize(Decimal("0.01")),
+                "name": tax.name,
+                "quantity": 1
+            })
+        
+        return items
+FeaturedEventPayment.get_items = get_items
+
+import listeners

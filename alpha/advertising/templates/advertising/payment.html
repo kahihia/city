@@ -60,6 +60,7 @@
                     {% csrf_token %}
                     <input type="hidden" name="order_id" value="{{ order.pk }}" />
                     <input type="hidden" name="backend" value="paypal" />
+                    <input type="hidden" name="order_class" value="advertising" />
                     <input type="submit" class="submit standart button" value="Pay" />
                 </form>
             </div>

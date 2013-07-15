@@ -1,5 +1,5 @@
 from django.contrib import admin
-from advertising.models import AdvertisingType, Advertising, AdvertisingCampaign, AdvertisingOrder, Payment
+from advertising.models import AdvertisingType, Advertising, AdvertisingCampaign, AdvertisingOrder, AdvertisingPayment
 
 
 class AdvertisingTypeAdmin(admin.ModelAdmin):
@@ -14,4 +14,4 @@ admin.site.register(AdvertisingType, AdvertisingTypeAdmin)
 admin.site.register(Advertising, AdvertisingAdmin)
 admin.site.register(AdvertisingCampaign)
 admin.site.register(AdvertisingOrder)
-admin.site.register(Payment)
+admin.site.register(AdvertisingPayment)

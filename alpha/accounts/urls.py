@@ -67,5 +67,9 @@ urlpatterns = patterns('',
     url(r'^set-user-context/(?P<context>[-\w]+)/$',
         accounts.set_context,
         name="account_set_context"
+    ),
+    url(r'^user-context-profile/$',
+        accounts.redirect_to_active_user_context,
+        name="user_account_context_page"
     )
 )

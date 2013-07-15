@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 
 from django.conf import settings
 from django.http import Http404, HttpResponseRedirect, HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.contrib import messages
@@ -24,7 +24,7 @@ from event.filters import EventFilter
 
 from event import DEFAULT_FROM_EMAIL
 
-from event.models import Event, Venue, SingleEvent, Reminder, AuditEvent, FakeAuditEvent, FeaturedEvent
+from event.models import Event, Venue, SingleEvent, Reminder, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
 from accounts.models import VenueAccount
 from event.utils import find_nearest_city
 
@@ -35,6 +35,10 @@ from taggit.models import Tag, TaggedItem
 from ajaxuploader.views import AjaxFileUploader
 
 from accounts.models import Account
+
+from moneyed import Money, CAD
+from django.contrib.auth.decorators import login_required
+from accounts.decorators import native_region_required
 
 
 def start(request):
@@ -443,6 +447,8 @@ def remove(request, authentication_key):
     return HttpResponseRedirect(reverse('private_venue_account', args=(request.current_venue_account.slug, )))
 
 
+@login_required
+@native_region_required(why_message="native_region_required")
 def setup_featured(request, authentication_key):
     account = Account.objects.get(user_id=request.user.id)
     event_obj = Event.events.get(authentication_key__exact=authentication_key)
@@ -464,9 +470,24 @@ def setup_featured(request, authentication_key):
         form = SetupFeaturedForm(instance=featured_event, data=request.POST)
 
         if form.is_valid():
-            form.save()
-            # TODO: here will be redirect to payments
-            return HttpResponseRedirect(reverse('private_venue_account', args=(request.current_venue_account.slug, )))
+            featured_event = form.save()
+
+            cost = (featured_event.end_time-featured_event.start_time).days * Money(2, CAD)
+            total_price = cost
+
+            for tax in account.taxes():
+                total_price = total_price + (cost * tax.tax)
+
+            order = FeaturedEventOrder(
+                cost=cost,
+                total_price=total_price,
+                featured_event=featured_event,
+                account=account
+            )
+
+            order.save()
+
+            return HttpResponseRedirect(reverse('setup_featured_payment', args=(str(order.id),)))
 
     return render_to_response('events/setup_featured_event.html', {
             'form': form,
@@ -474,12 +495,14 @@ def setup_featured(request, authentication_key):
         }, context_instance=RequestContext(request))
 
 
-def make_featured(request, authentication_key):
-    event_obj = Event.events.get(authentication_key__exact=authentication_key)
-    event_obj.featured = True
-    event_obj.save()
+def payment(request, order_id):
+    order = get_object_or_404(FeaturedEventOrder, pk=order_id)
 
-    return HttpResponseRedirect(reverse('private_venue_account', args=(request.current_venue_account.slug, )))
+    # form = PaypalConfirmationForm()
+
+    return render_to_response('featured/payment.html', {
+        "order": order
+    }, context_instance=RequestContext(request))    
 
 
 def ason(request):

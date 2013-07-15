@@ -66,11 +66,7 @@
                         {{ form.website }}
                     </div>
                     
-                    Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner, etc.
-                    
-                    <!--a href="javascript:void;" class="balloon">
-                        <div class="buttonq"></div>
-                    </a-->
+                    Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner, etc.                    
                     <div class="advertising-types">
                         <table cellspacing="0" cellpadding="0">
                             <tr>
@@ -240,7 +236,7 @@
                     <div class="pay-now-header">
                         Pay Now With
                     </div>
-                    <div class="pay-now-widget">                        
+                    <div class="pay-now-widget">
                         <div class="info">
                             <div class="budget">
                                 <table>
@@ -269,7 +265,7 @@
                                 </table>
                             </div>
                             <table class="taxes">
-                                {% if account_taxes %}                                
+                                {% if account_taxes %}
                                     {% for tax in account_taxes %}
                                         <tr class="tax-row">
                                             <td>
@@ -279,10 +275,10 @@
                                             <td>
                                                 C$<span class="tax-price">
                                                     0
-                                                </span>                                                
+                                                </span>
                                             </td>
-                                        </tr>                                        
-                                    {% endfor %}                                
+                                        </tr>
+                                    {% endfor %}
                                 {% endif %}
                                 <tr class="total-price-row">
                                     <td>
@@ -291,7 +287,7 @@
                                     <td>
                                         C$<span class="total-price-output">
                                             0
-                                        </span>                                        
+                                        </span>
                                     </td>
                                 </tr>
                             </table>

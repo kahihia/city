@@ -7,8 +7,13 @@ def custom_404(request):
     return render(request,"404.html")
 
 def redirect(request):
-    return HttpResponseRedirect( reverse('home'))
+    return HttpResponseRedirect(reverse('home'))
 
 # for facebook connect
 def channelfile(request):
     return HttpResponse('''<script src="//connect.facebook.net/en_US/all.js"></script>''')
+
+def finish_setup(request):
+	request.session['was_setup'] = True
+
+	return HttpResponse('OK')

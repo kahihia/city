@@ -392,16 +392,6 @@ def orders(request):
         }, context_instance=RequestContext(request))
 
 
-def set_context(request, context="root"):
-    if context=="root":
-        request.session['venue_account_id'] = None
-    else:
-        venue_account = VenueAccount.objects.get(slug=context)
-        request.session['venue_account_id'] = venue_account.id
-
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
-
-
 from userena.decorators import secure_required
 from guardian.decorators import permission_required_or_403
 
@@ -484,5 +474,26 @@ def profile_edit(request, username, edit_profile_form=AccountForm,
 
 
     return ExtraContextTemplateView.as_view(template_name=template_name,
-                                            extra_context=extra_context)(request)    
+                                            extra_context=extra_context)(request)
 
+
+def set_context(request, context="root"):
+    if context=="root":
+        request.session['venue_account_id'] = None
+    else:
+        venue_account = VenueAccount.objects.get(slug=context)
+        request.session['venue_account_id'] = venue_account.id
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+
+
+def redirect_to_active_user_context(request):
+    venue_account_id = request.session.get('venue_account_id', None)
+
+    if venue_account_id:
+        venue_account = VenueAccount.objects.get(id=venue_account_id)
+        return HttpResponseRedirect(reverse('private_venue_account', args=(venue_account.slug, )))
+
+    else:
+        return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))    
+    

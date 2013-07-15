@@ -52,7 +52,56 @@
     <script src="{{STATIC_URL}}js/searchpad/ajax-popup.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/event-actions.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/jump-to-date.js" type="text/javascript"></script>
+    {% if not request.was_setup %}
+        <style>
+            .suggest-city, .suggest-region, .skip-setup {
+                color: #247cc3;
+                cursor: pointer;
+                text-decoration: underline;
+            }
 
+        </style>
+        <script type="text/javascript">
+            var nearest_city_id = {{ user_location.nearest_city.id }},
+                nearest_city_name = "{{ user_location.nearest_city.name }}";
+        {% if user_location.nearest_region %}
+            var nearest_region_id = {{ user_location.nearest_region.id }},
+                nearest_region_name = "{{ user_location.nearest_region.name }}";
+        {% endif %}
+
+        $(document).on("ready page:load", function(){
+            var trip = new Trip([
+                { 
+                    sel : $('.location'),
+                    content : 'Please, choose your city or region.<br/>Suggestions: <span class="suggest-city" data-suggest-city-id="{{ user_location.nearest_city.id }}">{{ user_location.nearest_city.name }}<span>{% if user_location.nearest_region %}, <span class="suggest-region" data-suggest-region-id="{{ user_location.nearest_region.id }}">{{ user_location.nearest_region.name }}<span>{% endif %}',
+                    delay: -1
+                }
+            ]);            
+
+            trip.start();
+
+            setTimeout(function(){
+                $(".suggest-city").on("click", function(){
+                    window.location = window.filters.setFilter("location", "city|"+$(this).data("suggest-city-id")).getURL();
+                    trip.stop();
+                    $.ajax("/finish-setup");
+                });
+
+                $(".suggest-region").on("click", function(){
+                    window.location = window.filters.setFilter("location", "region|"+$(this).data("suggest-region-id")).getURL();
+                    trip.stop();
+                    $.ajax("/finish-setup");
+                });
+
+                $('.location-selection-wrapper').on("click", function(){
+                    trip.stop();
+                    $.ajax("/finish-setup");
+                });
+
+            }, 50);
+        });
+        </script>
+    {% endif %}
 
 
     <!-- end -->

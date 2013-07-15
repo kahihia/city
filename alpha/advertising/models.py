@@ -120,7 +120,7 @@ class AdvertisingOrder(models.Model):
     def __unicode__(self):
         return "Order for %s" % self.campaign
 
-Payment = build_payment_model(AdvertisingOrder, unique=True)
+AdvertisingPayment = build_payment_model(AdvertisingOrder, unique=True)
 
 def get_items(self):
         """Retrieves item list using signal query. Listeners must fill
@@ -150,6 +150,6 @@ def get_items(self):
             })
         
         return items
-Payment.get_items = get_items
+AdvertisingPayment.get_items = get_items
 
 import listeners

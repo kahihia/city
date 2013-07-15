@@ -37,6 +37,8 @@
         this.start_date_input = start_date_input;
         this.end_date_input = end_date_input;
         this.days_to_display = days_to_display;
+
+        this.initTotalPriceCalculation();
     }
 
     FeaturedSetupPage.prototype = {
@@ -48,6 +50,7 @@
                 diff = diff + Math.floor((date2.getTime() - date1.getTime()) / 86400000); // ms per day
             }
             this.days_to_display.val(diff);
+            this.calculateTotalPrice();
         },
         calculate_end_date: function(){
             var start_date = this.start_date_input.datepicker('getDate'),
@@ -65,8 +68,55 @@
                     new Date(year, month, date+days_to_display)
                 )
             );
+        },
+        initTotalPriceCalculation: function(){
+            var that = this;
+            this.dayCost = $("#id_day_cost");
+            this.taxes = [];
+
+            this.taxRows = $(".tax-row");
+            _.forEach(this.taxRows, function(row){
+                that.taxes.push(
+                    new TaxWidget(row)
+                );
+            });
+
+            this.calculateTotalPrice();
+
+            this.days_to_display.keyup(this.calculateTotalPrice.bind(this));
+            this.days_to_display.on("change", this.calculateTotalPrice.bind(this));
+        },
+        calculateTotalPrice: function(){
+            var that = this,
+                cost = +this.days_to_display.val() * + this.dayCost.val(),
+                totalPrice = cost;
+
+            _.forEach(this.taxes, function(tax){
+                tax.calculatePrice(+cost);
+                totalPrice += +tax.price();
+            });
+
+            $(".total-price-output").html(totalPrice.toFixed(2));
+
+        }       
+    };
+
+    function TaxWidget(row){
+        this.taxInput = $(".tax-input", row);
+        this.taxPriceOutput = $(".tax-price", row);
+    }
+
+    TaxWidget.prototype = {
+        calculatePrice: function(price){            
+            this.taxPrice = this.tax() * price;
+            this.taxPriceOutput.html(this.taxPrice.toFixed(2));
+        },
+        tax: function(){
+            return +this.taxInput.val();
+        },
+        price: function(){
+            return this.taxPrice.toFixed(2);
         }
-        
     };
 
     $(document).on("ready page:load", function(){

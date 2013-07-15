@@ -25,10 +25,6 @@ urlpatterns = patterns('',
                             event.setup_featured,
                             name='event_setup_featured'
                            ),
-                       url(r'^make_featured/(?P<authentication_key>\w+)/$',
-                            event.make_featured,
-                            name='event_make_featured'
-                           ),
                        url(r'^view/(?P<slug>[^/]+)/$',
                            event.view,
                            name='event_view'
@@ -54,6 +50,9 @@ urlpatterns = patterns('',
                            event.create,
                            name='event_create'
                            ),
+
+
+
                        url(r'^start$', event.start, name="start"),
                        url(r'^ajax-upload$', event.import_uploader, name="my_ajax_upload"),
                        url(r'^ctags$', event.city_tags, name='city_tags'),
@@ -71,6 +70,10 @@ urlpatterns = patterns('',
 
                        url(r'^nearest_venues/$', event.nearest_venues, name='nearest_venues'),
                        url(r'^locations/$', event.location_autocomplete, name="location_autocomplete"),
+                        url(r'^payment/(?P<order_id>\d+)/$',
+                          event.payment,
+                          name='setup_featured_payment'
+                      ),
 
                        # url(r'^audit-single-event/', event.audit_single_event_list),
                        # url(r'^audit-single-remove/(?P<id>\d+)', event.audit_single_event_remove),

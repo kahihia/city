@@ -13,6 +13,7 @@ urlpatterns = patterns(
     '',
     # Examples:
     url(r'^channel.html$', 'home.views.channelfile'),
+    url(r'^finish-setup$', 'home.views.finish_setup'),
     url(r'^$', 'event.views.redirect', name='home'),
     url(r'^events/', include('event.urls')),
     url(r'^accounts/', include('userena.urls')),

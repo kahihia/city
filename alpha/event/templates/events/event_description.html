@@ -156,7 +156,7 @@
                         <div id="venue_map" class="map"></div>                        
                     {% endif %}
                 </div>
-                <p>{{ event.description|linebreaks }}</p>
+                <div class="description">{{ event.description|linebreaks }}</div>
                 <h4 class="tags">
                     {% for tag in event.tags.all %}
                         <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">

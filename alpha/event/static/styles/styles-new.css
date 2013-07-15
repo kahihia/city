@@ -345,6 +345,16 @@ a:hover{
     font-size: 16px;
 }
 
+.primary-content .description {
+    color: #454545;
+    font-size: 14px;
+}
+
+.primary-content .description * {
+    color: #454545;
+    font-size: 14px;
+}
+
 ul.errorlist {
     padding-left: 0;
     margin: 0;

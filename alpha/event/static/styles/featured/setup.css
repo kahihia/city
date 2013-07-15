@@ -101,12 +101,20 @@
 
 .pay-now-widget .info {
     float: left;
-    margin: 35px;    
+    margin: 20px;    
     width: 265px;
     color: #000;
-    font-size: 20px;
+    font-size: 16px;
     font-style: italic;
     font-weight: bold;
+}
+
+.pay-now-widget .info table.taxes {
+    width: 220px;
+}
+
+.pay-now-widget .info table.taxes .total-price-row {
+    color: #9c1a00;
 }
 
 .pay-now-widget .info .only {

@@ -114,6 +114,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'event.middleware.LocationMiddleware',
+    'event.middleware.SetupMiddleware',    
     'accounts.middleware.VenueAccountMiddleware',
     'accounts.middleware.UserProfileMiddleware',
     'turbolinks.middleware.TurbolinksMiddleware',

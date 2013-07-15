@@ -134,8 +134,23 @@ def build_payment_model(order_class, **kwargs):
 		app_cache.register_models(bknd_name, *models.build_models(Payment))
 	return Payment
 
+def build_featured_event_payment_model(order_class, **kwargs):
+	global FeaturedEventPayment
+	global FeaturedEventOrder
+	class FeaturedEventPayment(PaymentFactory.construct(order=order_class, **kwargs)):
+		pass
+	FeaturedEventOrder = order_class
+	bknd_models_modules = import_backend_modules('models')
+	for bknd_name, models in bknd_models_modules.items():
+		app_cache.register_models(bknd_name, *models.build_models(FeaturedEventPayment))
+	return FeaturedEventPayment
+
 def payment_from_order(order):
 	"""Builds payment based on given Order instance."""
-	payment = Payment()
+	if order.__class__.__name__ == "AdvertisingOrder":
+		payment = Payment()
+	else:
+		payment = FeaturedEventPayment()
+
 	signals.order_to_payment_query.send(sender=None, order=order, payment=payment)
-	return payment
+	return payment	
