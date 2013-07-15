@@ -77,8 +77,8 @@ class FutureManager(SearchManager):
             .filter(single_events__start_time__gte=datetime.datetime.now())\
             .prefetch_related('single_events')\
             .annotate(nearest_start_time=Min('single_events__start_time'))\
-            .annotate(nearest_end_time=Min('single_events__end_time'))
-            # .order_by("nearest_start_time")
+            .annotate(nearest_end_time=Min('single_events__end_time'))\
+            .order_by("nearest_start_time")
 
         queryset.query.group_by = ["event_event.id"]
 

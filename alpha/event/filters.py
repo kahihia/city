@@ -69,8 +69,7 @@ class TimeFilter(Filter):
 class TagsFilter(Filter):
     def filter(self, qs, tags):
         # TODO: It is code with bad performance
-
-        event_ids = qs.values_list("id", flat=True)
+        event_ids = map(lambda event: event.id, qs)
         event_ids_with_tags = Event.events.filter(id__in=list(event_ids)).filter( 
             tagged_items__tag__name__in=tags 
         ).annotate(
