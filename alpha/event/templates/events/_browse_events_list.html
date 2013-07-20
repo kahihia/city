@@ -61,13 +61,11 @@
                         </div>
                     </div>
                     <div class="auctions-actions"> 
-                        {% if event.tickets %}                       
-                            <a href="{% if_url event.tickets event.tickets "javascript:void;" %}" class="button">
+                        {% if event.tickets %}
+                            <a href="javascript:void()"  class="action-buy-tickets button" data-event-id="{{ event.id }}">
                                 Buy Tickets
                             </a>
-                            <div class="tickets-popup">
-                                <b>{{event.tickets}}</b>
-                            </div>
+                            {% buy_tickets_popup event %}
                         {% endif %}
 
                         <div class="remind-me-wrapper">                        

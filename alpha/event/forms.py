@@ -66,7 +66,9 @@ def generate_form(*args):
             required=True,
             widget=forms.widgets.HiddenInput()
         )
-        description = RichTextFormField()
+        description = RichTextFormField(
+            required=False
+        )
         description_json = forms.CharField(
             required=True,
             widget=forms.widgets.HiddenInput()

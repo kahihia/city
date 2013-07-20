@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+from django.core.validators import URLValidator
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from django.template.loader import render_to_string
@@ -33,6 +34,9 @@ from mamona import signals
 from mamona.models import build_featured_event_payment_model
 from decimal import Decimal
 from ckeditor.fields import RichTextField
+
+
+
 
 class SearchGeoDjangoManager(SearchManagerMixIn, models.GeoManager):
     pass
@@ -230,6 +234,14 @@ class Event(models.Model):
             end_time__gte=datetime.datetime.now(),
             active=True
         ).count() > 0
+
+    def is_tickets_representet_with_url(self):
+        url_validator = URLValidator()
+        try:
+            url_validator(self.tickets)
+            return True
+        except ValidationError:
+            return False
 
 
 

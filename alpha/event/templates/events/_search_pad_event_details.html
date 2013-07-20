@@ -33,12 +33,10 @@
                     {% if event.tickets %}
                     <tr>
                         <td>
-                            <a href='{% if_url event.tickets event.tickets "javascript:searchPadPage.showTicketsPopup();" %}' class="action-buy-tickets">
-                                Buy tickets
+                            <a href="javascript:void()"  class="action-buy-tickets" data-event-id="{{ event.id }}">
+                                Buy Tickets
                             </a>
-                            <div class="tickets-popup">                                
-                                <b>{{event.tickets}}</b>
-                            </div>
+                            {% buy_tickets_popup event %}
                         </td>
                         <td></td>
                     </tr>

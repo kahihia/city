@@ -7,6 +7,7 @@
 
         this.inTheLoop = new InTheLoop(eventDetailsBlock);
         this.remindMe = new RemindMe(eventDetailsBlock);
+        this.buyTickets = new BuyTickets(eventDetailsBlock);
     }
 
     EventActions.prototype = {

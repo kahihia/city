@@ -68,7 +68,7 @@
                 <div class="event-details">
                     <div class="title-wrapper">
                         <div class="title">
-                            <a class="accented" href="{% url 'event_view' event.slug %}">{{event.name}}</a>
+                            <a class="accented" href="{% url 'event_view' event.slug %}">{{event.name}}</a> <a href="{% url 'event_edit' event.authentication_key %}">edit</a>
                         </div>
                         {% if event.price and event.price != "$" %}
                             <div class="event-price {% if event.price|length < 9 %} short {% endif %}">{{event.price}}</div>
@@ -88,12 +88,10 @@
                             {% if event.tickets %}
                             <tr>
                                 <td>
-                                    <a href='{% if_url event.tickets event.tickets "javascript:searchPadPage.showTicketsPopup();" %}' class="action-buy-tickets">
-                                        Buy tickets
+                                    <a href="javascript:void()"  class="action-buy-tickets" data-event-id="{{ event.id }}">
+                                        Buy Tickets
                                     </a>
-                                    <div class="tickets-popup">                                
-                                        <b>{{event.tickets}}</b>
-                                    </div>
+                                    {% buy_tickets_popup event %}
                                 </td>
                                 <td></td>
                             </tr>

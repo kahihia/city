@@ -1,0 +1,17 @@
+{% load event_tags %}
+
+<div class="buy-tickets-popup event-actions-popup" data-no-turbolink>
+    <div class="in-the-loop-popup-content">
+        <h1>
+            Buy tickets
+        </h1>
+        <div class="content">
+            {% if event.is_tickets_representet_with_url %}
+                Please, visit <a href="{{ event.tickets }}" target="_blank">website</a>
+            {% else %}
+                {{ event.tickets }}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
