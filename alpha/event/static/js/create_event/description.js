@@ -46,16 +46,15 @@
             $(this.selectedResult).on("click", function() {
                 $(that.daysListContainer).toggleClass("active");
             });
-            $(this.element).on("change", function() {
-                that.save();
-            });
+            // $(this.element).on("change", function() {
+            //     that.save();
+            // });
             $(this.element).on("blur", function(e){
                 that.saveCurrentDay();
                 if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
                     $("#id_tags__tagautosuggest").data('tagspopup').autoTagsDetect(
                         $("#id_description").val()
                     );
-                    //$("#id_description").focus();
                 }
             });
             $("#id_description").on("keyup", function(e){
@@ -63,7 +62,6 @@
                     $("#id_tags__tagautosuggest").data('tagspopup').autoTagsDetect(
                         $("#id_description").val()
                     );
-
                 }
             });
 
@@ -74,7 +72,7 @@
 
             this.currentDay = "default";
             this.save();
-
+            this.setupCKEditor();            
         },
         setValue: function(value){            
             this.data = value;
@@ -127,14 +125,22 @@
         },
         saveCurrentDay: function() {
             var days = this.data.days;
+            $("#id_description").val(CKEDITOR.instances.id_description.getData()); 
+
             if(this.currentDay == "default") {
+                for(var day_key in days){
+                    var day = days[day_key];
+                    if(day==this.data["default"]) {
+                        days[day_key] = $(this.textarea).val();
+                    }
+                }
                 this.data["default"] = $(this.textarea).val();
             } else {
                 if(!(this.currentDay in this.selectedResult)) {
                     days[this.currentDay] = $(this.textarea).val();
                 }
             }
-            this.save();
+            this.save();            
         },
         setCurrentDay: function(value, label) {
             $(this.result).html(label);
@@ -146,14 +152,53 @@
                 $(this.textarea).val(this.data["default"]);
                 $(this.result).html(label + " Days");
             } else {
-                $(this.textarea).val(this.data.days[value] || "");
-            }
-            $(this.textarea).attr("placeholder",this.data.days[value]||this.data["default"]);
+                $(this.textarea).val(this.data.days[value] || this.data["default"]);
+            }            
+
+            CKEDITOR.instances.id_description.setData($(this.textarea).val());
+
             $("[data-value='" + value + "']").addClass("selected");
             this.save();
         },
         save: function() {
             $("#id_description_json").val(JSON.stringify(this.data));
+        },
+        setupCKEditor: function(){
+            var that=this;
+            CKEDITOR.config.toolbar = [
+               ['Styles','Format','Font','FontSize'],
+               '/',
+               ['Bold','Italic','Underline','StrikeThrough','-','Undo','Redo'],
+               ['Table','-','Link','TextColor','BGColor','Source'],
+               '/',
+               ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],       
+            ];
+
+            CKEDITOR.replace("id_description");
+
+            CKEDITOR.instances.id_description.on("instanceReady", function(){
+                CKEDITOR.instances.id_description.on('key', function(e){
+                    setTimeout(function(){ 
+                        that.saveCurrentDay();
+                        if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
+                            $("#id_tags__tagautosuggest").data('tagspopup').autoTagsDetect(
+                                CKEDITOR.instances.id_description.getData()
+                            );
+                        }
+                    }, 1);
+                });
+
+                CKEDITOR.instances.id_description.on('paste', function(){
+                    setTimeout(function(){ 
+                        that.saveCurrentDay();
+                        if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
+                            $("#id_tags__tagautosuggest").data('tagspopup').autoTagsDetect(
+                                CKEDITOR.instances.id_description.getData()
+                            );
+                        }
+                    }, 1);
+                });
+            });
         }
     });
 

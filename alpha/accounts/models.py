@@ -112,6 +112,15 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
         else:
             return []
 
+    def reminder_weekday(self):
+        if self.reminder_active_type=="WEEKDAY":
+            return DAYS_OF_WEEK
+        else:
+            return "%s" % self.reminder_on_week_day
+
+
+    def in_the_loop_tag_names(self):
+        return self.in_the_loop_tags.all().values_list("name", flat=True)
 
 def create_facebook_profile(sender, instance, created, **kwargs):
     if created:

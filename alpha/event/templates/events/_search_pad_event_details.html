@@ -1,0 +1,104 @@
+{% load date_formatting %}
+{% load cropping %}
+{% load event_tags %}
+{% load endless %}
+
+{% paginate 1 eventsFilter.qs using "search_pad" as events %}
+{% for event in events %}
+    <div class="event-details-block" data-no-turbolink>
+        <div class="event-img">
+            {% if event.picture %}
+                <img src="{% cropped_thumbnail event "cropping" width=175 %}" height="175px" weight="175px">
+            {% else %}
+                <img src="{{STATIC_URL}}images/default-event.jpg" height="175px" weight="175px">
+            {% endif %}
+        </div>
+        <div class="event-details">
+            <div class="title-wrapper">
+                <div class="title">
+                    <a href="{% url 'event_view' event.slug %}">{{event.name}}</a>
+                </div>
+                {% if event.price and event.price != "$" %}
+                    <div class="event-price {% if event.price|length < 9 %} short {% endif %}">{{event.price}}</div>
+                {% endif %}
+            </div>
+            <div class="event-date-wrapper">{{event.nearest_start_time|date:"N d, Y fA | l"|title}}</div>                
+            <div class="event-description">
+                {{ event.venue.name }}<br>
+                {% if event.venue.street %}{{ event.venue.street }}<br>{% endif %}
+                {{ event.venue.city.name_std }}
+            </div>
+            <div class="event-actions">                
+                <table>
+                    {% if event.tickets %}
+                    <tr>
+                        <td>
+                            <a href='{% if_url event.tickets event.tickets "javascript:searchPadPage.showTicketsPopup();" %}' class="action-buy-tickets">
+                                Buy tickets
+                            </a>
+                            <div class="tickets-popup">                                
+                                <b>{{event.tickets}}</b>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    {% endif %}
+                    <tr>                        
+                        <td>
+                            <a href="javascript:void()" class="action-remind-me" data-event-id="{{ event.id }}">Remind Me</a>
+                            {% remind_me_popup event %}
+                        </td>
+                        <td class="in-the-loop-td">
+                            <a href="javascript:void()" class="action-in-the-loop">In the Loop</a>
+                            {% in_the_loop_popup event %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="javascript:void;" class="action-facebook-like">                                
+                                <div href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>                                
+                            </a>
+                        </td>
+                        <td>
+                            <a href="https://twitter.com/intent/tweet?original_referer=http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}&text={{event.name}}&tw_p=tweetbutton&url=http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" class="action-tweet">
+                                Tweet
+                            </a>                            
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="event-description">
+            {% if event.description %}
+                {{ event.description|safe }}
+            {% endif %}            
+        </div>
+    </div>
+{% empty %}
+    <h2>No upcoming events</h2>
+{%endfor%}
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+<div class="clr"></div>
+<div class="entry-navigation-np">
+    <p>
+        <ul>
+            {% get_pages %} 
+
+            <span class="step-links">
+                {% if not pages.current.is_first %}                
+                    <a href="/events/search/{{ pages.previous.url }}" class="ajax">
+                        <img src="{{STATIC_URL}}images/entry-prev.png">
+                    </a>
+                {% endif %}
+
+                {% if not pages.current.is_last %}                
+                    <a href="/events/search/{{ pages.next.url }}" class="ajax">
+                        <img src="{{STATIC_URL}}images/entry-next.png">
+                    </a>
+                {% endif %}                
+            </span>
+        </ul>
+    </p>
+</div>
+<!--end.entry-->

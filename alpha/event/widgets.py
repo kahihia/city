@@ -6,6 +6,8 @@ from django.utils.safestring import mark_safe
 from time import strftime
 import json
 
+from ckeditor.widgets import CKEditorWidget
+
 STATIC_PREFIX = settings.STATIC_URL
 
 
@@ -94,19 +96,20 @@ class WheelchairWidget(RadioSelect):
         )
 
 
-class DescriptionWidget(forms.Textarea):
+class DescriptionWidget(CKEditorWidget):
     def __init__(self, *args, **kwargs):
         super(DescriptionWidget, self).__init__(*args, **kwargs)
         self.description_json = forms.widgets.HiddenInput()
 
-    #def render(self, name, value, *args, **kwargs):
-    #    html = super(DescriptionWidget, self).render(name, value, *args, **kwargs)
-    #    html += self.description_json.render("description_json", "", {"id":'id_description_json'})
-    #    return mark_safe(html)
+    def render(self, name, value, *args, **kwargs):
+       html = super(DescriptionWidget, self).render(name, value, *args, **kwargs)
+       html += self.description_json.render("description_json", "", {"id":'id_description_json'})
+       return mark_safe(html)
 
     class Media(object):
         js = (
-            u'%sjs/description.js' % STATIC_PREFIX,
+            u'%sckeditor/ckeditor/ckeditor.js' % STATIC_PREFIX,
+            u'%sjs/description.js' % STATIC_PREFIX            
         )
 
 

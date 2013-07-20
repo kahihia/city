@@ -14,6 +14,7 @@ urlpatterns = patterns(
     # Examples:
     url(r'^channel.html$', 'home.views.channelfile'),
     url(r'^finish-setup$', 'home.views.finish_setup'),
+    url(r'^nearest-city-and-region$', 'home.views.nearest_city_and_region'),
     url(r'^$', 'event.views.redirect', name='home'),
     url(r'^events/', include('event.urls')),
     url(r'^accounts/', include('userena.urls')),
@@ -46,6 +47,8 @@ urlpatterns = patterns(
        'accounts.views.profile_edit',        
        name='user_profile_required',
     ),
+
+    (r'^ckeditor/', include('ckeditor.urls')),
 )
 
 if settings.DEBUG:

@@ -7,6 +7,7 @@ from lookups import CityLookup
 import selectable.forms as selectable
 from gmapi.forms.widgets import LocationWidget
 import json
+from ckeditor.fields import RichTextFormField
 
 
 class SetupFeaturedForm(forms.ModelForm):
@@ -65,10 +66,7 @@ def generate_form(*args):
             required=True,
             widget=forms.widgets.HiddenInput()
         )
-        description = forms.CharField(
-            widget=DescriptionWidget(),
-            required=False
-        )
+        description = RichTextFormField()
         description_json = forms.CharField(
             required=True,
             widget=forms.widgets.HiddenInput()

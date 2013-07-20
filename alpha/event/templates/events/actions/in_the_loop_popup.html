@@ -1,0 +1,49 @@
+{% load event_tags %}
+{% if account %}
+    <div class="in-the-loop-popup event-actions-popup" data-no-turbolink>
+        <div class="in-the-loop-popup-content">
+            <h1>
+                In the Loop
+            </h1>
+            <div class="content">
+                Please pick the tags you would like to add to your tag list. You will be notified on the website and sent an email when your saved tags are used in an event. To change your reminder options, <a href="{% url 'in_the_loop_settings' %}">click here</a>
+            </div>
+        </div>        
+        <table class="possible-in-the-loop-tags" cellpadding="0" cellspacing="0">
+            {% for tag in event.tags.all %}
+                {% cycle '<tr><td>' '<td>' '<td>' %}
+                    <div class="checkbox">
+                        <input id="id_for_tag_{% uniq_id_for_in_the_loop_tags %}" class="tag" type="checkbox" name="in_the_loop_tags" data-tag="{{ tag.name }}" {% if tag.name in account.in_the_loop_tag_names %}checked="checked"{% endif %}>
+                        <label for="id_for_tag_{% uniq_id_for_in_the_loop_tags %}"></label>
+                        <label for="id_for_tag_{% uniq_id_for_in_the_loop_tags True %}">{{ tag.name }}</label>
+                    </div>
+                {% cycle '</td>' '</td>' '</td></tr>' %}
+            {% endfor %}
+            <tr><td colspan="3">&nbsp;</td></tr>
+        </table>
+        <div class="popup-buttons">
+            <a href="javascript: void" class="popup-button save-tags-button">
+                Save Tags
+            </a>
+        </div>
+    </div>
+{% else %}
+    <div class="in-the-loop-popup event-actions-popup" data-no-turbolink>
+        <div class="in-the-loop-popup-content">
+            <h1>
+                In the Loop
+            </h1>
+            <div class="content">
+                Please log in or create an account to use this feature. Be notified when certain tags being used on City Fusion.
+            </div>
+        </div>        
+        <div class="popup-buttons">
+            <a href="{% url 'userena_signin' %}" class="popup-button">
+                Log in
+            </a>
+            <a href="{% url 'userena_signup' %}"  class="popup-button">
+                Create Account
+            </a>
+        </div>
+    </div>
+{% endif %}

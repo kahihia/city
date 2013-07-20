@@ -490,3 +490,149 @@ fieldset legend{
 .danger-action {
     color: #9c1a00;
 }
+
+body .event-actions-popup {
+    display: none;
+    width: 320px;
+    padding: 10px 20px;
+    padding-top: 0;
+}
+
+body .event-actions-popup h1 {
+    font: 18px Arial, Helvetica, sans-serif;
+    color: #000;
+    font-weight: bold;    
+}
+
+body .event-actions-popup .content {
+    color: #7d7b7c;   
+    font: 16px Arial, Helvetica, sans-serif;
+}
+
+body .event-actions-popup .popup-buttons{
+    text-align: center;
+    font: 16px Arial, Helvetica, sans-serif;
+    margin-top: 20px;
+}
+
+body .event-actions-popup .popup-buttons .popup-button {
+    display: inline-block;
+    background: #f9f9f9;
+    border: 1px solid #e6e6e6;
+    color: #5dacfd;
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    padding: 0 15px;
+    margin-right: 10px;
+
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+body .event-actions-popup .popup-buttons .popup-button:hover {
+    color: #227ad3;
+}
+
+body .event-actions-popup .possible-in-the-loop-tags {
+    margin-top: 15px;
+    border-bottom: 1px solid #d1d1d1;
+    position: relative;
+    left: -13px;
+    width: 390px;
+}
+
+body .event-actions-popup table.possible-in-the-loop-tags td {
+    width: 33%;
+    padding: 3px 0;
+    padding-left: 15px;
+    border-top: 1px solid #d1d1d1;
+    min-height: 20px;
+}
+
+body .event-actions-popup table.possible-in-the-loop-tags tr:nth-child(even) {
+    background: #fff;
+}
+
+body .event-actions-popup table.possible-in-the-loop-tags tr:nth-child(odd) {
+    background: #f5f5f5;
+}
+
+body .event-actions-popup .in-the-loop-popup-content {
+    padding: 0 15px;
+}
+
+.in-the-loop-fancybox .fancybox-skin {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.in-the-loop-fancybox .fancybox-inner {
+    width: 390px !important;
+}
+
+.event-action-ui-dialog.ui-dialog {
+    z-index: 8041 !important;
+    border: none;
+    -webkit-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    overflow: visible;
+    padding: 0;
+    height: 0;
+    padding-bottom: 20px;
+    background: #fff;
+}
+
+.event-action-ui-dialog.ui-dialog a {
+    color: #5dacfd;
+}
+
+.event-action-ui-dialog.ui-dialog a:hover {
+    color: #227ad3;
+}
+
+
+
+.event-action-ui-dialog.ui-dialog .ui-dialog-titlebar-close {
+    position: absolute;
+    top: -18px;
+    right: -18px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    z-index: 8040 !important;
+    background-image: url('/static/fancybox/fancybox_sprite.png');
+    background-position: 0 0;
+    margin: 0;
+    padding: 0;
+}
+
+.event-action-ui-dialog.ui-dialog .ui-dialog-titlebar-close .ui-icon-closethick{
+    display: none;
+}
+
+.event-action-ui-dialog.ui-dialog .ui-dialog-titlebar-close:hover {
+    position: absolute;
+    top: -18px;
+    right: -18px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    z-index: 8040 !important;
+    background-image: url('/static/fancybox/fancybox_sprite.png') center center no-repeat;
+    background-color: transparent;
+    background-position: 0 0;
+    border: none;
+
+}
+
+.event-action-ui-dialog.ui-dialog .ui-dialog-title {
+    display: none;
+}
+
+.event-action-ui-dialog.ui-dialog .ui-dialog-titlebar {
+    background: none;
+    border: none;
+}

@@ -515,18 +515,6 @@ def ason(request):
     return HttpResponse(json.dumps(tag_list), mimetype="application/json")
 
 
-def reminder(request, event_id):
-    if request.user.is_authenticated():
-        mail = request.user.email
-        search = Event.events.get(id=event_id)
-        saves = Reminder(event=search.name, email=mail, date=search.start_time)
-        saves.save()
-        messages.add_message(request, messages.SUCCESS, 'Event reminder will be sent')
-    else:
-        return HttpResponseRedirect('/accounts/register/')
-    return HttpResponseRedirect(request.GET['next'])
-
-
 def city_tags(request):
     city = None
     if request.method == 'POST':

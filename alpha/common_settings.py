@@ -171,6 +171,7 @@ INSTALLED_APPS = (
     'turbolinks',
     'mamona',
     'advertising',
+    'ckeditor',
 )
 
 # A sample logging configuration. The only tangible logging performed
@@ -320,3 +321,11 @@ MAMONA_BACKENDS_SETTINGS = {
 }
 
 IPADRESSLAB_KEY = "SAK44B55F864BQ627A4Z"
+
+
+CKEDITOR_UPLOAD_PATH = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ckeditor_uploads'))
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Basic',
+    },
+}

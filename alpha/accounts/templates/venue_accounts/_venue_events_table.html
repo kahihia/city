@@ -1,7 +1,7 @@
 {% load date_formatting %}
 {% load endless %}
 {% load cropping %}
-{% load event_pictures %}
+{% load event_tags %}
 
 
 {% paginate 6 venue_events %}
@@ -60,25 +60,19 @@
                         <div class="tickets-popup">
                             <b>{{event.tickets}}</b>
                         </div>
-                    {% endif %}
+                    {% endif %}                    
                     
-                    <a href="javascript:void()"  class="action-remind-me button" data-event-id="{{ event.id }}">
-                        Remind Me
-                    </a>
+                    <div class="remind-me-wrapper">
+                        <a href="javascript:void()"  class="action-remind-me button" data-event-id="{{ event.id }}">
+                            Remind Me                                
+                        </a>
+                        {% remind_me_popup event %}
+                    </div>
                     <div class="in-the-loop-wrapper">
-                        <a href="javascript:void()" class="button action-in-the-loop">In the Loop</a>
-                        <div class="in-the-loop-tags-popup">
-                            {% for tag in event.tags.all %}
-                            <span class="button tag" data-tag="{{ tag.name }}">
-                                {{ tag.name }}
-                            </span>
-                            {% endfor %}                                
-                            <div class="add-in-the-loop-wrapper">
-                                <span class="button add-in-the-loop active">
-                                    Add in the loop
-                                </span>
-                            </div>                                
-                        </div>
+                        <a href="javascript:void()" class="button action-in-the-loop">
+                            In the Loop
+                        </a>
+                        {% in_the_loop_popup event %}
                     </div>                        
                     <div href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>
                 </div>

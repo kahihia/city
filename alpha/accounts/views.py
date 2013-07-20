@@ -19,6 +19,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from utils import remind_account_about_events, inform_account_about_events_with_tag
 from django.contrib.auth.decorators import login_required
+from accounts.decorators import ajax_login_required
 
 from userena import settings as userena_settings
 from userena.utils import get_profile_model, get_user_model
@@ -31,23 +32,26 @@ from event.utils import find_nearest_city
 from advertising.models import AdvertisingOrder
 from accounts.forms import AccountForm
 
+
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
 
 TAG_MODEL = getattr(settings, 'TAGGIT_AUTOSUGGEST_MODEL', ('taggit', 'Tag'))
 TAG_MODEL = get_model(*TAG_MODEL)
 
 
+@ajax_login_required
 def remind_me(request, event_id):
     profile = Account.objects.get(user_id=request.user.id)
     event = Event.future_events.get(id=event_id)
-
     profile.reminder_events.add(event)
 
-    return render_to_response('accounts/ajax_result_remind_me.html', {
-        "event": event
-    }, context_instance=RequestContext(request))
+    return HttpResponse(json.dumps({
+        "id": event.id,
+        "name": event.name
+    }), mimetype='application/json')
 
 
+@login_required
 def remove_remind_me(request, event_id):
     profile = Account.objects.get(user_id=request.user.id)
     event = Event.future_events.get(id=event_id)
@@ -56,16 +60,22 @@ def remove_remind_me(request, event_id):
     return HttpResponseRedirect("/accounts/%s/" % request.user.username)
 
 
+@ajax_login_required
 def add_in_the_loop(request):
     profile = Account.objects.get(user_id=request.user.id)
     tags = request.GET.getlist("tag[]")
     profile.in_the_loop_tags.add(*tags)
+
+    return HttpResponse(json.dumps({
+        "tags": tags
+    }), mimetype='application/json')
 
     return render_to_response('accounts/ajax_result_add_in_the_loop.html', {
         "tags": tags
     }, context_instance=RequestContext(request))
 
 
+@login_required
 def reminder_settings(request):
     account = Account.objects.get(user_id=request.user.id)
     form = ReminderSettingsForm(instance=account)
@@ -80,7 +90,7 @@ def reminder_settings(request):
         "form": form
     }, context_instance=RequestContext(request))
 
-
+@login_required
 def in_the_loop_settings(request):
     account = Account.objects.get(user_id=request.user.id)
     form = InTheLoopSettingsForm(instance=account)
@@ -327,7 +337,7 @@ def unlink_venue_account_from_user_profile(request, venue_account_id):
     venue_account.accounts.remove(profile)
 
     return HttpResponseRedirect(
-        reverse('userena_profile_detail', args=(request.user.username, ))
+        reverse('account_profile_detail', args=(request.user.username, ))
     )
 
 
@@ -464,7 +474,7 @@ def profile_edit(request, username, edit_profile_form=AccountForm,
                                  fail_silently=True)
 
             if success_url: redirect_to = success_url
-            else: redirect_to = reverse('userena_profile_detail', kwargs={'username': username})
+            else: redirect_to = reverse('account_profile_detail', kwargs={'username': username})
             return redirect(redirect_to)
 
     if not extra_context: extra_context = dict()
@@ -495,5 +505,5 @@ def redirect_to_active_user_context(request):
         return HttpResponseRedirect(reverse('private_venue_account', args=(venue_account.slug, )))
 
     else:
-        return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))    
+        return HttpResponseRedirect(reverse('account_profile_detail', kwargs={'username': request.user.username}))    
     

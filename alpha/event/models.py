@@ -32,7 +32,7 @@ from djmoney.models.managers import money_manager
 from mamona import signals
 from mamona.models import build_featured_event_payment_model
 from decimal import Decimal
-
+from ckeditor.fields import RichTextField
 
 class SearchGeoDjangoManager(SearchManagerMixIn, models.GeoManager):
     pass
@@ -88,6 +88,17 @@ class FutureManager(SearchManager):
 
         return queryset
 
+# manager will help me to outflank django restriction https://code.djangoproject.com/ticket/13363
+class FutureWithoutAnnotationsManager(SearchManager):
+    def get_query_set(self):
+        queryset = super(FutureWithoutAnnotationsManager, self).get_query_set()\
+            .filter(single_events__start_time__gte=datetime.datetime.now())\
+            .prefetch_related('single_events')            
+
+        queryset.query.group_by = ["event_event.id"]
+
+        return queryset
+
 
 class FeaturedManager(FutureManager):
     def get_query_set(self):
@@ -131,6 +142,12 @@ class Event(models.Model):
         search_field='search_index',
         auto_update_search_field=True)
 
+    future_events_without_annotation = FutureWithoutAnnotationsManager(
+        fields=('name', 'description'),
+        config='pg_catalog.english',
+        search_field='search_index',
+        auto_update_search_field=True)
+
     featured_events = FeaturedManager(
         fields=('name', 'description'),
         config='pg_catalog.english',
@@ -157,7 +174,7 @@ class Event(models.Model):
     
     email = models.CharField('email address', max_length=100)
     name = models.CharField('event title', max_length=250)
-    description = models.TextField(blank=True)
+    description = RichTextField(blank=True)
     location = models.PointField()
     venue = models.ForeignKey('Venue', blank=True, null=True)
     price = models.CharField('event price (optional)', max_length=40, blank=True, default='Free')

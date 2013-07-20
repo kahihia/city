@@ -2,7 +2,7 @@
 {% load date_formatting %}
 {% load cropping %}
 {% load query_filter %}
-{% load event_pictures %}
+{% load event_tags %}
 {% load endless %}
 {% load advertising_tags %}
 
@@ -18,14 +18,13 @@
         <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{{STATIC_URL}}images/default-event.jpg" />
     {% endif %}
     <meta property="og:site_name" content="Cityfusion" />
-    <meta property="og:description" content="{{event.description}}" />
+    <meta property="og:description" content="{{ event.description }}" />
     <meta property="fb:admins" content="100000796428679" />
 
 
     <link href="{{STATIC_URL}}styles/browse/event_details.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/styles-new.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/event/conversation.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="{{STATIC_URL}}fancybox/jquery.fancybox.css" type="text/css" media="screen" />
     <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript" src="{{STATIC_URL}}js/facebook-for-turbolinks.js"></script>
@@ -71,7 +70,7 @@
                         <div class="title">
                             <a class="accented" href="{% url 'event_view' event.slug %}">{{event.name}}</a>
                         </div>
-                        {% if event.price %}
+                        {% if event.price and event.price != "$" %}
                             <div class="event-price {% if event.price|length < 9 %} short {% endif %}">{{event.price}}</div>
                         {% endif %}
                     </div>
@@ -102,21 +101,11 @@
                             <tr>
                                 <td>
                                     <a href="javascript:void()" class="action-remind-me accented" data-event-id="{{ event.id }}">Remind Me</a>
+                                    {% remind_me_popup event %}
                                 </td>
                                 <td class="in-the-loop-td">
                                     <a href="javascript:void()" class="action-in-the-loop accented">In the Loop</a>
-                                    <div class="in-the-loop-tags-popup">
-                                        {% for tag in event.tags.all %}
-                                        <span class="button tag" data-tag="{{ tag.name }}">
-                                            {{ tag.name }}
-                                        </span>
-                                        {% endfor %}                                
-                                        <div class="add-in-the-loop-wrapper">
-                                            <span class="button add-in-the-loop active">
-                                                Add in the loop
-                                            </span>
-                                        </div>                                
-                                    </div>
+                                    {% in_the_loop_popup event %}
                                 </td>
                             </tr>
                             <tr>
@@ -156,7 +145,7 @@
                         <div id="venue_map" class="map"></div>                        
                     {% endif %}
                 </div>
-                <div class="description">{{ event.description|linebreaks }}</div>
+                <div class="description">{{ event.description|safe }}</div>
                 <h4 class="tags">
                     {% for tag in event.tags.all %}
                         <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">

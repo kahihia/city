@@ -37,10 +37,6 @@ urlpatterns = patterns('',
                            event.view_event_day,
                            name='view_event_day'
                            ),
-                       url(r'^remind/(?P<event_id>\d+)/$',
-                           event.reminder,
-                           name='event_reminder'
-                           ),
                        url(r'^view/(?P<slug>[^/]+)/(?P<old_tags>[^/]+)/$',
                            event.view,
                            name='event_view_tags'

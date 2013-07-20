@@ -1,8 +1,9 @@
 from accounts.models import Account
 from functools import wraps
 from django.utils.decorators import available_attrs
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
+import json
 
 
 REDIRECT_FIELD_NAME = "redirect_after_edit_account"
@@ -34,3 +35,14 @@ def native_region_required(redirect_field_name=REDIRECT_FIELD_NAME, why_message=
         why_message=why_message
     )
     return actual_decorator
+
+
+def ajax_login_required(view_func):
+    def wrap(request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return view_func(request, *args, **kwargs)
+        data = json.dumps({ 'not_authenticated': True })
+        return HttpResponse(data, mimetype='application/json')
+    wrap.__doc__ = view_func.__doc__
+    wrap.__dict__ = view_func.__dict__
+    return wrap    

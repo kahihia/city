@@ -1,0 +1,88 @@
+{% if not request.was_setup %}
+    <style>
+        .suggest-city, .suggest-region, .skip-setup {
+            color: #247cc3;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+    </style>
+    <script type="text/javascript">
+        (function ($) {
+            var nearest_city_id = {{ user_location.nearest_city.id }},
+                nearest_city_name = "{{ user_location.nearest_city.name }}";
+            {% if user_location.nearest_region %}
+                var nearest_region_id = {{ user_location.nearest_region.id }},
+                    nearest_region_name = "{{ user_location.nearest_region.name }}";
+            {% endif %}
+
+            function setupTrip(){
+                var content =  'Please, choose your city or region.<br/>Suggestions: <span class="suggest-city" data-suggest-city-id="'+nearest_city_id+'">'+nearest_city_name+'<span>';
+                if(nearest_region_id){
+                    content += ', <span class="suggest-region" data-suggest-region-id="'+nearest_region_id+'">'+nearest_region_name+'<span>';
+                }
+                var trip = new Trip([
+                    { 
+                        sel: $('.location'),
+                        content: content,
+                        delay: -1
+                    }
+                ]);
+
+                trip.start();
+
+                setTimeout(function(){
+                    $(".suggest-city").on("click", function(){
+                        var that=this;
+                        trip.stop();
+                        $.ajax("/finish-setup", {
+                            complete: function(){
+                                window.location = window.filters.setFilter("location", "city|"+$(that).data("suggest-city-id")).getURL();
+                            }
+                        });
+                        
+                    });
+
+                    $(".suggest-region").on("click", function(){
+                        var that=this;
+                        trip.stop();
+                        $.ajax("/finish-setup", {
+                            complete: function(){
+                                window.location = window.filters.setFilter("location", "region|"+$(that).data("suggest-region-id")).getURL();
+                            }
+                        });
+
+                    });
+
+                    $('.location-selection-wrapper').on("click", function(){
+                        trip.stop();
+                        $.ajax("/finish-setup");
+                    });
+
+                }, 50);
+            }
+
+            $(document).on("ready page:load", function(){
+                setupTrip();
+                if (navigator.geolocation){
+                    navigator.geolocation.getCurrentPosition(function(position){
+                        $.ajax("/nearest-city-and-region", {
+                            type: "GET",
+                            dataType: "json",
+                            data: { 
+                                latitude: position.coords.latitude, 
+                                longitude: position.coords.longitude 
+                            }
+                        }).done(function(data){
+                            nearest_city_id = data.nearest_city_id;
+                            nearest_city_name = data.nearest_city_name;
+                            nearest_region_id = data.nearest_region_id;
+                            nearest_region_name = data.nearest_region_name;
+                            setupTrip();
+                        });
+                    });
+                }
+            });
+        })(jQuery);        
+    </script>
+{% endif %}

@@ -33,15 +33,12 @@
     {% include 'django_facebook/_facebook_js.html' %}
 
     <!-- Search Pad Popup scripts -->
-    <link href="{{ STATIC_URL }}styles/searchpad/popup.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="{{STATIC_URL}}styles/searchpad/popup.css" type="text/css" rel="stylesheet" media="all" />
     <link href="{{STATIC_URL}}styles/browse/jump_popup.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/browse/search_pad.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/browse/search_tags.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/browse/event_details.css" rel="stylesheet" type="text/css" />
     <link href="{{ STATIC_URL }}js/trip/trip.css" type="text/css" rel="stylesheet" media="all" />
-    <link href="{{ STATIC_URL }}styles/location-debug-panel.css" type="text/css" rel="stylesheet" media="all" />
-
-    <script src="{{STATIC_URL}}js/location-debug-panel.js" type="text/javascript"></script>
 
     <script src="{{STATIC_URL}}js/trip/trip.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/event-actions.js" type="text/javascript"></script>
@@ -50,61 +47,11 @@
     <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/browse/jquery.hoverIntent.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/ajax-popup.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/searchpad/in-the-loop.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/searchpad/remind-me.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/event-actions.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/jump-to-date.js" type="text/javascript"></script>
-    {% if not request.was_setup %}
-        <style>
-            .suggest-city, .suggest-region, .skip-setup {
-                color: #247cc3;
-                cursor: pointer;
-                text-decoration: underline;
-            }
-
-        </style>
-        <script type="text/javascript">
-            var nearest_city_id = {{ user_location.nearest_city.id }},
-                nearest_city_name = "{{ user_location.nearest_city.name }}";
-        {% if user_location.nearest_region %}
-            var nearest_region_id = {{ user_location.nearest_region.id }},
-                nearest_region_name = "{{ user_location.nearest_region.name }}";
-        {% endif %}
-
-        $(document).on("ready page:load", function(){
-            var trip = new Trip([
-                { 
-                    sel : $('.location'),
-                    content : 'Please, choose your city or region.<br/>Suggestions: <span class="suggest-city" data-suggest-city-id="{{ user_location.nearest_city.id }}">{{ user_location.nearest_city.name }}<span>{% if user_location.nearest_region %}, <span class="suggest-region" data-suggest-region-id="{{ user_location.nearest_region.id }}">{{ user_location.nearest_region.name }}<span>{% endif %}',
-                    delay: -1
-                }
-            ]);            
-
-            trip.start();
-
-            setTimeout(function(){
-                $(".suggest-city").on("click", function(){
-                    $.ajax("/finish-setup");
-                    trip.stop();
-                    window.location = window.filters.setFilter("location", "city|"+$(this).data("suggest-city-id")).getURL();                    
-                });
-
-                $(".suggest-region").on("click", function(){
-                    trip.stop();
-                    $.ajax("/finish-setup");
-                    window.location = window.filters.setFilter("location", "region|"+$(this).data("suggest-region-id")).getURL();                    
-                });
-
-                $('.location-selection-wrapper').on("click", function(){
-                    trip.stop();
-                    $.ajax("/finish-setup");
-                });
-
-            }, 50);
-        });
-        </script>
-    {% endif %}
-
-
-    <!-- end -->
+    {% include 'setup_location.html' %}
 
     {% block head %}
 

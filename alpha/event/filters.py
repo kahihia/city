@@ -160,7 +160,8 @@ class FunctionFilter(Filter):
         return qs.filter(tagged_items__tag__name__in=["Date Night"])
 
     def free_filter(self, qs):
-        ids = qs.extra(
+        # https://code.djangoproject.com/ticket/13363
+        ids = Event.future_events_without_annotation.extra(
             where=["""
                 event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', 'free')
                 OR event_event.search_index @@ plainto_tsquery('pg_catalog.english', 'free')
@@ -170,7 +171,8 @@ class FunctionFilter(Filter):
         return qs.filter(Q(tagged_items__tag__name__in=["Free"]) | Q(id__in=list(ids)))
 
     def family_filter(self, qs):
-        ids = qs.extra(
+        # https://code.djangoproject.com/ticket/13363
+        ids = Event.future_events_without_annotation.extra(
             where=["""
                 event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', 'family')
                 OR event_event.search_index @@ plainto_tsquery('pg_catalog.english', 'family')
