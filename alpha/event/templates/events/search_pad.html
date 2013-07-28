@@ -27,14 +27,8 @@
         </div>
     </div>
     <div class="search-pad-advertising">
-        {% random %}
-            <div class="advertising-container">                
-                {% advertising_group "300x600" %}
-            </div>
-        {% or %}
-            <div class="advertising-container">
-                {% advertising_group "300x250|300x250" %}
-            </div>
-        {% endrandom %}
+        <div class="advertising-container">                
+            {% advertising_group "300x600" %}
+        </div>
     </div>
 <!--/div-->

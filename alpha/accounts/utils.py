@@ -9,6 +9,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def convert_canadian_phone_number_to_e164(phonenumber):
+    if str(phonenumber).startswith("+"):
+        return str(phonenumber)
+    return "+1" + str(phonenumber).replace("-", "")
+
+
 def remind_account_about_events(account, events):
     if account.reminder_with_email:
         remind_account_about_events_with_email(account, events)
@@ -80,7 +86,7 @@ def remind_account_about_events_with_sms(account, events):
 
         try:
             client.sms.messages.create(
-                to=str(account.reminder_phonenumber),
+                to=convert_canadian_phone_number_to_e164(account.reminder_phonenumber),
                 from_=settings.TWILIO_NUMBER,
                 body=body
             )
@@ -139,7 +145,7 @@ def inform_account_about_events_with_tag_with_sms(account, events, tags_in_venue
 
         try:
             client.sms.messages.create(
-                to=str(account.reminder_phonenumber),
+                to=convert_canadian_phone_number_to_e164(account.reminder_phonenumber),
                 from_=settings.TWILIO_NUMBER,
                 body=body
             )

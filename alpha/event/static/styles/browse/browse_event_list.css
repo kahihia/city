@@ -32,35 +32,54 @@
     vertical-align: top;
 }
 
-.entry-wrapper .entry-info.featured .entry-details-wrapper {
-    width: 400px;
-}
-
 .entry-wrapper .entry-info .entry-details-wrapper .title,
 .entry-wrapper .entry-info .entry-details-wrapper .entry-date,
 .entry-wrapper .entry-info .entry-details-wrapper .entry-description {
-    width: 315px;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;    
+    text-overflow: ellipsis;
+    width: 520px;
 }
 
-.entry-wrapper .entry-info.with-actions .entry-details-wrapper .title,
-.entry-wrapper .entry-info.with-actions .entry-details-wrapper .entry-date,
-.entry-wrapper .entry-info.with-actions .entry-details-wrapper .entry-description {
-    width: 250px;
+.entry-wrapper .entry-info.home-page .entry-details-wrapper{
+    width: 330px;   
+}
+.entry-wrapper .entry-info.home-page .entry-details-wrapper .title,
+.entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-date,
+.entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-description {
+    width: 320px;
+}    
+
+.entry-wrapper .entry-info.with-all-actions .entry-details-wrapper{
+    width: 280px;   
+}
+.entry-wrapper .entry-info.with-all-actions .entry-details-wrapper .title,
+.entry-wrapper .entry-info.with-all-actions .entry-details-wrapper .entry-date,
+.entry-wrapper .entry-info.with-all-actions .entry-details-wrapper .entry-description {
+    width: 260px;
 }
 
-.entry-wrapper .entry-info.featured .entry-details-wrapper .title,
-.entry-wrapper .entry-info.featured .entry-details-wrapper .entry-date,
-.entry-wrapper .entry-info.featured .entry-details-wrapper .entry-description {
+.entry-wrapper .entry-info.without-make-feature-action .entry-details-wrapper {
+    width: 400px;
+}
+.entry-wrapper .entry-info.without-make-feature-action .entry-details-wrapper .title,
+.entry-wrapper .entry-info.without-make-feature-action .entry-details-wrapper .entry-date,
+.entry-wrapper .entry-info.without-make-feature-action .entry-details-wrapper .entry-description {
     width: 380px;
+}
 
+.entry-wrapper .entry-info.with-delete-action .entry-details-wrapper {
+    width: 480px;
+}
+.entry-wrapper .entry-info.with-delete-action .entry-details-wrapper .title,
+.entry-wrapper .entry-info.with-delete-action .entry-details-wrapper .entry-date,
+.entry-wrapper .entry-info.with-delete-action .entry-details-wrapper .entry-description {
+    width: 460px;
 }
 
 .entry-wrapper .entry-info .auctions-details-wrapper .title,
 .entry-wrapper .entry-info .auctions-details-wrapper .entry-date {
-    width:200px;
+    width:180px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; 

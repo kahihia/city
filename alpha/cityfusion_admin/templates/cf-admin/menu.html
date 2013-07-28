@@ -1,0 +1,7 @@
+<ul class="tabs">
+	{% for key, item in menu_items.items %}
+		<li {% if key == active %}class="current"{% endif %}>
+			<a href="{% url item.urlname %}"><span>{{ item.linktext }}</span></a>
+		</li>
+	{% endfor %}
+</ul>

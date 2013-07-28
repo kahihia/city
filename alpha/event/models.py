@@ -25,7 +25,7 @@ from image_cropping import ImageCropField, ImageRatioField
 from djorm_pgfulltext.models import SearchManagerMixIn, SearchManager
 from djorm_pgfulltext.fields import VectorField
 
-from django.db.models import Min, Max
+from django.db.models import Min
 
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
@@ -34,8 +34,6 @@ from mamona import signals
 from mamona.models import build_featured_event_payment_model
 from decimal import Decimal
 from ckeditor.fields import RichTextField
-
-
 
 
 class SearchGeoDjangoManager(SearchManagerMixIn, models.GeoManager):
@@ -83,12 +81,10 @@ class FutureManager(SearchManager):
     def get_query_set(self):
         queryset = super(FutureManager, self).get_query_set()\
             .filter(single_events__start_time__gte=datetime.datetime.now())\
-            .prefetch_related('single_events')\
-            .annotate(nearest_start_time=Min('single_events__start_time'))\
-            .annotate(nearest_end_time=Min('single_events__end_time'))\
-            .order_by("nearest_start_time")
-
-        queryset.query.group_by = ["event_event.id"]
+            .select_related('single_events')\
+            .annotate(start_time=Min("single_events__start_time"))\
+            .annotate(end_time=Min("single_events__end_time"))\
+            .order_by("single_events__start_time")
 
         return queryset
 
@@ -97,10 +93,7 @@ class FutureWithoutAnnotationsManager(SearchManager):
     def get_query_set(self):
         queryset = super(FutureWithoutAnnotationsManager, self).get_query_set()\
             .filter(single_events__start_time__gte=datetime.datetime.now())\
-            .prefetch_related('single_events')            
-
-        queryset.query.group_by = ["event_event.id"]
-
+            .select_related('single_events')
         return queryset
 
 
@@ -117,11 +110,10 @@ class ArchivedManager(SearchManager):
     def get_query_set(self):
         queryset = super(ArchivedManager, self).get_query_set()\
             .filter(single_events__start_time__lte=datetime.datetime.now())\
-            .prefetch_related('single_events')\
-            .annotate(nearest_start_time=Max('single_events__start_time'))\
-            .annotate(nearest_end_time=Max('single_events__end_time'))
-
-        queryset.query.group_by = ["event_event.id"]
+            .select_related('single_events')\
+            .annotate(start_time=Min("single_events__start_time"))\
+            .annotate(end_time=Min("single_events__end_time"))\
+            .order_by("-single_events__start_time")
 
         return queryset
 
@@ -175,6 +167,7 @@ class Event(models.Model):
     cropping = ImageRatioField('picture', '180x180', size_warning=True, allow_fullsize=True)
     
     owner = models.ForeignKey(User, blank=True, null=True)
+    venue_account_owner = models.ForeignKey('accounts.VenueAccount', blank=True, null=True)
     
     email = models.CharField('email address', max_length=100)
     name = models.CharField('event title', max_length=250)
@@ -225,9 +218,6 @@ class Event(models.Model):
                 return potential
             suffix = suffix + 1
 
-    def next_day(self):
-        return SingleEvent.objects.filter(start_time__gte=datetime.datetime.now(), event=self).order_by("start_time")[0]
-
     def is_featured(self):
         return self.featuredevent_set.filter(
             start_time__lte=datetime.datetime.now(),
@@ -244,10 +234,12 @@ class Event(models.Model):
             return False
 
 
-
 class FutureEventDayManager(models.Manager):
     def get_query_set(self):
-        return super(FutureEventDayManager, self).get_query_set().filter(start_time__gte=datetime.datetime.now())
+        return super(FutureEventDayManager, self).get_query_set()\
+            .filter(start_time__gte=datetime.datetime.now())\
+            .select_related('event')\
+            .order_by("start_time")
 
 
 class SingleEvent(models.Model):
@@ -264,7 +256,7 @@ class SingleEvent(models.Model):
 
     objects = models.Manager()
 
-    future_days = FutureEventDayManager()
+    future_events = FutureEventDayManager()
 
     event = models.ForeignKey(Event, blank=False, null=False, related_name='single_events')
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
@@ -277,6 +269,14 @@ class SingleEvent(models.Model):
         if not description:
             description = self.event.description
         return description
+
+    def __getattr__(self, key):
+        if key not in ('event', '_event_cache'):
+            return getattr(self.event, key)      
+        raise AttributeError("'%s' object has no attribute '%s'" % (self.__class__.__name__, key))
+
+    def cropping(self):
+        return self.event.cropping
 
 
 class Venue(models.Model):

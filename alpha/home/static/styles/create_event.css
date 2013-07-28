@@ -25,3 +25,28 @@ SPAN.tagMatches SPAN {
   cursor: pointer;
   background: url(/static/images/blue.png);
 }
+
+.venue-account-owner-dropdown {
+  font-size: 13px;
+}
+
+.venue-account-owner-dropdown:after {
+  right: 7px;
+  top: 7px;
+}
+
+.venue-account-owner-dropdown .dropdown-label {
+  color: #000;
+
+}
+
+.venue-account-owner-dropdown-list {
+  width: 282px;
+
+}
+
+
+.venue-account-owner-dropdown-list .dropdown-child {
+  height: 15px;
+  padding: 10px;
+}

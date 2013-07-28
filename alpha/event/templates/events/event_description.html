@@ -29,21 +29,23 @@
 
     <script type="text/javascript" src="{{STATIC_URL}}js/facebook-for-turbolinks.js"></script>
 
-    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>        
     <script>
         var venue_latitude = {{ event.venue.location.y }},
-            venue_longtitude = {{ event.venue.location.x }};
+            venue_longtitude = {{ event.venue.location.x }},
+            crsf_token = "{{ csrf_token }}";
     </script>
 
     <script src="{{STATIC_URL}}js/searchpad/event-actions.js" type="text/javascript"></script>
     <script type="text/javascript" src="{{STATIC_URL}}fancybox/jquery.fancybox.js"></script>
+    <script src="{{STATIC_URL}}js/actions/report-event.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/actions/claim-event.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/event/eventpage.js" type="text/javascript"></script>
 {% endblock %}    
 
 
 {% block page %}
     <div id="fb-root"></div>
-
     <div class="primary-content">
         <h1>Event details</h1>
         <div class="content">
@@ -58,29 +60,32 @@
                     {% else %}
                         <div class="center-cropped default" style="background-image: url('{{STATIC_URL}}images/default-event.jpg');"></div>
                     {% endif %}
-                    <footer>
+                    {% if event.venue_account_owner and event.venue_account_owner.public %}
+                    <footer>                        
                         Submitted by 
-                        <span class="accented">
-                            {{ event.owner }}
-                        </span>
-                    </footer>                
+                        <a href="{% url 'public_venue_account' event.venue_account_owner.slug %}">
+                            {{ event.venue_account_owner.venue.name }}
+                        </a>
+                    </footer>
+                    {% endif %}
                 </div>
                 <div class="event-details">
                     <div class="title-wrapper">
                         <div class="title">
-                            <a class="accented" href="{% url 'event_view' event.slug %}">{{event.name}}</a> <a href="{% url 'event_edit' event.authentication_key %}">edit</a>
+                            <a class="accented" href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">{{event.name}}</a> {% if request.user.is_staff %} <a href="{% url 'event_edit' event.authentication_key %}">edit</a>{% endif %}
                         </div>
                         {% if event.price and event.price != "$" %}
                             <div class="event-price {% if event.price|length < 9 %} short {% endif %}">{{event.price}}</div>
                         {% endif %}
                     </div>
                     <div class="event-date-wrapper">
-                        {{event.nearest_start_time|contextualize_date}} - {{event.nearest_end_time|just_time}}                    
+                        {{event.start_time|contextualize_date}} - {{event.end_time|just_time}}                    
                     </div>
                     <div class="event-description">
                         <span class="accented">{{ event.venue.name }}</span>
                         <br>                    
                         {{ event.venue.city.name_std }},
+                        {% if event.venue.street %}{{ event.venue.street }},{% endif %}
                         {{ event.venue.city.region.name_std }}
                     </div>
                     <div class="event-actions">
@@ -88,7 +93,7 @@
                             {% if event.tickets %}
                             <tr>
                                 <td>
-                                    <a href="javascript:void()"  class="action-buy-tickets" data-event-id="{{ event.id }}">
+                                    <a href="javascript:void()"  class="action-buy-tickets accented">
                                         Buy Tickets
                                     </a>
                                     {% buy_tickets_popup event %}
@@ -110,9 +115,9 @@
                                 <td>
                                     <a href="javascript:void;" class="action-facebook-like accented">                                
                                         <div 
-                                            href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" 
+                                            href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" 
                                             class="fb-like" 
-                                            data-href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" 
+                                            data-href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" 
                                             data-send="false" 
                                             data-layout="button_count" 
                                             data-width="20" 
@@ -122,7 +127,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="https://twitter.com/intent/tweet?original_referer=http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}&text={{event.name}}&tw_p=tweetbutton&url=http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" class="action-tweet accented">
+                                    <a href="https://twitter.com/intent/tweet?original_referer=http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}&text={{event.name}}&tw_p=tweetbutton&url=http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" class="action-tweet accented">
                                         Tweet
                                     </a>                            
                                 </td>
@@ -140,6 +145,11 @@
                         </table>
                     </div>
                     {% if event.venue %}
+                        <div class="venue_map_preview">
+                            <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.venue.location.y }},{{ event.venue.location.x }}&zoom=13&size=100x80&maptype=roadmap
+&markers=color:blue%7C{{ event.venue.location.y }},{{ event.venue.location.x }}&sensor=false">
+                            <a href="javascript: void">Full map and directions</a>
+                        </div>
                         <div id="venue_map" class="map"></div>                        
                     {% endif %}
                 </div>
@@ -149,7 +159,19 @@
                         <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">
                             {{ tag }}</a>{% if not forloop.last %}, {% endif %}
                     {% endfor %}
-                </h4>  
+                </h4>
+
+                {% load user_action_tags %}
+                <div class="report-claim-container">
+                    <a href="javascript: void" class="report-event-button">
+                        Report Event
+                    </a>
+                    {% report_event_popup event %}
+                    <a href="javascript: void" class="claim-event-button">
+                        Claim Event
+                    </a>
+                    {% claim_event_popup event %}
+                </div>
             </div>
         </div>
 
@@ -159,7 +181,7 @@
         <div class="event-conversation content">
             
 
-            <div class="fb-comments" data-href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" data-width="630" data-num-posts="5"></div>
+            <div class="fb-comments" data-href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" data-width="630" data-num-posts="5"></div>
         </div>
     </div>
 
@@ -179,10 +201,10 @@
                         {% paginate 5 event.venue.future_events using "venue_events" as venue_events %}
                         {% for venue_event in venue_events %}
                             <tr>
-                                <td>{{ venue_event.nearest_start_time|date:"M d" }}</td>
-                                <td>{{ venue_event.nearest_start_time|date:"fA"|title }}</td>
+                                <td>{{ venue_event.start_time|date:"M d" }}</td>
+                                <td>{{ venue_event.start_time|date:"fA"|title }}</td>
                                 <td>
-                                    <a href="{% url 'event_view' venue_event.slug %}">
+                                    <a href="{% url 'event_view' venue_event.slug event.start_time|date:"Y-m-d" %}">
                                         {{ venue_event.name }}
                                     </a>
                                 </td>

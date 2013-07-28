@@ -7,7 +7,10 @@
             'hideOnContentClick': true
         });
 
-        this.showMap();
+        $(".venue_map_preview").on("click", this.showMap.bind(this));
+
+        this.reportEvent = new ReportEvent();
+        this.claimEvent = new ClaimEvent();
     };
 
     EventPage.prototype = {
@@ -27,8 +30,17 @@
                     position: point,
                     draggable: false
                 });
+
+            $.fancybox(document.getElementById("venue_map"), {
+                autoSize: true,
+                closeBtn: true,
+                hideOnOverlayClick: false
+            });
+
+            google.maps.event.trigger(venue_account_map, 'resize');
+            venue_account_map.panTo(point);       
         }
-    };
+    };    
 
     $(document).on("ready page:load", function(){
         window.eventPage = new EventPage();

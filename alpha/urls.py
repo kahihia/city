@@ -19,6 +19,7 @@ urlpatterns = patterns(
     url(r'^events/', include('event.urls')),
     url(r'^accounts/', include('userena.urls')),
     url(r'^account-actions/', include('accounts.urls')),
+    url(r'^cf-admin/', include('cityfusion_admin.urls')),
     url(r'^feedback/', include('feedback.urls')),
     url(r'^advertise/$', 'home.views.redirect', name='advertise'),
     # url(r'^alpha/', include('alpha.foo.urls')),

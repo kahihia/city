@@ -14,6 +14,7 @@ import selectable.forms as selectable
 from event.lookups import CityLookup
 from accounts.lookups import RegionLookup
 from cities.models import Region
+from django_localflavor_ca.forms import CAPhoneNumberField
 
 
 class ReminderSettingsForm(forms.ModelForm):
@@ -21,6 +22,7 @@ class ReminderSettingsForm(forms.ModelForm):
     reminder_with_email = forms.BooleanField(required=False, label="")
     reminder_with_sms = forms.BooleanField(required=False, label="")
     reminder_active_type = forms.ChoiceField(widget=forms.RadioSelect, choices=REMINDER_TYPES)
+    reminder_phonenumber = CAPhoneNumberField(required=False)
 
     class Meta:
         model = Account
@@ -48,6 +50,7 @@ class InTheLoopSettingsForm(forms.ModelForm):
     in_the_loop_with_website = forms.BooleanField(required=False, label="")
     in_the_loop_with_email = forms.BooleanField(required=False, label="")
     in_the_loop_with_sms = forms.BooleanField(required=False, label="")
+    in_the_loop_phonenumber = CAPhoneNumberField(required=False)
 
     regions = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
@@ -86,6 +89,7 @@ class VenueAccountForm(forms.ModelForm):
         required=False
     )
 
+    phone = CAPhoneNumberField(required=False)
 
     class Meta:
         model = VenueAccount
@@ -96,6 +100,7 @@ class VenueAccountForm(forms.ModelForm):
             'email',
             'site',
             'facebook',
+            'myspace',
             'twitter',
             'about',
             'cropping',
@@ -145,19 +150,3 @@ class AccountForm(EditProfileForm):
             'native_region',
             'not_from_canada'
         ]
-
-
-# class NewVenueAccountForm(forms.Form):
-#     place = JSONCharField(
-#         widget=GeoCompleteWidget(),
-#         required=False
-#     )
-
-#     location = forms.Field(widget=LocationWidget(), required=False)
-#     venue_name = forms.CharField(required=False)
-#     street = forms.CharField(required=False)
-#     city = forms.CharField(
-#         widget=selectable.AutoCompleteSelectWidget(CityLookup, allow_new=True),
-#         required=False
-#     )
-#     city_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())

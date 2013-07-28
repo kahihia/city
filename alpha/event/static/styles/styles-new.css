@@ -10,7 +10,8 @@
     color:#022e52;
 }
 
-.content-wrapper .content {    
+.content-wrapper .content {
+    position: relative;
     width: 675px;
     border: 1px solid #ccc;
 }
@@ -193,6 +194,7 @@
 }
 
 .content-wrapper .event-wrapper .tags{
+    width: 540px;
     padding-left:25px;
     font-size:11px;
     color:#5dacfd;
@@ -214,7 +216,8 @@
 
 .secondary-content {
     float:right;
-    width: 308px;
+    width: 310px;
+    margin-bottom: 10px;
 }
 
 .secondary-content header{
@@ -263,6 +266,11 @@
 .secondary-content-table td a {
     color: #5dacfd;
     text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 180px;
+    display: inline-block;
 }
 
 .secondary-content-table th a:hover,

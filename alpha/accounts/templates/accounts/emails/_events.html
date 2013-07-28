@@ -28,16 +28,16 @@
                     <td width="325" valign="top" align="left">
                         <div>
                             <span style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif;">
-                                <a target="_blank" href="{{site}}{% url 'event_view' event.slug %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none;">
+                                <a target="_blank" href="{{site}}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none;">
                                     {{ event.name }}
                                 </a>          
                             </span>
                         </div>
 
                         <div>
-                            <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.nearest_start_time|date:"l, F d, Y"}}</span>
+                            <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|date:"l, F d, Y"}}</span>
                             <span class="appleLinksBlue" style="color: #cdcdcd; font-size: 12px; font-family: sans-serif;">|</span>
-                            <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.nearest_start_time|just_time}} - {{event.nearest_end_time|just_time}}</span>
+                            <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|just_time}} - {{event.end_time|just_time}}</span>
                         </div>
 
                         <div>

@@ -24,7 +24,6 @@
                 }
             });
         });
-        $(".entry-info").auction_popup();
         this.initEventActions();
     }
 

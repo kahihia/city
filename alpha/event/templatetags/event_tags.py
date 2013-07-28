@@ -76,3 +76,12 @@ def uniq_id_for_in_the_loop_tags(context, increment=False):
     if increment:
         request.session["uniq_id_for_in_the_loop_tags"] = id + 1
     return id
+
+
+@register.inclusion_tag('events/list/event_block.html', takes_context=True)
+def event_block(context, event):
+    STATIC_URL = context['STATIC_URL']
+    return {
+        'event': event,
+        'STATIC_URL': STATIC_URL
+    }

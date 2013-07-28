@@ -20,7 +20,6 @@
 
         $("#id_place").on("blur", function() {
             $(".pac-container").removeClass("show");
-            // window.setTimeout(that.setVenueText.bind(that), 10);
         });
 
         $("#id_place").on("focus", function() {

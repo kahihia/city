@@ -57,7 +57,7 @@ def remove_remind_me(request, event_id):
     event = Event.future_events.get(id=event_id)
     profile.reminder_events.remove(event)
 
-    return HttpResponseRedirect("/accounts/%s/" % request.user.username)
+    return HttpResponseRedirect("/account/%s/" % request.user.username)
 
 
 @ajax_login_required
@@ -84,7 +84,7 @@ def reminder_settings(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Reminder options updated.')
-            return HttpResponseRedirect('/accounts/%s/' % request.user.username)
+            return HttpResponseRedirect('/account/%s/' % request.user.username)
 
     return render_to_response('accounts/reminder_settings.html', {
         "form": form
@@ -100,7 +100,7 @@ def in_the_loop_settings(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'In the loop options updated.')
-            return HttpResponseRedirect('/accounts/%s/' % request.user.username)
+            return HttpResponseRedirect('/account/%s/' % request.user.username)
 
     return render_to_response('accounts/in_the_loop_settings.html', {
         "form": form
@@ -244,78 +244,74 @@ def edit_venue_account(request, slug):
 
 
 def save_venue(request):
-    if "venue_name" in request.POST and request.POST["venue_name"]:
-        name = request.POST["venue_name"]
-        street = request.POST["street"]
+    name = request.POST["venue_name"]
+    street = request.POST["street"]
+    location = Point((
+        float(request.POST["location_lng"]),
+        float(request.POST["location_lat"])
+    ))
+
+    if request.POST["city_identifier"]:
         city = City.objects.get(id=int(request.POST["city_identifier"]))
-        country = Country.objects.get(name='Canada')
-        location = Point((
-            float(request.POST["location_lng"]),
-            float(request.POST["location_lat"])
-        ))
-        venue = Venue(name=name, street=street, city=city, country=country, location=location)
-        venue.save()
-    elif "place" in request.POST and request.POST["place"]:
-        name = request.POST["geo_venue"]
-        street = request.POST["geo_street"]
-        city = City.objects.filter(
+
+    else:
+        cities = City.objects.filter(
             Q(name_std=request.POST["geo_city"].encode('utf8')) |
             Q(name=request.POST["geo_city"])
         )
-        country = Country.objects.get(name='Canada')
-        location = Point((
-            float(request.POST["geo_longtitude"]),
-            float(request.POST["geo_latitude"])
-        ))
 
-        if city.count() > 1:
-            city = find_nearest_city(city, location)
-        elif not city.count():
+        if cities.count() > 1:
+            city = find_nearest_city(cities, location)
+        elif not cities.count():
             city = City.objects.distance(location).order_by('distance')[0]
         else:
-            city = city[0]
-        venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, location=location)
-    else:
-        venue = None
-    return venue    
+            city = cities[0]
+
+    country = Country.objects.get(name='Canada')
+    venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, location=location)
+
+    return venue  
 
 
 @login_required
 def create_venue_account(request):
     account = Account.objects.get(user_id=request.user.id)
-    venueAccount = VenueAccount()
-    form = NewVenueAccountForm(
-        initial={
-            "picture_src": "/media/%s" % venueAccount.picture
-        }
-    )
+    form = NewVenueAccountForm()
+
+    venue_account = VenueAccount()
 
     if request.method == 'POST':
-        if request.POST["picture_src"]:
-            venueAccount.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
-
-        form = NewVenueAccountForm(instance=venueAccount, data=request.POST)
+        form = NewVenueAccountForm(data=request.POST)
 
         if form.is_valid():
             venue = save_venue(request)
 
-            if not account.venueaccount_set.filter(venue_id=venue.id).count():
-                venueAccount.venue = venue
-                venueAccount = form.save()
+            try:
+                venue_account = VenueAccount.objects.get(venue=venue)
+                return HttpResponseRedirect(reverse('venue_account_already_in_use', args=(venue_account.id, )))
+
+            except:               
+                venue_account = VenueAccount(venue=venue, account=account)
+                form = NewVenueAccountForm(instance=venue_account, data=request.POST)
+                venue_account = form.save()
 
                 types = form.cleaned_data['types']
-                venueAccount.types = types
+                venue_account.types = types
+                venue_account.save()
 
-                venueAccount.accounts.add(account)
-
-                venueAccount.save()
-
-            # return HttpResponseRedirect(reverse('private_venue_account', args=(venueAccount.slug, )))
-            return HttpResponseRedirect('/accounts/%s/' % request.user.username)
+                return HttpResponseRedirect(reverse('account_profile_detail', args=(request.user.username, )))                
 
     return render_to_response('venue_accounts/create_venue_account.html', {
-            'venue_account': venueAccount,
+            'venue_account': venue_account,
             'form': form
+        }, context_instance=RequestContext(request))
+
+
+def venue_account_already_in_use(request, venue_account_id):
+    venue_account = VenueAccount.objects.get(id=venue_account_id)
+
+    return render_to_response('venue_accounts/already_in_use.html', {
+            'venue_account': venue_account
         }, context_instance=RequestContext(request))
 
 
@@ -330,11 +326,9 @@ def set_venue_privacy(request, venue_account_id, privacy):
     )
 
 
+@login_required
 def unlink_venue_account_from_user_profile(request, venue_account_id):
-    profile = Account.objects.get(user_id=request.user.id)
-    venue_account = VenueAccount.objects.get(id=venue_account_id)
-
-    venue_account.accounts.remove(profile)
+    VenueAccount.objects.get(id=venue_account_id).delete()
 
     return HttpResponseRedirect(
         reverse('account_profile_detail', args=(request.user.username, ))
@@ -381,7 +375,7 @@ def profile_detail(request, username, template_name=userena_settings.USERENA_PRO
     extra_context['location'] = request.user_location["location"]
 
     tabs_page = "profile-detail"
-    active_tab = request.session.get(tabs_page, "reminder")
+    active_tab = request.session.get(tabs_page, "account-events")
     extra_context['active_tab'] = active_tab
 
     return ExtraContextTemplateView.as_view(

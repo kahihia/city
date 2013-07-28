@@ -23,39 +23,7 @@ class Migration(DataMigration):
         gst.save()
 
         for name in ["Alberta", "British Columbia", "Manitoba", "Northwest Territories", "Nunavut", "Quebec", "Saskatchewan", "Yukon"]:
-            gst.regions.add(regions[name])
-
-        pst_british_columbia = AccountTax(
-            name="PST",
-            description="British Columbia. Provincial sales taxes (PST), levied by the provinces",
-            tax=Decimal("0.07")
-        )
-        pst_british_columbia.save()
-        pst_british_columbia.regions.add(regions["British Columbia"])
-
-        pst_manitoba = AccountTax(
-            name="PST",
-            description="Manitoba. Provincial sales taxes (PST), levied by the provinces",
-            tax=Decimal("0.08")
-        )
-        pst_manitoba.save()
-        pst_manitoba.regions.add(regions["Manitoba"])
-
-        pst_saskatchewan = AccountTax(
-            name="PST",
-            description="Saskatchewan. Provincial sales taxes (PST), levied by the provinces",
-            tax=Decimal("0.05")
-        )
-        pst_saskatchewan.save()
-        pst_saskatchewan.regions.add(regions["Saskatchewan"])
-
-        qst = AccountTax(
-            name="QST",
-            description="Quebec Sales Tax or QST, French: Taxe de vente du Québec or TVQ",
-            tax=Decimal("0.0975")
-        )
-        qst.save()
-        qst.regions.add(regions["Quebec"])
+            gst.regions.add(regions[name])        
 
         hst_new_brunswick = AccountTax(
             name="HST",

@@ -7,7 +7,7 @@
 {% paginate 6 venue_events %}
 <div class="account-entry-wrapper entry-wrapper">
 {% for event in venue_events %}    
-    <div class="entry-info {% if private %}with-actions{% endif %}{% if event.is_featured %} featured{% endif %}">
+    <div class="entry-info {% if private %}{% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}{% endif %}">
         <div class="entry-img-prev">
             {% if event.picture %}
                 <img src="{% cropped_thumbnail event "cropping" width=60 %}" height="60px" weight="60px">
@@ -17,83 +17,44 @@
         </div>
         <div class="entry-details-wrapper">                                  
             <div class="title">
-                <a href="{% url 'event_view' event.slug %}">
+                <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">
                     {{event.name}}&nbsp;
                 </a>                    
             </div>
             <div class="entry-date">
-                {{event.nearest_start_time|date:"l, F d, Y"}}
+                {{event.start_time|date:"l, F d, Y"}}
                 <span class="delimeter">|</span>
-                {{event.nearest_start_time|just_time}} - {{event.nearest_end_time|just_time}}
+                {{event.start_time|just_time}} - {{event.end_time|just_time}}
             </div>
             <div class="entry-description">                    
-                {{ event.venue.name }}, {{ event.venue.street }}, {{ event.venue.city.name_std }}
+                {{ event.venue.name }}, {% if event.venue.street %}{{ event.venue.street }}, {% endif %}{{ event.venue.city.name_std }}
             </div>                
-        </div>
-        <div class="auctions-wrapper">
-            <div class="auctions-content">
-                <div class="auctions-img-prev">
-                    {% if event.picture %}
-                        <img src="{% cropped_thumbnail event "cropping" width=87 %}" height="87px" weight="87px">
-                    {% else %}
-                        <img src="{{STATIC_URL}}images/default-event.jpg" height="87px" weight="87px">
-                    {% endif %}
-                </div>
-                <div class="auctions-details-wrapper">
-                    <div class="title">
-                        {{event.name}}&nbsp;
-                    </div>
-                    <div class="entry-date">
-                        {{event.nearest_start_time|date:"l, F d, Y"}}
-                        <br>
-                        {{event.nearest_start_time|contextualize_date}} - {{event.nearest_end_time|just_time}}                                
-                    </div>
-                    <div class="auctions-additional">
-                        {{ event.venue.name }}
-                    </div>
-                </div>
-                <div class="auctions-actions"> 
-                    {% if event.tickets %}
-                        <a href="javascript:void()"  class="action-buy-tickets button" data-event-id="{{ event.id }}">
-                            Buy Tickets
-                        </a>
-                        {% buy_tickets_popup event %}
-                    {% endif %}
-                    
-                    <div class="remind-me-wrapper">
-                        <a href="javascript:void()"  class="action-remind-me button" data-event-id="{{ event.id }}">
-                            Remind Me                                
-                        </a>
-                        {% remind_me_popup event %}
-                    </div>
-                    <div class="in-the-loop-wrapper">
-                        <a href="javascript:void()" class="button action-in-the-loop">
-                            In the Loop
-                        </a>
-                        {% in_the_loop_popup event %}
-                    </div>                        
-                    <div href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug %}" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>
-                </div>
-            </div>
         </div>
 
         {% if private %}
             <div class="event-edit-actions">
-                <a href="{% url 'event_edit' event.authentication_key %}" class="edit-action">
+                <a href="{% url 'event_edit' event.authentication_key %}">
                     Edit
                 </a>
-                <a href="{% url 'event_remove' event.authentication_key %}" class="delete-action danger-action">
+                <a href="{% url 'event_copy' event.authentication_key %}">
+                    Copy
+                </a>
+                <a href="{% url 'event_remove' event.authentication_key %}" class="danger-action">
                     Delete
                 </a>
                 {% if not event.is_featured %}
-                    <a href="{% url 'event_setup_featured' event.authentication_key %}" class="make-featured-action">
+                    <a href="{% url 'event_setup_featured' event.authentication_key %}">
                         Make Featured Event
                     </a>
-                {% endif %}                
+                {% endif %}
             </div>
-        {% endif %}        
+        {% endif %}
         <div class="clr"></div>
     </div>
+{% empty %}
+    <p>
+        no active events
+    </p>
 {%endfor%}
 </div>
 

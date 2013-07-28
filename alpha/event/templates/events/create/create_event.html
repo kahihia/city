@@ -61,7 +61,6 @@
                     {% csrf_token %}
                     <!--errors -->
                     {%if form.errors %}
-                    {{ form.errors }}
                     <h3>Please correct the following:</h3>
                     <div class="errors" style="border:1px solid RED;border-radius:4px;">
                         <ul style="list-style-type: none;">
@@ -130,6 +129,11 @@
                                 <span class="error">{{ error }}</span>
                                 {% endfor %}
                             </li>
+                            <li id="name-info">
+                                {% for error in form.venue_account_owner.errors %}
+                                <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </li>
                         </ul>
                     </div>
                     {% endif %}
@@ -153,6 +157,25 @@
                             <td>{{form.name}}</td>                                            
                         </tr>
                         <tr>
+                            <td>
+                                Owner
+                                <a href="javascript:void;"  class="balloon">
+                                    <div class="buttonq"></div>
+                                </a>
+                                <div class="balloon-content">
+                                    <h3>
+                                        Help - Enter event <i>[Owner]:</i>
+                                    </h3>
+                                    <p> 
+                                        Choose account wich will be owner of this event
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                {{ form.venue_account_owner }}
+                            </td>
+                        </tr>
+                        <tr class="location-tr">
                             <td>
                                 Location
                                 <a href="javascript:void;"  class="balloon">
@@ -301,18 +324,6 @@
                         <tr>
                             <td colspan="2" class="wheelchair-td">
                                 Wheelchair Accessible
-                                <a href="javascript:void;" class="balloon wheelchair">
-                                    <div class="buttonq"></div>
-                                </a>
-                                <div class="balloon-content">
-                                    <h3>
-                                        Help - Enter event
-                                        <i>[Wheelchair]:</i>
-                                    </h3>
-                                    <p>
-                                        Select yes or no
-                                    </p>
-                                </div>
                                 <ul>
                                     <li>
                                         <div class="radio">
@@ -328,7 +339,7 @@
                                             <label for="id_wheelchair_1">No</label>
                                         </div>
                                     </li>
-                                </ul>                                                
+                                </ul>
                             </td>                                            
                         </tr>
                         <tr>

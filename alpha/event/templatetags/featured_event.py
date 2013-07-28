@@ -90,7 +90,7 @@ def feature_event_as_image(context, event):
         arial = ImageFont.truetype("%s/alpha/event/static/fonts/Arial.ttf" % settings.BASE_PATH, 10)
         arial_bold = ImageFont.truetype("%s/alpha/event/static/fonts/Arial_Bold.ttf" % settings.BASE_PATH, 10)
 
-        time_period = "%s - %s" % (filters.title(filters.date(event.nearest_start_time, "b d, Y | fA")), filters.title(filters.date(event.nearest_end_time, "fA")))
+        time_period = "%s - %s" % (filters.title(filters.date(event.start_time, "b d, Y | fA")), filters.title(filters.date(event.end_time, "fA")))
 
         draw.text(event_name_pos, truncatesmart(event.name, 25), (235, 138, 25), font=arial_bold)
         draw.text(start_time_pos, truncatesmart(time_period, 25), (255, 255, 255), font=arial)

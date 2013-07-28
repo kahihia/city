@@ -14,11 +14,11 @@
                 </a>
             </li>
             <li class="subcat top5">
-                <a href="javascript:void;" >Top 5 Categories</a>
+                <a href="javascript:void;" >Top 10 Categories</a>
                 <a href="{% events_filter_url request eventsFilter function="tags"  exclude="tag" %}" class="toggler ajax"></a>
             </li>
             <ul class="top5-tags">
-                {%for tag in top5_tags%}                
+                {%for tag in top10_tags%}
                 <li>
                     <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}" class="ajax{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}"  >
                         {{tag.tag__name}}
@@ -34,6 +34,16 @@
             </li>
             <br>
 
+            <li class="special">
+                <a href="{% events_filter_url request eventsFilter function="top_viewed" exclude="tag" %}" class="ajax">
+                    Top viewed
+                </a>
+            </li>
+            <li class="special">
+                <a href="{% events_filter_url request eventsFilter function="latest" exclude="tag" %}" class="ajax">
+                    Recently Added
+                </a>
+            </li>            
             <li class="special">
                 <a href="{% events_filter_url request eventsFilter function="night_life"  exclude="tag" %}" class="ajax">
                     Night life

@@ -192,6 +192,33 @@
 }
 
 #venue_map {
-    width: 330px;
-    height: 300px;
+    width: 500px;
+    height: 500px;
+    display: none;
+}
+
+.venue_map_preview {
+    vertical-align: middle;
+    margin-top: 20px;
+    line-height: 100px;
+}
+
+.venue_map_preview img, .venue_map_preview a {
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.venue_map_preview a {
+    margin-left: 10px;
+}
+
+.report-claim-container {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    text-align: right;
+}
+
+.report-claim-container a {
+    display: block;
 }

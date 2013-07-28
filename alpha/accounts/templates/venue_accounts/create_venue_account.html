@@ -117,10 +117,37 @@
                                     {{ form.place }}
                                     <a href="javascript:void;" class="show-map">show on map</a> 
                                     <div>
-                                        <div class="location_map">{{form.location}}</div>                                                
+                                        <div class="location_map">{{form.location}}</div>
                                     </div>
                                 </td>
-
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="edit-contact-info-table-second-td">
+                                    Venue name:
+                                </td>
+                                <td>
+                                    {{ form.venue_name }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    Street:
+                                </td>
+                                <td>
+                                    {{ form.street }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    City:
+                                </td>
+                                <td>
+                                    {{ form.city }}
+                                    {{ form.city_identifier }}
+                                </td>
                             </tr>
                             <tr>
                                 <td>
@@ -132,7 +159,7 @@
                                 <td>
                                     {{ form.phone }}
                                 </td>
-                            </tr>                        
+                            </tr>
                             <tr>
                                 <td>
                                     <img src="{{ STATIC_URL }}/images/fax_profile_icon.png"/>
@@ -143,7 +170,7 @@
                                 <td>
                                     {{ form.fax }}
                                 </td>
-                            </tr>                        
+                            </tr>
                             <tr>
                                 <td>
                                     <img src="{{ STATIC_URL }}/images/email_profile_icon.png"/>
@@ -152,7 +179,7 @@
                                     Email:
                                 </td>
                                 <td>
-                                    {{ form.email }}                                
+                                    {{ form.email }}
                                 </td>
                             </tr>
                             <tr>
@@ -179,7 +206,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <img src="{{ STATIC_URL }}/images/twitter.png"/>                                
+                                    <img src="{{ STATIC_URL }}/images/twitter.png"/>
                                 </td>
                                 <td>
                                     Twitter:
@@ -215,7 +242,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>                                
+                                <td>
                                 </td>
                                 <td class="top">
                                     Picture:
@@ -237,8 +264,8 @@
                     </form>
                 </div>
 
-                <div class="clr"></div>               
-            </div>            
+                <div class="clr"></div>
+            </div>
         </div>
     </div>
 {% endblock %}

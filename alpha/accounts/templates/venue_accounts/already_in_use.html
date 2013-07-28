@@ -1,0 +1,27 @@
+{% extends 'base-new.html' %}
+
+{% block title %} 
+    Venue account already in use
+{% endblock %}
+
+
+{% block page %}
+    <div class="primary-content">
+        {% if venue_account.account.user.id == request.user.id %}
+            <h1>
+                You already is owner of  "{{ venue_account.venue.name }}" venue
+            </h1>            
+            <p>
+                You can <a href="{% url 'edit_venue_account' venue_account.slug %}">edit</a> this venue or <a href="{% url 'create_venue_account' %}">create</a> new one
+            </p>
+            
+        {% else %}
+            <h1>
+                "{{ venue_account.venue.name }}" already owned by {{ venue_account.account.user.get_full_name }}
+            </h1>
+            <p>
+                You can contact admin if you think that you have rights for it or you can <a href="{% url 'create_venue_account' %}">create</a> another venue
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}

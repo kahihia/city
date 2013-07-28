@@ -23,7 +23,6 @@
 
             $("#id_place").on("blur", function() {
                 $(".pac-container").removeClass("show");
-                // window.setTimeout(that.setVenueText.bind(that), 10);
             });
 
             $("#id_place").on("focus", function() {
@@ -58,9 +57,10 @@
                     country: 'ca'
                 }
             }).bind("geocode:result", function(event, result) {
-                $("#id_venue_name").val("");
-                $("#id_street").val("");
-                $("#id_city_0").val("");
+                console.log(result);
+                $("#id_venue_name").val($("#id_geo_venue").val());
+                $("#id_street").val($("#id_geo_street").val());
+                $("#id_city_0").val($("#id_geo_city").val());
 
                 window.user_lat = result.geometry.location.lat();
                 window.user_lng = result.geometry.location.lng();
@@ -76,7 +76,7 @@
             var point, options, marker, map,
                 that = this;
             
-            point = new google.maps.LatLng(window.user_lat , window.user_lng);
+            point = new google.maps.LatLng(window.user_lat|0, window.user_lng|0);
 
             options = {
                 zoom: 14,
@@ -89,17 +89,17 @@
             this.marker = new google.maps.Marker({
                 map: this.map,
                 position: point,
-                // draggable: true
+                draggable: true
             });
 
-            // google.maps.event.addListener(this.marker, 'dragend', function(mouseEvent) {
-            //     that.setLocationFromMap(mouseEvent.latLng);
-            // });
+            google.maps.event.addListener(this.marker, 'dragend', function(mouseEvent) {
+                that.setLocationFromMap(mouseEvent.latLng);
+            });
             
-            // google.maps.event.addListener(this.map, 'click', function(mouseEvent){
-            //     that.marker.setPosition(mouseEvent.latLng);
-            //     that.setLocationFromMap(mouseEvent.latLng);
-            // });
+            google.maps.event.addListener(this.map, 'click', function(mouseEvent){
+                that.marker.setPosition(mouseEvent.latLng);
+                that.setLocationFromMap(mouseEvent.latLng);
+            });
 
             $(".show-map").on("click", function(){
                 $.fancybox($(".location_map"), {

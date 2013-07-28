@@ -28,6 +28,12 @@
             {{ stats.cost }}
         </td>
     </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">
+            Venue have not featured event
+        </td>
+    </tr>
     {% endfor %}
 </table>
 

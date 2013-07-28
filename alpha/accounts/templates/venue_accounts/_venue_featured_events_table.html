@@ -17,45 +17,25 @@
         </div>
         <div class="entry-details-wrapper">                                  
             <div class="title">
-                <a href="{% url 'event_view' event.slug %}">
+                <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">
                     {{event.name}}&nbsp;
                 </a>                    
             </div>
             <div class="entry-date">
-                {{event.nearest_start_time|date:"l, F d, Y"}}
+                {{event.start_time|date:"l, F d, Y"}}
                 <span class="delimeter">|</span>
-                {{event.nearest_start_time|just_time}} - {{event.nearest_end_time|just_time}}
+                {{event.start_time|just_time}} - {{event.end_time|just_time}}
             </div>
             <div class="entry-description">                    
                 {{ event.venue.name }}, {{ event.venue.street }}, {{ event.venue.city.name_std }}
             </div>                
-        </div>
-        <div class="auctions-wrapper">
-            <div class="auctions-content">
-                <div class="auctions-img-prev">
-                    {% if event.picture %}
-                        <img src="{% cropped_thumbnail event "cropping" width=87 %}" height="87px" weight="87px">
-                    {% else %}
-                        <img src="{{STATIC_URL}}images/default-event.jpg" height="87px" weight="87px">
-                    {% endif %}
-                </div>
-                <div class="auctions-details-wrapper">
-                    <div class="title">
-                        {{event.name}}&nbsp;
-                    </div>
-                    <div class="entry-date">
-                        {{event.nearest_start_time|date:"l, F d, Y"}}
-                        <br>
-                        {{event.nearest_start_time|contextualize_date}} - {{event.nearest_end_time|just_time}}                                
-                    </div>
-                    <div class="auctions-additional">
-                        {{ event.venue.name }}
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div>        
         <div class="clr"></div>
     </div>
+{% empty %}
+    <p>
+        no featured events
+    </p>
 {%endfor%}
 </div>
 

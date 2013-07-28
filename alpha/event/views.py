@@ -13,7 +13,6 @@ from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.loader import render_to_string
 from django.template import RequestContext
-from django.contrib import messages
 
 from django.middleware.csrf import get_token
 
@@ -24,11 +23,10 @@ from event.filters import EventFilter
 
 from event import DEFAULT_FROM_EMAIL
 
-from event.models import Event, Venue, SingleEvent, Reminder, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
-from accounts.models import VenueAccount
+from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
 from event.utils import find_nearest_city
 
-from event.forms import generate_form, SetupFeaturedForm
+from event.forms import SetupFeaturedForm, CreateEventForm, EditEventForm
 
 from taggit.models import Tag, TaggedItem
 
@@ -62,7 +60,7 @@ def search_pad(request):
 
     featuredEventsFilter = EventFilter({}, queryset=featured_events)
 
-    events = Event.future_events.all()
+    events = SingleEvent.future_events.all()
 
     events_all_count = events.count()
 
@@ -76,17 +74,17 @@ def search_pad(request):
 
     eventsFilter = EventFilter(params, queryset=events)
 
-    top5_tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.id, eventsFilter.qs())) \
+    top10_tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
         .values('tag', 'tag__name') \
         .annotate(count=Count('id')) \
-        .order_by('-count')[0:5]
+        .order_by('-count')[0:10]
 
     return render_to_response('events/search_pad.html', {
                                 'featured_events': featured_events,
                                 'featuredEventsFilter': featuredEventsFilter,
                                 'events': events,
                                 'eventsFilter': eventsFilter,
-                                'top5_tags': top5_tags,
+                                'top10_tags': top10_tags,
                                 'events_all_count': events_all_count,
                                 'start_date': start_date,
                                 'end_date': end_date,
@@ -103,7 +101,7 @@ def browse(request):
 
     featuredEventsFilter = EventFilter({}, queryset=featured_events)
 
-    events = Event.future_events.all()
+    events = SingleEvent.future_events.all()
 
     params = request.GET.copy()
 
@@ -115,7 +113,7 @@ def browse(request):
 
     eventsFilter = EventFilter(params, queryset=events)
 
-    tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.id, eventsFilter.qs())) \
+    tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
         .values('tag', 'tag__name') \
         .annotate(count=Count('id')) \
         .order_by('-count')
@@ -133,56 +131,29 @@ def browse(request):
                             }, context_instance=RequestContext(request))
 
 
-def view_featured(request, slug=None):
+def view_featured(request, slug, date):
     try:
-        event = Event.future_events.get(slug=slug)
-        # TODO: add filter by IP
-        # event.viewed_times = event.viewed_times + 1
-        # event.save()
+        event = Event.future_events.get(slug=slug, start_time__startswith=date)
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))   
         
     event.featuredevent_set.all()[0].click() 
 
-    return HttpResponseRedirect(reverse('event_view', args=(slug, ))) 
+    return HttpResponseRedirect(reverse('event_view', args=(slug, date))) 
 
 
-def view(request, slug=None):
+def view(request, slug, date=None):
     try:
-        event = Event.future_events.get(slug=slug)
-        # TODO: add filter by IP
-        # event.viewed_times = event.viewed_times + 1
-        # event.save()
+        if date:
+            event = Event.future_events.get(slug=slug, start_time__startswith=date)
+        else:
+            event = Event.future_events.get(slug=slug)
     except ObjectDoesNotExist:
-        return HttpResponseRedirect(reverse('event_browse'))    
-
-    opengraph = {'og:title': event.name,
-                  'og:type': 'event',
-                  'og:locale': 'en_US',
-                  # 'og:image': 'http://' + settings.EVENT_EMAIL_SITE + event_picture_url(event, size=200),
-                  'og:url': 'http://' + settings.EVENT_EMAIL_SITE + reverse('event_view', args=(event.slug,)),
-                  'og:site_name': 'Cityfusion',
-                  'fb:app_id': '330171680330072',
-                  #'og:description' : '%s, %s' % (
-                  #    event.start_time.strftime("%B %-1d"),
-                  #    event.start_time.strftime('%-1I:%M %p'))
-                  }
+        return HttpResponseRedirect(reverse('event_browse'))
 
     return render_to_response('events/event_description.html', {
-                                'event': event,
-                                'browsing': True,
-                                'opengraph': opengraph
-                                },
-                              context_instance=RequestContext(request))
-
-
-def view_event_day(request, id):
-    event_day = SingleEvent.objects.get(id=id)
-
-    return render_to_response('events/event_day_description.html', {
-                                'event_day': event_day
-                            },
-                            context_instance=RequestContext(request))
+            'event': event,
+        }, context_instance=RequestContext(request))
 
 
 def save_venue(request):
@@ -250,16 +221,15 @@ def save_when_and_description(request, event_obj):
 
 
 def send_event_details_email(event_obj):
-    #email the user
     current_site = settings.EVENT_EMAIL_SITE
-    subject = render_to_string('events/creation_email_subject.txt', {
+    subject = render_to_string('events/create/creation_email_subject.txt', {
             'site': current_site,
             'title': mark_safe(event_obj.name)
         })
 
     subject = ''.join(subject.splitlines())  # Email subjects are all on one line
 
-    message = render_to_string('events/creation_email.txt', {
+    message = render_to_string('events/create/creation_email.txt', {
             'authentication_key': event_obj.authentication_key,
             'slug': event_obj.slug,
             'site': current_site
@@ -273,58 +243,49 @@ def send_event_details_email(event_obj):
     msg.send()
 
 
-def link_venue_with_account(venue, account):
-    venue_account, created = VenueAccount.objects.get_or_create(venue=venue)
-    venue_account.accounts.add(account)
-
-
 def save_event(request, form):
+    event = form.save()
 
-    venue = save_venue(request)
+    if event.venue_account_owner:
+        venue = event.venue_account_owner.venue
+    else:
+        venue = save_venue(request)
 
-    event_obj = form.save()
-    event_obj.venue = venue
+    event.venue = venue
 
-    save_when_and_description(request, event_obj)
+    save_when_and_description(request, event)
 
     if request.user.is_authenticated():
         #if logged in, use the users info to complete form
-        event_obj.owner = request.user
-        event_obj.email = request.user.email  # don't really need this line
+        event.owner = request.user
+        event.email = request.user.email  # don't really need this line
 
     if request.POST["picture_src"]:
-        event_obj.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
+        event.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
 
-    event_obj = event_obj.save()  # save to the database
+    event = event.save()  # save to the database
     # form.save_m2m()  # needed for many-to-many fields (i.e. the event tags)
-    return event_obj
+    return event
 
 
-def create(request, form_class=None, success_url=None, template_name='events/create_event.html'):
-    if form_class == None:
-        exclude = ['owner', 'authentication_key', 'slug']
-        if request.user.is_authenticated():
-            exclude.append('email')
-        else:
-            return HttpResponseRedirect('/accounts/signin/')
-        form_class = generate_form(*exclude)
-
+@login_required
+def create(request, success_url=None, template_name='events/create/create_event.html'):
     if request.method == 'POST':
-        form = form_class(data=request.POST)
+        form = CreateEventForm(account=request.account, data=request.POST)
         if form.is_valid():
             event_obj = save_event(request, form)
             send_event_details_email(event_obj)
 
-            # on success, redirect to the home page by default
-            # if the user is authenticated, take them to their event page
             if success_url is None:
-                success_url = reverse('event_created', kwargs={'slug': event_obj.slug})
-            #send user off into the abyss...
+                success_url = reverse('event_created', kwargs={ 'slug': event_obj.slug })
+
             return HttpResponseRedirect(success_url)
     else:
-        form = form_class()
+        form = CreateEventForm(account=request.account, initial={
+            "venue_account_owner": request.current_venue_account
+        })
 
-    #Send out the form
+
     context = RequestContext(request)
     return render_to_response(template_name, {
             'form': form,
@@ -337,14 +298,14 @@ def created(request, slug=None):
     if slug is None:
         raise Http404
 
-    return render_to_response('events/creation_complete.html', {
+    return render_to_response('events/create/creation_complete.html', {
             'slug': slug,
             'posting': True,
         }, context_instance=RequestContext(request))
 
 
-def initial_for_event_form(event_obj):
-    venue = event_obj.venue
+def initial_place(event):
+    venue = event.venue
 
     full_parts = [x for x in [venue.name, venue.street, venue.city.name, venue.country.name] if x]
     place = {
@@ -353,19 +314,26 @@ def initial_for_event_form(event_obj):
         "street": venue.street,
         "city": venue.city.name,
         "country": venue.country.name,
-        "longtitude": venue.location.y,
-        "latitude": venue.location.x
+        "longtitude": venue.location.x,
+        "latitude": venue.location.y
     }
 
-    location = (venue.location.y, venue.location.x)
+    return place
 
+def initial_location(event):
+    return (event.venue.location.y, event.venue.location.x)
+
+def inital_picture_src(event):
+    return "/media/%s" % event.picture
+
+def initial_for_event_form(event):    
     when_json = {}
     description_json = {
-        "default": event_obj.description,
+        "default": event.description,
         "days": {}
     }
 
-    single_events = SingleEvent.objects.filter(event=event_obj)
+    single_events = SingleEvent.objects.filter(event=event)
 
     for se in single_events:
         start_time = se.start_time
@@ -387,57 +355,86 @@ def initial_for_event_form(event_obj):
         description_json["days"][start_time.strftime("%m/%d/%Y")] = se.description
 
     return {
-            "place": place,
-            "location": location,
-            "picture_src": "/media/%s" % event_obj.picture,
+            "place": initial_place(event),
+            "location": initial_location(event),
+            "picture_src": inital_picture_src(event),
             "when_json": json.dumps(when_json),
             "description_json": json.dumps(description_json)
         }
 
 
-def edit(request,
-         form_class=None, success_url=None, authentication_key=None,
-         template_name='events/edit_event.html'):
-
-    # Define the form to be used. This allows for anonymous creation of events.
-    if form_class == None:
-        form_class = generate_form('owner', 'authentication_key', 'slug', 'email')
-
-    # Event object is retrieved based on incoming path hash
-    # If the hash does not match an existing event, the user
-    # is redirected to the event creation page.
+@login_required
+def edit(request, success_url=None, authentication_key=None, template_name='events/edit/edit_event.html'):
     try:
-        event_obj = Event.events.get(authentication_key__exact=authentication_key)
+        event = Event.events.get(authentication_key__exact=authentication_key)
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_create'))
 
     # Set the return address
     if success_url is None:
-        success_url = reverse('event_view', kwargs={'slug': event_obj.slug})
+        success_url = reverse('event_view', kwargs={'slug': event.slug})
 
     # Verify and save the form to model
     if request.method == 'POST':
-        form = form_class(instance=event_obj, data=request.POST)
+        form = EditEventForm(account=request.account, instance=event, data=request.POST)
         if form.is_valid():
-            # Remove existing single events
-            SingleEvent.objects.filter(event=event_obj).delete()
+            SingleEvent.objects.filter(event=event).delete()
 
-            event_obj = save_event(request, form)
+            event = save_event(request, form)
             return HttpResponseRedirect(success_url)
     else:
-        form = form_class(
-            instance=event_obj,
-            initial=initial_for_event_form(event_obj)
+        form = EditEventForm(
+            account=request.account,
+            instance=event,
+            initial=initial_for_event_form(event)
         )
 
-    # Edit the event
-    context = RequestContext(request)
     return render_to_response(template_name, {
                                 'form': form,
-                                'event': event_obj,
+                                'event': event,
                                 'location': request.user_location["location"],
                             },
-                            context_instance=context)
+                            context_instance=RequestContext(request))
+
+
+@login_required
+def copy(request, authentication_key, template_name='events/create/copy_event.html'):
+    if request.method == 'POST':
+        form = CreateEventForm(account=request.account, data=request.POST)
+        if form.is_valid():
+            event_obj = save_event(request, form)
+            send_event_details_email(event_obj)
+
+            success_url = reverse('event_created', kwargs={ 'slug': event_obj.slug })
+
+            return HttpResponseRedirect(success_url)
+    else:
+        basic_event = Event.events.get(authentication_key__exact=authentication_key)   
+
+        event = Event(
+            name=basic_event.name, 
+            description=basic_event.description,
+            price=basic_event.price,
+            website=basic_event.website,
+            tickets=basic_event.tickets,
+            owner=basic_event.owner,
+            venue_account_owner=basic_event.venue_account_owner,
+            picture=basic_event.picture,
+            cropping=basic_event.cropping
+        )
+
+        form = CreateEventForm(account=request.account, instance=event, initial={
+            "place": initial_place(basic_event),
+            "location": initial_location(basic_event),
+            "picture_src": inital_picture_src(basic_event),
+            "tags": basic_event.tags_representation
+        })
+
+    return render_to_response(template_name, {
+            'form': form,
+            'posting': True,
+            'location': request.user_location["location"],
+        }, context_instance=RequestContext(request))    
 
 
 def remove(request, authentication_key):

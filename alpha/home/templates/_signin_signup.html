@@ -7,7 +7,7 @@
                 <li class="user-profile">
                     {% if not current_venue_account %} 
                         <a href="{% url 'account_profile_detail' user.username %}">
-                            <img src="{{ request.profile.get_mugshot_url }}" alt="Your mugshot" widrh="29" height="29" />
+                            <img src="{{ request.account.get_mugshot_url }}" alt="Your mugshot" widrh="29" height="29" />
                             <span>
                                 {{ user.username }}
                             </span>                            

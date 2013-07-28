@@ -17,7 +17,6 @@
     </script>
     <script src="{{STATIC_URL}}js/browse/jquery.hoverIntent.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/event-actions.js"></script>
-    <script src="{{STATIC_URL}}js/browse/auctions-popup.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/accounts/venue_account.js"></script>
     <script src="{{STATIC_URL}}js/tabs.js"></script>
     
@@ -96,7 +95,7 @@
                                     Website:
                                 </td>
                                 <td>
-                                    <a href="{{ venue_account.site }}">{{ venue_account.site }}</a>
+                                    <a href="{{ venue_account.site }}" target="_blank">{{ venue_account.site }}</a>
                                 </td>
                             </tr>
                         {% endif %}
@@ -106,10 +105,9 @@
                                     <img src="{{ STATIC_URL }}/images/fb_profile_icon.png"/>
                                 </td>
                                 <td>
-                                    Website:
-                                </td>
-                                <td>
-                                    <a href="{{ venue_account.facebook }}">{{ venue_account.facebook }}</a>
+                                    <a href="{{ venue_account.facebook }}" target="_blank">
+                                        Facebook
+                                    </a>
                                 </td>
                             </tr>
                         {% endif %}
@@ -119,10 +117,21 @@
                                     <img src="{{ STATIC_URL }}/images/twitter.png"/>
                                 </td>
                                 <td>
-                                    Twitter:
+                                    <a href="{{ venue_account.twitter }}" target="_blank">
+                                        Twitter
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% if venue_account.myspace %}
+                            <tr>
+                                <td>
+                                    <img src="{{ STATIC_URL }}/images/myspace_profile_icon.png"/>
                                 </td>
                                 <td>
-                                    <a href="{{ venue_account.twitter }}">{{ venue_account.twitter }}</a>
+                                    <a href="{{ venue_account.myspace }}" target="_blank">
+                                        Myspace
+                                    </a>
                                 </td>
                             </tr>
                         {% endif %}

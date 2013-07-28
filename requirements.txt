@@ -11,3 +11,4 @@ simplejson==1.9.3
 twilio
 django-money
 py-moneyed
+django-localflavor-ca

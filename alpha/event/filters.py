@@ -1,4 +1,4 @@
-from models import Event, Venue
+from models import Event, Venue, SingleEvent
 import datetime
 import re
 import string
@@ -61,7 +61,7 @@ class TimeFilter(Filter):
         else:
             operation = "<="
 
-        where = 'EXTRACT(hour from %s) %s %s' % (self.field.replace("single_events__", "event_singleevent."), operation, value)
+        where = 'EXTRACT(hour from %s) %s %s' % (self.field, operation, value)
 
         return qs.extra(where=[where])
 
@@ -69,7 +69,7 @@ class TimeFilter(Filter):
 class TagsFilter(Filter):
     def filter(self, qs, tags):
         # TODO: It is code with bad performance
-        event_ids = map(lambda event: event.id, qs)
+        event_ids = map(lambda event: event.event.id, qs)
         event_ids_with_tags = Event.events.filter(id__in=list(event_ids)).filter( 
             tagged_items__tag__name__in=tags 
         ).annotate(
@@ -77,7 +77,7 @@ class TagsFilter(Filter):
         ).filter( 
             repeat_count=len(tags) 
         ).values_list("id", flat=True)
-        return qs.filter(id__in=list(event_ids_with_tags))
+        return qs.filter(event_id__in=list(event_ids_with_tags))
 
     def url_query(self, querydict):
         tags = querydict["tag"]
@@ -132,54 +132,61 @@ class FunctionFilter(Filter):
         return getattr(self, "%s_filter" % value)(qs)
 
     def random_filter(self, qs):
-        # qs.order_by = ['?']
         return qs.order_by("?")
 
     def tags_filter(self, qs):
         return qs
 
     def recently_featured_filter(self, qs):
-        return qs.filter(featuredevent__isnull=False).order_by("featuredevent__start_time")
+        return qs.filter(event__featuredevent__isnull=False).order_by("event__featuredevent__start_time")
 
     def all_filter(self, qs):
         return qs
 
     def top_viewed_filter(self, qs):
-        # TODO: add view statistic and sort by it
-        return qs.order_by("-viewed_times")
+        return qs.order_by("-event__viewed_times")
 
     def latest_filter(self, qs):
-        return qs.order_by("-created")
+        return qs.order_by("-event__created")
 
     def night_life_filter(self, qs):
         return qs.filter(
-            Q(tagged_items__tag__name__in=["19+", "Night Life", "DJ", "Party", "Rave"]) | Q(venue__venueaccount__types=VenueType.active_types.get(name="Nightlife & Singles"))
+            Q(event__tagged_items__tag__name__in=["19+", "Night Life", "DJ", "Party", "Rave"]) | Q(event__venue__venueaccount__types=VenueType.active_types.get(name="Nightlife & Singles"))
         )
 
     def date_night_filter(self, qs):
-        return qs.filter(tagged_items__tag__name__in=["Date Night"])
+        return qs.filter(event__tagged_items__tag__name__in=["Date Night"])
 
     def free_filter(self, qs):
-        # https://code.djangoproject.com/ticket/13363
-        ids = Event.future_events_without_annotation.extra(
+        single_event_ids = SingleEvent.future_events.extra(
             where=["""
-                event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', 'free')
-                OR event_event.search_index @@ plainto_tsquery('pg_catalog.english', 'free')
+                "event_singleevent".search_index @@ plainto_tsquery('pg_catalog.english', 'free')                
             """]
         ).values_list("id", flat=True)
 
-        return qs.filter(Q(tagged_items__tag__name__in=["Free"]) | Q(id__in=list(ids)))
+        event_ids = Event.future_events.extra(
+            where=["""                
+                "event_event".search_index @@ plainto_tsquery('pg_catalog.english', 'free')
+            """]
+        ).values_list("id", flat=True)
+
+        return qs.filter(Q(event__tagged_items__tag__name__in=["Free"]) | Q(id__in=list(single_event_ids)) | Q(event_id__in=list(event_ids)))
 
     def family_filter(self, qs):
         # https://code.djangoproject.com/ticket/13363
-        ids = Event.future_events_without_annotation.extra(
+        single_event_ids = SingleEvent.future_events.extra(
             where=["""
-                event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', 'family')
-                OR event_event.search_index @@ plainto_tsquery('pg_catalog.english', 'family')
+                "event_singleevent".search_index @@ plainto_tsquery('pg_catalog.english', 'free')                
             """]
         ).values_list("id", flat=True)
 
-        return qs.filter(Q(tagged_items__tag__name__in=["Family"]) | Q(id__in=list(ids)))
+        event_ids = Event.future_events.extra(
+            where=["""                
+                "event_event".search_index @@ plainto_tsquery('pg_catalog.english', 'free')
+            """]
+        ).values_list("id", flat=True)
+
+        return qs.filter(Q(event__tagged_items__tag__name__in=["Family"]) | Q(id__in=list(single_event_ids)) | Q(event_id__in=list(event_ids)))
 
     def search_tags(self, function):
         name = search_tags_for_filters.get(function)
@@ -323,13 +330,13 @@ class LocationFilter(Filter):
             return self.filter_by_city(qs, location_id)
 
     def filter_by_country(self, qs, id):
-        return qs.filter(venue__country__id=id)
+        return qs.filter(event__venue__country__id=id)
 
     def filter_by_region(self, qs, id):
-        return qs.filter(Q(venue__city__region__id=id) | Q(venue__city__subregion__id=id))
+        return qs.filter(Q(event__venue__city__region__id=id) | Q(event__venue__city__subregion__id=id))
 
     def filter_by_city(self, qs, id):
-        return qs.filter(venue__city__id=id)
+        return qs.filter(event__venue__city__id=id)
 
 
 class SearchFilter(Filter):
@@ -370,7 +377,7 @@ class NightLifeFilter(Filter):
             return None
 
     def filter(self, qs, value=None):
-        return qs.filter(venue__venueaccount__types=VenueType.active_types.get(name="Nightclub"))
+        return qs.filter(event__venue__venueaccount__types=VenueType.active_types.get(name="Nightclub"))
 
 
 class EventFilter(object):
@@ -378,10 +385,10 @@ class EventFilter(object):
         self.data = data.copy()
         self.queryset = queryset
         self.filters = {
-            "start_date": DateFilter("start_date", "single_events__start_time", lookup="gte"),
-            "end_date": DateFilter("end_date", "single_events__start_time", lookup="lte"),
-            "start_time": TimeFilter("start_time", "single_events__start_time", lookup="gte"),
-            "end_time": TimeFilter("end_time", "single_events__start_time", lookup="lte"),
+            "start_date": DateFilter("start_date", "start_time", lookup="gte"),
+            "end_date": DateFilter("end_date", "start_time", lookup="lte"),
+            "start_time": TimeFilter("start_time", "start_time", lookup="gte"),
+            "end_time": TimeFilter("end_time", "start_time", lookup="lte"),
             "tag": TagsFilter("tag", "tags"),
             "featured": Filter("featured", "featured"),
             "function": FunctionFilter("function"),
@@ -401,12 +408,9 @@ class EventFilter(object):
                 qs = queryFilter.filter(qs, queryFilter.filter_data(self.data))
         return qs
 
-    def select_first_days(self, qs):
-        days = qs.values_list("id", flat=True)
-        if days:
-            return qs.extra(where=["""ROW("event_singleevent"."event_id", "event_singleevent"."start_time") IN (SELECT event_id, MIN(start_time) FROM event_singleevent WHERE id IN (%s) GROUP BY event_id)"""
-                % ",".join([str(id) for id in days])])
-        return qs
+    def objects_list(self):
+        return list(self.qs())
+
 
     def url_query(self, **kwargs):
         data = self.data.copy()

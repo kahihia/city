@@ -3,11 +3,10 @@
 {% load cropping %}
 {% load event_tags %}
 
-
 {% paginate 6 venue_archived_events %}
 <div class="account-entry-wrapper entry-wrapper">
 {% for event in venue_archived_events %}    
-    <div class="entry-info">
+    <div class="entry-info with-delete-action">
         <div class="entry-img-prev">
             {% if event.picture %}
                 <img src="{% cropped_thumbnail event "cropping" width=60 %}" height="60px" weight="60px">
@@ -17,21 +16,32 @@
         </div>
         <div class="entry-details-wrapper">
             <div class="title">
-                <a href="{% url 'event_view' event.slug %}">
+                <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">
                     {{event.name}}&nbsp;
                 </a>                    
             </div>
             <div class="entry-date">
-                {{event.nearest_start_time|date:"l, F d, Y"}}
+                {{event.start_time|date:"l, F d, Y"}}
                 <span class="delimeter">|</span>
-                {{event.nearest_start_time|just_time}} - {{event.nearest_end_time|just_time}}
+                {{event.start_time|just_time}} - {{event.end_time|just_time}}
             </div>
             <div class="entry-description">                    
                 {{ event.venue.name }}, {{ event.venue.street }}, {{ event.venue.city.name_std }}
             </div>                
         </div>
+
+        <div class="event-edit-actions">            
+            <a href="{% url 'event_copy' event.authentication_key %}">
+                Copy
+            </a>
+        </div>
+
         <div class="clr"></div>
     </div>
+{% empty %}
+    <p>
+        Archive is empty
+    </p>
 {%endfor%}
 </div>
 
@@ -51,7 +61,7 @@
                     <a href="{{ pages.next.url }}">
                         <img src="{{STATIC_URL}}images/entry-next.png">
                     </a>
-                {% endif %}                
+                {% endif %}
             </span>
         </ul>
     </p>

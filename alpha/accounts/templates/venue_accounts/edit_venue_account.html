@@ -70,6 +70,11 @@
                                     {% endfor %}
                                 </li>
                                 <li id="all-info">
+                                    {% for error in form.myspace.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li id="all-info">
                                     {% for error in form.picture_src.errors %}
                                         <span class="error">{{ error }}</span>
                                     {% endfor %}
@@ -154,6 +159,17 @@
                                 </td>
                                 <td>
                                     {{ form.twitter }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="{{ STATIC_URL }}/images/myspace_profile_icon.png"/>                                
+                                </td>
+                                <td>
+                                    Myspace:
+                                </td>
+                                <td>
+                                    {{ form.myspace }}
                                 </td>
                             </tr>
                             <tr>

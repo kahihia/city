@@ -150,20 +150,7 @@
             </div>
             <div class="clr"></div>
         </div>
-    </div>
-
-    <script type="text/javascript">
-        function onBlur(el) {
-            if (el.value == '') {
-                el.value = el.defaultValue;
-            }
-        }
-        function onFocus(el) {
-            if (el.value == el.defaultValue) {
-                el.value = '';
-            }
-        }
-    </script> 
+    </div>    
 </div>
 
 <div class="search-pad-popup">
@@ -172,5 +159,22 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    function onBlur(el) {
+        if (el.value == '') {
+            el.value = el.defaultValue;
+        }
+    }
+    function onFocus(el) {
+        if (el.value == el.defaultValue) {
+            el.value = '';
+        }
+    }
+</script> 
+
+{% load analytics %}
+{% googleanalyticsjs %}
 </body>
+
+
 </html>

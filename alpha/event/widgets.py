@@ -1,10 +1,10 @@
 from django import forms
 from django.conf import settings
 from django.template import Template, Context
-from django.forms.widgets import Select, MultiWidget, DateInput, TextInput, RadioSelect
+from django.forms.widgets import RadioSelect
 from django.utils.safestring import mark_safe
-from time import strftime
 import json
+from accounts.models import VenueAccount
 
 from ckeditor.widgets import CKEditorWidget
 
@@ -43,7 +43,10 @@ class PriceWidget(forms.TextInput):
         )
 
     def render(self, name, value, *args, **kwargs):
-        html = """<div class="checkbox"><input type='checkbox' id="id_price_free"><label for="id_price_free"></label><label for="id_price_free">Free</label></div>"""
+        html = """<div class="checkbox"><input type='checkbox' id="id_price_free" """
+        if value:
+            html += ' checked="checked" '
+        html += """><label for="id_price_free"></label><label for="id_price_free" class="price-free-label">Free</label></div>"""
         html += super(forms.TextInput, self).render(name, value, *args, **kwargs)
         return mark_safe(html)
 
@@ -145,4 +148,65 @@ class AjaxCropWidget(forms.TextInput):
                 <p>Please enable JavaScript to use file uploader.</p>
             </noscript>
         </div>""").render(Context({}))
+        return mark_safe(html)
+
+
+class ChooseUserContextWidget(forms.Widget):
+    class Media:
+        js = (
+            "js/create_event/venue_account_owner.js",
+        )
+
+    def __init__(self, account, *args, **kw):        
+        super(ChooseUserContextWidget, self).__init__(*args, **kw)
+        self.account = account
+
+        self.choices = [{
+            "id": account.id,
+            "type": "account",
+            "text": account.user.username
+        }]
+
+        for venue_account in account.venueaccount_set.all():
+            self.choices.append({
+                "id": venue_account.id,
+                "type": "venue_account",
+                "text": venue_account.venue.name
+            })
+
+        self.user_context_type = forms.widgets.HiddenInput()
+        self.user_context_id = forms.widgets.HiddenInput()
+
+
+    def value_from_datadict(self, data, files, name):
+        user_context_type = self.user_context_type.value_from_datadict(data, files, 'user_context_type')
+        user_context_id = int(self.user_context_id.value_from_datadict(data, files, 'user_context_id'))
+        
+        if user_context_type=="account":
+            return None
+        else:
+            return user_context_id
+
+    def render(self, name, value, *args, **kwargs):
+        html = """<div class="dropdown venue-account-owner-dropdown inputfield rborder" data-dropdown-class="venue-account-owner-dropdown-list"><select id="id_venue_account_owner">"""
+        for choice in self.choices:
+            html += "<option"
+            if choice["id"] == value:
+                html += " selected='selected'"
+            html += " value='%s|%d'>%s</option>" % (choice["type"], choice["id"], choice["text"])
+
+        html += """</select></div>"""
+        html += "</div>"
+
+        if value:
+            user_context_type = "venue_account"
+            user_context_id = value
+        else:
+            user_context_type = "account"
+            user_context_id = self.account.id  
+            
+
+        html += self.user_context_type.render("user_context_type", "", {"id": 'id_user_context_type', "value": user_context_type})
+        html += self.user_context_id.render("user_context_id", "", {"id": 'id_user_context_id', "value": user_context_id})
+
         return mark_safe(html)

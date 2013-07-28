@@ -398,8 +398,13 @@
 }
 
 .edit-contact-info-table {
+    width: 500px;
     padding: 0;
     margin: 0;
+}
+
+.edit-contact-info-table .edit-contact-info-table-second-td {
+    width: 200px;
 }
 
 .edit-contact-info-table .checkbox {
@@ -464,24 +469,17 @@
     background: #fff;
     float: right;
     margin-top: 10px;
-    height: 45px;
-    line-height: 40px;
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    vertical-align: middle;
 }
 
 .account-entry-wrapper .event-edit-actions div,
 .account-entry-wrapper .event-edit-actions a {
     display: inline-block;
-    margin-right: 5px;
+    margin: 15px 5px;
     color: #06c;
     text-decoration: none;
-    height: 25px;
-    line-height: 25px;
-    vertical-align: middle;
-    padding-left: 27px;
     cursor: pointer;
 }
 
@@ -554,6 +552,7 @@
 
 #id_city_0 {
     border-radius: 0;
+    font-size: 0.9em;
 }
 
  .ads-stats th {

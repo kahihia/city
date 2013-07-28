@@ -1,0 +1,42 @@
+{% if account %}
+    <div class="claim-event-popup event-actions-popup" data-no-turbolink>
+        <div>
+            <h1>
+                Claim Event
+            </h1>
+            <div class="content">
+                <form>
+                    {% csrf_token %}
+                    <textarea name="message" placeholder="Write message here"></textarea>
+                    <input type="hidden" name="event_id" value="{{ event.id }}">
+                    <input type="hidden" name="account_id" value="{{ account.id }}">
+                </form>                
+            </div>
+        </div>
+        
+        <div class="popup-buttons">
+            <a href="javascript: void" class="popup-button send-claim-button">
+                Send
+            </a>
+        </div>
+    </div>
+{% else %}
+    <div class="claim-event-popup event-actions-popup" data-no-turbolink>
+        <div>
+            <h1>
+                Claim Event
+            </h1>
+            <div class="content">
+                Please log in or create an account to use this feature.
+            </div>
+        </div>
+        <div class="popup-buttons">
+            <a href="{% url 'userena_signin' %}" class="popup-button">
+                Log in
+            </a>
+            <a href="{% url 'userena_signup' %}"  class="popup-button">
+                Create Account
+            </a>
+        </div>
+    </div>
+{% endif %}

@@ -1,3 +1,8 @@
+input#id_price[readonly] {
+    background-color: rgb(235, 235, 228);
+    color: rgb(84, 84, 84);
+}
+
 .modern .content-wrapper input[type="text"],
 .modern .content-wrapper input[type="password"],
 .modern .popup input[type="text"],
@@ -509,6 +514,11 @@ body .event-actions-popup .content {
     font: 16px Arial, Helvetica, sans-serif;
 }
 
+body .event-actions-popup .content textarea {
+    width: 360px;
+    height: 200px;
+}
+
 body .event-actions-popup .popup-buttons{
     text-align: center;
     font: 16px Arial, Helvetica, sans-serif;
@@ -537,17 +547,18 @@ body .event-actions-popup .popup-buttons .popup-button:hover {
 
 body .event-actions-popup .possible-in-the-loop-tags {
     margin-top: 15px;
-    border-bottom: 1px solid #d1d1d1;
     position: relative;
     left: -13px;
     width: 390px;
 }
 
+
+
 body .event-actions-popup table.possible-in-the-loop-tags td {
     width: 33%;
     padding: 3px 0;
     padding-left: 15px;
-    border-top: 1px solid #d1d1d1;
+    
     min-height: 20px;
 }
 

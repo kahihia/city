@@ -73,6 +73,7 @@
     $(document).on("ready page:load", function(){
         new BooleanTag("date_night", "Date Night");
         new BooleanTag("family", "Family");
+        new BooleanTag("wheelchair", "Wheelchair");
     });
 
 })(jQuery, window, document);

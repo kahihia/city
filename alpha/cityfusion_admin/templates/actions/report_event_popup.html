@@ -1,0 +1,23 @@
+<div class="report-event-popup event-actions-popup" data-no-turbolink>
+    <div>
+        <h1>
+            Report Event
+        </h1>
+        <div class="content">
+            <form>
+                {% csrf_token %}
+                <textarea name="message" placeholder="Write message here"></textarea>
+                <input type="hidden" name="event_id" value="{{ event.id }}">
+                {% if account %}
+                    <input type="hidden" name="account_id" value="{{ account.id }}">
+                {% endif %}
+            </form>
+            
+        </div>
+    </div>
+    <div class="popup-buttons">
+        <a href="javascript: void" class="popup-button send-report-button">
+            Send
+        </a>
+    </div>
+</div>

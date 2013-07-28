@@ -4,6 +4,7 @@
     function CreateEventPage(){
         this.doNotSubmitOnEnter();
         this.initBalloons();
+        this.initVenueAccountOwner();
         this.initVenueAutocomplete();
         this.initDescriptionField();
     }
@@ -55,6 +56,9 @@
                 $("#id_description").data("description").setValue(json);
                 $("#id_description").data("description").saveCurrentDay();
             }
+        },
+        initVenueAccountOwner: function(){
+            this.venueAccountOwner = new VenueAccountOwnerWidget();
         }
     };
 

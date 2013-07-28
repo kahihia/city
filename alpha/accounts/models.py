@@ -8,8 +8,6 @@ from taggit_autosuggest.managers import TaggableManager
 
 from event.models import Event, SingleEvent, Venue
 
-from phonenumber_field.modelfields import PhoneNumberField
-
 from django_facebook.models import FacebookProfileModel
 
 from django.db.models.signals import post_save, m2m_changed
@@ -48,11 +46,9 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
                                 unique=True,
                                 verbose_name=_('user'),
                                 related_name='my_profile')
-    # here will be location, site, reminder settings, loop tags, order
 
     native_region = models.ForeignKey(Region, blank=True, null=True, related_name="native_for_accounts")
     not_from_canada = models.BooleanField(default=False)
-
 
     website = models.URLField(blank=True, null=True, default='')
 
@@ -77,7 +73,7 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
     reminder_with_sms = models.BooleanField(default=False)
 
     reminder_email = models.EmailField(blank=True, null=True)
-    reminder_phonenumber = PhoneNumberField(blank=True, null=True)
+    reminder_phonenumber = models.CharField(max_length=15, blank=True, null=True)
 
     # events for remind
     reminder_events = models.ManyToManyField("event.Event", blank=True, null=True)
@@ -91,11 +87,14 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
     in_the_loop_with_sms = models.BooleanField(default=False)
 
     in_the_loop_email = models.EmailField(blank=True, null=True)
-    in_the_loop_phonenumber = PhoneNumberField(blank=True, null=True)
+    in_the_loop_phonenumber = models.CharField(max_length=15, blank=True, null=True)
 
     all_of_canada = models.BooleanField()
     regions = models.ManyToManyField(Region)
     cities = models.ManyToManyField(City)
+
+    def future_events(self):
+        return Event.future_events.filter(owner_id=self.user.id)
 
     def in_the_loop_events(self):
         return Event.future_events.filter(tagged_items__tag__name__in=self.in_the_loop_tags.all().values("name"))
@@ -122,6 +121,7 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
     def in_the_loop_tag_names(self):
         return self.in_the_loop_tags.all().values_list("name", flat=True)
 
+
 def create_facebook_profile(sender, instance, created, **kwargs):
     if created:
         Account.objects.create(user=instance)
@@ -130,7 +130,7 @@ def create_facebook_profile(sender, instance, created, **kwargs):
 def add_events_to_schedule(account, events):
     if account.reminder_active_type in ["DAYS", "HOURS"]:
         for event in events:
-            event_days = SingleEvent.future_days.filter(event_id=event.id)
+            event_days = SingleEvent.future_events.filter(event_id=event.id)
 
             for event_day in event_days:
                 if account.reminder_active_type == "DAYS":
@@ -270,13 +270,14 @@ class VenueType(models.Model):
 
 class VenueAccount(models.Model):
     venue = models.ForeignKey(Venue)
-    phone = PhoneNumberField(blank=True, null=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
     fax = models.CharField(verbose_name='Custom Venue Fax', max_length=20, blank=True, null=True)
     email = models.EmailField(verbose_name='Custom Venue Email', blank=True, null=True)
     site = models.URLField(verbose_name='Custom Venue Website Address', blank=True, null=True)
+    myspace = models.URLField(verbose_name='Custom Venue MySpace page', blank=True, null=True)
     facebook = models.URLField(verbose_name='Custom Venue Facebook page', blank=True, null=True)
     twitter = models.URLField(verbose_name='Custom Venue Twitter page', blank=True, null=True)
-    accounts = models.ManyToManyField(Account, verbose_name='User profile')
+    account = models.ForeignKey(Account)
     about = models.TextField(verbose_name='Text for "About Us" block', blank=True, null=True)
     picture = ImageCropField(upload_to='venue_profile_imgs', blank=True, null=True, help_text='Custom Venue Profile picture')
     cropping = ImageRatioField('picture', '154x154', size_warning=True, allow_fullsize=True)
@@ -319,4 +320,4 @@ class AccountTax(models.Model):
         return "%s(%s) %s" % (self.name, self.tax, self.regions.all())
 
     def pretty_tax(self):
-        return "%g" % (self.tax*100)
+        return "%g" % (self.tax*100) 

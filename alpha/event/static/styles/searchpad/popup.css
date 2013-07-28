@@ -7,6 +7,25 @@
     float: left;
 }
 
+.search-pad-popup .main-navigation-nav-wrapper ul.categories li {
+    margin-bottom: 4px;
+}
+
+.search-pad-popup .main-navigation-nav-wrapper ul.categories li.subcat {
+    margin-top: 6px;
+}
+
+.search-pad-content {
+    position: relative;
+    height: 583px;
+}
+
+.search-pad-content .entry-navigation-np {
+    position: absolute;
+    bottom: 0;
+    left: 50px;
+}
+
 .search-pad-popup .loader {
     vertical-align: middle;
     text-align: center;
@@ -25,7 +44,7 @@
 }
 
 .search-pad-content-wrapper {
-    min-height: 540px;
+    min-height: 588px;
     height: 100%;
     float: left;
 
@@ -33,7 +52,6 @@
     padding-left: 15px;
     padding-top: 20px;
     padding-right: 5px;
-    padding-bottom: 45px;
     border: 1px solid #e3e3e3;
 }
 
@@ -43,4 +61,18 @@
 
 #ui-datepicker-div {
     z-index:8031 !important;
+}
+
+.search-pad-popup .event-details-block {
+    margin-top: 10px;
+}
+
+.search-pad-popup .searchpad-event-description{
+    height: 200px;
+    overflow: auto;
+    padding-right: 5px;
+}
+
+.search-pad-popup .step-links span {
+    opacity: 0.5;
 }

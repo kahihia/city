@@ -52,6 +52,10 @@ urlpatterns = patterns('',
         accounts.create_venue_account,
         name='create_venue_account'
     ),
+    url(r'venue-already-in-use/(?P<venue_account_id>\d+)/$',
+        accounts.venue_account_already_in_use,
+        name="venue_account_already_in_use"
+    ),
     url(r'^set-venue-privacy/(?P<venue_account_id>[\d]+)/(?P<privacy>(public|private))/$',
         accounts.set_venue_privacy,
         name='save_venue_privacy'

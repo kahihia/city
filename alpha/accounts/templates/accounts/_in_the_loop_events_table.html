@@ -1,29 +1,39 @@
+{% load date_formatting %}
 {% load endless %}
+{% load cropping %}
 
 {% paginate 6 profile.in_the_loop_events using "in_the_loop_page" as in_the_loop_events %}
 
-<table class="profile-table" celpadding="0" cellspacing="0">
-    <tr>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Event</th>        
-    </tr>
-    {% for event in in_the_loop_events %}
-    <tr>
-        <td>
-            {{ event.nearest_start_time|date:"b d" }}
-        </td>
-        <td>
-            {{ event.nearest_start_time|date:"fA"|title }}-{{ event.nearest_end_time|date:"fA"|title }}
-        </td>
-        <td>
-            <a href="{% url 'event_view' event.slug %}">
-                {{ event.name }}
-            </a>            
-        </td>        
-    </tr>
-    {% endfor %}
-</table>
+<div class="account-entry-wrapper entry-wrapper">
+{% for event in in_the_loop_events %}    
+    <div class="entry-info">
+        <div class="entry-img-prev">
+            {% if event.picture %}
+                <img src="{% cropped_thumbnail event "cropping" width=60 %}" height="60px" weight="60px">
+            {% else %}
+                <img src="{{STATIC_URL}}images/default-event.jpg" height="60px" weight="60px">
+            {% endif %}
+        </div>
+        <div class="entry-details-wrapper">
+            <div class="title">
+                <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">
+                    {{event.name}}&nbsp;
+                </a>                    
+            </div>
+            <div class="entry-date">
+                {{event.start_time|date:"l, F d, Y"}}
+                <span class="delimeter">|</span>
+                {{event.start_time|just_time}} - {{event.end_time|just_time}}
+            </div>
+            <div class="entry-description">
+                {{ event.venue.name }}, {% if event.venue.street %}{{ event.venue.street }}, {% endif %}{{ event.venue.city.name_std }}
+            </div>
+        </div>
+
+        <div class="clr"></div>
+    </div>
+{%endfor%}
+</div>
 
 {% if pages|length > 1 %}
     <div class="profile-table-pagination">

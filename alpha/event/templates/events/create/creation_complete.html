@@ -4,7 +4,7 @@
     <section class="body noborder">
         <h1>Event Posted!</h1>
         <p>
-            <a href="{% url 'event_view' slug %}">See event in action &rarr;</a>
+            <a href="{% url 'event_view' slug event.start_time|date:"Y-m-d" %}">See event in action &rarr;</a>
         </p>
         <p>An email has been sent to you with the details. Please check your spam filter if it does not arrive.</p>
         {% if user.is_authenticated %}
