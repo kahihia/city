@@ -7,7 +7,7 @@
             <form>
                 {% csrf_token %}
                 <textarea name="message" placeholder="Write message here"></textarea>
-                <input type="hidden" name="event_id" value="{{ event.id }}">
+                <input type="hidden" name="event_id" value="{{ event.event_identifier }}">
                 {% if account %}
                     <input type="hidden" name="account_id" value="{{ account.id }}">
                 {% endif %}

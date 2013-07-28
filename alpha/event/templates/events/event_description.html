@@ -13,7 +13,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="http://{{ request.META.HTTP_HOST }}/events/view/{{event.slug}}/" />
     {% if event.picture %}
-        <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{% cropped_thumbnail event "cropping" width=200 %}" />    
+        <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{% if event.event %}{% cropped_thumbnail event.event "cropping" height=200 %}{% else %}{% cropped_thumbnail event "cropping" height=200 %}{% endif %}" />    
     {% else %}
         <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{{STATIC_URL}}images/default-event.jpg" />
     {% endif %}
@@ -54,7 +54,7 @@
                     {% if event.picture %}
                         <a id="photoFancy" href="/media/{{ event.picture }}">
                             <div class="center-cropped" 
-                                style="background: url('{% cropped_thumbnail event "cropping" height=265 %}') center center no-repeat;">
+                                style="background: url('{% if event.event %}{% cropped_thumbnail event.event "cropping" height=265 %}{% else %}{% cropped_thumbnail event "cropping" height=265 %}{% endif %}') center center no-repeat;">
                             </div>​
                         </a>
                     {% else %}
@@ -103,7 +103,7 @@
                             {% endif %}
                             <tr>
                                 <td>
-                                    <a href="javascript:void()" class="action-remind-me accented" data-event-id="{{ event.id }}">Remind Me</a>
+                                    <a href="javascript:void()" class="action-remind-me accented" data-event-id="{{ event.event_identifier }}">Remind Me</a>
                                     {% remind_me_popup event %}
                                 </td>
                                 <td class="in-the-loop-td">

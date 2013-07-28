@@ -1,7 +1,7 @@
 {% load date_formatting %}
 {% load cropping %}
 
-<div class="entry-info">
+<div class="entry-info home-page">
     <div class="entry-img-prev">
         {% if event.picture %}
             <img src="{% cropped_thumbnail event "cropping" width=60 %}" height="60px" weight="60px">
@@ -11,12 +11,12 @@
     </div>
     <div class="entry-details-wrapper">
         <div class="title">
-            <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">
+            <a href="{% if event.start_time %}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}{% else %}{% url 'event_view' event.slug %}{% endif %}">
                 {{event.name}}&nbsp;
             </a>                    
         </div>
         <div class="entry-date">
-            {{event.nearest_start_time|date:"l, F d, Y"}}
+            {{event.start_time|date:"l, F d, Y"}}
             <span class="delimeter">|</span>
             {{event.start_time|just_time}} - {{event.end_time|just_time}}
         </div>

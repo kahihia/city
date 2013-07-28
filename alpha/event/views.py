@@ -145,7 +145,7 @@ def view_featured(request, slug, date):
 def view(request, slug, date=None):
     try:
         if date:
-            event = Event.future_events.get(slug=slug, start_time__startswith=date)
+            event = SingleEvent.future_events.get(event__slug=slug, start_time__startswith=date)
         else:
             event = Event.future_events.get(slug=slug)
     except ObjectDoesNotExist:

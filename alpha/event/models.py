@@ -233,6 +233,18 @@ class Event(models.Model):
         except ValidationError:
             return False
 
+    def next_day(self):
+        return SingleEvent.objects.filter(start_time__gte=datetime.datetime.now(), event=self).order_by("start_time")[0]
+
+    def start_time(self):
+        return self.next_day().start_time
+
+    def end_time(self):
+        return self.next_day().end_time
+
+    def event_identifier(self):
+        return self.id
+
 
 class FutureEventDayManager(models.Manager):
     def get_query_set(self):
@@ -275,8 +287,10 @@ class SingleEvent(models.Model):
             return getattr(self.event, key)      
         raise AttributeError("'%s' object has no attribute '%s'" % (self.__class__.__name__, key))
 
-    def cropping(self):
-        return self.event.cropping
+    def event_identifier(self):
+        return self.event.id
+
+
 
 
 class Venue(models.Model):

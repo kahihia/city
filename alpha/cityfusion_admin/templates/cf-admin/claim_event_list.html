@@ -1,0 +1,46 @@
+{% extends 'cf-admin/base.html' %}
+{% load event_tags %}
+{% load admin_menu %}
+
+{% block page %}
+    <div class="tabs-container">
+        {% cf_admin_menu "claim_event" %}
+
+        <div class="box visible options">            
+            <table>
+                <tr>
+                    <th>Event</th>
+                    <th>Message</th>
+                    <th>Transfer event</th>
+                    <th>Refuse</th>
+                </tr>
+                {% for claim in claims %}
+                <tr>
+                    <td>
+                        <div class="entry-wrapper">
+                            {% event_block claim.event %}
+                        </div>
+                    </td>                    
+                    <td>
+                        {{ claim.message }}
+                    </td>                    
+                    <td>
+                        <a href="{% url "transfer_event" claim.id %}" target="_blank">
+                            Transfer to <a href="{% url "admin:accounts_account_change" claim.account.id %}" target="_blank">{{ claim.account.user.username }}</a>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url "claim_event_refuse" claim.id %}">Refuse</a>
+                    </td>
+                </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">
+                            No claims was found
+                        </td>
+                    </tr>
+                {% endfor %}                
+            </table>
+        </div>
+    </div>
+{% endblock %}

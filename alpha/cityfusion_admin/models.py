@@ -13,6 +13,10 @@ class ReportEvent(models.Model):
 
     active = ActiveManager()
 
+    def process(self):
+        self.processed = True
+        self.save()
+
 
 class ClaimEvent(models.Model):
     event = models.ForeignKey("event.Event")
@@ -21,6 +25,12 @@ class ClaimEvent(models.Model):
     processed  = models.BooleanField(default=False)
 
     active = ActiveManager()
+
+    def process(self):
+        self.processed = True
+        self.save()
+
+
 
 
 CF_ADMIN_MENU = {

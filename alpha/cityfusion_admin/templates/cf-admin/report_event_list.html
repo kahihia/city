@@ -6,14 +6,14 @@
     <div class="tabs-container">
         {% cf_admin_menu "report_event" %}
 
-        <div class="box visible">            
+        <div class="box visible options">            
             <table>
                 <tr>
                     <th>Event</th>
                     <th>Reporter</th>
                     <th>Message</th>
-                    <th>Remove</th>
                     <th>Edit</th>
+                    <th>Mark as processed</th>
                 </tr>
                 {% for report in reports %}
                 <tr>
@@ -31,12 +31,12 @@
                     </td>
                     <td>
                         {{ report.message }}
-                    </td>
-                    <td>
-                        <a href="{% url "admin:event_event_delete" report.event.id %}" target="_blank">Remove</a>
-                    </td>
+                    </td>                    
                     <td>
                         <a href="{% url "admin:event_event_change" report.event.id %}" target="_blank">Edit</a>
+                    </td>
+                    <td>
+                        <a href="{% url "report_event_process" report.id %}">Mark as processed</a>
                     </td>
                 </tr>
                 {% empty %}
