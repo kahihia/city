@@ -234,13 +234,24 @@ class Event(models.Model):
             return False
 
     def next_day(self):
-        return SingleEvent.objects.filter(start_time__gte=datetime.datetime.now(), event=self).order_by("start_time")[0]
+        try:
+            return SingleEvent.objects.filter(start_time__gte=datetime.datetime.now(), event=self).order_by("start_time")[0]
+        except:
+            return None
 
     def start_time(self):
-        return self.next_day().start_time
+        next_day = self.next_day()
+        if next_day:
+            return next_day.start_time
+        else:
+            return None
 
     def end_time(self):
-        return self.next_day().end_time
+        next_day = self.next_day()
+        if next_day:
+            return next_day.end_time
+        else:
+            return None
 
     def event_identifier(self):
         return self.id
