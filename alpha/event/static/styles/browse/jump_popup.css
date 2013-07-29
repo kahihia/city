@@ -25,10 +25,7 @@
 .jump-popup .time-row .checkbox, .jump-popup .date-row .checkbox {
     vertical-align: top;
     margin-top: 2px;
-
 }
-
-
 
 .jump-popup .end-time, .jump-popup .end-date {
     margin-left: 30px;    
@@ -61,7 +58,7 @@
     width: 144px;
 }
 
-.jump-popup .date.dropdown input {
+body .jump-popup .date.dropdown input {
     height: 14px;
 }
 
