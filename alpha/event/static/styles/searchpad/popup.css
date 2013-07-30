@@ -73,6 +73,10 @@
     padding-right: 5px;
 }
 
+.search-pad-popup .searchpad-event-description * {
+    max-width: 425px;
+}
+
 .search-pad-popup .step-links span {
     opacity: 0.5;
 }
