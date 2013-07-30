@@ -176,7 +176,7 @@ def private_venue_account(request, slug):
     venue_events = Event.future_events.filter(venue=venue_account.venue)
     venue_featured_events = Event.featured_events.filter(venue=venue_account.venue)
     venue_archived_events = Event.archived_events.filter(venue=venue_account.venue)
-    featured_events_stats = FeaturedEvent.objects.filter(venue_account=venue_account)
+    featured_events_stats = FeaturedEvent.objects.filter(event__venue_id=venue_account.venue.id)
 
     tabs_page = "private-venue-account"
 

@@ -429,7 +429,7 @@ models.signals.post_save.connect(audit_event_catch, sender=Event)
 
 class FeaturedEvent(models.Model):
     event = models.ForeignKey(Event, blank=False, null=False)
-    venue_account = models.ForeignKey("accounts.VenueAccount", blank=True, null=True)
+    owner = models.ForeignKey("accounts.Account", blank=True, null=True)
     start_time = models.DateTimeField('starting time')
     end_time = models.DateTimeField('ending time', auto_now=False, auto_now_add=False)
     active = models.BooleanField(default=False)

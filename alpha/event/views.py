@@ -447,17 +447,17 @@ def remove(request, authentication_key):
 @login_required
 @native_region_required(why_message="native_region_required")
 def setup_featured(request, authentication_key):
-    account = Account.objects.get(user_id=request.user.id)
-    event_obj = Event.events.get(authentication_key__exact=authentication_key)
-    venue_account = account.venueaccount_set.get(venue=event_obj.venue)
+    account = request.account
+    event = Event.events.get(authentication_key__exact=authentication_key)    
+
     featured_event = FeaturedEvent(
-        event=event_obj,
-        venue_account=venue_account,
+        event=event,
+        owner=account,
         start_time=datetime.date.today(),
         end_time=datetime.date.today() + datetime.timedelta(days=15)
     )
 
-    venue_account_featured_stats = FeaturedEvent.objects.filter(venue_account=venue_account)
+    venue_account_featured_stats = FeaturedEvent.objects.filter(event__venue_id=event.venue.id)
 
     form = SetupFeaturedForm(
         instance=featured_event

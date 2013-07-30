@@ -10,6 +10,8 @@ class VenueAccountMiddleware(object):
         else:
           	request.current_venue_account = None
 
+        request.venue_account = request.current_venue_account
+
 
 
 class UserProfileMiddleware(object):
