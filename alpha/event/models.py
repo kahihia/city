@@ -256,6 +256,9 @@ class Event(models.Model):
     def event_identifier(self):
         return self.id
 
+    def event_description(self):
+        return self.description
+
 
 class FutureEventDayManager(models.Manager):
     def get_query_set(self):
