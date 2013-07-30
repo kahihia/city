@@ -174,10 +174,9 @@
                ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],       
             ];
 
-            CKEDITOR.replace("id_description",{
-                
-            });
+            CKEDITOR.replace("id_description");
 
+            
             CKEDITOR.instances.id_description.on("instanceReady", function(){
                 CKEDITOR.instances.id_description.on('key', function(e){
                     setTimeout(function(){ 
@@ -190,7 +189,9 @@
                     }, 1);
                 });
 
-                CKEDITOR.instances.id_description.on('paste', function(){
+                CKEDITOR.instances.id_description.on('paste', function(e){
+                    e.data.html = e.data.dataValue.replace(/\s*width="[^"]*"/g, '');
+
                     setTimeout(function(){ 
                         that.saveCurrentDay();
                         if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){

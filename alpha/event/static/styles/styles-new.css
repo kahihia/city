@@ -362,7 +362,6 @@ a:hover{
 .primary-content .description * {
     color: #454545;
     font-size: 14px;
-    max-width: 650px;
 }
 
 ul.errorlist {
