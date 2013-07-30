@@ -151,8 +151,15 @@ def view(request, slug, date=None):
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))
 
+    venue = event.venue
+
+    events_from_venue = SingleEvent.future_events.filter(event__venue_id=venue.id)
+    if date:
+        events_from_venue = events_from_venue.exclude(id=event.id)
+
     return render_to_response('events/event_description.html', {
             'event': event,
+            'events_from_venue': events_from_venue
         }, context_instance=RequestContext(request))
 
 

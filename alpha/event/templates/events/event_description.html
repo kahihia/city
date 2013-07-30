@@ -201,14 +201,14 @@
                         <th>Time</th>
                         <th>Event</th>
                     </tr>                    
-                    {% if event.venue.future_events|length > 0 %}
-                        {% paginate 5 event.venue.future_events using "venue_events" as venue_events %}
+                    {% if events_from_venue|length > 0 %}
+                        {% paginate 5 events_from_venue using "venue_events" as venue_events %}
                         {% for venue_event in venue_events %}
                             <tr>
                                 <td>{{ venue_event.start_time|date:"M d" }}</td>
                                 <td>{{ venue_event.start_time|date:"fA"|title }}</td>
                                 <td>
-                                    <a href="{% url 'event_view' venue_event.slug event.start_time|date:"Y-m-d" %}">
+                                    <a href="{% url 'event_view' venue_event.slug venue_event.start_time|date:"Y-m-d" %}">
                                         {{ venue_event.name }}
                                     </a>
                                 </td>
@@ -217,7 +217,7 @@
                     {% endif %}
                 </tbody>
             </table>
-            {% if event.venue.future_events|length > 0 and pages|length > 1 %}
+            {% if events_from_venue|length > 0 and pages|length > 1 %}
                 <div class="secondary-content-table-pagination">
                     <span class="pagintation-wrapper">
                         {% get_pages %}
