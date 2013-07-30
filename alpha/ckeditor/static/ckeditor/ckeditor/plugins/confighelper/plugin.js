@@ -30,9 +30,9 @@ CKEDITOR.plugins.add( 'confighelper',
 
 		// Placeholder - Start
 		// Get the placeholder from the replaced element or from the configuration
-		var placeholder = editor.element.getAttribute( 'placeholder' ) || editor.config.placeholder || '';
+		var placeholder = editor.element.getAttribute( 'placeholder' ) || editor.config.placeholder;
 
-		if (true)
+		if (placeholder)
 		{
 			// Check if the browser supports the placeholder attribute on textareas natively.
 			var supportsPlaceholder = ('placeholder' in document.createElement( 'textarea' ) );
@@ -64,7 +64,6 @@ CKEDITOR.plugins.add( 'confighelper',
 			// Otherwise return the original data
 			function dataIsEmpty( data )
 			{
-				placeholder = editor.element.getAttribute( 'placeholder' ) || editor.config.placeholder || '';
 				if ( data.length > 20 )
 					return false;
 
@@ -140,7 +139,7 @@ CKEDITOR.plugins.add( 'confighelper',
 			}
 
 			editor.on('blur', addPlaceholder);
-			editor.on('mode', addPlaceholder);			
+			editor.on('mode', addPlaceholder);
 
 			editor.on('focus', removePlaceholder);
 			editor.on('beforeModeUnload', removePlaceholder);
