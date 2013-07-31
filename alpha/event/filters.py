@@ -187,13 +187,13 @@ class FunctionFilter(Filter):
         # https://code.djangoproject.com/ticket/13363
         single_event_ids = SingleEvent.future_events.extra(
             where=["""
-                "event_singleevent".search_index @@ plainto_tsquery('pg_catalog.english', 'free')                
+                "event_singleevent".search_index @@ plainto_tsquery('pg_catalog.english', 'family')                
             """]
         ).values_list("id", flat=True)
 
         event_ids = Event.future_events.extra(
             where=["""                
-                "event_event".search_index @@ plainto_tsquery('pg_catalog.english', 'free')
+                "event_event".search_index @@ plainto_tsquery('pg_catalog.english', 'family')
             """]
         ).values_list("id", flat=True)
 
