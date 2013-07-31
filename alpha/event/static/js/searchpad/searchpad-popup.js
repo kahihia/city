@@ -12,6 +12,8 @@
         });
 
         this.loadSearchPadPage("/events/search");
+
+        this.initAuthRequired();
         
     };
 
@@ -47,6 +49,7 @@
             });
         },
         updateUI: function(){
+            var that=this;
             this.ajaxifyLinks();
             this.initSearchTags();
             new window.JumpToDate(this.popup);
@@ -55,6 +58,15 @@
             }
 
             this.eventActions = new window.EventActions($(".event-details", this.popup));
+
+            if($(".auth-required-popup").length>0){
+                $(".auth-required").on("click", function(e){
+                    $(that.dialogContainer).dialog('open');
+                    e.stopPropagation();
+                });
+            }
+
+                
         },
         initSearchTags: function(){
             var that=this;
@@ -65,6 +77,16 @@
                     );
                 }
             });
+        },
+        initAuthRequired: function(){
+            if($(".auth-required-popup").length>0){                
+                this.dialogContainer = $(".auth-required-popup").dialog({
+                    dialogClass: "event-action-ui-dialog",
+                    resizable: false,
+                    width: 390,
+                    autoOpen: false
+                });
+            }
         }
     };
 

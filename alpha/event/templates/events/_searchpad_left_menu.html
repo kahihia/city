@@ -4,16 +4,10 @@
         <ul class="categories">
             <li class="header">
                 <a href="{% events_filter_url request eventsFilter function="all" exclude="tag|datetime" %}" class="all ajax">
-                    Browse All Events({{events_all_count}})
+                    Browse All Events
                 </a>
             </li>
-            <li class="subcat">
-
-                <a href="{% events_filter_url request eventsFilter function="random" exclude="tag" %}" class="ajax">
-                    Random Events
-                </a>
-            </li>
-            <li class="subcat top5">
+            <li class="top5">
                 <a href="javascript:void;" >Top 10 Categories</a>
                 <a href="{% events_filter_url request eventsFilter function="tags"  exclude="tag" %}" class="toggler ajax"></a>
             </li>
@@ -25,15 +19,18 @@
                     </a>
                 </li>                                            
                 {%endfor%}
-            </ul> 
-
-            <li class="subcat">
-                <a href="{% events_filter_url request eventsFilter function="recently_featured" exclude="all" %}" class="ajax">
-                    Recently Featured
+            </ul>             
+            <br>
+            <li>
+                <a href="{% events_filter_url request eventsFilter function="reminder" exclude="all" %}" class="ajax auth-required">
+                    Reminder
                 </a>
             </li>
-            <br>
-
+            <li>
+                <a href="{% events_filter_url request eventsFilter function="in_the_loop" exclude="all" %}" class="ajax auth-required">
+                    In the Loop
+                </a>
+            </li>
             <li class="special">
                 <a href="{% events_filter_url request eventsFilter function="top_viewed" exclude="tag" %}" class="ajax">
                     Top viewed
@@ -66,4 +63,4 @@
             </li>
         </ul>
     </div>
-</div>   
+</div>

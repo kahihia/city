@@ -19,4 +19,7 @@ class UserProfileMiddleware(object):
         if request.user.id:
             request.profile = Account.objects.get(user_id=request.user.id)
             request.account = request.profile
+        else:
+            request.profile = None
+            request.account = None
 

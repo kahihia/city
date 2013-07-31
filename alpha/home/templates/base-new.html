@@ -159,6 +159,9 @@
     </div>
 </div>
 
+{% load event_tags %}
+{% auth_required_popup %}
+
 <script type="text/javascript">
     function onBlur(el) {
         if (el.value == '') {

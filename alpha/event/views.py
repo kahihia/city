@@ -72,7 +72,7 @@ def search_pad(request):
             request.user_location["user_location_id"]
         )
 
-    eventsFilter = EventFilter(params, queryset=events)
+    eventsFilter = EventFilter(params, queryset=events, account=request.account)
 
     top10_tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
         .values('tag', 'tag__name') \

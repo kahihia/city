@@ -1,0 +1,20 @@
+{% if not account %}
+    <div class="auth-required-popup event-actions-popup" data-no-turbolink>
+        <div class="in-the-loop-popup-content">
+            <h1>
+                Authentification required
+            </h1>
+            <div class="content">
+                Please log in or create an account to use this feature.
+            </div>
+        </div>
+        <div class="popup-buttons">
+            <a href="{% url 'userena_signin' %}" class="popup-button">
+                Log in
+            </a>
+            <a href="{% url 'userena_signup' %}"  class="popup-button">
+                Create Account
+            </a>
+        </div>
+    </div>
+{% endif %}

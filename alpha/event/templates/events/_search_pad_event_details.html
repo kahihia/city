@@ -69,8 +69,8 @@
         <div class="event-description searchpad-event-description">
             {% if event.event_description %}
                 {{ event.event_description|safe }}
-            {% endif %}            
-        </div>
+            {% endif %}
+        </div>        
     </div>
 {% empty %}
     <h2>No upcoming events</h2>
@@ -79,6 +79,9 @@
 
 <div class="clr"></div>
 <div class="entry-navigation-np">
+    <p>
+        Total search numbers found ({{ eventsFilter.qs.count }})
+    </p>
     <p>
         <ul>
             {% get_pages %} 

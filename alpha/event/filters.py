@@ -120,13 +120,16 @@ search_tags_for_filters = {
     "night_life": "Night life",
     "date_night": "Date night",
     "free": "Free",
-    "family": "Family"
+    "family": "Family",
+    "reminder": "Reminder",
+    "in_the_loop": "In the Loop"
 }
 
 
 class FunctionFilter(Filter):
-    def __init__(self, name):
+    def __init__(self, name, account=None):
         self.name = name
+        self.account = account
 
     def filter(self, qs, value):
         return getattr(self, "%s_filter" % value)(qs)
@@ -139,6 +142,14 @@ class FunctionFilter(Filter):
 
     def recently_featured_filter(self, qs):
         return qs.filter(event__featuredevent__isnull=False).order_by("event__featuredevent__start_time")
+
+    def reminder_filter(self, qs):
+        ids = self.account.reminder_events.all().values_list("id", flat=True)
+        return qs.filter(event_id__in=ids)
+
+    def in_the_loop_filter(self, qs):
+        ids = self.account.in_the_loop_events().values_list("id", flat=True)
+        return qs.filter(event_id__in=ids)
 
     def all_filter(self, qs):
         return qs
@@ -381,7 +392,7 @@ class NightLifeFilter(Filter):
 
 
 class EventFilter(object):
-    def __init__(self, data, queryset=Event.events.all()):
+    def __init__(self, data, queryset=Event.events.all(), account=None):
         self.data = data.copy()
         self.queryset = queryset
         self.filters = {
@@ -391,7 +402,7 @@ class EventFilter(object):
             "end_time": TimeFilter("end_time", "start_time", lookup="lte"),
             "tag": TagsFilter("tag", "tags"),
             "featured": Filter("featured", "featured"),
-            "function": FunctionFilter("function"),
+            "function": FunctionFilter("function", account=account),
             "search": SearchFilter("search", "search_index"),
             "location": LocationFilter("location")
         }

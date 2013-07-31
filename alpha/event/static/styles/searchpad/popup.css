@@ -23,7 +23,8 @@
 .search-pad-content .entry-navigation-np {
     position: absolute;
     bottom: 0;
-    left: 50px;
+    left: 100px;
+    background: #ffffff;
 }
 
 .search-pad-popup .loader {
@@ -40,7 +41,6 @@
 
 .search-pad-popup .main-navigation-nav-wrapper {
     padding: 0;
-
 }
 
 .search-pad-content-wrapper {
@@ -68,7 +68,7 @@
 }
 
 .search-pad-popup .searchpad-event-description{
-    height: 200px;
+    height: 190px;
     overflow: auto;
     padding-right: 5px;
 }

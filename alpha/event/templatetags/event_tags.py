@@ -85,3 +85,11 @@ def event_block(context, event):
         'event': event,
         'STATIC_URL': STATIC_URL
     }
+
+
+@register.inclusion_tag('events/actions/auth_required_popup.html', takes_context=True)    
+def auth_required_popup(context):
+    request = context['request']
+    return {
+        "account": request.account
+    }
