@@ -169,6 +169,9 @@ class FunctionFilter(Filter):
         return qs.filter(event__tagged_items__tag__name__in=["Date Night"])
 
     def free_filter(self, qs):
+        # TODO: refactor
+        single_event_with_tag = SingleEvent.future_events.filter(event__tagged_items__tag__name__in=["Free"])
+
         single_event_ids = SingleEvent.future_events.extra(
             where=["""
                 "event_singleevent".search_index @@ plainto_tsquery('pg_catalog.english', 'free')                
@@ -181,10 +184,12 @@ class FunctionFilter(Filter):
             """]
         ).values_list("id", flat=True)
 
-        return qs.filter(Q(event__tagged_items__tag__name__in=["Free"]) | Q(id__in=list(single_event_ids)) | Q(event_id__in=list(event_ids)))
+        return qs.filter(Q(id__in=single_event_with_tag) | Q(id__in=list(single_event_ids)) | Q(event_id__in=list(event_ids)))
 
     def family_filter(self, qs):
         # https://code.djangoproject.com/ticket/13363
+        # TODO: refactor
+        single_event_with_tag = SingleEvent.future_events.filter(event__tagged_items__tag__name__in=["Family"])
         single_event_ids = SingleEvent.future_events.extra(
             where=["""
                 "event_singleevent".search_index @@ plainto_tsquery('pg_catalog.english', 'family')                
@@ -197,7 +202,7 @@ class FunctionFilter(Filter):
             """]
         ).values_list("id", flat=True)
 
-        return qs.filter(Q(event__tagged_items__tag__name__in=["Family"]) | Q(id__in=list(single_event_ids)) | Q(event_id__in=list(event_ids)))
+        return qs.filter(Q(id__in=single_event_with_tag) | Q(id__in=list(single_event_ids)) | Q(event_id__in=list(event_ids)))
 
     def search_tags(self, function):
         name = search_tags_for_filters.get(function)
