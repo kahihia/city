@@ -157,22 +157,23 @@ class EditEventForm(forms.ModelForm):
 
         place = cleaned_data["place"]
 
-        if cleaned_data["venue_name"]:
-            if not cleaned_data["city_identifier"]:
-                self.city_required = True
-                raise forms.ValidationError(u'City is required')
-            if not cleaned_data["location"]:
-                raise forms.ValidationError(u'Location on the map is required')
+        if not cleaned_data["venue_account_owner"]:
+            if cleaned_data["venue_name"]:
+                if not cleaned_data["city_identifier"]:
+                    self.city_required = True
+                    raise forms.ValidationError(u'City is required')
+                if not cleaned_data["location"]:
+                    raise forms.ValidationError(u'Location on the map is required')
 
-        elif place["full"]:
-            if not place["city"]:
-                raise forms.ValidationError(u'You need to select al least city')
-            if not place["venue"] or \
-               not place["latitude"] or \
-               not place["longtitude"]:
-                raise forms.ValidationError(u'Invalid location')
-        else:
-            raise forms.ValidationError(u'Location is required')
+            elif place["full"]:
+                if not place["city"]:
+                    raise forms.ValidationError(u'You need to select al least city')
+                if not place["venue"] or \
+                   not place["latitude"] or \
+                   not place["longtitude"]:
+                    raise forms.ValidationError(u'Invalid location')
+            else:
+                raise forms.ValidationError(u'Location is required')
 
         return cleaned_data
 

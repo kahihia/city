@@ -32,8 +32,6 @@ from taggit.models import Tag, TaggedItem
 
 from ajaxuploader.views import AjaxFileUploader
 
-from accounts.models import Account
-
 from moneyed import Money, CAD
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import native_region_required
@@ -198,11 +196,11 @@ def save_venue(request):
     return venue
 
 
-def save_when_and_description(request, event_obj):
+def save_when_and_description(request, event):
     when_json = json.loads(request.POST["when_json"])
     description_json = json.loads(request.POST["description_json"])
 
-    event_obj.description = description_json['default']
+    event.description = description_json['default']
 
     for year, months in when_json.iteritems():
         for month, days in months.iteritems():
@@ -219,7 +217,7 @@ def save_when_and_description(request, event_obj):
                 end = datetime.datetime(int(year), int(month), int(day), end_time[3], end_time[4])
 
                 single_event = SingleEvent(
-                    event=event_obj,
+                    event=event,
                     start_time=start.strftime('%Y-%m-%d %H:%M'),
                     end_time=end.strftime('%Y-%m-%d %H:%M'),
                     description=description
@@ -227,25 +225,25 @@ def save_when_and_description(request, event_obj):
                 single_event.save()
 
 
-def send_event_details_email(event_obj):
+def send_event_details_email(event):
     current_site = settings.EVENT_EMAIL_SITE
     subject = render_to_string('events/create/creation_email_subject.txt', {
             'site': current_site,
-            'title': mark_safe(event_obj.name)
+            'title': mark_safe(event.name)
         })
 
     subject = ''.join(subject.splitlines())  # Email subjects are all on one line
 
     message = render_to_string('events/create/creation_email.txt', {
-            'authentication_key': event_obj.authentication_key,
-            'slug': event_obj.slug,
+            'authentication_key': event.authentication_key,
+            'slug': event.slug,
             'site': current_site
         })
 
     msg = EmailMessage(subject,
                message,
                DEFAULT_FROM_EMAIL,
-               [event_obj.email])
+               [event.email])
     msg.content_subtype = 'html'
     msg.send()
 
@@ -263,15 +261,13 @@ def save_event(request, form):
     save_when_and_description(request, event)
 
     if request.user.is_authenticated():
-        #if logged in, use the users info to complete form
         event.owner = request.user
-        event.email = request.user.email  # don't really need this line
+        event.email = request.user.email
 
     if request.POST["picture_src"]:
         event.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
 
-    event = event.save()  # save to the database
-    # form.save_m2m()  # needed for many-to-many fields (i.e. the event tags)
+    event = event.save()
     return event
 
 
@@ -280,11 +276,11 @@ def create(request, success_url=None, template_name='events/create/create_event.
     if request.method == 'POST':
         form = CreateEventForm(account=request.account, data=request.POST)
         if form.is_valid():
-            event_obj = save_event(request, form)
-            send_event_details_email(event_obj)
+            event = save_event(request, form)
+            send_event_details_email(event)
 
             if success_url is None:
-                success_url = reverse('event_created', kwargs={ 'slug': event_obj.slug })
+                success_url = reverse('event_created', kwargs={ 'slug': event.slug })
 
             return HttpResponseRedirect(success_url)
     else:
@@ -342,8 +338,8 @@ def initial_for_event_form(event):
 
     single_events = SingleEvent.objects.filter(event=event)
 
-    for se in single_events:
-        start_time = se.start_time
+    for single_event in single_events:
+        start_time = single_event.start_time
         year = start_time.year
         month = start_time.month
         day = start_time.day
@@ -356,10 +352,10 @@ def initial_for_event_form(event):
 
         when_json[year][month][day] = {
             "start": start_time.strftime('%I:%M %p'),
-            "end": se.end_time.strftime('%I:%M %p')
+            "end": single_event.end_time.strftime('%I:%M %p')
         }
 
-        description_json["days"][start_time.strftime("%m/%d/%Y")] = se.description
+        description_json["days"][start_time.strftime("%m/%d/%Y")] = single_event.description
 
     return {
             "place": initial_place(event),
@@ -377,11 +373,9 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_create'))
 
-    # Set the return address
     if success_url is None:
         success_url = reverse('event_view', kwargs={'slug': event.slug})
 
-    # Verify and save the form to model
     if request.method == 'POST':
         form = EditEventForm(account=request.account, instance=event, data=request.POST)
         if form.is_valid():

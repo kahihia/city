@@ -305,8 +305,6 @@ class SingleEvent(models.Model):
         return self.event.id
 
 
-
-
 class Venue(models.Model):
     name = models.CharField(max_length=250, default='Default Venue')
     street = models.CharField(max_length=250, blank=True)
