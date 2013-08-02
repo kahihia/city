@@ -1,0 +1,78 @@
+{% extends 'cf-admin/base.html' %}
+{% load event_tags %}
+{% load admin_menu %}
+{% load setup_advertising %}
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/advertising-setup.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
+
+    <script src="{{STATIC_URL}}js/jquery.balloon.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/advertising/setup-page.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block page %}
+    <div class="tabs-container">
+        {% cf_admin_menu "admin_advertising" %}
+        <div class="box visible options">
+            <ul class="tabs">
+                <li>
+                    <a href="{% url 'admin_advertising' %}"><span>Active advertising</span></a>
+                </li>
+                <li>
+                    <a href="{% url 'admin_advertising_setup' %}"><span>Create new campaign</span></a>
+                </li>
+            </ul>            
+            <div class="box visible advertising-setup">
+                <h1>
+                    Edit {{ campaign.name }} campaign
+                </h1>
+                <div class="content account-options-wrapper">
+                    <div class="main-content account-options">
+                        {%if form.errors %}
+                            <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                                <ul style="list-style-type: none;">
+                                    <li id="all-info">
+                                        {% for error in form.non_field_errors %}
+                                            <span class="error">{{ error }}</span>
+                                        {% endfor %}
+                                    </li>
+                                    <li id="all-info">
+                                        {% for error in form.name.errors %}
+                                            <span class="error">{{ error }}</span>
+                                        {% endfor %}
+                                    </li>
+                                    <li id="all-info">
+                                        {% for error in form.website.errors %}
+                                            <span class="error">{{ error }}</span>
+                                        {% endfor %}
+                                    </li>
+                                </ul>
+                            </div>                            
+                        {% endif %}
+                        <form  enctype="multipart/form-data" method="post" name="advertising-setup" >
+                            {% csrf_token %}
+                            <div class="campaign-name">
+                                Name of Campaign                        
+                                {{ form.name }}
+                                Enter the name of your campaign.
+                            </div>
+
+                            <div class="campaign-name">
+                                Campaign website URL
+                                {{ form.website }}
+                            </div>
+
+                            {% setup_advertising_types %}
+                            {% setup_advertising_upload %}
+                            {% setup_advertising_regions %}
+
+                            <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
+                        </form>
+                    </div>                
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -101,3 +101,27 @@ def advertising_group(context, dimensions, css_class="advertising-right"):
 @register.filter
 def getbykey(dict, key):    
     return dict[key]
+
+@register.inclusion_tag('advertising/stats/stats.html', takes_context=True)
+def advertising_stats(context, ads):
+    request = context["request"]
+    return {
+        'ads': ads,
+        'request': request
+    }
+
+@register.inclusion_tag('advertising/stats/admin-advertising-list.html', takes_context=True)
+def admin_advertising_stats(context, ads):
+    request = context["request"]
+    return {
+        'ads': ads,
+        'request': request
+    }
+
+@register.inclusion_tag('advertising/stats/admin-advertising-campaigns.html', takes_context=True)
+def admin_advertising_campaigns(context, campaigns):
+    request = context["request"]
+    return {
+        'campaigns': campaigns,
+        'request': request
+    }    

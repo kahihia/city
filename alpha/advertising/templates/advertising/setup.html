@@ -2,6 +2,7 @@
 {% load i18n %} 
 {% load url from future %} 
 {% load dictionary_tags %}
+{% load setup_advertising %}
 
 {% block title %}
     {% blocktrans with profile.user.username as username %}
@@ -10,7 +11,6 @@
 {% endblock %} 
 
 {% block head %}
-    <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />    
     <link href="{{STATIC_URL}}styles/advertising-setup.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
@@ -24,7 +24,7 @@
         <h1>
             Advertising - Setup
         </h1>
-        <div class="content account-options-wrapper">            
+        <div class="content account-options-wrapper">
             <div class="main-content account-options">
                 {%if form.errors %}
                     <div class="errors" style="border:1px solid RED;border-radius:4px;">
@@ -66,278 +66,10 @@
                         {{ form.website }}
                     </div>
                     
-                    Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner, etc.                    
-                    <div class="advertising-types">
-                        <table cellspacing="0" cellpadding="0">
-                            <tr>
-                                <th>
-                                    Size of Ad
-                                    <a href="javascript:void;" class="balloon">
-                                        <div class="buttonq mini"></div>
-                                    </a>
-                                    <div class="balloon-content">
-                                        <h3>
-                                            Help - Advertising Campaign
-                                            <i>[Size]:</i>
-                                        </h3>
-                                        <p>
-                                            Choose ad size
-                                        </p>
-                                    </div>
-                                </th>
-                                <th class="ad-type-col">
-                                    CPM
-                                    <a href="javascript:void;" class="balloon">
-                                        <div class="buttonq mini"></div>
-                                    </a>
-                                    <div class="balloon-content">
-                                        <h3>
-                                            Help - Advertising Campaign
-                                            <i>[CPM]:</i>
-                                        </h3>
-                                        <p>
-                                            Cost per view
-                                        </p>
-                                    </div>
-                                </th>
-                                <th class="ad-type-col">
-                                    CMC
-                                    <a href="javascript:void;" class="balloon">
-                                        <div class="buttonq mini"></div>
-                                    </a>
-                                    <div class="balloon-content">
-                                        <h3>
-                                            Help - Advertising Campaign
-                                            <i>[CPC]:</i>
-                                        </h3>
-                                        <p>
-                                            Cost per click
-                                        </p>
-                                    </div>
-                                </th>                                
-                                <th>
-                                    CPM Prices
-                                    <a href="javascript:void;" class="balloon">
-                                        <div class="buttonq mini"></div>
-                                    </a>
-                                    <div class="balloon-content">
-                                        <h3>
-                                            Help - Advertising Campaign
-                                            <i>[CPM Price]:</i>
-                                        </h3>
-                                        <p>
-                                            Price for 1000 views
-                                        </p>
-                                    </div>
-                                </th>
-                                <th>
-                                    CPC Prices
-                                    <a href="javascript:void;" class="balloon">
-                                        <div class="buttonq mini"></div>
-                                    </a>
-                                    <div class="balloon-content">
-                                        <h3>
-                                            Help - Advertising Campaign
-                                            <i>[CPC Price]:</i>
-                                        </h3>
-                                        <p>
-                                            Price for 1000 clicks
-                                        </p>
-                                    </div>
-                                </th>                                
-                            </tr>
-                            <tr class="empty-tr">
-                                <td></td>
-                                <td class="ad-type-col"></td>
-                                <td class="ad-type-col"></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-
-                            {% for advertising_type in advertising_types %}
-                            <tr>
-                                <td class="ad-type-description-col">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="id_advertising_type_{{ advertising_type.id }}" value="{{ advertising_type.id }}" name="advertising_types" data-ad-type="{{ advertising_type.id }}" {% if advertising_type.id in chosen_advertising_types %}checked="checked"{% endif %}>
-                                        <label for="id_advertising_type_{{ advertising_type.id }}"></label>
-                                        <label for="id_advertising_type_{{ advertising_type.id }}">{{ advertising_type }}</label>
-                                    </div>                                    
-                                </td>
-                                <td class="ad-type-col">
-                                    <div class="radio">                                        
-                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cpm" value="CPM" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}" {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CPM" %}checked="checked"{% endifequal %}>
-                                        <label for="advertising_type_{{ advertising_type.id }}_cpm"></label>
-                                    </div>
-                                </td>
-                                <td class="ad-type-col">
-                                    <div class="radio">                                        
-                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cmc" value="CMC" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}" {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CMC" %}checked="checked"{% endifequal %}>
-                                        <label for="advertising_type_{{ advertising_type.id }}_cmc"></label>
-                                    </div>
-                                </td>                                
-                                <td class="center">                                    
-                                    {{ advertising_type.cpm_price }}
-                                </td>
-                                <td class="center">
-                                    {{ advertising_type.cpc_price }}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            <tr class="empty-tr">
-                                <td></td>
-                                <td class="ad-type-col"></td>
-                                <td class="ad-type-col"></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div class="advertising-uploads">
-                        <table>
-                        {% for advertising_type in advertising_types %}                        
-                            <tr data-ad-type="{{ advertising_type.id }}"  {% if advertising_type.id in chosen_advertising_types %}class="chosen"{% endif %}>
-                                <td>Upload {{advertising_type}}</td>
-                                <td>
-                                    <input type="file" name="advertising_image.{{advertising_type.id}}">
-                                </td>
-                                <td>
-                                    
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </table>
-                    </div>
-                    
-                    Select province/territory to show your ad (Choices)
-                    
-                    <div class="advertising-territories options">
-                        <div class="teritory-node">
-                            <div class="checkbox">
-                                <input {% if form.all_of_canada.value %}checked="checked"{% endif %} type="checkbox" id="id_all_of_canada" value="true" name="all_of_canada" />
-                                <label for="id_all_of_canada"></label>
-                                <label for="id_all_of_canada">All of Canada</label>
-                            </div>
-                        </div>
-                        {% for region in form.fields.regions.queryset %}
-                        <div class="teritory-node region">
-                            <div class="checkbox">
-                                <input {% for current_region in form.regions.value %}{% if region.pk = current_region|add:0 %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_regions_{{ forloop.counter0 }}" value="{{ region.id }}" name="regions" />
-                                <label for="id_regions_{{ forloop.counter0 }}"></label>
-                                <label for="id_regions_{{ forloop.counter0 }}">
-                                    {{ region.name }}
-                                </label>
-                            </div>
-                        </div>
-                        {% endfor %}
-                        <div class="clr"></div>
-                    </div>
-
-                    <div class="pay-now-header">
-                        Pay Now With
-                    </div>
-                    <div class="pay-now-widget">
-                        <div class="info">
-                            <div class="budget">
-                                <table>
-                                    <tr>
-                                        <td>Budget(CAD):</td>
-                                        <td>
-                                            <input type="text" id="id_budget" name="order_budget" value="0.0">
-
-                                            <input type="hidden" name="order_budget_currency" value="CAD">
-                                        </td>
-                                        <td>
-                                            <a href="javascript:void;" class="balloon">
-                                                <div class="buttonq"></div>
-                                            </a>
-                                            <div class="balloon-content">
-                                                <h3>
-                                                    Help - Advertising Campaign
-                                                    <i>[Budget]:</i>
-                                                </h3>
-                                                <p>
-                                                    Budget for campaign
-                                                </p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <table class="taxes">
-                                {% if account_taxes %}
-                                    {% for tax in account_taxes %}
-                                        <tr class="tax-row">
-                                            <td>
-                                                <input type="hidden" value="{{ tax.tax }}" class="tax-input">
-                                                {{ tax.name }} ({{ tax.pretty_tax }}%):
-                                            </td>
-                                            <td>
-                                                C$<span class="tax-price">
-                                                    0
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                {% endif %}
-                                <tr class="total-price-row">
-                                    <td>
-                                        Total:
-                                    </td>
-                                    <td>
-                                        C$<span class="total-price-output">
-                                            0
-                                        </span>
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                        </div>
-                        <div class="choose-payment-system">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <input id="payment_paypal_id" type="radio" name="payment_system" value="paypal" checked="checked" >
-                                            <label for="payment_paypal_id"></label>
-                                            <label for="payment_paypal_id">
-                                                <img src="{{ STATIC_URL }}/images/featured/paypal.png"/>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox disabled">
-                                            <input id="payment_visa_id" type="radio" name="payment_system" value="visa" disabled>
-                                            <label for="payment_visa_id"></label>
-                                            <label for="payment_visa_id">
-                                                <img src="{{ STATIC_URL }}/images/featured/visa.png"/>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="checkbox disabled">
-                                            <input id="payment_email_money_id" type="radio" name="payment_system" value="email_money_transfer" disabled>
-                                            <label for="payment_email_money_id"></label>
-                                            <label for="payment_email_money_id">
-                                                <img src="{{ STATIC_URL }}/images/featured/email_money_transfer.png"/>
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="checkbox disabled">
-                                            <input id="payment_master_card_id" type="radio" name="payment_system" value="master_card" disabled>
-                                            <label for="payment_master_card_id"></label>
-                                            <label for="payment_master_card_id">
-                                                <img src="{{ STATIC_URL }}/images/featured/master_card.png"/>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                    {% setup_advertising_types %}
+                    {% setup_advertising_upload %}
+                    {% setup_advertising_regions %}
+                    {% setup_advertising_payments %}
                     <div class="pay-now-footer">
                         <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
                     </div>

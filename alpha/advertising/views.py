@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from advertising.models import AdvertisingCampaign, AdvertisingType, Advertising, AdvertisingOrder
-from advertising.forms import AdvertisingSetupForm, AdvertisingCampaignEditForm, DepositFundsForCampaignForm
+from advertising.forms import PaidAdvertisingSetupForm, AdvertisingCampaignEditForm, DepositFundsForCampaignForm
 from advertising.utils import get_chosen_advertising_types, get_chosen_advertising_payment_types, get_chosen_advertising_images
 
 from django.contrib.auth.decorators import login_required
@@ -26,12 +26,12 @@ def setup(request):
     account = Account.objects.get(user_id=request.user.id)
     campaign = AdvertisingCampaign(account=account)
 
-    form = AdvertisingSetupForm(instance=campaign)
+    form = PaidAdvertisingSetupForm(instance=campaign)
 
     advertising_types = AdvertisingType.objects.filter(active=True).order_by("id")
 
     if request.method == 'POST':
-        form = AdvertisingSetupForm(instance=campaign, data=request.POST, files=request.FILES)
+        form = PaidAdvertisingSetupForm(instance=campaign, data=request.POST, files=request.FILES)
         if form.is_valid():
             advertising_campaign = form.save()
 
@@ -157,8 +157,7 @@ def edit_campaign(request, campaign_id):
                 advertising.save()                    
 
             campaign = form.save()
-            return HttpResponseRedirect('/advertising/campaign/44/edit/')
-            # return HttpResponseRedirect('/accounts/%s/' % request.user.username)
+            return HttpResponseRedirect('/accounts/%s/' % request.user.username)
 
     chosen_advertising_types = get_chosen_advertising_types(campaign, request)
     chosen_advertising_payment_types = get_chosen_advertising_payment_types(campaign, request)

@@ -200,7 +200,7 @@
                         <table>
                         {% for advertising_type in advertising_types %}
                             <tr data-ad-type="{{ advertising_type.id }}" {% if advertising_type.id in chosen_advertising_types %}class="chosen"{% endif %}>
-                                <td>Upload {{advertising_type}}</td>                                
+                                <td>Upload {{advertising_type}}</td>
                                 <td>
                                     <input type="file" name="advertising_image.{{advertising_type.id}}">
                                 </td>
@@ -210,7 +210,7 @@
                                             <!-- Advertising preview -->
                                             view actual ad
                                         </a>
-                                    {% endif %}                                    
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}

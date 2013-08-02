@@ -1,0 +1,65 @@
+{% load endless %}
+
+{% if ads|length %}
+    {% paginate 15 ads %}
+    <table class="profile-table ads-stats" celpadding="0" cellspacing="0">
+        <tr>
+            <th class="action">Campaign Name</th>
+            <th class="action">Size of Ad</th>            
+            <th class="action">Edit</th>
+            <th class="action">Remove</th>
+        </tr>
+        {% for ad in ads %}
+        <tr class="ad-line {% if forloop.first %}selected{% endif %}">
+            <td class="action" data-stat-key="campaign">
+                {{ ad.campaign.name }}
+            </td>
+            <td class="action" data-stat-key="campaign">
+                
+            </td>            
+            <td class="action" data-stat-key="type" data-stat-value="{{ ad.ad_type }}">
+                <a href="/media/{{ ad.image }}">View {{ ad.ad_type.name }}</a><br>
+                {{ ad.ad_type.width }}x{{ ad.ad_type.height }}
+            </td>
+            <td class="action">
+                <a href="{% url 'admin_advertising_edit_campaign' ad.campaign.id %}">
+                    Edit
+                </a>
+            </td>
+            <td class="action">
+                <a href="{% url 'admin_advertising_remove_campaign' ad.campaign.id %}">
+                    Remove campaign
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if pages|length > 1 %}
+        <div class="profile-table-pagination">
+            <span class="pagintation-wrapper">
+                {% get_pages %}
+                {% if pages.current.is_first %}
+                    <span class="prev"></span>            
+                {% else %}
+                    <a class="prev" href="{{ pages.previous.url }}"></a>
+                {% endif %}
+                <span class="page-info">
+                    {{ pages.current }} of {{ pages|length }}
+                </span>
+
+                {% if pages.current.is_last %}
+                    <span class="next"></span>                    
+                {% else %}
+                    <a class="next" href="{{ pages.next.url }}"></a>
+                {% endif %}
+            </span>        
+        </div>
+    {% endif %}
+{% else %}
+    <div class="empty">
+        <p>You have no ads.</p>
+        <p>You can <a href="{% url 'advertising_setup' %}">create</a> new advertising campaign</p>
+    </div>    
+{% endif %}
+

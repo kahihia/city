@@ -21,10 +21,6 @@ class AdvertisingSetupForm(forms.ModelForm):
         required=False
     )
 
-    order_budget = MoneyField(min_value=Money(10, CAD))
-
-    # advertisings = ModelAdvertisingsField()
-
     class Meta:
         model = AdvertisingCampaign
         fields = (
@@ -39,7 +35,6 @@ class AdvertisingSetupForm(forms.ModelForm):
 
         self.fields['name'].error_messages['required'] = 'Campaign name is required'
         self.fields['website'].error_messages['required'] = 'Website URL is required'
-        self.fields['order_budget'].error_messages['min_value'] = 'Ensure budget is greater than or equal to %(limit_value)s'
 
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -85,43 +80,7 @@ class AdvertisingSetupForm(forms.ModelForm):
         return cleaned_data
 
 
-class DepositFundsForCampaignForm(forms.Form):
-    order_budget = MoneyField(min_value=Money(10, CAD))
-
-    def __init__(self, *args, **kwargs):
-        super(DepositFundsForCampaignForm, self).__init__(*args, **kwargs)
-        self.fields['order_budget'].error_messages['min_value'] = 'Ensure budget is greater than or equal to %(limit_value)s'    
-
-
-class AdvertisingCampaignEditForm(forms.ModelForm):
-    regions = forms.ModelMultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        queryset=Region.objects.filter(country__code="CA"),
-        required=False
-    )
-
-    types = forms.ModelMultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        queryset=AdvertisingType.objects.filter(active=True),
-        required=False
-    )
-
-    class Meta:
-        model = AdvertisingCampaign
-        fields = (
-            'name',
-            'regions',
-            'all_of_canada',
-            'website'
-        )
-
-    def __init__(self, *args, **kwargs):
-        super(AdvertisingCampaignEditForm, self).__init__(*args, **kwargs)
-
-        self.fields['name'].error_messages['required'] = 'Campaign name is required'
-        self.fields['website'].error_messages['required'] = 'Website URL is required'
-
-
+class AdvertisingCampaignEditForm(AdvertisingSetupForm):
     def clean(self):
         cleaned_data = self.cleaned_data
 
@@ -165,3 +124,21 @@ class AdvertisingCampaignEditForm(forms.ModelForm):
                 raise forms.ValidationError("You should upload image for all advertising types")
 
         return cleaned_data        
+
+
+
+class PaidAdvertisingSetupForm(AdvertisingSetupForm):
+    order_budget = MoneyField(min_value=Money(10, CAD))
+
+    def __init__(self, *args, **kwargs):
+        super(PaidAdvertisingSetupForm, self).__init__(*args, **kwargs)
+
+        self.fields['order_budget'].error_messages['min_value'] = 'Ensure budget is greater than or equal to %(limit_value)s'
+
+
+class DepositFundsForCampaignForm(forms.Form):
+    order_budget = MoneyField(min_value=Money(10, CAD))
+
+    def __init__(self, *args, **kwargs):
+        super(DepositFundsForCampaignForm, self).__init__(*args, **kwargs)
+        self.fields['order_budget'].error_messages['min_value'] = 'Ensure budget is greater than or equal to %(limit_value)s'

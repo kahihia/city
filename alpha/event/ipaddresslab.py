@@ -29,21 +29,36 @@ class IPAdressLab():
 
         tree = ET.fromstring(data)
         geolocation_data = tree.find('geolocation_data')
-        datadict = { element.tag: element.text for element in geolocation_data }
-
-        return datadict
+        if geolocation_data:
+            return { element.tag: element.text for element in geolocation_data }
+        else:
+            return None
+        
 
     def set_ip(self, ip):
         self.info = self.get_info(ip)
 
     def lon_lat(self):
-        return (
-            float(self.info["longitude"]),
-            float(self.info["latitude"])
-        )
+        if self.info:
+            return (
+                float(self.info["longitude"]),
+                float(self.info["latitude"])
+            )
+        else:
+            return (
+                -106.666667,
+                52.133333
+            )
 
     def lat_lon(self):
-        return (
-            float(self.info["latitude"]),
-            float(self.info["longitude"])            
-        )
+        if self.info:
+            return (
+                float(self.info["latitude"]),
+                float(self.info["longitude"])            
+            )
+
+        else:
+            return (
+                52.133333,
+                -106.666667
+            )

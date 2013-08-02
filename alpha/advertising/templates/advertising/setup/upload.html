@@ -1,0 +1,21 @@
+{% load dictionary_tags %}
+<div class="advertising-uploads">
+    <table>
+    {% for advertising_type in advertising_types %}
+        <tr data-ad-type="{{ advertising_type.id }}" {% if advertising_type.id in chosen_advertising_types %}class="chosen"{% endif %}>
+            <td>Upload {{advertising_type}}</td>
+            <td>
+                <input type="file" name="advertising_image.{{advertising_type.id}}">
+            </td>
+            <td>
+                {% if advertising_type.id in advertising_images %}
+                    <a href="/media/{{ advertising_images|keyvalue:advertising_type.id }}" class="advertising-image" target="_blank">
+                        <!-- Advertising preview -->
+                        view actual ad
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>

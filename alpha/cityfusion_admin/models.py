@@ -64,6 +64,10 @@ post_save.connect(send_claims_to_managers, sender=ClaimEvent)
 
 
 CF_ADMIN_MENU = {
+    "cfadmin_home": {
+        "urlname": "cfadmin_home",
+        "linktext": "Home"
+    },
     "report_event": {
         "urlname": "report_event_list",
         "linktext": "Reports"
@@ -71,5 +75,17 @@ CF_ADMIN_MENU = {
     "claim_event": {
         "urlname": "claim_event_list",
         "linktext": "Claims"
+    },
+    "admin_advertising": {
+        "urlname": "admin_advertising",
+        "linktext": "Advertising"
+    },
+    "admin_featured": {
+        "urlname": "admin_featured",
+        "linktext": "Featured Event"
+    },
+    "free_try": {
+        "urlname": "free_try",
+        "linktext": "Free try"
     }
 }
