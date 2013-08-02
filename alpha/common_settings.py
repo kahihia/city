@@ -172,7 +172,7 @@ INSTALLED_APPS = (
     'mamona',
     'advertising',
     'ckeditor',
-    'cityfusion_admin'
+    'cityfusion_admin',
 )
 
 # A sample logging configuration. The only tangible logging performed
@@ -229,6 +229,7 @@ EVENT_DEFAULT_PICTURE_URL = STATIC_URL + 'img/default.gif'
 #                      interpolation in a 2x2 environment)
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
 EVENT_EMAIL_SITE = 'dev.cityfusion.ca'
 #instead of taking the hustles of configuring a simple mail server, use an established one instead

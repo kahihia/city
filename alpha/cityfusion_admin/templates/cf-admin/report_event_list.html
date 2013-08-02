@@ -23,7 +23,7 @@
                         </div>
                     </td>
                     <td>
-                        {% if report.account %}                            
+                        {% if report.account %}
                             <a href="{% url "admin:accounts_account_change" report.account.id %}" target="_blank">{{ report.account.user.username }}</a>
                         {% else %}
                             Anonym user

@@ -1,0 +1,5 @@
+{% if report.account %}
+    <a href="http://{{ site }}/{% url "admin:accounts_account_change" report.account.id %}" target="_blank">{{ report.account.user.username }}</a>
+{% else %}
+    Anonym user
+{% endif %} report "{{ report.event.name }}" event. Please visit <a href="http://{{ site }}/{% url 'report_event_list' %}">page</a> to process it.

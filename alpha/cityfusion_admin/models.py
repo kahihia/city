@@ -1,4 +1,11 @@
 from django.contrib.gis.db import models
+from django.db.models.signals import post_save
+from django.core.mail import mail_managers
+from django.template.loader import render_to_string
+from django.conf import settings
+from utils import run_async
+
+current_site = settings.EVENT_EMAIL_SITE
 
 class ActiveManager(models.Manager):
     def get_query_set(self):
@@ -31,6 +38,29 @@ class ClaimEvent(models.Model):
         self.save()
 
 
+@run_async
+def send_report_to_managers(sender, instance, created, **kwargs):
+    if created:        
+        html_message = render_to_string('cf-admin/email/report_email.html', {
+            'report': instance,
+            'site': current_site            
+        })
+
+        mail_managers("Cityfusion. Report was created", html_message, html_message=html_message)
+
+
+@run_async
+def send_claims_to_managers(sender, instance, created, **kwargs):
+    if created:
+        html_message = render_to_string('cf-admin/email/claim_email.html', {
+            'claim': instance,
+            'site': current_site
+        })
+
+        mail_managers("Cityfusion. Claim was created", html_message, html_message=html_message)
+
+post_save.connect(send_report_to_managers, sender=ReportEvent)
+post_save.connect(send_claims_to_managers, sender=ClaimEvent)
 
 
 CF_ADMIN_MENU = {
