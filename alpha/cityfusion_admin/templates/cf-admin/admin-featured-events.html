@@ -26,6 +26,7 @@
             <table>
                 <tr>
                     <th>Event</th>
+                    <th>Status</th>
                     <th>Owned by</th>
                     <th>From-To</th>
                     <th>Edit</th>
@@ -35,7 +36,14 @@
                 <tr>
                     <td>
                         {% featured_event featured_event.event %}
-                    </td>    
+                    </td>
+                    <td>
+                        {% if featured_event.active %}
+                            On
+                        {% else %}
+                            Off(<a href="{% url "admin_activate_featured" %}">Activate</a>)
+                        {% endif %}
+                    </td>
                     <td>
                         {% if featured_event.owner %}
                             <a href="{% url "admin:accounts_account_change" featured_event.owner.id %}" target="_blank">{{ featured_event.owner.user.username }}</a>

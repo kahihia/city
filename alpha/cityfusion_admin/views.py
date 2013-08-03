@@ -256,6 +256,14 @@ def admin_remove_featured(request, featured_event_id):
     FeaturedEvent.objects.get(id=featured_event_id).delete()
     return HttpResponseRedirect(reverse('admin_featured'))
 
+def admin_activate_featured(request, featured_event_id):
+    featured_event = FeaturedEvent.objects.get(id=featured_event_id)
+    featured_event.active = True
+    featured_event.save()
+    return HttpResponseRedirect(reverse('admin_featured'))    
+
+admin_activate_featured    
+
 def admin_edit_featured(request, featured_event_id):
     featured_event = FeaturedEvent.objects.get(id=featured_event_id)
     form = SetupFeaturedForm(
