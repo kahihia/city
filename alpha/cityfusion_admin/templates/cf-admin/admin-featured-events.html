@@ -37,7 +37,9 @@
                         {% featured_event featured_event.event %}
                     </td>    
                     <td>
-                        <a href="{% url "admin:accounts_account_change" featured_event.owner.id %}" target="_blank">{{ featured_event.owner.user.username }}</a>
+                        {% if featured_event.owner %}
+                            <a href="{% url "admin:accounts_account_change" featured_event.owner.id %}" target="_blank">{{ featured_event.owner.user.username }}</a>
+                        {% endif %}
                     </td>
                     <td>
                         {{ featured_event.start_time|date:"b d, Y"|title }} - {{ featured_event.end_time|date:"b d, Y"|title }}
