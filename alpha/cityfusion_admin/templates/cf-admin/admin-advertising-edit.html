@@ -18,59 +18,60 @@
         <div class="box visible options">
             <ul class="tabs">
                 <li>
-                    <a href="{% url 'admin_advertising' %}"><span>Active advertising</span></a>
+                    <a href="{% url 'admin_advertising' %}"><span>Admin advertising</span></a>
                 </li>
                 <li>
                     <a href="{% url 'admin_advertising_setup' %}"><span>Create new campaign</span></a>
                 </li>
+                <li>
+                    <a href="{% url 'admin_advertising_review' %}"><span>Review ads</span></a>
+                </li>
             </ul>            
             <div class="box visible advertising-setup">
-                <h1>
-                    Edit {{ campaign.name }} campaign
-                </h1>
-                <div class="content account-options-wrapper">
-                    <div class="main-content account-options">
-                        {%if form.errors %}
-                            <div class="errors" style="border:1px solid RED;border-radius:4px;">
-                                <ul style="list-style-type: none;">
-                                    <li id="all-info">
-                                        {% for error in form.non_field_errors %}
-                                            <span class="error">{{ error }}</span>
-                                        {% endfor %}
-                                    </li>
-                                    <li id="all-info">
-                                        {% for error in form.name.errors %}
-                                            <span class="error">{{ error }}</span>
-                                        {% endfor %}
-                                    </li>
-                                    <li id="all-info">
-                                        {% for error in form.website.errors %}
-                                            <span class="error">{{ error }}</span>
-                                        {% endfor %}
-                                    </li>
-                                </ul>
-                            </div>                            
-                        {% endif %}
-                        <form  enctype="multipart/form-data" method="post" name="advertising-setup" >
-                            {% csrf_token %}
-                            <div class="campaign-name">
-                                Name of Campaign                        
-                                {{ form.name }}
-                                Enter the name of your campaign.
-                            </div>
+                <div class="main-content account-options">
+                    <h1>
+                        Edit {{ campaign.name }} campaign
+                    </h1>
+                    {%if form.errors %}
+                        <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                            <ul style="list-style-type: none;">
+                                <li id="all-info">
+                                    {% for error in form.non_field_errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li id="all-info">
+                                    {% for error in form.name.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li id="all-info">
+                                    {% for error in form.website.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                        </div>                            
+                    {% endif %}
+                    <form  enctype="multipart/form-data" method="post" name="advertising-setup" >
+                        {% csrf_token %}
+                        <div class="campaign-name">
+                            Name of Campaign                        
+                            {{ form.name }}
+                            Enter the name of your campaign.
+                        </div>
 
-                            <div class="campaign-name">
-                                Campaign website URL
-                                {{ form.website }}
-                            </div>
+                        <div class="campaign-name">
+                            Campaign website URL
+                            {{ form.website }}
+                        </div>
 
-                            {% setup_advertising_types %}
-                            {% setup_advertising_upload %}
-                            {% setup_advertising_regions %}
+                        {% setup_advertising_types %}
+                        {% setup_advertising_upload %}
+                        {% setup_advertising_regions %}
 
-                            <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
-                        </form>
-                    </div>                
+                        <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
+                    </form>
                 </div>
             </div>
         </div>

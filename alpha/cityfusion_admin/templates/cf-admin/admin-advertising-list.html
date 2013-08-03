@@ -16,10 +16,13 @@
         <div class="box visible options">
             <ul class="tabs">
                 <li class="current">
-                    <span>Active advertising</span>
+                    <span>Admin advertising</span>
                 </li>
                 <li>
                     <a href="{% url 'admin_advertising_setup' %}"><span>Create new campaign</span></a>
+                </li>
+                <li>
+                    <a href="{% url 'admin_advertising_review' %}"><span>Review ads</span></a>
                 </li>
             </ul>
             <div class="box visible advertising-stats">

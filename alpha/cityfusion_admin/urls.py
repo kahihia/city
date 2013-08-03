@@ -62,7 +62,17 @@ urlpatterns = patterns('',
         views.admin_advertising_remove_ad,
         name='admin_advertising_remove_ad'
     ),
+    url(r'^admin-advertising/review/$',
+        views.admin_advertising_review,
+        name='admin_advertising_review'
+    ),
+    url(r'^admin-advertising/ad/(?P<ad_id>\d+)/(?P<status>\w+)/$',
+        views.admin_advertising_change_status,
+        name='admin_advertising_change_status'
+    ),
 
+
+    
 
     # Features
     url(r'^admin-featured/$',

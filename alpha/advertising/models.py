@@ -62,7 +62,7 @@ PAYMENT_TYPE = (
 REVIEWED_STATUS = (
     ('PENDING', 'PENDING'),
     ('ACCEPTED', 'ACCEPTED'),
-    ('DECLINED', 'DECLINED')
+    ('DENIED', 'DENIED')
 )
 
 
@@ -76,6 +76,11 @@ class ActiveAdvertisingManager(models.Manager):
 class AdminAdvertisingManager(models.Manager):
     def get_query_set(self):
         return super(AdminAdvertisingManager, self).get_query_set().filter(campaign__owned_by_admin=True)
+
+
+class PendingAdvertisingManager(models.Manager):
+    def get_query_set(self):
+        return super(PendingAdvertisingManager, self).get_query_set().filter(review_status="PENDING")        
 
 
 class Advertising(models.Model):
@@ -95,6 +100,7 @@ class Advertising(models.Model):
     objects = models.Manager()
     active = ActiveAdvertisingManager()
     admin = AdminAdvertisingManager()
+    pending = PendingAdvertisingManager()
 
     def __unicode__(self):
         return "%s - %s: %d/%d" % (self.campaign, self.ad_type, self.views, self.clicks)

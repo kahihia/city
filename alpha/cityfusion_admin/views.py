@@ -124,7 +124,8 @@ def admin_advertising_setup(request):
                     payment_type=chosen_advertising_payment_types[advertising_type_id],
                     image=chosen_advertising_images[advertising_type_id],
                     cpm_price=advertising_type.cpm_price,
-                    cpc_price=advertising_type.cpc_price
+                    cpc_price=advertising_type.cpc_price,
+                    review_status="ACCEPTED"
                 )
 
                 advertising.save()            
@@ -215,6 +216,21 @@ def admin_advertising_remove_ad(request, ad_id):
     ad = Advertising.objects.get(id=ad_id)
     ad.delete()
     return HttpResponseRedirect(reverse('admin_advertising'))
+
+def admin_advertising_review(request):
+    ads = Advertising.pending.all()
+
+    return render_to_response('cf-admin/admin-advertising-review.html', {
+            "ads": ads
+        }, context_instance=RequestContext(request))
+
+def admin_advertising_change_status(request, ad_id, status):
+    ad = Advertising.objects.get(id=ad_id)
+    ad.review_status = status
+    ad.save()
+    return HttpResponseRedirect(reverse('admin_advertising_review'))
+
+
 
 def admin_featured(request):
     featured_events = FeaturedEvent.future.all()

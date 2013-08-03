@@ -73,7 +73,8 @@ class InTheLoopSettingsForm(forms.ModelForm):
             'in_the_loop_email',
             'in_the_loop_phonenumber',
             'regions',
-            'cities'
+            'cities',
+            'all_of_canada'
         )
 
 
