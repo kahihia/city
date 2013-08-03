@@ -111,7 +111,7 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
         ).values_list("id", flat=True)
 
         # TODO. Leave one query. For some reason endless pagination return bad list, when we use table with selected related data, need to be research.
-        return Event.objects.filter(id__in=ids)
+        return Event.events.filter(id__in=ids)
 
 
     def reminder_events_in_future(self):
