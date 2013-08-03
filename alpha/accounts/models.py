@@ -105,10 +105,13 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
         else:
             location_query = Q(venue__city__id__in=city_ids) | Q(venue__city__region__id__in=region_ids) | Q(venue__city__subregion__id__in=region_ids)
 
-        return Event.future_events.filter(
+        ids =  Event.future_events.filter(
             Q(tagged_items__tag__name__in=self.in_the_loop_tags.all().values_list("name", flat=True)),
             location_query
-        )
+        ).values_list("id", flat=True)
+
+        # TODO. Leave one query. For some reason endless pagination return bad list, when we use table with selected related data, need to be research.
+        return Event.objects.filter(id__in=ids)
 
 
     def reminder_events_in_future(self):
