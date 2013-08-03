@@ -1,3 +1,4 @@
+import datetime
 import json
 from cityfusion_admin.models import ReportEvent, ClaimEvent
 from django.views.decorators.http import require_POST
@@ -7,6 +8,8 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from accounts.models import Account
+from event.models import Event, FeaturedEvent
+from event.forms import SetupFeaturedForm
 
 
 @require_POST
@@ -214,7 +217,63 @@ def admin_advertising_remove_ad(request, ad_id):
     return HttpResponseRedirect(reverse('admin_advertising'))
 
 def admin_featured(request):
-    pass
+    featured_events = FeaturedEvent.future.all()
+    return render_to_response('cf-admin/admin-featured-events.html', {
+            "featured_events": featured_events
+        }, context_instance=RequestContext(request))
+
+def admin_setup_featured(request, event_id):
+    account = request.account
+    event = Event.events.get(id=event_id)    
+
+    featured_event = FeaturedEvent(
+        event=event,
+        owner=account,
+        start_time=datetime.date.today(),
+        end_time=datetime.date.today() + datetime.timedelta(days=15),
+        active=True,
+        owned_by_admin=True
+    )
+
+    form = SetupFeaturedForm(
+        instance=featured_event
+    )
+
+    if request.method == 'POST':
+        form = SetupFeaturedForm(instance=featured_event, data=request.POST)
+
+        if form.is_valid():
+            featured_event = form.save()
+
+            return HttpResponseRedirect(reverse('admin_featured'))
+
+    return render_to_response('cf-admin/admin-setup-featured-event.html', {
+            'form': form,
+            'event': event
+        }, context_instance=RequestContext(request))
+
+def admin_remove_featured(request, featured_event_id):
+    FeaturedEvent.objects.get(id=featured_event_id).delete()
+    return HttpResponseRedirect(reverse('admin_featured'))
+
+def admin_edit_featured(request, featured_event_id):
+    featured_event = FeaturedEvent.objects.get(id=featured_event_id)
+    form = SetupFeaturedForm(
+        instance=featured_event
+    )
+    
+    if request.method == 'POST':
+        form = SetupFeaturedForm(instance=featured_event, data=request.POST)
+
+        if form.is_valid():
+            featured_event = form.save()
+
+            return HttpResponseRedirect(reverse('admin_featured'))
+
+    return render_to_response('cf-admin/admin-setup-featured-event.html', {
+            'form': form,
+            'event': featured_event.event
+        }, context_instance=RequestContext(request))
 
 def free_try(request):
     pass

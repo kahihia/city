@@ -45,4 +45,11 @@ def claim_event_popup(context, event):
     else:
         return {
             'account': None
-        }        
+        }
+
+@register.inclusion_tag('actions/actions.html', takes_context=True)
+def admin_event_actions(context):
+    return context
+
+
+            

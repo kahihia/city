@@ -5,6 +5,7 @@
 {% load event_tags %}
 {% load endless %}
 {% load advertising_tags %}
+{% load admin_event_actions %}
 
 {% block head %}
     <link href="{{STATIC_URL}}styles/styles-new.css" rel="stylesheet" type="text/css" />
@@ -70,9 +71,13 @@
                     {% endif %}
                 </div>
                 <div class="event-details">
+                    {% if request.user.is_staff %}
+                        {% admin_event_actions %}
+                    {% endif %}
+
                     <div class="title-wrapper">
                         <div class="title">
-                            <a class="accented" href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">{{event.name}}</a> {% if request.user.is_staff %} <a href="{% url 'event_edit' event.authentication_key %}">edit</a>{% endif %}
+                            <a class="accented" href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">{{event.name}}</a>
                         </div>
                         {% if event.price and event.price != "$" %}
                             <div class="event-price {% if event.price|length < 9 %} short {% endif %}">{{event.price}}</div>
@@ -165,7 +170,7 @@
                     {% endfor %}
                 </h4>
 
-                {% load user_action_tags %}
+                {% load admin_event_actions %}
                 <div class="report-claim-container">
                     <a href="javascript: void" class="report-event-button">
                         Report Event

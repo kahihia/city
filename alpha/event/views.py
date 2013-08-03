@@ -155,7 +155,7 @@ def view(request, slug, date=None):
     if date:
         events_from_venue = events_from_venue.exclude(id=event.id)
 
-    return render_to_response('events/event_description.html', {
+    return render_to_response('events/event_detail_page.html', {
             'event': event,
             'events_from_venue': events_from_venue
         }, context_instance=RequestContext(request))

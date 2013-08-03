@@ -1,0 +1,7 @@
+{% if request.user.is_staff %}
+<div class="cfadmin-actions">
+	<a href="{% url 'event_edit' event.authentication_key %}">edit</a>
+	<a href="{% url 'admin_setup_featured' event.event_identifier %}">Make featured</a>
+</div>
+
+{% endif %}

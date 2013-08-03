@@ -222,3 +222,18 @@
 .report-claim-container a {
     display: block;
 }
+
+.cfadmin-actions {
+    position: absolute;
+    background: #eee;
+    z-index: 10;
+    padding: 10px;
+    border: 1px solid;
+    top: -10px;
+    right: -10px;    
+}
+
+.cfadmin-actions a {
+    display: block;
+}
+

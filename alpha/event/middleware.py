@@ -27,7 +27,7 @@ def get_real_ip(request):
         real_ip = "198.245.113.94"
 
     if real_ip == "127.0.0.1":
-        real_ip = "198.245.113.94"
+        real_ip = "10.2.46.128"
 
     return real_ip
 

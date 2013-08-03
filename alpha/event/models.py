@@ -25,7 +25,7 @@ from image_cropping import ImageCropField, ImageRatioField
 from djorm_pgfulltext.models import SearchManagerMixIn, SearchManager
 from djorm_pgfulltext.fields import VectorField
 
-from django.db.models import Min
+from django.db.models import Min, Count
 
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
@@ -97,14 +97,16 @@ class FutureWithoutAnnotationsManager(SearchManager):
         return queryset
 
 
-class FeaturedManager(FutureManager):
-    def get_query_set(self):
+class FeaturedManager(SearchManager):
+    def get_query_set(self):        
         return super(FeaturedManager, self).get_query_set()\
             .filter(
+                single_events__start_time__gte=datetime.datetime.now(),
                 featuredevent__start_time__lte=datetime.datetime.now(),
                 featuredevent__end_time__gte=datetime.datetime.now(),
                 featuredevent__active=True
-            )
+            ).annotate(Count("id"))
+
 
 class ArchivedManager(SearchManager):
     def get_query_set(self):
@@ -428,12 +430,22 @@ models.signals.post_save.connect(audit_event_catch, sender=Event)
 # models.signals.post_save.connect(audit_single_event, sender=SingleEvent)
 
 
+class FutureFeaturedEventManager(models.Manager):
+    def get_query_set(self):
+        return super(FutureFeaturedEventManager, self).get_query_set()\
+            .filter(event__single_events__start_time__gte=datetime.datetime.now())\
+            .annotate(Count("id"))
+
+
+
+
 class FeaturedEvent(models.Model):
     event = models.ForeignKey(Event, blank=False, null=False)
     owner = models.ForeignKey("accounts.Account", blank=True, null=True)
     start_time = models.DateTimeField('starting time')
     end_time = models.DateTimeField('ending time', auto_now=False, auto_now_add=False)
     active = models.BooleanField(default=False)
+    owned_by_admin = models.BooleanField(default=False)
 
     views = models.IntegerField(default=0)
     clicks = models.IntegerField(default=0)
@@ -441,6 +453,7 @@ class FeaturedEvent(models.Model):
     cost = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
 
     objects = money_manager(models.Manager())
+    future = FutureFeaturedEventManager()
 
     def __unicode__(self):
         return self.event.name

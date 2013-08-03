@@ -62,9 +62,24 @@ urlpatterns = patterns('',
         views.admin_advertising_remove_ad,
         name='admin_advertising_remove_ad'
     ),
+
+
+    # Features
     url(r'^admin-featured/$',
         views.admin_featured,
         name='admin_featured'
+    ),
+    url(r'^admin-setup-featured/(?P<event_id>\d+)$',
+        views.admin_setup_featured,
+        name='admin_setup_featured'
+    ),
+    url(r'^admin-remove-featured/(?P<featured_event_id>\d+)$',
+        views.admin_remove_featured,
+        name='admin_remove_featured'
+    ),
+    url(r'^admin-edit-featured/(?P<featured_event_id>\d+)$',
+        views.admin_edit_featured,
+        name='admin_edit_featured'
     ),
 
     url(r'^free-try/$',
