@@ -34,15 +34,18 @@ def return_from_gw(request, payment_id, order_class):
 			)
 
 @csrf_exempt
-def ipn(request):
+def ipn(request, order_class):
 	"""Instant Payment Notification callback.
 	See https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_admin_IPNIntro
 	for details."""
 	# TODO: add some logging here, as all the errors will occur silently
 	try:
-		payment = get_object_or_404(Payment, id=request.POST['invoice'],
-				status__in=('in_progress', 'partially_paid', 'paid', 'failed'),
-				backend='paypal')
+		payment_id = int(request.POST['invoice'].split("-")[1])
+		if order_class=="advertising":
+			payment = get_object_or_404(Payment, id=payment_id, status__in=('in_progress', 'partially_paid', 'paid', 'failed'), backend='paypal')
+		else:
+			payment = get_object_or_404(FeaturedEventPayment, id=payment_id, status__in=('in_progress', 'partially_paid', 'paid', 'failed'), backend='paypal')
+		
 	except (KeyError, ValueError):
 		return HttpResponseBadRequest()
 	charset = request.POST.get('charset', 'UTF-8')

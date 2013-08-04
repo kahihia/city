@@ -57,7 +57,7 @@ class PaypalConfirmationForm(ConfirmationForm):
 					)
 		self.fields['notify_url'].initial = 'http://%s%s' % (
 				Site.objects.get_current().domain,
-				reverse('mamona-paypal-ipn')
+				reverse('mamona-paypal-ipn', kwargs={ 'order_class': order_class })
 				)
 
 	def clean(self, *args, **kwargs):
