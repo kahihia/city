@@ -148,7 +148,7 @@ class FunctionFilter(Filter):
         return qs.filter(event_id__in=ids)
 
     def in_the_loop_filter(self, qs):
-        ids = self.account.in_the_loop_events().values_list("id", flat=True)
+        ids = self.account.in_the_loop_events().values_list("event_id", flat=True)
         return qs.filter(event_id__in=ids)
 
     def all_filter(self, qs):
