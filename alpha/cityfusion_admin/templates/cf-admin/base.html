@@ -9,8 +9,8 @@
     <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />
     <link type="text/css" href="{{STATIC_URL}}date/css/redmond/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
 
-    <link href="{{ STATIC_URL }}styles/accounts/signin_signup.css" type="text/css" rel="stylesheet" media="all" />
-    <link href="{{ STATIC_URL }}styles/accounts/accounts.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="{{STATIC_URL}}styles/accounts/signin_signup.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="{{STATIC_URL}}styles/accounts/accounts.css" type="text/css" rel="stylesheet" media="all" />
     <link href="{{STATIC_URL}}styles/browse/browse.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/browse/browse_event_list.css" rel="stylesheet" type="text/css" />
 
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="{{STATIC_URL}}js/libs/underscore-min.js"></script>    
     
     <script src="{{STATIC_URL}}js/accounts/choose-account-context.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/messages.js" type="text/javascript"></script>    
+    <script src="{{STATIC_URL}}js/messages.js" type="text/javascript"></script>
 
     
     <script src="{{STATIC_URL}}js/searchpad/ajax-popup.js" type="text/javascript"></script>
@@ -30,11 +30,9 @@
             width: 100%;
         }
     </style>
-    
-    
-    
+    {% block head %}{% endblock %}    
 </head>
-<body>
+<body class="modern">
 {% if messages %}
     <ul class="messages">
         {% for message in messages %}

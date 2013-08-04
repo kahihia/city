@@ -17,13 +17,13 @@
                     {% else %}
                         <img src="{{STATIC_URL}}images/default-event.jpg" height="60px" weight="60px">
                     {% endif %}
-                </a>                
+                </a>
             </div>
-            <div class="entry-details-wrapper">                                  
+            <div class="entry-details-wrapper">
                 <div class="title">
                     <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">
                         {{event.name}}&nbsp;
-                    </a>                    
+                    </a>
                 </div>
                 <div class="entry-date">
                     {{event.start_time|date:"l, F d, Y"}}
@@ -32,8 +32,8 @@
                 </div>
                 <div class="entry-description">                    
                     {{ event.venue.name }}{% if event.venue.street %}, {{ event.venue.street }}{% endif %}, {{ event.venue.city.name_std }}
-                </div>                
-            </div>            
+                </div>
+            </div>
         </div>
     {%endfor%}
 </div>
@@ -44,17 +44,25 @@
             {% get_pages %} 
 
             <span class="step-links">
-                {% if not pages.current.is_first %}                    
+                {% if pages.current.is_first %}
+                    <span>
+                        <img src="{{STATIC_URL}}images/entry-prev.png">
+                    </span>
+                {% else %}
                     <a href="{{ pages.previous.url }}">
                         <img src="{{STATIC_URL}}images/entry-prev.png">
                     </a>
                 {% endif %}
 
-                {% if not pages.current.is_last %}                
+                {% if pages.current.is_last %}
+                    <span>
+                        <img src="{{STATIC_URL}}images/entry-next.png">
+                    </span>
+                {% else %}
                     <a href="{{ pages.next.url }}">
                         <img src="{{STATIC_URL}}images/entry-next.png">
                     </a>
-                {% endif %}                
+                {% endif %}
             </span>
         </ul>
     </p>

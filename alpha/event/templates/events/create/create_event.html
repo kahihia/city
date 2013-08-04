@@ -1,6 +1,7 @@
 {% extends 'base-with-advertising.html' %}
 {% load cropping %}
 {% load selectable_tags %}
+{% load advertising_tags %}
 
 {% block head %}
     <link href="{{STATIC_URL}}styles/create_event.css" rel="stylesheet" type="text/css" />
@@ -482,3 +483,18 @@
         <div class="clr"></div>
     </div>
 {% endblock %}
+
+
+{% block advertising %}
+    <div class="advertising-with-margin">
+        {% random %}
+            <div class="advertising-right-container">
+                {% advertising_group "300x600|300x250" %}
+            </div>
+        {% or %}
+            <div class="advertising-right-container">
+                {% advertising_group "300x250|300x250|300x250" %}
+            </div>
+        {% endrandom %}
+    </div>
+{% endblock%}

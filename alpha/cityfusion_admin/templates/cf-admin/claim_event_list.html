@@ -1,19 +1,26 @@
 {% extends 'cf-admin/base.html' %}
 {% load event_tags %}
 {% load admin_menu %}
+{% load endless %}
+{% load cf_pagination %}
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
+{% endblock %}
 
 {% block page %}
     <div class="tabs-container">
         {% cf_admin_menu "claim_event" %}
 
-        <div class="box visible options">            
-            <table>
+        <div class="box visible">
+            <table class="profile-table" celpadding="0" cellspacing="0">
                 <tr>
                     <th>Event</th>
                     <th>Message</th>
                     <th>Transfer event</th>
                     <th>Refuse</th>
                 </tr>
+                {% paginate 10 claims %}
                 {% for claim in claims %}
                 <tr>
                     <td>
@@ -39,8 +46,9 @@
                             No claims was found
                         </td>
                     </tr>
-                {% endfor %}                
+                {% endfor %}
             </table>
+            {% cf_pagination %}
         </div>
     </div>
 {% endblock %}

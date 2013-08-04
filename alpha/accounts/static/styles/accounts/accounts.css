@@ -343,7 +343,7 @@
 
 .edit-event-account-button {
     margin-top: 12px;
-    width: 144px;
+    width: 154px;
     height: 34px;
     line-height: 34px;
     color: #0066cc;
@@ -353,7 +353,7 @@
 }
 
 .public-or-private .button {
-    width: 144px;
+    width: 154px;
     height: 34px;
     line-height: 34px;
     margin-top: 5px;
@@ -361,7 +361,7 @@
 
 .public-or-private .radio {
     display: inline-block;
-    width: 70px;
+    width: 75px;
     height: 34px;
     line-height: 34px;
     vertical-align: middle
@@ -418,6 +418,7 @@
 .about-us {
     margin-top: 20px;
     margin-bottom: 30px;
+    margin-right: 10px;
 }
 
 #venue_account_map {

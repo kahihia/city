@@ -5,6 +5,7 @@ from cities.models import Region
 from mamona import signals
 from mamona.models import build_payment_model
 from decimal import Decimal
+from django.db.models import Q
 # from django.db.models import F
 
 
@@ -22,6 +23,11 @@ class AdvertisingType(models.Model):
         return "%s(%d x %d)" % (self.name, self.width, self.height)
 
 
+class AdminAdvertisingCampaignManager(models.Manager):
+    def get_query_set(self):
+        return super(AdminAdvertisingCampaignManager, self).get_query_set().filter(owned_by_admin=True)        
+
+
 class AdvertisingCampaign(models.Model):
     name = models.CharField(max_length=128)
     account = models.ForeignKey('accounts.Account')
@@ -36,7 +42,10 @@ class AdvertisingCampaign(models.Model):
 
     website = models.URLField()
 
+    owned_by_admin = models.BooleanField(default=False)
+
     objects = money_manager(models.Manager())
+    admin = AdminAdvertisingCampaignManager()
 
     def __unicode__(self):
         return self.name
@@ -53,16 +62,25 @@ PAYMENT_TYPE = (
 REVIEWED_STATUS = (
     ('PENDING', 'PENDING'),
     ('ACCEPTED', 'ACCEPTED'),
-    ('DECLINED', 'DECLINED')
+    ('DENIED', 'DENIED')
 )
 
 
 class ActiveAdvertisingManager(models.Manager):
     def get_query_set(self):
         return super(ActiveAdvertisingManager, self).get_query_set().filter(
-            review_status="ACCEPTED"
+            Q(review_status="ACCEPTED") | Q(campaign__owned_by_admin=True)
             # campaign__ammount_spent__gt=F("campaign__budget")
         )
+
+class AdminAdvertisingManager(models.Manager):
+    def get_query_set(self):
+        return super(AdminAdvertisingManager, self).get_query_set().filter(campaign__owned_by_admin=True)
+
+
+class PendingAdvertisingManager(models.Manager):
+    def get_query_set(self):
+        return super(PendingAdvertisingManager, self).get_query_set().filter(review_status="PENDING")        
 
 
 class Advertising(models.Model):
@@ -72,7 +90,6 @@ class Advertising(models.Model):
     image = models.ImageField(upload_to="advertising")
     reviewed = models.BooleanField(default=False)
     review_status = models.CharField(max_length=10, choices=REVIEWED_STATUS, default="PENDING")
-
     views = models.IntegerField(default=0)
     clicks = models.IntegerField(default=0)
 
@@ -82,6 +99,8 @@ class Advertising(models.Model):
 
     objects = models.Manager()
     active = ActiveAdvertisingManager()
+    admin = AdminAdvertisingManager()
+    pending = PendingAdvertisingManager()
 
     def __unicode__(self):
         return "%s - %s: %d/%d" % (self.campaign, self.ad_type, self.views, self.clicks)

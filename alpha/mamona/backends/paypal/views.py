@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 
-from mamona.models import Payment
+from mamona.models import Payment, FeaturedEventPayment
 from mamona.utils import get_backend_settings
 from mamona.signals import return_urls_query
 
@@ -10,8 +10,12 @@ import urllib2
 from urllib import urlencode
 from decimal import Decimal
 
-def return_from_gw(request, payment_id):
-	payment = get_object_or_404(Payment, id=payment_id)
+def return_from_gw(request, payment_id, order_class):
+	if order_class=="advertising":
+		payment = get_object_or_404(Payment, id=payment_id)
+	else:
+		payment = get_object_or_404(FeaturedEventPayment, id=payment_id)
+
 	urls = {}
 	return_urls_query.send(sender=None, instance=payment, urls=urls)
 	if payment.status == 'failed':
@@ -30,15 +34,18 @@ def return_from_gw(request, payment_id):
 			)
 
 @csrf_exempt
-def ipn(request):
+def ipn(request, order_class):
 	"""Instant Payment Notification callback.
 	See https://cms.paypal.com/us/cgi-bin/?&cmd=_render-content&content_ID=developer/e_howto_admin_IPNIntro
 	for details."""
 	# TODO: add some logging here, as all the errors will occur silently
 	try:
-		payment = get_object_or_404(Payment, id=request.POST['invoice'],
-				status__in=('in_progress', 'partially_paid', 'paid', 'failed'),
-				backend='paypal')
+		payment_id = int(request.POST['invoice'].split("-")[1])
+		if order_class=="advertising":
+			payment = get_object_or_404(Payment, id=payment_id, status__in=('in_progress', 'partially_paid', 'paid', 'failed'), backend='paypal')
+		else:
+			payment = get_object_or_404(FeaturedEventPayment, id=payment_id, status__in=('in_progress', 'partially_paid', 'paid', 'failed'), backend='paypal')
+		
 	except (KeyError, ValueError):
 		return HttpResponseBadRequest()
 	charset = request.POST.get('charset', 'UTF-8')

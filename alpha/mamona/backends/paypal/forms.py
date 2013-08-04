@@ -21,7 +21,7 @@ class PaypalConfirmationForm(ConfirmationForm):
 	upload = forms.CharField(widget=forms.HiddenInput(), initial='1')
 	charset = forms.CharField(widget=forms.HiddenInput(), initial='utf-8')
 
-	def __init__(self, *args, **kwargs):
+	def __init__(self, order_class, *args, **kwargs):
 		super(PaypalConfirmationForm, self).__init__(*args, **kwargs)
 		# a keyword, haha :)
 		self.fields['return'] = forms.CharField(widget=forms.HiddenInput())
@@ -53,11 +53,11 @@ class PaypalConfirmationForm(ConfirmationForm):
 			# TODO: use https when needed
 			self.fields['return'].initial = 'http://%s%s' % (
 					Site.objects.get_current().domain,
-					reverse('mamona-paypal-return', kwargs={'payment_id': self.payment.id})
+					reverse('mamona-paypal-return', kwargs={'payment_id': self.payment.id, 'order_class': order_class})
 					)
 		self.fields['notify_url'].initial = 'http://%s%s' % (
 				Site.objects.get_current().domain,
-				reverse('mamona-paypal-ipn')
+				reverse('mamona-paypal-ipn', kwargs={ 'order_class': order_class })
 				)
 
 	def clean(self, *args, **kwargs):

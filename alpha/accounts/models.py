@@ -97,7 +97,19 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
         return Event.future_events.filter(owner_id=self.user.id)
 
     def in_the_loop_events(self):
-        return Event.future_events.filter(tagged_items__tag__name__in=self.in_the_loop_tags.all().values("name"))
+        region_ids = self.regions.all().values_list("id", flat=True)
+        city_ids = self.cities.all().values_list("id", flat=True)
+
+        if self.all_of_canada:
+            location_query = Q(event__venue__country__name="Canada")
+        else:
+            location_query = Q(event__venue__city__id__in=city_ids) | Q(event__venue__city__region__id__in=region_ids) | Q(event__venue__city__subregion__id__in=region_ids)
+
+        return SingleEvent.future_events.filter(
+            Q(event__tagged_items__tag__name__in=self.in_the_loop_tags.all().values_list("name", flat=True)),
+            location_query
+        )
+
 
     def reminder_events_in_future(self):
         return Event.future_events.filter(id__in=self.reminder_events.values("id"))

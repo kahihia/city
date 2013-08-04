@@ -1,0 +1,27 @@
+{% extends 'cf-admin/base.html' %}
+{% load event_tags %}
+{% load admin_menu %}
+{% load setup_advertising %}
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/advertising-setup.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
+
+    <script src="{{STATIC_URL}}js/jquery.balloon.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/advertising/setup-page.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block page %}
+    <div class="tabs-container">
+        {% cf_admin_menu "cfadmin_home" %}
+        <div class="box visible options">
+            <h1>
+                Welcome to cityfusion admin interface
+            </h1>
+            <p>
+                Please, choose tab your are interestion in
+            </p>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'cf-admin/base.html' %}
+{% load event_tags %}
+{% load admin_menu %}
+{% load advertising_tags %}
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
+    <script src="{{STATIC_URL}}fancybox/jquery.fancybox.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/advertising/advertising-images.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block page %}
+    <div class="tabs-container">
+        {% cf_admin_menu "admin_advertising" %}
+        <div class="box visible options">
+            <ul class="tabs">
+                <li class="current">
+                    <span>Admin advertising</span>
+                </li>
+                <li>
+                    <a href="{% url 'admin_advertising_setup' %}"><span>Create new campaign</span></a>
+                </li>
+                <li>
+                    <a href="{% url 'admin_advertising_review' %}"><span>Review ads</span></a>
+                </li>
+            </ul>
+            <div class="box visible advertising-stats">
+                {% admin_advertising_campaigns campaigns %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

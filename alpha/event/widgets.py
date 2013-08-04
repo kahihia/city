@@ -4,7 +4,6 @@ from django.template import Template, Context
 from django.forms.widgets import RadioSelect
 from django.utils.safestring import mark_safe
 import json
-from accounts.models import VenueAccount
 
 from ckeditor.widgets import CKEditorWidget
 

@@ -1,3 +1,76 @@
+
+.login-entry-info .pop-up-wrapper
+{
+    z-index:11;
+    position:absolute;
+    left:-20px;
+    top:15px;
+    display:none;
+}
+.login-entry-info .pop-up-wrapper-container
+{
+    width:350px;
+    height:220px;
+    border:1px solid #41c3ff;
+    position:relative;
+    background-color:#FFF;
+}
+.login-entry-info .pop-up-wrapper-container .contents
+{
+    width:auto;
+    padding:20px 10px 10px 20px;
+}
+
+.login-entry-info .pop-up-wrapper-container .contents .pop-featured-details
+{
+    float:left;
+    margin-left:5px;
+    width:220px;
+    color:#0066cb;
+}
+
+.login-entry-info .pop-up-pointer
+{
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #3dc1ff;
+    width:0;
+    height:0;
+    margin-left:30px;
+    display:block;
+}
+.login-entry-info .space{
+    width:60px;
+    float:left;
+}
+.login-entry-info ul
+{
+    margin:0px;
+    padding:0px;
+    list-style:none;
+}
+.login-entry-info ul li:hover .pop-up-wrapper
+{
+    display:block;
+}
+.login-entry-info ul li
+{
+    float:left;
+    position:relative;
+}
+.login-entry-info ul li a
+{
+    color:#454545;
+    text-decoration:none;
+}
+
+.login-entry-info ul li a:hover
+{
+    color:#0066cc;
+    font-weight:bold;
+}
+/*end login popu login*/
+
 .sign-up-wrapper-top
 {
     width:288px;
@@ -9,7 +82,7 @@
 .sign-up-and-facebook
 {
     width:auto;
-    padding:7px 15px;
+    padding:7px 9px;
     color:#797979;
     text-decoration:none;
 }
@@ -22,7 +95,6 @@
 
 .sign-up-wrapper-top .sign-up-and-facebook {
     position: relative;
-    padding: 7px 13px;
     padding-top: 5px;
 }
 

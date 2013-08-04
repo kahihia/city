@@ -148,7 +148,7 @@ class FunctionFilter(Filter):
         return qs.filter(event_id__in=ids)
 
     def in_the_loop_filter(self, qs):
-        ids = self.account.in_the_loop_events().values_list("id", flat=True)
+        ids = self.account.in_the_loop_events().values_list("event_id", flat=True)
         return qs.filter(event_id__in=ids)
 
     def all_filter(self, qs):
@@ -161,9 +161,10 @@ class FunctionFilter(Filter):
         return qs.order_by("-event__created")
 
     def night_life_filter(self, qs):
-        return qs.filter(
+        ids = qs.filter(
             Q(event__tagged_items__tag__name__in=["19+", "Night Life", "DJ", "Party", "Rave"]) | Q(event__venue__venueaccount__types=VenueType.active_types.get(name="Nightlife & Singles"))
-        )
+        ).values_list("id", flat=True)
+        return qs.filter(event_id__in=ids)
 
     def date_night_filter(self, qs):
         return qs.filter(event__tagged_items__tag__name__in=["Date Night"])

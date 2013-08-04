@@ -11,8 +11,9 @@
 
     <script type="text/javascript">
         var crsf_token = "{{ csrf_token }}";
-    </script>
+    </script>    
     {{ form.media.js }}
+    <script src="{{STATIC_URL}}js/accounts/venue-edit-page.js" type="text/javascript" ></script>
 {% endblock %}
 
 
@@ -163,7 +164,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <img src="{{ STATIC_URL }}/images/myspace_profile_icon.png"/>                                
+                                    <img src="{{ STATIC_URL }}/images/myspace_profile_icon.png"/>
                                 </td>
                                 <td>
                                     Myspace:

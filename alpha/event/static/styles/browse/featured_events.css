@@ -1,8 +1,98 @@
+.featured-area
+{
+    width:1010px;
+    background:#022E52;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
+    padding:10px 0px 10px 10px;
+    color:#fff;
+    margin: 0 auto;
+}
+
+.featured-area h2
+{
+    margin:0px;
+    padding:10px 0px 10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.features-wrapper
+{
+    width:auto;
+    min-height: 161px;
+}
+
+.features
+{
+    float:left;
+    margin-right:5px;
+    position:relative;
+}
+
 .featured-title, .featured-date, .featured-details-link, .featured-venue {
     text-overflow: ellipsis;
     overflow:hidden;
     width: 100%;
     white-space: nowrap;
+}
+
+.featured-img-wrapper
+{
+    width:auto;
+}
+
+.featured-img-wrapper img
+{
+    border: 4px solid #eee;
+    width: 154px;
+    height: 153px;
+}
+
+.featured-img-details
+{
+    position:absolute;
+    left:4px;
+    bottom:4px;
+    width:154px;
+    background:url(/static/images/featured-img-details-bg.png) repeat;
+}
+
+.featured-img-details-wrapper
+{
+    width:auto;
+    padding:3px 5px;
+    font-size:10px;
+}
+
+.featured-title a
+{
+    font-weight:bold;
+    color:#eb8a19;
+    text-decoration:none;
+}
+
+.featured-title a:hover
+{
+    text-decoration:underline;
+}
+
+.featured-date, .featured-venue
+{
+    color:#fff;
+    text-decoration:none;
+}
+
+.featured-details-link a
+{
+    color:#247cc3;
+    text-decoration:none;
+}
+
+.featured-details-link a:hover
+{
+    text-decoration:underline;
 }
 
 .features-navigation

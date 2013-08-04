@@ -1,5 +1,4 @@
 ;(function($, window, document, undefined) {
-
     'use strict';
 
     $(document).on("ready page:load", function(){
