@@ -635,6 +635,10 @@ body
 	margin: 0 10px;
 }
 
+.entry-navigation-np .step-links span {
+    opacity: 0.5;
+}
+
 .footer-wrapper
 {
 	width:auto;
