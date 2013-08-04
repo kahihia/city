@@ -15,6 +15,7 @@ from event.lookups import CityLookup
 from accounts.lookups import RegionLookup
 from cities.models import Region
 from django_localflavor_ca.forms import CAPhoneNumberField
+from ckeditor.fields import RichTextFormField
 
 
 class ReminderSettingsForm(forms.ModelForm):
@@ -91,6 +92,7 @@ class VenueAccountForm(forms.ModelForm):
     )
 
     phone = CAPhoneNumberField(required=False)
+    about = RichTextFormField(required=False)
 
     class Meta:
         model = VenueAccount
@@ -123,6 +125,7 @@ class NewVenueAccountForm(VenueAccountForm):
         required=False
     )
     city_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
+    about = RichTextFormField(required=False)
 
     def clean(self):
         cleaned_data = self.cleaned_data

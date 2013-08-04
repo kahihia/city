@@ -331,4 +331,30 @@ CKEDITOR_CONFIGS = {
     },
 }
 
+CKEDITOR_CONFIGS = {
+    "default":
+    {
+        'skin': 'moono',
+        'toolbar_Basic': [
+            ['Styles','Format','Font','FontSize'],
+            '/',
+            ['Bold','Italic','Underline','StrikeThrough','-','Undo','Redo'],
+            ['Table','-','Link','TextColor','BGColor','Source'],
+            '/',
+            ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+        ],
+        'toolbar_Full': [
+            ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
+            ['Image', 'Flash', 'Table', 'HorizontalRule'],
+            ['TextColor', 'BGColor'],
+            ['Smiley', 'SpecialChar'], ['Source'],
+        ],
+        'toolbar': 'Basic',
+        'height': 200,
+        'width': 400,
+        'filebrowserWindowWidth': 940,
+        'filebrowserWindowHeight': 725,
+    }
+}
+
 GOOGLE_ANALYTICS_CODE = "UA-18720563-1"

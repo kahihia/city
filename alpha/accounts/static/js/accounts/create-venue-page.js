@@ -4,7 +4,7 @@
 
     function CreateVenuePage(){
         this.initVenueAutocomplete();
-
+        this.initCKEditor();
     }
 
     CreateVenuePage.prototype = {
@@ -145,6 +145,14 @@
 
             window.user_lng = lng;
             window.user_lat = lat;
+        },
+        initCKEditor: function(){
+            CKEDITOR.instances.id_about.on("instanceReady", function(){
+
+                CKEDITOR.instances.id_about.on('paste', function(e){
+                    e.data.html = e.data.dataValue.replace(/\s*width="[^"]*"/g, '');
+                });
+            });
         }
     };
 

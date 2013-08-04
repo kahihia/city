@@ -11,8 +11,9 @@
 
     <script type="text/javascript">
         var crsf_token = "{{ csrf_token }}";
-    </script>
+    </script>    
     {{ form.media.js }}
+    <script src="{{STATIC_URL}}js/accounts/venue-edit-page.js" type="text/javascript" ></script>
 {% endblock %}
 
 
