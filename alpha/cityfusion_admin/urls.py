@@ -23,6 +23,18 @@ urlpatterns = patterns('',
         views.claim_event_list,
         name='claim_event_list'
     ),
+    url(r'^import-facebook-events/$',
+        views.import_facebook_events,
+        name='import_facebook_events'
+    ),
+    url(r'^load-facebook-events/$',
+        views.load_facebook_events,
+        name='load_facebook_events'
+    ),
+    url(r'^reject-facebook-event/$',
+        views.reject_facebook_event,
+        name='reject_facebook_event'
+    ),
     url(r'^transfer-event/(?P<claim_id>\d+)/$',
         views.transfer_event,
         name='transfer_event'

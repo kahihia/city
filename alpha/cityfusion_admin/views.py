@@ -1,12 +1,14 @@
 import json
 from cityfusion_admin.models import ReportEvent, ClaimEvent
+from cityfusion_admin.utils import get_facebook_events_data
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
+from django.template.loader import render_to_string
 from django.template import RequestContext
 
-from event.models import Event
+from event.models import Event, FacebookEvent
 from accounts.models import Account
 
 
@@ -63,7 +65,51 @@ def claim_event_list(request):
 
     return render_to_response('cf-admin/claim_event_list.html', {
                                 'claims': claims
-                            }, context_instance=RequestContext(request))    
+                            }, context_instance=RequestContext(request))
+
+
+def import_facebook_events(request):
+    return render_to_response('cf-admin/import_facebook_events.html',
+                              context_instance=RequestContext(request))
+
+
+def load_facebook_events(request):
+    if request.is_ajax():
+        try:
+            data = get_facebook_events_data(
+                request,
+                request.GET['place'],
+                int(request.GET.get('page', 0))
+            )
+
+            content = render_to_string('cf-admin/facebook_event_list.html',
+                                       {'events': data['events']},
+                                       context_instance=RequestContext(request))
+            response = {
+                'success': True,
+                'content': content,
+                'page': data['page']
+            }
+        except Exception as e:
+            response = {
+                'success': False,
+                'text': e.message
+            }
+
+        return HttpResponse(json.dumps(response), mimetype='application/json')
+    else:
+        raise Http404
+
+
+@require_POST
+def reject_facebook_event(request):
+    if request.is_ajax():
+        facebook_event_id = request.POST['facebook_event_id']
+        FacebookEvent.objects.create(eid=int(facebook_event_id))
+
+        return HttpResponse(json.dumps({'success': True}), mimetype='application/json')
+    else:
+        raise Http404
 
 
 def transfer_event(request, claim_id):

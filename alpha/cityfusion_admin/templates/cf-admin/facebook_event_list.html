@@ -1,0 +1,36 @@
+{% load date_formatting %}
+
+{% for event in events %}
+    <div class="entry-info home-page extended" data-no-turbolink data-type="event_item" data-event-id='{{ event.id }}'>
+        <div class="entry-img-prev">
+            <a href="https://www.facebook.com/events/{{ event.id }}/">
+                <img src="{{ event.picture }}" alt="" height="60" width="60" />
+            </a>
+        </div>
+        <div class="entry-details-wrapper">
+            <div class="title">
+                <a href="https://www.facebook.com/events/{{ event.id }}/">
+                    {{event.name}}&nbsp;
+                </a>
+            </div>
+            <div class="entry-date">
+                {{event.start_time|date:"l, F d, Y"}}
+                <span class="delimeter">|</span>
+                {{event.start_time|just_time}}
+                {% if event.end_time  %}
+                    -
+                    {{event.end_time|just_time}}
+                {% endif %}
+            </div>
+            <div class="entry-description">
+                {{ event.location }}{% if event.venue.street %}, {{ event.venue.street }}{% endif %}{% if event.venue.city %}, {{ event.venue.city }}{% endif %}
+            </div>
+            <div class="import-buttons">
+                {% if event.venue.city and event.venue.longitude and event.venue.latitude %}
+                    <input type="button" data-type="button_import" value="Import" />
+                {% endif %}
+                <input type="button" data-type="button_reject" value="Reject" />
+            </div>
+        </div>
+    </div>
+{%endfor%}

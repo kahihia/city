@@ -23,8 +23,8 @@ from event.filters import EventFilter
 
 from event import DEFAULT_FROM_EMAIL
 
-from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
-from event.utils import find_nearest_city
+from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder, FacebookEvent
+from event.utils import find_nearest_city, extract_event_data_from_facebook
 
 from event.forms import SetupFeaturedForm, CreateEventForm, EditEventForm
 
@@ -34,6 +34,7 @@ from ajaxuploader.views import AjaxFileUploader
 
 from moneyed import Money, CAD
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from accounts.decorators import native_region_required
 
 
@@ -161,29 +162,29 @@ def view(request, slug, date=None):
         }, context_instance=RequestContext(request))
 
 
-def save_venue(request):
-    if request.POST["venue_name"]:
-        name = request.POST["venue_name"]
-        street = request.POST["street"]
-        city = City.objects.get(id=int(request.POST["city_identifier"]))
+def save_venue(data):
+    if data["venue_name"]:
+        name = data["venue_name"]
+        street = data["street"]
+        city = City.objects.get(id=int(data["city_identifier"]))
         country = Country.objects.get(name='Canada')
         location = Point((
-            float(request.POST["location_lng"]),
-            float(request.POST["location_lat"])
+            float(data["location_lng"]),
+            float(data["location_lat"])
         ))
         venue = Venue(name=name, street=street, city=city, country=country, location=location)
         venue.save()
-    elif request.POST["place"]:
-        name = request.POST["geo_venue"]
-        street = request.POST["geo_street"]
+    elif data["place"]:
+        name = data["geo_venue"]
+        street = data["geo_street"]
         city = City.objects.filter(
-            Q(name_std=request.POST["geo_city"].encode('utf8')) |
-            Q(name=request.POST["geo_city"])
+            Q(name_std=data["geo_city"].encode('utf8')) |
+            Q(name=data["geo_city"])
         )
         country = Country.objects.get(name='Canada')
         location = Point((
-            float(request.POST["geo_longtitude"]),
-            float(request.POST["geo_latitude"])
+            float(data["geo_longtitude"]),
+            float(data["geo_latitude"])
         ))
 
         if city.count() > 1:
@@ -196,9 +197,9 @@ def save_venue(request):
     return venue
 
 
-def save_when_and_description(request, event):
-    when_json = json.loads(request.POST["when_json"])
-    description_json = json.loads(request.POST["description_json"])
+def save_when_and_description(data, event):
+    when_json = json.loads(data["when_json"])
+    description_json = json.loads(data["description_json"])
 
     event.description = description_json['default']
 
@@ -248,24 +249,24 @@ def send_event_details_email(event):
     msg.send()
 
 
-def save_event(request, form):
+def save_event(user, data, form):
     event = form.save()
 
     if event.venue_account_owner:
         venue = event.venue_account_owner.venue
     else:
-        venue = save_venue(request)
+        venue = save_venue(data)
 
     event.venue = venue
 
-    save_when_and_description(request, event)
+    save_when_and_description(data, event)
 
-    if request.user.is_authenticated():
-        event.owner = request.user
-        event.email = request.user.email
+    if user.is_authenticated():
+        event.owner = user
+        event.email = user.email
 
-    if request.POST["picture_src"]:
-        event.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
+    if data["picture_src"]:
+        event.picture.name = data["picture_src"].replace(settings.MEDIA_URL, "")
 
     event = event.save()
     return event
@@ -276,7 +277,7 @@ def create(request, success_url=None, template_name='events/create/create_event.
     if request.method == 'POST':
         form = CreateEventForm(account=request.account, data=request.POST)
         if form.is_valid():
-            event = save_event(request, form)
+            event = save_event(request.user, request.POST, form)
             send_event_details_email(event)
 
             if success_url is None:
@@ -295,6 +296,30 @@ def create(request, success_url=None, template_name='events/create/create_event.
             'posting': True,
             'location': request.user_location["location"],
         }, context_instance=context)
+
+
+@login_required
+@require_POST
+def create_from_facebook(request):
+    if request.is_ajax():
+        facebook_event_id = request.POST['facebook_event_id']
+        event_data = extract_event_data_from_facebook(request, facebook_event_id)
+        form = CreateEventForm(account=request.account, data=event_data)
+        if form.is_valid():
+            event = save_event(request.user, event_data, form)
+            facebook_event = FacebookEvent.objects.create(eid=int(facebook_event_id))
+            event.facebook_event = facebook_event
+            event.save()
+
+            success = False
+        else:
+            success = False
+
+        return HttpResponse(
+            json.dumps({'success': success, 'info': form.errors}),
+            mimetype='application/json')
+    else:
+        raise Http404
 
 
 def created(request, slug=None):
@@ -381,7 +406,7 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
         if form.is_valid():
             SingleEvent.objects.filter(event=event).delete()
 
-            event = save_event(request, form)
+            event = save_event(request.user, request.POST, form)
             return HttpResponseRedirect(success_url)
     else:
         form = EditEventForm(
@@ -403,7 +428,7 @@ def copy(request, authentication_key, template_name='events/create/copy_event.ht
     if request.method == 'POST':
         form = CreateEventForm(account=request.account, data=request.POST)
         if form.is_valid():
-            event_obj = save_event(request, form)
+            event_obj = save_event(request.user, request.POST, form)
             send_event_details_email(event_obj)
 
             success_url = reverse('event_created', kwargs={ 'slug': event_obj.slug })

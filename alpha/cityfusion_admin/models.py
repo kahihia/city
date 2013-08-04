@@ -64,12 +64,16 @@ post_save.connect(send_claims_to_managers, sender=ClaimEvent)
 
 
 CF_ADMIN_MENU = {
-    "report_event": {
-        "urlname": "report_event_list",
-        "linktext": "Reports"
+    'report_event': {
+        'urlname': 'report_event_list',
+        'linktext': 'Reports'
     },
-    "claim_event": {
-        "urlname": "claim_event_list",
-        "linktext": "Claims"
-    }
+    'claim_event': {
+        'urlname': 'claim_event_list',
+        'linktext': 'Claims'
+    },
+    'import_facebook_events': {
+        'urlname': 'import_facebook_events',
+        'linktext': 'Import from Facebook'
+    },
 }

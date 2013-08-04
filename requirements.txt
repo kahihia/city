@@ -6,9 +6,20 @@ django-taggit==0.9.3
 wsgiref==0.1.2
 django-cities
 django-image-cropping
-django-taggit
 simplejson==1.9.3
 twilio
 django-money
 py-moneyed
 django-localflavor-ca
+django-selectable
+django-userena
+easy-thumbnails
+django-guardian
+django_facebook==5.2.6
+django-celery
+djorm-ext-pgfulltext
+psycopg2
+django_filter
+nltk
+PIL
+python-dateutil < 2.0

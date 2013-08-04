@@ -8,7 +8,10 @@ DATABASES = {
         'NAME': 'cityfusion_dev',                      # Or path to database file if using sqlite3.
         'USER': 'cityfusion_dev',                      # Not used with sqlite3.
         'PASSWORD': 'forfusion',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
+
+FACEBOOK_APP_ID = "536513936402579"
+FACEBOOK_APP_SECRET = "f0aea33f1319a8e238a419ea57a671d5"

@@ -14,8 +14,10 @@ import string
 import random
 from taggit_autosuggest.managers import TaggableManager
 import os
+import json
 import os.path
 import re
+import dateutil.parser as dateparser
 
 import datetime
 from event import EVENT_PICTURE_DIR
@@ -182,6 +184,8 @@ class Event(models.Model):
 
     viewed_times = models.IntegerField(default=0, blank=True, null=True)
 
+    facebook_event = models.ForeignKey('FacebookEvent', blank=True, null=True)
+
     search_index = VectorField()
 
     tags = TaggableManager()
@@ -303,6 +307,28 @@ class SingleEvent(models.Model):
 
     def event_identifier(self):
         return self.event.id
+
+
+class FacebookEvent(models.Model):
+    eid = models.BigIntegerField(blank=False, null=False)
+
+    @classmethod
+    def prepare_events(cls, raw_data):
+        existing_items = cls.objects.all().values_list('eid', flat=True)
+        result = []
+
+        for item in raw_data:
+            if not int(item['id']) in existing_items:
+                for key in ['start_time', 'end_time']:
+                    if key in item:
+                        item[key] = dateparser.parse(item[key])
+                    else:
+                        item[key] = None
+
+                item['picture'] = item['picture']['data']['url']
+                result.append(item)
+
+        return result
 
 
 class Venue(models.Model):

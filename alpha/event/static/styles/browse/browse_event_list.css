@@ -14,7 +14,11 @@
     height: 66px;
     padding: 7px 14px;
     background: #f6f6f6;
-    margin-bottom: 4px;    
+    margin-bottom: 4px;
+}
+
+.entry-wrapper .entry-info.extended {
+    height: 86px;
 }
 
 .entry-wrapper .entry-info .entry-img-prev {

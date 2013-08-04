@@ -51,6 +51,10 @@ urlpatterns = patterns('',
         event.create,
         name='event_create'
     ),
+    url(r'^create-from-facebook/$',
+        event.create_from_facebook,
+        name='event_create_from_facebook'
+    ),
 
     url(r'^start$', event.start, name="start"),
     url(r'^ajax-upload$', event.import_uploader, name="my_ajax_upload"),

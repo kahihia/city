@@ -149,13 +149,13 @@ body
 	width:345px;
 	background:none;
 	color:#454545;
-	float:left;	
+	float:left;
 }
 
 .search-events-text-box
 {
 	padding:10px 80px 7px 10px;
-	margin-top:3px;	
+	margin-top:3px;
 	-moz-border-radius:6px;
 	-webkit-border-radius:6px;
 	border-radius:6px;
@@ -461,7 +461,7 @@ body
 	padding:20px 25px 20px 35px;
 }
 
-.schedule-bar-wrapper .pop-up-wrapper-container .contents .pop-featured-img 
+.schedule-bar-wrapper .pop-up-wrapper-container .contents .pop-featured-img
 {
 	float:left;
 }
@@ -540,7 +540,7 @@ body
 }
 .schedule-bar-wrapper ul li input
 {
-	
+
 	display:block;
 	color:#454545;
 	font-weight:bold;
@@ -551,7 +551,7 @@ body
 	-webkit-border-radius:5px;
 	border-radius:5px;
 	border:1px solid #ddd;
-	
+
 }
 .schedule-bar-wrapper ul li a
 {
@@ -910,11 +910,11 @@ a {
 	background:url(/static/images/tag_icon.png) left no-repeat;
 }
 
-#hintbox{ 
+#hintbox{
 	/*CSS for pop up hint box */
 	position: absolute;
 	background-color: #f7f7f7;
-	width: 230px; /*Default width of hint.*/ 
+	width: 230px; /*Default width of hint.*/
 	border:1px solid #d6d6d6;
 	font-size: 11px;
 	font-weight:normal;
@@ -923,7 +923,7 @@ a {
 	visibility: hidden;
 	color:#454545;
 	}
-	
+
 .hintanchor{ /*CSS for link that shows hint onmouseover*/
 	font-weight: bold;
 	color: #000000;
@@ -963,4 +963,43 @@ a {
 
 .messages {
 	display: none;
+}
+
+.indicator-block {
+    display: none;
+    padding-top: 10px;
+}
+
+.box .form-block {
+    padding-left: 8px;
+}
+
+.load-more {
+    display: none;
+    cursor: pointer;
+    padding-left: 8px;
+    text-decoration: underline;
+    padding-top: 10px;
+}
+
+.import-buttons {
+    padding-top: 5px;
+}
+
+.alert-success, .alert-error {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 13px;
+}
+
+.alert-success {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    color: #468847;
+}
+
+.alert-error {
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    color: #b94a48;
 }
