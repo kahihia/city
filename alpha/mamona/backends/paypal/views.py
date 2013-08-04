@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 
-from mamona.models import Payment
+from mamona.models import Payment, FeaturedEventPayment
 from mamona.utils import get_backend_settings
 from mamona.signals import return_urls_query
 
@@ -10,8 +10,12 @@ import urllib2
 from urllib import urlencode
 from decimal import Decimal
 
-def return_from_gw(request, payment_id):
-	payment = get_object_or_404(Payment, id=payment_id)
+def return_from_gw(request, payment_id, order_class):
+	if order_class=="advertising":
+		payment = get_object_or_404(Payment, id=payment_id)
+	else:
+		payment = get_object_or_404(FeaturedEventPayment, id=payment_id)
+
 	urls = {}
 	return_urls_query.send(sender=None, instance=payment, urls=urls)
 	if payment.status == 'failed':
