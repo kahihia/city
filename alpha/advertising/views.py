@@ -189,3 +189,14 @@ def payment(request, order_id):
     return render_to_response('advertising/payment.html', {
         "order": order
     }, context_instance=RequestContext(request))
+
+def advertising_order(request, order_id):
+    order = get_object_or_404(AdvertisingOrder, pk=order_id)
+    payment = order.payment_set.all()[0]
+
+    # form = PaypalConfirmationForm()
+
+    return render_to_response('advertising/order.html', {
+        "order": order,
+        "payment": payment
+    }, context_instance=RequestContext(request))    

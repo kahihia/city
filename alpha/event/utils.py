@@ -47,9 +47,16 @@ def extract_event_data_from_facebook(request, facebook_event_id):
                                          from event
                                          where eid = %s''' % facebook_event_id)[0]
 
-    start_time = dateparser.parse(facebook_event['start_time']);
+    if type(facebook_event['start_time']) == int:
+        start_time = datetime.datetime.fromtimestamp(facebook_event['start_time'])
+    else:        
+        start_time = dateparser.parse(facebook_event['start_time'])
+
     if 'end_time' in facebook_event and facebook_event['end_time']:
-        end_time = dateparser.parse(facebook_event['end_time'])
+        if type(facebook_event['end_time']) == int:
+            end_time = datetime.datetime.fromtimestamp(facebook_event['end_time'])
+        else:
+            end_time = dateparser.parse(facebook_event['end_time'])
     else:
         end_time = start_time
 

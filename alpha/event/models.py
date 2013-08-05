@@ -14,7 +14,6 @@ import string
 import random
 from taggit_autosuggest.managers import TaggableManager
 import os
-import json
 import os.path
 import re
 import dateutil.parser as dateparser

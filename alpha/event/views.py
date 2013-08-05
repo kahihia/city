@@ -311,7 +311,7 @@ def create_from_facebook(request):
             event.facebook_event = facebook_event
             event.save()
 
-            success = False
+            success = True
         else:
             success = False
 
@@ -525,7 +525,16 @@ def payment(request, order_id):
 
     return render_to_response('featured/payment.html', {
         "order": order
-    }, context_instance=RequestContext(request))    
+    }, context_instance=RequestContext(request))
+
+
+def featured_event_order(request, order_id):
+    order = get_object_or_404(FeaturedEventOrder, pk=order_id)
+    payment = order.featuredeventpayment_set.all()[0]
+    return render_to_response('featured/order.html', {
+        "order": order,
+        "payment": payment
+    }, context_instance=RequestContext(request))
 
 
 def ason(request):

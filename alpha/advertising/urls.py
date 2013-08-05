@@ -28,5 +28,9 @@ urlpatterns = patterns('',
     url(r'^campaign/(?P<campaign_id>\d+)/deposit/$',
         views.deposit_funds_for_campaign,
         name='advertising_deposit_funds_for_campaign'
-    )
+    ),
+    url(r'^advertising-order/(?P<order_id>\d+)/$',
+        views.advertising_order,
+        name='advertising_order'
+    ),
 )

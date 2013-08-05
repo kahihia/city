@@ -76,6 +76,10 @@ urlpatterns = patterns('',
         event.payment,
         name='setup_featured_payment'
     ),
+    url(r'^featured-event-order/(?P<order_id>\d+)/$',
+        event.featured_event_order,
+        name='featured_event_order'
+    ),
 
     # url(r'^audit-single-event/', event.audit_single_event_list),
     # url(r'^audit-single-remove/(?P<id>\d+)', event.audit_single_event_remove),
