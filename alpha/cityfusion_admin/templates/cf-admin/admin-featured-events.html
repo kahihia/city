@@ -44,7 +44,7 @@
                     </td>
                     <td>
                         {% if featured_event.active %}
-                            On
+                            On(<a href="{% url "admin_deactivate_featured" featured_event.id %}">Deactivate</a>)
                         {% else %}
                             Off(<a href="{% url "admin_activate_featured" featured_event.id %}">Activate</a>)
                         {% endif %}

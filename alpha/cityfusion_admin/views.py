@@ -322,9 +322,13 @@ def admin_activate_featured(request, featured_event_id):
     featured_event = FeaturedEvent.objects.get(id=featured_event_id)
     featured_event.active = True
     featured_event.save()
-    return HttpResponseRedirect(reverse('admin_featured'))    
+    return HttpResponseRedirect(reverse('admin_featured'))
 
-admin_activate_featured    
+def admin_deactivate_featured(request, featured_event_id):    
+    featured_event = FeaturedEvent.objects.get(id=featured_event_id)
+    featured_event.active = False
+    featured_event.save()
+    return HttpResponseRedirect(reverse('admin_featured'))
 
 def admin_edit_featured(request, featured_event_id):
     featured_event = FeaturedEvent.objects.get(id=featured_event_id)

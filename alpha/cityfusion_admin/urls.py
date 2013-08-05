@@ -107,6 +107,10 @@ urlpatterns = patterns('',
         views.admin_activate_featured,
         name='admin_activate_featured'
     ),
+    url(r'^admin-deactivate-featured/(?P<featured_event_id>\d+)$',
+        views.admin_deactivate_featured,
+        name='admin_deactivate_featured'
+    ),
 
     url(r'^free-try/$',
         views.free_try,
