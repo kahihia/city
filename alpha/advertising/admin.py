@@ -7,7 +7,8 @@ class AdvertisingTypeAdmin(admin.ModelAdmin):
 
 
 class AdvertisingAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'image', 'review_status')
+    list_display = ('__unicode__', 'image_thumb', 'review_status')
+    readonly_fields = ('image_thumb',)
 
 
 admin.site.register(AdvertisingType, AdvertisingTypeAdmin)

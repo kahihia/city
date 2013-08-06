@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.conf import settings
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
 from cities.models import Region
@@ -121,6 +122,13 @@ class Advertising(models.Model):
             self.campaign.save()
 
         self.save()
+
+    def image_thumb(self):
+        return u'<img src="%s" height="60" />' % self.image.url
+
+    image_thumb.short_description = 'Image1'
+    image_thumb.allow_tags = True
+
 
 
 class AdvertisingOrder(models.Model):
