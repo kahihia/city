@@ -126,7 +126,7 @@ class Advertising(models.Model):
     def image_thumb(self):
         return u'<img src="%s" height="60" />' % self.image.url
 
-    image_thumb.short_description = 'Image1'
+    image_thumb.short_description = 'Image'
     image_thumb.allow_tags = True
 
 
