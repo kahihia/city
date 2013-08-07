@@ -26,9 +26,7 @@
                 {{ event.location }}{% if event.venue.street %}, {{ event.venue.street }}{% endif %}{% if event.venue.city %}, {{ event.venue.city }}{% endif %}
             </div>
             <div class="import-buttons">
-                {% if event.venue.city and event.venue.longitude and event.venue.latitude %}
-                    <input type="button" data-type="button_import" value="Import" />
-                {% endif %}
+                <input type="button" data-type="button_import" value="Import" data-complete="{% if event.venue.city and event.venue.longitude and event.venue.latitude %}true{% else %}false{% endif %}" />
                 <input type="button" data-type="button_reject" value="Reject" />
             </div>
         </div>

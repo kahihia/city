@@ -1,7 +1,7 @@
 ;(function($, window, document, undefined) {
     'use strict';
 
-    var FacebookEventsLoader = function() {
+    var FacebookEventsService = function() {
         var self = this;
 
         self.init = function() {
@@ -10,10 +10,30 @@
             self.searchButton = $("[data-id=search_button]");
             self.moreLink = $("[data-id=load_more]");
             self.placeInput = $(".location-text-box input");
+            self.locationLayer = $("[data-id=location_layer]");
+
 
             self.loadUrl = self.eventsBlock.data("load-url");
             self.createUrl = self.eventsBlock.data("create-url");
             self.rejectUrl = self.eventsBlock.data("reject-url");
+
+            self.locationElements = {
+                "id_geo_street": "geo_street",
+                "id_geo_venue": "geo_venue",
+                "id_geo_address": "geo_address",
+                "id_geo_country": "geo_country",
+                "id_geo_city": "geo_city",
+                "id_geo_latitude": "geo_latitude",
+                "id_geo_longtitude": "geo_longtitude",
+                "id_place": "place",
+                "id_street": "street",
+                "id_location_lng": "location_lng",
+                "id_location_lat": "location_lat",
+                "id_city_0": "city_0",
+                "id_city_1": "city_1",
+                "id_venue_name": "venue_name",
+                "id_city_identifier": "city_identifier"
+            };
 
             self.reset();
 
@@ -22,6 +42,11 @@
 
             self.eventsBlock.on("click", "[data-type=button_import]", self.onImportButtonClick);
             self.eventsBlock.on("click", "[data-type=button_reject]", self.onRejectButtonClick);
+
+            $("body").on("click", "[data-id=location_button_cancel]", self.onLocationCancelButtonClick);
+            $("body").on("click", "[data-id=location_button_ok]", self.onLocationOkButtonClick);
+
+            $("body").prepend(self.locationLayer);
         };
 
         self.reset = function() {
@@ -46,7 +71,12 @@
                         }
                     }
                     else {
-                        self.eventsBlock.html(data.text);
+                        var message = $("<div/>", {
+                            "class": "alert-error",
+                            "html": data.text
+                        });
+
+                        self.eventsBlock.html(message);
                         self.moreLink.hide();
 
                         self.reset();
@@ -81,38 +111,18 @@
         };
 
         self.onImportButtonClick = function() {
+            self.activeItem = $(this).closest("[data-type=event_item]");
+
             var buttons = $(this).parent().find("input");
             buttons.attr("disabled", "true");
 
-            var eventData = {
-                "facebook_event_id": $(this).closest("[data-type=event_item]").data("event-id"),
-                "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val()
+            if($(this).attr("data-complete") === "true") {
+                self.processImport();
             }
-
-            var eventItem = $(this).closest("[data-type=event_item]");
-
-            $.post(self.createUrl, eventData, function(data) {
-                if(data.success) {
-                    var message = $("<div/>", {
-                        "class": "alert-success",
-                        "html": "Import completed successfully"
-                    }).insertBefore(eventItem);
-
-                    eventItem.remove();
-                }
-                else {
-                    var message = $("<div/>", {
-                        "class": "alert-error",
-                        "html": "Import error"
-                    }).insertBefore(eventItem);
-
-                    buttons.removeAttr("disabled");
-                }
-
-                window.setTimeout(function() {
-                    message.remove();
-                }, 3000);
-            }, 'json');
+            else {
+                self.resetLocationParams();
+                self.locationLayer.show();
+            }
         };
 
         self.onRejectButtonClick = function() {
@@ -132,11 +142,72 @@
             }, 'json');
         };
 
+        self.onLocationOkButtonClick = function() {
+            self.locationLayer.hide();
+            self.processImport();
+        };
+
+        self.onLocationCancelButtonClick = function() {
+            self.locationLayer.hide();
+            self.activeItem.find("input").removeAttr("disabled");
+        };
+
+        self.processImport = function() {
+            var buttons = self.activeItem.find("input");
+
+            var eventData = {
+                "facebook_event_id": self.activeItem.data("event-id"),
+                "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val()
+            }
+
+            $.each(self.locationElements, function(id, name) {
+                eventData[name] = $("#" + id).val();
+            });
+
+            $.post(self.createUrl, eventData, function(data) {
+                if(data.success) {
+                    var message = $("<div/>", {
+                        "class": "alert-success",
+                        "html": "Import completed successfully"
+                    }).insertBefore(self.activeItem);
+
+                    self.activeItem.remove();
+                    delete self.activeItem;
+                }
+                else {
+                    var message = $("<div/>", {
+                        "class": "alert-error",
+                        "html": "Import error"
+                    }).insertBefore(self.activeItem);
+
+                    buttons.removeAttr("disabled");
+                }
+
+                window.setTimeout(function() {
+                    message.remove();
+                }, 3000);
+            }, 'json');
+        };
+
+        self.resetLocationParams = function() {
+            var elements = ["id_geo_street", "id_geo_venue", "id_geo_address",
+                            "id_geo_country", "id_geo_city", "id_geo_latitude",
+                            "id_geo_longtitude", "id_place", "id_street",
+                            "id_location_lng", "id_location_lat", "id_city_0",
+                            "id_city_1", "id_venue_name", "id_city_identifier"];
+
+            $.each(self.locationElements, function(id, name) {
+                $("#" + id).val("");
+            });
+        };
+
         self.init();
     };
 
     $(document).ready(function() {
         var locationSearch = new window.SearchByLocation();
+
+        /// Monkey patching
         locationSearch.searchUrl = "/cf-admin/locations?search=";
         locationSearch.findByLocation = function(name, city) {
             $(".search-lists").hide();
@@ -144,7 +215,7 @@
                 $(".search-lists").removeAttr("style");
             }, 100);
 
-            $(".location-text-box input").val(name);
+            $(".location-text-box input").val(city);
             $(".location-text-box input").attr("data-city", city);
         };
 
@@ -169,7 +240,9 @@
             li = $("<li>").append(link);
             return li;
         }
+        ///
 
-        new FacebookEventsLoader();
+        new window.VenueAutocomplete();
+        new FacebookEventsService();
     });
 })(jQuery, window, document);

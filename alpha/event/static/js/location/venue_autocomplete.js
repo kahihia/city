@@ -63,7 +63,9 @@
                 $("#id_venue_name").val("");
                 $("#id_street").val("");
                 $("#id_city_0").val("");
-                $("#id_tags__tagautosuggest")[0].tagspopup.forCity($("#id_geo_city").val());
+                if($("#id_tags__tagautosuggest").length !== 0) {
+                    $("#id_tags__tagautosuggest")[0].tagspopup.forCity($("#id_geo_city").val());
+                }
 
                 window.user_lat = result.geometry.location.lat();
                 window.user_lng = result.geometry.location.lng();
