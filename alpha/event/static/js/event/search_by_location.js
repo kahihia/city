@@ -9,6 +9,8 @@
         this.searchList = $(".search-lists ul");
         this.searchInput = $(".location-text-box input");
 
+        this.searchUrl = "/events/locations?search=";
+
         this.initLocationLinks();
 
         setInterval(function(){
@@ -17,7 +19,7 @@
 
                 currentSearchValue = that.searchInput.val();
                 request = $.ajax({
-                    url: "/events/locations?search=" + currentSearchValue,
+                    url: that.searchUrl + currentSearchValue,
                     success: function(data) {
                         that.refreshLocationList(data);
                     }
@@ -26,7 +28,7 @@
         }, 500);
 
         request = $.ajax({
-            url: "/events/locations?search=" + currentSearchValue,
+            url: that.searchUrl + currentSearchValue,
             success: function(data) {
                 that.refreshLocationList(data);
             }
@@ -45,26 +47,29 @@
                 });
             });
         },
-        findByLocation: function(id, type){
+        findByLocation: function(id, type, text){
             window.location = window.filters.setFilter("location", type+"|"+id).getURL();
         },
 
         refreshLocationList: function(data){
             $("li a", this.searchList).remove();
 
-            _.forEach(data.locations, function(location){
-                var link, li;
-
-                link = $("<a href='javascript:void;'>").html(location.name);
-                link.attr("data-location-id", location.id);
-                link.attr("data-location-type", location.type);
-
-                li = $("<li>").append(link);
-
-                this.searchList.append(li);
+            _.forEach(data.locations, function(location) {
+                this.searchList.append(this.appendLink(location));
             }, this);
 
             this.initLocationLinks();
+        },
+
+        appendLink: function(data) {
+            var link, li;
+
+            link = $("<a href='javascript:void(0);'>").html(data.name);
+            link.attr("data-location-id", data.id);
+            link.attr("data-location-type", data.type);
+
+            li = $("<li>").append(link);
+            return li;
         }
         
     };

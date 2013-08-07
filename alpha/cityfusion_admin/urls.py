@@ -32,6 +32,16 @@ urlpatterns = patterns('',
         views.claim_event_list,
         name='claim_event_list'
     ),
+    url(r'^transfer-event/(?P<claim_id>\d+)/$',
+        views.transfer_event,
+        name='transfer_event'
+    ),
+    url(r'^claim-event-refuse/(?P<claim_id>\d+)/$', 
+        views.claim_event_refuse,
+        name='claim_event_refuse'
+    ),
+
+    #Facebook
     url(r'^import-facebook-events/$',
         views.import_facebook_events,
         name='import_facebook_events'
@@ -44,13 +54,9 @@ urlpatterns = patterns('',
         views.reject_facebook_event,
         name='reject_facebook_event'
     ),
-    url(r'^transfer-event/(?P<claim_id>\d+)/$',
-        views.transfer_event,
-        name='transfer_event'
-    ),
-    url(r'^claim-event-refuse/(?P<claim_id>\d+)/$', 
-        views.claim_event_refuse,
-        name='claim_event_refuse'
+    url(r'^locations/$',
+        views.location_autocomplete,
+        name='admin_location_autocomplete'
     ),
 
     # Advertising

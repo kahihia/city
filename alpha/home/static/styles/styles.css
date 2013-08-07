@@ -825,6 +825,10 @@ a {
     padding-top: 5px;
 }
 
+.events-search-button {
+    margin-top: 10px;
+}
+
 .alert-success, .alert-error {
     margin: 10px 0;
     padding: 10px;

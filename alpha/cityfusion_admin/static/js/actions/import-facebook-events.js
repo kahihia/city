@@ -9,7 +9,7 @@
             self.eventsBlock = $("[data-id=facebook_events_list]");
             self.searchButton = $("[data-id=search_button]");
             self.moreLink = $("[data-id=load_more]");
-            self.placeInput = $("[data-id=place_input]");
+            self.placeInput = $(".location-text-box input");
 
             self.loadUrl = self.eventsBlock.data("load-url");
             self.createUrl = self.eventsBlock.data("create-url");
@@ -60,11 +60,11 @@
         };
 
         self.onSearchButtonClick = function() {
-            self.place = self.placeInput.val();
+            self.place = self.placeInput.attr("data-city");
 
             self.loadEvents({"place": self.place}, function() {
                 self.eventsBlock.empty();
-                self.indicatorBlock.insertAfter(self.searchButton).show();
+                $(".form-block").append(self.indicatorBlock.show());
                 self.moreLink.hide();
             });
         };
@@ -133,9 +133,43 @@
         };
 
         self.init();
-    }
+    };
 
     $(document).ready(function() {
+        var locationSearch = new window.SearchByLocation();
+        locationSearch.searchUrl = "/cf-admin/locations?search=";
+        locationSearch.findByLocation = function(name, city) {
+            $(".search-lists").hide();
+            window.setTimeout(function() { // hack for list closing
+                $(".search-lists").removeAttr("style");
+            }, 100);
+
+            $(".location-text-box input").val(name);
+            $(".location-text-box input").attr("data-city", city);
+        };
+
+        locationSearch.initLocationLinks = function() {
+            var that=this;
+            $("li a", this.searchList).each(function(){
+                $(this).on("click", function() {
+                    that.findByLocation(
+                        $(this).text(),
+                        $(this).data("location-city")
+                    );
+                });
+            });
+        },
+
+        locationSearch.appendLink = function(data) {
+            var link, li;
+
+            link = $("<a href='javascript:void(0);'>").html(data.name);
+            link.attr("data-location-city", data.city_name);
+
+            li = $("<li>").append(link);
+            return li;
+        }
+
         new FacebookEventsLoader();
     });
 })(jQuery, window, document);

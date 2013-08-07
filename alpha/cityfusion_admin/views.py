@@ -12,6 +12,8 @@ from django.template import RequestContext
 from accounts.models import Account
 from event.models import Event, FeaturedEvent, FacebookEvent
 from event.forms import SetupFeaturedForm
+from cities.models import City, Country, Region
+from django.contrib.gis.geos import Point
 
 
 @require_POST
@@ -110,6 +112,46 @@ def reject_facebook_event(request):
         FacebookEvent.objects.create(eid=int(facebook_event_id))
 
         return HttpResponse(json.dumps({'success': True}), mimetype='application/json')
+    else:
+        raise Http404
+
+
+def location_autocomplete(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            canada = Country.objects.get(name="Canada")
+
+            locations = []
+
+            kwargs = {
+                "country": canada
+            }
+
+            search = request.GET.get("search", "")
+
+            if search:
+                kwargs["name__icontains"] = search
+
+            cities = City.objects.filter(**kwargs)
+
+            if request.user_location:
+                cities = cities.distance(Point(request.user_location["location"])).order_by('-distance')
+
+            cities = cities[0:5]
+
+            for city in cities:
+                if city.region:
+                    name = "%s, %s, %s" % (city.name, city.region.name, city.country.name)
+                else:
+                    name = "%s, %s" % (city.name, city.country.name)
+                locations.append({
+                    "name": name,
+                    "city_name": city.name
+                })
+
+            return HttpResponse(json.dumps({
+                "locations": locations
+            }), mimetype="application/json")
     else:
         raise Http404
 
