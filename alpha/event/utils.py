@@ -35,7 +35,10 @@ def get_times_from_request(request):
     return start_time, end_time
 
 
-def extract_event_data_from_facebook(request, facebook_event_id):
+def extract_event_data_from_facebook(request, data):
+    """
+    @todo Refactor - split on several methods
+    """
     graph = get_persistent_graph(request)
     facebook_event = graph.fql('''select name,
                                          start_time,
@@ -45,7 +48,7 @@ def extract_event_data_from_facebook(request, facebook_event_id):
                                          location,
                                          venue
                                          from event
-                                         where eid = %s''' % facebook_event_id)[0]
+                                         where eid = %s''' % data['facebook_event_id'])[0]
 
     if type(facebook_event['start_time']) == int:
         start_time = datetime.datetime.fromtimestamp(facebook_event['start_time'])
@@ -74,17 +77,38 @@ def extract_event_data_from_facebook(request, facebook_event_id):
         bias = ((img_height - img_width) / 2)
         cropping = [0, bias, img_width, bias + img_width]
 
-    longitude = facebook_event['venue'].get('longitude', '')
-    latitude = facebook_event['venue'].get('latitude', '')
+    if facebook_event['venue']:
+        city = facebook_event['venue'].get('city', '')
+        longitude = facebook_event['venue'].get('longitude', '')
+        latitude = facebook_event['venue'].get('latitude', '')
 
-    return {
+    if not facebook_event['venue'] or not (city and longitude and latitude):
+        location_data = {param: data[param] for param in ['place', 'geo_venue', 'geo_street',
+                                                          'geo_city', 'geo_address', 'geo_country',
+                                                          'geo_longtitude', 'geo_latitude', 'street',
+                                                          'location_lng', 'location_lat', 'city_0',
+                                                          'city_1', 'city_identifier', 'venue_name']}
+    else:
+        location_data = {
+            'place': facebook_event['location'],
+            'geo_venue': facebook_event['location'],
+            'geo_street': facebook_event['venue'].get('street', ''),
+            'geo_city': city,
+            'geo_longtitude': longitude,
+            'location_lng': longitude,
+            'geo_latitude': latitude,
+            'location_lat': latitude,
+            'venue_name': '',
+        }
+
+    result = {
         'name': facebook_event['name'],
         'user_context_type': 'account',
         'user_context_id': request.account.id,
         'family': False,
         'date_night': False,
         'wheelchair': False,
-        'website': 'https://www.facebook.com/events/' + facebook_event_id,
+        'website': 'https://www.facebook.com/events/' + data['facebook_event_id'],
         'when': start_time.strftime('%d-%m-%Y'),
         'when_json': json.dumps({
                         str(start_time.year): {
@@ -105,14 +129,8 @@ def extract_event_data_from_facebook(request, facebook_event_id):
         }),
         'tags': ',Facebook,',
         'picture_src': settings.MEDIA_URL + 'uploads/' + image_basename,
-        'cropping': ','.join('%d' % n for n in cropping),
-        'venue_name': '',
-        'place': facebook_event['location'],
-        'geo_venue': facebook_event['location'],
-        'geo_street': facebook_event['venue'].get('street', ''),
-        'geo_city': facebook_event['venue'].get('city', ''),
-        'geo_longtitude': longitude,
-        'location_lng': longitude,
-        'geo_latitude': latitude,
-        'location_lat': latitude
+        'cropping': ','.join('%d' % n for n in cropping)
     }
+
+    result.update(location_data)
+    return result

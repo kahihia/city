@@ -306,7 +306,7 @@ def create(request, success_url=None, template_name='events/create/create_event.
 def create_from_facebook(request):
     if request.is_ajax():
         facebook_event_id = request.POST['facebook_event_id']
-        event_data = extract_event_data_from_facebook(request, facebook_event_id)
+        event_data = extract_event_data_from_facebook(request, request.POST)
         form = CreateEventForm(account=request.account, data=event_data)
         if form.is_valid():
             event = save_event(request.user, event_data, form)
