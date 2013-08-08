@@ -150,6 +150,7 @@ def location_autocomplete(request):
                 else:
                     name = '%s, %s' % (city.name, city.country.name)
                 locations.append({
+                    'id': city.id,
                     'name': name,
                     'city_name': city.name
                 })

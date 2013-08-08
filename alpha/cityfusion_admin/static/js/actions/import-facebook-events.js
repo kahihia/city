@@ -157,7 +157,8 @@
 
             var eventData = {
                 "facebook_event_id": self.activeItem.data("event-id"),
-                "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val()
+                "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val(),
+                "city_id": $("[data-id=city_id]").val()
             }
 
             $.each(self.locationElements, function(id, name) {
@@ -209,7 +210,7 @@
 
         /// Monkey patching
         locationSearch.searchUrl = "/cf-admin/locations?search=";
-        locationSearch.findByLocation = function(name, city) {
+        locationSearch.findByLocation = function(id, name, city) {
             $(".search-lists").hide();
             window.setTimeout(function() { // hack for list closing
                 $(".search-lists").removeAttr("style");
@@ -217,13 +218,15 @@
 
             $(".location-text-box input").val(city);
             $(".location-text-box input").attr("data-city", city);
+            $("[data-id=city_id]").val(id);
         };
 
         locationSearch.initLocationLinks = function() {
             var that=this;
-            $("li a", this.searchList).each(function(){
+            $("li a", this.searchList).each(function() {
                 $(this).on("click", function() {
                     that.findByLocation(
+                        $(this).data("location-id"),
                         $(this).text(),
                         $(this).data("location-city")
                     );
@@ -236,6 +239,7 @@
 
             link = $("<a href='javascript:void(0);'>").html(data.name);
             link.attr("data-location-city", data.city_name);
+            link.attr("data-location-id", data.id);
 
             li = $("<li>").append(link);
             return li;

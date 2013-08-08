@@ -23,8 +23,9 @@ from event.filters import EventFilter
 
 from event import DEFAULT_FROM_EMAIL
 
-from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder, FacebookEvent
-from event.utils import find_nearest_city, extract_event_data_from_facebook
+from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
+from event.utils import find_nearest_city
+from event.services import facebook_service
 
 from event.forms import SetupFeaturedForm, CreateEventForm, EditEventForm
 
@@ -306,14 +307,11 @@ def create(request, success_url=None, template_name='events/create/create_event.
 def create_from_facebook(request):
     if request.is_ajax():
         facebook_event_id = request.POST['facebook_event_id']
-        event_data = extract_event_data_from_facebook(request, request.POST)
+        event_data = facebook_service.get_prepared_event_data(request, request.POST)
         form = CreateEventForm(account=request.account, data=event_data)
         if form.is_valid():
             event = save_event(request.user, event_data, form)
-            facebook_event = FacebookEvent.objects.create(eid=int(facebook_event_id))
-            event.facebook_event = facebook_event
-            event.save()
-
+            facebook_service.create_facebook_event(int(facebook_event_id), event)
             success = True
         else:
             success = False
