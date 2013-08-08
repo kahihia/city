@@ -175,7 +175,7 @@ def save_venue(data):
             float(data["location_lng"]),
             float(data["location_lat"])
         ))
-        venue = Venue(name=name, street=street, city=city, country=country, location=location)
+        venue = Venue(name=name, street=street, city=city, country=country, location=location, suggested=True)
         venue.save()
     elif data["place"]:
         name = data["geo_venue"]
@@ -719,11 +719,11 @@ def suggest_cityfusion_venue(request):
     search = request.GET.get("search", "")
 
     if search:
-        venues = Venue.objects.filter(
+        venues = Venue.objects.filter(suggested=True).filter(
             Q(name__icontains=search)|Q(street__icontains=search)|Q(city__name__icontains=search)
         )[:5]
     else:
-        venues = Venue.objects.all()[:5]
+        venues = Venue.objects.filter(suggested=True)[:5]
 
     return HttpResponse(json.dumps({
         "venues": map(lambda venue: { 

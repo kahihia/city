@@ -338,6 +338,7 @@ class Venue(models.Model):
     city = models.ForeignKey(City)
     location = models.PointField()
     country = models.ForeignKey(Country)
+    suggested = models.BooleanField(default=False)
     objects = models.GeoManager()
 
     def __unicode__(self):
