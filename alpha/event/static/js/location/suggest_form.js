@@ -7,7 +7,9 @@
         this.initFormButtons();
         this.initSuggestMap();
         this.embedSuggestVenueButtonIntoGoogleAutocomplete();
-        this.suggestCityfusionVenue = new SuggestCityfusionVenue(this);
+        if(typeof(SuggestCityfusionVenue) !== "undefined") {
+            this.suggestCityfusionVenue = new SuggestCityfusionVenue(this);
+        }
     }
 
     SuggestForm.prototype = {
