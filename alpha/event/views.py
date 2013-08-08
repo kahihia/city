@@ -34,7 +34,7 @@ from ajaxuploader.views import AjaxFileUploader
 
 from moneyed import Money, CAD
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from accounts.decorators import native_region_required
 
 
@@ -163,7 +163,10 @@ def view(request, slug, date=None):
 
 
 def save_venue(data):
-    if data["venue_name"]:
+    if data["venue_identifier"]:
+        venue= Venue.objects.get(id=int(data["venue_identifier"]))
+
+    elif data["venue_name"]:
         name = data["venue_name"]
         street = data["street"]
         city = City.objects.get(id=int(data["city_identifier"]))
@@ -653,59 +656,80 @@ def save_active_tab(request, page, tab):
     return HttpResponse("OK")
 
 
+@require_GET
 def location_autocomplete(request):
     """
         I should give user opportunity to choose region where from events is interesting for him. It can be whole Canada, regions or city
     """
 
-    if request.method == 'GET':
-        canada = Country.objects.get(name="Canada")
+    canada = Country.objects.get(name="Canada")
 
-        locations = []
+    locations = []
 
-        kwargs = {
-            "country": canada
-        }
+    kwargs = {
+        "country": canada
+    }
 
-        search = request.GET.get("search", "")
+    search = request.GET.get("search", "")
 
-        if search: 
-            kwargs["name__icontains"] = search
+    if search: 
+        kwargs["name__icontains"] = search
 
-        cities = City.objects.filter(**kwargs)
+    cities = City.objects.filter(**kwargs)
 
-        if request.user_location:
-            cities = cities.distance(Point(request.user_location["location"])).order_by('-distance')
+    if request.user_location:
+        cities = cities.distance(Point(request.user_location["location"])).order_by('-distance')
 
-        cities = cities[0:5]
+    cities = cities[0:5]
 
-        for city in cities:
-            if city.region:
-                name = "%s, %s, %s" % (city.name, city.region.name, city.country.name)
-            else:
-                name = "%s, %s" % (city.name, city.country.name)
-            locations.append({
-                "id": city.id,
-                "type": "city",
-                "name": name
-            })
+    for city in cities:
+        if city.region:
+            name = "%s, %s, %s" % (city.name, city.region.name, city.country.name)
+        else:
+            name = "%s, %s" % (city.name, city.country.name)
+        locations.append({
+            "id": city.id,
+            "type": "city",
+            "name": name
+        })
 
-        regions = Region.objects.filter(**kwargs)[:5]
+    regions = Region.objects.filter(**kwargs)[:5]
 
-        for region in regions:
-            locations.append({
-                "id": region.id,
-                "type": "region",
-                "name": "%s, %s" % (region.name, region.country.name)
-            })
+    for region in regions:
+        locations.append({
+            "id": region.id,
+            "type": "region",
+            "name": "%s, %s" % (region.name, region.country.name)
+        })
 
-        if not search or search.lower() in "canada":
-            locations.append({
-                "id": canada.id,
-                "type": "country",
-                "name": "Canada"
-            })
+    if not search or search.lower() in "canada":
+        locations.append({
+            "id": canada.id,
+            "type": "country",
+            "name": "Canada"
+        })
 
-        return HttpResponse(json.dumps({
-            "locations": locations
-        }), mimetype="application/json")
+    return HttpResponse(json.dumps({
+        "locations": locations
+    }), mimetype="application/json")
+
+
+@require_GET
+def suggest_cityfusion_venue(request):
+    search = request.GET.get("search", "")
+
+    if search:
+        venues = Venue.objects.filter(
+            Q(name__icontains=search)|Q(street__icontains=search)|Q(city__name__icontains=search)
+        )[:5]
+    else:
+        venues = Venue.objects.all()[:5]
+
+    return HttpResponse(json.dumps({
+        "venues": map(lambda venue: { 
+            "id": venue.id,
+            "name": str(venue),
+            "lat": venue.location.y,
+            "lng": venue.location.x
+        }, venues)
+    }), mimetype="application/json")

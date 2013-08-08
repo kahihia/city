@@ -7,6 +7,7 @@
         this.initFormButtons();
         this.initSuggestMap();
         this.embedSuggestVenueButtonIntoGoogleAutocomplete();
+        this.suggestCityfusionVenue = new SuggestCityfusionVenue(this);
     }
 
     SuggestForm.prototype = {
@@ -90,6 +91,8 @@
                     that.suggestMap.infowindow.open(map, marker);
                 }
             });
+
+            $("#id_venue_name").val($("#id_place").val());
         }
     };
 

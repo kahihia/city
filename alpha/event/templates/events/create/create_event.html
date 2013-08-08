@@ -31,14 +31,15 @@
     <script type="text/javascript">
         var crsf_token = "{{ csrf_token }}";
         {% if location %}
-            window.user_lat = {{location.0}};
-            window.user_lng = {{location.1}};
+            window.user_lat = {{location.1}};
+            window.user_lng = {{location.0}};
         {% endif %}
     </script>
 
     <script src="{{STATIC_URL}}js/jquery.dj.selectable.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/location/jquery.geocomplete.js"></script>
     <script src="{{STATIC_URL}}js/location/suggest_map.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/location/suggest_cityfusion_venue.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/location/suggest_form.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/location/venue_autocomplete.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}ckeditor/ckeditor/ckeditor.js" type="text/javascript"></script>
@@ -194,6 +195,7 @@
                             <td>
                                 <div class="location">{{ form.place }}</div>
                                 <div class="show-map"></div>
+                                {{ form.venue_identifier }}
                                 <div class="suggest">
                                     <div class="error">
                                         All fields is required

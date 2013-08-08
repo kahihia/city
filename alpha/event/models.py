@@ -341,7 +341,10 @@ class Venue(models.Model):
     objects = models.GeoManager()
 
     def __unicode__(self):
-        return "%s, %s, %s" % (self.name, self.street, self.city)
+        if self.street:
+            return "%s, %s, %s" % (self.name, self.street, self.city.name)
+        else:
+            return "%s, %s" % (self.name, self.city.name)
 
     def future_events(self):
         return Event.future_events.filter(venue__id=self.id)

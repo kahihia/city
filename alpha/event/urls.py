@@ -81,6 +81,11 @@ urlpatterns = patterns('',
         name='featured_event_order'
     ),
 
+    url(r'^suggest-cityfusion-venue/$',
+        event.suggest_cityfusion_venue,
+        name="suggest_cityfusion_venue"
+    ),
+
     # url(r'^audit-single-event/', event.audit_single_event_list),
     # url(r'^audit-single-remove/(?P<id>\d+)', event.audit_single_event_remove),
     # url(r'^audit-single-edit/(?P<id>\d+)', event.audit_single_event_edit),

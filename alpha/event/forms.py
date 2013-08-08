@@ -51,6 +51,7 @@ class EditEventForm(forms.ModelForm):
         required=False
     )
     location = forms.Field(widget=LocationWidget(), required=False)
+    venue_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
     venue_name = forms.CharField(required=False)
     street = forms.CharField(required=False)
     city = forms.CharField(
@@ -158,7 +159,9 @@ class EditEventForm(forms.ModelForm):
         place = cleaned_data["place"]
 
         if not cleaned_data["venue_account_owner"]:
-            if cleaned_data["venue_name"]:
+            if cleaned_data["venue_identifier"]:
+                pass
+            elif cleaned_data["venue_name"]:
                 if not cleaned_data["city_identifier"]:
                     self.city_required = True
                     raise forms.ValidationError(u'City is required')
