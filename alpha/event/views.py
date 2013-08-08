@@ -163,7 +163,7 @@ def view(request, slug, date=None):
 
 
 def save_venue(data):
-    if data["venue_identifier"]:
+    if "venue_identifier" in data and data["venue_identifier"]:
         venue= Venue.objects.get(id=int(data["venue_identifier"]))
 
     elif data["venue_name"]:
