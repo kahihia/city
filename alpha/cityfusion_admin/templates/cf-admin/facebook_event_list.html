@@ -14,12 +14,15 @@
                 </a>
             </div>
             <div class="entry-date">
-                {{event.start_time|date:"l, F d, Y"}}
-                <span class="delimeter">|</span>
-                {{event.start_time|just_time}}
+                <div class="date-line">
+                    From:
+                    {{event.start_time|date:"l, F d, Y, g:i A"}}
+                </div>
                 {% if event.end_time  %}
-                    -
-                    {{event.end_time|just_time}}
+                    <div class="date-line">
+                        To:
+                        {{event.end_time|date:"l, F d, Y, g:i A"}}
+                    </div>
                 {% endif %}
             </div>
             <div class="entry-description">

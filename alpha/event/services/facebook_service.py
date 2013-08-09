@@ -92,16 +92,7 @@ def get_prepared_event_data(request, data):
         'wheelchair': False,
         'website': 'https://www.facebook.com/events/' + data['facebook_event_id'],
         'when': start_time.strftime('%d-%m-%Y'),
-        'when_json': json.dumps({
-                        str(start_time.year): {
-                            str(start_time.month): {
-                                str(start_time.day): {
-                                    'start': start_time.strftime('%-1I:%M %p'),
-                                    'end': end_time.strftime('%-1I:%M %p')
-                                }
-                            }
-                        }
-                    }),
+        'when_json': _get_time_range_json(start_time, end_time),
         'description': facebook_event['description'],
         'description_json': json.dumps({
             'default': facebook_event['description'],
@@ -127,8 +118,45 @@ def _get_tags_from_description(city_id, description):
         tag_ids = []
 
     possible_tags = Tag.objects.filter(Q(id__in=tag_ids) |
-        Q(name__in=["Free", "Wheelchair"])
+        Q(name__in=['Free', 'Wheelchair'])
     ).values_list('name', flat=True)
 
     tags = [tag for tag in possible_tags if tag in description]
+    if not 'Facebook' in tags:
+        tags.append('Facebook')
+
     return ',%s,' % ','.join(tags)
+
+
+def _get_time_range_json(start_time, end_time):
+    periods = {}
+    is_first, is_last = True, False
+
+    while start_time <= end_time and not is_last:
+        prev_time = start_time
+        start_time += datetime.timedelta(days=1)
+        if start_time < end_time:
+            added_time = prev_time
+        else:
+            added_time = end_time
+            is_last = True
+
+        year = str(added_time.year)
+        month = str(added_time.month)
+        day = str(added_time.day)
+
+        if not year in periods:
+            periods[year] = {}
+
+        if not month in periods[year]:
+            periods[year][month] = {}
+
+        if not day in periods[year][month]:
+            periods[year][month][day] = {
+                'start': added_time.strftime('%-1I:%M %p') if is_first else '12:00 AM',
+                'end': added_time.strftime('%-1I:%M %p') if is_last else '11:59 PM'
+            }
+
+        is_first = False
+
+    return json.dumps(periods)

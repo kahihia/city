@@ -18,7 +18,7 @@
 }
 
 .entry-wrapper .entry-info.extended {
-    height: 86px;
+    height: 110px;
 }
 
 .entry-wrapper .entry-info .entry-img-prev {
@@ -43,6 +43,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     width: 520px;
+}
+
+.entry-date .date-line {
+    padding: 2px 0;
 }
 
 .entry-wrapper .entry-info.home-page .entry-details-wrapper{
