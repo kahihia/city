@@ -25,7 +25,7 @@
             <div class="entry-description">
                 {{ event.location }}{% if event.venue.street %}, {{ event.venue.street }}{% endif %}{% if event.venue.city %}, {{ event.venue.city }}{% endif %}
             </div>
-            <div class="import-buttons">
+            <div class="import-buttons" data-type="buttons_block">
                 <input type="button" data-type="button_import" value="Import" data-complete="{% if event.venue.city and event.venue.longitude and event.venue.latitude %}true{% else %}false{% endif %}" />
                 <input type="button" data-type="button_reject" value="Reject" />
             </div>

@@ -155,9 +155,7 @@ def location_autocomplete(request):
                     'city_name': city.name
                 })
 
-            return HttpResponse(json.dumps({
-                'locations': locations
-            }), mimetype='application/json')
+            return HttpResponse(json.dumps(locations), mimetype='application/json')
     else:
         raise Http404
 

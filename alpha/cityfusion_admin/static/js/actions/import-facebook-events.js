@@ -5,11 +5,15 @@
         var self = this;
 
         self.init = function() {
+            self.formBlock = $("[data-id=form_block]");
             self.indicatorBlock = $("[data-id=indicator_block]");
+            self.miniIndicator = $("[data-id=mini_indicator]");
             self.eventsBlock = $("[data-id=facebook_events_list]");
             self.searchButton = $("[data-id=search_button]");
             self.moreLink = $("[data-id=load_more]");
-            self.placeInput = $(".location-text-box input");
+            self.cityInput = $("[data-id=city_input]");
+            self.cityName = $("[data-id=city_name]");
+            self.cityId = $("[data-id=city_id]");
             self.locationLayer = $("[data-id=location_layer]");
 
 
@@ -36,6 +40,7 @@
             };
 
             self.reset();
+            self.initCityInput();
 
             self.searchButton.click(self.onSearchButtonClick);
             self.moreLink.click(self.onMoreLinkClick);
@@ -52,6 +57,34 @@
         self.reset = function() {
             self.place = null;
             self.page = 0;
+        };
+
+        self.initCityInput = function() {
+            self.cityInput.select2({
+                placeholder: "Select the city",
+                minimumInputLength: 2,
+                ajax: {
+                    url: self.cityInput.data("ajax-url"),
+                    dataType: "json",
+                    data: function (term, page) {
+                        return {"search": term};
+                    },
+                    results: function (data) {                    
+                        return {results: data};
+                    }
+                },
+                formatResult: function(data) {
+                    return "<span>" + data.name + "</span>";
+                },
+                formatSelection: function(data) {
+                    return "<span>" + data.city_name + "</span>";
+                }
+            });
+
+            self.cityInput.on("change", function(e) {            
+                self.cityName.val(e.added.city_name);
+                self.cityId.val(e.added.id);
+            })
         };
 
         self.loadEvents = function(params, beforeAction) {
@@ -90,7 +123,7 @@
         };
 
         self.onSearchButtonClick = function() {
-            self.place = self.placeInput.attr("data-city");
+            self.place = self.cityName.val();
 
             self.loadEvents({"place": self.place}, function() {
                 self.eventsBlock.empty();
@@ -158,36 +191,46 @@
             var eventData = {
                 "facebook_event_id": self.activeItem.data("event-id"),
                 "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val(),
-                "city_id": $("[data-id=city_id]").val()
+                "city_id": self.cityId.val()
             }
 
             $.each(self.locationElements, function(id, name) {
                 eventData[name] = $("#" + id).val();
             });
 
-            $.post(self.createUrl, eventData, function(data) {
-                if(data.success) {
-                    var message = $("<div/>", {
-                        "class": "alert-success",
-                        "html": "Import completed successfully"
-                    }).insertBefore(self.activeItem);
+            self.activeItem.find("[data-type=buttons_block]").append(self.miniIndicator.show());
+            $.ajax({
+                type: 'POST',
+                url: self.createUrl,
+                data: eventData,
+                dataType: 'json',
+                async:false,
+                success: function(data) {
+                    if(data.success) {
+                        var message = $("<div/>", {
+                            "class": "alert-success",
+                            "html": "Import completed successfully"
+                        }).insertBefore(self.activeItem);
 
-                    self.activeItem.remove();
-                    delete self.activeItem;
-                }
-                else {
-                    var message = $("<div/>", {
-                        "class": "alert-error",
-                        "html": "Import error"
-                    }).insertBefore(self.activeItem);
+                        self.formBlock.append(self.miniIndicator.hide());
+                        self.activeItem.remove();
+                        delete self.activeItem;
+                    }
+                    else {
+                        var message = $("<div/>", {
+                            "class": "alert-error",
+                            "html": "Import error"
+                        }).insertBefore(self.activeItem);
 
-                    buttons.removeAttr("disabled");
-                }
+                        self.formBlock.append(self.miniIndicator.hide());
+                        buttons.removeAttr("disabled");
+                    }
 
-                window.setTimeout(function() {
-                    message.remove();
-                }, 3000);
-            }, 'json');
+                    window.setTimeout(function() {
+                        message.remove();
+                    }, 3000);
+                }                
+            });            
         };
 
         self.resetLocationParams = function() {
@@ -206,47 +249,7 @@
     };
 
     $(document).ready(function() {
-        var locationSearch = new window.SearchByLocation();
-
-        /// Monkey patching
-        locationSearch.searchUrl = "/cf-admin/locations?search=";
-        locationSearch.findByLocation = function(id, name, city) {
-            $(".search-lists").hide();
-            window.setTimeout(function() { // hack for list closing
-                $(".search-lists").removeAttr("style");
-            }, 100);
-
-            $(".location-text-box input").val(city);
-            $(".location-text-box input").attr("data-city", city);
-            $("[data-id=city_id]").val(id);
-        };
-
-        locationSearch.initLocationLinks = function() {
-            var that=this;
-            $("li a", this.searchList).each(function() {
-                $(this).on("click", function() {
-                    that.findByLocation(
-                        $(this).data("location-id"),
-                        $(this).text(),
-                        $(this).data("location-city")
-                    );
-                });
-            });
-        },
-
-        locationSearch.appendLink = function(data) {
-            var link, li;
-
-            link = $("<a href='javascript:void(0);'>").html(data.name);
-            link.attr("data-location-city", data.city_name);
-            link.attr("data-location-id", data.id);
-
-            li = $("<li>").append(link);
-            return li;
-        }
-        ///
-
         new window.VenueAutocomplete();
-        new FacebookEventsService();
+        new FacebookEventsService();        
     });
 })(jQuery, window, document);

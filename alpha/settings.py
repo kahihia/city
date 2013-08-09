@@ -1,6 +1,7 @@
 # local dev settings
 
 from common_settings import *
+import socket
 
 DATABASES = {
     'default': {
@@ -13,5 +14,6 @@ DATABASES = {
     }
 }
 
-FACEBOOK_APP_ID = "536513936402579"
-FACEBOOK_APP_SECRET = "f0aea33f1319a8e238a419ea57a671d5"
+if socket.gethostbyname(socket.gethostname()) == '127.0.0.1':
+	FACEBOOK_APP_ID = "536513936402579"
+	FACEBOOK_APP_SECRET = "f0aea33f1319a8e238a419ea57a671d5"

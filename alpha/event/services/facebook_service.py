@@ -131,4 +131,4 @@ def _get_tags_from_description(city_id, description):
     ).values_list('name', flat=True)
 
     tags = [tag for tag in possible_tags if tag in description]
-    return ',' + ','.join(tags) + ','
+    return ',%s,' % ','.join(tags)
