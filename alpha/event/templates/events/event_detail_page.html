@@ -6,6 +6,7 @@
 {% load endless %}
 {% load advertising_tags %}
 {% load admin_event_actions %}
+{% load common_tags %}
 
 {% block head %}
     <link href="{{STATIC_URL}}styles/styles-new.css" rel="stylesheet" type="text/css" />
@@ -160,7 +161,7 @@
                 </div>
                 <div class="description">
                     {% if event.event_description %}
-                        {{ event.event_description|safe }}
+                        {{ event.event_description|html_urlize|safe }}
                     {% endif %}
                 </div>
                 <h4 class="tags">
