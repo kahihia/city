@@ -57,20 +57,14 @@
                     that.embedSuggestVenueButtonIntoGoogleAutocomplete();
                 },100);
             } else {
-                var suggestNewVenueButton = $("<div>").addClass("new-venue").html("suggest a new venue");
+                var suggestNewVenueButton = $("<div>").addClass("new-venue").html("Not found? Suggest a new Venue!");
 
-                $(".pac-container").append(suggestNewVenueButton);
+                $(".pac-container").prepend(suggestNewVenueButton);
 
                 $(suggestNewVenueButton).on("mousedown", this.showSuggestPopup.bind(this));
 
                 setInterval(function(){
-                    if($(".pac-container .pac-item").length>0){
-                        $(".pac-container").removeClass("suggest-new");
-                    } else {
-                        if($("#id_place").val().length>3){
-                            $(".pac-container").addClass("suggest-new");
-                        }
-                    }
+                    $(".pac-container").addClass("suggest-new");
                 }, 10);
             }
         },
