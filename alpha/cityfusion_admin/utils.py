@@ -51,7 +51,7 @@ def get_facebook_events_data(request, place, page):
         params['offset'] = page * paging_delta
 
     result = fb.get('search', **params)
-    events = FacebookEvent.prepare_events(result['data'])
+    events = FacebookEvent.prepare_events(result['data'], place.lower())
 
     return {
         'events': events,
