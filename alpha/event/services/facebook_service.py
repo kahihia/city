@@ -5,10 +5,8 @@ import json
 from PIL import Image
 import dateutil.parser as dateparser
 from django.conf import settings
-from django.db.models import Q
 from django_facebook.api import get_persistent_graph
-from event.models import Event, City, FacebookEvent
-from taggit.models import Tag
+from event.models import FacebookEvent
 
 
 def create_facebook_event(facebook_event_id, related_event):
@@ -100,32 +98,14 @@ def get_prepared_event_data(request, data):
                 start_time.strftime('%m/%d/%Y'): facebook_event['description']
             }
         }),
-        'tags': _get_tags_from_description(data['city_id'], facebook_event['description']),
+        'tags': data['tags'],
+        'tickets': data['tickets'],
         'picture_src': settings.MEDIA_URL + 'uploads/' + image_basename,
         'cropping': ','.join('%d' % n for n in cropping)
     }
 
     result.update(location_data)
     return result
-
-
-def _get_tags_from_description(city_id, description):
-    try:
-        city = City.objects.get(pk=city_id)
-        event_tags = Event.events.filter(venue__city=city).select_related('tags').values('tags')
-        tag_ids = set([tag['tags'] for tag in event_tags if tag['tags']])
-    except City.DoesNotExist:
-        tag_ids = []
-
-    possible_tags = Tag.objects.filter(Q(id__in=tag_ids) |
-        Q(name__in=['Free', 'Wheelchair'])
-    ).values_list('name', flat=True)
-
-    tags = [tag for tag in possible_tags if tag in description]
-    if not 'Facebook' in tags:
-        tags.append('Facebook')
-
-    return ',%s,' % ','.join(tags)
 
 
 def _get_time_range_json(start_time, end_time):

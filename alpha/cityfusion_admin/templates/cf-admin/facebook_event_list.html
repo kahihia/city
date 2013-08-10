@@ -1,7 +1,7 @@
 {% load date_formatting %}
 
 {% for event in events %}
-    <div class="entry-info home-page extended" data-no-turbolink data-type="event_item" data-event-id='{{ event.id }}'>
+    <div class="entry-info home-page extended" data-no-turbolink data-type="event_item" data-event-id='{{ event.id }}' data-event-desc="{{ event.description }}" data-event-tickets={{ event.ticket_uri }}>
         <div class="entry-img-prev">
             <a href="https://www.facebook.com/events/{{ event.id }}/">
                 <img src="{{ event.picture }}" alt="" height="60" width="60" />

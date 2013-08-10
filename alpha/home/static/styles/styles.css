@@ -867,19 +867,23 @@ a {
 
 .location-dialog {
     width: 424px;
-    height: 100px;
+    height: auto;
     position: absolute;
     left: 50%;
     top: 50%;
-    margin: -58px 0 0 -217px;
+    margin: -78px 0 0 -217px;
     background: #ffffff;
     padding: 15px 0 0 10px;
     border-radius: 8px;
+}
+
+.location-dialog .location {
+    float: left;
 }
 
 .location-layer-buttons {
     width: 120px;
     text-align: center;
     margin: 0 auto;
-    padding-top: 15px;
+    padding: 15px 0;
 }

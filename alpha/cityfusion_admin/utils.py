@@ -43,7 +43,7 @@ def get_facebook_events_data(request, place, page):
     params = {
         'q': place,
         'type': 'event',
-        'fields': 'id,name,picture,start_time,end_time,location,venue',
+        'fields': 'id,name,description,picture,start_time,end_time,location,venue,ticket_uri',
         'limit': paging_delta
     }
 

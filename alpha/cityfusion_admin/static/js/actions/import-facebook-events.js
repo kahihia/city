@@ -13,8 +13,8 @@
             self.moreLink = $("[data-id=load_more]");
             self.cityInput = $("[data-id=city_input]");
             self.cityName = $("[data-id=city_name]");
-            self.cityId = $("[data-id=city_id]");
             self.locationLayer = $("[data-id=location_layer]");
+            self.locationTr = $("[data-id=location_tr]");
 
 
             self.loadUrl = self.eventsBlock.data("load-url");
@@ -50,8 +50,6 @@
 
             $("body").on("click", "[data-id=location_button_cancel]", self.onLocationCancelButtonClick);
             $("body").on("click", "[data-id=location_button_ok]", self.onLocationOkButtonClick);
-
-            $("body").prepend(self.locationLayer);
         };
 
         self.reset = function() {
@@ -83,7 +81,6 @@
 
             self.cityInput.on("change", function(e) {            
                 self.cityName.val(e.added.city_name);
-                self.cityId.val(e.added.id);
             })
         };
 
@@ -125,6 +122,8 @@
         self.onSearchButtonClick = function() {
             self.place = self.cityName.val();
 
+            $("#id_tags__tagautosuggest").data('tagspopup').forCity(self.cityName.val());
+
             self.loadEvents({"place": self.place}, function() {
                 self.eventsBlock.empty();
                 $(".form-block").append(self.indicatorBlock.show());
@@ -150,12 +149,15 @@
             buttons.attr("disabled", "true");
 
             if($(this).attr("data-complete") === "true") {
-                self.processImport();
+                self.locationTr.hide();
             }
             else {
-                self.resetLocationParams();
-                self.locationLayer.show();
+                self.locationTr.show();
             }
+
+            self.resetLocationParams();
+            self.fillTagsAndTickets();
+            self.locationLayer.show();
         };
 
         self.onRejectButtonClick = function() {
@@ -176,6 +178,8 @@
         };
 
         self.onLocationOkButtonClick = function() {
+            var tags_as_string = $("#as-values-id_tags__tagautosuggest").val();
+            $("#id_tags").val(tags_as_string);
             self.locationLayer.hide();
             self.processImport();
         };
@@ -191,7 +195,8 @@
             var eventData = {
                 "facebook_event_id": self.activeItem.data("event-id"),
                 "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val(),
-                "city_id": self.cityId.val()
+                "tags": $("#id_tags").val(),
+                "tickets": $("#id_tickets").val()
             }
 
             $.each(self.locationElements, function(id, name) {
@@ -234,15 +239,23 @@
         };
 
         self.resetLocationParams = function() {
-            var elements = ["id_geo_street", "id_geo_venue", "id_geo_address",
-                            "id_geo_country", "id_geo_city", "id_geo_latitude",
-                            "id_geo_longtitude", "id_place", "id_street",
-                            "id_location_lng", "id_location_lat", "id_city_0",
-                            "id_city_1", "id_venue_name", "id_city_identifier"];
-
             $.each(self.locationElements, function(id, name) {
                 $("#" + id).val("");
             });
+        };
+
+        self.fillTagsAndTickets = function() {
+            var tagsPlugin = $("#id_tags__tagautosuggest").data('tagspopup');
+            var oldTags = $("#as-selections-id_tags__tagautosuggest").find(".as-selection-item");
+            $.each(oldTags, function() {
+                tagsPlugin.removeTag($(this).data("value"));
+            });
+
+            tagsPlugin.autoTagsDetect(
+                self.activeItem.data("event-desc")
+            );
+
+            $("#id_tickets").val(self.activeItem.data("event-tickets"));
         };
 
         self.init();

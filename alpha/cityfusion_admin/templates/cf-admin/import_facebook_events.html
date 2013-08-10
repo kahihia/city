@@ -34,67 +34,91 @@
     </script>
 {% endblock %}
 
+{% block body_start %}
+    <div data-id="location_layer" class="location-background">
+        <div class="location-dialog">
+            <table>
+                <tr class="location-tr" data-id="location_tr">
+                    <td>
+                        Venue
+                    </td>
+                    <td>
+                        <div class="location">{{ form.place }}</div>
+                        <div class="show-map"></div>
+                        <div class="suggest">
+                            <div class="error">
+                                All fields is required
+                            </div>
+                            <table>
+                                <tr>
+                                    <td>Venue name</td>
+                                    <td>{{form.venue_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Street address</td>
+                                    <td>{{form.street}}</td>
+                                </tr>
+                                <tr>
+                                    <td>City</td>
+                                    <td>
+                                        {{form.city}}
+                                        {{form.city_identifier}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Location</td>
+                                    <td>
+                                        <div class="location_map">{{form.location}}</div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="cancel-button">Cancel</div>
+                            <div class="reset-button">Clear</div>
+                            <div class="submit-button">Submit</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tags_bottom">
+                        Tags
+                    </td>
+                    <td>
+                        <div class="tags-popup-wrapper">
+                            <div class="tags-popup">
+                                <div class="tags-container"></div>
+                                <div class="close-button">Close</div>
+                            </div>
+                        </div>
+                        {{form.tags}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Tickets
+                    </td>
+                    <td>
+                        {{form.tickets}}
+                    </td>
+                </tr>
+            </table>
+            <div class="location-layer-buttons">
+                <input data-id="location_button_ok" type="button" value="Ok" />
+                <input data-id="location_button_cancel" type="button" value="Cancel" />
+            </div>
+        </div>
+    </div>
+{% endblock body_start %}
+
 {% block page %}
     <div class="tabs-container">
         {% cf_admin_menu "import_facebook_events" %}
 
         <div class="box visible options">
             <div class="form-block" data-id="form_block">
-                <div data-id="location_layer" class="location-background">
-                    <div class="location-dialog">
-                        <table>
-                            <tr class="location-tr">
-                                <td>
-                                    Venue
-                                </td>
-                                <td>
-                                    <div class="location">{{ form.place }}</div>
-                                    <div class="show-map"></div>
-                                    <div class="suggest">
-                                        <div class="error">
-                                            All fields is required
-                                        </div>
-                                        <table>
-                                            <tr>
-                                                <td>Venue name</td>
-                                                <td>{{form.venue_name}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Street address</td>
-                                                <td>{{form.street}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>City</td>
-                                                <td>
-                                                    {{form.city}}
-                                                    {{form.city_identifier}}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Location</td>
-                                                <td>
-                                                    <div class="location_map">{{form.location}}</div>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <div class="cancel-button">Cancel</div>
-                                        <div class="reset-button">Clear</div>
-                                        <div class="submit-button">Submit</div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="location-layer-buttons">
-                            <input data-id="location_button_ok" type="button" value="Ok" />
-                            <input data-id="location_button_cancel" type="button" value="Cancel" />
-                        </div>
-                    </div>
-                </div>                
                 <p>
                     <input data-ajax-url="{% url 'admin_location_autocomplete' %}" type="hidden" class="bigdrop city-input" data-id="city_input" value=""/>
                     <input class="events-search-button" data-id="search_button" type="button" value="Search" />
                 </p>
-                <input type="hidden" data-id="city_id" value="" />
                 <input type="hidden" data-id="city_name" value="" />
                 {% csrf_token %}
                 <div class="indicator-block" data-id="indicator_block">
