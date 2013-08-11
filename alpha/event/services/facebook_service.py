@@ -33,7 +33,11 @@ def get_facebook_events_data(request, place, page):
     };
 
 
-def create_facebook_event(facebook_event_id, related_event):
+def create_facebook_event(facebook_event_id, related_event, request=None):
+    if not facebook_event_id and request:
+        facebook_event_id = int(_create_external_facebook_event(related_event, request))
+        return
+
     facebook_event = FacebookEvent.objects.create(eid=facebook_event_id)
     related_event.facebook_event = facebook_event
     related_event.save()
@@ -130,6 +134,17 @@ def get_prepared_event_data(request, data):
 
     result.update(location_data)
     return result
+
+
+def _create_external_facebook_event(event, request):
+    fb = get_persistent_graph(request)
+    params = {
+        'name': event.name,
+        'start_time': '2013-09-04T19:00:00-0700',
+    }
+
+    result = fb.set('523227901077594/events', **params)
+    return result['id']
 
 
 def _get_time_range_json(start_time, end_time):

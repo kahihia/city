@@ -280,6 +280,8 @@ AUTH_PROFILE_MODULE = 'accounts.Account'
 
 FACEBOOK_APP_ID = "583239701740569"
 FACEBOOK_APP_SECRET = "aae620ebe9a61c65018f17b2dfada437"
+FACEBOOK_PERMS = ['email', 'user_about_me', 'create_event']
+FACEBOOK_DEFAULT_SCOPE = ['email', 'user_about_me', 'user_birthday', 'user_website', 'create_event', 'manage_pages']
 # FACEBOOK_REGISTRATION_BACKEND = 'django_facebook.registration_backends.UserenaBackend'
 AUTH_PROFILE_MODULE = 'accounts.Account'
 

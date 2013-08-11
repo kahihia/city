@@ -21,7 +21,7 @@ from cities.models import City, Country, Region
 from django.db.models import Q, Count
 from event.filters import EventFilter
 
-from event import DEFAULT_FROM_EMAIL
+from .settings import DEFAULT_FROM_EMAIL
 
 from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
 from event.utils import find_nearest_city
