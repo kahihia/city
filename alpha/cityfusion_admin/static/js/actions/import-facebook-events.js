@@ -178,10 +178,12 @@
         };
 
         self.onLocationOkButtonClick = function() {
-            var tags_as_string = $("#as-values-id_tags__tagautosuggest").val();
-            $("#id_tags").val(tags_as_string);
-            self.locationLayer.hide();
-            self.processImport();
+            if($("#id_place").val()) {
+                var tags_as_string = $("#as-values-id_tags__tagautosuggest").val();
+                $("#id_tags").val(tags_as_string);
+                self.locationLayer.hide();
+                self.processImport();
+            }
         };
 
         self.onLocationCancelButtonClick = function() {

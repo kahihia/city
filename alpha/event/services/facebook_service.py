@@ -5,8 +5,32 @@ import json
 from PIL import Image
 import dateutil.parser as dateparser
 from django.conf import settings
+from django.utils import timezone
 from django_facebook.api import get_persistent_graph
 from event.models import FacebookEvent
+
+
+def get_facebook_events_data(request, place, page):
+    paging_delta = 200
+
+    fb = get_persistent_graph(request)
+    params = {
+        'q': place,
+        'type': 'event',
+        'fields': 'id,name,description,picture,start_time,end_time,location,venue,ticket_uri',
+        'limit': paging_delta
+    }
+
+    if page:
+        params['offset'] = page * paging_delta
+
+    result = fb.get('search', **params)
+    events = _get_filtered_events(result['data'], place.lower())
+
+    return {
+        'events': events,
+        'page': (page + 1) if len(result['data']) == paging_delta else 0
+    };
 
 
 def create_facebook_event(facebook_event_id, related_event):
@@ -140,3 +164,30 @@ def _get_time_range_json(start_time, end_time):
         is_first = False
 
     return json.dumps(periods)
+
+
+def _get_filtered_events(raw_data, city_name):
+    existing_items = FacebookEvent.objects.all().values_list('eid', flat=True)
+    result = []
+
+    for item in raw_data:
+        if not int(item['id']) in existing_items \
+                and 'location' in item \
+                and city_name in item['location'].lower():
+
+            for key in ['start_time', 'end_time']:
+                if key in item:
+                    item[key] = dateparser.parse(item[key])
+                else:
+                    item[key] = None
+
+                if item[key] and not timezone.is_aware(item[key]):
+                    item[key] = item[key].replace(tzinfo=timezone.utc)
+
+            time_now = datetime.datetime.utcnow().replace(tzinfo=timezone.utc)
+            if item['start_time'] > time_now \
+                    or (item['end_time'] and item['end_time'] > time_now):
+                item['picture'] = item['picture']['data']['url']
+                result.append(item)
+
+    return result

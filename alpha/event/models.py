@@ -9,16 +9,12 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.mail.message import EmailMessage
 
-from django.utils import timezone
-
 from cities.models import City, Country
 import string
 import random
 from taggit_autosuggest.managers import TaggableManager
 import os
-import os.path
 import re
-import dateutil.parser as dateparser
 
 import datetime
 from event import EVENT_PICTURE_DIR
@@ -314,29 +310,6 @@ class SingleEvent(models.Model):
 
 class FacebookEvent(models.Model):
     eid = models.BigIntegerField(blank=False, null=False)
-
-    @classmethod
-    def prepare_events(cls, raw_data, city_name):
-        existing_items = cls.objects.all().values_list('eid', flat=True)
-        result = []
-
-        for item in raw_data:
-            if not int(item['id']) in existing_items \
-                    and 'location' in item \
-                    and city_name in item['location'].lower():
-
-                for key in ['start_time', 'end_time']:
-                    if key in item:
-                        item[key] = dateparser.parse(item[key])
-                    else:
-                        item[key] = None
-
-                # time_now = timezone.now()
-                # if item['start_time'] > time_now or item['end_time'] > time_now:
-                item['picture'] = item['picture']['data']['url']
-                result.append(item)
-
-        return result
 
 
 class Venue(models.Model):

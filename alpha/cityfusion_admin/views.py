@@ -1,7 +1,6 @@
 import datetime
 import json
 from cityfusion_admin.models import ReportEvent, ClaimEvent
-from cityfusion_admin.utils import get_facebook_events_data
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -12,8 +11,10 @@ from django.template import RequestContext
 from accounts.models import Account
 from event.models import Event, FeaturedEvent, FacebookEvent
 from event.forms import SetupFeaturedForm, CreateEventForm
-from cities.models import City, Country, Region
+from event.services import facebook_service
+from cities.models import City, Country
 from django.contrib.gis.geos import Point
+from django_facebook.decorators import facebook_required
 
 
 @require_POST
@@ -72,6 +73,7 @@ def claim_event_list(request):
                             }, context_instance=RequestContext(request))
 
 
+@facebook_required
 def import_facebook_events(request):
     form = CreateEventForm(account=request.account, initial={
         "venue_account_owner": request.current_venue_account
@@ -85,7 +87,7 @@ def import_facebook_events(request):
 def load_facebook_events(request):
     if request.is_ajax():
         try:
-            data = get_facebook_events_data(
+            data = facebook_service.get_facebook_events_data(
                 request,
                 request.GET['place'],
                 int(request.GET.get('page', 0))
