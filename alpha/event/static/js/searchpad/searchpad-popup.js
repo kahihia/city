@@ -7,7 +7,7 @@
         this.openButton = $(".search-pad-popup-open-button");
         this.popup = $(".search-pad-popup");
 
-        this.openButton.on("click", function(){            
+        this.openButton.on("click", function(){
             that.open();
         });
 
@@ -19,7 +19,7 @@
 
     SearchPadPopup.prototype = {
         open: function(){
-            $.fancybox($(this.popup), {                
+            $.fancybox($(this.popup), {
                 closeBtn: true,
                 hideOnOverlayClick: false,
                 width: 1024,
@@ -30,11 +30,16 @@
         ajaxifyLinks: function(){
             var links = $("a.ajax", this.popup),
                 that = this;
+
             links.on("click", function(e){
-                var href = $(this).attr("href");               
+                var link=this;
+                // Jump to Date link change should trigger befor links will be loaded
+                setTimeout(function(){
+                    var href = $(link).attr("href");
+                    that.loadSearchPadPage(href);
+                }, 10);
 
                 e.preventDefault();
-                that.loadSearchPadPage(href)
                 return false;
             });
         },
@@ -79,7 +84,7 @@
             });
         },
         initAuthRequired: function(){
-            if($(".auth-required-popup").length>0){                
+            if($(".auth-required-popup").length>0){
                 this.dialogContainer = $(".auth-required-popup").dialog({
                     dialogClass: "event-action-ui-dialog",
                     resizable: false,
