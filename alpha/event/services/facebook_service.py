@@ -138,6 +138,11 @@ def get_prepared_event_data(request, data):
 
 def _create_external_facebook_event(event, request):
     fb = get_persistent_graph(request)
+    description = '%s<br/><br/>%s' % (event.description, 
+        getattr(event, 'comment_for_facebook', ''))
+
+    # raise Exception(description)
+
     params = {
         'name': event.name,
         'start_time': '2013-09-04T19:00:00-0700',

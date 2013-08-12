@@ -20,7 +20,8 @@ approve_events.short_description = "Approve selected events"
 
 class EventAdminForm(forms.ModelForm):
 
-    test_field = forms.CharField()
+    post_to_facebook = forms.BooleanField(initial=False, required=False)
+    comment_for_facebook = forms.CharField(max_length=255, required=False)
 
     class Meta:
         model = Event
@@ -31,12 +32,12 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'venue', 'tags_representation')
     fields = ('slug', 'picture', 'owner', 'venue_account_owner', 'email',
               'name', 'description', 'venue', 'price', 'website', 'tickets',
-              'audited', 'post_to_facebook', 'tags', 'test_field')
+              'audited', 'post_to_facebook', 'comment_for_facebook', 'tags',)
 
     def save_model(self, request, obj, form, change):
-        raise Exception(form.cleaned_data)
         super(EventAdmin, self).save_model(request, obj, form, change)
-        if obj.post_to_facebook and not obj.facebook_event:
+        if form.cleaned_data['post_to_facebook'] and not obj.facebook_event:
+            obj.comment_for_facebook = form.cleaned_data['comment_for_facebook']
             facebook_service.create_facebook_event(None, obj, request)
 
 

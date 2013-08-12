@@ -179,8 +179,6 @@ class Event(models.Model):
 
     facebook_event = models.ForeignKey('FacebookEvent', blank=True, null=True)
 
-    post_to_facebook = models.BooleanField(default=False)
-
     search_index = VectorField()
 
     tags = TaggableManager()
