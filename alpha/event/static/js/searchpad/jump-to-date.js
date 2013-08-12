@@ -70,7 +70,9 @@
             this.openButton.removeClass("active");
         },
         closeIfNotPopup: function(e){
-            if($(e.target).hasClass("jump-popup") || $(e.target).parents(".jump-popup").length>0 || $(e.target).parents("#ui-datepicker-div").length>0){
+            if(
+                $(e.target).hasClass("jump-popup") || $(e.target).parents(".jump-popup").length>0 || $(e.target).parents("#ui-datepicker-div").length>0 || $(e.target).parents(".ui-datepicker-header").length>0
+            ){
                 
             } else {
                 this.closePopup();
