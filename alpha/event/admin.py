@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from event.models import Event, SingleEvent, AuditEvent, AuditSingleEvent, AuditPhrase, FakeAuditEvent, FeaturedEvent
 from event.models import Venue
@@ -17,13 +18,23 @@ def approve_events(modeladmin, request, queryset):
 approve_events.short_description = "Approve selected events"
 
 
+class EventAdminForm(forms.ModelForm):
+
+    test_field = forms.CharField()
+
+    class Meta:
+        model = Event
+
+
 class EventAdmin(admin.ModelAdmin):
+    form = EventAdminForm
     list_display = ('name', 'description', 'venue', 'tags_representation')
     fields = ('slug', 'picture', 'owner', 'venue_account_owner', 'email',
               'name', 'description', 'venue', 'price', 'website', 'tickets',
-              'audited', 'post_to_facebook', 'tags',)
+              'audited', 'post_to_facebook', 'tags', 'test_field')
 
     def save_model(self, request, obj, form, change):
+        raise Exception(form.cleaned_data)
         super(EventAdmin, self).save_model(request, obj, form, change)
         if obj.post_to_facebook and not obj.facebook_event:
             facebook_service.create_facebook_event(None, obj, request)
