@@ -66,6 +66,14 @@
                         My settings
                     </header>
                     <ul>
+                        {% if is_admin %}
+                            <li>
+                                <a href="{% url 'admin:index' %}">Admin area</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'cfadmin_home' %}">Management interface</a>
+                            </li>
+                        {% endif %}
                         <li>
                             <a href="{% url 'user_profile_edit' profile.user.username %}">Edit my Account</a>
                         </li>
