@@ -70,20 +70,32 @@
             this.openButton.removeClass("active");
         },
         closeIfNotPopup: function(e){
-            if($(e.target).hasClass("jump-popup") || $(e.target).parents(".jump-popup").length>0 || $(e.target).parents(".ui-datepicker-header").length>0){
+            if($(e.target).hasClass("jump-popup") || $(e.target).parents(".jump-popup").length>0 || $(e.target).parents("#ui-datepicker-div").length>0){
                 
             } else {
                 this.closePopup();
             }
         },
         bindChangeLinkEvents: function(){
-            var that=this;
+            var that=this,
+                startDateInput = $(".start-date .date input", this.popup),
+                endDateInput = $(".end-date .date input", this.popup);;
+
             $(".timepicker .dropdown", this.popup).on("dropdown.change", function(){
                 that.changeLink();
             });
 
             $("input", this.popup).on("change", function(){
                 that.changeLink();
+            });
+
+            startDateInput.on("change", function(){
+                var startDate = new Date(Date.parse(startDateInput.attr("value"))),
+                    endDate = new Date(Date.parse(endDateInput.attr("value")));
+
+                if(startDate>endDate){
+                    endDateInput.val(startDateInput.val());
+                }
             });
 
         },

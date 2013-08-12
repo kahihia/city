@@ -63,7 +63,7 @@
             if(tags.indexOf("Free")!==-1){
                 $("#id_price_free").attr('checked', true);
             } else {
-                $("#id_price_free").attr('checked', false);
+                // $("#id_price_free").attr('checked', false);
             }
             setTimeout(function(){
                 $("#id_price_free").trigger("changeFromTags");
