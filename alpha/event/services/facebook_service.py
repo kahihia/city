@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.utils.html import strip_tags
 from django_facebook.api import get_persistent_graph
 from event.models import Event, FacebookEvent
-from ..settings import FACEBOOK_PAGE_ID
+from ..settings import FACEBOOK_PAGE_ID, EVENTFUL_ID, CONCERTIN_ID
 
 
 def get_facebook_events_data(request, place, page):
@@ -20,7 +20,7 @@ def get_facebook_events_data(request, place, page):
     params = {
         'q': place,
         'type': 'event',
-        'fields': 'id,name,description,picture,start_time,end_time,location,venue,ticket_uri',
+        'fields': 'id,name,owner,description,picture,start_time,end_time,location,venue,ticket_uri',
         'limit': paging_delta
     }
 
@@ -205,7 +205,8 @@ def _get_filtered_events(raw_data, city_name):
     for item in raw_data:
         if not int(item['id']) in existing_items \
                 and 'location' in item \
-                and city_name in item['location'].lower():
+                and city_name in item['location'].lower() \
+                and not item['owner']['id'] in [EVENTFUL_ID, CONCERTIN_ID]:
 
             for key in ['start_time', 'end_time']:
                 if key in item:
