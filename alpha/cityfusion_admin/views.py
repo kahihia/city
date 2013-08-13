@@ -73,6 +73,9 @@ def claim_event_list(request):
                             }, context_instance=RequestContext(request))
 
 
+def posting_to_facebook(request):
+    return render_to_response('cf-admin/posting_to_facebook.html', context_instance=RequestContext(request))
+
 @facebook_required
 def import_facebook_events(request):
     form = CreateEventForm(account=request.account, initial={

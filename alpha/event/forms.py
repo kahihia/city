@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.widgets import RadioSelect
 from event.models import Event, FeaturedEvent
 from event.widgets import WhenWidget, PriceWidget, GeoCompleteWidget, WheelchairWidget, AjaxCropWidget, ChooseUserContextWidget
 from django.utils.translation import ugettext_lazy as _
@@ -86,6 +87,12 @@ class EditEventForm(forms.ModelForm):
         widget=WheelchairWidget(choices=YES_OR_NO),
         required=False
     )
+
+    post_to_facebook = forms.BooleanField(
+        widget=RadioSelect(choices=YES_OR_NO),
+        required=False,
+    )
+
     picture_src = forms.CharField(
         widget=AjaxCropWidget(),
         required=False
@@ -93,6 +100,7 @@ class EditEventForm(forms.ModelForm):
 
     website = forms.URLField(required=False)
     tickets = forms.CharField(required=False)
+    comment_for_facebook = forms.CharField(required=False)
 
     def __init__(self, account, *args, **kwargs):
         self.city_required = False
@@ -142,12 +150,16 @@ class EditEventForm(forms.ModelForm):
 
         self.fields['wheelchair'].widget.attrs['tabindex'] = 6
 
+        self.fields['comment_for_facebook'].widget.attrs['class'] = 'inputfield rborder'
+        self.fields['comment_for_facebook'].widget.attrs['tabindex'] = 10
+
         self.fields['tags'].error_messages['required'] = 'Please enter at least one tag'
         self.fields['tags'].widget.attrs['class'] = 'inputfield rborder'
-        self.fields['tags'].widget.attrs['tabindex'] = 7
+        self.fields['tags'].widget.attrs['tabindex'] = 11
 
         self.fields['tickets'].widget.attrs['class'] = 'inputfield rborder'
-        self.fields['tickets'].widget.attrs['tabindex'] = 8
+        self.fields['tickets'].widget.attrs['tabindex'] = 12
+
 
         self.fields['picture_src'].label = _(u'Image')
 

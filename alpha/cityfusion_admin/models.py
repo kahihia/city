@@ -92,4 +92,8 @@ CF_ADMIN_MENU = {
         "urlname": "import_facebook_events",
         "linktext": "Import from Facebook"
     },
+    "posting_to_facebook": {
+        "urlname": "posting_to_facebook",
+        "linktext": "Post to facebook"
+    },
 }

@@ -42,6 +42,10 @@ urlpatterns = patterns('',
     ),
 
     #Facebook
+    url(r'^posting-to-facebook/$',
+        views.posting_to_facebook,
+        name='posting_to_facebook'
+    ),
     url(r'^import-facebook-events/$',
         views.import_facebook_events,
         name='import_facebook_events'
