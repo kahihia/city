@@ -39,6 +39,7 @@
                     }));
                 }
                 else {
+                    self.miniIndicator.hide();
                     var message = $("<div/>", {
                         "class": "alert-error",
                         "html": data.text
