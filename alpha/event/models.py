@@ -259,6 +259,9 @@ class Event(models.Model):
     def event_description(self):
         return self.description
 
+    def is_fb_posted(self):
+        return self.post_to_facebook and self.facebook_event
+
 
 class FutureEventDayManager(models.Manager):
     def get_query_set(self):

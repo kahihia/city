@@ -73,8 +73,40 @@ def claim_event_list(request):
                             }, context_instance=RequestContext(request))
 
 
-def posting_to_facebook(request):
-    return render_to_response('cf-admin/posting_to_facebook.html', context_instance=RequestContext(request))
+@facebook_required
+def posting_to_facebook_events(request):
+    events = Event.events.filter(post_to_facebook=True)\
+                         .extra(select={'is_fb': 'facebook_event_id is not null'},
+                                order_by=['is_fb'])
+
+    return render_to_response('cf-admin/posting_to_facebook.html',
+                              {'events': events},
+                              context_instance=RequestContext(request))
+
+
+@require_POST
+def post_event_to_facebook(request):
+    if request.is_ajax():
+        try:
+            event_id = request.POST['event_id']
+            event = Event.events.get(pk=int(event_id))
+            facebook_event_id = facebook_service.create_facebook_event(event, request)
+            facebook_service.attach_facebook_event(int(facebook_event_id), event)
+
+            response = {
+                'success': True,
+                'facebook_event_id': facebook_event_id,
+            }
+        except Exception as e:
+            response = {
+                'success': False,
+                'text': e.message
+            }
+
+        return HttpResponse(json.dumps(response), mimetype='application/json')
+    else:
+        raise Http404
+
 
 @facebook_required
 def import_facebook_events(request):

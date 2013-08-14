@@ -311,7 +311,7 @@ def create_from_facebook(request):
         form = CreateEventForm(account=request.account, data=event_data)
         if form.is_valid():
             event = save_event(request.user, event_data, form)
-            facebook_service.create_facebook_event(int(facebook_event_id), event)
+            facebook_service.attach_facebook_event(int(facebook_event_id), event)
             success = True
         else:
             success = False

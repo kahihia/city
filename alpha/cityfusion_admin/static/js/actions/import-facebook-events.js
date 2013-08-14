@@ -1,7 +1,7 @@
 ;(function($, window, document, undefined) {
     'use strict';
 
-    var FacebookEventsService = function() {
+    var FacebookEventsImportService = function() {
         var self = this;
 
         self.init = function() {
@@ -265,6 +265,6 @@
 
     $(document).ready(function() {
         new window.VenueAutocomplete();
-        new FacebookEventsService();        
+        new FacebookEventsImportService();
     });
 })(jQuery, window, document);

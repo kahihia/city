@@ -36,10 +36,33 @@ def get_facebook_events_data(request, place, page):
     };
 
 
-def create_facebook_event(facebook_event_id, related_event, request=None):
-    if not facebook_event_id and request:
-        facebook_event_id = int(_create_external_facebook_event(related_event, request))
+def create_facebook_event(event, request):
+    fb = get_persistent_graph(request)
+    description = '%s\r\n%s' % (strip_tags(event.description),
+        getattr(event, 'comment_for_facebook', ''))
 
+    location = event.venue.name
+    if event.venue.street:
+        location += ', %s' % event.venue.street
+
+    location += ', %s' % event.venue.city.name_std
+    dates = Event.events.annotate(start_time=Min("single_events__start_time"))\
+                .annotate(end_time=Max("single_events__end_time")).get(pk=event.id)
+
+    params = {
+        'name': event.name,
+        'start_time': dates.start_time.strftime('%Y-%m-%dT%H:%M:%S+0000'),
+        'end_time': dates.end_time.strftime('%Y-%m-%dT%H:%M:%S+0000'),
+        'description': description,
+        'location': location,
+        'ticket_uri': event.tickets
+    }
+
+    result = fb.set('%s/events' % FACEBOOK_PAGE_ID, **params)
+    return result['id']
+
+
+def attach_facebook_event(facebook_event_id, related_event):
     facebook_event = FacebookEvent.objects.create(eid=facebook_event_id)
     related_event.facebook_event = facebook_event
     related_event.save()
@@ -136,32 +159,6 @@ def get_prepared_event_data(request, data):
 
     result.update(location_data)
     return result
-
-
-def _create_external_facebook_event(event, request):
-    fb = get_persistent_graph(request)
-    description = '%s\r\n%s' % (strip_tags(event.description), 
-        getattr(event, 'comment_for_facebook', ''))
-
-    location = event.venue.name
-    if event.venue.street:
-        location += ', %s' % event.venue.street
-
-    location += ', %s' % event.venue.city.name_std
-    dates = Event.events.annotate(start_time=Min("single_events__start_time"))\
-                .annotate(end_time=Max("single_events__end_time")).get(pk=event.id)
-
-    params = {
-        'name': event.name,
-        'start_time': dates.start_time.strftime('%Y-%m-%dT%H:%M:%S+0000'),
-        'end_time': dates.end_time.strftime('%Y-%m-%dT%H:%M:%S+0000'),
-        'description': description,
-        'location': location,
-        'ticket_uri': event.tickets
-    }
-
-    result = fb.set('%s/events' % FACEBOOK_PAGE_ID, **params)
-    return result['id']
 
 
 def _get_time_range_json(start_time, end_time):
