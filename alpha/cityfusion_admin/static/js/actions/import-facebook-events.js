@@ -178,7 +178,7 @@
         };
 
         self.onLocationOkButtonClick = function() {
-            if($("#id_place").val()) {
+            if($("#id_place").val() || !self.locationTr.is(':visible')) {
                 var tags_as_string = $("#as-values-id_tags__tagautosuggest").val();
                 $("#id_tags").val(tags_as_string);
                 self.locationLayer.hide();
