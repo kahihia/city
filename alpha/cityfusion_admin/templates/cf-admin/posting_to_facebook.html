@@ -30,7 +30,14 @@
                 {% paginate 10 events %}
                 {% for event in events %}
                     <tr data-type="posting_tr">
-                        <td>{{ event.name }}</td>
+                        <td>
+                            {{ event.name }}
+                            <div>
+                                <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">View</a>
+                                |
+                                <a href="{% url 'event_edit' event.authentication_key %}">Edit</a>
+                            </div>
+                        </td>
                         <td>
                             {% if event.owner %}
                                 <a href="{% url "admin:accounts_account_change" event.owner.id %}" target="_blank">{{ event.owner.username }}</a>

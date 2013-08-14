@@ -5,6 +5,7 @@
         var self = this;
 
         self.init = function() {
+            self.tabsContainer = $(".tabs-container");
             self.postingLinkSelector = "[data-type=posting_link]";
             self.postingTrSelector = "[data-type=posting_tr]";
             self.postingStatusSelector = "[data-type=posting_status]";
@@ -36,6 +37,16 @@
                         "href": "https://www.facebook.com/events/" + data.facebook_event_id + "/",
                         "text": "FB event link"
                     }));
+                }
+                else {
+                    var message = $("<div/>", {
+                        "class": "alert-error",
+                        "html": data.text
+                    }).insertBefore(self.tabsContainer)
+
+                    window.setTimeout(function() {
+                        message.remove();
+                    }, 3000);
                 }
             }, 'json');
         };
