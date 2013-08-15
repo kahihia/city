@@ -1,7 +1,7 @@
 {% load cropping %}
 {% load featured_event %}
 {% if in_email %}
-    <a target="_blank" href="{{site}}{% url 'event_view_featured' event.slug event.start_time %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none; border: none; display: block; line-height:0px;">
+    <a target="_blank" href="{{site}}{% url 'event_view_featured' event.slug event.start_time|date:"Y-m-d" %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none; border: none; display: block; line-height:0px;">
         <img src="{{site}}/{% feature_event_as_image event %}" style="border-collapse:collapse; border: none;" />
     </a>
 {% else %}
