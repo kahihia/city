@@ -33,6 +33,12 @@
     top:-3px;
 }
 
+.balloon.inline {
+    float: none;
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .balloon.wheelchair {
     float:none;
     display:inline-block;
