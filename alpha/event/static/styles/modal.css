@@ -37,6 +37,7 @@
     float: none;
     display: inline-block;
     vertical-align: middle;
+    top: 0;
 }
 
 .balloon.wheelchair {
