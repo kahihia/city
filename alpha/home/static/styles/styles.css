@@ -856,7 +856,7 @@ a {
     color: #b94a48;
 }
 
-.location-background {
+.modal-background {
     display: none;
     position: fixed;
     width: 100%;
@@ -865,7 +865,7 @@ a {
     z-index: 100;
 }
 
-.location-dialog {
+.modal-dialog {
     width: 424px;
     height: auto;
     position: absolute;
@@ -877,11 +877,15 @@ a {
     border-radius: 8px;
 }
 
-.location-dialog .location {
+.modal-text {
+	text-align: center;
+}
+
+.modal-dialog .location {
     float: left;
 }
 
-.location-layer-buttons {
+.modal-layer-buttons {
     width: 120px;
     text-align: center;
     margin: 0 auto;

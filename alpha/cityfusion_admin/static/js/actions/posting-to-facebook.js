@@ -11,10 +11,13 @@
             self.postingStatusSelector = "[data-type=posting_status]";
             self.postingBox  = $("[data-id=posting_box]");
             self.miniIndicator = $("[data-id=mini_indicator]");
+            self.modalLayer = $("[data-id=modal_layer]");
+            self.modalText = $("[data-id=modal-text]");
 
             self.postingUrl = self.postingBox.data("posting-url");
 
             self.postingBox.on("click", self.postingLinkSelector, self.onPostingLinkClick);
+            $("body").on("click", "[data-id=modal_button_ok]", self.onModalOkButtonClick);
         };
 
         self.onPostingLinkClick = function() {
@@ -35,21 +38,20 @@
 
                     link.replaceWith($("<a/>", {
                         "href": "https://www.facebook.com/events/" + data.facebook_event_id + "/",
-                        "text": "FB event link"
+                        "text": "FB event link",
+                        "target": "_blank"
                     }));
                 }
                 else {
                     self.miniIndicator.hide();
-                    var message = $("<div/>", {
-                        "class": "alert-error",
-                        "html": data.text
-                    }).insertBefore(self.tabsContainer)
-
-                    window.setTimeout(function() {
-                        message.remove();
-                    }, 3000);
+                    self.modalText.html(data.text);
+                    self.modalLayer.show();                    
                 }
             }, 'json');
+        };
+
+        self.onModalOkButtonClick = function() {
+            self.modalLayer.hide();
         };
 
         self.init();
