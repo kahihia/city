@@ -1,7 +1,7 @@
 from cities.models import City, Region, Country
 from event.utils import find_nearest_city
 from django.contrib.gis.geos import Point
-from django.contrib.gis.geoip import GeoIP
+from django.contrib.gis.utils.geoip import GeoIP
 import urllib
 
 import logging
