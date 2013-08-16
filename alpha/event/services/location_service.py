@@ -2,6 +2,7 @@ from cities.models import City, Region, Country
 from event.utils import find_nearest_city
 from django.contrib.gis.geos import Point
 from django.contrib.gis.geoip import GeoIP
+import urllib
 
 import logging
 
@@ -101,30 +102,15 @@ class LocationByIP(object):
         return geoip.country_code(self.ip)=="CA" or bool(geoip.city(self.ip) and geoip.city(self.ip)["country_code"]=="CA")
 
 
-class LocationFromAccountSettins(object):
-    def __init__(self, request):
-        self.account = request.account
-
-    @property
-    def canadian_region(self):        
-        return self.account and self.account.native_region
-
-    @property
-    def is_canada(self):
-        return not self.account.not_from_canada
-
-
 class LocationFromBrowser(object):
     def __init__(self, request):
         self.request = request
-        # request.session["browser_lat_lon"] = None
 
     @property
     def canadian_region(self):
         if self.lat_lon:
             nearest_city = find_nearest_city(City.objects.all(), Point(self.lat_lon[::-1]))
             return nearest_city.region
-
         else:
             return None
 
@@ -142,6 +128,34 @@ class LocationFromBrowser(object):
     @lat_lon.setter
     def lat_lon(self, value):
         self.request.session["browser_lat_lon"] = value
+
+    @property
+    def is_canada(self):
+        if not self.lat_lon:
+            return LocationByIP(self.request).is_canada
+
+        code = self.request.session.get("lat_lon_code_%s,%s" % (self.lat_lon[0], self.lat_lon[1]), None)
+        if not code:
+            params = urllib.urlencode({
+                'lat': self.lat_lon[0], 
+                'lng': self.lat_lon[1]
+            })
+            code = urllib.urlopen("http://ws.geonames.org/countryCode?%s" % params).read().strip()
+            self.request.session["lat_lon_code_%s,%s" % (self.lat_lon[0], self.lat_lon[1])] = code
+
+        return code.strip()=="CA"
+
+class LocationFromAccountSettins(object):
+    def __init__(self, request):
+        self.account = request.account
+
+    @property
+    def canadian_region(self):        
+        return self.account and self.account.native_region
+
+    @property
+    def is_canada(self):
+        return not self.account.not_from_canada        
 
 class LocationFromUserChoice(object):
     def __init__(self, request):
@@ -220,7 +234,7 @@ class LocationFromUserChoice(object):
     @property
     def location_type(self):
         if not "user_location_data" in self.request.session:
-            if not self.by_IP.is_canada:
+            if not self.from_browser.is_canada:
                 return "country"
             if self.city:
                 return "city"
@@ -287,7 +301,7 @@ def user_location(request):
         "user_location_city": (from_user_choice.city or from_browser.city or by_IP.city),
         "user_location_region": (from_user_choice.canadian_region or from_account_settings.canadian_region or from_browser.canadian_region or by_IP.canadian_region),
         "user_location_lat_lon": (from_browser.lat_lon or by_IP.lat_lon),
-        "is_canada": by_IP.is_canada,
+        "is_canada": from_browser.is_canada,
 
         "user_location_type": from_user_choice.location_type,
         "user_location_name": from_user_choice.location_name,

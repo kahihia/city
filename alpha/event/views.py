@@ -16,7 +16,7 @@ from django.template import RequestContext
 
 from django.middleware.csrf import get_token
 
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point, GEOSGeometry
 from cities.models import City, Country, Region
 from django.db.models import Q, Count
 from event.filters import EventFilter
@@ -38,6 +38,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
 from accounts.decorators import native_region_required
 from services import location_service
+from django.contrib.gis.measure import Distance
 
 
 def start(request):
@@ -744,18 +745,11 @@ def set_browser_location(request):
     )
 
     from_browser = location_service.LocationFromBrowser(request)
-    from_account_settings = location_service.LocationFromAccountSettins(request)
-    from_user_choice = location_service.LocationFromUserChoice(request)
 
     status = "SAME"
-    if not (from_account_settings.canadian_region or from_user_choice.canadian_region): # We did not need refresh page, if user already choose his location in settings or location field in header
-        if not from_browser.lat_lon:
-            status = "REFRESH"
-        else: # When user is moving we need to give him some gap, to prevent page refresh on every step
-            p1 = Point(lat_lon)
-            p2 = Point(from_browser.lat_lon)
-            if p1.distance(p2)>200:
-                status = "REFRESH"
+
+    if not from_browser.lat_lon:
+        status = "REFRESH"
 
     from_browser.lat_lon = lat_lon    
 
