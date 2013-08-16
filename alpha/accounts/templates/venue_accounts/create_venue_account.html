@@ -17,12 +17,9 @@
 
     <script type="text/javascript">
         var crsf_token = "{{ csrf_token }}";
-        {% if request.location %}
-            window.user_lat = {{ request.location.0 }};
-            window.user_lng = {{ request.location.1 }};
-        {% endif %}
     </script>
 
+    <script src="{{STATIC_URL}}js/location/suggest_cityfusion_venue.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/accounts/create-venue-page.js" type="text/javascript" ></script>
     {{ form.media.js }}
 {% endblock %}
@@ -133,6 +130,7 @@
                                 </td>
                                 <td>
                                     {{ form.venue_name }}
+                                    {{ form.venue_identifier }}
                                 </td>
                             </tr>
                             <tr>

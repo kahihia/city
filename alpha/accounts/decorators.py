@@ -30,7 +30,7 @@ def account_passes_test(test_func, redirect_field_name=REDIRECT_FIELD_NAME, why_
 
 def native_region_required(redirect_field_name=REDIRECT_FIELD_NAME, why_message=None):
     actual_decorator = account_passes_test(
-        lambda account: bool(account.not_from_canada or account.native_region),
+        lambda account: bool(account.tax_origin_confirmed and (account.not_from_canada or account.native_region)),
         redirect_field_name=redirect_field_name,
         why_message=why_message
     )

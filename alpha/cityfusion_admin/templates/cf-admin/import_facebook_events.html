@@ -27,10 +27,6 @@
     {{ form.media.js }}
     <script type="text/javascript">
         var crsf_token = "{{ csrf_token }}";
-        {% if location %}
-            window.user_lat = {{location.0}};
-            window.user_lng = {{location.1}};
-        {% endif %}
     </script>
 {% endblock %}
 

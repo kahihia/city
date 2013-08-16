@@ -244,6 +244,10 @@ def edit_venue_account(request, slug):
 
 
 def save_venue(request):
+    venue_identifier = request.POST["venue_identifier"]
+    if venue_identifier:
+        return Venue.objects.get(id=int(venue_identifier))
+
     name = request.POST["venue_name"]
     street = request.POST["street"]
     location = Point((
@@ -372,7 +376,7 @@ def profile_detail(request, username, template_name=userena_settings.USERENA_PRO
     
     extra_context['profile'] = user.get_profile()
     extra_context['hide_email'] = userena_settings.USERENA_HIDE_EMAIL
-    extra_context['location'] = request.user_location["location"]
+    extra_context['location'] = request.user_location["user_location_lat_lon"]
     extra_context['is_admin'] = user.is_superuser
 
     tabs_page = "profile-detail"
@@ -452,8 +456,12 @@ def profile_edit(request, username, edit_profile_form=AccountForm,
 
     profile = user.get_profile()
 
-    user_initial = {'first_name': user.first_name,
-                    'last_name': user.last_name}
+    user_initial = {
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'not_from_canada': profile.not_from_canada or not request.user_location['is_canada'],
+        'native_region': profile.native_region or request.user_location['user_location_region']
+    }
 
     form = edit_profile_form(instance=profile, initial=user_initial)
 
@@ -464,9 +472,11 @@ def profile_edit(request, username, edit_profile_form=AccountForm,
         if form.is_valid():
             profile = form.save()
 
-            if userena_settings.USERENA_USE_MESSAGES:
-                messages.success(request, _('Your profile has been updated.'),
-                                 fail_silently=True)
+            if profile.not_from_canada or profile.native_region:
+                profile.tax_origin_confirmed = True
+            else:
+                profile.tax_origin_confirmed = False
+            profile.save()
 
             if success_url: redirect_to = success_url
             else: redirect_to = reverse('account_profile_detail', kwargs={'username': username})

@@ -23,8 +23,8 @@
 
                 window.setTimeout(function(){
                     that.setLocation(
-                        +(document.getElementById("id_location_lat").value) || window.user_lat,
-                        +(document.getElementById("id_location_lng").value) || window.user_lng
+                        +(document.getElementById("id_location_lat").value) || window.userLocationLat,
+                        +(document.getElementById("id_location_lng").value) || window.userLocationLng
                     );
                 },100);
             });
@@ -73,22 +73,24 @@
             this.marker.setPosition(point);
             this.map.panTo(point);
 
-            window.user_lng = lng;
-            window.user_lat = lat;
+            window.userLocationLng = lng;
+            window.userLocationLat = lat;
         },
         setLocation: function(lat, lng){
-            var point = new google.maps.LatLng(lat, lng);
+            if(lat&&lng){
+                var point = new google.maps.LatLng(lat, lng);
 
-            google.maps.event.trigger(this.map, 'resize');
+                google.maps.event.trigger(this.map, 'resize');
 
-            this.marker.setPosition(point);
-            this.map.panTo(point);
+                this.marker.setPosition(point);
+                this.map.panTo(point);
 
-            $("#id_location_lng").val(lng);
-            $("#id_location_lat").val(lat);
+                $("#id_location_lng").val(lng);
+                $("#id_location_lat").val(lat);
 
-            window.user_lng = lng;
-            window.user_lat = lat;
+                window.userLocationLng = lng;
+                window.userLocationLat = lat;
+            }            
         }
     };
 

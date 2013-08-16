@@ -52,7 +52,6 @@ class DateFilter(Filter):
             lookup = self.lookup
 
         return qs.filter(**{'%s__%s' % (self.field, lookup): value})
-        
 
 
 class TimeFilter(Filter):

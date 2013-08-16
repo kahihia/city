@@ -86,6 +86,11 @@ urlpatterns = patterns('',
         name="suggest_cityfusion_venue"
     ),
 
+    url(r'^set-browser-location/$',
+        event.set_browser_location,
+        name="set_browser_location"
+    ),
+
     # url(r'^audit-single-event/', event.audit_single_event_list),
     # url(r'^audit-single-remove/(?P<id>\d+)', event.audit_single_event_remove),
     # url(r'^audit-single-edit/(?P<id>\d+)', event.audit_single_event_edit),

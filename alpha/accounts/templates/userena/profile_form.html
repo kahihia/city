@@ -68,22 +68,25 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
-                        <div class="checkbox">
-                            {{form.not_from_canada}}
-                            <label for="id_not_from_canada"></label>
-                        </div>                        
-                        <label for="id_not_from_canada">I am not from Canada</label>
+                    <td colspan="2">                        
+                        <fieldset>
+                            {{ form.tax_origin_confirmed }}
+                            <legend>Tax origin{% if not profile.tax_origin_confirmed %}(<span class="warn">not yet filled</span>){% endif %}:</legend>
+                            <div class="checkbox">
+                                {{form.not_from_canada}}
+                                <label for="id_not_from_canada"></label>
+                            </div>
+                            <label for="id_not_from_canada">I am not from Canada</label>
+                            <br>
+                            <div class="native-region-tr">
+                                <label for="id_native_region">Province or Territory:</label>
+                                <div class="native-region-combobox">
+                                    {{form.native_region}}
+                                </div>                                
+                            </div>
+                        </fieldset>
                     </td>
-                </tr>
-                <tr class="native-region-tr">
-                    <td>
-                        <label for="id_native_region">Province or Territory:</label>
-                    </td>
-                    <td>
-                        {{form.native_region}}
-                    </td>
-                </tr>
+                </tr>                
             </table>            
             <input type="submit" class="submit standart button" value="{% trans "Save profile" %}" />
         </div>        

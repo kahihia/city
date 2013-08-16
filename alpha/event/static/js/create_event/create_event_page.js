@@ -44,7 +44,6 @@
         },
         initVenueAutocomplete: function(){
             this.venueAutocomplete = new window.VenueAutocomplete();
-
         },
         initDescriptionField: function(){
             var value = $("#id_description_json").val();

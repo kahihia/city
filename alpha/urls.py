@@ -13,8 +13,6 @@ urlpatterns = patterns(
     '',
     # Examples:
     url(r'^channel.html$', 'home.views.channelfile'),
-    url(r'^finish-setup$', 'home.views.finish_setup'),
-    url(r'^nearest-city-and-region$', 'home.views.nearest_city_and_region'),
     url(r'^$', 'event.views.redirect', name='home'),
     url(r'^events/', include('event.urls')),
     url(r'^accounts/', include('userena.urls')),
@@ -33,7 +31,7 @@ urlpatterns = patterns(
     url(r'^facebook/', include('django_facebook.urls')),
     url(r'^advertising/', include('advertising.urls')),
     url(r'^accounts/(?P<username>[\.\w-]+)/edit-profile/$',
-       'userena.views.profile_edit',
+       'accounts.views.profile_edit',
         {
             'edit_profile_form': AccountForm
         },
@@ -45,7 +43,7 @@ urlpatterns = patterns(
     ),
 
     url(r'^accounts/(?P<username>[\.\w-]+)/edit-profile/(?P<why_message>[\.\w-]+)/(?P<success_url>.*)$',
-       'accounts.views.profile_edit',        
+       'accounts.views.profile_edit',
        name='user_profile_required',
     ),
 

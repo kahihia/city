@@ -10,8 +10,8 @@
 
         if (window.navigator.geolocation){
             window.navigator.geolocation.getCurrentPosition(function(position){
-                window.user_lat = position.coords.latitude;
-                window.user_lng = position.coords.longitude;
+                Cityfusion.userLocationLat = position.coords.latitude;
+                Cityfusion.userLocationLng = position.coords.longitude;
             });
         }
 
@@ -67,12 +67,12 @@
                     $("#id_tags__tagautosuggest")[0].tagspopup.forCity($("#id_geo_city").val());
                 }
 
-                window.user_lat = result.geometry.location.lat();
-                window.user_lng = result.geometry.location.lng();
+                Cityfusion.userLocationLat = result.geometry.location.lat();
+                Cityfusion.userLocationLng = result.geometry.location.lng();
 
-                that.suggestForm.suggestMap.setLocation(window.user_lat, window.user_lng);
+                that.suggestForm.suggestMap.setLocation(Cityfusion.userLocationLat, Cityfusion.userLocationLng);
 
-                window.setTimeout(that.setVenueText.bind(that));
+                window.setTimeout(that.setVenueText.bind(that), 1);
             });
         },
         setVenueText: function(){

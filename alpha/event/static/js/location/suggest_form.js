@@ -7,8 +7,9 @@
         this.initFormButtons();
         this.initSuggestMap();
         this.embedSuggestVenueButtonIntoGoogleAutocomplete();
+        
         if(typeof(SuggestCityfusionVenue) !== "undefined") {
-            this.suggestCityfusionVenue = new SuggestCityfusionVenue(this);
+            this.suggestCityfusionVenue = new SuggestCityfusionVenue(this, this.onCityfusionVenueChoose.bind(this));
         }
     }
 
@@ -83,12 +84,20 @@
                 hideOnOverlayClick: false,
                 afterShow: function(){
                     google.maps.event.trigger(map, 'resize');
-                    that.suggestMap.setLocation(window.user_lat, window.user_lng);
+                    that.suggestMap.setLocation(window.userLocationLat, window.userLocationLng);
                     that.suggestMap.infowindow.open(map, marker);
                 }
             });
 
             $("#id_venue_name").val($("#id_place").val());
+        },
+        onCityfusionVenueChoose: function(venue){
+            setTimeout(function(){
+                $("#id_place").val(venue.full_name);
+            }, 10);
+
+            $("#id_venue_identifier").val(venue.id);
+            this.suggestMap.setLocation(parseFloat(venue.lat), parseFloat(venue.lng));
         }
     };
 

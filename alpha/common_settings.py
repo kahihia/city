@@ -112,13 +112,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'event.middleware.LocationMiddleware',
-    'event.middleware.SetupMiddleware',    
+    'django.contrib.messages.middleware.MessageMiddleware',    
     'accounts.middleware.VenueAccountMiddleware',
     'accounts.middleware.UserProfileMiddleware',
+    'event.middleware.LocationMiddleware',
     'turbolinks.middleware.TurbolinksMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 # INTERNAL_IPS = ('127.0.0.1',)
@@ -253,7 +251,7 @@ CITIES_PLUGINS = [
     'cities.plugin.postal_code_ca.Plugin',  # Canada postal codes need region codes remapped to match geonames
 ]
 
-SELECTABLE_MAX_LIMIT = 10
+SELECTABLE_MAX_LIMIT = 15
 
 from easy_thumbnails.conf import Settings as thumbnail_settings
 THUMBNAIL_PROCESSORS = (
@@ -261,6 +259,7 @@ THUMBNAIL_PROCESSORS = (
 ) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
 GEOIP_PATH = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'geoip'))
+GEOIP_CITY = "GeoIPCityca.dat"
 
 AUTHENTICATION_BACKENDS = (
     'userena.backends.UserenaAuthenticationBackend',

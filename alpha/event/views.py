@@ -37,6 +37,7 @@ from moneyed import Money, CAD
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
 from accounts.decorators import native_region_required
+from services import location_service
 
 
 def start(request):
@@ -65,11 +66,11 @@ def search_pad(request):
     events_all_count = events.count()
 
     params = request.GET.copy()
-
+    location_from_user_choice = location_service.LocationFromUserChoice(request)
     if not "location" in params:
         params["location"] = "%s|%s" % (
-            request.user_location["user_location_type"],
-            request.user_location["user_location_id"]
+            location_from_user_choice.location_type,
+            location_from_user_choice.location_id,
         )
 
     eventsFilter = EventFilter(params, queryset=events, account=request.account)
@@ -104,11 +105,11 @@ def browse(request):
     events = SingleEvent.future_events.all()
 
     params = request.GET.copy()
-
+    location_from_user_choice = location_service.LocationFromUserChoice(request)
     if not "location" in params:
         params["location"] = "%s|%s" % (
-            request.user_location["user_location_type"],
-            request.user_location["user_location_id"]
+            location_from_user_choice.location_type,
+            location_from_user_choice.location_id,
         )
 
     eventsFilter = EventFilter(params, queryset=events)
@@ -298,7 +299,7 @@ def create(request, success_url=None, template_name='events/create/create_event.
     return render_to_response(template_name, {
             'form': form,
             'posting': True,
-            'location': request.user_location["location"],
+            'location': request.user_location["user_location_lat_lon"],
         }, context_instance=context)
 
 
@@ -418,8 +419,7 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
 
     return render_to_response(template_name, {
                                 'form': form,
-                                'event': event,
-                                'location': request.user_location["location"],
+                                'event': event                            
                             },
                             context_instance=RequestContext(request))
 
@@ -459,8 +459,7 @@ def copy(request, authentication_key, template_name='events/create/copy_event.ht
 
     return render_to_response(template_name, {
             'form': form,
-            'posting': True,
-            'location': request.user_location["location"],
+            'posting': True
         }, context_instance=RequestContext(request))    
 
 
@@ -638,7 +637,7 @@ def nearest_venues(request):
         if search:
             venues = venues.filter(Q(name__icontains=search) | Q(city__name__icontains=search))
         if request.location:
-            venues = venues.distance(Point(request.location)).order_by('-distance')[:10]
+            venues = venues.distance(Point(request.location)).order_by('distance')[:10]
 
         return HttpResponse(json.dumps({
             "venues": [{
@@ -675,8 +674,8 @@ def location_autocomplete(request):
 
     cities = City.objects.filter(**kwargs)
 
-    if request.user_location:
-        cities = cities.distance(Point(request.user_location["location"])).order_by('-distance')
+    if request.user_location and request.user_location["user_location_lat_lon"]:
+        cities = cities.distance(Point(request.user_location["user_location_lat_lon"][::-1])).order_by('distance')
 
     cities = cities[0:5]
 
@@ -691,7 +690,7 @@ def location_autocomplete(request):
             "name": name
         })
 
-    regions = Region.objects.filter(**kwargs)[:5]
+    regions = Region.objects.filter(**kwargs)[:3]
 
     for region in regions:
         locations.append({
@@ -726,8 +725,40 @@ def suggest_cityfusion_venue(request):
     return HttpResponse(json.dumps({
         "venues": map(lambda venue: { 
             "id": venue.id,
-            "name": str(venue),
+            "full_name": venue.__unicode__(),
+            "name": venue.name,
+            "street": venue.street,
+            "city_name": venue.city.name,
+            "city_id": venue.city.id,
             "lat": venue.location.y,
-            "lng": venue.location.x
+            "lng": venue.location.x,
         }, venues)
     }), mimetype="application/json")
+
+
+@require_GET
+def set_browser_location(request):
+    lat_lon = (
+        float(request.GET['latitude']),
+        float(request.GET['longitude']),
+    )
+
+    from_browser = location_service.LocationFromBrowser(request)
+    from_account_settings = location_service.LocationFromAccountSettins(request)
+    from_user_choice = location_service.LocationFromUserChoice(request)
+
+    status = "SAME"
+    if not (from_account_settings.canadian_region or from_user_choice.canadian_region): # We did not need refresh page, if user already choose his location in settings or location field in header
+        if not from_browser.lat_lon:
+            status = "REFRESH"
+        else: # When user is moving we need to give him some gap, to prevent page refresh on every step
+            p1 = Point(lat_lon)
+            p2 = Point(from_browser.lat_lon)
+            if p1.distance(p2)>200:
+                status = "REFRESH"
+
+    from_browser.lat_lon = lat_lon    
+
+    return HttpResponse(json.dumps({
+        "status": status
+    }), mimetype="application/json")    

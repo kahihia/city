@@ -19,14 +19,3 @@ def top5_tags(request):
     return {
         "top5_tags": top5_tags
     }
-
-
-# def location_debug_context_processor(request):
-#     ip = get_real_ip(request)
-#     ipinfo = IPAdressLab(ip=ip)
-#     return {
-#         "ip": ip,
-#         "lon_lat": ipinfo.lon_lat(),
-#         "lat_lon": ipinfo.lat_lon(),
-#         "ip_info": ipinfo.get_info(ip="198.245.113.94")        
-#     }

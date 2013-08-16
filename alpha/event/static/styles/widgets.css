@@ -388,7 +388,7 @@ ul#box-nav li.selected a {
 
 
 fieldset {
-    border:none;
+    border:1px solid #d4d4d4;
 }
 
 fieldset legend{
@@ -644,4 +644,14 @@ body .event-actions-popup .in-the-loop-popup-content {
 .event-action-ui-dialog.ui-dialog .ui-dialog-titlebar {
     background: none;
     border: none;
+}
+
+.suggest-city, .suggest-region, .skip-setup {
+    color: #247cc3;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.warn {
+    color: #cc3b3b;
 }

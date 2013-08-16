@@ -658,3 +658,25 @@
     font-size: 14px;
     color: red;
 }
+
+.native-region-combobox {
+    position: relative;
+    width: 160px;
+}
+
+.native-region-combobox .ui-button {
+    position:absolute;
+    top: 3px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    background: url("/static/images/widgets/dropdown.png") no-repeat;
+    border: none;
+
+    padding: 0;
+}
+
+.native-region-combobox .ui-button * {
+    display:none;
+}
+

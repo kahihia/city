@@ -5,6 +5,10 @@
     function CreateVenuePage(){
         this.initVenueAutocomplete();
         this.initCKEditor();
+
+        if(typeof(SuggestCityfusionVenue) !== "undefined") {
+            this.suggestCityfusionVenue = new SuggestCityfusionVenue(this, this.onCityfusionVenueChoose.bind(this));
+        }
     }
 
     CreateVenuePage.prototype = {
@@ -16,8 +20,8 @@
 
             if (window.navigator.geolocation){
                 window.navigator.geolocation.getCurrentPosition(function(position){
-                    window.user_lat = position.coords.latitude;
-                    window.user_lng = position.coords.longitude;
+                    Cityfusion.userLocationLat = position.coords.latitude;
+                    Cityfusion.userLocationLng = position.coords.longitude;
                 });
             }
 
@@ -62,12 +66,10 @@
                 $("#id_street").val($("#id_geo_street").val());
                 $("#id_city_0").val($("#id_geo_city").val());
 
-                window.user_lat = result.geometry.location.lat();
-                window.user_lng = result.geometry.location.lng();
+                Cityfusion.userLocationLat = result.geometry.location.lat();
+                Cityfusion.userLocationLng = result.geometry.location.lng();
 
-                that.setLocation(window.user_lat, window.user_lng);
-
-                // window.setTimeout(that.setVenueText.bind(that));
+                that.setLocation(Cityfusion.userLocationLat, Cityfusion.userLocationLng);
             });
 
             this.initGoogleMap();
@@ -76,7 +78,7 @@
             var point, options, marker, map,
                 that = this;
             
-            point = new google.maps.LatLng(window.user_lat|0, window.user_lng|0);
+            point = new google.maps.LatLng(Cityfusion.userLocationLat|0, Cityfusion.userLocationLng|0);
 
             options = {
                 zoom: 14,
@@ -112,8 +114,8 @@
 
                 window.setTimeout(function(){
                     that.setLocation(
-                        +(document.getElementById("id_location_lat").value) || window.user_lat,
-                        +(document.getElementById("id_location_lng").value) || window.user_lng
+                        +(document.getElementById("id_location_lat").value) || Cityfusion.userLocationLat,
+                        +(document.getElementById("id_location_lng").value) || Cityfusion.userLocationLng
                     );
                 },100);
 
@@ -129,22 +131,25 @@
             this.marker.setPosition(point);
             this.map.panTo(point);
 
-            window.user_lng = lng;
-            window.user_lat = lat;
+            Cityfusion.userLocationLng = lng;
+            Cityfusion.userLocationLat = lat;
         },
         setLocation: function(lat, lng){
-            var point = new google.maps.LatLng(lat, lng);
+            if(lat&&lng){
+                var point = new google.maps.LatLng(lat, lng);
 
-            google.maps.event.trigger(this.map, 'resize');
+                google.maps.event.trigger(this.map, 'resize');
 
-            this.marker.setPosition(point);
-            this.map.panTo(point);
+                this.marker.setPosition(point);
+                this.map.panTo(point);
 
-            $("#id_location_lng").val(lng);
-            $("#id_location_lat").val(lat);
+                $("#id_location_lng").val(lng);
+                $("#id_location_lat").val(lat);
 
-            window.user_lng = lng;
-            window.user_lat = lat;
+                Cityfusion.userLocationLng = lng;
+                Cityfusion.userLocationLat = lat;
+
+            }
         },
         initCKEditor: function(){
             CKEDITOR.instances.id_about.on("instanceReady", function(){
@@ -153,6 +158,20 @@
                     e.data.html = e.data.dataValue.replace(/\s*width="[^"]*"/g, '');
                 });
             });
+        },
+        onCityfusionVenueChoose: function(venue){
+            setTimeout(function(){
+                $("#id_place").val(venue.full_name);
+            }, 10);
+
+            $("#id_venue_identifier").val(venue.id);
+            this.setLocation(parseFloat(venue.lat), parseFloat(venue.lng));
+
+            $("#id_venue_name").val(venue.name);
+            $("#id_street").val(venue.street);
+            $("#id_city_0").val(venue.city_name);
+            $("#id_city_1").val([venue.city_id, venue.lat, venue.lng].join(","));
+            $("#id_city_identifier").val(venue.city_id);
         }
     };
 

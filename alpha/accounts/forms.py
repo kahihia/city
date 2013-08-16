@@ -118,6 +118,7 @@ class NewVenueAccountForm(VenueAccountForm):
     )
 
     location = forms.Field(widget=LocationWidget(), required=False)
+    venue_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
     venue_name = forms.CharField(required=False)
     street = forms.CharField(required=False)
     city = forms.CharField(
@@ -132,9 +133,10 @@ class NewVenueAccountForm(VenueAccountForm):
 
         place = cleaned_data["place"]
 
-        if not place["venue"] or \
-           not place["latitude"] or \
-           not place["longtitude"]:
+        if not cleaned_data["venue_identifier"] and\
+            (not place["venue"] or \
+            not place["latitude"] or \
+            not place["longtitude"]):
             raise forms.ValidationError(u'You should choose venue from list')
 
         return cleaned_data
@@ -143,7 +145,8 @@ class NewVenueAccountForm(VenueAccountForm):
 class AccountForm(EditProfileForm):
     native_region = selectable.AutoCompleteSelectField(
         lookup_class=RegionLookup,
-        required=False
+        required=False,
+        widget=selectable.AutoComboboxSelectWidget(lookup_class=RegionLookup)
     )    
 
     class Meta:
@@ -152,5 +155,6 @@ class AccountForm(EditProfileForm):
             'mugshot',
             'date_of_birth',
             'native_region',
-            'not_from_canada'
+            'tax_origin_confirmed',
+            'not_from_canada',
         ]

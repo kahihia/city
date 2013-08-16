@@ -46,9 +46,10 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
                                 unique=True,
                                 verbose_name=_('user'),
                                 related_name='my_profile')
-
-    native_region = models.ForeignKey(Region, blank=True, null=True, related_name="native_for_accounts")
+    
+    tax_origin_confirmed = models.BooleanField(default=False)
     not_from_canada = models.BooleanField(default=False)
+    native_region = models.ForeignKey(Region, blank=True, null=True, related_name="native_for_accounts")
 
     website = models.URLField(blank=True, null=True, default='')
 

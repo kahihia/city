@@ -28,7 +28,7 @@
                 closeBtn: true,
                 hideOnOverlayClick: false,
                 afterShow: function(){
-                    if(that.map) that.setLocation(window.user_lat, window.user_lng);
+                    if(that.map) that.setLocation(window.userLocationLat, window.userLocationLng);
                 }
             });
 
@@ -61,8 +61,8 @@
 
             if (window.navigator.geolocation){
                 window.navigator.geolocation.getCurrentPosition(function(position){
-                    window.user_lat = position.coords.latitude;
-                    window.user_lng = position.coords.longitude;
+                    window.userLocationLat = position.coords.latitude;
+                    window.userLocationLng = position.coords.longitude;
                 });
             }
 
@@ -106,10 +106,10 @@
                 $("#id_street").val("");
                 $("#id_city_0").val("");
 
-                window.user_lat = result.geometry.location.lat();
-                window.user_lng = result.geometry.location.lng();
+                window.userLocationLat = result.geometry.location.lat();
+                window.userLocationLng = result.geometry.location.lng();
 
-                that.setLocation(window.user_lat, window.user_lng);
+                that.setLocation(window.userLocationLat, window.userLocationLng);
 
                 // window.setTimeout(that.setVenueText.bind(that));
             });
@@ -121,7 +121,7 @@
             var point, options, marker, map,
                 that = this;
             
-            point = new google.maps.LatLng(window.user_lat , window.user_lng);
+            point = new google.maps.LatLng(window.userLocationLat , window.userLocationLng);
 
             options = {
                 zoom: 14,
@@ -156,8 +156,8 @@
             this.marker.setPosition(point);
             this.map.panTo(point);
 
-            window.user_lng = lng;
-            window.user_lat = lat;
+            window.userLocationLng = lng;
+            window.userLocationLat = lat;
         },
         setLocation: function(lat, lng){
             var point = new google.maps.LatLng(lat, lng);
@@ -170,8 +170,8 @@
             $("#id_location_lng").val(lng);
             $("#id_location_lat").val(lat);
 
-            window.user_lng = lng;
-            window.user_lat = lat;
+            window.userLocationLng = lng;
+            window.userLocationLat = lat;
 
         },
         initSuggestion: function(){
