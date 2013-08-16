@@ -106,10 +106,6 @@ class LocationFromAccountSettins(object):
         self.account = request.account
 
     @property
-    def city(self):
-        return None
-
-    @property
     def canadian_region(self):        
         return self.account and self.account.native_region
 
@@ -139,7 +135,6 @@ class LocationFromBrowser(object):
         else:
             return None
 
-
     @property
     def lat_lon(self):
         return self.request.session.get("browser_lat_lon", None)
@@ -148,11 +143,14 @@ class LocationFromBrowser(object):
     def lat_lon(self, value):
         self.request.session["browser_lat_lon"] = value
 
-
 class LocationFromUserChoice(object):
     def __init__(self, request):
         self.request = request
         self.change_user_choice()
+
+        self.by_IP = LocationByIP(request)
+        self.from_browser = LocationFromBrowser(request)
+        self.from_account_settings = LocationFromAccountSettins(request)
         # del request.session["user_location_data"]
 
     def change_user_choice(self):
@@ -185,11 +183,7 @@ class LocationFromUserChoice(object):
     @property
     def city(self):
         if missing_in_session("user_location_data", self.request.session):
-            by_IP = LocationByIP(self.request)
-            from_browser = LocationFromBrowser(self.request)
-            from_account_settings = LocationFromAccountSettins(self.request)
-
-            return (from_account_settings.city or from_browser.city or by_IP.city)
+            return (self.from_account_settings.city or self.from_browser.city or self.by_IP.city)
 
         user_location_data = self.request.session["user_location_data"]
 
@@ -203,12 +197,8 @@ class LocationFromUserChoice(object):
 
     @property
     def canadian_region(self):
-        if missing_in_session("user_location_data", self.request.session):
-            by_IP = LocationByIP(self.request)
-            from_browser = LocationFromBrowser(self.request)
-            from_account_settings = LocationFromAccountSettins(self.request)
-            
-            return (from_account_settings.canadian_region or from_browser.canadian_region or by_IP.canadian_region)
+        if missing_in_session("user_location_data", self.request.session):            
+            return (self.from_account_settings.canadian_region or self.from_browser.canadian_region or self.by_IP.canadian_region)
 
         user_location_data = self.request.session["user_location_data"]
 
@@ -225,11 +215,13 @@ class LocationFromUserChoice(object):
             return Region.objects.get(id=user_location_id)
         elif user_location_type=="city":
             return City.objects.get(id=user_location_id).region
-        return None            
+        return None
 
     @property
     def location_type(self):
         if not "user_location_data" in self.request.session:
+            if not self.by_IP.is_canada:
+                "country"
             if self.city:
                 return "city"
             if self.canadian_region:
@@ -241,10 +233,11 @@ class LocationFromUserChoice(object):
     @property
     def location_id(self):
         if not "user_location_data" in self.request.session:
-            if self.city:
+            location_type = self.location_type
+            if location_type=="city":
                 return self.city.id
-            if self.canadian_region:
-                return self.canadiam_region.id
+            if location_type=="region":
+                return self.canadian_region.id
             return Country.objects.get(code="CA").id
 
         return self.request.session["user_location_data"]["user_location_id"]
@@ -255,14 +248,14 @@ class LocationFromUserChoice(object):
         region = self.canadian_region
 
         if not "user_location_data" in self.request.session:
-            if city:
+            location_type = self.location_type
+            if location_type=="city":
                 if city.region:
                     return "%s, %s" % (city.name, city.region.name)
                 else:
                     return city.name
-            if region:
+            if location_type=="region":
                 return region.name
-                
             return "Canada"
 
         return self.request.session["user_location_data"]["user_location_name"]
