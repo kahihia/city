@@ -221,7 +221,7 @@ class LocationFromUserChoice(object):
     def location_type(self):
         if not "user_location_data" in self.request.session:
             if not self.by_IP.is_canada:
-                "country"
+                return "country"
             if self.city:
                 return "city"
             if self.canadian_region:
