@@ -183,7 +183,7 @@ class LocationFromUserChoice(object):
     @property
     def city(self):
         if missing_in_session("user_location_data", self.request.session):
-            return (self.from_account_settings.city or self.from_browser.city or self.by_IP.city)
+            return (self.from_browser.city or self.by_IP.city)
 
         user_location_data = self.request.session["user_location_data"]
 
