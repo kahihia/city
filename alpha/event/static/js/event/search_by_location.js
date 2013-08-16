@@ -35,7 +35,9 @@
             }
         });
 
-        // this.setupTrip();
+        if(Cityfusion.isCanada){
+            this.setupTrip();
+        }
     };
 
     SearchByLocation.prototype = {
@@ -78,30 +80,30 @@
             var that=this;
             this.updateTrip();           
 
-            // if (navigator.geolocation){
-            //     navigator.geolocation.getCurrentPosition(function(position){
-            //         $.ajax("/events/set-browser-location", {
-            //             type: "GET",
-            //             dataType: "json",
-            //             data: { 
-            //                 latitude: position.coords.latitude, 
-            //                 longitude: position.coords.longitude 
-            //             }
-            //         }).done(function(data){
-            //             Cityfusion.userLocationCityId = data.city_id;
-            //             Cityfusion.userLocationCityName = data.city_name;
-            //             Cityfusion.userLocationRegionId = data.region_id;
-            //             Cityfusion.userLocationRegionName = data.region_name;
-            //             that.updateTrip();
-            //         });
-            //     });
-            // }
+            if (navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(function(position){
+                    $.ajax("/events/set-browser-location", {
+                        type: "GET",
+                        dataType: "json",
+                        data: { 
+                            latitude: position.coords.latitude, 
+                            longitude: position.coords.longitude 
+                        }
+                    }).done(function(data){
+                        Cityfusion.userLocationCityId = data.city_id;
+                        Cityfusion.userLocationCityName = data.city_name;
+                        Cityfusion.userLocationRegionId = data.region_id;
+                        Cityfusion.userLocationRegionName = data.region_name;
+                        that.updateTrip();
+                    });
+                });
+            }
 
             $(".location").on("click", function(){
                 that.trip && that.trip.start();
             });
 
-            $(".location").on("keypress", function(){
+            $(".location").on("keypress blur", function(){
                 that.trip.stop();
             });
         },

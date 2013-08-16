@@ -15,6 +15,10 @@
             "userLocationRegionId": {{ user_location.user_location_region.id }},
             "userLocationRegionName": "{{ user_location.user_location_region.name }}",
             {% endif %}
+
+            {% if user_location.is_canada %}
+            "isCanada": true
+            {% endif %}
         }
 
         window.Cityfusion = Cityfusion;
