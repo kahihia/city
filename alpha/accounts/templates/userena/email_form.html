@@ -9,10 +9,10 @@
     <div class="tabs-container">
         <ul class="tabs right-tabs">
             <li class="first">
-                <a href="{% url 'account_profile_detail' user.username %}"><span>{% trans 'View profile' %}</span></a>
+                <a href="{% url 'userena_profile_detail' user.username %}"><span>{% trans 'View profile' %}</span></a>
             </li>
             <li>
-                <a href="{% url 'user_profile_edit' user.username %}">{% trans "Edit profile" %}</a>
+                <a href="{% url 'userena_profile_edit' user.username %}">{% trans "Edit profile" %}</a>
             </li>
             <li>
                 <a href="{% url 'userena_password_change' user.username %}">{% trans "Change password" %}</a>

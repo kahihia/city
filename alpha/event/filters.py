@@ -207,7 +207,7 @@ class FunctionFilter(Filter):
 
     def search_tags(self, function):
         name = search_tags_for_filters.get(function)
-        print name
+
         if name:
             return [{
                 "name": name,

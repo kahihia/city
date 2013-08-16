@@ -10,7 +10,7 @@ def venue_accounts(context):
     user = request.user
     account = get_object_or_404(Account, user=user)
     venue_accounts = account.venueaccount_set.all()
-    print venue_accounts
+
     return {
         'venue_accounts': venue_accounts
     }
