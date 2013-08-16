@@ -8,30 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting field 'Account.new_token_required'
-        db.delete_column(u'accounts_account', 'new_token_required')
-
         # Adding field 'Account.tax_origin_confirmed'
         db.add_column(u'accounts_account', 'tax_origin_confirmed',
                       self.gf('django.db.models.fields.BooleanField')(default=False),
-                      keep_default=False)
-
-
-        # Changing field 'Account.facebook_open_graph'
-        db.alter_column(u'accounts_account', 'facebook_open_graph', self.gf('django.db.models.fields.BooleanField')())
+                      keep_default=False)        
 
     def backwards(self, orm):
-        # Adding field 'Account.new_token_required'
-        db.add_column(u'accounts_account', 'new_token_required',
-                      self.gf('django.db.models.fields.BooleanField')(default=False),
-                      keep_default=False)
-
         # Deleting field 'Account.tax_origin_confirmed'
         db.delete_column(u'accounts_account', 'tax_origin_confirmed')
 
-
-        # Changing field 'Account.facebook_open_graph'
-        db.alter_column(u'accounts_account', 'facebook_open_graph', self.gf('django.db.models.fields.NullBooleanField')(null=True))
 
     models = {
         u'accounts.account': {
