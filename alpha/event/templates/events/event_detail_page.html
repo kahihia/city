@@ -91,7 +91,7 @@
                         <span class="accented">{{ event.venue.name }}</span>
                         <br>                    
                         {{ event.venue.city.name_std }},
-                        {% if event.venue.street %}{{ event.venue.street }},{% endif %}
+                        {% if event.venue.street %}{% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}{% endif %}
                         {{ event.venue.city.region.name_std }}
                     </div>
                     <div class="event-actions">

@@ -16,7 +16,7 @@ from django.template import RequestContext
 
 from django.middleware.csrf import get_token
 
-from django.contrib.gis.geos import Point, GEOSGeometry
+from django.contrib.gis.geos import Point
 from cities.models import City, Country, Region
 from django.db.models import Q, Count
 from event.filters import EventFilter
@@ -38,7 +38,6 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
 from accounts.decorators import native_region_required
 from services import location_service
-from django.contrib.gis.measure import Distance
 
 
 def start(request):
@@ -183,6 +182,7 @@ def save_venue(data):
     elif data["place"]:
         name = data["geo_venue"]
         street = data["geo_street"]
+        street_number = data["geo_street_number"]
         city = City.objects.filter(
             Q(name_std=data["geo_city"].encode('utf8')) |
             Q(name=data["geo_city"])
@@ -200,6 +200,9 @@ def save_venue(data):
         else:
             city = city[0]
         venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, location=location)
+
+        venue.street_number = street_number
+        venue.save()
     return venue
 
 

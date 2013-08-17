@@ -21,7 +21,7 @@
             {{event.start_time|just_time}} - {{event.end_time|just_time}}
         </div>
         <div class="entry-description">                    
-            {{ event.venue.name }}, {% if event.venue.street %}{{ event.venue.street }}, {% endif %}{{ event.venue.city.name_std }}
+            {{ event.venue.name }}, {% if event.venue.street %}{% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}, {% endif %}{{ event.venue.city.name_std }}
         </div>
     </div>
     <div class="clr"></div>

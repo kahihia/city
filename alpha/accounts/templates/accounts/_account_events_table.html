@@ -1,34 +1,12 @@
-{% load date_formatting %}
 {% load endless %}
-{% load cropping %}
+{% load event_tags %}
 
 {% paginate 6 profile.future_events using "account_events" as account_events %}
 
 <div class="account-entry-wrapper entry-wrapper">
 {% for event in account_events %}    
     <div class="entry-info {% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}">
-        <div class="entry-img-prev">
-            {% if event.picture %}
-                <img src="{% cropped_thumbnail event "cropping" width=60 %}" height="60px" weight="60px">
-            {% else %}
-                <img src="{{STATIC_URL}}images/default-event.jpg" height="60px" weight="60px">
-            {% endif %}
-        </div>
-        <div class="entry-details-wrapper">
-            <div class="title">
-                <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">
-                    {{event.name}}&nbsp;
-                </a>                    
-            </div>
-            <div class="entry-date">
-                {{event.start_time|date:"l, F d, Y"}}
-                <span class="delimeter">|</span>
-                {{event.start_time|just_time}} - {{event.end_time|just_time}}
-            </div>
-            <div class="entry-description">                    
-                {{ event.venue.name }}, {% if event.venue.street %}{{ event.venue.street }}, {% endif %}{{ event.venue.city.name_std }}
-            </div>
-        </div>
+        {% short_single_event event %}
 
         <div class="event-edit-actions">
             <a href="{% url 'event_edit' event.authentication_key %}">

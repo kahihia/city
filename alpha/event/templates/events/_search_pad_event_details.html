@@ -25,7 +25,7 @@
             <div class="event-date-wrapper">{{event.start_time|date:"N d, Y fA | l"|title}}</div>                
             <div class="event-description">
                 {{ event.venue.name }}<br>
-                {% if event.venue.street %}{{ event.venue.street }}<br>{% endif %}
+                {% if event.venue.street %}{% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}<br>{% endif %}
                 {{ event.venue.city.name_std }}
             </div>
             <div class="event-actions">                
