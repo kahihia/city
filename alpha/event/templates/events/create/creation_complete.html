@@ -9,7 +9,7 @@
         <p>An email has been sent to you with the details. Please check your spam filter if it does not arrive.</p>
         {% if user.is_authenticated %}
             <p>
-                To edit your event anytime, go to your <a href="{% url 'account_profile_detail' user.username %}">user account</a> and choose venue account.
+                To edit your event anytime, go to your <a href="{% url 'userena_profile_detail' user.username %}">user account</a> and choose venue account.
             </p>
         {% endif %}
     </section>
