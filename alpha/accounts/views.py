@@ -57,7 +57,7 @@ def remove_remind_me(request, event_id):
     event = Event.future_events.get(id=event_id)
     profile.reminder_events.remove(event)
 
-    return HttpResponseRedirect("/account/%s/" % request.user.username)
+    return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))
 
 
 @ajax_login_required
@@ -84,7 +84,7 @@ def reminder_settings(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Reminder options updated.')
-            return HttpResponseRedirect('/account/%s/' % request.user.username)
+            return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))
 
     return render_to_response('accounts/reminder_settings.html', {
         "form": form
@@ -100,7 +100,7 @@ def in_the_loop_settings(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'In the loop options updated.')
-            return HttpResponseRedirect('/account/%s/' % request.user.username)
+            return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))
 
     return render_to_response('accounts/in_the_loop_settings.html', {
         "form": form
@@ -510,5 +510,5 @@ def redirect_to_active_user_context(request):
         return HttpResponseRedirect(reverse('private_venue_account', args=(venue_account.slug, )))
 
     else:
-        return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))    
+        return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))
     
