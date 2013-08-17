@@ -383,60 +383,62 @@
                                 </ul>
                             </td>
                         </tr>
-                        <tr>
-                            <td colspan="2" class="wheelchair-td">
-                                Let CityFusion post it to FaceBook?                                
-                                <a href="javascript:void(0);" class="balloon inline">
-                                    <div class="buttonq"></div>
-                                </a>
-                                <div class="balloon-content">
-                                    <h3>
-                                        Help for
-                                        <i>[Let post it to FaceBook ]:</i>
-                                    </h3>                                 
-                                    <p>
-                                        This option allows CityFusion to publish this Event also to FaceBook
-                                    </p>
-                                </div>                                
-                                <ul>
-                                    <li>
-                                        <div class="radio">
-                                            <input value="True" type="radio" id="id_post_to_facebook_0" name="post_to_facebook" tabindex="9" {% if form.post_to_facebook.value %}checked="checked"{% endif %}>
-                                            <label for="id_post_to_facebook_0"></label>
-                                            <label for="id_post_to_facebook_0">Yes</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div  class="radio">
-                                            <input value="False" type="radio" id="id_post_to_facebook_1" name="post_to_facebook" tabindex="9" {% if not form.post_to_facebook.value %}checked="checked"{% endif %}>
-                                            <label for="id_post_to_facebook_1"></label>
-                                            <label for="id_post_to_facebook_1">No</label>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Facebook comment &nbsp;
-                                <a href="javascript:void(0);" class="balloon inline">
-                                    <div class="buttonq"></div>
-                                </a>
-                                <div class="balloon-content">
-                                    <h3>
-                                        Help for
-                                        <i>[Facebook comment]:</i>
-                                    </h3>
-                                    <p>
-                                        Optional comment that will be attached to the description when
-                                        posting to the Facebook
-                                    </p>
-                                </div>
-                            </td>
-                            <td>
-                                {{form.comment_for_facebook}}
-                            </td>
-                        </tr>
+                        {% comment %}
+                            <tr>
+                                <td colspan="2" class="wheelchair-td">
+                                    Let CityFusion post it to FaceBook?
+                                    <a href="javascript:void(0);" class="balloon inline">
+                                        <div class="buttonq"></div>
+                                    </a>
+                                    <div class="balloon-content">
+                                        <h3>
+                                            Help for
+                                            <i>[Let post it to FaceBook ]:</i>
+                                        </h3>
+                                        <p>
+                                            This option allows CityFusion to publish this Event also to FaceBook
+                                        </p>
+                                    </div>
+                                    <ul>
+                                        <li>
+                                            <div class="radio">
+                                                <input value="True" type="radio" id="id_post_to_facebook_0" name="post_to_facebook" tabindex="9" {% if form.post_to_facebook.value %}checked="checked"{% endif %}>
+                                                <label for="id_post_to_facebook_0"></label>
+                                                <label for="id_post_to_facebook_0">Yes</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div  class="radio">
+                                                <input value="False" type="radio" id="id_post_to_facebook_1" name="post_to_facebook" tabindex="9" {% if not form.post_to_facebook.value %}checked="checked"{% endif %}>
+                                                <label for="id_post_to_facebook_1"></label>
+                                                <label for="id_post_to_facebook_1">No</label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Facebook comment &nbsp;
+                                    <a href="javascript:void(0);" class="balloon inline">
+                                        <div class="buttonq"></div>
+                                    </a>
+                                    <div class="balloon-content">
+                                        <h3>
+                                            Help for
+                                            <i>[Facebook comment]:</i>
+                                        </h3>
+                                        <p>
+                                            Optional comment that will be attached to the description when
+                                            posting to the Facebook
+                                        </p>
+                                    </div>
+                                </td>
+                                <td>
+                                    {{form.comment_for_facebook}}
+                                </td>
+                            </tr>
+                        {% endcomment %}
                         <tr>
                             <td class="tags_bottom">
                                 Tags

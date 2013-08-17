@@ -283,29 +283,6 @@ FACEBOOK_DEFAULT_SCOPE = ['email', 'user_about_me', 'user_birthday', 'user_websi
 # FACEBOOK_REGISTRATION_BACKEND = 'django_facebook.registration_backends.UserenaBackend'
 AUTH_PROFILE_MODULE = 'accounts.Account'
 
-BROKER_URL = 'amqp://guest:guest@localhost:5672/'
-
-
-from datetime import timedelta
-from celery.schedules import crontab
-
-CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
-
-CELERYBEAT_SCHEDULE = {
-    'reminding-about-events-every-5-minutes': {
-        'task': 'accounts.tasks.remind_accounts_about_events',
-        'schedule': timedelta(minutes=5)
-    },
-    'reminding-about-event-every-day': {
-        'task': 'accounts.tasks.remind_accounts_about_events_on_week_day',
-        'schedule': crontab(hour=6, minute=0),
-    },
-    'inform-accounts-about-new-events-with-tags-every-3-hours': {
-        'task': 'accounts.tasks.inform_accounts_about_new_events_with_tags',
-        'schedule': timedelta(minutes=1)
-    }
-}
-
 TWILIO_ACCOUNT_SID = 'AC1a554e71d3c0921faa3732bd495f5878'
 TWILIO_AUTH_TOKEN = '89eec7d9c48d4d3f3809ed8edb17a48d'
 TWILIO_NUMBER = "+12026013648"
@@ -358,3 +335,33 @@ CKEDITOR_CONFIGS = {
 }
 
 GOOGLE_ANALYTICS_CODE = "UA-18720563-1"
+
+#Celery settings
+
+BROKER_HOST = '127.0.0.1'
+BROKER_PORT = 5672
+BROKER_USER = 'fusion'
+BROKER_PASSWORD = 'forfusion'
+BROKER_VHOST = 'cityfusion_vhost'
+CELERY_BACKEND = 'amqp'
+CELERY_RESULT_DBURI = ''
+
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+from datetime import timedelta
+from celery.schedules import crontab
+
+CELERYBEAT_SCHEDULE = {
+    'reminding-about-events-every-5-minutes': {
+        'task': 'accounts.tasks.remind_accounts_about_events',
+        'schedule': timedelta(minutes=5)
+    },
+    'reminding-about-event-every-day': {
+        'task': 'accounts.tasks.remind_accounts_about_events_on_week_day',
+        'schedule': crontab(hour=6, minute=0),
+    },
+    'inform-accounts-about-new-events-with-tags-every-3-hours': {
+        'task': 'accounts.tasks.inform_accounts_about_new_events_with_tags',
+        'schedule': timedelta(minutes=1)
+    }
+}
