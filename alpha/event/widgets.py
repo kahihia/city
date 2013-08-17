@@ -165,14 +165,16 @@ class ChooseUserContextWidget(forms.Widget):
         self.choices = [{
             "id": account.id,
             "type": "account",
-            "text": account.user.username
+            "text": account.user.username,
+            "fullname": ""
         }]
 
         for venue_account in account.venueaccount_set.all():
             self.choices.append({
                 "id": venue_account.id,
                 "type": "venue_account",
-                "text": venue_account.venue.name
+                "text": venue_account.venue.name,
+                "fullname": venue_account.venue
             })
 
         self.user_context_type = forms.widgets.HiddenInput()
@@ -194,7 +196,7 @@ class ChooseUserContextWidget(forms.Widget):
             html += "<option"
             if choice["id"] == value:
                 html += " selected='selected'"
-            html += " value='%s|%d'>%s</option>" % (choice["type"], choice["id"], choice["text"])
+            html += " value='%s|%d|%s'>%s</option>" % (choice["type"], choice["id"], choice["fullname"], choice["text"])
 
         html += """</select></div>"""
         html += "</div>"

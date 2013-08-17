@@ -49,6 +49,7 @@
 
                     latlng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
                     that.suggestForm.suggestMap.setLocationFromMap(latlng);
+                    $("#id_linking_venue_mode").val("GOOGLE");
                 }
             });
 
@@ -73,6 +74,7 @@
                 that.suggestForm.suggestMap.setLocation(Cityfusion.userLocationLat, Cityfusion.userLocationLng);
 
                 window.setTimeout(that.setVenueText.bind(that), 1);
+                $("#id_linking_venue_mode").val("GOOGLE");
             });
         },
         setVenueText: function(){

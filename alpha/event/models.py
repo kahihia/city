@@ -319,6 +319,10 @@ class FacebookEvent(models.Model):
     eid = models.BigIntegerField(blank=False, null=False)
 
 
+def without_empty(array):
+    return [x for x in array if x]
+
+
 class Venue(models.Model):
     name = models.CharField(max_length=250, default='Default Venue')
     street = models.CharField(max_length=250, blank=True)
@@ -330,10 +334,8 @@ class Venue(models.Model):
     objects = models.GeoManager()
 
     def __unicode__(self):
-        if self.street:
-            return "%s, %s, %s" % (self.name, self.street, self.city.name)
-        else:
-            return "%s, %s" % (self.name, self.city.name)
+        street_str = " ".join(without_empty([self.street_number, self.street]))
+        return ", ".join(without_empty([self.name, street_str, self.city.name]))
 
     def future_events(self):
         return Event.future_events.filter(venue__id=self.id)
