@@ -43,3 +43,5 @@ nosetests.xml
 
 # kde special files
 .directory
+
+*.orig
