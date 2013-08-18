@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.core.mail.message import EmailMessage
 from django.contrib.gis.db import models
 
-from accounts.models import Account, AccountReminding
+from accounts.models import Account
 from .models import Event, SingleEvent, AuditEvent, AuditPhrase, phrases_query
 from .settings import DEFAULT_FROM_EMAIL
 
