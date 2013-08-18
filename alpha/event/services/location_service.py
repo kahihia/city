@@ -131,6 +131,7 @@ class LocationFromBrowser(object):
 
     @property
     def is_canada(self):
+        return False
         if not self.lat_lon:
             return LocationByIP(self.request).is_canada
 

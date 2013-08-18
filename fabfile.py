@@ -1,7 +1,7 @@
 from fabric.api import run
 from fabric.state import env
 from fabric.context_managers import cd
-from fabric.operations import run, local, sudo
+from fabric.operations import local
 
 env.schema_apps = [ 'citi_user', 'home', 'event' ]
 env.local_settings_file = 'alpha.settings'

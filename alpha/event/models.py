@@ -346,18 +346,20 @@ class Venue(models.Model):
         return Venue.objects.filter(id__in=ids)
 
 
-class CanadianVenue(Venue):
-    province = models.CharField(max_length=200)
-    postal_code = models.CharField(max_length=50)
-
-
-class Reminder(models.Model):
-    email = models.CharField(max_length=100)
-    date = models.DateTimeField()
-    event = models.CharField(max_length=100)
+class CountryBorder(models.Model):
+    name = models.CharField(max_length=50)
+    code = models.CharField('2 Digit ISO', max_length=2)
+    mpoly = models.MultiPolygonField()
+    objects = models.GeoManager()
 
     def __unicode__(self):
-        return self.event
+        return self.name
+
+countryborders_mapping = {
+    'code' : 'ISO2',
+    'name' : 'NAME',        
+    'mpoly' : 'MULTIPOLYGON',
+}
 
 
 class AuditPhrase(models.Model):
