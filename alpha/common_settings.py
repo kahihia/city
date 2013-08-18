@@ -356,6 +356,6 @@ CELERYBEAT_SCHEDULE = {
     },
     'inform-accounts-about-new-events-with-tags-every-3-hours': {
         'task': 'accounts.tasks.inform_accounts_about_new_events_with_tags',
-        'schedule': timedelta(hour=3)
+        'schedule': timedelta(hours=3)
     }
 }
