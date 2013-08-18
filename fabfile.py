@@ -31,7 +31,7 @@ def upgrade():
     
     with cd(env.alpha_folder):
         run("python manage.py collectstatic")
-        run("sh script.sh")
+        run("supervisorctl reload")
 
 def make_virtualenv():
     local("virtualenv --no-site-packages venv")
