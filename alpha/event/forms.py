@@ -219,7 +219,7 @@ class EditEventForm(forms.ModelForm):
     def clean_tags(self):
         tags = self.cleaned_data['tags']
         if len(tags) > 10:
-            raise forms.ValidationError("It is not possible to create more than 10 tags for event, please leave the most important")
+            raise forms.ValidationError("I'm sorry, but 10 tags is the maximum amount per event.")
         return tags
 
 

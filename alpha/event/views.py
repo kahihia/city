@@ -275,11 +275,14 @@ def copy(request, authentication_key, template_name='events/create/copy_event.ht
         }, context_instance=RequestContext(request))    
 
 
+@login_required
 def remove(request, authentication_key):
-    event_obj = Event.events.get(authentication_key__exact=authentication_key)
-    event_obj.delete()
+    event = Event.events.get(authentication_key__exact=authentication_key)
+    event.delete()
 
-    return HttpResponseRedirect(reverse('private_venue_account', args=(request.current_venue_account.slug, )))
+    url = request.META.get('HTTP_REFERER', reverse('event_browse'))
+
+    return HttpResponseRedirect(url)
 
 
 @login_required
