@@ -1,13 +1,12 @@
 {% load endless %}
 {% load event_tags %}
 
-{% paginate 6 profile.reminder_events_in_future  using "reminder_page" as reminder_events %}
+{% paginate 6 profile.reminder_single_events_in_future  using "reminder_page" as reminder_events %}
 
 <div class="account-entry-wrapper entry-wrapper">
 {% for event in reminder_events %}    
     <div class="entry-info with-delete-action">
         {% short_single_event event %}
-
         <div class="event-edit-actions">
             <a href="{% url 'remove_remind_me' event.id %}" class="danger-action">
                 Delete

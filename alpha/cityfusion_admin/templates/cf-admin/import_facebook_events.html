@@ -22,7 +22,9 @@
     <script src="{{STATIC_URL}}js/location/venue_autocomplete.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/select2.min.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/actions/import-facebook-events.js" type="text/javascript"></script>
-    <!-- end time -->
+
+    {% include 'variables.html' %}
+
     {{ form.map }}
     {{ form.media.js }}
     <script type="text/javascript">

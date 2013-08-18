@@ -1,4 +1,4 @@
-Django==1.5.1
+Django==1.5.2
 Pillow==1.7.2
 South==0.7.3
 django-registration==0.7
@@ -24,3 +24,4 @@ nltk
 PIL
 python-dateutil < 2.0
 BeautifulSoup==3.2.0
+gunicorn

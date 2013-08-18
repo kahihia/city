@@ -338,13 +338,7 @@ GOOGLE_ANALYTICS_CODE = "UA-18720563-1"
 
 #Celery settings
 
-BROKER_HOST = '127.0.0.1'
-BROKER_PORT = 5672
-BROKER_USER = 'fusion'
-BROKER_PASSWORD = 'forfusion'
-BROKER_VHOST = 'cityfusion_vhost'
-CELERY_BACKEND = 'amqp'
-CELERY_RESULT_DBURI = ''
+BROKER_URL = 'amqp://fusion:forfusion@127.0.0.1:5672/cityfusion_vhost'
 
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 

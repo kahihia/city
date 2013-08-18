@@ -1,9 +1,12 @@
 import re
+
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.core.mail.message import EmailMessage
 from django.contrib.gis.db import models
-from .models import Event, AuditEvent, AuditPhrase, phrases_query
+
+from accounts.models import Account, AccountReminding
+from .models import Event, SingleEvent, AuditEvent, AuditPhrase, phrases_query
 from .settings import DEFAULT_FROM_EMAIL
 
 
@@ -43,7 +46,12 @@ def audit_event_catch(instance=None, created=False, **kwargs):
         msg.content_subtype = 'html'
 
 
+def after_single_event_delete(instance=None, **kwargs):
+    Account.reminder_single_events.through.objects.filter(singleevent_id=instance.id).delete()
+
+
 models.signals.post_save.connect(audit_event_catch, sender=Event)
+models.signals.pre_delete.connect(after_single_event_delete, sender=SingleEvent)
 
 # def audit_single_event(instance=None, created=False, **kwargs):
 #     bad_phrases = phrases_query()

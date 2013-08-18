@@ -76,8 +76,8 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
     reminder_email = models.EmailField(blank=True, null=True)
     reminder_phonenumber = models.CharField(max_length=15, blank=True, null=True)
 
-    # events for remind
-    reminder_events = models.ManyToManyField("event.Event", blank=True, null=True)
+    # single events for remind
+    reminder_single_events = models.ManyToManyField('event.SingleEvent', blank=True, null=True)
 
     in_the_loop_tags = TaggableManager(blank=True)
 
@@ -112,8 +112,8 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
         ).annotate(Count("id"))
 
 
-    def reminder_events_in_future(self):
-        return Event.future_events.filter(id__in=self.reminder_events.values("id"))
+    def reminder_single_events_in_future(self):
+        return SingleEvent.future_events.filter(id__in=self.reminder_single_events.values('id'))
 
     def ads(self):
         return Advertising.objects.filter(campaign__account__id=self.id)
@@ -140,46 +140,42 @@ def create_facebook_profile(sender, instance, created, **kwargs):
         Account.objects.create(user=instance)
 
 
-def add_events_to_schedule(account, events):
-    if account.reminder_active_type in ["DAYS", "HOURS"]:
-        for event in events:
-            event_days = SingleEvent.future_events.filter(event_id=event.id)
+def add_single_events_to_schedule(account, events):
+    for event_day in events:
+        if account.reminder_active_type == "DAYS":
+            notification_time = event_day.start_time - timedelta(days=int(account.reminder_days_before_event))
+        if account.reminder_active_type == "HOURS":
+            notification_time = event_day.start_time - timedelta(hours=int(account.reminder_hours_before_event))
 
-            for event_day in event_days:
-                if account.reminder_active_type == "DAYS":
-                    notification_time = event_day.start_time - timedelta(days=int(account.reminder_days_before_event))
-                if account.reminder_active_type == "HOURS":
-                    notification_time = event_day.start_time - timedelta(hours=int(account.reminder_hours_before_event))
-
-                if notification_time > datetime.datetime.now():
-                    reminding = AccountReminding(
-                        account=account,
-                        event=event,
-                        notification_time=notification_time,
-                        notification_type=("%s_BEFORE_EVENT" % account.reminder_active_type)
-                    )
-                    reminding.save()
+        if notification_time > datetime.datetime.now():
+            reminding = AccountReminding(
+                account=account,
+                single_event=event_day,
+                notification_time=notification_time,
+                notification_type=("%s_BEFORE_EVENT" % account.reminder_active_type)
+            )
+            reminding.save()
 
 
-def sync_schedule_after_reminder_events_was_modified(sender, **kwargs):
+def sync_schedule_after_reminder_single_events_was_modified(sender, **kwargs):
     if kwargs['action'] == 'post_add':
-        events = Event.future_events.filter(id__in=kwargs["pk_set"])
+        events = SingleEvent.future_events.filter(id__in=kwargs["pk_set"])
 
-        add_events_to_schedule(kwargs['instance'], events)
+        add_single_events_to_schedule(kwargs['instance'], events)
 
     if kwargs['action'] == 'post_remove':
-        AccountReminding.objects.filter(event__id__in=kwargs["pk_set"]).delete()
+        AccountReminding.objects.filter(single_event__id__in=kwargs["pk_set"]).delete()
 
 
 def sync_schedule_after_reminder_settings_was_changed(sender, instance, created, **kwargs):
     AccountReminding.objects.filter(account_id=instance.id).delete()
-    add_events_to_schedule(instance, instance.reminder_events.all())
-
+    add_single_events_to_schedule(instance, instance.reminder_single_events.all())
 
 post_save.connect(create_facebook_profile, sender=User)
 post_save.connect(sync_schedule_after_reminder_settings_was_changed, sender=Account)
 
-m2m_changed.connect(sync_schedule_after_reminder_events_was_modified, sender=Account.reminder_events.through)
+m2m_changed.connect(sync_schedule_after_reminder_single_events_was_modified,
+                    sender=Account.reminder_single_events.through)
 
 
 class RemindingManager(models.Manager):
@@ -196,7 +192,7 @@ NOTIFICATION_TYPES = (
 
 class AccountReminding(models.Model):
     account = models.ForeignKey(Account)
-    event = models.ForeignKey('event.Event')
+    single_event = models.ForeignKey('event.SingleEvent')
     notification_time = models.DateTimeField('notification time', auto_now=False, auto_now_add=False)
     notification_type = models.CharField(max_length=25, choices=NOTIFICATION_TYPES)
     done = models.BooleanField(default=False)
@@ -212,7 +208,7 @@ class AccountReminding(models.Model):
         status = "QUEUE"
         if self.done:
             status = "DONE"
-        return "%s at (%s) - %s" % (self.event.name, self.notification_time, status)
+        return "%s at (%s) - %s" % (self.single_event.name, self.notification_time, status)
 
 
 class NewInTheLoopEventManager(models.Manager):
