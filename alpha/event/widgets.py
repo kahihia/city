@@ -56,6 +56,7 @@ class GeoCompleteWidget(forms.TextInput):
         self.geo_venue = forms.widgets.HiddenInput()
         self.geo_address = forms.widgets.HiddenInput()
         self.geo_street = forms.widgets.HiddenInput()
+        self.geo_street_number = forms.widgets.HiddenInput()
         self.geo_city = forms.widgets.HiddenInput()
         self.geo_country = forms.widgets.HiddenInput()
         self.geo_longtitude = forms.widgets.HiddenInput()
@@ -69,6 +70,7 @@ class GeoCompleteWidget(forms.TextInput):
         html += self.geo_venue.render("geo_venue", "", {"id": 'id_geo_venue', 'data-geo': "name", 'value': value.get('venue', '')})
         html += self.geo_address.render("geo_address", "", {"id": 'id_geo_address', 'data-geo': "formatted_address", 'value': value.get('venue', '')})
         html += self.geo_street.render("geo_street", "", {"id": 'id_geo_street', 'data-geo': "route", 'value': value.get('street', '')})
+        html += self.geo_street_number.render("geo_street_number", "", {"id": 'id_geo_street_number', 'data-geo': "street_number", 'value': value.get('street_number', '')})
         html += self.geo_city.render("geo_city", "", {"id": 'id_geo_city', 'data-geo': "locality", 'value': value.get('city', '')})
         html += self.geo_country.render("geo_country", "", {"id": 'id_geo_country', 'data-geo': "country", 'value': value.get('country', '')})
         html += self.geo_longtitude.render("geo_longtitude", "", {"id": 'id_geo_longtitude', 'data-geo': "lng", 'value': value.get('longtitude', '')})
@@ -163,14 +165,16 @@ class ChooseUserContextWidget(forms.Widget):
         self.choices = [{
             "id": account.id,
             "type": "account",
-            "text": account.user.username
+            "text": account.user.username,
+            "fullname": ""
         }]
 
         for venue_account in account.venueaccount_set.all():
             self.choices.append({
                 "id": venue_account.id,
                 "type": "venue_account",
-                "text": venue_account.venue.name
+                "text": venue_account.venue.name,
+                "fullname": venue_account.venue
             })
 
         self.user_context_type = forms.widgets.HiddenInput()
@@ -192,7 +196,7 @@ class ChooseUserContextWidget(forms.Widget):
             html += "<option"
             if choice["id"] == value:
                 html += " selected='selected'"
-            html += " value='%s|%d'>%s</option>" % (choice["type"], choice["id"], choice["text"])
+            html += " value='%s|%d|%s'>%s</option>" % (choice["type"], choice["id"], choice["fullname"], choice["text"])
 
         html += """</select></div>"""
         html += "</div>"

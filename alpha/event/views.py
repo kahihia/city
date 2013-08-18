@@ -1,31 +1,25 @@
 import datetime
-import time
 import json
 import utils
 
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail.message import EmailMessage
-from django.utils.safestring import mark_safe
 
-from django.conf import settings
+
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
-from django.template.loader import render_to_string
+
 from django.template import RequestContext
 
 from django.middleware.csrf import get_token
 
-from django.contrib.gis.geos import Point, GEOSGeometry
+from django.contrib.gis.geos import Point
 from cities.models import City, Country, Region
 from django.db.models import Q, Count
 from event.filters import EventFilter
 
-from .settings import DEFAULT_FROM_EMAIL
-
 from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
-from event.utils import find_nearest_city
-from event.services import facebook_service
+from event.services import facebook_service, location_service, event_service
 
 from event.forms import SetupFeaturedForm, CreateEventForm, EditEventForm
 
@@ -37,9 +31,6 @@ from moneyed import Money, CAD
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
 from accounts.decorators import native_region_required
-from services import location_service
-from django.contrib.gis.measure import Distance
-
 
 def start(request):
     csrf_token = get_token(request)
@@ -168,126 +159,13 @@ def view(request, slug, date=None):
         }, context_instance=RequestContext(request))
 
 
-def save_venue(data):
-    if "venue_identifier" in data and data["venue_identifier"]:
-        venue= Venue.objects.get(id=int(data["venue_identifier"]))
-
-    elif data["venue_name"]:
-        name = data["venue_name"]
-        street = data["street"]
-        city = City.objects.get(id=int(data["city_identifier"]))
-        country = Country.objects.get(name='Canada')
-        location = Point((
-            float(data["location_lng"]),
-            float(data["location_lat"])
-        ))
-        venue = Venue(name=name, street=street, city=city, country=country, location=location, suggested=True)
-        venue.save()
-    elif data["place"]:
-        name = data["geo_venue"]
-        street = data["geo_street"]
-        city = City.objects.filter(
-            Q(name_std=data["geo_city"].encode('utf8')) |
-            Q(name=data["geo_city"])
-        )
-        country = Country.objects.get(name='Canada')
-        location = Point((
-            float(data["geo_longtitude"]),
-            float(data["geo_latitude"])
-        ))
-
-        if city.count() > 1:
-            city = find_nearest_city(city, location)
-        elif not city.count():
-            city = City.objects.distance(location).order_by('distance')[0]
-        else:
-            city = city[0]
-        venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, location=location)
-    return venue
-
-
-def save_when_and_description(data, event):
-    when_json = json.loads(data["when_json"])
-    description_json = json.loads(data["description_json"])
-
-    event.description = description_json['default']
-
-    for year, months in when_json.iteritems():
-        for month, days in months.iteritems():
-            for day, times in days.iteritems():
-                date = datetime.datetime(int(year), int(month), int(day), 0, 0)
-                if date.strftime("%m/%d/%Y") in description_json['days']:
-                    description = description_json['days'][date.strftime("%m/%d/%Y")]
-                else:
-                    description = ""
-                start_time = time.strptime(times["start"], '%I:%M %p')
-                start = datetime.datetime(int(year), int(month), int(day), start_time[3], start_time[4])
-
-                end_time = time.strptime(times["end"], '%I:%M %p')
-                end = datetime.datetime(int(year), int(month), int(day), end_time[3], end_time[4])
-
-                single_event = SingleEvent(
-                    event=event,
-                    start_time=start.strftime('%Y-%m-%d %H:%M'),
-                    end_time=end.strftime('%Y-%m-%d %H:%M'),
-                    description=description
-                )
-                single_event.save()
-
-
-def send_event_details_email(event):
-    current_site = settings.EVENT_EMAIL_SITE
-    subject = render_to_string('events/create/creation_email_subject.txt', {
-            'site': current_site,
-            'title': mark_safe(event.name)
-        })
-
-    subject = ''.join(subject.splitlines())  # Email subjects are all on one line
-
-    message = render_to_string('events/create/creation_email.txt', {
-            'authentication_key': event.authentication_key,
-            'slug': event.slug,
-            'site': current_site
-        })
-
-    msg = EmailMessage(subject,
-               message,
-               DEFAULT_FROM_EMAIL,
-               [event.email])
-    msg.content_subtype = 'html'
-    msg.send()
-
-
-def save_event(user, data, form):
-    event = form.save()
-
-    if event.venue_account_owner:
-        venue = event.venue_account_owner.venue
-    else:
-        venue = save_venue(data)
-
-    event.venue = venue
-
-    save_when_and_description(data, event)
-
-    if user.is_authenticated():
-        event.owner = user
-        event.email = user.email
-
-    if data["picture_src"]:
-        event.picture.name = data["picture_src"].replace(settings.MEDIA_URL, "")
-
-    event = event.save()
-    return event
-
-
 @login_required
 def create(request, success_url=None, template_name='events/create/create_event.html'):
     if request.method == 'POST':
         form = CreateEventForm(account=request.account, data=request.POST)
         if form.is_valid():
-            event = save_event(request.user, request.POST, form)
-            send_event_details_email(event)
+            event = event_service.save_event(request.user, request.POST, form)
+            event_service.send_event_details_email(event)
 
             if success_url is None:
                 success_url = reverse('event_created', kwargs={ 'slug': event.slug })
@@ -315,7 +193,7 @@ def create_from_facebook(request):
         event_data = facebook_service.get_prepared_event_data(request, request.POST)
         form = CreateEventForm(account=request.account, data=event_data)
         if form.is_valid():
-            event = save_event(request.user, event_data, form)
+            event = event_service.save_event(request.user, event_data, form)
             facebook_service.attach_facebook_event(int(facebook_event_id), event)
             success = True
         else:
@@ -338,65 +216,6 @@ def created(request, slug=None):
         }, context_instance=RequestContext(request))
 
 
-def initial_place(event):
-    venue = event.venue
-
-    full_parts = [x for x in [venue.name, venue.street, venue.city.name, venue.country.name] if x]
-    place = {
-        "full": ", ".join(full_parts),
-        "venue": venue.name,
-        "street": venue.street,
-        "city": venue.city.name,
-        "country": venue.country.name,
-        "longtitude": venue.location.x,
-        "latitude": venue.location.y
-    }
-
-    return place
-
-def initial_location(event):
-    return (event.venue.location.y, event.venue.location.x)
-
-def inital_picture_src(event):
-    return "/media/%s" % event.picture
-
-def initial_for_event_form(event):    
-    when_json = {}
-    description_json = {
-        "default": event.description,
-        "days": {}
-    }
-
-    single_events = SingleEvent.objects.filter(event=event)
-
-    for single_event in single_events:
-        start_time = single_event.start_time
-        year = start_time.year
-        month = start_time.month
-        day = start_time.day
-
-        if not year in when_json:
-            when_json[year] = {}
-
-        if not month in when_json[year]:
-            when_json[year][month] = {}
-
-        when_json[year][month][day] = {
-            "start": start_time.strftime('%I:%M %p'),
-            "end": single_event.end_time.strftime('%I:%M %p')
-        }
-
-        description_json["days"][start_time.strftime("%m/%d/%Y")] = single_event.description
-
-    return {
-            "place": initial_place(event),
-            "location": initial_location(event),
-            "picture_src": inital_picture_src(event),
-            "when_json": json.dumps(when_json),
-            "description_json": json.dumps(description_json)
-        }
-
-
 @login_required
 def edit(request, success_url=None, authentication_key=None, template_name='events/edit/edit_event.html'):
     try:
@@ -412,13 +231,13 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
         if form.is_valid():
             SingleEvent.objects.filter(event=event).delete()
 
-            event = save_event(request.user, request.POST, form)
+            event = event_service.save_event(request.user, request.POST, form)
             return HttpResponseRedirect(success_url)
     else:
         form = EditEventForm(
             account=request.account,
             instance=event,
-            initial=initial_for_event_form(event)
+            initial=event_service.prepare_initial_event_data_for_edit(event)
         )
 
     return render_to_response(template_name, {
@@ -433,8 +252,8 @@ def copy(request, authentication_key, template_name='events/create/copy_event.ht
     if request.method == 'POST':
         form = CreateEventForm(account=request.account, data=request.POST)
         if form.is_valid():
-            event_obj = save_event(request.user, request.POST, form)
-            send_event_details_email(event_obj)
+            event_obj = event_service.save_event(request.user, request.POST, form)
+            event_service.send_event_details_email(event_obj)
 
             success_url = reverse('event_created', kwargs={ 'slug': event_obj.slug })
 
@@ -454,12 +273,11 @@ def copy(request, authentication_key, template_name='events/create/copy_event.ht
             cropping=basic_event.cropping
         )
 
-        form = CreateEventForm(account=request.account, instance=event, initial={
-            "place": initial_place(basic_event),
-            "location": initial_location(basic_event),
-            "picture_src": inital_picture_src(basic_event),
-            "tags": basic_event.tags_representation
-        })
+        form = CreateEventForm(
+            account=request.account, 
+            instance=event, 
+            initial=event_service.prepare_initial_event_data_for_copy
+        )
 
     return render_to_response(template_name, {
             'form': form,

@@ -46,6 +46,12 @@ class EditEventForm(forms.ModelForm):
         model = Event
         exclude = ('owner', 'authentication_key', 'slug', 'email')
 
+    # There will be four modes, how we will detect wich venue user choose
+    # SUGGEST - when user can not found venue in google autocomplete he can suggest new venue
+    # GOOGLE - user can choose venue with help of google autocomplete widget
+    # OWNER - when user choose venue as owner of event, we can use this venue by default
+    # EXIST - user can choose also from venues that already exist on cityfusion
+    linking_venue_mode = forms.CharField(required=True, widget=forms.widgets.HiddenInput())
 
     place = JSONCharField(
         widget=GeoCompleteWidget(),
@@ -117,6 +123,8 @@ class EditEventForm(forms.ModelForm):
         self.fields['name'].error_messages['required'] = 'Event name is required'
         self.fields['name'].label = _(u'Event Name')
 
+        self.fields['linking_venue_mode'].error_messages['required'] = 'Your event cannot miss a location'
+
         self.fields['place'].error_messages['required'] = 'Your event cannot miss a location'
         self.fields['place'].widget.attrs['class'] = 'inputfield rborder'
         self.fields['place'].label = _(u'Location')
@@ -168,29 +176,50 @@ class EditEventForm(forms.ModelForm):
         if 'tags' in cleaned_data:
             cleaned_data['tags'] = map(string.capwords, cleaned_data['tags'])
 
-        place = cleaned_data["place"]
+        if "linking_venue_mode" in cleaned_data:
+            linking_venue_mode = cleaned_data["linking_venue_mode"]
+        else:
+            linking_venue_mode = None
 
-        if not cleaned_data["venue_account_owner"]:
-            if cleaned_data["venue_identifier"]:
-                pass
-            elif cleaned_data["venue_name"]:
-                if not cleaned_data["city_identifier"]:
-                    self.city_required = True
-                    raise forms.ValidationError(u'City is required')
-                if not cleaned_data["location"]:
-                    raise forms.ValidationError(u'Location on the map is required')
+        if not linking_venue_mode:
+            raise forms.ValidationError(u'Please specify venue')
+        
+        if linking_venue_mode=="SUGGEST":
+            if not cleaned_data["venue_name"]:
+                raise forms.ValidationError(u'Please specify venue name')
 
-            elif place["full"]:
-                if not place["city"]:
-                    raise forms.ValidationError(u'You need to select al least city')
-                if not place["venue"] or \
-                   not place["latitude"] or \
-                   not place["longtitude"]:
-                    raise forms.ValidationError(u'Invalid location')
-            else:
-                raise forms.ValidationError(u'Location is required')
+            if not cleaned_data["city_identifier"]:
+                self.city_required = True
+                raise forms.ValidationError(u'Pleace specify city')
 
+            if not cleaned_data["location"]:
+                raise forms.ValidationError(u'Please specify location on the map')
+
+
+        if linking_venue_mode=="GOOGLE":
+            place = cleaned_data["place"]
+
+            if not place["city"]:
+                raise forms.ValidationError(u'You need to select al least city')
+            if not place["venue"] or \
+               not place["latitude"] or \
+               not place["longtitude"]:
+                raise forms.ValidationError(u'Location that you choose is invalid, please, choose another one')
+
+
+        if linking_venue_mode=="OWNER":
+            pass
+
+        if linking_venue_mode=="EXIST":
+            pass            
+        
         return cleaned_data
+
+    def clean_tags(self):
+        tags = self.cleaned_data['tags']
+        if len(tags) > 10:
+            raise forms.ValidationError("It is not possible to create more than 10 tags for event, please leave the most important")
+        return tags
 
 
 class CreateEventForm(EditEventForm):

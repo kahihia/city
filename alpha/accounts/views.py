@@ -57,7 +57,8 @@ def remove_remind_me(request, single_event_id):
     single_event = SingleEvent.future_events.get(id=single_event_id)
     profile.reminder_single_events.remove(single_event)
 
-    return HttpResponseRedirect("/accounts/%s/" % request.user.username)
+    return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))
+
 
 
 @ajax_login_required
@@ -80,7 +81,7 @@ def reminder_settings(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Reminder options updated.')
-            return HttpResponseRedirect('/account/%s/' % request.user.username)
+            return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))
 
     return render_to_response('accounts/reminder_settings.html', {
         "form": form
@@ -96,7 +97,7 @@ def in_the_loop_settings(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'In the loop options updated.')
-            return HttpResponseRedirect('/account/%s/' % request.user.username)
+            return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))
 
     return render_to_response('accounts/in_the_loop_settings.html', {
         "form": form
@@ -299,7 +300,7 @@ def create_venue_account(request):
                 venue_account.types = types
                 venue_account.save()
 
-                return HttpResponseRedirect(reverse('account_profile_detail', args=(request.user.username, )))                
+                return HttpResponseRedirect(reverse('userena_profile_detail', args=(request.user.username, )))                
 
     return render_to_response('venue_accounts/create_venue_account.html', {
             'venue_account': venue_account,
@@ -331,7 +332,7 @@ def unlink_venue_account_from_user_profile(request, venue_account_id):
     VenueAccount.objects.get(id=venue_account_id).delete()
 
     return HttpResponseRedirect(
-        reverse('account_profile_detail', args=(request.user.username, ))
+        reverse('userena_profile_detail', args=(request.user.username, ))
     )
 
 
@@ -475,7 +476,7 @@ def profile_edit(request, username, edit_profile_form=AccountForm,
             profile.save()
 
             if success_url: redirect_to = success_url
-            else: redirect_to = reverse('account_profile_detail', kwargs={'username': username})
+            else: redirect_to = reverse('userena_profile_detail', kwargs={'username': username})
             return redirect(redirect_to)
 
     if not extra_context: extra_context = dict()
@@ -506,5 +507,5 @@ def redirect_to_active_user_context(request):
         return HttpResponseRedirect(reverse('private_venue_account', args=(venue_account.slug, )))
 
     else:
-        return HttpResponseRedirect(reverse('account_profile_detail', kwargs={'username': request.user.username}))    
+        return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))
     

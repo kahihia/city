@@ -20,7 +20,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from advertising.models import Advertising
 from cities.models import Region, City
-from django.db.models import Q
+from django.db.models import Q, Count
 
 
 REMINDER_TYPES = (
@@ -109,7 +109,7 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
         return SingleEvent.future_events.filter(
             Q(event__tagged_items__tag__name__in=self.in_the_loop_tags.all().values_list("name", flat=True)),
             location_query
-        )
+        ).annotate(Count("id"))
 
 
     def reminder_single_events_in_future(self):

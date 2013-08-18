@@ -131,7 +131,7 @@
                     this.endOfDay(endDate)
                 );
             } else if($(this.timeJumpToDateCheckbox).is(":checked")){
-                href = "{0}&tart_time={1}&end_time={2}".format(
+                href = "{0}&start_time={1}&end_time={2}".format(
                     this.baseUrlQuery,
                     startTime.replace(":00", ""),
                     endTime.replace(":00", "")

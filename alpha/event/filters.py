@@ -1,5 +1,6 @@
 from models import Event, Venue, SingleEvent
 import datetime
+import dateutil.parser as dateparser
 import re
 import string
 import nltk
@@ -37,7 +38,7 @@ class Filter(object):
             return querydict[self.name]
         return default
 
-    def search_tags(self):
+    def search_tags(self, value):
         return None
 
 
@@ -505,4 +506,35 @@ class EventFilter(object):
                 new_tags = queryFilter.search_tags(queryFilter.filter_data(self.data))
                 if new_tags:
                     tags += new_tags
+
+        if self.data.get("start_date") and self.data.get("end_date"):
+            start_date = dateparser.parse(self.data.get("start_date"))
+            end_date = dateparser.parse(self.data.get("end_date"))
+
+            if start_date==end_date.replace(hour=0, minute=0, second=0, microsecond=0):
+                date_string = start_date.strftime("%b %d")
+            else:
+                date_string = "%s - %s" % (
+                    start_date.strftime("%b %d"),
+                    end_date.strftime("%b %d"),
+                )
+
+            tags += [{
+                "name": date_string,
+                "remove_url": "?" + self.url_query(exclude="start_date|end_date")
+            }]
+
+        if self.data.get("start_time") and self.data.get("end_time"):
+            start_time = datetime.datetime.now().replace(hour=int(self.data.get("start_time")))            
+            end_time = datetime.datetime.now().replace(hour=int(self.data.get("end_time")))
+
+            tags += [{
+                "name": "%s - %s" % (
+                    start_time.strftime("%I %p"),
+                    end_time.strftime("%I %p"),
+                ),
+                "remove_url": "?" + self.url_query(exclude="start_time|end_time")
+            }]
+
+
         return tags

@@ -61,9 +61,9 @@
                     country: 'ca'
                 }
             }).bind("geocode:result", function(event, result) {
-                console.log(result);
                 $("#id_venue_name").val($("#id_geo_venue").val());
                 $("#id_street").val($("#id_geo_street").val());
+                $("#id_street_number").val($("#id_geo_street_number").val());
                 $("#id_city_0").val($("#id_geo_city").val());
 
                 Cityfusion.userLocationLat = result.geometry.location.lat();

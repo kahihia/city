@@ -121,6 +121,7 @@ class NewVenueAccountForm(VenueAccountForm):
     venue_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
     venue_name = forms.CharField(required=False)
     street = forms.CharField(required=False)
+    street_number = forms.CharField(required=False)
     city = forms.CharField(
         widget=selectable.AutoCompleteSelectWidget(CityLookup, allow_new=True),
         required=False

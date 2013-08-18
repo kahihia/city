@@ -253,6 +253,10 @@ class Event(models.Model):
         else:
             return None
 
+    def base(self):
+        return self
+
+
     def event_identifier(self):
         return self.id
 
@@ -307,14 +311,22 @@ class SingleEvent(models.Model):
     def event_identifier(self):
         return self.event.id
 
+    def base(self):
+        return self.event
+
 
 class FacebookEvent(models.Model):
     eid = models.BigIntegerField(blank=False, null=False)
 
 
+def without_empty(array):
+    return [x for x in array if x]
+
+
 class Venue(models.Model):
     name = models.CharField(max_length=250, default='Default Venue')
     street = models.CharField(max_length=250, blank=True)
+    street_number = models.CharField(max_length=250, blank=True)
     city = models.ForeignKey(City)
     location = models.PointField()
     country = models.ForeignKey(Country)
@@ -322,10 +334,8 @@ class Venue(models.Model):
     objects = models.GeoManager()
 
     def __unicode__(self):
-        if self.street:
-            return "%s, %s, %s" % (self.name, self.street, self.city.name)
-        else:
-            return "%s, %s" % (self.name, self.city.name)
+        street_str = " ".join(without_empty([self.street_number, self.street]))
+        return ", ".join(without_empty([self.name, street_str, self.city.name]))
 
     def future_events(self):
         return Event.future_events.filter(venue__id=self.id)
@@ -359,7 +369,6 @@ class AuditPhrase(models.Model):
 
 
 def phrases_query():
-    # TODO: add caching
     phrases = AuditPhrase.objects.filter(active=True)
     phrases = [pm.phrase for pm in phrases]
     phrases = "|".join(phrases)

@@ -43,6 +43,7 @@
 
             suggest_values = [venue, street, city];
             $("#id_place").val(suggest_values.join(", "));
+            $("#id_linking_venue_mode").val("SUGGEST");
 
             $.fancybox.close();
         },
@@ -98,6 +99,8 @@
 
             $("#id_venue_identifier").val(venue.id);
             this.suggestMap.setLocation(parseFloat(venue.lat), parseFloat(venue.lng));
+
+            $("#id_linking_venue_mode").val("EXIST");
         }
     };
 
