@@ -59,6 +59,7 @@
                     {% csrf_token %}
                     <!--errors -->
                     {%if form.errors %}
+                    {{ form.errors }}
                     <h3>Please correct the following:</h3>
                     <div class="errors" style="border:1px solid RED;border-radius:4px;">
                         <ul style="list-style-type: none;">

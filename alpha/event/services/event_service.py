@@ -103,11 +103,6 @@ def prepare_initial_location(event):
 def prepare_initial_picture_src(event):
     return "/media/%s" % event.picture
 
-def prepare_initial_venue_id(event):
-    if event.venue:
-        return event.venue.id
-    return None
-
 def prepare_initial_event_data_for_edit(event):
     when_json = {}
     description_json = {
@@ -138,7 +133,7 @@ def prepare_initial_event_data_for_edit(event):
 
     return {
         "linking_venue_mode": "EXIST",
-        "venue_identifier": prepare_initial_venue_id(event),
+        "venue_identifier": event.venue.id,
         "place": prepare_initial_place(event),            
         "location": prepare_initial_location(event),
         "picture_src": prepare_initial_picture_src(event),

@@ -57,6 +57,7 @@ class EditEventForm(forms.ModelForm):
         widget=GeoCompleteWidget(),
         required=False
     )
+
     location = forms.Field(widget=LocationWidget(), required=False)
     venue_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
     venue_name = forms.CharField(required=False)
