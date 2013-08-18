@@ -5,11 +5,11 @@ from accounts import views as accounts
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^remind-me/(?P<event_id>\d+)/$',
+    url(r'^remind-me/(?P<single_event_id>\d+)/$',
         accounts.remind_me,
         name='remind_me'
     ),
-    url(r'^remove-remind-me/(?P<event_id>\d+)/$',
+    url(r'^remove-remind-me/(?P<single_event_id>\d+)/$',
         accounts.remove_remind_me,
         name='remove_remind_me'
     ),

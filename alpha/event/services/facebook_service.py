@@ -2,13 +2,16 @@ import datetime
 import os
 import urllib
 import json
-from PIL import Image
-import dateutil.parser as dateparser
-from django.conf import settings
+
 from django.db.models import Max, Min
 from django.utils import timezone
 from django.utils.html import strip_tags
+from django.conf import settings
+
+from PIL import Image
+import dateutil.parser as dateparser
 from django_facebook.api import get_persistent_graph
+
 from event.models import Event, FacebookEvent
 from ..settings import FACEBOOK_PAGE_ID, EVENTFUL_ID, CONCERTIN_ID
 

@@ -1,7 +1,7 @@
 # Create your views here.
 
 from models import Account, VenueAccount
-from event.models import Event, FeaturedEvent, Venue
+from event.models import Event, SingleEvent, FeaturedEvent, Venue
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -40,24 +40,24 @@ TAG_MODEL = get_model(*TAG_MODEL)
 
 
 @ajax_login_required
-def remind_me(request, event_id):
+def remind_me(request, single_event_id):
     profile = Account.objects.get(user_id=request.user.id)
-    event = Event.future_events.get(id=event_id)
-    profile.reminder_events.add(event)
+    single_event = SingleEvent.future_events.get(id=single_event_id)
+    profile.reminder_single_events.add(single_event)
 
     return HttpResponse(json.dumps({
-        "id": event.id,
-        "name": event.name
+        "id": single_event.id,
+        "name": single_event.name
     }), mimetype='application/json')
 
 
 @login_required
-def remove_remind_me(request, event_id):
+def remove_remind_me(request, single_event_id):
     profile = Account.objects.get(user_id=request.user.id)
-    event = Event.future_events.get(id=event_id)
-    profile.reminder_events.remove(event)
+    single_event = SingleEvent.future_events.get(id=single_event_id)
+    profile.reminder_single_events.remove(single_event)
 
-    return HttpResponseRedirect("/account/%s/" % request.user.username)
+    return HttpResponseRedirect("/accounts/%s/" % request.user.username)
 
 
 @ajax_login_required
@@ -69,10 +69,6 @@ def add_in_the_loop(request):
     return HttpResponse(json.dumps({
         "tags": tags
     }), mimetype='application/json')
-
-    return render_to_response('accounts/ajax_result_add_in_the_loop.html', {
-        "tags": tags
-    }, context_instance=RequestContext(request))
 
 
 @login_required

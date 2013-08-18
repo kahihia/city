@@ -8,7 +8,7 @@
         this.remindMeButton = $(".action-remind-me", this.eventElement);
 
         this.remindMeButton.on("click", function(){
-            that.remindMe($(this).data("event-id"));
+            that.remindMe($(this).data("single-event-id"));
         });
 
         this.dialogContainer = $(".remind-me-popup", that.eventElement).dialog({

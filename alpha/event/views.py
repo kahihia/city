@@ -149,7 +149,10 @@ def view(request, slug, date=None):
         if date:
             event = SingleEvent.future_events.get(event__slug=slug, start_time__startswith=date)
         else:
-            event = Event.future_events.get(slug=slug)
+            event = Event.future_events.get(slug=slug).next_day()
+
+        if not event:
+            raise ObjectDoesNotExist
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))
 

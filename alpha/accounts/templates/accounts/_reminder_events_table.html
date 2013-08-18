@@ -2,14 +2,14 @@
 {% load endless %}
 {% load cropping %}
 
-{% paginate 6 profile.reminder_events_in_future  using "reminder_page" as reminder_events %}
+{% paginate 6 profile.reminder_single_events_in_future  using "reminder_page" as reminder_events %}
 
 <div class="account-entry-wrapper entry-wrapper">
 {% for event in reminder_events %}    
     <div class="entry-info with-delete-action">
         <div class="entry-img-prev">
             {% if event.picture %}
-                <img src="{% cropped_thumbnail event "cropping" width=60 %}" height="60px" weight="60px">
+                <img src="{% cropped_thumbnail event.event "cropping" width=60 %}" height="60px" weight="60px">
             {% else %}
                 <img src="{{STATIC_URL}}images/default-event.jpg" height="60px" weight="60px">
             {% endif %}
