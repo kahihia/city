@@ -4,32 +4,24 @@ import utils
 
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
-
-
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
-
 from django.template import RequestContext
-
 from django.middleware.csrf import get_token
-
 from django.contrib.gis.geos import Point
-from cities.models import City, Country, Region
 from django.db.models import Q, Count
-from event.filters import EventFilter
-
-from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
-from event.services import facebook_service, location_service, event_service
-
-from event.forms import SetupFeaturedForm, CreateEventForm, EditEventForm
-
-from taggit.models import Tag, TaggedItem
-
-from ajaxuploader.views import AjaxFileUploader
-
-from moneyed import Money, CAD
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
+
+from taggit.models import Tag, TaggedItem
+from moneyed import Money, CAD
+
+from cities.models import City, Country, Region
+from event.filters import EventFilter
+from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
+from event.services import facebook_service, location_service, event_service
+from event.forms import SetupFeaturedForm, CreateEventForm, EditEventForm
+from ajaxuploader.views import AjaxFileUploader
 from accounts.decorators import native_region_required
 
 def start(request):
@@ -229,9 +221,7 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
     if request.method == 'POST':
         form = EditEventForm(account=request.account, instance=event, data=request.POST)
         if form.is_valid():
-            SingleEvent.objects.filter(event=event).delete()
-
-            event = event_service.save_event(request.user, request.POST, form)
+            event_service.save_event(request.user, request.POST, form)
             return HttpResponseRedirect(success_url)
     else:
         form = EditEventForm(

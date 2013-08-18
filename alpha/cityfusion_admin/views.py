@@ -174,12 +174,7 @@ def location_autocomplete(request):
             if search:
                 kwargs['name__icontains'] = search
 
-            cities = City.objects.filter(**kwargs)
-
-            if request.user_location:
-                cities = cities.distance(Point(request.user_location['location'])).order_by('distance')
-
-            cities = cities[0:5]
+            cities = City.objects.filter(**kwargs)[0:5]
 
             for city in cities:
                 if city.region:

@@ -4,13 +4,14 @@ import json
 
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
-
 from django.core.mail.message import EmailMessage
-
+from django.db import transaction
 from django.conf import settings
+
+import dateutil.parser as dateparser
+
 from event.settings import DEFAULT_FROM_EMAIL
 from event.services import venue_service
-
 from event.models import SingleEvent
 
 
@@ -36,11 +37,14 @@ def send_event_details_email(event):
     msg.content_subtype = 'html'
     msg.send()    
 
+
 def save_when_and_description(data, event):
     when_json = json.loads(data["when_json"])
     description_json = json.loads(data["description_json"])
 
     event.description = description_json['default']
+    single_events = list(event.single_events.all())  # existing single events of the current event
+    single_events_to_save_ids = []
 
     for year, months in when_json.iteritems():
         for month, days in months.iteritems():
@@ -62,24 +66,42 @@ def save_when_and_description(data, event):
                     end_time=end.strftime('%Y-%m-%d %H:%M'),
                     description=description
                 )
-                single_event.save()
 
+                ext_single_event = get_identic_single_event_from_list(single_event, single_events)
+                if not ext_single_event:
+                    single_event.save()
+                else:
+                    single_events_to_save_ids.append(ext_single_event.id)
+
+    single_events_to_delete_ids = list(set([item.id for item in single_events]).difference(single_events_to_save_ids))
+    SingleEvent.objects.filter(id__in=single_events_to_delete_ids).delete()
+
+
+@transaction.commit_manually
 def save_event(user, data, form):
-    event = form.save()
+    try:
+        event = form.save()
 
-    event.venue = venue_service.get_venue_from_request_data(event, data)
+        event.venue = venue_service.get_venue_from_request_data(event, data)
 
-    save_when_and_description(data, event)
+        save_when_and_description(data, event)
 
-    if user.is_authenticated():
-        event.owner = user
-        event.email = user.email
+        if user.is_authenticated():
+            event.owner = user
+            event.email = user.email
 
-    if data["picture_src"]:
-        event.picture.name = data["picture_src"].replace(settings.MEDIA_URL, "")
+        if data["picture_src"]:
+            event.picture.name = data["picture_src"].replace(settings.MEDIA_URL, "")
 
-    event = event.save()
+        event = event.save()
+    except Exception as e:
+        transaction.rollback()
+        raise e
+    else:
+        transaction.commit()
+
     return event
+
 
 def prepare_initial_place(event):
     venue = event.venue
@@ -97,16 +119,20 @@ def prepare_initial_place(event):
 
     return place
 
+
 def prepare_initial_location(event):
     return (event.venue.location.y, event.venue.location.x)
 
+
 def prepare_initial_picture_src(event):
     return "/media/%s" % event.picture
+
 
 def prepare_initial_venue_id(event):
     if event.venue:
         return event.venue.id
     return None
+
 
 def prepare_initial_event_data_for_edit(event):
     when_json = {}
@@ -146,6 +172,7 @@ def prepare_initial_event_data_for_edit(event):
         "description_json": json.dumps(description_json)
     }
 
+
 def prepare_initial_event_data_for_copy(event):
     return {
         "linking_venue_mode": "EXIST",
@@ -155,3 +182,13 @@ def prepare_initial_event_data_for_copy(event):
         "picture_src": prepare_initial_picture_src(event),
         "tags": event.tags_representation
     }
+
+
+def get_identic_single_event_from_list(single_event, single_event_list):
+    for item in single_event_list:
+        if item.start_time == dateparser.parse(single_event.start_time) \
+            and item.end_time == dateparser.parse(single_event.end_time) \
+                and item.description == single_event.description:
+            return item
+
+    return False

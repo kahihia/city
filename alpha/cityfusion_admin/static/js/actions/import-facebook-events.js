@@ -23,6 +23,7 @@
 
             self.locationElements = {
                 "id_geo_street": "geo_street",
+                "id_geo_street_number": "geo_street_number",
                 "id_geo_venue": "geo_venue",
                 "id_geo_address": "geo_address",
                 "id_geo_country": "geo_country",
