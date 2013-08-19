@@ -647,7 +647,7 @@ body
 
 .footer-container
 {
-	width:1024px;
+	width:1004px;
 	margin:0px auto;
 	text-align:left;
 }
@@ -663,7 +663,7 @@ body
 .footer-site-links
 {
 	width:auto;
-	padding:20px 0px;
+	padding:20px 10px;
 	background:#022E52;
 	text-align:center;
 }
@@ -691,7 +691,42 @@ body
 {
 	display:inline-block;
 	padding:0px 10px;
+    border-right: 1px solid #ffffff;
 }
+
+.footer-site-map ul li.last {
+    border-right: 0;
+}
+
+.footer-icon {
+    display: inline-block;
+    height: 23px;
+    width: 21px;
+    background-image: url(/static/images/footer-icon-sprite.png);
+    vertical-align: middle;
+    border: 0;
+}
+
+.footer-icon.facebook {
+    background-position: 1px 0;
+}
+
+.footer-icon.twitter {
+    background-position: -22px 0;
+}
+
+.footer-icon.email {
+    background-position: -45px 0;
+}
+
+.footer-icon.google {
+    background-position: -67px 0;
+}
+
+.footer-icon.youtube {
+    background-position: -90px 0;
+}
+
 
 .footer-site-map ul li a
 {

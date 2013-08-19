@@ -1,0 +1,50 @@
+{% extends 'base-with-advertising.html' %}
+
+{% block head %}
+    <link type="text/css" href="{{STATIC_URL}}styles/static_pages.css" rel="stylesheet" />
+    <script type="text/javascript" src="{{STATIC_URL}}js/static_pages.js"></script>
+{% endblock %}
+
+{% block page %}
+        <h1>Advertising</h1>
+        <div class="primary-content">
+            <div class="content page">
+                <div class="main-content">
+                    <div class="inner-content">
+                        <ul class="entries-list">
+                            <li>
+                                <div class="list-entry-title" data-type="entry_title">Types of ads</div>
+                                <div class="list-entry-text first" data-type="entry_text">
+                                    Aenean sed fermentum metus. Integer imperdiet nisi vel lectus fermentum malesuada.
+                                    Aliquam tincidunt tempus tempus. Aliquam euismod mauris non eros facilisis.
+                                    Aenean sed fermentum metus. Integer imperdiet nisi vel lectus fermentum malesuada.
+                                    Aliquam tincidunt tempus tempus. Aliquam euismod mauris non eros facilisis.
+                                </div>
+                            </li>
+                            <li>
+                                <div class="list-entry-title" data-type="entry_title">Cost for ads</div>
+                                <div class="list-entry-text" data-type="entry_text">
+                                    Aenean sed fermentum metus. Integer imperdiet nisi vel lectus fermentum malesuada.
+                                    Aliquam tincidunt tempus tempus. Aliquam euismod mauris non eros facilisis.
+                                    Aenean sed fermentum metus. Integer imperdiet nisi vel lectus fermentum malesuada.
+                                    Aliquam tincidunt tempus tempus. Aliquam euismod mauris non eros facilisis.
+                                </div>
+                            </li>
+                            <li>
+                                <div class="list-entry-title" data-type="entry_title">Cost per mile</div>
+                                <div class="list-entry-text" data-type="entry_text">
+                                    Aenean sed fermentum metus. Integer imperdiet nisi vel lectus fermentum malesuada.
+                                    Aliquam tincidunt tempus tempus. Aliquam euismod mauris non eros facilisis.
+                                    Aenean sed fermentum metus. Integer imperdiet nisi vel lectus fermentum malesuada.
+                                    Aliquam tincidunt tempus tempus. Aliquam euismod mauris non eros facilisis.
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="indent-block">
+                            <a class="button-grey" href="{% url 'advertising_setup' %}">Purchase Ads</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock page %}

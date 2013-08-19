@@ -113,10 +113,18 @@
             <div class="copyright">&copy; 2012 Cityfusion</div>
             <div class="footer-site-map">
                 <ul>            
-                    <li><a href="/advertise/">Advertising</a></li>
-                    <li><a href="/">FAQ</a></li>
+                    <li><a href="{% url 'staticpage' alias='faq' %}">FAQ</a></li>
                     <li><a href="/feedback/">Feedback</a></li>
-                    <li><a href="contact.php">Contact</a></li>
+                    <li><a href="{% url 'staticpage' alias='advertising' %}">Advertising</a></li>
+                    <li><a href="{% url 'staticpage' alias='privacy_policy' %}">Privacy Policy</a></li>
+                    <li class="last"><a href="{% url 'staticpage' alias='terms_of_service' %}">Terms of Service</a></li>
+                    <li class="last">
+                        <a href="#" class="footer-icon facebook"></a>
+                        <a href="#" class="footer-icon twitter"></a>
+                        <a href="#" class="footer-icon email"></a>
+                        <a href="#" class="footer-icon google"></a>
+                        <a href="#" class="footer-icon youtube"></a>
+                    </li>
                 </ul>
             </div>
             <div class="clr"></div>

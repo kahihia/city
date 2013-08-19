@@ -13,7 +13,6 @@ from event.models import Event, FeaturedEvent, FacebookEvent
 from event.forms import SetupFeaturedForm, CreateEventForm
 from event.services import facebook_service
 from cities.models import City, Country
-from django.contrib.gis.geos import Point
 from django_facebook.decorators import facebook_required
 
 

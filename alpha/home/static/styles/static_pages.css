@@ -1,0 +1,78 @@
+.content.page {
+    min-height: 455px;
+}
+
+.inner-content {
+	padding: 20px 18px;
+}
+
+.inner-content .indent-block {
+    padding-left: 16px;
+}
+
+.entries-list {
+	list-style: none;
+	padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.entries-list li {
+	background: url('images/entry-arrow.png') left 5px no-repeat;
+	padding-left: 16px;
+}
+
+.list-entry-title {
+	font-size: 14px;
+	color: #022e52;
+	font-weight: bold;
+    cursor: pointer;
+    line-height: 20px;
+}
+
+.list-entry-text {
+	padding: 13px 0 20px 0;
+    display: none;
+}
+
+.list-entry-text ul li {
+    list-style: disc;
+}
+
+.num-entries-list li .list-entry-text {
+    color: #454545;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.list-entry-text.first {
+    display: block;
+}
+
+.num-entries-list {
+    padding: 0;
+    margin: 0 0 20px 18px;
+}
+
+.num-entries-list > li {
+    color: #247cc3;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.button-grey {
+	display: inline-block;
+	height: 34px;
+	line-height: 34px;
+	background: url('images/button-gradient.png') left top repeat-x;
+	border-radius: 7px;
+	border: 1px solid #ebebeb;
+	cursor: pointer;
+	color: #454545;
+	font-weight: bold;
+	font-size: 14px;
+	padding: 0 20px;
+}
+
+p.non-top {
+    margin-top: 0;
+}
