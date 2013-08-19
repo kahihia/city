@@ -48,7 +48,7 @@ class LocationWidget(forms.TextInput):
                 a, b = value.split(',')
             else:
                 a, b = value
-            lat, lng = float(a), float(b)
+            lng, lat = float(a), float(b)
 
         html = self.lng_widget.render("%s_lng" % name, lng, dict(id='id_%s_lng' % name))
         html += self.lat_widget.render("%s_lat" % name, lat, dict(id='id_%s_lat' % name))

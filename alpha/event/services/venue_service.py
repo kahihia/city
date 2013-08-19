@@ -25,13 +25,10 @@ def get_venue_suggested_by_user(data):
         float(data.get("location_lng")),
         float(data.get("location_lat"))
     ))
-    venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country)
     
-    if created:
-        venue.location=location
-        venue.suggested=True
-        venue.save()    
-    
+    venue = Venue(name=name, street=street, city=city, country=country, location=location, suggested=True)
+    venue.save()
+
     return venue
 
 def get_venue_from_google(data):
@@ -54,7 +51,8 @@ def get_venue_from_google(data):
         city = City.objects.distance(location).order_by('distance')[0]
     else:
         city = city[0]
-    venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country)
+
+    venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, suggested=False)
 
     if created:
         venue.location=location

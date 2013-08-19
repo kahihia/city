@@ -28,7 +28,6 @@
                     );
                 },100);
             });
-
         },
         initGoogleMap: function(){
             var point, options, marker, map,
