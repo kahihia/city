@@ -99,11 +99,11 @@
                 });
             }
 
-            $(".location").on("click", function(){
+            $(".location-text-box .location").on("click", function(){
                 that.trip && that.trip.start();
             });
 
-            $(".location").on("keypress blur", function(){
+            $(".location-text-box .location").on("keypress blur", function(){
                 that.trip.stop();
             });
         },
