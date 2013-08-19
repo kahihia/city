@@ -31,6 +31,7 @@ def inform_accounts_about_new_events_with_tags():
     # Optimize
     for account in Account.objects.all():
         events = InTheLoopSchedule.unprocessed_for_account(account)
+
         if events.count():
             account_tags = account.in_the_loop_tags.values_list('name', flat=True)
             tags_in_venues = {}

@@ -245,7 +245,8 @@ class InTheLoopSchedule(models.Model):
         return Event.future_events.filter(
             Q(id__in=event_ids),
             location_query
-        )
+        ).annotate(repeat_count=Count('id'))
+        
 
     def __unicode__(self):
         status = "QUEUE"

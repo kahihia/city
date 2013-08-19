@@ -103,7 +103,7 @@ def inform_account_about_events_with_tag(account, events, tags_in_venues):
 
 
 def inform_account_about_events_with_tag_with_email(account, events, tags_in_venues):
-    featured_events = Event.featured_events.all()[:4]  # .exclude(id__in=events.values_list('id', flat=True))[:4]
+    featured_events = Event.featured_events.all()[:4]
 
     similar_events = find_similar_events(events)
 

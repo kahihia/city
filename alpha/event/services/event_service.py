@@ -68,7 +68,6 @@ def save_when_and_description(data, event):
                     end_time=end.strftime('%Y-%m-%d %H:%M'),
                     description=description
                 )
-                single_event.save()
 
                 ext_single_event = get_identic_single_event_from_list(single_event, single_events)
                 if not ext_single_event:
@@ -80,28 +79,21 @@ def save_when_and_description(data, event):
     SingleEvent.objects.filter(id__in=single_events_to_delete_ids).delete()
 
 
-@transaction.commit_manually
 def save_event(user, data, form):
-    try:
-        event = form.save()
+    event = form.save()
 
-        event.venue = venue_service.get_venue_from_request_data(event, data)
+    event.venue = venue_service.get_venue_from_request_data(event, data)
 
-        save_when_and_description(data, event)
+    save_when_and_description(data, event)
 
-        if user.is_authenticated():
-            event.owner = user
-            event.email = user.email
+    if user.is_authenticated():
+        event.owner = user
+        event.email = user.email
 
-        if data["picture_src"]:
-            event.picture.name = data["picture_src"].replace(settings.MEDIA_URL, "")
+    if data["picture_src"]:
+        event.picture.name = data["picture_src"].replace(settings.MEDIA_URL, "")
 
-        event = event.save()
-    except Exception as e:
-        transaction.rollback()
-        raise e
-    else:
-        transaction.commit()
+    event = event.save()
 
     return event
 
