@@ -52,13 +52,15 @@ def get_venue_from_google(data):
     else:
         city = city[0]
 
-    venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, suggested=False)
-
-    if created:
-        venue.location=location
+    try:
+        venue = Venue.objects.get(name=name, street=street, city=city, country=country, suggested=False)
+    except:
+        venue = Venue(name=name, street=street, city=city, country=country, location=location, suggested=False)
+    
 
     venue.street_number = street_number
     venue.save()
+
     return venue
 
 
