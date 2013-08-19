@@ -171,7 +171,7 @@ def prepare_initial_event_data_for_edit(event):
 def prepare_initial_event_data_for_copy(event):
     return {
         "linking_venue_mode": "EXIST",
-        "venue_identifier": event.venue.id,
+        "venue_identifier": prepare_initial_venue_id(event),
         "place": prepare_initial_place(event),
         "location": prepare_initial_location(event),
         "picture_src": prepare_initial_picture_src(event),

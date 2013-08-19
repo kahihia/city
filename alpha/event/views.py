@@ -260,13 +260,13 @@ def copy(request, authentication_key, template_name='events/create/copy_event.ht
             owner=basic_event.owner,
             venue_account_owner=basic_event.venue_account_owner,
             picture=basic_event.picture,
-            cropping=basic_event.cropping
+            cropping=basic_event.cropping,
         )
 
         form = CreateEventForm(
             account=request.account, 
             instance=event, 
-            initial=event_service.prepare_initial_event_data_for_copy
+            initial=event_service.prepare_initial_event_data_for_copy(basic_event)
         )
 
     return render_to_response(template_name, {

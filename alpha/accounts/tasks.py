@@ -41,7 +41,7 @@ def inform_accounts_about_new_events_with_tags():
                 tags_intersection = list(set(account_tags) & set(event_tags))
 
                 for tag in tags_intersection:
-                    if tag in tags_in_venues:
+                    if tag in tags_in_venues and not event.venue.city.name_std in tags_in_venues[tag]:
                         tags_in_venues[tag].append(event.venue.city.name_std)
                     else:
                         tags_in_venues[tag] = [event.venue.city.name_std]
