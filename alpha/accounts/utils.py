@@ -1,3 +1,4 @@
+from accounts.models import InTheLoopSchedule
 from event.models import Event
 from django.contrib.sites.models import Site
 from django.core.mail.message import EmailMessage
@@ -94,12 +95,28 @@ def remind_account_about_events_with_sms(account, events):
             logger.error(e)
 
 
-def inform_account_about_events_with_tag(account, events, tags_in_venues):
-    if account.reminder_with_email:
-        inform_account_about_events_with_tag_with_email(account, events, tags_in_venues)
+def inform_account_about_events_with_tags(account):
+    events = InTheLoopSchedule.unprocessed_for_account(account)
 
-    if account.reminder_with_sms:
-        inform_account_about_events_with_tag_with_sms(account, events, tags_in_venues)
+    if events.count():
+        account_tags = account.in_the_loop_tags.values_list('name', flat=True)
+        tags_in_venues = {}
+        for event in events:
+            event_tags = event.tags.values_list('name', flat=True)
+
+            tags_intersection = list(set(account_tags) & set(event_tags))
+
+            for tag in tags_intersection:
+                if tag in tags_in_venues and not event.venue.city.name_std in tags_in_venues[tag]:
+                    tags_in_venues[tag].append(event.venue.city.name_std)
+                else:
+                    tags_in_venues[tag] = [event.venue.city.name_std]
+
+        if account.reminder_with_email:
+            inform_account_about_events_with_tag_with_email(account, events, tags_in_venues)
+
+        if account.reminder_with_sms:
+            inform_account_about_events_with_tag_with_sms(account, events, tags_in_venues)
 
 
 def inform_account_about_events_with_tag_with_email(account, events, tags_in_venues):

@@ -54,7 +54,7 @@ def truncatesmart(value, limit=80):
 
 @register.simple_tag(takes_context=True)
 def feature_event_as_image(context, event):
-    script_version = "1.0"
+    script_version = "1.02"
 
     image_filename = "%s_feature_event_as_image_%s.png" % (event.slug, script_version)
 
@@ -70,41 +70,39 @@ def feature_event_as_image(context, event):
                 'upscale': False
             }
             thumb = thumbnailer.get_thumbnail(thumbnail_options)
+            im = thumb.image
         else:
-            thumb = "event/static/images/default-event-147x147.jpg"
+            im = Image.open("event/static/images/default-event-147x147.jpg")
+        
+        im = im.convert("RGBA")
 
-        try:
-            im = Image.open(thumb.file)
-            im = im.convert("RGBA")
+        bottom_bg = Image.new("RGBA", (147, 57), (0, 0, 0, 200))
 
-            bottom_bg = Image.new("RGBA", (147, 57), (0, 0, 0, 200))
+        im.paste(bottom_bg.convert('RGB'), (0, 90), bottom_bg)
 
-            im.paste(bottom_bg.convert('RGB'), (0, 90), bottom_bg)
+        draw = ImageDraw.Draw(im)
 
-            draw = ImageDraw.Draw(im)
+        event_name_pos = (5, 95)
+        start_time_pos = (5, 108)
+        venue_pos = (5, 121)
+        event_details_pos = (5, 131)
 
-            event_name_pos = (5, 95)
-            start_time_pos = (5, 108)
-            venue_pos = (5, 121)
-            event_details_pos = (5, 131)
+        arial = ImageFont.truetype("%s/alpha/event/static/fonts/Arial.ttf" % settings.BASE_PATH, 10)
+        arial_bold = ImageFont.truetype("%s/alpha/event/static/fonts/Arial_Bold.ttf" % settings.BASE_PATH, 10)
 
-            arial = ImageFont.truetype("%s/alpha/event/static/fonts/Arial.ttf" % settings.BASE_PATH, 10)
-            arial_bold = ImageFont.truetype("%s/alpha/event/static/fonts/Arial_Bold.ttf" % settings.BASE_PATH, 10)
+        time_period = "%s - %s" % (filters.title(filters.date(event.start_time(), "b d, Y | fA")), filters.title(filters.date(event.end_time(), "fA")))
 
-            time_period = "%s - %s" % (filters.title(filters.date(event.start_time, "b d, Y | fA")), filters.title(filters.date(event.end_time, "fA")))
+        draw.text(event_name_pos, truncatesmart(event.name, 25), (235, 138, 25), font=arial_bold)
+        draw.text(start_time_pos, truncatesmart(time_period, 25), (255, 255, 255), font=arial)
+        draw.text(venue_pos, truncatesmart(event.venue.name, 25), (255, 255, 255), font=arial)
+        draw.text(event_details_pos, "event details", (36, 124, 195), font=arial_bold)
 
-            draw.text(event_name_pos, truncatesmart(event.name, 25), (235, 138, 25), font=arial_bold)
-            draw.text(start_time_pos, truncatesmart(time_period, 25), (255, 255, 255), font=arial)
-            draw.text(venue_pos, truncatesmart(event.venue.name, 25), (255, 255, 255), font=arial)
-            draw.text(event_details_pos, "event details", (36, 124, 195), font=arial_bold)
+        content = StringIO.StringIO()
+        im.save(content, 'PNG')
 
-            content = StringIO.StringIO()
-            im.save(content, 'PNG')
+        in_memory_file = InMemoryUploadedFile(content, None, image_filename, "image/png", content.len, None)
 
-            in_memory_file = InMemoryUploadedFile(content, None, image_filename, "image/png", content.len, None)
+        image_filename = default_storage.save(image_filename, in_memory_file)
 
-            image_filename = default_storage.save(image_filename, in_memory_file)
-        except IOError:
-            pass
 
     return "media/%s" % image_filename

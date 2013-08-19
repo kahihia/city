@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from celery import task
-from utils import remind_account_about_events, inform_account_about_events_with_tag
+from utils import remind_account_about_events, inform_account_about_events_with_tags
 from models import AccountReminding, Account, InTheLoopSchedule
 from event.models import Event
 
@@ -30,22 +30,6 @@ def remind_accounts_about_events_on_week_day():
 def inform_accounts_about_new_events_with_tags():
     # Optimize
     for account in Account.objects.all():
-        events = InTheLoopSchedule.unprocessed_for_account(account)
-
-        if events.count():
-            account_tags = account.in_the_loop_tags.values_list('name', flat=True)
-            tags_in_venues = {}
-            for event in events:
-                event_tags = event.tags.values_list('name', flat=True)
-
-                tags_intersection = list(set(account_tags) & set(event_tags))
-
-                for tag in tags_intersection:
-                    if tag in tags_in_venues and not event.venue.city.name_std in tags_in_venues[tag]:
-                        tags_in_venues[tag].append(event.venue.city.name_std)
-                    else:
-                        tags_in_venues[tag] = [event.venue.city.name_std]
-
-            inform_account_about_events_with_tag(account, events, tags_in_venues)
+        inform_account_about_events_with_tags(account)
 
     InTheLoopSchedule.new_events.all().update(processed=True)
