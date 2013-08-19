@@ -149,7 +149,7 @@
             case this.CONSTANTS['SPACE'] : 
 
                 // space will make the page jump
-                e.preventDefault();
+                // e.preventDefault();
                 this.pause();
                 break;
 
@@ -183,6 +183,10 @@
         },
 
         pauseAndResume : function() {
+            if(!this.timer) {
+                return;
+            }
+
             if ( this.progressing ) {
                 this.timer.pause();
                 this.pauseProgressBar();
