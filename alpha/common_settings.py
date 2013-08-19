@@ -359,5 +359,3 @@ CELERYBEAT_SCHEDULE = {
         'schedule': timedelta(hours=3)
     }
 }
-
-GDAL_LIBRARY_PATH = "/usr/local/lib/libgdal.so"
