@@ -360,14 +360,12 @@ class LocationFilter(Filter):
 class SearchFilter(Filter):
     def search_tags(self, search_string):
         # TODO: use nslt to split words
-        search_string = search_string.strip()
+        # search_string = search_string.strip()
         if search_string:
             return [{
-                "name": word,
-                "remove_url": "?" + self.parent.url_query(search=search_string.replace(word, ""))
-            } for word in nltk.word_tokenize(
-                re.sub('[%s]' % re.escape(string.punctuation), '', search_string)
-            )]
+                "name": search_string,
+                "remove_url": "?" + self.parent.url_query(exclude="search")
+            }]
         else:
             return None
 
