@@ -201,7 +201,7 @@ class EditEventForm(forms.ModelForm):
             place = cleaned_data["place"]
 
             if not place["city"]:
-                raise forms.ValidationError(u'You need to select al least city')
+                raise forms.ValidationError(u'Please select at least a city or town name')
             if not place["venue"] or \
                not place["latitude"] or \
                not place["longtitude"]:
