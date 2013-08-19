@@ -17,7 +17,7 @@ from django.utils import simplejson as json
 from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
 
-from utils import remind_account_about_events, inform_account_about_events_with_tag
+from utils import remind_account_about_events, inform_account_about_events_with_tags
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import ajax_login_required
 
@@ -154,13 +154,8 @@ def remind_preview(request):
 
 
 def in_the_loop_preview(request):
-    message = inform_account_about_events_with_tag(
-        Account.objects.get(user__email="jaromudr@gmail.com"),
-        Event.future_events.all()[0:1],
-        {
-            "opa": ["Montreal"],
-            "hmm": ["Ottava", "Odessa"]
-        }
+    message = inform_account_about_events_with_tags(
+        Account.objects.get(user__email="jaromudr@gmail.com")
     )
 
     return HttpResponse(message)

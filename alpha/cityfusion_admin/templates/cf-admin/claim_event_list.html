@@ -33,8 +33,9 @@
                     </td>                    
                     <td>
                         <a href="{% url "transfer_event" claim.id %}" target="_blank">
-                            Transfer to <a href="{% url "admin:accounts_account_change" claim.account.id %}" target="_blank">{{ claim.account.user.username }}</a>
+                            Transfer to 
                         </a>
+                        <a href="{% url "admin:accounts_account_change" claim.account.id %}" target="_blank">{{ claim.account.user.username }}</a>
                     </td>
                     <td>
                         <a href="{% url "claim_event_refuse" claim.id %}">Refuse</a>

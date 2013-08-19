@@ -12,7 +12,7 @@
                     Your tag 
                 </span>
                 <span style="color: #8cc2fa; font-family: sans-serif; font-weight: bold; font-style: italic; font-size:16px">
-                    <a target="_blank" href="will_be_later" style="color: #8cc2fa; font-family: sans-serif; font-weight: bold; font-style: italic; font-size:16px; text-decoration: none; border: none;">
+                    <a target="_blank" href="{{site}}{% url 'event_browse' %}?function=tags&tag={{ tag|urlencode }}" style="color: #8cc2fa; font-family: sans-serif; font-weight: bold; font-style: italic; font-size:16px; text-decoration: none; border: none;">
                         {{ tag }}
                     </a>
                 </span>
@@ -20,8 +20,8 @@
                     was used in an event in
                 </span>
                 <span style="color: #8cc2fa; font-family: sans-serif; font-weight: bold; font-style: italic; font-size:16px">
-                    <a target="_blank" href="will_be_later" style="color: #8cc2fa; font-family: sans-serif; font-weight: bold; font-style: italic; font-size:16px; text-decoration: none; border: none;">
-                        {{venues|join:", "}}.
+                    <a target="_blank" href="{{site}}{% url 'event_browse' %}?function=tags&tag={{ tag|urlencode }}" style="color: #8cc2fa; font-family: sans-serif; font-weight: bold; font-style: italic; font-size:16px; text-decoration: none; border: none;">
+                        {{ venues|join:", " }}.
                     </a>
                 </span>
                 <br/>

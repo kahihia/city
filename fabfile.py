@@ -8,7 +8,7 @@ env.local_settings_file = 'alpha.settings'
 
 
 def dev():
-    env.hosts = ['root@cityfusion.ca']
+    env.hosts = ['root@dev.cityfusion.ca']
     env.project_folder = '/root/cityfusion_git'
     env.alpha_folder = '/root/cityfusion_git/alpha'
     env.settings_file = 'alpha.settings_prod'

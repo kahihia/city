@@ -1,5 +1,5 @@
 {% if advertising %}
-    <a target="_blank" href="{% url 'advertising_open' advertising.id %}">
-        <img src="/media/{{ advertising.image }}" />
+    <a target="_blank" href="{{site}}{% url 'advertising_open' advertising.id %}">
+        <img src="{{site}}/media/{{ advertising.image }}" />
     </a>
 {% endif %}
