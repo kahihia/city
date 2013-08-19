@@ -1,9 +1,6 @@
 from models import Event, Venue, SingleEvent
 import datetime
 import dateutil.parser as dateparser
-import re
-import string
-import nltk
 from accounts.models import VenueType
 from django.db.models import Q, Count
 from cities.models import Region, City
