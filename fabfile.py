@@ -27,8 +27,6 @@ def upgrade():
     with cd(env.project_folder):
         run("git pull origin master")
 
-    run("killall -9 gunicorn_django") 
-    
     with cd(env.alpha_folder):
         run("python manage.py collectstatic")
         run("supervisorctl reload")
