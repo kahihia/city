@@ -11,7 +11,7 @@ def feedback(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            message = 'From: %(name)s <%(email)s>\n\n%(comments)s' % form.cleaned_data
+            message = 'From: %(name)s <%(email)s>\n\n%(type)s\n\n%(comments)s' % form.cleaned_data
             send_mail("cityfusion.ca Feedback", message, 'feedback@cityfusion.ca',
                       ['levi@peakxp.com', 'tony@peakxp.com', 'sam@peakxp.com'], fail_silently=True)
             feedback = Feedback(**form.cleaned_data)

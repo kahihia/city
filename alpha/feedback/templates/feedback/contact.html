@@ -1,26 +1,38 @@
-{% extends "base-new.html" %}
+{% extends 'base-with-advertising.html' %}
 {% block title %} > Feedback{% endblock %}
 
+{% block head %}
+    <link type="text/css" href="{{STATIC_URL}}css/feedback.css" rel="stylesheet" />
+{% endblock %}
+
 {% block page %}
-<section class="body">
-<h2>Feedback</h2>
-<p>We'd love to hear your comments on how Cityfusion can be improved for you.</p>
-
-<form id="contact" method="post">
-  {% csrf_token %}
-  <table>
-    {% for field in form %}
-    <tr>
-    <td>
-    <p class="label">{{ field.label_tag }}</p>
-    {{ field }}{% for error in field.errors %}<span class="error">{{ error }}</span> {% endfor %}
-    {% endfor %}
-    <p class="label"></p>
-    <input type="submit" class="submit button" value="Send Message">
-    </td>
-    </tr>
-    </table>
-
-</form>
-</section>
+    <h1>Feedback/Contact Form</h1>
+    <div class="primary-content">
+        <div class="content">
+            <div class="main-content">
+                <div class="inner-content">
+                    <form id="contact" method="post">
+                        {% csrf_token %}
+                        <table>
+                            {% for field in form %}
+                                <tr>
+                                    <td class="label-td">{{ field.label_tag }}</td>
+                                    <td>
+                                        {{ field }}
+                                        {% for error in field.errors %}<span class="error">{{ error }}</span> {% endfor %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="submit" class="button-grey" value="Send">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
