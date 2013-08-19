@@ -63,6 +63,7 @@ def remind_account_about_events_with_email(account, events):
             "events": events,
             "similar_events": similar_events,
             "STATIC_URL": "/static/",
+            "advertising_region": account.advertising_region,
             "site": "http://%s" % Site.objects.get_current().domain
         })
 
@@ -132,7 +133,8 @@ def inform_account_about_events_with_tag_with_email(account, events, tags_in_ven
             "similar_events": similar_events,
             "STATIC_URL": "/static/",
             "site": "http://%s" % Site.objects.get_current().domain,
-            "tags_in_venues": tags_in_venues
+            "tags_in_venues": tags_in_venues,
+            "advertising_region": account.advertising_region,
         })
 
     msg = EmailMessage(subject,

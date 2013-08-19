@@ -3,7 +3,6 @@ from event.models import CountryBorder
 from event.utils import find_nearest_city
 from django.contrib.gis.geos import Point
 from django.contrib.gis.utils.geoip import GeoIP
-import urllib
 
 import logging
 
@@ -305,4 +304,5 @@ def user_location(request):
         "user_location_type": from_user_choice.location_type,
         "user_location_name": from_user_choice.location_name,
         "user_location_id": from_user_choice.location_id,
+        "advertising_region": from_user_choice.canadian_region or from_account_settings.canadian_region or from_browser.canadian_region or by_IP.canadian_region
     }

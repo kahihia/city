@@ -134,6 +134,12 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
     def in_the_loop_tag_names(self):
         return self.in_the_loop_tags.all().values_list("name", flat=True)
 
+    def advertising_region(self):
+        if self.not_from_canada:
+            return None
+
+        return self.native_region
+
 
 def create_facebook_profile(sender, instance, created, **kwargs):
     if created:

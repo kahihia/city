@@ -2,6 +2,7 @@ from django import template
 from django.template.base import Node, NodeList, TemplateSyntaxError
 from ..models import Advertising
 register = template.Library()
+from django.db.models import Q
 
 
 class RandomNode(Node):
@@ -55,14 +56,29 @@ def advertising(context, dimensions):
 
     width, height = map(lambda x: int(x), dimensions.split("x"))
 
+    user_location = context.get("user_location")
+
+    advertising_region = context.get("advertising_region", None) or user_location.get("advertising_region", None)
+
+    region_query = Q(campaign__all_of_canada=True)
+
+    if advertising_region:
+        region_query = region_query | Q(campaign__regions=advertising_region)
+
     try:
-        advertising = Advertising.active.filter(ad_type__width=width, ad_type__height=height).order_by('?')[0]
+        advertising = Advertising.active.filter(
+            Q(ad_type__width=width), 
+            Q(ad_type__height=height),
+            region_query
+        ).order_by('?')[0]
+
         advertising.view()
     except:
         advertising = None
 
     return {
-        'advertising': advertising
+        'advertising': advertising,
+        'site': context.get("site", "")
     }
 
 
@@ -72,6 +88,16 @@ def advertising_group(context, dimensions, css_class="advertising-right"):
         {% advertising_group "300x250|300x250|300x250" %}
 
     """
+    user_location = context.get("user_location")
+
+    advertising_region = context.get("advertising_region", None) or user_location.get("advertising_region", None)
+
+    region_query = Q(campaign__all_of_canada=True)
+
+    if advertising_region:
+        region_query = region_query | Q(campaign__regions=advertising_region)
+
+
     ads_to_return = []
     dimensions_set = dimensions.split("|")
 
@@ -86,7 +112,11 @@ def advertising_group(context, dimensions, css_class="advertising-right"):
     for dimensions, nums in dimensions_hash.iteritems():
         width, height = map(lambda x: int(x), dimensions.split("x"))
 
-        ads = Advertising.active.filter(ad_type__width=width, ad_type__height=height).order_by('?')[:nums]
+        ads = Advertising.active.filter(
+            Q(ad_type__width=width), 
+            Q(ad_type__height=height),
+            region_query
+        ).order_by('?')[:nums]
 
         for ad in list(ads):
             ad.view()

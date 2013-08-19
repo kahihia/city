@@ -26,7 +26,7 @@ class AdvertisingType(models.Model):
 
 class AdminAdvertisingCampaignManager(models.Manager):
     def get_query_set(self):
-        return super(AdminAdvertisingCampaignManager, self).get_query_set().filter(owned_by_admin=True)        
+        return super(AdminAdvertisingCampaignManager, self).get_query_set().filter(owned_by_admin=True)
 
 
 class AdvertisingCampaign(models.Model):
