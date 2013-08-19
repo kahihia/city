@@ -1,5 +1,4 @@
 from django.contrib.gis.db import models
-from django.conf import settings
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
 from cities.models import Region
@@ -26,7 +25,7 @@ class AdvertisingType(models.Model):
 
 class AdminAdvertisingCampaignManager(models.Manager):
     def get_query_set(self):
-        return super(AdminAdvertisingCampaignManager, self).get_query_set().filter(owned_by_admin=True)
+        return super(AdminAdvertisingCampaignManager, self).get_query_set()
 
 
 class AdvertisingCampaign(models.Model):
@@ -53,6 +52,9 @@ class AdvertisingCampaign(models.Model):
 
     def ammount_remaining(self):
         return self.budget - self.ammount_spent
+
+    def regions_representation(self):
+        return ", ".join(self.regions.all().values_list("name", flat=True))
 
 
 PAYMENT_TYPE = (
