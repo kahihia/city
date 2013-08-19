@@ -1,4 +1,5 @@
 from cities.models import City, Region, Country
+from event.models import CountryBorder
 from event.utils import find_nearest_city
 from django.contrib.gis.geos import Point
 from django.contrib.gis.utils.geoip import GeoIP
@@ -131,20 +132,19 @@ class LocationFromBrowser(object):
 
     @property
     def is_canada(self):
-        return False
         if not self.lat_lon:
             return LocationByIP(self.request).is_canada
 
-        code = self.request.session.get("lat_lon_code_%s,%s" % (self.lat_lon[0], self.lat_lon[1]), None)
-        if not code:
-            params = urllib.urlencode({
-                'lat': self.lat_lon[0], 
-                'lng': self.lat_lon[1]
-            })
-            code = urllib.urlopen("http://ws.geonames.org/countryCode?%s" % params).read().strip()
-            self.request.session["lat_lon_code_%s,%s" % (self.lat_lon[0], self.lat_lon[1])] = code
+        pnt = Point(self.lat_lon[::-1])
 
-        return code.strip()=="CA"
+        countries = CountryBorder.objects.filter(mpoly__contains=pnt)
+
+        for country in countries:
+            if country.code=="CA":
+                return True
+
+        return False
+
 
 class LocationFromAccountSettins(object):
     def __init__(self, request):
