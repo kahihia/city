@@ -16,6 +16,8 @@ def channelfile(request):
 
 
 def page(request, alias):
+    import socket
+    raise Exception(socket.gethostname())
     try:
         return render_to_response('pages/%s.html' % alias, context_instance=RequestContext(request))
     except TemplateDoesNotExist:

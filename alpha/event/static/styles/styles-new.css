@@ -184,6 +184,11 @@
     background: url("/static/images/like.png") 5px center no-repeat;    
 }
 
+.footer-site-map .action-facebook-like {
+    background: url("/static/images/like.png") 5px center no-repeat;
+    vertical-align: middle;
+}
+
 .content-wrapper .event-details .event-actions .action-tweet {    
     background: url("/static/images/tweet.png") 5px center no-repeat;    
 }
