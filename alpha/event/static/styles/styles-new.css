@@ -363,6 +363,10 @@ a:hover{
     font-size: 14px;
 }
 
+.primary-content .description p, .searchpad-event-description p {
+    margin: 0;
+}
+
 ul.errorlist {
     padding-left: 0;
     margin: 0;

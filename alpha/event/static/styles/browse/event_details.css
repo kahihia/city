@@ -9,6 +9,11 @@
     margin: 13px;
 }
 
+.event-details-block .event-img image{
+    width: 175px;
+    height: 175px;
+}
+
 .event-details-block .event-details {
     display: inline-block;
     vertical-align: top;
@@ -21,6 +26,12 @@
     color: #06c;
     text-decoration: none;
     cursor: pointer;
+
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    text-overflow: ellipsis;
 }
 
 .event-details-block .event-details .title-wrapper {
@@ -225,12 +236,13 @@
 
 .cfadmin-actions {
     position: absolute;
+    width: 100px;
     background: #eee;
     z-index: 10;
     padding: 10px;
     border: 1px solid;
-    top: -60px;
-    right: -10px;    
+    top: -10px;
+    left: -30px;    
 }
 
 .cfadmin-actions a {

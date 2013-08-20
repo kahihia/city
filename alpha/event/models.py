@@ -70,6 +70,14 @@ def picture_file_path(instance=None, filename=None):
     return os.path.join(EVENT_PICTURE_DIR, datetime.date.today().isoformat(), filename)
 
 
+def has_changed(instance, field):
+    if not instance.pk:
+        return False
+    old_value = instance.__class__._default_manager.filter(pk=instance.pk).values(field).get()[field]
+
+    return not getattr(instance, field) == old_value    
+
+
 class FutureManager(SearchManager):
     def get_query_set(self):
         queryset = super(FutureManager, self).get_query_set()\
@@ -190,6 +198,9 @@ class Event(models.Model):
         if self.pk is None:
             self.authentication_key = ''.join(random.choice(string.ascii_letters + '0123456789') for x in xrange(40))
             self.slug = self.uniqueSlug()
+
+        if has_changed(self, 'name'):
+            self.slug = self.uniqueSlug()
         super(Event, self).save(*args, **kwargs)
         return self
 
@@ -197,9 +208,6 @@ class Event(models.Model):
         return ", ".join([tag.name for tag in self.tags.all()])
 
     def clean(self):
-        #if self.end_time:
-        #    if self.start_time > self.end_time:
-        #        raise ValidationError('The event date and time must be later than the start date and time.')
         if self.name and slugify(self.name) == '':
             raise ValidationError('Please enter a name for your event.')
 

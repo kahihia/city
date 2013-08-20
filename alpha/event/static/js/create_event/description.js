@@ -174,6 +174,8 @@
                ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
             ];
 
+            CKEDITOR.config.contentsCss = '/static/styles/ckeditor-content.css';
+
             CKEDITOR.replace("id_description");
 
             

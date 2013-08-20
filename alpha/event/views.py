@@ -215,14 +215,13 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_create'))
 
-    if success_url is None:
-        success_url = reverse('event_view', kwargs={'slug': event.slug})
-
     if request.method == 'POST':
         form = EditEventForm(account=request.account, instance=event, data=request.POST)
         if form.is_valid():
             event_service.save_event(request.user, request.POST, form)
-            return HttpResponseRedirect(success_url)
+            return HttpResponseRedirect(
+                reverse('event_view', kwargs={'slug': event.slug})
+            )
     else:
         form = EditEventForm(
             account=request.account,

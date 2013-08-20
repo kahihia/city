@@ -6,7 +6,6 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
 from django.core.mail.message import EmailMessage
-from django.db import transaction
 from django.conf import settings
 
 import dateutil.parser as dateparser
@@ -169,13 +168,18 @@ def prepare_initial_event_data_for_edit(event):
 
 
 def prepare_initial_event_data_for_copy(event):
+    description_json = {
+        "default": event.description,
+        "days": {}
+    }
     return {
         "linking_venue_mode": "EXIST",
         "venue_identifier": prepare_initial_venue_id(event),
         "place": prepare_initial_place(event),
         "location": prepare_initial_location(event),
         "picture_src": prepare_initial_picture_src(event),
-        "tags": event.tags_representation
+        "tags": event.tags_representation,
+        "description_json": json.dumps(description_json)
     }
 
 
