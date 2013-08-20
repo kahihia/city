@@ -24,9 +24,16 @@
                     $(that.element).prop('readonly', true);
                 } else {
                     $(that.element).prop('readonly', false);
-                    $(that.element).val("$");
+                    if($(that.element).val()=="Free"){
+                        $(that.element).val("$");    
+                    }
                 }
             });
+
+            if($(that.element).val()=="Free"){
+                $(that.element).prop('readonly', true);
+            }
+                
         },
         addFreeTag: function() {
             var e;
