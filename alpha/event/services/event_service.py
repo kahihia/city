@@ -115,7 +115,7 @@ def prepare_initial_place(event):
 
 
 def prepare_initial_location(event):
-    return (event.venue.location.y, event.venue.location.x)
+    return (event.venue.location.x, event.venue.location.y)
 
 
 def prepare_initial_picture_src(event):
