@@ -211,7 +211,7 @@
                         {% paginate 5 events_from_venue using "venue_events" as venue_events %}
                         {% for venue_event in venue_events %}
                             <tr>
-                                <td>{{ venue_event.start_time|date:"M d" }}</td>
+                                <td>{{ venue_event.start_time|date:"D, M d" }}</td>
                                 <td>{{ venue_event.start_time|date:"fA"|title }}</td>
                                 <td>
                                     <a href="{% url 'event_view' venue_event.slug venue_event.start_time|date:"Y-m-d" %}">

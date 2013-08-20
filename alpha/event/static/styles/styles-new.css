@@ -264,11 +264,7 @@
 .secondary-content-table th a,
 .secondary-content-table td a {
     color: #5dacfd;
-    text-decoration: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 180px;
+    text-decoration: none;    
     display: inline-block;
 }
 
