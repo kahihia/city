@@ -201,6 +201,7 @@ class Event(models.Model):
 
         if has_changed(self, 'name'):
             self.slug = self.uniqueSlug()
+
         super(Event, self).save(*args, **kwargs)
         return self
 

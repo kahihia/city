@@ -36,7 +36,7 @@
             street = $("#id_street").val();
             city = $("#id_city_0").val();
 
-            if(!venue || !street || !city){
+            if(!venue || !city){
                 $(".suggest .error").show();
                 return;
             }
