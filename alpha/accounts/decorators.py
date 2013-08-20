@@ -3,10 +3,13 @@ from functools import wraps
 from django.utils.decorators import available_attrs
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
+from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 import json
 
 
-REDIRECT_FIELD_NAME = "redirect_after_edit_account"
+REDIRECT_FIELD_NAME_ACCOUNT = "redirect_after_edit_account"
 
 
 def account_passes_test(test_func, redirect_field_name=REDIRECT_FIELD_NAME, why_message=None):
@@ -28,7 +31,7 @@ def account_passes_test(test_func, redirect_field_name=REDIRECT_FIELD_NAME, why_
     return decorator
 
 
-def native_region_required(redirect_field_name=REDIRECT_FIELD_NAME, why_message=None):
+def native_region_required(redirect_field_name=REDIRECT_FIELD_NAME_ACCOUNT, why_message=None):
     actual_decorator = account_passes_test(
         lambda account: bool(account.tax_origin_confirmed and (account.not_from_canada or account.native_region)),
         redirect_field_name=redirect_field_name,
@@ -45,4 +48,30 @@ def ajax_login_required(view_func):
         return HttpResponse(data, mimetype='application/json')
     wrap.__doc__ = view_func.__doc__
     wrap.__dict__ = view_func.__dict__
-    return wrap    
+    return wrap
+
+
+def user_passes_test_with_403(test_func, login_url=None):
+    """
+    Decorator for views that checks that the user passes the given test.
+    
+    Anonymous users will be redirected to login_url, while users that fail
+    the test will be given a 403 error.
+    """
+    if not login_url:
+        from django.conf import settings
+        login_url = settings.LOGIN_URL
+    def _dec(view_func):
+        def _checklogin(request, *args, **kwargs):
+            if test_func(request.user):
+                return view_func(request, *args, **kwargs)
+            elif not request.user.is_authenticated():
+                return HttpResponseRedirect('%s?%s=%s' % (login_url, REDIRECT_FIELD_NAME, request.get_full_path()))
+            else:
+                resp = render_to_response('403.html', context_instance=RequestContext(request))
+                resp.status_code = 403
+                return resp
+        _checklogin.__doc__ = view_func.__doc__
+        _checklogin.__dict__ = view_func.__dict__
+        return _checklogin
+    return _dec    

@@ -31,6 +31,8 @@ from django.db.models import Q
 from event.utils import find_nearest_city
 from advertising.models import AdvertisingOrder
 from accounts.forms import AccountForm
+from userena.decorators import secure_required
+from guardian.decorators import permission_required_or_403
 
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
@@ -58,7 +60,6 @@ def remove_remind_me(request, single_event_id):
     profile.reminder_single_events.remove(single_event)
 
     return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))
-
 
 
 @ajax_login_required
@@ -164,6 +165,12 @@ def in_the_loop_preview(request):
 @login_required
 def private_venue_account(request, slug):
     venue_account = VenueAccount.objects.get(slug=slug)
+    
+    if venue_account.account.user != request.user:
+        resp = render_to_response('403.html', context_instance=RequestContext(request))
+        resp.status_code = 403
+        return resp
+
 
     venue_events = Event.future_events.filter(venue=venue_account.venue)
     venue_featured_events = Event.featured_events.filter(venue=venue_account.venue)
@@ -210,6 +217,12 @@ def public_venue_account(request, slug):
 @login_required
 def edit_venue_account(request, slug):
     venue_account = VenueAccount.objects.get(slug=slug)
+
+    if venue_account.account.user != request.user:
+        resp = render_to_response('403.html', context_instance=RequestContext(request))
+        resp.status_code = 403
+        return resp
+
     form = VenueAccountForm(
         instance=venue_account,
         initial={
@@ -235,6 +248,7 @@ def edit_venue_account(request, slug):
         }, context_instance=RequestContext(request))
 
 
+@login_required
 def save_venue(request):
     venue_identifier = request.POST["venue_identifier"]
     if venue_identifier:
@@ -311,9 +325,16 @@ def venue_account_already_in_use(request, venue_account_id):
         }, context_instance=RequestContext(request))
 
 
+@login_required
 def set_venue_privacy(request, venue_account_id, privacy):
     public = (privacy == "public")
     venue_account = VenueAccount.objects.get(id=venue_account_id)
+    
+    if venue_account.account.user != request.user:
+        resp = render_to_response('403.html', context_instance=RequestContext(request))
+        resp.status_code = 403
+        return resp
+
     venue_account.public = public
     venue_account.save()
 
@@ -324,13 +345,22 @@ def set_venue_privacy(request, venue_account_id, privacy):
 
 @login_required
 def unlink_venue_account_from_user_profile(request, venue_account_id):
-    VenueAccount.objects.get(id=venue_account_id).delete()
+    venue_account = VenueAccount.objects.get(id=venue_account_id)
+    
+    if venue_account.account.user != request.user:
+        resp = render_to_response('403.html', context_instance=RequestContext(request))
+        resp.status_code = 403
+        return resp
+
+    venue_account.delete()
 
     return HttpResponseRedirect(
         reverse('userena_profile_detail', args=(request.user.username, ))
     )
 
 
+@secure_required
+@permission_required_or_403('change_profile', (get_profile_model(), 'user__username', 'username'))
 def profile_detail(request, username, template_name=userena_settings.USERENA_PROFILE_DETAIL_TEMPLATE, extra_context=None, **kwargs):
     """
     Detailed view of an user.
@@ -381,6 +411,7 @@ def profile_detail(request, username, template_name=userena_settings.USERENA_PRO
     )(request)    
 
 
+@login_required
 def orders(request):
     account = Account.objects.get(user_id=request.user.id)
 
@@ -391,10 +422,6 @@ def orders(request):
             'advertising_orders': advertising_orders,
             'featured_orders': []
         }, context_instance=RequestContext(request))
-
-
-from userena.decorators import secure_required
-from guardian.decorators import permission_required_or_403
 
 
 @secure_required
