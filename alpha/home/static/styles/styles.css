@@ -86,7 +86,8 @@ body
 
 .location-wrapper
 {
-	float: right;
+	float: left;
+    width: 706px;
 }
 
 .location-wrapper .location-label
@@ -114,6 +115,11 @@ body
 .location-selection-wrapper:hover .search-lists
 {
 	display:block;
+}
+
+.search-wrapper
+{
+    float: right;
 }
 
 .search-selection-wrapper
