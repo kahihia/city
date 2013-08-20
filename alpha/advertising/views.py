@@ -88,6 +88,12 @@ def setup(request):
 def deposit_funds_for_campaign(request, campaign_id):
     account = Account.objects.get(user_id=request.user.id)    
     campaign = AdvertisingCampaign.objects.get(id=campaign_id)
+
+    if campaign.account.user != request.user:
+        resp = render_to_response('403.html', context_instance=RequestContext(request))
+        resp.status_code = 403
+        return resp
+
     form = DepositFundsForCampaignForm()
 
     if request.method == 'POST':
@@ -116,6 +122,11 @@ def deposit_funds_for_campaign(request, campaign_id):
 
 def edit_campaign(request, campaign_id):
     campaign = AdvertisingCampaign.objects.get(id=campaign_id)
+
+    if campaign.account.user != request.user:
+        resp = render_to_response('403.html', context_instance=RequestContext(request))
+        resp.status_code = 403
+        return resp
 
     form = AdvertisingCampaignEditForm(instance=campaign)
 
@@ -175,7 +186,13 @@ def edit_campaign(request, campaign_id):
 
 
 def remove_campaign(request, campaign_id):
-    campaign = AdvertisingCampaign.objects.get(id=campaign_id)
+    campaign = AdvertisingCampaign.objects.get(id=campaign_id)    
+
+    if campaign.account.user != request.user:
+        resp = render_to_response('403.html', context_instance=RequestContext(request))
+        resp.status_code = 403
+        return resp
+
     campaign.delete()
 
     return HttpResponseRedirect('/accounts/%s/' % request.user.username)

@@ -14,6 +14,7 @@ from event.forms import SetupFeaturedForm, CreateEventForm
 from event.services import facebook_service
 from cities.models import City, Country
 from django_facebook.decorators import facebook_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 @require_POST
@@ -50,6 +51,7 @@ def claim_event(request):
     }), mimetype="application/json")
 
 
+@staff_member_required
 def report_event_list(request):
     reports = ReportEvent.active.all()
 
@@ -57,6 +59,7 @@ def report_event_list(request):
                                 'reports': reports
                             }, context_instance=RequestContext(request))
 
+@staff_member_required
 def report_event_process(request, report_id):
     report = ReportEvent.active.get(id=report_id)
     report.process()
@@ -64,6 +67,7 @@ def report_event_process(request, report_id):
     return HttpResponseRedirect(reverse('report_event_list'))
 
 
+@staff_member_required
 def claim_event_list(request):
     claims = ClaimEvent.active.all()
 
@@ -72,6 +76,7 @@ def claim_event_list(request):
                             }, context_instance=RequestContext(request))
 
 
+@staff_member_required
 @facebook_required
 def posting_to_facebook_events(request):
     events = Event.events.filter(post_to_facebook=True)\
@@ -84,6 +89,7 @@ def posting_to_facebook_events(request):
 
 
 @require_POST
+@staff_member_required
 def post_event_to_facebook(request):
     if request.is_ajax():
         try:
@@ -107,6 +113,7 @@ def post_event_to_facebook(request):
         raise Http404
 
 
+@staff_member_required
 @facebook_required
 def import_facebook_events(request):
     form = CreateEventForm(account=request.account, initial={
@@ -118,6 +125,7 @@ def import_facebook_events(request):
                               context_instance=RequestContext(request))
 
 
+@staff_member_required
 def load_facebook_events(request):
     if request.is_ajax():
         try:
@@ -147,6 +155,7 @@ def load_facebook_events(request):
 
 
 @require_POST
+@staff_member_required
 def reject_facebook_event(request):
     if request.is_ajax():
         facebook_event_id = request.POST['facebook_event_id']
@@ -157,6 +166,7 @@ def reject_facebook_event(request):
         raise Http404
 
 
+@staff_member_required
 def location_autocomplete(request):
     if request.is_ajax():
         if request.method == 'GET':
@@ -191,6 +201,7 @@ def location_autocomplete(request):
         raise Http404
 
 
+@staff_member_required
 def transfer_event(request, claim_id):
     claim = ClaimEvent.active.get(id=claim_id)
     
@@ -206,6 +217,7 @@ def transfer_event(request, claim_id):
     return HttpResponseRedirect(reverse('claim_event_list'))
     
 
+@staff_member_required
 def claim_event_refuse(request, claim_id):
     claim = ClaimEvent.active.get(id=claim_id)
     claim.process()
@@ -217,12 +229,16 @@ from advertising.models import AdvertisingCampaign, AdvertisingType, Advertising
 from advertising.forms import AdvertisingSetupForm, AdvertisingCampaignEditForm
 from advertising.utils import get_chosen_advertising_types, get_chosen_advertising_payment_types, get_chosen_advertising_images
 
+
+@staff_member_required
 def admin_advertising(request):
     campaigns = AdvertisingCampaign.admin.all()
     return render_to_response('cf-admin/admin-advertising-list.html', {
             "campaigns": campaigns
         }, context_instance=RequestContext(request))
 
+
+@staff_member_required
 def admin_advertising_setup(request):
     account = Account.objects.get(user_id=request.user.id)
     campaign = AdvertisingCampaign(account=account, owned_by_admin=True)
@@ -269,6 +285,7 @@ def admin_advertising_setup(request):
     }, context_instance=RequestContext(request))
 
 
+@staff_member_required
 def admin_advertising_edit_campaign(request, campaign_id):
     campaign = AdvertisingCampaign.objects.get(id=campaign_id)
 
@@ -329,17 +346,22 @@ def admin_advertising_edit_campaign(request, campaign_id):
     }, context_instance=RequestContext(request))
 
 
+@staff_member_required
 def admin_advertising_remove_campaign(request, campaign_id):
     campaign = AdvertisingCampaign.objects.get(id=campaign_id)
     campaign.delete()
 
     return HttpResponseRedirect(reverse('admin_advertising'))
 
+
+@staff_member_required
 def admin_advertising_remove_ad(request, ad_id):
     ad = Advertising.objects.get(id=ad_id)
     ad.delete()
     return HttpResponseRedirect(reverse('admin_advertising'))
 
+
+@staff_member_required
 def admin_advertising_review(request):
     ads = Advertising.pending.all()
 
@@ -347,6 +369,8 @@ def admin_advertising_review(request):
             "ads": ads
         }, context_instance=RequestContext(request))
 
+
+@staff_member_required
 def admin_advertising_change_status(request, ad_id, status):
     ad = Advertising.objects.get(id=ad_id)
     ad.review_status = status
@@ -354,13 +378,15 @@ def admin_advertising_change_status(request, ad_id, status):
     return HttpResponseRedirect(reverse('admin_advertising_review'))
 
 
-
+@staff_member_required
 def admin_featured(request):
     featured_events = FeaturedEvent.future.all()
     return render_to_response('cf-admin/admin-featured-events.html', {
             "featured_events": featured_events
         }, context_instance=RequestContext(request))
 
+
+@staff_member_required
 def admin_setup_featured(request, event_id):
     account = request.account
     event = Event.events.get(id=event_id)    
@@ -391,22 +417,30 @@ def admin_setup_featured(request, event_id):
             'event': event
         }, context_instance=RequestContext(request))
 
+
+@staff_member_required
 def admin_remove_featured(request, featured_event_id):
     FeaturedEvent.objects.get(id=featured_event_id).delete()
     return HttpResponseRedirect(reverse('admin_featured'))
 
+
+@staff_member_required
 def admin_activate_featured(request, featured_event_id):
     featured_event = FeaturedEvent.objects.get(id=featured_event_id)
     featured_event.active = True
     featured_event.save()
     return HttpResponseRedirect(reverse('admin_featured'))
 
+
+@staff_member_required
 def admin_deactivate_featured(request, featured_event_id):    
     featured_event = FeaturedEvent.objects.get(id=featured_event_id)
     featured_event.active = False
     featured_event.save()
     return HttpResponseRedirect(reverse('admin_featured'))
 
+
+@staff_member_required
 def admin_edit_featured(request, featured_event_id):
     featured_event = FeaturedEvent.objects.get(id=featured_event_id)
     form = SetupFeaturedForm(
@@ -426,5 +460,7 @@ def admin_edit_featured(request, featured_event_id):
             'event': featured_event.event
         }, context_instance=RequestContext(request))
 
+
+@staff_member_required
 def free_try(request):
     pass
