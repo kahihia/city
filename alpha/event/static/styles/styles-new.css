@@ -249,6 +249,10 @@
     text-align: center;
 }
 
+.secondary-content-table .secondary-content-table-date {
+    width: 70px;
+}
+
 .secondary-content-table tr:nth-child(even) {background: #f4f4f4}
 .secondary-content-table tr:nth-child(odd) {background: #fff}
 
