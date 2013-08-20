@@ -3,6 +3,13 @@
 
 {% block head %}
     <link type="text/css" href="{{STATIC_URL}}css/feedback.css" rel="stylesheet" />
+    <link type="text/css" href="{{STATIC_URL}}js/libs/selectBox/css/jquery.selectbox.css" rel="stylesheet" />
+    <script type="text/javascript" src="{{STATIC_URL}}js/libs/selectBox/js/jquery.selectbox-0.2.min.js"></script>
+    <script type="text/javascript">
+        $("document").ready(function() {
+            $("form select").selectbox();
+        });
+    </script>
 {% endblock %}
 
 {% block page %}
