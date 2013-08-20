@@ -43,3 +43,29 @@ form .label-td {
 	font-size: 14px;
 	padding: 0 20px;
 }
+
+form .sbHolder {
+    background-color: transparent;
+    width: 405px;
+    border: thin solid #E3E3E3 !important;
+    border-radius: 5px 5px 5px 5px !important;
+}
+
+form .sbSelector {
+    color: #454545 !important;
+    font-weight: bold;
+}
+
+form .sbOptions {
+    width: 405px;
+    border: thin solid #000000 !important;
+    background-color: #dddddd;
+}
+
+form .sbOptions a {
+    color: #454545 !important;
+}
+
+form .sbToggle, form .sbToggle:hover {
+    background: url(/static/js/libs/selectBox/img/selection_arrow.png) 5px 5px no-repeat;
+}
