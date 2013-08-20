@@ -88,12 +88,7 @@ class EditEventForm(forms.ModelForm):
         widget=PriceWidget(),
         required=False,
         initial="$"
-    )
-
-    wheelchair = forms.BooleanField(
-        widget=WheelchairWidget(choices=YES_OR_NO),
-        required=False
-    )
+    )    
 
     post_to_facebook = forms.BooleanField(
         widget=RadioSelect(choices=YES_OR_NO),
@@ -156,8 +151,6 @@ class EditEventForm(forms.ModelForm):
         self.fields['website'].widget.attrs['class'] = 'inputfield rborder'
         self.fields['website'].widget.attrs['tabindex'] = 6
         self.fields['website'].error_messages['invalid'] = 'Enter a valid website url'
-
-        self.fields['wheelchair'].widget.attrs['tabindex'] = 6
 
         self.fields['comment_for_facebook'].widget.attrs['class'] = 'inputfield rborder'
         self.fields['comment_for_facebook'].widget.attrs['tabindex'] = 10
