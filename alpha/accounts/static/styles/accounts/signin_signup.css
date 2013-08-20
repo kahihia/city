@@ -130,7 +130,6 @@
     width: 185px;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
     padding-right: 20px;
 
 }

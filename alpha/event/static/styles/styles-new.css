@@ -126,6 +126,7 @@
     height: 23px;
     max-height: 23px;
     min-height: 23px;
+    vertical-align: middle;
 }
 
 .content-wrapper .event-details .event-actions td a {
@@ -135,8 +136,6 @@
     position: relative;
     min-width: 30px;
     height:100%;
-    display: inline-block;
-    padding-top: 3px;
 }
 
 .content-wrapper .event-details .event-actions td a iframe {
