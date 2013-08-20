@@ -24,7 +24,7 @@
             }
         });
 
-        // window.setInterval(this.updateTag.bind(this), 50);
+        window.setInterval(this.updateTag.bind(this), 50);
         this.updateTag();        
     }
 

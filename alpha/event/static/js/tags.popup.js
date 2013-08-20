@@ -35,10 +35,10 @@
             });
 
             $("#id_tags__tagautosuggest").on("keydown", function(e){
-                that.setFreeAndWheelchair();
+                that.setFree();
             });
             $("#id_tags__tagautosuggest").on("focus", function(e){
-                that.setFreeAndWheelchair();
+                that.setFree();
             });
 
             $(".as-selections .as-close").live("mousedown", function(){
@@ -55,9 +55,9 @@
 
             }
             
-            this.setFreeAndWheelchair();
+            this.setFree();
         },
-        setFreeAndWheelchair: function(){
+        setFree: function(){
             var tags = $("#as-values-id_tags__tagautosuggest").val().split(",");
             tags = _.filter(tags, function(tag){ return tag; });
             if(tags.indexOf("Free")!==-1){
@@ -68,12 +68,6 @@
             setTimeout(function(){
                 $("#id_price_free").trigger("changeFromTags");
             },10);
-
-            if(tags.indexOf("Wheelchair" )!==-1){
-                $("#id_wheelchair_0").attr('checked', true);
-            } else {
-                $("#id_wheelchair_1").attr('checked', true);
-            }
         },
         forCity: function(city){
             var data = {},that=this;
@@ -107,12 +101,19 @@
             }
         },
         addTag: function(tag) {
-            if($(".as-selection-item[data-value='"+tag+"']").length>0) return;
             var e;
-            $("#id_tags__tagautosuggest").val(tag);
-            e = jQuery.Event("keydown");
-            e.keyCode = 9;
-            $("#id_tags__tagautosuggest").trigger(e);
+            var tags = _.map($("#as-values-id_tags__tagautosuggest").val().split(","), function(tag){
+                return tag.trim();
+            });
+
+            tags = _.filter(tags, function(tag){ return tag; });
+
+            if(tags.indexOf(tag)===-1){
+                $("#id_tags__tagautosuggest").val(tag);
+                e = $.Event("keydown");
+                e.keyCode = 9;
+                $("#id_tags__tagautosuggest").trigger(e);
+            }
         },
         removeTag: function(tag) {
             var button = $(".as-selections [data-value='"+tag+"'] a");
@@ -123,9 +124,9 @@
             $(".modal-bg").hide();
             $(".as-selections").removeClass("active");
             setTimeout(function(){
-		$("#id_tags__tagautosuggest").blur();
-		$('.tags-popup').hide();
-		$('.tags-popup').css("opacity", 1);
+                $("#id_tags__tagautosuggest").blur();
+                $('.tags-popup').hide();
+                $('.tags-popup').css("opacity", 1);
             });
         },
         autoTagsDetect: function(description){
@@ -153,9 +154,6 @@
             if(this.autoTags.indexOf(tag)!==-1){
                 this.autoTags = _.without(this.autoTags, tag);
                 this.removeTag(tag);
-                if(tag==="Wheelchair"){
-                    $("#id_wheelchair_1")[0].checked = true;
-                }
             }
 
         }
