@@ -11,17 +11,15 @@ def dev():
     env.hosts = ['root@dev.cityfusion.ca']
     env.project_folder = '/root/cityfusion_git'
     env.alpha_folder = '/root/cityfusion_git/alpha'
-    env.settings_file = 'alpha.settings_prod'
+
+def prod():
+    env.hosts = ['root@cityfusion.ca']
+    env.project_folder = '/root/cityfusion_git'
+    env.alpha_folder = '/root/cityfusion_git/alpha'
+
 
 def host_type():
     run('uname -a')
-
-def django_admin(cmd):
-    return ". venv/bin/activate; django-admin.py %s --settings=%s --pythonpath=." % (cmd, env.settings_file)
-
-def django_admin_local(cmd):
-    return ". venv/bin/activate; django-admin.py %s --settings=%s --pythonpath=." % (cmd, env.local_settings_file)
-
 
 def upgrade():
     with cd(env.project_folder):
@@ -44,6 +42,3 @@ def pip_freeze():
 
 def echo_shell():
     print env.shell
-
-def test():
-    local(django_admin("test event home citi_user"), capture=False)

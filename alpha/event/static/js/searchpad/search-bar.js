@@ -4,7 +4,7 @@
 
     var SearchBar = function(){
         this.searchInput = $("<input type='text' class='search-input'>");
-        $(".searchTags").append(this.searchInput);        
+        // $(".searchTags").append(this.searchInput);        
     };
 
     SearchBar.prototype = {

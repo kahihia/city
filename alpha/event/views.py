@@ -134,6 +134,14 @@ def view(request, slug, date=None):
         else:
             event = Event.future_events.get(slug=slug).next_day()
 
+        base_event = event.event
+        if not base_event.viewed_times:
+            base_event.viewed_times = 1
+        else:
+            base_event.viewed_times = base_event.viewed_times + 1
+        base_event.save()
+
+
         if not event:
             raise ObjectDoesNotExist
     except ObjectDoesNotExist:
