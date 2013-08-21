@@ -52,8 +52,9 @@
                     tags = _.map(data.tags, function(tag){ return tag.name; });
                     that.loadTags(tags);
                 });
-
             }
+
+            this.watchTagsCount();
         },
         setFree: function(){
             var tags = $("#as-values-id_tags__tagautosuggest").val().split(",");
@@ -153,7 +154,23 @@
                 this.autoTags = _.without(this.autoTags, tag);
                 this.removeTag(tag);
             }
+        },
+        watchTagsCount: function(){
+            setInterval(this.calculateTagsCount.bind(this), 50);
 
+        },
+        calculateTagsCount: function(){
+            var count = _.filter($("#as-values-id_tags__tagautosuggest").val().split(","), function(tag){ 
+                return tag.trim(); 
+            }).length;
+
+            $(".tags-counter").text(count);
+
+            if(count>10) {
+                $(".tags-counter-container").addClass("overflow");
+            } else {
+                $(".tags-counter-container").removeClass("overflow");
+            }
         }
     });
 
