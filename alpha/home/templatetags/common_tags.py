@@ -9,7 +9,7 @@ register = template.Library()
 def html_urlize(value, autoescape=None):
     """Converts URLs in html text into clickable links."""
     ignored_tags = ['a', 'code', 'pre']
-    soup = BeautifulSoup(value)
+    soup = BeautifulSoup(value, convertEntities='html')
     tags = soup.findAll(True)
     text_all = soup.contents
     for text in text_all:
@@ -29,7 +29,7 @@ def html_urlize(value, autoescape=None):
                     text.replaceWith(parsed_text)
                 try:
                     tag.replaceWith(str(soup_text))
-                except:
+                except Exception:
                     pass
     return mark_safe(str(soup))
 
