@@ -161,7 +161,7 @@ class FunctionFilter(Filter):
     def night_life_filter(self, qs):
         ids = qs.filter(
             Q(event__tagged_items__tag__name__in=["19+", "Night Life", "DJ", "Party", "Rave"]) | Q(event__venue__venueaccount__types=VenueType.active_types.get(name='Nightlife & Singles & Night Clubs'))
-        ).values_list("id", flat=True)
+        ).values_list("event_id", flat=True)
         return qs.filter(event_id__in=ids)
 
     def date_night_filter(self, qs):
