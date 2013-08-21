@@ -87,7 +87,7 @@ body
 .location-wrapper
 {
 	float: left;
-    width: 706px;
+    width: 703px;
 }
 
 .location-wrapper .location-label
@@ -186,7 +186,7 @@ body
 .search-text-box input.search
 {
 	border:0;
-	width:260px;
+	width:245px;
 	background:none;
 	color:#454545;
 	float:left;
@@ -672,6 +672,7 @@ body
 	padding:20px 10px;
 	background:#022E52;
 	text-align:center;
+	margin-bottom: 120px;
 }
 
 .copyright
