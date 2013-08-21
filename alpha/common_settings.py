@@ -334,8 +334,6 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-GOOGLE_ANALYTICS_CODE = "UA-18720563-1"
-
 #Celery settings
 
 BROKER_URL = 'amqp://fusion:forfusion@127.0.0.1:5672/cityfusion_vhost'
