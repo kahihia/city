@@ -119,6 +119,11 @@
                     <li><a href="{% url 'staticpage' alias='privacy_policy' %}">Privacy Policy</a></li>
                     <li class="last"><a href="{% url 'staticpage' alias='terms_of_service' %}">Terms of Service</a></li>
                     <li class="last">
+                        <a href="javascript:void(0);" class="action-facebook-like">
+                            <div href="http://{{ request.META.HTTP_HOST }}" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>
+                        </a>
+                    </li>
+                    <li class="last">
                         <a href="#" class="footer-icon facebook"></a>
                         <a href="#" class="footer-icon twitter"></a>
                         <a href="#" class="footer-icon email"></a>

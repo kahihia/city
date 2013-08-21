@@ -14,6 +14,10 @@ DATABASES = {
     }
 }
 
-if socket.gethostbyname(socket.gethostname()) == '127.0.0.1':
+host_ip = socket.gethostbyname(socket.gethostname())
+if host_ip == '127.0.0.1':
     FACEBOOK_APP_ID = '536513936402579'
     FACEBOOK_APP_SECRET = 'f0aea33f1319a8e238a419ea57a671d5'
+elif host_ip == '192.81.133.213':
+    FACEBOOK_APP_ID = '1406987966191446'
+    FACEBOOK_APP_SECRET = '349b9b850b503a02b490148333b6d917'
