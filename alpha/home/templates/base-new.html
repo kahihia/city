@@ -65,6 +65,7 @@
     {% googleanalyticsjs %}
 </head>
 <body {% block body_attributes %}class="modern"{% endblock %}>
+    <script>_gaq && _gaq.push(['_trackPageview']);</script>
 {% if messages %}
     <ul class="messages">
         {% for message in messages %}
