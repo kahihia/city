@@ -13,8 +13,8 @@ class ShowGoogleAnalyticsJS(template.Node):
         # if 'user' in context and context['user'] and context['user'].is_staff:
         #   return "<!-- Goggle Analytics not included because you are a staff user! -->"
 
-        # if settings.DEBUG:
-        #     return "<!-- Goggle Analytics not included because you are in Debug mode! -->"
+        if settings.DEBUG:
+            return "<!-- Goggle Analytics not included because you are in Debug mode! -->"
 
         return """
         <script type="text/javascript">
