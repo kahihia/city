@@ -143,8 +143,9 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
         return self.native_region
 
 
-def create_facebook_profile(sender, user, created, **kwargs):
+def create_facebook_profile(sender, instance, created, **kwargs):
     if created:
+        user = instance
         account = Account.objects.create(user=user)
 
         for perm in ASSIGNED_PERMISSIONS['profile']:
