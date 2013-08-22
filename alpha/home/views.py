@@ -3,6 +3,8 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext, TemplateDoesNotExist
+from django.conf import settings
+from django.contrib.sites.models import Site
 
 def custom_404(request):
     return render(request,"404.html")
@@ -14,6 +16,11 @@ def redirect(request):
 def channelfile(request):
     return HttpResponse('''<script src="//connect.facebook.net/en_US/all.js"></script>''')
 
+def facebook_for_turbolinks_js(request):
+	return render_to_response('facebook-for-turbolinks.js', {
+			"FACEBOOK_APP_ID": settings.FACEBOOK_APP_ID,
+			"site": Site.objects.get_current().domain
+		}, context_instance=RequestContext(request))
 
 def page(request, alias):
     try:

@@ -38,8 +38,8 @@ loadFacebookSDK = function() {
 
 initializeFacebookSDK = function() {
   return FB.init({
-    appId: '241160805895511',
-    channelUrl: '//localhost:8000/channel.html',
+    appId: '{{ FACEBOOK_APP_ID }}',
+    channelUrl: '//{{ site }}/channel.html',
     status: true,
     cookie: true,
     xfbml: true
