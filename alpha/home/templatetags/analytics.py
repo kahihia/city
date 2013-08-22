@@ -48,3 +48,7 @@ class ShowGoogleAnalyticsJSPush(template.Node):
         return """
         <script>_gaq && _gaq.push(['_trackPageview']);</script>
         """
+
+@register.tag
+def googleanalyticsjs_push(parser, token):
+    return ShowGoogleAnalyticsJSPush()        
