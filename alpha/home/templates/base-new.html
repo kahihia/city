@@ -60,6 +60,9 @@
 
     {% endblock %}
     {% block userena_head %}{% endblock %}
+
+    {% load analytics %}
+    {% googleanalyticsjs %}
 </head>
 <body {% block body_attributes %}class="modern"{% endblock %}>
 {% if messages %}
@@ -159,7 +162,4 @@
     }
 </script>
 </body>
-{% load analytics %}
-{% googleanalyticsjs %}
-
 </html>
