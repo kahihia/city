@@ -21,6 +21,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from advertising.models import Advertising
 from cities.models import Region, City
 from django.db.models import Q, Count
+from userena.managers import ASSIGNED_PERMISSIONS
+from guardian.shortcuts import assign
 
 
 REMINDER_TYPES = (
@@ -141,9 +143,15 @@ class Account(UserenaBaseProfile, FacebookProfileModel):
         return self.native_region
 
 
-def create_facebook_profile(sender, instance, created, **kwargs):
+def create_facebook_profile(sender, user, created, **kwargs):
     if created:
-        Account.objects.create(user=instance)
+        account = Account.objects.create(user=user)
+
+        for perm in ASSIGNED_PERMISSIONS['profile']:
+            assign(perm[0], user, account)
+
+        for perm in ASSIGNED_PERMISSIONS['user']:
+            assign(perm[0], user, user)
 
 
 def add_single_events_to_schedule(account, events):
