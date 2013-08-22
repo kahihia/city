@@ -31,3 +31,20 @@ class ShowGoogleAnalyticsJS(template.Node):
 @register.tag
 def googleanalyticsjs(parser, token):
     return ShowGoogleAnalyticsJS()
+
+class ShowGoogleAnalyticsJSPush(template.Node):
+    def render(self, context):
+        code =  getattr(settings, "GOOGLE_ANALYTICS_CODE", False)
+        if not code:
+            return "<!-- Goggle Analytics not included because you haven't set the settings.GOOGLE_ANALYTICS_CODE variable! -->"
+
+        # TODO: uncoment in production
+        # if 'user' in context and context['user'] and context['user'].is_staff:
+        #   return "<!-- Goggle Analytics not included because you are a staff user! -->"
+
+        # if settings.DEBUG:
+        #     return "<!-- Goggle Analytics not included because you are in Debug mode! -->"
+
+        return """
+        <script>_gaq && _gaq.push(['_trackPageview']);</script>
+        """

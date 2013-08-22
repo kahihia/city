@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    (function () {
+    ;(function($, window, document, undefined) {
         var Cityfusion = {
             {% if user_location.user_location_lat_lon %}
             "userLocationLat": {{ user_location.user_location_lat_lon.1 }},
@@ -39,5 +39,5 @@
                 });
             });
         }
-    })();
+    })(jQuery, window, document);
 </script>

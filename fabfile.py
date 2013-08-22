@@ -27,7 +27,7 @@ def upgrade():
         run("git pull origin master")
 
     with cd(env.alpha_folder):
-        run("python manage.py collectstatic")
+        run("python manage.py collectstatic --noinput")
         run("supervisorctl reload")
 
 def make_virtualenv():

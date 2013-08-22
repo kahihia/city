@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang='en_US'>
 <head>
     {% load analytics %}
-    {% googleanalyticsjs %}    
+    {% googleanalyticsjs %}
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>City Fusion</title>
@@ -66,7 +66,7 @@
     {% block userena_head %}{% endblock %}
 </head>
 <body {% block body_attributes %}class="modern"{% endblock %}>
-    <script>_gaq && _gaq.push(['_trackPageview']);</script>
+    {% googleanalyticsjs_push %}
 {% if messages %}
     <ul class="messages">
         {% for message in messages %}
