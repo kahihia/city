@@ -11,6 +11,7 @@ def dev():
     env.hosts = ['root@dev.cityfusion.ca']
     env.project_folder = '/root/cityfusion_git'
     env.alpha_folder = '/root/cityfusion_git/alpha'
+    env.password = "123forfusion"
 
 def prod():
     env.hosts = ['root@cityfusion.ca']
