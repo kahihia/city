@@ -1,8 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang='en_US'>
 <head>
-    {% load analytics %}
-    {% googleanalyticsjs %}
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>City Fusion</title>
     
@@ -54,6 +52,9 @@
     <script src="{{STATIC_URL}}js/searchpad/remind-me.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/event-actions.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/jump-to-date.js" type="text/javascript"></script>
+
+    {% load analytics %}
+    {% googleanalyticsjs %}
 
     {% block head %}
 

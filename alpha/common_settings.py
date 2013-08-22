@@ -357,5 +357,3 @@ CELERYBEAT_SCHEDULE = {
         'schedule': timedelta(hours=3)
     }
 }
-
-GOOGLE_ANALYTICS_CODE = "UA-18720563-1"
