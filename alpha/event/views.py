@@ -82,7 +82,7 @@ def browse(request):
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
-    featured_events = Event.featured_events.all()
+    featured_events = Event.featured_events.all().order_by('?')
 
     featuredEventsFilter = EventFilter({}, queryset=featured_events)
 

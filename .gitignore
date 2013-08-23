@@ -38,6 +38,7 @@ nosetests.xml
 /static
 /media
 /alpha/media
+/pids
 
 *.log
 
