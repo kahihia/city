@@ -52,14 +52,14 @@
             $(this.element).on("blur", function(e){
                 that.saveCurrentDay();
                 if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
-                    $("#id_tags__tagautosuggest").data('tagspopup').autoTagsDetect(
+                    $("#id_tags__tagautosuggest").data('ui-tagspopup').autoTagsDetect(
                         $("#id_description").val()
                     );
                 }
             });
             $("#id_description").on("keyup", function(e){
                 if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
-                    $("#id_tags__tagautosuggest").data('tagspopup').autoTagsDetect(
+                    $("#id_tags__tagautosuggest").data('ui-tagspopup').autoTagsDetect(
                         $("#id_description").val()
                     );
                 }
@@ -184,7 +184,7 @@
                     setTimeout(function(){ 
                         that.saveCurrentDay();
                         if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
-                            $("#id_tags__tagautosuggest").data('tagspopup').autoTagsDetect(
+                            $("#id_tags__tagautosuggest").data('ui-tagspopup').autoTagsDetect(
                                 CKEDITOR.instances.id_description.getData()
                             );
                         }
@@ -197,7 +197,7 @@
                     setTimeout(function(){ 
                         that.saveCurrentDay();
                         if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
-                            $("#id_tags__tagautosuggest").data('tagspopup').autoTagsDetect(
+                            $("#id_tags__tagautosuggest").data('ui-tagspopup').autoTagsDetect(
                                 CKEDITOR.instances.id_description.getData()
                             );
                         }
@@ -214,8 +214,8 @@
             if(value){
                 var json = JSON.parse(value);
                 $("#id_description").html(json["default"]);
-                $("#id_description").data("description").setValue(json);
-                $("#id_description").data("description").saveCurrentDay();
+                $("#id_description").data("ui-description").setValue(json);
+                $("#id_description").data("ui-description").saveCurrentDay();
             }
         },100);
     });

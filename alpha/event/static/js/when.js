@@ -61,16 +61,16 @@
 					disabledMonths = _.filter(allMonths, function(month) {
 						return month < (new Date().getMonth() + 1);
 					});
-					$($(that.monthPicker).data("newMonthPicker").monthValue).monthpicker('disableMonths', disabledMonths);
+					$($(that.monthPicker).data("ui-newMonthPicker").monthValue).monthpicker('disableMonths', disabledMonths);
 
 				} else {
-					$($(that.monthPicker).data("newMonthPicker").monthValue).monthpicker('disableMonths', []);
+					$($(that.monthPicker).data("ui-newMonthPicker").monthValue).monthpicker('disableMonths', []);
 				}
 			};
 
 			setTimeout(disabledOrEnableMonths, 100);
 
-			$($(this.monthPicker).data("newMonthPicker").monthValue).monthpicker().bind("monthpicker-change-year", function(e, year) {
+			$($(this.monthPicker).data("ui-newMonthPicker").monthValue).monthpicker().bind("monthpicker-change-year", function(e, year) {
 				disabledOrEnableMonths(year);
 			});
 
@@ -100,7 +100,7 @@
 					$.fancybox.close();
 					$(that.error).hide();
 					$(that.element).val(that.getText());
-					$("#id_description").data("description").setDays(that.getDays());
+					$("#id_description").data("ui-description").setDays(that.getDays());
 				} else {
 					$(that.error).show();
 				}
@@ -162,7 +162,7 @@
 				$(this.monthsContainer).prepend(monthContainer);
 			}
 
-			days = $(".days-time-picker", monthContainer).data("daystimepicker");
+			days = $(".days-time-picker", monthContainer).data("ui-daystimepicker");
 			if(!(year in this.months)) this.months[year] = {};
 			this.months[year][month] = days;
 		},
@@ -195,7 +195,7 @@
 
 			daysPicker = $("<div>").addClass("days-picker").multiDatesPicker({
 				onToggle: function(dateText) {
-					var timepicker = $(daysTimePicker).data("daystimepicker");
+					var timepicker = $(daysTimePicker).data("ui-daystimepicker");
 					var dateArray = dateText.split("/");
 					var month = parseInt(dateArray[0]);
 					var day = parseInt(dateArray[1]);
@@ -410,11 +410,11 @@
 			}
 			if(previous) {
 				this.days.splice(
-				this.days.indexOf(previous) + 1, 0, $(timePicker).data("myTimepicker"));
+				this.days.indexOf(previous) + 1, 0, $(timePicker).data("ui-myTimepicker"));
 				$(previous.element).after(timePicker)
 			} else {
 				this.days.splice(
-				0, 0, $(timePicker).data("myTimepicker"));
+				0, 0, $(timePicker).data("ui-myTimepicker"));
 				$(this.daysContainer).prepend(timePicker);
 			}
 			if(this.days.length === 0) {
@@ -633,7 +633,7 @@
 			});
 			$("#id_when").when();
 			if($("#id_when_json").val()) {
-				$("#id_when").data("when").setValue(
+				$("#id_when").data("ui-when").setValue(
 				JSON.parse(
 				$("#id_when_json").val()));
 			};

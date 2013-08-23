@@ -123,7 +123,7 @@
         self.onSearchButtonClick = function() {
             self.place = self.cityName.val();
 
-            $("#id_tags__tagautosuggest").data('tagspopup').forCity(self.cityName.val());
+            $("#id_tags__tagautosuggest").data('ui-tagspopup').forCity(self.cityName.val());
 
             self.loadEvents({"place": self.place}, function() {
                 self.eventsBlock.empty();
@@ -248,7 +248,7 @@
         };
 
         self.fillTagsAndTickets = function() {
-            var tagsPlugin = $("#id_tags__tagautosuggest").data('tagspopup');
+            var tagsPlugin = $("#id_tags__tagautosuggest").data('ui-tagspopup');
             var oldTags = $("#as-selections-id_tags__tagautosuggest").find(".as-selection-item");
             $.each(oldTags, function() {
                 tagsPlugin.removeTag($(this).data("value"));

@@ -85,7 +85,7 @@
             if (item) {
                 if (self.allowMultiple) {
                     $(input).val("");
-                    $(input).data("autocomplete").term = "";
+                    $(input).data("ui-autocomplete").term = "";
                     if ($(self.hiddenMultipleSelector + '[value="' + item.id + '"]').length === 0) {
                         var newInput = $('<input />', {
                             'type': 'hidden',
@@ -166,7 +166,7 @@
                     }
                     if (self.allowMultiple && !$(input).hasClass('ui-state-error')) {
                         $(input).val("");
-                        $(input).data("autocomplete").term = "";
+                        $(input).data("ui-autocomplete").term = "";
                     }
                 },
                 select: function (event, ui) {
@@ -183,7 +183,7 @@
                 }
             }).addClass("ui-widget ui-widget-content ui-corner-all");
             // Override the default auto-complete render.
-            $(input).data("autocomplete")._renderItem = function (ul, item) {
+            $(input).data("ui-autocomplete")._renderItem = function (ul, item) {
                 /* Adds hook for additional formatting, allows HTML in the label,
                 highlights term matches and handles pagination. */
                 var label = item.label;
@@ -206,7 +206,7 @@
                 return li;
             };
             // Override the default auto-complete suggest.
-            $(input).data("autocomplete")._suggest = function (items) {
+            $(input).data("ui-autocomplete")._suggest = function (items) {
                 /* Needed for handling pagination links */
                 var page = $(input).data('page');
                 var ul = this.menu.element;
