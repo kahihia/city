@@ -492,24 +492,6 @@ body
 }
 
 /*browse events css*/
-
-#search_result{
-	padding-top:50px;
-}
-
-.result-entry-info{
-	background-color:#f6f6f6;
-	margin:5px;
-	padding:5px;
-}
-.result-entry-info a{
-	text-decoration:none;
-	color:#0066cc;
-}
-.result-entry-info a:hover{
-	text-decoration:none;
-	color:#ff9e00;
-}
 .entry-wrapper
 {
 	width:466px;
@@ -559,76 +541,12 @@ body
 	font-size:15px;
 }
 
-.entry-date-wrapper
-{
-	color:#0066cc;
-	padding-top:5px;
-}
-
 .entry-description
 {
 	color:#454545;
 	padding-top:10px;
 }
 
-.details-events-view{
-	color:#0260bb;
-	font-weight:bold;
-	font-size:15px;
-	padding-left:40px;
-}
-/* details events popup */
-
-
-/* zoom picture */
-.dg-picture-zoom{
-	/*cursor : url(/static/images/magnify-plus.cur), pointer !important;*/
-	cursor: url(/static/images/magnify-plus.png), pointer !important;;
-}
-.dg-picture-zoom-large{
-	cursor : url(/static/images/magnify-minus.png), pointer !important;
-
-}
-.dg-picture-zoom-border-container{
-    border : 2px solid #FFF;
-    background-color: #FFF;
-    margin-left:-7px;
-    margin-top:-7px;
-    padding:7px;
-    box-shadow:10px 10px 20px #000000;
-    border-radius: 5px;
-}
-/*end zoom*/
-
-.auctions-wrapper
-{
-	padding-top:10px;
-}
-
-.auctions-wrapper ul
-{
-	margin:0px;
-	padding:0px;
-	list-style:none;
-}
-
-.auctions-wrapper ul li
-{
-	padding:3px 3px 3px 0px;
-	border-bottom:1px solid #ddd;
-}
-
-.auctions-wrapper ul li a
-{
-	color:#0260bb;
-	text-decoration:none;
-	font-weight:bold;
-}
-
-.auctions-wrapper ul li a img
-{
-	margin-right:4px;
-}
 
 .entry-navigation-np
 {
@@ -749,11 +667,6 @@ body
 	color:#ff9e00;
 }
 
-.add-border-right-white
-{
-	border-right:1px solid #fff;
-}
-
 a img {
 	border: 0px;
 }
@@ -779,10 +692,6 @@ a {
 	-webkit-border-radius:5px;
 	border-radius: 5px;
 }
-.btnbg{
-	background: url(/static/images/btn_bg.png) repeat-x;
-	cursor:pointer;
-}
 
 .tags{
 	padding-left:25px;
@@ -804,12 +713,6 @@ a {
 	visibility: hidden;
 	color:#454545;
 	}
-
-.hintanchor{ /*CSS for link that shows hint onmouseover*/
-	font-weight: bold;
-	color: #000000;
-	margin: 3px 8px;
-}
 
 #hintbox h3{
 	background-color:#e3e3e3;
