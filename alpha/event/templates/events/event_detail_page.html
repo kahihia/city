@@ -20,7 +20,7 @@
         <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{{STATIC_URL}}images/default-event.jpg" />
     {% endif %}
     <meta property="og:site_name" content="Cityfusion" />
-    <meta property="og:description" content="{{ event.event_description }}" />
+    <meta property="og:description" content="{{ event.event_description|striptags|safe }}" />
     <meta property="fb:admins" content="100000796428679" />
 
 
