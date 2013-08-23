@@ -1,8 +1,13 @@
-from BeautifulSoup import BeautifulSoup
+import urllib
+
 from django.template.defaultfilters import stringfilter
 from django.utils.html import urlize
 from django.utils.safestring import mark_safe
 from django import template
+from django.conf import settings
+
+from BeautifulSoup import BeautifulSoup
+
 register = template.Library()
 
 
@@ -37,3 +42,11 @@ html_urlize.is_safe = True
 html_urlize.needs_autoescape = True
 html_urlize = stringfilter(html_urlize)
 register.filter(html_urlize)
+
+@register.simple_tag(takes_context=True)
+def like_button(context, url):
+    return '<iframe src="https://www.facebook.com/plugins/like.php?locale=en_US&amp;href=%s&amp;width=93' \
+           '&amp;height=21&amp;colorscheme=light&amp;layout=button_count&amp;action=like&amp;show_faces=false' \
+           '&amp;send=false&amp;appId=%s" scrolling="no" frameborder="0" style="border:none; ' \
+           'overflow:hidden; width:80px; height:21px; vertical-align: middle;" allowTransparency="true">' \
+           '</iframe>' % (urllib.quote(url), settings.FACEBOOK_APP_ID)
