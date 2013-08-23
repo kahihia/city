@@ -125,7 +125,7 @@
                     <li><a href="{% url 'staticpage' alias='privacy_policy' %}">Privacy Policy</a></li>
                     <li class="last"><a href="{% url 'staticpage' alias='terms_of_service' %}">Terms of Service</a></li>
                     <li class="last">
-                        {% like_button "http://%s"|add:request.META.HTTP_HOST %}
+                        {% like_button "http://"|add:request.META.HTTP_HOST %}
                     </li>
                     <li class="last">
                         <a href="#" class="footer-icon facebook"></a>
