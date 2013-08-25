@@ -252,12 +252,12 @@
     min-width: 60px;
     padding-left: 10px;
     padding-right: 30px;
-    height: 21px;
-    max-height: 21px;
-    min-height: 21px;
-    line-height: 21px;
+    height: 22px;
+    max-height: 22px;
+    min-height: 22px;
+    line-height: 22px;
     border: none;
-    vertical-align: top;
+    vertical-align: middle;
     background: #f6f6f6;
     margin-right: 4px;
     margin-bottom: 4px;
@@ -273,6 +273,10 @@
 
     padding-top: 0;
     padding-bottom: 0;
+}
+
+.account-options ul.as-selections li.as-original .as-input {
+    height: 21px;
 }
 
 .account-options ul.as-selections li.as-selection-item:hover {
