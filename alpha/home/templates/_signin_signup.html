@@ -39,9 +39,7 @@
                 </li>
                 <li>
                     <form action="{% url 'facebook_connect' %}?facebook_login=1" method="post">
-                        <a class="login_with_facebook" href="javascript:void(0);" style="font-size: 20px;" onclick="F.connect(this.parentNode);">
-                            
-                        </a>
+                        <a class="login_with_facebook" href="javascript:void(0);" style="font-size: 20px;" onclick="F.connect(this.parentNode);"></a>
                         <input type="hidden" value="{{ request.path }}" name="next" />
                         <input type="hidden" value="{{ request.path }}" name="register_next" />
                         <input type="hidden" value="{{ request.path }}" name="error_next" />
@@ -56,7 +54,7 @@
             <li class="{% if not current_venue_account %} active{% endif %}">
                 <a href="{% url 'account_set_context' "root" %}">
                     <img src="{{ profile.get_mugshot_url }}" alt="Your mugshot" widrh="29" height="29" />
-                    {{ user.username }}
+                    <span>{{ user.username }}</span>
                 </a>
             </li>
             {% for venue_account in profile.venueaccount_set.all %}
@@ -67,7 +65,7 @@
                         {% else %}
                             <img src="{{STATIC_URL}}images/default-event.jpg" height="29px" weight="29px">
                         {% endif %}
-                        {{ venue_account.venue.name }}
+                        <span>{{ venue_account.venue.name }}</span>
                     </a>
                 </li>
             {% empty %}
