@@ -17,10 +17,6 @@ urlpatterns = patterns('',
         event.edit,
         name='event_edit'
     ),
-    url(r'^edit/(?P<authentication_key>\w+)/$',
-        event.remove,
-        name='event_remove'
-    ),
     url(r'^copy/(?P<authentication_key>\w+)/$',
         event.copy,
         name='event_copy'
