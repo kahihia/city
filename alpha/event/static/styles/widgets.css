@@ -123,6 +123,7 @@ input[type=checkbox] {
     position: absolute;
     padding: 0;
     margin: 0;
+    border: none;
 }
 
 input[type=checkbox] + label {
@@ -148,6 +149,7 @@ input[type=radio] {
     position: absolute;
     padding: 0;
     margin: 0;
+    border: none;
 }
 input[type=radio] + label {
     display: inline-block;
