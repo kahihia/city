@@ -125,7 +125,8 @@ input[type=checkbox] + label {
     width: 16px;
 }
 
-input[type=checkbox]:checked + label:after {
+input[type=checkbox]:checked + label:after,
+input[type=checkbox][checked="checked"]  + label:after {
     content: '';
     position: absolute;
     background: url("/static/images/widgets/checked.png") center center no-repeat;
@@ -146,7 +147,8 @@ input[type=radio] + label {
     height: 21px;
     background: url("/static/images/widgets/radio-bg.png") center center no-repeat;
 }
-input[type=radio]:checked + label {
+input[type=radio]:checked + label,
+input[type=radio][checked="checked"] + label  {
     background: url("/static/images/widgets/radio-bg-selected.png") center center no-repeat;
 }
 
