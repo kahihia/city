@@ -117,16 +117,16 @@ div.radio label{
 }
 
 input[type=checkbox] {
-    display: none !important;
+    display: none !important;    
 }
+
 input[type=checkbox] + label {
     position:relative;
     background: url("/static/images/widgets/checkbox-bg.png") center center no-repeat;;
     width: 16px;
 }
 
-input[type=checkbox]:checked + label:after,
-input[type=checkbox][checked="checked"]  + label:after {
+input[type=checkbox]:checked + label:after {
     content: '';
     position: absolute;
     background: url("/static/images/widgets/checked.png") center center no-repeat;
@@ -147,8 +147,7 @@ input[type=radio] + label {
     height: 21px;
     background: url("/static/images/widgets/radio-bg.png") center center no-repeat;
 }
-input[type=radio]:checked + label,
-input[type=radio][checked="checked"] + label  {
+input[type=radio]:checked + label {
     background: url("/static/images/widgets/radio-bg-selected.png") center center no-repeat;
 }
 
