@@ -116,7 +116,8 @@ div.radio label{
     cursor: pointer;
 }
 
-input[type=checkbox] {
+input[type=checkbox],
+input[type=radio] {
     width: 0;
     height: 0;
     opacity: 0;
@@ -124,6 +125,8 @@ input[type=checkbox] {
     padding: 0;
     margin: 0;
     border: none;
+    filter: alpha(opacity=0);
+    -moz-opacity: 0;
 }
 
 input[type=checkbox] + label {
@@ -142,15 +145,6 @@ input[type=checkbox]:checked + label:after {
     height: 10px;
 }
 
-input[type=radio] {
-    width: 0;
-    height: 0;
-    opacity: 0;
-    position: absolute;
-    padding: 0;
-    margin: 0;
-    border: none;
-}
 input[type=radio] + label {
     display: inline-block;
     cursor: pointer;
