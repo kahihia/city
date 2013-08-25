@@ -7,7 +7,9 @@
         <tr>
             <th class="action">Campaign Name</th>
             <th class="action">Owner</th>
-            <th class="action">Ads(Impressions/Clicks)</th>
+            <th class="action">Ads(Impressions/Clicks), CPC, CPM</th>
+            <th class="action">Spent</th>
+            <th class="action">Remain</th>
             <th class="action">Regions</th>
             <th class="action">Edit</th>
             <th class="action">Remove</th>
@@ -24,11 +26,14 @@
                 {% for ad in campaign.advertising_set.all %}
                     <a href="/media/{{ ad.image }}" class="advertising-image" target="_blank">
                         {{ ad.ad_type.name }} {{ ad.ad_type.width }}x{{ ad.ad_type.height }}
-                    </a>({{ ad.views }}/{{ ad.clicks }})
+                    </a>({{ ad.views }}/{{ ad.clicks }}), {{ ad.cpc_price }}, {{ ad.cpm_price }}
+                    <br/>
                     <a href="{% url 'admin_advertising_remove_ad' ad.id %}" class="danger">Remove ad</a>
                     <br>
                 {% endfor %}
             </td>
+            <td>{{ campaign.ammount_spent }}</td>
+            <td>{{ campaign.ammount_remaining }}</td>
             <td class="action">
                 {% if campaign.all_of_canada %}
                     All of Canada
@@ -39,12 +44,12 @@
             </td>
             <td class="action">
                 <a href="{% url 'admin_advertising_edit_campaign' campaign.id %}">
-                    Edit campaign
+                    Edit
                 </a>
             </td>
             <td class="action">
                 <a href="{% url 'admin_advertising_remove_campaign' campaign.id %}" class="danger">
-                    Remove campaign
+                    Remove
                 </a>
             </td>
         </tr>
