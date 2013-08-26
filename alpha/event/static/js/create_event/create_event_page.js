@@ -52,8 +52,8 @@
             if(value){
                 var json = JSON.parse(value);
                 $("#id_description").html(json["default"]);
-                $("#id_description").data("description").setValue(json);
-                $("#id_description").data("description").saveCurrentDay();
+                $("#id_description").data("ui-description").setValue(json);
+                $("#id_description").data("ui-description").saveCurrentDay();
             }
         },
         initVenueAccountOwner: function(){
