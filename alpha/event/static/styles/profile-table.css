@@ -130,4 +130,10 @@ a.add-button {
 
 .ads-thumb {
     float: left;
+    margin-right: 2px;
+}
+
+.advertising-items {
+    clear: both;
+    padding: 4px 0;
 }
