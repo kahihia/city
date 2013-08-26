@@ -668,13 +668,13 @@
 
 .native-region-combobox {
     position: relative;
-    width: 160px;
+    width: 155px;
 }
 
 .native-region-combobox .ui-button {
     position:absolute;
     top: 3px;
-    right: 4px;
+    right: 0px;
     width: 20px;
     height: 20px;
     background: url("/static/images/widgets/dropdown.png") no-repeat;

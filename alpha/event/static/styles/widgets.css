@@ -396,6 +396,7 @@ ul#box-nav li.selected a {
 
 fieldset {
     border:1px solid #d4d4d4;
+    padding: 10px;
 }
 
 fieldset legend{
