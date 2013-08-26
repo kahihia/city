@@ -21,3 +21,13 @@ if (!Function.prototype.bind) {
     return fBound;
   };
 }
+
+if(typeof String.prototype.trim !== 'function') {
+  String.prototype.trim = function() {
+    //Your implementation here. Might be worth looking at perf comparison at
+    //http://blog.stevenlevithan.com/archives/faster-trim-javascript
+    //
+    //The most common one is perhaps this:
+    return this.replace(/^\s+|\s+$/g, ''); 
+  }
+}

@@ -396,6 +396,7 @@ ul#box-nav li.selected a {
 
 fieldset {
     border:1px solid #d4d4d4;
+    padding: 10px;
 }
 
 fieldset legend{
@@ -599,6 +600,7 @@ body .event-actions-popup .in-the-loop-popup-content {
     height: 0;
     padding-bottom: 20px;
     background: #fff;
+    border: 1px solid #ddd;
 }
 
 .event-action-ui-dialog.ui-dialog a {
@@ -617,10 +619,12 @@ body .event-actions-popup .in-the-loop-popup-content {
     height: 36px;
     cursor: pointer;
     z-index: 8040 !important;
+    background: none;
     background-image: url('/static/fancybox/fancybox_sprite.png');
     background-position: 0 0;
     margin: 0;
     padding: 0;
+    border: none;
 }
 
 .event-action-ui-dialog.ui-dialog .ui-dialog-titlebar-close .ui-icon-closethick{
