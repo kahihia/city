@@ -69,11 +69,11 @@
         appendLink: function(data) {
             var link, li;
 
-            link = $("<a href='javascript:void(0);'>").html(data.name);
+            link = $("<a href='javascript:void(0);'></a>").html(data.name);
             link.attr("data-location-id", data.id);
             link.attr("data-location-type", data.type);
 
-            li = $("<li>").append(link);
+            li = $("<li />").append(link);
             return li;
         },
         setupTrip: function(){
