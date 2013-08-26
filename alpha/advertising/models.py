@@ -31,6 +31,7 @@ class AdminAdvertisingCampaignManager(models.Manager):
 class AdvertisingCampaign(models.Model):
     name = models.CharField(max_length=128)
     account = models.ForeignKey('accounts.Account')
+    venue_account = models.ForeignKey('accounts.VenueAccount', blank=True, null=True)
     all_of_canada = models.BooleanField()
     regions = models.ManyToManyField(Region)
     budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')

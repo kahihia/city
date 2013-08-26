@@ -40,9 +40,16 @@
                         {% endif %}
                     </div>                    
                     <div>
-                        <a class="button edit-event-account-button" href="{% url 'edit_venue_account' slug=venue_account.slug %}">
-                            Edit Profile
-                        </a>
+                        <div>
+                            <a class="button edit-event-account-button" href="{% url 'advertising_setup' %}">
+                                Create New Ad
+                            </a>
+                        </div>
+                        <div>
+                            <a class="button edit-event-account-button" href="{% url 'edit_venue_account' slug=venue_account.slug %}">
+                                Edit Profile
+                            </a>
+                        </div>
                         <div class="public-or-private">
                             <div class="radio">
                                 <input {% if venue_account.public %}checked="checked"{% endif %} id="venue_account_make_public" type="radio" value="public" name="public_or_private"> 

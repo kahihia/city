@@ -24,7 +24,7 @@ def open(request, advertising_id):
 @native_region_required(why_message="native_region_required")
 def setup(request):
     account = Account.objects.get(user_id=request.user.id)
-    campaign = AdvertisingCampaign(account=account)
+    campaign = AdvertisingCampaign(account=account, venue_account=request.current_venue_account)
 
     form = PaidAdvertisingSetupForm(instance=campaign)
 
