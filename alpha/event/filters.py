@@ -81,7 +81,7 @@ class TagsFilter(Filter):
         tags = querydict["tag"]
         if isinstance(tags, basestring):
             tags = querydict.getlist(self.name)
-        return "&".join(["tag=%s" % urllib.quote(tag) for tag in tags])
+        return "&".join(["tag=%s" % urllib.quote(tag.encode('utf8')) for tag in tags])
 
     def upgrade_value(self, querydict, value):
         return_value = []
