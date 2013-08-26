@@ -155,7 +155,7 @@ body
 	width:345px;
 	background:none;
 	color:#454545;
-	float:left;
+	float:left;	
 }
 
 .search-events-text-box
@@ -181,6 +181,7 @@ body
 	width:175px;
 	background:none;
 	color:#454545;
+	height: 18px;
 }
 
 .search-text-box input.search
@@ -190,6 +191,7 @@ body
 	background:none;
 	color:#454545;
 	float:left;
+	height: 18px;
 }
 
 .search-submission
