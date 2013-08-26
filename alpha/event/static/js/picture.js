@@ -37,6 +37,11 @@
                 that.saveThumbnail();
             });
 
+            this.cancel_button = $(".cancel-button", this.popup);
+            $(this.cancel_button).on('click', function() {
+                $.fancybox.close();
+            });
+
             $(".picture-thumb").on("click", function(){
                 if(that.cropping_image) {
                     $.fancybox($(that.popup), {

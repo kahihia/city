@@ -31,6 +31,21 @@
     cursor: pointer;
 }
 
+.full-screen-popup .cancel-button {
+    font-size: 1.3em;
+    padding: 5px 10px;
+    position: absolute;
+    right: 130px;
+    bottom: 5px;
+    background: #EFEFEF;
+    border: 1px solid #E6E6E6;
+    -moz-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
 .jcrop-holder {
     margin:0 auto;
     vertical-align:middle;    
