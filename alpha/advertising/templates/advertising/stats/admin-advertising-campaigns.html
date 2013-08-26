@@ -24,7 +24,7 @@
             <td class="action">
                 {% for ad in campaign.advertising_set.all %}
                     <a href="/media/{{ ad.image }}" class="advertising-image" target="_blank">
-                        <img width="30" src="/media/{{ ad.image }}" alt="" />
+                        <img class="ads-thumb" width="30" src="/media/{{ ad.image }}" alt="" />
                         {{ ad.ad_type.name }} {{ ad.ad_type.width }}x{{ ad.ad_type.height }}
                     </a>({{ ad.views }}/{{ ad.clicks }}), {{ ad.cpc_price }}, {{ ad.cpm_price }}
                     <br/>
