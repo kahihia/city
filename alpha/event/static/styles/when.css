@@ -297,6 +297,7 @@
 }
 
 .ui-timepicker-hours .ui-timepicker {
+    float: left;
     padding-left: 10px;
     padding-right: 5px;    
 }
