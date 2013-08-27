@@ -98,7 +98,6 @@ TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.request',
     'event.context_processors.user_location',
     'event.context_processors.top5_tags',
-    # 'event.context_processors.location_debug_context_processor',
     'accounts.context_processors.user_context',
     'accounts.context_processors.taxes_context',
     'django_facebook.context_processors.facebook',
@@ -117,7 +116,7 @@ MIDDLEWARE_CLASSES = (
     'accounts.middleware.UserProfileMiddleware',
     'event.middleware.LocationMiddleware',
     'turbolinks.middleware.TurbolinksMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -172,7 +171,7 @@ INSTALLED_APPS = (
     'advertising',
     'ckeditor',
     'cityfusion_admin',
-    'debug_toolbar',
+    # 'debug_toolbar',
 )
 
 # A sample logging configuration. The only tangible logging performed
