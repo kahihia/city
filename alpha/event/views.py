@@ -128,6 +128,8 @@ def view_featured(request, slug, date):
 
 
 def view(request, slug, date=None):
+    from django.db import connection
+    connection._rollback()
     try:
         if date:
             event = SingleEvent.future_events.get(event__slug=slug, start_time__startswith=date)
@@ -157,7 +159,6 @@ def view(request, slug, date=None):
             'event': event,
             'events_from_venue': events_from_venue
         }, context_instance=RequestContext(request))
-
 
 @login_required
 def create(request, success_url=None, template_name='events/create/create_event.html'):

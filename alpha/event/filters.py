@@ -358,8 +358,6 @@ class LocationFilter(Filter):
 
 class SearchFilter(Filter):
     def search_tags(self, search_string):
-        # TODO: use nslt to split words
-        # search_string = search_string.strip()
         if search_string:
             return [{
                 "name": search_string,

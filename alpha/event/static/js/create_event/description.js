@@ -166,7 +166,7 @@
         setupCKEditor: function(){
             var that=this;
             CKEDITOR.config.toolbar = [
-               ['Styles','Format','Font','FontSize'],
+               ['Styles','Format','Font','FontSize', 'Maximize'],
                '/',
                ['Bold','Italic','Underline','StrikeThrough','-','Undo','Redo'],
                ['Table','-','Link','TextColor','BGColor','Source'],

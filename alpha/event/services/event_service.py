@@ -36,7 +36,7 @@ def send_event_details_email(event):
                DEFAULT_FROM_EMAIL,
                [event.email])
     msg.content_subtype = 'html'
-    msg.send()    
+    msg.send()
 
 
 def save_when_and_description(data, event):

@@ -117,9 +117,10 @@ MIDDLEWARE_CLASSES = (
     'accounts.middleware.UserProfileMiddleware',
     'event.middleware.LocationMiddleware',
     'turbolinks.middleware.TurbolinksMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
-# INTERNAL_IPS = ('127.0.0.1',)
+INTERNAL_IPS = ('127.0.0.1',)
 
 ROOT_URLCONF = 'urls'
 
@@ -171,6 +172,7 @@ INSTALLED_APPS = (
     'advertising',
     'ckeditor',
     'cityfusion_admin',
+    'debug_toolbar',
 )
 
 # A sample logging configuration. The only tangible logging performed
@@ -313,7 +315,7 @@ CKEDITOR_CONFIGS = {
     {
         'skin': 'moono',
         'toolbar_Basic': [
-            ['Styles','Format','Font','FontSize'],
+            ['Styles','Format','Font','FontSize', 'Maximize'],
             '/',
             ['Bold','Italic','Underline','StrikeThrough','-','Undo','Redo'],
             ['Table','-','Link','TextColor','BGColor','Source'],
