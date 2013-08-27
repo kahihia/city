@@ -230,9 +230,6 @@ EVENT_DEFAULT_PICTURE_URL = STATIC_URL + 'img/default.gif'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
-EVENT_EMAIL_SITE = 'dev.cityfusion.ca'
-#instead of taking the hustles of configuring a simple mail server, use an established one instead
-
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'cityfusion.smtp@gmail.com'

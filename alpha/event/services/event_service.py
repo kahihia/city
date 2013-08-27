@@ -14,10 +14,11 @@ from event.settings import DEFAULT_FROM_EMAIL
 from event.services import venue_service
 
 from event.models import SingleEvent
+from django.contrib.sites.models import Site
 
 
 def send_event_details_email(event):
-    current_site = settings.EVENT_EMAIL_SITE
+    current_site = Site.objects.get_current().domain
     subject = render_to_string('events/create/creation_email_subject.txt', {
             'site': current_site,
             'title': mark_safe(event.name)

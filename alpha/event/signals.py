@@ -8,6 +8,7 @@ from django.contrib.gis.db import models
 from accounts.models import Account
 from .models import Event, SingleEvent, AuditEvent, AuditPhrase, phrases_query
 from .settings import DEFAULT_FROM_EMAIL
+from django.contrib.sites.models import Site
 
 
 def audit_event_catch(instance=None, created=False, **kwargs):
@@ -28,7 +29,7 @@ def audit_event_catch(instance=None, created=False, **kwargs):
         for phrase in phrases:
             audit_event.phrases.add(phrase)
 
-        current_site = settings.EVENT_EMAIL_SITE
+        current_site = Site.objects.get_current().domain
 
         subject = 'Bad phrases have been caught!'
 

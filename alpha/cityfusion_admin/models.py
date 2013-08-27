@@ -2,10 +2,10 @@ from django.contrib.gis.db import models
 from django.db.models.signals import post_save
 from django.core.mail import mail_managers
 from django.template.loader import render_to_string
-from django.conf import settings
 from utils import run_async
+from django.contrib.sites.models import Site
 
-current_site = settings.EVENT_EMAIL_SITE
+current_site = Site.objects.get_current().domain
 
 class ActiveManager(models.Manager):
     def get_query_set(self):
