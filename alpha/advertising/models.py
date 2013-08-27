@@ -6,7 +6,7 @@ from mamona import signals
 from mamona.models import build_payment_model
 from decimal import Decimal
 from django.db.models import Q
-# from django.db.models import F
+from django.db.models import F
 
 
 class AdvertisingType(models.Model):
@@ -73,8 +73,7 @@ REVIEWED_STATUS = (
 class ActiveAdvertisingManager(models.Manager):
     def get_query_set(self):
         return super(ActiveAdvertisingManager, self).get_query_set().filter(
-            Q(review_status="ACCEPTED") | Q(campaign__owned_by_admin=True)
-            # campaign__ammount_spent__gt=F("campaign__budget")
+            (Q(review_status="ACCEPTED") & Q(campaign__ammount_spent__gt=F("campaign__budget"))) | Q(campaign__owned_by_admin=True)
         )
 
 class AdminAdvertisingManager(models.Manager):
