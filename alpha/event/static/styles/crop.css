@@ -159,3 +159,27 @@
 .hintbox p{
     padding: 5px 10px 10px 10px;
 }
+
+.qq-upload-indicator-block {
+    display: inline-block;
+    padding-left: 5px;
+}
+
+.qq-upload-indicator-block.inv {
+    display: none;
+}
+
+.qq-upload-indicator-block img {
+    vertical-align: middle;
+}
+
+.qq-uploading-cancel {
+    margin-left: 5px;
+    color: #454545;
+    text-decoration: underline;
+}
+
+.qq-uploading-cancel:hover {
+    color: #454545;
+    text-decoration: none;
+}

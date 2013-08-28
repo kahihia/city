@@ -36,6 +36,7 @@
 
 .list-entry-text ul li {
     list-style: disc;
+    padding: 2px 0;
 }
 
 .num-entries-list li .list-entry-text {

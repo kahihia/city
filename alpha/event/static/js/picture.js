@@ -26,6 +26,8 @@
             var that = this;
             this.cropping = $("#id_cropping");
             this.picture = $("#id_picture");
+            this.indicatorBlockSelector = "[data-id=upload_indicator_block]";
+            this.uploadingCancelSelector = "[data-id=uploading_cancel]";
             if($(this.cropping).next().length > 1) {
                 this.cropping_image = $(this.cropping).next();
                 this.initJcrop();
@@ -33,13 +35,21 @@
             this.popup = $(".full-screen-popup");
             this.save_button = $(".save-button", this.popup);
             $(this.save_button).on('click', function() {
+                $(".modal-bg").hide();
                 $.fancybox.close();
                 that.saveThumbnail();
             });
 
-            this.cancel_button = $(".cancel-button", this.popup);
-            $(this.cancel_button).on('click', function() {
+            this.cancelButton = $(".cancel-button", this.popup);
+            $(this.cancelButton).on('click', function() {
+                $(".modal-bg").hide();
                 $.fancybox.close();
+            });
+
+            $("body").on("click", this.uploadingCancelSelector, function() {
+                var fileId = $(that.uploadingCancelSelector).data("file-id");
+                that.uploader._handler.cancel(fileId);
+                $(that.indicatorBlockSelector).addClass("inv");
             });
 
             $(".picture-thumb").on("click", function(){
@@ -59,10 +69,11 @@
                 allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
                 sizeLimit: 33554432,
                 onComplete: function(id, fileName, responseJSON) {
+                    $(that.indicatorBlockSelector).addClass("inv");
                     if(responseJSON.success) {
                         $("#id_picture_src").val(responseJSON.path);
                         that.changeImage(responseJSON.path);
-                        $(".modal-bg").hide();
+                        $(".modal-bg").show();
                         
                         $.fancybox($(that.popup), {
                             autoSize: true,
@@ -76,15 +87,28 @@
                         $(".modal-bg").hide();
                     }
                 },
-                onSubmit: function(){
-                    $(".modal-bg").show();
+                onSubmit: function(id, fileName) {
+                    $(that.indicatorBlockSelector).removeClass("inv");
+                    $(that.uploadingCancelSelector).attr("data-file-id", id);
                 },
                 params: {
                     'csrf_token': crsf_token,
                     'csrf_name': 'csrfmiddlewaretoken',
                     'csrf_xname': 'X-CSRFToken'
-                }
+                },
+                template: '<div class="qq-uploader">' +
+                    '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
+                    '<div class="qq-upload-button">Upload a file</div>' +
+                    '<div class="qq-upload-indicator-block inv" data-id="upload_indicator_block">' +
+                        '<img src="/static/images/mini-ajax-loader.gif" alt="" />' +
+                        '<a class="qq-uploading-cancel" data-id="uploading_cancel" href="javascript:void(0);">' +
+                            'Cancel' +
+                        '</a>' +
+                    '</div>' +
+                    '<ul class="qq-upload-list"></ul>' +
+                 '</div>'
             });
+
             if($("#id_picture_src").val()){
                 this.changeImage(
                     $("#id_picture_src").val()
