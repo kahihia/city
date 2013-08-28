@@ -93,13 +93,6 @@ class GeoCompleteWidget(forms.TextInput):
         return json.loads(value)
 
 
-class WheelchairWidget(RadioSelect):
-    class Media(object):
-        js = (
-            u'%sjs/wheelchair.js' % STATIC_PREFIX,
-        )
-
-
 class DescriptionWidget(CKEditorWidget):
     def __init__(self, *args, **kwargs):
         super(DescriptionWidget, self).__init__(*args, **kwargs)

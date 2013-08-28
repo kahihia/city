@@ -664,3 +664,7 @@ body .event-actions-popup .in-the-loop-popup-content {
 .warn {
     color: #cc3b3b;
 }
+
+.create-event-table {
+    width: 530px;
+}

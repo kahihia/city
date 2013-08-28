@@ -1,5 +1,4 @@
 import datetime
-import time
 import json
 
 from django.template.loader import render_to_string
@@ -15,6 +14,8 @@ from event.services import venue_service
 
 from event.models import SingleEvent
 from django.contrib.sites.models import Site
+
+from django.db import transaction
 
 
 def send_event_details_email(event):
@@ -56,11 +57,11 @@ def save_when_and_description(data, event):
                     description = description_json['days'][date.strftime("%m/%d/%Y")]
                 else:
                     description = ""
-                start_time = time.strptime(times["start"], '%I:%M %p')
-                start = datetime.datetime(int(year), int(month), int(day), start_time[3], start_time[4])
+                start_time = dateparser.parse(times["start"])
+                start = datetime.datetime(int(year), int(month), int(day), start_time.hour, start_time.minute)
 
-                end_time = time.strptime(times["end"], '%I:%M %p')
-                end = datetime.datetime(int(year), int(month), int(day), end_time[3], end_time[4])
+                end_time = dateparser.parse(times["end"])
+                end = datetime.datetime(int(year), int(month), int(day), end_time.hour, end_time.minute)
 
                 single_event = SingleEvent(
                     event=event,
@@ -79,6 +80,7 @@ def save_when_and_description(data, event):
     SingleEvent.objects.filter(id__in=single_events_to_delete_ids).delete()
 
 
+@transaction.commit_on_success
 def save_event(user, data, form):
     event = form.save()
 

@@ -10,6 +10,8 @@ from django.template import RequestContext
 from django.middleware.csrf import get_token
 from django.contrib.gis.geos import Point
 from django.db.models import Q, Count
+from django.db import DatabaseError
+from django.forms.util import ErrorList
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
 
@@ -23,6 +25,7 @@ from event.services import facebook_service, location_service, event_service
 from event.forms import SetupFeaturedForm, CreateEventForm, EditEventForm
 from ajaxuploader.views import AjaxFileUploader
 from accounts.decorators import native_region_required
+
 
 def start(request):
     csrf_token = get_token(request)
@@ -128,8 +131,6 @@ def view_featured(request, slug, date):
 
 
 def view(request, slug, date=None):
-    from django.db import connection
-    connection._rollback()
     try:
         if date:
             event = SingleEvent.future_events.get(event__slug=slug, start_time__startswith=date)
@@ -165,13 +166,24 @@ def create(request, success_url=None, template_name='events/create/create_event.
     if request.method == 'POST':
         form = CreateEventForm(account=request.account, data=request.POST)
         if form.is_valid():
-            event = event_service.save_event(request.user, request.POST, form)
-            event_service.send_event_details_email(event)
+            try:
+                event = event_service.save_event(request.user, request.POST, form)
 
-            if success_url is None:
-                success_url = reverse('event_created', kwargs={ 'slug': event.slug })
+                event_service.send_event_details_email(event)
 
-            return HttpResponseRedirect(success_url)
+                if success_url is None:
+                    success_url = reverse('event_created', kwargs={ 'slug': event.slug })
+
+                return HttpResponseRedirect(success_url)
+
+            except DatabaseError as de:
+                if de.message.startswith("index row requires") or de.message.startswith("index row size"):
+                    form._errors['__all__'] = ErrorList(["Description is too long, please try to cut description"])
+                else:
+                    form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
+            except:
+                form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
+
     else:
         form = CreateEventForm(account=request.account, initial={
             "venue_account_owner": request.current_venue_account
@@ -194,11 +206,19 @@ def create_from_facebook(request):
         event_data = facebook_service.get_prepared_event_data(request, request.POST)
         form = CreateEventForm(account=request.account, data=event_data)
         if form.is_valid():
-            event = event_service.save_event(request.user, event_data, form)
-            facebook_service.attach_facebook_event(int(facebook_event_id), event)
-            success = True
-        else:
             success = False
+            try:
+                event = event_service.save_event(request.user, event_data, form)
+                facebook_service.attach_facebook_event(int(facebook_event_id), event)
+                success = True
+
+            except DatabaseError as de:
+                if de.message.startswith("index row requires") or de.message.startswith("index row size"):
+                    form._errors['__all__'] = ErrorList(["Description is too long, please try to cut description"])
+                else:
+                    form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
+            except:
+                form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
 
         return HttpResponse(
             json.dumps({'success': success, 'info': form.errors}),
@@ -227,10 +247,18 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
     if request.method == 'POST':
         form = EditEventForm(account=request.account, instance=event, data=request.POST)
         if form.is_valid():
-            event_service.save_event(request.user, request.POST, form)
-            return HttpResponseRedirect(
-                reverse('event_view', kwargs={'slug': event.slug})
-            )
+            try:
+                event_service.save_event(request.user, request.POST, form)
+                return HttpResponseRedirect(
+                    reverse('event_view', kwargs={'slug': event.slug})
+                )
+            except DatabaseError as de:
+                if de.message.startswith("index row requires") or de.message.startswith("index row size"):
+                    form._errors['__all__'] = ErrorList(["Description is too long, please try to cut description"])
+                else:
+                    form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
+            except:
+                form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
     else:
         form = EditEventForm(
             account=request.account,

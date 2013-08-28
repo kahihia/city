@@ -72,7 +72,9 @@
 
             this.currentDay = "default";
             this.save();
-            this.setupCKEditor();            
+            this.setupCKEditor();
+
+            this.initRecommendedWarning();
         },
         setValue: function(value){            
             this.data = value;
@@ -181,14 +183,19 @@
             
             CKEDITOR.instances.id_description.on("instanceReady", function(){
                 CKEDITOR.instances.id_description.on('key', function(e){
-                    setTimeout(function(){ 
+                    setTimeout(function(){
                         that.saveCurrentDay();
                         if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
                             $("#id_tags__tagautosuggest").data('ui-tagspopup').autoTagsDetect(
                                 CKEDITOR.instances.id_description.getData()
                             );
-                        }
+                        }                        
                     }, 1);
+
+                    setTimeout(function(){ // To prevent blinking
+                        that.updateWarning();
+                    }, 100);
+                    
                 });
 
                 CKEDITOR.instances.id_description.on('paste', function(e){
@@ -201,9 +208,34 @@
                                 CKEDITOR.instances.id_description.getData()
                             );
                         }
+
+                        that.updateWarning(
+                            CKEDITOR.instances.id_description.getData()
+                        );
                     }, 1);
+
+                    setTimeout(function(){ // To prevent blinking
+                        that.updateWarning();
+                    }, 100);
                 });
             });
+        },
+        initRecommendedWarning: function(){
+            this.recommendedLength = 4000;
+            $(".description-recommended-length").html(this.recommendedLength);
+            this.recommendedWarning = $(".description-warn");
+            this.descriptionLength = $(".description-length");
+            this.descriptionLength.html($(this.textarea).val().length);
+            this.updateWarning();
+        },
+        updateWarning: function(){
+            var ckeditor_length = CKEDITOR.instances.id_description.getData().length;
+            if(ckeditor_length>this.recommendedLength){
+                $(this.recommendedWarning).show();
+                this.descriptionLength.html(ckeditor_length);
+            } else {
+                $(this.recommendedWarning).hide();
+            }
         }
     });
 

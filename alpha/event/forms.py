@@ -1,14 +1,19 @@
+import json
+import datetime
+import string
+
 from django import forms
 from django.forms.widgets import RadioSelect
 from event.models import Event, FeaturedEvent
-from event.widgets import WhenWidget, PriceWidget, GeoCompleteWidget, WheelchairWidget, AjaxCropWidget, ChooseUserContextWidget
+from event.widgets import WhenWidget, PriceWidget, GeoCompleteWidget, AjaxCropWidget, ChooseUserContextWidget
 from django.utils.translation import ugettext_lazy as _
-import string
+
 from lookups import CityLookup
 import selectable.forms as selectable
 from gmapi.forms.widgets import LocationWidget
-import json
+
 from ckeditor.fields import RichTextFormField
+import dateutil.parser as dateparser
 
 
 class SetupFeaturedForm(forms.ModelForm):
@@ -214,6 +219,26 @@ class EditEventForm(forms.ModelForm):
         if len(tags) > 10:
             raise forms.ValidationError("I'm sorry, but 10 tags is the maximum amount per event.")
         return tags
+
+    def clean_when_json(self):
+        when_json = json.loads(self.cleaned_data["when_json"])
+
+        for year, months in when_json.iteritems():
+            for month, days in months.iteritems():
+                for day, times in days.iteritems():
+                    try:
+                        dateparser.parse(times["start"])
+                    except:
+                        raise forms.ValidationError("%s is not valid start time. Please use right format" % times["start"])
+
+                    try:
+                        dateparser.parse(times["end"])
+                    except:
+                        raise forms.ValidationError("%s is not valid end time. Please use right format" % times["end"])
+
+
+
+
 
 
 class CreateEventForm(EditEventForm):
