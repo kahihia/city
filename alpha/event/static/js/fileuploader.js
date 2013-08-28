@@ -400,10 +400,10 @@ qq.FileUploaderBasic.prototype = {
             this._uploadFile(files[i]);        
         }        
     },       
-    _uploadFile: function(fileContainer){      
+    _uploadFile: function(fileContainer){
         var id = this._handler.add(fileContainer);
         var fileName = this._handler.getName(id);
-        
+
         if (this._options.onSubmit(id, fileName) !== false){
             this._onSubmit(id, fileName);
             this._handler.upload(id, this._options.params);
@@ -522,7 +522,7 @@ qq.FileUploader = function(o){
         template: '<div class="qq-uploader">' + 
                 '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
                 '<div class="qq-upload-button">Upload a file</div>' +
-                '<ul class="qq-upload-list"></ul>' + 
+                '<ul class="qq-upload-list"></ul>' +
              '</div>',
 
         // template for one item in file list
