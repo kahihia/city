@@ -13,14 +13,22 @@ def payment_status_changed_listener(sender, instance=None, old_status=None, new_
     if instance.order.__class__.__name__ == "AdvertisingOrder":
         if new_status == 'paid':
             instance.order.status = 's'
+
             campaign = instance.order.campaign
             campaign.budget = campaign.budget + instance.order.budget
+            campaign.save()
+
             instance.order.save()
         elif new_status == 'failed':
             instance.order.status = 'f'
             instance.order.save()
         elif new_status == 'partially_paid':
             instance.order.status = 'p'
+
+            campaign = instance.order.campaign
+            campaign.budget = campaign.budget + instance.order.budget
+            campaign.save()
+
             instance.order.save()
 
 def return_urls_query_listener(sender, instance=None, urls=None, **kwargs):
