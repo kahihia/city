@@ -1,7 +1,7 @@
 {% load endless %}
 
-{% if profile.ads|length %}
-    {% paginate 6 profile.ads using "ads_page" as ads %}
+{% if ads_items|length %}
+    {% paginate 6 ads_items using "ads_page" as ads %}
 
 
     {% with ads|first as ad %}

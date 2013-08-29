@@ -189,7 +189,7 @@
         <div class="tabs-container">
             <ul class="tabs" data-page-id="private-venue-account">
                 <li data-tab-id="venue-events" {% if active_tab == "venue-events" %}class="current"{% endif %}>
-                    <span>{{ venue_account.venue.name }} Events</span>
+                    <span>Venue Events</span>
                 </li>
                 <li data-tab-id="venue-featured-events" {% if active_tab == "venue-featured-events" %}class="current"{% endif %}>
                     <span>Featured Events</span>
@@ -199,6 +199,9 @@
                 </li>
                 <li data-tab-id="venue-featured-stats" {% if active_tab == "venue-featured-stats" %}class="current"{% endif %}>
                     <span>Featured stats</span>
+                </li>
+                <li data-tab-id="venue-advertising-stats" {% if active_tab == "venue-advertising-stats" %}class="current"{% endif %}>
+                   <span>Advertising Stats</span>
                 </li>
             </ul>
             <div class="box{% if active_tab == "venue-events" %} visible{% endif %}">
@@ -212,6 +215,9 @@
             </div>
             <div class="box{% if active_tab == "venue-featured-stats" %} visible{% endif %}">
                 {% include 'venue_accounts/_venue_featured_stats_table.html' %}
+            </div>
+            <div class="box{% if active_tab == "venue-advertising-stats" %} visible{% endif %} advertising-stats">
+                {% include 'advertising/stats/list.html' with ads_items=venue_account.ads %}
             </div>
         </div>
     </div>
