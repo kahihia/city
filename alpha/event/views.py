@@ -161,6 +161,7 @@ def view(request, slug, date=None):
             'events_from_venue': events_from_venue
         }, context_instance=RequestContext(request))
 
+
 @login_required
 def create(request, success_url=None, template_name='events/create/create_event.html'):
     if request.method == 'POST':
@@ -176,11 +177,6 @@ def create(request, success_url=None, template_name='events/create/create_event.
 
                 return HttpResponseRedirect(success_url)
 
-            except DatabaseError as de:
-                if de.message.startswith("index row requires") or de.message.startswith("index row size"):
-                    form._errors['__all__'] = ErrorList(["Description is too long, please try to cut description"])
-                else:
-                    form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
             except:
                 form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
 
@@ -212,11 +208,6 @@ def create_from_facebook(request):
                 facebook_service.attach_facebook_event(int(facebook_event_id), event)
                 success = True
 
-            except DatabaseError as de:
-                if de.message.startswith("index row requires") or de.message.startswith("index row size"):
-                    form._errors['__all__'] = ErrorList(["Description is too long, please try to cut description"])
-                else:
-                    form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
             except:
                 form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
 
@@ -252,11 +243,7 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
                 return HttpResponseRedirect(
                     reverse('event_view', kwargs={'slug': event.slug})
                 )
-            except DatabaseError as de:
-                if de.message.startswith("index row requires") or de.message.startswith("index row size"):
-                    form._errors['__all__'] = ErrorList(["Description is too long, please try to cut description"])
-                else:
-                    form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
+
             except:
                 form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
     else:
