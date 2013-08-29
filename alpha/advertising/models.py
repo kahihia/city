@@ -34,9 +34,11 @@ class AdvertisingCampaign(models.Model):
     venue_account = models.ForeignKey('accounts.VenueAccount', blank=True, null=True)
     all_of_canada = models.BooleanField()
     regions = models.ManyToManyField(Region)
+    
     budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
-
     ammount_spent = MoneyField(max_digits=18, decimal_places=10, default_currency='CAD')
+
+    enough_money = models.BooleanField(default=False)
 
     started = models.DateTimeField(auto_now=True, auto_now_add=True)
     ended = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
@@ -47,6 +49,15 @@ class AdvertisingCampaign(models.Model):
 
     objects = money_manager(models.Manager())
     admin = AdminAdvertisingCampaignManager()
+
+    def save(self, *args, **kwargs):
+        if self.ammount_spent >= self.budget:
+            self.enough_money = False
+        else:
+            self.enough_money = True        
+
+        super(AdvertisingCampaign, self).save(*args, **kwargs)
+        return self
 
     def __unicode__(self):
         return self.name
@@ -73,7 +84,7 @@ REVIEWED_STATUS = (
 class ActiveAdvertisingManager(models.Manager):
     def get_query_set(self):
         return super(ActiveAdvertisingManager, self).get_query_set().filter(
-            (Q(review_status="ACCEPTED") & Q(campaign__ammount_spent__gt=F("campaign__budget"))) | Q(campaign__owned_by_admin=True)
+            (Q(review_status="ACCEPTED") & Q(campaign__enough_money=True)) | Q(campaign__owned_by_admin=True)
         )
 
 

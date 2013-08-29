@@ -104,7 +104,7 @@
                                     </div>
                                 </th>
                                 <th class="ad-type-col">
-                                    CMC
+                                    CPC
                                     <a href="javascript:void;" class="balloon">
                                         <div class="buttonq mini"></div>
                                     </a>
@@ -144,7 +144,7 @@
                                             <i>[CPC Price]:</i>
                                         </h3>
                                         <p>
-                                            Price for 1000 clicks
+                                            Price for 1 click
                                         </p>
                                     </div>
                                 </th>                                
@@ -174,8 +174,8 @@
                                 </td>
                                 <td class="ad-type-col">
                                     <div class="radio">                                        
-                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cmc" value="CMC" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}" {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CMC" %}checked="checked"{% endifequal %}>
-                                        <label for="advertising_type_{{ advertising_type.id }}_cmc"></label>
+                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cpc" value="CPC" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}" {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CPC" %}checked="checked"{% endifequal %}>
+                                        <label for="advertising_type_{{ advertising_type.id }}_cpc"></label>
                                     </div>
                                 </td>                                
                                 <td class="center">                                    

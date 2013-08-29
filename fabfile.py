@@ -31,6 +31,14 @@ def upgrade():
         run("python manage.py collectstatic --noinput")
         run("supervisorctl reload")
 
+def migrate(app):
+    with cd(env.project_folder):
+        run("git pull origin master")
+
+    with cd(env.alpha_folder):
+        run("python manage.py migrate %s" % app)
+
+
 def make_virtualenv():
     local("virtualenv --no-site-packages venv")
     update_virtualenv()
