@@ -15,9 +15,6 @@ from .settings import EVENT_PICTURE_DIR
 
 from image_cropping import ImageCropField, ImageRatioField
 
-from djorm_pgfulltext.models import SearchManagerMixIn, SearchManager
-from djorm_pgfulltext.fields import VectorField
-
 from django.db.models import Min, Count
 
 from djmoney.models.fields import MoneyField
@@ -27,10 +24,6 @@ from mamona import signals
 from mamona.models import build_featured_event_payment_model
 from decimal import Decimal
 from ckeditor.fields import RichTextField
-
-
-class SearchGeoDjangoManager(SearchManagerMixIn, models.GeoManager):
-    pass
 
 
 def picture_file_path(instance=None, filename=None):
@@ -78,7 +71,7 @@ def has_changed(instance, field):
     return not getattr(instance, field) == old_value    
 
 
-class FutureManager(SearchManager):
+class FutureManager(models.Manager):
     def get_query_set(self):
         queryset = super(FutureManager, self).get_query_set()\
             .filter(single_events__start_time__gte=datetime.datetime.now())\
@@ -90,7 +83,7 @@ class FutureManager(SearchManager):
         return queryset
 
 # manager will help me to outflank django restriction https://code.djangoproject.com/ticket/13363
-class FutureWithoutAnnotationsManager(SearchManager):
+class FutureWithoutAnnotationsManager(models.Manager):
     def get_query_set(self):
         queryset = super(FutureWithoutAnnotationsManager, self).get_query_set()\
             .filter(single_events__start_time__gte=datetime.datetime.now())\
@@ -98,7 +91,7 @@ class FutureWithoutAnnotationsManager(SearchManager):
         return queryset
 
 
-class FeaturedManager(SearchManager):
+class FeaturedManager(models.Manager):
     def get_query_set(self):        
         return super(FeaturedManager, self).get_query_set()\
             .filter(
@@ -109,7 +102,7 @@ class FeaturedManager(SearchManager):
             ).annotate(Count("id"))
 
 
-class ArchivedManager(SearchManager):
+class ArchivedManager(models.Manager):
     def get_query_set(self):
         queryset = super(ArchivedManager, self).get_query_set()\
             .filter(single_events__start_time__lte=datetime.datetime.now())\
@@ -128,36 +121,12 @@ class Event(models.Model):
     def __unicode__(self):
         return u'%s/// %s' % (self.owner, self.name)    
 
-    events = SearchManager(
-        fields=('name', 'description'),
-        config='pg_catalog.english',
-        search_field='search_index',
-        auto_update_search_field=True
-    )
+    events = models.Manager()
 
-    future_events = FutureManager(
-        fields=('name', 'description'),
-        config='pg_catalog.english',
-        search_field='search_index',
-        auto_update_search_field=True)
-
-    future_events_without_annotation = FutureWithoutAnnotationsManager(
-        fields=('name', 'description'),
-        config='pg_catalog.english',
-        search_field='search_index',
-        auto_update_search_field=True)
-
-    featured_events = FeaturedManager(
-        fields=('name', 'description'),
-        config='pg_catalog.english',
-        search_field='search_index',
-        auto_update_search_field=True)
-
-    archived_events = ArchivedManager(
-        fields=('name', 'description'),
-        config='pg_catalog.english',
-        search_field='search_index',
-        auto_update_search_field=True)
+    future_events = FutureManager()
+    future_events_without_annotation = FutureWithoutAnnotationsManager()
+    featured_events = FeaturedManager()
+    archived_events = ArchivedManager()
 
 
     created = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now())
@@ -189,8 +158,6 @@ class Event(models.Model):
     viewed_times = models.IntegerField(default=0, blank=True, null=True)
 
     facebook_event = models.ForeignKey('FacebookEvent', blank=True, null=True)
-
-    search_index = VectorField()
 
     tags = TaggableManager()
 
@@ -304,7 +271,6 @@ class SingleEvent(models.Model):
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
     end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
     description = models.TextField(null=True, blank=True)  # additional description
-    search_index = VectorField()
 
     def event_description(self):
         description = self.description
@@ -412,8 +378,6 @@ class FutureFeaturedEventManager(models.Manager):
         return super(FutureFeaturedEventManager, self).get_query_set()\
             .filter(event__single_events__start_time__gte=datetime.datetime.now())\
             .annotate(Count("id"))
-
-
 
 
 class FeaturedEvent(models.Model):

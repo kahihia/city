@@ -366,14 +366,26 @@ class SearchFilter(Filter):
         else:
             return None
 
+
     def filter(self, qs, search_string):
         return qs.extra(
             where=["""
-                event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', %s)
-                OR event_event.search_index @@ plainto_tsquery('pg_catalog.english', %s)
+                (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", "event_event"."description")), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
+                OR (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleevent"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
             """],
             params=[search_string, search_string]
         )
+
+    # def filter(self, qs, search_string):
+    #     return qs.extra(
+    #         where=["""
+    #             event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', %s)
+    #             OR event_event.search_index @@ plainto_tsquery('pg_catalog.english', %s)
+    #         """],
+    #         params=[search_string, search_string]
+    #     )
+
+# WHERE ( (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", '')), 'D') || setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."description", '')), 'D')) @@ (plainto_tsquery('pg_catalog.english', 'boo')))
 
 
 class NightLifeFilter(Filter):
