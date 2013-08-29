@@ -256,7 +256,7 @@
                                 </td>
                                 <td>
                                     {% for pk, choice in form.fields.types.widget.choices %}
-                                        <div class="checkbox">
+                                        <div class="checkbox block">
                                             <input {% for venue_type in venue_account.types.all %}{% if venue_type.pk == pk %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_types_{{ forloop.counter0 }}" value="{{ pk }}" name="types" />
                                             <label for="id_types_{{ forloop.counter0 }}"></label>
                                             <label for="id_types_{{ forloop.counter0 }}">{{ choice }}</label>

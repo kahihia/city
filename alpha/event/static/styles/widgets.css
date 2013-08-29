@@ -103,6 +103,10 @@ div.checkbox {
     vertical-align: middle;  
 }
 
+div.checkbox.block {
+    display: block;
+}
+
 div.checkbox.disabled {
     opacity: 0.3;
 }
