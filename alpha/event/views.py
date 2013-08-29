@@ -10,7 +10,6 @@ from django.template import RequestContext
 from django.middleware.csrf import get_token
 from django.contrib.gis.geos import Point
 from django.db.models import Q, Count
-from django.db import DatabaseError
 from django.forms.util import ErrorList
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET

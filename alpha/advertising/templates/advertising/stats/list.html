@@ -48,7 +48,13 @@
                 </tr>
                 <tr>
                     <td>Amount Remaining:</td>
-                    <td  data-stat-key="remaining">{{ ad.campaign.ammount_remaining }}</td>
+                    <td  data-stat-key="remaining">
+                        {% if ad.campaign.enough_money %}
+                            {{ ad.campaign.ammount_remaining }}
+                        {% else %}
+                            C$0
+                        {% endif %}
+                    </td>
                 </tr>
             </table>
         </div>
@@ -96,7 +102,11 @@
                 {{ ad.campaign.ammount_spent }}
             </td>
             <td class="action" data-stat-key="remaining">
-                {{ ad.campaign.ammount_remaining }}
+                {% if ad.campaign.enough_money %}
+                    {{ ad.campaign.ammount_remaining }}
+                {% else %}
+                    C$0
+                {% endif %}
             </td>            
             <td class="action">
                 <a href="{% url 'advertising_edit_campaign' ad.campaign.id %}">

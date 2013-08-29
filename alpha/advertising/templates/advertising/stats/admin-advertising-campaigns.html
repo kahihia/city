@@ -34,7 +34,13 @@
                 {% endfor %}
             </td>
             <td>{{ campaign.ammount_spent }}</td>
-            <td>{{ campaign.ammount_remaining }}</td>
+            <td>
+                {% if campaign.enough_money %}
+                    {{ campaign.ammount_remaining }}
+                {% else %}
+                    C$0
+                {% endif %}
+            </td>
             <td class="action">
                 {% if campaign.all_of_canada %}
                     All of Canada
