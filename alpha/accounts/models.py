@@ -334,6 +334,9 @@ class VenueAccount(models.Model):
                 return potential
             suffix = suffix + 1
 
+    def ads(self):
+        return Advertising.objects.filter(campaign__venue_account__id=self.id)
+
 
 class AccountTax(models.Model):
     name = models.CharField(max_length=255)

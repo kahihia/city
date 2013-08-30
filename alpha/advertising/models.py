@@ -87,6 +87,7 @@ class ActiveAdvertisingManager(models.Manager):
             (Q(review_status="ACCEPTED") & Q(campaign__enough_money=True)) | Q(campaign__owned_by_admin=True)
         )
 
+
 class AdminAdvertisingManager(models.Manager):
     def get_query_set(self):
         return super(AdminAdvertisingManager, self).get_query_set().filter(campaign__owned_by_admin=True)
@@ -141,7 +142,6 @@ class Advertising(models.Model):
 
     image_thumb.short_description = 'Image'
     image_thumb.allow_tags = True
-
 
 
 class AdvertisingOrder(models.Model):
