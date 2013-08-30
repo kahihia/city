@@ -24,6 +24,7 @@ from event.services import facebook_service, location_service, event_service
 from event.forms import SetupFeaturedForm, CreateEventForm, EditEventForm
 from ajaxuploader.views import AjaxFileUploader
 from accounts.decorators import native_region_required
+from accounts.models import VenueAccount
 
 
 def start(request):
@@ -398,14 +399,20 @@ def city_tags(request):
             if cities.count():
                 city = cities[0]
 
+        elif "venue_id" in request.POST:
+            city = Venue.objects.get(id=int(request.POST['venue_id'])).city
+
+        elif "venue_account_id" in request.POST:
+            city = VenueAccount.objects.get(id=int(request.POST['venue_account_id'])).venue.city
+
         if city:
             tags = Event.events.filter(venue__city=city).select_related('tags').values('tags')
             tags = set([tag['tags'] for tag in tags if tag['tags']])
         else:
             tags = []
 
-        tags = Tag.objects.filter(Q(id__in=tags) |
-            Q(name__in=["Free", "Wheelchair"])
+        tags = Tag.objects.filter(
+            Q(id__in=tags) | Q(name__in=["Free", "Wheelchair"])
         ).values()
         return HttpResponse(json.dumps({"tags": list(tags)}), mimetype="application/json")
 

@@ -58,7 +58,7 @@ urlpatterns = patterns('',
 
     url(r'^start$', event.start, name="start"),
     url(r'^ajax-upload$', event.import_uploader, name="my_ajax_upload"),
-    url(r'^ctags$', event.city_tags, name='city_tags'),
+    url(r'^city_tags$', event.city_tags, name='city_tags'),
     url(r'^create/posted/(?P<slug>[^/]+)/$',
         event.created,
         name='event_created'

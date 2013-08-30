@@ -48,9 +48,9 @@
             if($("#id_geo_city").val()){
                 this.forCity($("#id_geo_city").val());
             } else {
-                $.post("/events/ctags", {}, function(data){
+                $.post("/events/city_tags", {}, function(data){
                     tags = _.map(data.tags, function(tag){ return tag.name; });
-                    that.loadTags(tags);
+                    that.refreshTags(tags);
                 });
             }
 
@@ -69,18 +69,68 @@
             },10);
         },
         forCity: function(city){
+            // Debrecated
             var data = {},that=this;
             if(typeof city==="string"){
                 data.geo_city = city;
             } else if(typeof city === "number"){
                 data.city_identifier = city;
             }
-            $.post("/events/ctags", data, function(data){
+            $.post("/events/city_tags", data, function(data){
                 tags = _.map(data.tags, function(tag){ return tag.name; });
-                that.loadTags(tags);
+                that.refreshTags(tags);
             });
         },
-        loadTags: function(tags) {
+        loadTagsForCityByVenueAccount: function(){
+            var data = {},that=this;
+
+            if($("#id_user_context_type").val()=="venue_account"){
+                data.venue_account_id = $("#id_user_context_id").val();
+
+                $.post("/events/city_tags", data, function(data){
+                    tags = _.map(data.tags, function(tag){ return tag.name; });
+                    that.refreshTags(tags);
+                });
+            }
+        },
+        loadTagsForCityByVenue: function(){
+            var data = {},that=this;
+
+            data.venue_id = $("#id_venue_identifier").val();
+
+            if(data.venue_id){
+                $.post("/events/city_tags", data, function(data){
+                    tags = _.map(data.tags, function(tag){ return tag.name; });
+                    that.refreshTags(tags);
+                });
+            }
+        },
+        loadTagsForCityByCityName: function(){
+            var data = {}, that=this,
+                city = $("#id_geo_city").val();
+
+            if(city){
+                data.geo_city = city;
+
+                $.post("/events/city_tags", data, function(data){
+                    tags = _.map(data.tags, function(tag){ return tag.name; });
+                    that.refreshTags(tags);
+                });
+            }
+        },
+        loadTagsForCityByCity: function(){
+            var data = {}, that=this;
+
+            data.city_identifier = $("#id_city_identifier").val();
+
+            if(data.city_identifier) {
+                $.post("/events/city_tags", data, function(data){
+                    tags = _.map(data.tags, function(tag){ return tag.name; });
+                    that.refreshTags(tags);
+                });
+            }
+        },
+        refreshTags: function(tags) {
             var that = this;
             this.tags = tags;
             $(this.popup).hide();

@@ -24,6 +24,10 @@
                 $("#id_place").val("");
                 $("#id_linking_venue_mode").val("");
             }
+
+            if($("#id_tags__tagautosuggest").length !== 0) {
+                $("#id_tags__tagautosuggest")[0].tagspopup.loadTagsForCityByVenueAccount();
+            }
         });
     }
 

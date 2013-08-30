@@ -45,6 +45,10 @@
             $("#id_place").val(suggest_values.join(", "));
             $("#id_linking_venue_mode").val("SUGGEST");
 
+            if($("#id_tags__tagautosuggest").length !== 0) {
+                $("#id_tags__tagautosuggest")[0].tagspopup.loadTagsForCityByCity();
+            }
+
             $.fancybox.close();
         },
         initSuggestMap: function(){
@@ -99,6 +103,11 @@
 
             $("#id_venue_identifier").val(venue.id);
             this.suggestMap.setLocation(parseFloat(venue.lat), parseFloat(venue.lng));
+
+            if($("#id_tags__tagautosuggest").length !== 0) {
+                $("#id_tags__tagautosuggest")[0].tagspopup.loadTagsForCityByVenue();
+            }
+
 
             $("#id_linking_venue_mode").val("EXIST");
         }

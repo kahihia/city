@@ -65,7 +65,7 @@
                 $("#id_street").val("");
                 $("#id_city_0").val("");
                 if($("#id_tags__tagautosuggest").length !== 0) {
-                    $("#id_tags__tagautosuggest")[0].tagspopup.forCity($("#id_geo_city").val());
+                    $("#id_tags__tagautosuggest")[0].tagspopup.loadTagsForCityByCityName();
                 }
 
                 Cityfusion.userLocationLat = result.geometry.location.lat();
