@@ -184,6 +184,19 @@ body
 	height: 18px;
 }
 
+.location-text-box input.location::-webkit-input-placeholder{
+	color: #454545;
+}
+.location-text-box input.location:-moz-placeholder{
+	color: #454545;
+}
+.location-text-box input.location::-moz-placeholder{
+	color: #454545;
+}
+.location-text-box input.location:-ms-input-placeholder {
+	color: #454545;
+}
+
 .search-text-box input.search
 {
 	border:0;

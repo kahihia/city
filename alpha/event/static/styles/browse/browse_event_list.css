@@ -13,8 +13,16 @@
     width: 422px;
     height: 66px;
     padding: 7px 14px;
-    background: #f6f6f6;
+    background: #f7f7f7;
     margin-bottom: 4px;
+}
+
+.entry-wrapper .entry-info:nth-child(even) {
+    background: #e3e3e3;    
+}
+
+.entry-wrapper .entry-info:nth-child(odd) {
+    background: #f7f7f7;    
 }
 
 .entry-wrapper .entry-info.extended {
@@ -100,7 +108,7 @@
 
 .entry-wrapper .entry-info .entry-details-wrapper .title,
 .entry-wrapper .entry-info .auctions-details-wrapper .title {
-    color: #0066cc;
+    color: #000;
     font-size:1.1em;
     font-weight: bold;
     margin-top:3px;
@@ -110,7 +118,7 @@
 .entry-wrapper .entry-info .entry-details-wrapper .title a,
 .entry-wrapper .entry-info .auctions-details-wrapper .title a {
     text-decoration: none;
-    color: #0066cc;
+    color: #000;
 }
 
 .entry-wrapper .entry-info .entry-details-wrapper .title a:hover,
@@ -120,7 +128,8 @@
 
 .entry-wrapper .entry-info .entry-details-wrapper .entry-date,
 .entry-wrapper .entry-info .auctions-details-wrapper .entry-date {
-    color: #247cc3;    
+    font-weight: bold;
+    color: #2c8ed9;    
 }
 
 .entry-wrapper .entry-info .entry-details-wrapper .entry-date .delimeter {
@@ -128,7 +137,7 @@
 }
 
 .entry-wrapper .entry-info .entry-details-wrapper .entry-description {
-    color: #000;
+    color: #eb8a19;
     font-weight: bold;
 }
 
@@ -137,6 +146,7 @@
 }
 
 .entry-info .entry-img-prev{
+    background: #fff;
     border: 1px solid #ddd;
 }
 
