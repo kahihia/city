@@ -42,8 +42,22 @@ DAYS_OF_WEEK = (
     ('6', 'Sunday'),
 )
 
+LOCATION_TYPES = (
+    ('country', "Country"),
+    ('region', "Teritory"),
+    ('city', "City")
+)
 
-class Account(UserenaBaseProfile, FacebookProfileModel):
+class AccountSettingsMixin(models.Model):
+    location_type = models.CharField(max_length=10, choices=LOCATION_TYPES, blank=True, null=True)
+    location_name = models.CharField(max_length=256, blank=True, null=True)
+    location_id = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+
+class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     user = models.OneToOneField(User,
                                 unique=True,
                                 verbose_name=_('user'),

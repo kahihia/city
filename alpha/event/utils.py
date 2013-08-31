@@ -1,7 +1,12 @@
 import datetime
+from django.db.models import Count
+from cities.models import City
 
 
-def find_nearest_city(cities, location):
+def find_nearest_city(location, cities=None):
+    if not cities:
+        cities = City.objects.filter(venue__event__single_events__start_time__gte=datetime.datetime.now()).annotate(Count('id'))
+
     return cities.distance(location).order_by('distance')[0]
 
 

@@ -271,7 +271,7 @@ def save_venue(request):
         )
 
         if cities.count() > 1:
-            city = find_nearest_city(cities, location)
+            city = find_nearest_city(location, cities)
         elif not cities.count():
             city = City.objects.distance(location).order_by('distance')[0]
         else:

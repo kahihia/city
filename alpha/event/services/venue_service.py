@@ -46,7 +46,7 @@ def get_venue_from_google(data):
     ))
 
     if city.count() > 1:
-        city = find_nearest_city(city, location)
+        city = find_nearest_city(location, city)
     elif not city.count():
         city = City.objects.distance(location).order_by('distance')[0]
     else:

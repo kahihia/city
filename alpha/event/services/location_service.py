@@ -1,3 +1,5 @@
+import datetime
+
 from cities.models import City, Region, Country
 from event.models import CountryBorder
 from event.utils import find_nearest_city
@@ -89,7 +91,7 @@ class LocationByIP(object):
     @property
     def city(self):
         if self.lat_lon:
-            return find_nearest_city(City.objects.all(), Point(self.lat_lon[::-1]))
+            return find_nearest_city(Point(self.lat_lon[::-1]))
         else:
             return None
 
@@ -109,7 +111,7 @@ class LocationFromBrowser(object):
     @property
     def canadian_region(self):
         if self.lat_lon:
-            nearest_city = find_nearest_city(City.objects.all(), Point(self.lat_lon[::-1]))
+            nearest_city = find_nearest_city(Point(self.lat_lon[::-1]))
             return nearest_city.region
         else:
             return None
@@ -117,7 +119,7 @@ class LocationFromBrowser(object):
     @property
     def city(self):
         if self.lat_lon:
-            return find_nearest_city(City.objects.all(), Point(self.lat_lon[::-1]))
+            return find_nearest_city(Point(self.lat_lon[::-1]))
         else:
             return None
 
@@ -160,12 +162,21 @@ class LocationFromAccountSettins(object):
 class LocationFromUserChoice(object):
     def __init__(self, request):
         self.request = request
+        self.account = request.account
         self.change_user_choice()
 
         self.by_IP = LocationByIP(request)
         self.from_browser = LocationFromBrowser(request)
         self.from_account_settings = LocationFromAccountSettins(request)
-        # del request.session["user_location_data"]
+
+        if self.account and missing_in_session("user_location_data", self.request.session):
+            user_location_data = {}
+            user_location_data["user_location_id"] = self.account.location_id
+            user_location_data["user_location_name"] = self.account.location_name
+            user_location_data["user_location_type"] = self.account.location_type
+
+            self.request.session["user_location_data"] = user_location_data
+
 
     def change_user_choice(self):
         if "location" in self.request.GET:
@@ -186,6 +197,12 @@ class LocationFromUserChoice(object):
                     user_location_name = "%s, %s" % (city.name, city.region.name)
                 else:
                     user_location_name = city.name
+
+            if self.account:
+                self.account.location_type = user_location_type
+                self.account.location_name = user_location_name
+                self.account.location_id = user_location_id
+                self.account.save()
 
             user_location_data["user_location_id"] = user_location_id
             user_location_data["user_location_name"] = user_location_name
