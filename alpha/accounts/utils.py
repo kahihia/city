@@ -16,16 +16,16 @@ def convert_canadian_phone_number_to_e164(phonenumber):
     return "+1" + str(phonenumber).replace("-", "")
 
 
-def remind_account_about_events(account, events):
+def remind_account_about_events(account, single_events):
     if account.reminder_with_email:
-        remind_account_about_events_with_email(account, events)
+        remind_account_about_events_with_email(account, single_events)
 
     if account.reminder_with_sms:
-        remind_account_about_events_with_sms(account, events)
+        remind_account_about_events_with_sms(account, single_events)
 
 
-def find_similar_events(events):
-    basic_event_ids = ",".join([str(id) for id in list(set(events.values_list('id', flat=True)))])
+def find_similar_events(single_events):
+    basic_event_ids = ",".join([str(id) for id in list(set(single_events.values_list('event_id', flat=True)))])
      # TODO: create similarity matrix for best performance(if we will need this)
     similar_events = Event.events.raw("""
         SELECT event_event.*, array_agg(tag_id) as tags,
@@ -51,16 +51,16 @@ def find_similar_events(events):
     return similar_events
 
 
-def remind_account_about_events_with_email(account, events):
-    featured_events = Event.featured_events.all()[:4]  # .exclude(id__in=events.values_list('id', flat=True))[:4]
+def remind_account_about_events_with_email(account, single_events):
+    featured_events = Event.featured_events.all()[:4]
 
-    similar_events = find_similar_events(events)
+    similar_events = find_similar_events(single_events)
 
     subject = "Upcoming events from cityfusion"
 
     message = render_to_string('accounts/emails/reminder_email.html', {
             "featured_events": featured_events,
-            "events": events,
+            "events": single_events,
             "similar_events": similar_events,
             "STATIC_URL": "/static/",
             "advertising_region": account.advertising_region,
@@ -77,10 +77,10 @@ def remind_account_about_events_with_email(account, events):
     return message
 
 
-def remind_account_about_events_with_sms(account, events):
+def remind_account_about_events_with_sms(account, single_events):
     client = TwilioRestClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
 
-    for event in events:
+    for event in single_events:
 
         body = render_to_string('accounts/sms/reminder_sms.txt', {
             "event": event

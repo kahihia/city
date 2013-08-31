@@ -148,7 +148,7 @@ def cities_autosuggest(request):
 def remind_preview(request):
     message = remind_account_about_events(
         Account.objects.get(user__email="jaromudr@gmail.com"),
-        Event.future_events.all()[0:1]
+        SingleEvent.future_events.all()[0:1]
     )
 
     return HttpResponse(message)

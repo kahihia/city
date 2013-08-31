@@ -15,7 +15,7 @@ from .settings import EVENT_PICTURE_DIR
 
 from image_cropping import ImageCropField, ImageRatioField
 
-from django.db.models import Min, Count
+from django.db.models import Min, Max, Count
 
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
@@ -106,11 +106,12 @@ class FeaturedManager(models.Manager):
 class ArchivedManager(models.Manager):
     def get_query_set(self):
         queryset = super(ArchivedManager, self).get_query_set()\
-            .filter(single_events__start_time__lte=datetime.datetime.now())\
+            .exclude(single_events__start_time__gte=datetime.datetime.now())\
             .select_related('single_events')\
-            .annotate(start_time=Min("single_events__start_time"))\
-            .annotate(end_time=Min("single_events__end_time"))\
-            .order_by("-single_events__start_time")
+            .annotate(start_time=Max("single_events__start_time"))\
+            .annotate(end_time=Max("single_events__end_time"))\
+            .extra(order_by=['-start_time'])\
+            .annotate(Count("id"))
 
         return queryset
 

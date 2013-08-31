@@ -175,13 +175,13 @@ class FunctionFilter(Filter):
 
         single_event_ids = SingleEvent.future_events.extra(
             where=["""
-                "event_singleevent".search_index @@ plainto_tsquery('pg_catalog.english', 'free')                
+                (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleevent"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', 'free')
             """]
         ).values_list("id", flat=True)
 
-        event_ids = Event.future_events.extra(
+        event_ids = Event.events.extra(
             where=["""                
-                "event_event".search_index @@ plainto_tsquery('pg_catalog.english', 'free')
+                (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", "event_event"."description")), 'D')) @@ plainto_tsquery('pg_catalog.english', 'free')
             """]
         ).values_list("id", flat=True)
 
@@ -193,13 +193,13 @@ class FunctionFilter(Filter):
         single_event_with_tag = SingleEvent.future_events.filter(event__tagged_items__tag__name__in=["Family"])
         single_event_ids = SingleEvent.future_events.extra(
             where=["""
-                "event_singleevent".search_index @@ plainto_tsquery('pg_catalog.english', 'family')                
+                (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleevent"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', 'family')
             """]
         ).values_list("id", flat=True)
 
-        event_ids = Event.future_events.extra(
+        event_ids = Event.events.extra(
             where=["""                
-                "event_event".search_index @@ plainto_tsquery('pg_catalog.english', 'family')
+                (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", "event_event"."description")), 'D')) @@ plainto_tsquery('pg_catalog.english', 'family')
             """]
         ).values_list("id", flat=True)
 
