@@ -19,14 +19,14 @@
         <div>
             <div class="time-row">
                 <div class="checkbox">
-                    <input id="timeJumpToDatePopupCheckbox" type="checkbox" class="time-checkbox" checked>
+                    <input id="timeJumpToDatePopupCheckbox" type="checkbox" class="time-checkbox">
                     <label for="timeJumpToDatePopupCheckbox"> </label>
                 </div>
                 
-                <div class="start-time inline">
+                <div class="start-time inline" disabled="disabled">
                     <span>Start Time</span>
                     <div class="timepicker">
-                        <div class="time dropdown" data-dropdown-class="time" data-value="{{ start_time|hour12 }}">
+                        <div class="time dropdown" data-dropdown-class="time" data-value="{{ start_time|hour12 }}" disabled="disabled">
                             <select>
                                 <option value="01:00">01:00</option>
                                 <option value="02:00">02:00</option>
@@ -42,7 +42,7 @@
                                 <option value="12:00">12:00</option>
                             </select>
                         </div>
-                        <div class="meridian dropdown" data-dropdown-class="meridian" data-value="{{ start_time|meredian }}">
+                        <div class="meridian dropdown" data-dropdown-class="meridian" data-value="{{ start_time|meredian }}" disabled="disabled">
                             <select>
                                 <option value="a.m.">a.m.</option>
                                 <option value="p.m.">p.m.</option>
@@ -50,10 +50,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="end-time inline">                  
+                <div class="end-time inline" disabled="disabled">                  
                     <span>End Time</span>
                     <div class="timepicker ">
-                        <div class="time dropdown" data-dropdown-class="time" data-value="{{ end_time|hour12 }}">
+                        <div class="time dropdown" data-dropdown-class="time" data-value="{{ end_time|hour12 }}" disabled="disabled">
                             <select>
                                 <option value="01:00">01:00</option>
                                 <option value="02:00">02:00</option>
@@ -69,7 +69,7 @@
                                 <option value="12:00">12:00</option>
                             </select>
                         </div>
-                        <div class="meridian dropdown" data-dropdown-class="meridian" data-value="{{ end_time|meredian }}">
+                        <div class="meridian dropdown" data-dropdown-class="meridian" data-value="{{ end_time|meredian }}" disabled="disabled">
                             <select>
                                 <option value="a.m.">a.m.</option>
                                 <option value="p.m.">p.m.</option>

@@ -145,15 +145,15 @@
 
 		},
 		addMonth: function(year, month) {
-			// TODO: insert month beetween it neighb...
 			if((year in this.months) && (month in this.months[year])) {
 				return;
 			}
 			var monthContainer, days;
 			date = new Date();
+			date.setDate(1);
 			year && date.setFullYear(year);
 			month && date.setMonth(month - 1);
-			date.setDate(1);
+			
 			prevDaysTimePicker = this.findPrevDaysTimePicker(year, month);
 			monthContainer = this.monthContainer(date, year, month);
 			if(prevDaysTimePicker) {
