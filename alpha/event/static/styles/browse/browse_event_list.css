@@ -137,7 +137,8 @@
 }
 
 .entry-wrapper .entry-info .entry-details-wrapper .entry-description {
-    color: #eb8a19;
+    color: #333;
+    font-size: 12px;
     font-weight: bold;
 }
 

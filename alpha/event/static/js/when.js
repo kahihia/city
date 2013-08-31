@@ -145,7 +145,6 @@
 
 		},
 		addMonth: function(year, month) {
-			// TODO: insert month beetween it neighb...
 			if((year in this.months) && (month in this.months[year])) {
 				return;
 			}

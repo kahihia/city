@@ -153,7 +153,7 @@
 }
 .main-navigation-nav-wrapper ul.categories ul.top5-tags li a:hover,
 .main-navigation-nav-wrapper ul.categories ul.top5-tags li a.selected {
-    background: #5dacfd;/* url("/static/images/searchpad/gradient-from-bottom.png") no-repeat;*/
+    background: #5dacfd;
     color: #fff; 
 }
 
