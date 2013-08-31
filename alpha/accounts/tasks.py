@@ -10,7 +10,7 @@ def remind_accounts_about_events():
     hots = AccountReminding.hots.all()
 
     for reminding in hots:
-        remind_account_about_events(reminding.account, SingleEvent.future_events.filter(id=reminding.single_event.event.id))
+        remind_account_about_events(reminding.account, SingleEvent.future_events.filter(id=reminding.single_event.id))
         reminding.processed()
     return hots
 
