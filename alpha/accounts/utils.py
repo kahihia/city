@@ -25,7 +25,7 @@ def remind_account_about_events(account, single_events):
 
 
 def find_similar_events(events):
-    basic_event_ids = ",".join([str(id) for id in list(set(events.values_list('id', flat=True)))])
+    basic_event_ids = ",".join([str(id) for id in list(set([event.id for event in events]))])
      # TODO: create similarity matrix for best performance(if we will need this)
     similar_events = Event.events.raw("""
         SELECT event_event.*, array_agg(tag_id) as tags,
@@ -72,7 +72,7 @@ def remind_account_about_events_with_email(account, single_events):
     msg = EmailMessage(subject,
                message,
                "reminder@cityfusion.ca",
-               [account.user.email])
+               [account.reminder_email])
     msg.content_subtype = 'html'
     msg.send()
 
@@ -142,7 +142,7 @@ def inform_account_about_events_with_tag_with_email(account, events, tags_in_ven
     msg = EmailMessage(subject,
         message,
         "reminder@cityfusion.ca",
-        [account.user.email])
+        [account.in_the_loop_email])
 
     msg.content_subtype = 'html'
 
