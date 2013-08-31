@@ -72,7 +72,7 @@ def remind_account_about_events_with_email(account, single_events):
     msg = EmailMessage(subject,
                message,
                "reminder@cityfusion.ca",
-               [account.user.email])
+               [account.reminder_email])
     msg.content_subtype = 'html'
     msg.send()
 
@@ -142,7 +142,7 @@ def inform_account_about_events_with_tag_with_email(account, events, tags_in_ven
     msg = EmailMessage(subject,
         message,
         "reminder@cityfusion.ca",
-        [account.user.email])
+        [account.in_the_loop_email])
 
     msg.content_subtype = 'html'
 
