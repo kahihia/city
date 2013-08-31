@@ -15,7 +15,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="http://{{ request.META.HTTP_HOST }}/events/view/{{event.slug}}/" />
     {% if event.picture %}
-        <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{% if event.event %}{% cropped_thumbnail event.event "cropping" height=200 %}{% else %}{% cropped_thumbnail event "cropping" height=200 %}{% endif %}" />    
+        <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{% cropped_thumbnail event.base "cropping" height=200 %}" />    
     {% else %}
         <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{{STATIC_URL}}images/default-event.jpg" />
     {% endif %}
@@ -54,7 +54,7 @@
                     {% if event.picture %}
                         <a id="photoFancy" href="/media/{{ event.picture }}">
                             <div class="center-cropped" 
-                                style="background: url('{% if event.event %}{% cropped_thumbnail event.event "cropping" height=265 %}{% else %}{% cropped_thumbnail event "cropping" height=265 %}{% endif %}') center center no-repeat;">
+                                style="background: url('{% cropped_thumbnail event.base "cropping" height=265 %}') center center no-repeat;">
                             </div>​
                         </a>
                     {% else %}
