@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang='en_US' class="preview">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>City Fusion</title>
+    <link href="/static/styles/styles.css" rel="stylesheet" type="text/css" />
+    <link href="/static/styles/styles-new.css" rel="stylesheet" type="text/css" />
+    <link href="/static/styles/widgets.css" rel="stylesheet" type="text/css" />
+    <link href="/static/styles/advertising.css" rel="stylesheet" type="text/css" />
+    <link href="/static/fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
+    <link type="text/css" href="/static/date/css/redmond/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+    <link href="/static/css/facebook.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="/static/styles/accounts/signin_signup.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="/static/styles/browse/event_details.css" rel="stylesheet" type="text/css" />
+    <link href="/static/styles/event/conversation.css" rel="stylesheet" type="text/css" />
+    <link href="/static/styles/profile-table.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body class="modern preview">
+    <div class="wrapper preview">
+        <div class="page-container preview">
+            <div class="content-wrapper">
+                <div class="primary-content preview">
+                    <div class="event-wrapper">
+                        <div class="description" id="description-container">
+                            <p>As of July 24th, 2013, the Meetup event</p>
+                            <p>description editor has been simplified so Organizers can create Meetups with a consistent look and feel</p>
+
+                            <p>&nbsp;</p>
+
+                            <p>across all platforms. Formatting options <a href="http://rambler.ru">http://rambler.ru</a> such as color and font-size have been removed, so Meetups render better on mobile devices. Meetups scheduled on the <a href="http://yandex.ru"><a href="http://yandex.ru">http://yandex.ru</a></a> calendar <a href="https://www.mail.ru">https://www.mail.ru</a> before July 24th will retain their formatting, unless edited. Past Meetups will keep their original formatting</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var container = document.getElementById("description-container");
+        container.innerHTML = window.opener._cke_htmlToLoad;
+        delete window.opener._cke_htmlToLoad;
+    </script>
+</body>
+</html>

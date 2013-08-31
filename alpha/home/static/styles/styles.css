@@ -7,10 +7,18 @@ body
 	font:12px Arial, Helvetica, sans-serif;
 }
 
+html.preview, body.preview {
+    height: 100%;
+}
+
 .wrapper
 {
 	width:auto;
 	text-align:center;
+}
+
+.wrapper.preview {
+    height: 100%;
 }
 
 .page-container
@@ -20,6 +28,12 @@ body
 	text-align:left;
 	background: #fff;
 	padding-bottom: 10px;
+}
+
+.page-container.preview {
+    min-height: 100%;
+    padding-bottom: 0;
+    width: 725px;
 }
 
 .logo

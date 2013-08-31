@@ -1,3 +1,4 @@
+
 .content-wrapper {
     padding: 25px 15px 0px;
     color: #454545;
@@ -216,6 +217,10 @@
 .primary-content {
     float:left;
     margin-bottom: 20px;
+}
+
+.primary-content.preview {
+    float: none;
 }
 
 .secondary-content {

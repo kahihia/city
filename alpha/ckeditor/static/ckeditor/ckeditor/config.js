@@ -3,10 +3,13 @@
  * For licensing, see LICENSE.html or http://ckeditor.com/license
  */
 
+CKEDITOR.plugins.addExternal('preview', 'plugins/preview/', 'plugin.js');
+
 CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here.
 	// For the complete reference:
 	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
+    config.extraPlugins = 'preview';
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	config.toolbarGroups = [
