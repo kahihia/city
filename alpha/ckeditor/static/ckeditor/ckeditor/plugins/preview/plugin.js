@@ -7,79 +7,97 @@
  * @fileOverview Preview plugin.
  */
 
-(function() {
+(function($) {
 	var pluginPath;
 
 	var previewCmd = { modes:{wysiwyg:1,source:1 },
 		canUndo: false,
 		readOnly: 1,
 		exec: function( editor ) {
-			var sHTML,
-				config = editor.config,
-				baseTag = config.baseHref ? '<base href="' + config.baseHref + '"/>' : '',
-				eventData;
+            if($ && $.fancybox) {
+                $.fancybox.open([
+                    {
+                        type: 'iframe',
+                        href : pluginPath + 'preview.html'
+                    }
+                ], {
+                    padding : 0,
+                    width: 710,
+                    afterLoad:function() {
+                        var container = $(this.content[0]).contents().find("#description-container");
+                        container.html(editor.getData());
+                    }
+                });
+            }
+            else {
+                var sHTML,
+                    config = editor.config,
+                    baseTag = config.baseHref ? '<base href="' + config.baseHref + '"/>' : '',
+                    eventData;
 
-			if ( config.fullPage ) {
-				sHTML = editor.getData().replace( /<head>/, '$&' + baseTag ).replace( /[^>]*(?=<\/title>)/, '$& &mdash; ' + editor.lang.preview.preview );
-			} else {
-				sHTML = editor.getData();
-			}
+                if ( config.fullPage ) {
+                    sHTML = editor.getData().replace( /<head>/, '$&' + baseTag ).replace( /[^>]*(?=<\/title>)/, '$& &mdash; ' + editor.lang.preview.preview );
+                } else {
+                    sHTML = editor.getData();
+                }
 
-			var iWidth = 640,
-				// 800 * 0.8,
-				iHeight = 420,
-				// 600 * 0.7,
-				iLeft = 80; // (800 - 0.8 * 800) /2 = 800 * 0.1.
-			try {
-				var screen = window.screen;
-				//iWidth = Math.round( screen.width * 0.8 );
-                iWidth = 725;
-				iHeight = Math.round( screen.height * 0.7 );
-				iLeft = Math.round( screen.width * 0.1 );
-			} catch ( e ) {}
+                var iWidth = 640,
+                    // 800 * 0.8,
+                    iHeight = 420,
+                    // 600 * 0.7,
+                    iLeft = 80; // (800 - 0.8 * 800) /2 = 800 * 0.1.
+                try {
+                    var screen = window.screen;
+                    //iWidth = Math.round( screen.width * 0.8 );
+                    iWidth = 725;
+                    iHeight = Math.round( screen.height * 0.7 );
+                    iLeft = Math.round( screen.width * 0.1 );
+                } catch ( e ) {}
 
-			// (#9907) Allow data manipulation before preview is displayed.
-			// Also don't open the preview window when event cancelled.
-			if ( !editor.fire( 'contentPreview', eventData = { dataValue: sHTML } ) )
-				return false;
+                // (#9907) Allow data manipulation before preview is displayed.
+                // Also don't open the preview window when event cancelled.
+                if ( !editor.fire( 'contentPreview', eventData = { dataValue: sHTML } ) )
+                    return false;
 
-			var sOpenUrl = '';
-			if ( CKEDITOR.env.ie ) {
-				window._cke_htmlToLoad = eventData.dataValue;
-				sOpenUrl = 'javascript:void( (function(){' +
-					'document.open();' +
-					// Support for custom document.domain.
-					// Strip comments and replace parent with window.opener in the function body.
-					( '(' + CKEDITOR.tools.fixDomain + ')();' ).replace( /\/\/.*?\n/g, '' ).replace( /parent\./g, 'window.opener.' ) +
-					'document.write( window.opener._cke_htmlToLoad );' +
-					'document.close();' +
-					'window.opener._cke_htmlToLoad = null;' +
-				'})() )';
-			}
+                var sOpenUrl = '';
+                if ( CKEDITOR.env.ie ) {
+                    window._cke_htmlToLoad = eventData.dataValue;
+                    sOpenUrl = 'javascript:void( (function(){' +
+                        'document.open();' +
+                        // Support for custom document.domain.
+                        // Strip comments and replace parent with window.opener in the function body.
+                        ( '(' + CKEDITOR.tools.fixDomain + ')();' ).replace( /\/\/.*?\n/g, '' ).replace( /parent\./g, 'window.opener.' ) +
+                        'document.write( window.opener._cke_htmlToLoad );' +
+                        'document.close();' +
+                        'window.opener._cke_htmlToLoad = null;' +
+                    '})() )';
+                }
 
-			// With Firefox only, we need to open a special preview page, so
-			// anchors will work properly on it. (#9047)
-			if ( CKEDITOR.env.gecko ) {
-				window._cke_htmlToLoad = eventData.dataValue;
-				sOpenUrl = pluginPath + 'preview.html';
-			}
+                // With Firefox only, we need to open a special preview page, so
+                // anchors will work properly on it. (#9047)
 
-			var oWindow = window.open( sOpenUrl, null, 'toolbar=yes,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes,width=' +
-				iWidth + ',height=' + iHeight + ',left=' + iLeft );
+                if ( CKEDITOR.env.gecko ) {
+                    window._cke_htmlToLoad = eventData.dataValue;
+                    sOpenUrl = pluginPath + 'preview.html';
+                }
 
-			if ( !CKEDITOR.env.ie && !CKEDITOR.env.gecko ) {
-				var doc = oWindow.document;
-				doc.open();
-				doc.write( eventData.dataValue );
-				doc.close();
+                var oWindow = window.open( sOpenUrl, null, 'toolbar=yes,location=no,status=yes,menubar=yes,scrollbars=yes,resizable=yes,width=' +
+                    iWidth + ',height=' + iHeight + ',left=' + iLeft );
 
-				// Chrome will need this to show the embedded. (#8016)
-				CKEDITOR.env.webkit && setTimeout( function() {
-					doc.body.innerHTML += '';
-				}, 0 );
-			}
+                if ( !CKEDITOR.env.ie && !CKEDITOR.env.gecko ) {
+                    var doc = oWindow.document;
+                    doc.open();
+                    doc.write( eventData.dataValue );
+                    doc.close();
 
-			return true;
+                    // Chrome will need this to show the embedded. (#8016)
+                    CKEDITOR.env.webkit && setTimeout( function() {
+                        doc.body.innerHTML += '';
+                    }, 0 );
+                }
+
+                return true;
+            }
 		}
 	};
 
@@ -106,7 +124,7 @@
 			});
 		}
 	});
-})();
+})(jQuery);
 
 /**
  * Event fired when executing `preview` command, which allows additional data manipulation.
