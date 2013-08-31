@@ -39,6 +39,31 @@
     text-decoration: none;
 }
 
+.profile-table .col {
+    float: left;
+    width: 25%;
+}
+
+.profile-table .image {
+    width: 30px;
+    float: left;
+}
+
+.profile-table .stats {
+    float: right;
+    width: 270px;
+}
+
+.profile-table .stat {
+    float: left;
+    width: 25%;
+}
+
+.profile-table .ad-desc {
+    padding-top: 8px;
+    clear: both;
+}
+
 a.remove-button {
     display: inline-block;
     width: 16px;
@@ -135,5 +160,6 @@ a.add-button {
 
 .advertising-items {
     clear: both;
-    padding: 4px 0;
+    padding: 9px 0;
+    width: 300px;
 }
