@@ -169,7 +169,7 @@ class LocationFromUserChoice(object):
         self.from_browser = LocationFromBrowser(request)
         self.from_account_settings = LocationFromAccountSettins(request)
 
-        if self.account and missing_in_session("user_location_data", self.request.session):
+        if self.account and missing_in_session("user_location_data", self.request.session) and self.account.location_type:
             user_location_data = {}
             user_location_data["user_location_id"] = self.account.location_id
             user_location_data["user_location_name"] = self.account.location_name
