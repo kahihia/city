@@ -25,7 +25,7 @@ def remind_account_about_events(account, single_events):
 
 
 def find_similar_events(events):
-    basic_event_ids = ",".join([str(id) for id in list(set(events.values_list('id', flat=True)))])
+    basic_event_ids = ",".join([str(id) for id in list(set([event.id for event in events]))])
      # TODO: create similarity matrix for best performance(if we will need this)
     similar_events = Event.events.raw("""
         SELECT event_event.*, array_agg(tag_id) as tags,
