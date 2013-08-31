@@ -377,38 +377,19 @@ class SearchFilter(Filter):
 
         ids_string = ",".join([str(id) for id in ids])
 
+        where = """
+            (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", "event_event"."description")), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
+            OR (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleevent"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
+        """
+
+        if ids:
+            ids_string = ",".join([str(id) for id in ids])
+            where = """"event_singleevent"."id" IN ("""+ids_string+""") OR """ +where
 
         return qs.extra(
-            where=["""
-                "event_singleevent"."id" IN ("""+ids_string+""")
-                OR (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", "event_event"."description")), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
-                OR (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleevent"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
-            """],
+            where=[where],
             params=[search_string, search_string]
         ).annotate(Count("id"))
-
-        #     def filter(self, qs, tags):
-        # # TODO: It is code with bad performance
-        # event_ids = map(lambda event: event.event.id, qs)
-        # event_ids_with_tags = Event.events.filter(id__in=list(event_ids)).filter( 
-        #     tagged_items__tag__name__in=tags 
-        # ).annotate(
-        #     repeat_count=Count('id') 
-        # ).filter( 
-        #     repeat_count=len(tags) 
-        # ).values_list("id", flat=True)
-        # return qs.filter(event_id__in=list(event_ids_with_tags))
-
-    # def filter(self, qs, search_string):
-    #     return qs.extra(
-    #         where=["""
-    #             event_singleevent.search_index @@ plainto_tsquery('pg_catalog.english', %s)
-    #             OR event_event.search_index @@ plainto_tsquery('pg_catalog.english', %s)
-    #         """],
-    #         params=[search_string, search_string]
-    #     )
-
-# WHERE ( (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", '')), 'D') || setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."description", '')), 'D')) @@ (plainto_tsquery('pg_catalog.english', 'boo')))
 
 
 class NightLifeFilter(Filter):
