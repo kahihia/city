@@ -78,7 +78,8 @@ class FutureManager(models.Manager):
             .select_related('single_events')\
             .annotate(start_time=Min("single_events__start_time"))\
             .annotate(end_time=Min("single_events__end_time"))\
-            .order_by("single_events__start_time")
+            .extra(order_by=['start_time'])\
+            .annotate(Count("id"))
 
         return queryset
 
