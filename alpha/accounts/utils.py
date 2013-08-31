@@ -24,8 +24,8 @@ def remind_account_about_events(account, single_events):
         remind_account_about_events_with_sms(account, single_events)
 
 
-def find_similar_events(single_events):
-    basic_event_ids = ",".join([str(id) for id in list(set(single_events.values_list('event_id', flat=True)))])
+def find_similar_events(events):
+    basic_event_ids = ",".join([str(id) for id in list(set(events.values_list('id', flat=True)))])
      # TODO: create similarity matrix for best performance(if we will need this)
     similar_events = Event.events.raw("""
         SELECT event_event.*, array_agg(tag_id) as tags,
@@ -54,7 +54,9 @@ def find_similar_events(single_events):
 def remind_account_about_events_with_email(account, single_events):
     featured_events = Event.featured_events.all()[:4]
 
-    similar_events = find_similar_events(single_events)
+    similar_events = find_similar_events(
+        Event.future_events.filter(id__in=single_events.values_list("event_id", flat=True))
+    )
 
     subject = "Upcoming events from cityfusion"
 
