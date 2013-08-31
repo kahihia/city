@@ -1,8 +1,8 @@
 from django import template
 from easy_thumbnails.files import get_thumbnailer
-import Image
-import ImageDraw
-import ImageFont
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 from django.template import defaultfilters as filters
 import StringIO
 from django.core.files.storage import default_storage
