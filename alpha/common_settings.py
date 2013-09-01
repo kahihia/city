@@ -6,7 +6,7 @@ djcelery.setup_loader()
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', 'dev.cityfusion.ca', 'www.cityfusion.ca', 'cityfusion.ca']
 
 ADMINS = (
     ('jaromudr', 'jaromudr@gmail.com'),
