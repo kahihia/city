@@ -3,8 +3,10 @@ import djcelery
 djcelery.setup_loader()
 # Django settings for alpha project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+
+ALLOWED_HOSTS = ['localhost']
 
 ADMINS = (
     ('jaromudr', 'jaromudr@gmail.com'),

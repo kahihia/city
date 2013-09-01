@@ -10,7 +10,7 @@ if settings.DEBUG:
 """
 from os import path
 from django.conf import settings
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from urlparse import urljoin
 
 

@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 from cityfusion_admin import views
 from django.views.generic import TemplateView
 

@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 
 from ajaxuploader.views import AjaxFileUploader
 from ajaxuploader.backends.default_storage import DefaultStorageUploadBackend

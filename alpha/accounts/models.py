@@ -186,7 +186,7 @@ def add_single_events_to_schedule(account, events):
             reminding.save()
 
 
-def sync_schedule_after_reminder_single_events_was_modified(sender, **kwargs):
+def sync_schedule_after_reminder_single_events_was_modified(sender, **kwargs):    
     if kwargs['action'] == 'post_add':
         events = SingleEvent.future_events.filter(id__in=kwargs["pk_set"])
 

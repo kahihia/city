@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from utils import import_backend_modules
 
 includes_list = []
