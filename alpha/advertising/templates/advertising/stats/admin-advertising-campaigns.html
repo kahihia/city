@@ -7,7 +7,15 @@
         <tr>
             <th class="action">Campaign Name</th>
             <th class="action">Owner</th>
-            <th class="action">Ads(Impressions/Clicks), CPC, CPM</th>
+            <th class="action">
+                <div class="col image">&nbsp;</div>
+                <div class="stats">
+                    <div class="col">Impressions</div>
+                    <div class="col">Clicks</div>
+                    <div class="col">CPC</div>
+                    <div class="col">CPM</div>
+                </div>
+            </th>
             <th class="action">Amount Spent</th>
             <th class="action">Amount Remaining</th>
             <th class="action">Regions</th>
@@ -24,12 +32,26 @@
             <td class="action">
                 {% for ad in campaign.advertising_set.all %}
                     <div class="advertising-items">
-                        <a href="/media/{{ ad.image }}" class="advertising-image" target="_blank">
-                            <img class="ads-thumb" width="30" src="/media/{{ ad.image }}" alt="" />
-                            {{ ad.ad_type.name }} {{ ad.ad_type.width }}x{{ ad.ad_type.height }}
-                        </a>({{ ad.views }}/{{ ad.clicks }}), {{ ad.cpc_price }}, {{ ad.cpm_price }}
-                        <br/>
-                        <a href="{% url 'admin_advertising_remove_ad' ad.id %}" class="danger">Remove ad</a>
+                        <div class="image">
+                            <a href="/media/{{ ad.image }}" class="advertising-image" target="_blank">
+                                <img class="ads-thumb" width="30" src="/media/{{ ad.image }}" alt="" />
+                            </a>
+                        </div>
+                        <div class="stats">
+                            <div>
+                                <div class="stat">{{ ad.views }}</div>
+                                <div class="stat">{{ ad.clicks }}</div>
+                                <div class="stat">{{ ad.cpc_price }}</div>
+                                <div class="stat">{{ ad.cpm_price }}</div>
+                            </div>
+                            <div class="ad-desc">
+                                <a href="/media/{{ ad.image }}" class="advertising-image" target="_blank">
+                                    {{ ad.ad_type.name }} {{ ad.ad_type.width }}x{{ ad.ad_type.height }}
+                                </a>
+                                <br/>
+                                <a href="{% url 'admin_advertising_remove_ad' ad.id %}" class="danger">Remove ad</a>
+                            </div>
+                        </div>
                     </div>
                 {% endfor %}
             </td>
