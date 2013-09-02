@@ -6,7 +6,8 @@
     <tr>
         <th>Campaign</th>
         <th>Budget</th>
-        <th>Status</th>        
+        <th>Status</th>
+        <th>Actions</th>
     </tr>
     {% for order in advertising_orders %}
     <tr>
@@ -18,7 +19,15 @@
         </td>
         <td>
             {{ order.status }}
-        </td>        
+        </td>
+        <td>
+            <a href="{% url "account_order_printed" %}">
+                <img src="{{STATIC_URL}}images/pdf-icon.png" alt="Get as PDF" title="Get as PDF" />
+            </a>
+            <a href="#">
+                <img src="{{STATIC_URL}}images/print-icon.png" alt="Printed version" title="Printed version">
+            </a>
+        </td>
     </tr>
     {% endfor %}
 </table>

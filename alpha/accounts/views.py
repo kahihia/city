@@ -30,6 +30,7 @@ from cities.models import City, Country
 from django.db.models import Q
 from event.utils import find_nearest_city
 from advertising.models import AdvertisingOrder
+from event.models import FeaturedEventOrder
 from accounts.forms import AccountForm
 from userena.decorators import secure_required
 from guardian.decorators import permission_required_or_403
@@ -416,12 +417,23 @@ def orders(request):
     account = Account.objects.get(user_id=request.user.id)
 
     advertising_orders = AdvertisingOrder.objects.filter(campaign__account_id=account.id)
+    featured_orders = FeaturedEventOrder.objects.filter(featured_event__owner_id=account.id)
+
+    tabs_page = 'orders'
+    active_tab = request.session.get(tabs_page, 'advertising')
 
     return render_to_response('accounts/orders.html', {
             'account': account,
             'advertising_orders': advertising_orders,
-            'featured_orders': []
+            'featured_orders': featured_orders,
+            'tabs_page': tabs_page,
+            'active_tab': active_tab
         }, context_instance=RequestContext(request))
+
+
+@login_required
+def order_printed(request):
+    return render_to_response('accounts/printed/order_advertising.html')
 
 
 @secure_required

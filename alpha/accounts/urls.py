@@ -68,6 +68,10 @@ urlpatterns = patterns('',
         accounts.orders,
         name='account_orders'
     ),
+    url(r'^order-printed/$',
+        accounts.order_printed,
+        name='account_order_printed'
+    ),
     url(r'^set-user-context/(?P<context>[-\w]+)/$',
         accounts.set_context,
         name="account_set_context"

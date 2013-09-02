@@ -1,0 +1,57 @@
+{% load endless %}
+
+{% paginate 20 featured_orders using "featured_orders" %}
+
+<table class="profile-table" celpadding="0" cellspacing="0">
+    <tr>
+        <th>Event name</th>
+        <th>Cost</th>
+        <th>Period</th>
+        <th>Actions</th>
+    </tr>
+    {% for order in featured_orders %}
+    <tr>
+        <td>
+            {{ order.featured_event.event.name }}
+        </td>
+        <td>
+            {{ order.cost }}
+        </td>
+        <td>
+            {{ order.featured_event.start_time|date:"F d, Y" }}
+            -
+            {{ order.featured_event.end_time|date:"F d, Y" }}
+        </td>
+        <td>
+            <a href="#">
+                <img src="{{STATIC_URL}}images/pdf-icon.png" alt="Get as PDF" title="Get as PDF" />
+            </a>
+            <a href="#">
+                <img src="{{STATIC_URL}}images/print-icon.png" alt="Printed version" title="Printed version">
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% if pages|length > 1 %}
+    <div class="profile-table-pagination">
+        <span class="pagintation-wrapper">
+            {% get_pages %}
+            {% if pages.current.is_first %}
+                <span class="prev"></span>
+            {% else %}
+                <a class="prev" href="{{ pages.previous.url }}"></a>
+            {% endif %}
+            <span class="page-info">
+                {{ pages.current }} of {{ pages|length }}
+            </span>
+
+            {% if pages.current.is_last %}
+                <span class="next"></span>
+            {% else %}
+                <a class="next" href="{{ pages.next.url }}"></a>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}
