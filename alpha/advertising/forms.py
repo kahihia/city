@@ -6,6 +6,7 @@ from django.core.files.images import get_image_dimensions
 
 from djmoney.forms.fields import MoneyField
 from moneyed import Money, CAD
+from accounts.widgets import ChooseUserContextWidget
 
 
 class AdvertisingSetupForm(forms.ModelForm):
@@ -27,11 +28,14 @@ class AdvertisingSetupForm(forms.ModelForm):
             'name',
             'regions',
             'all_of_canada',
-            'website'
+            'website',
+            'venue_account'
         )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, account, *args, **kwargs):
         super(AdvertisingSetupForm, self).__init__(*args, **kwargs)
+
+        self.fields['venue_account'].widget = ChooseUserContextWidget(account)
 
         self.fields['name'].error_messages['required'] = 'Campaign name is required'
         self.fields['website'].error_messages['required'] = 'Website URL is required'

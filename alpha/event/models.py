@@ -141,7 +141,7 @@ class Event(models.Model):
     cropping = ImageRatioField('picture', '180x180', size_warning=True, allow_fullsize=True)
     
     owner = models.ForeignKey(User, blank=True, null=True)
-    venue_account_owner = models.ForeignKey('accounts.VenueAccount', blank=True, null=True)
+    venue_account_owner = models.ForeignKey('accounts.VenueAccount', blank=True, null=True, on_delete=models.SET_NULL)
     
     email = models.CharField('email address', max_length=100)
     name = models.CharField('event title', max_length=250)

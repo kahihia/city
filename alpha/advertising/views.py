@@ -26,12 +26,12 @@ def setup(request):
     account = Account.objects.get(user_id=request.user.id)
     campaign = AdvertisingCampaign(account=account, venue_account=request.current_venue_account)
 
-    form = PaidAdvertisingSetupForm(instance=campaign)
+    form = PaidAdvertisingSetupForm(account, instance=campaign)
 
     advertising_types = AdvertisingType.objects.filter(active=True).order_by("id")
 
     if request.method == 'POST':
-        form = PaidAdvertisingSetupForm(instance=campaign, data=request.POST, files=request.FILES)
+        form = PaidAdvertisingSetupForm(account, instance=campaign, data=request.POST, files=request.FILES)
         if form.is_valid():
             advertising_campaign = form.save()
 
@@ -121,6 +121,7 @@ def deposit_funds_for_campaign(request, campaign_id):
     }, context_instance=RequestContext(request))
 
 def edit_campaign(request, campaign_id):
+    account = Account.objects.get(user_id=request.user.id)
     campaign = AdvertisingCampaign.objects.get(id=campaign_id)
 
     if campaign.account.user != request.user:
@@ -128,14 +129,14 @@ def edit_campaign(request, campaign_id):
         resp.status_code = 403
         return resp
 
-    form = AdvertisingCampaignEditForm(instance=campaign)
+    form = AdvertisingCampaignEditForm(account, instance=campaign)
 
     advertising_types = AdvertisingType.objects.filter(active=True).order_by("id")
 
     advertising_images = { ad.ad_type_id: ad.image for ad in campaign.advertising_set.all() }
 
     if request.method == 'POST':
-        form = AdvertisingCampaignEditForm(instance=campaign, data=request.POST, files=request.FILES)
+        form = AdvertisingCampaignEditForm(account, instance=campaign, data=request.POST, files=request.FILES)
 
         if form.is_valid():
             campaign = form.save()

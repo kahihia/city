@@ -242,12 +242,12 @@ def admin_advertising(request):
 def admin_advertising_setup(request):
     account = Account.objects.get(user_id=request.user.id)
     campaign = AdvertisingCampaign(account=account, owned_by_admin=True)
-    form = AdvertisingSetupForm(instance=campaign)
+    form = AdvertisingSetupForm(account, instance=campaign)
 
     advertising_types = AdvertisingType.objects.filter(active=True).order_by("id")
 
     if request.method == 'POST':
-        form = AdvertisingSetupForm(instance=campaign, data=request.POST, files=request.FILES)
+        form = AdvertisingSetupForm(account, instance=campaign, data=request.POST, files=request.FILES)
         if form.is_valid():
             advertising_campaign = form.save()
 
@@ -289,14 +289,14 @@ def admin_advertising_setup(request):
 def admin_advertising_edit_campaign(request, campaign_id):
     campaign = AdvertisingCampaign.objects.get(id=campaign_id)
 
-    form = AdvertisingCampaignEditForm(instance=campaign)
+    form = AdvertisingCampaignEditForm(campaign.account, instance=campaign)
 
     advertising_types = AdvertisingType.objects.filter(active=True).order_by("id")
 
     advertising_images = { ad.ad_type_id: ad.image for ad in campaign.advertising_set.all() }
 
     if request.method == 'POST':
-        form = AdvertisingCampaignEditForm(instance=campaign, data=request.POST, files=request.FILES)
+        form = AdvertisingCampaignEditForm(campaign.account, instance=campaign, data=request.POST, files=request.FILES)
 
         if form.is_valid():
             campaign = form.save()

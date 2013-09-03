@@ -28,6 +28,9 @@
             </td>
             <td>
                 <a href="{% url "admin:accounts_account_change" campaign.account.id %}" target="_blank">{{ campaign.account.user.username }}</a>
+                {% if campaign.venue_account %}
+                    ({{ campaign.venue_account }})
+                {% endif %}
             </td>
             <td class="action">
                 {% for ad in campaign.advertising_set.all %}

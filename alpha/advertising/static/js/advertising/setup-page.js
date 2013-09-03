@@ -2,12 +2,16 @@
     'use strict';
 
     function AdvertisingSetupPage(){
+        this.initVenueAccountWidget();
         this.initAdTypeSelection();
         this.initRegionSelection();
         this.initTotalPriceCalculation();
     }
 
     AdvertisingSetupPage.prototype = {
+        initVenueAccountWidget: function(){
+            this.venueAccount = new VenueAccountOwnerWidget();
+        },
         initAdTypeSelection: function(){
             var that=this;
 

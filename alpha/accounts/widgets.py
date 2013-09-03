@@ -161,3 +161,66 @@ class CityAutoSuggest(forms.TextInput):
         js = (
             '%s/js/jquery.autoSuggest.minified.js' % js_base_url,
         )
+
+
+class ChooseUserContextWidget(forms.Widget):
+    class Media:
+        js = (
+            "js/create_event/venue_account_owner.js",
+        )
+
+    def __init__(self, account, *args, **kw):        
+        super(ChooseUserContextWidget, self).__init__(*args, **kw)
+        self.account = account
+
+        self.choices = [{
+            "id": account.id,
+            "type": "account",
+            "text": account.user.username,
+            "fullname": ""
+        }]
+
+        for venue_account in account.venueaccount_set.all():
+            self.choices.append({
+                "id": venue_account.id,
+                "type": "venue_account",
+                "text": venue_account.venue.name,
+                "fullname": venue_account.venue
+            })
+
+        self.user_context_type = forms.widgets.HiddenInput()
+        self.user_context_id = forms.widgets.HiddenInput()
+
+
+    def value_from_datadict(self, data, files, name):
+        user_context_type = self.user_context_type.value_from_datadict(data, files, 'user_context_type')
+        user_context_id = int(self.user_context_id.value_from_datadict(data, files, 'user_context_id'))
+        
+        if user_context_type=="account":
+            return None
+        else:
+            return user_context_id
+
+    def render(self, name, value, *args, **kwargs):
+        html = """<div class="dropdown venue-account-owner-dropdown" data-dropdown-class="venue-account-owner-dropdown-list"><select id="id_venue_account_owner">"""
+        for choice in self.choices:
+            html += "<option"
+            if choice["id"] == value:
+                html += " selected='selected'"
+            html += " value='%s|%d|%s'>%s</option>" % (choice["type"], choice["id"], choice["fullname"], choice["text"])
+
+        html += """</select></div>"""
+
+        if value:
+            user_context_type = "venue_account"
+            user_context_id = value
+        else:
+            user_context_type = "account"
+            user_context_id = self.account.id  
+            
+
+        html += self.user_context_type.render("user_context_type", "", {"id": 'id_user_context_type', "value": user_context_type})
+        html += self.user_context_id.render("user_context_id", "", {"id": 'id_user_context_id', "value": user_context_id})
+
+        return mark_safe(html)
+

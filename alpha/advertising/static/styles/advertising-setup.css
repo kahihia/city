@@ -34,6 +34,32 @@ body .hintbox {
     margin-right: 10px;
 }
 
+.campaign-owner .dropdown {
+    width: 190px;
+    margin-left: 20px;
+    margin-right: 10px;
+    height: 20px;
+    line-height: 20px;
+    border: 1px solid #ababab;
+}
+.campaign-owner .dropdown:after{
+    right: 2px;
+    top: 2px;
+}
+
+.venue-account-owner-dropdown-list {
+    width: 190px;
+    width: 210px;
+    border-left: 1px solid #ababab;
+    border-right: 1px solid #ababab;
+    border-bottom: 1px solid #ababab;
+}
+
+.venue-account-owner-dropdown-list .dropdown-child {
+    padding: 5px;
+
+}
+
 .advertising-types {
     margin-top: 5px;
     margin-bottom: 20px;

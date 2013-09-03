@@ -6,7 +6,6 @@ from mamona import signals
 from mamona.models import build_payment_model
 from decimal import Decimal
 from django.db.models import Q
-from django.db.models import F
 
 
 class AdvertisingType(models.Model):
@@ -31,7 +30,7 @@ class AdminAdvertisingCampaignManager(models.Manager):
 class AdvertisingCampaign(models.Model):
     name = models.CharField(max_length=128)
     account = models.ForeignKey('accounts.Account')
-    venue_account = models.ForeignKey('accounts.VenueAccount', blank=True, null=True)
+    venue_account = models.ForeignKey('accounts.VenueAccount', blank=True, null=True, on_delete=models.SET_NULL)
     all_of_canada = models.BooleanField()
     regions = models.ManyToManyField(Region)
     

@@ -192,7 +192,6 @@ class ChooseUserContextWidget(forms.Widget):
             html += " value='%s|%d|%s'>%s</option>" % (choice["type"], choice["id"], choice["fullname"], choice["text"])
 
         html += """</select></div>"""
-        html += "</div>"
 
         if value:
             user_context_type = "venue_account"
