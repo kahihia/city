@@ -53,7 +53,7 @@
 
             <div class="modal-bg"></div>
             <div id="entry-form">
-                <form method="post" name="post-events" onsubmit="return validate_form_events(this)" enctype="multipart/form-data">
+                <form method="post" name="post-events" enctype="multipart/form-data">
                     {% csrf_token %}
                     <!--errors -->
                     {%if form.errors %}
