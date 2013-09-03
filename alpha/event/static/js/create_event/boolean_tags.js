@@ -11,7 +11,7 @@
 
         this.tagName = tagName;
 
-        this.yes.on("change", function(event) {
+        this.yes.on("change", function() {
             that.removeTag();
             if(that.yes[0].checked) {
                 that.addTag();
@@ -25,7 +25,7 @@
         });
 
         window.setInterval(this.updateTag.bind(this), 50);
-        this.updateTag();        
+        this.updateTag();
     }
 
     BooleanTag.prototype = {
@@ -45,7 +45,7 @@
             }            
         },
         removeTag: function() {
-            var button = $(".as-selections [data-value='"+this.tagName+"'] a");
+            var button = $(".as-selections [data-value='"+this.tagName+"'] a, ".as-selections [data-value=' "+this.tagName+"'] a"");
             $('.tags-popup').css("opacity", 0);
             $(button).trigger("click");
             $(".modal-bg").hide();
