@@ -45,7 +45,7 @@
             }            
         },
         removeTag: function() {
-            var button = $(".as-selections [data-value='"+this.tagName+"'] a, .as-selections [data-value=' "+this.tagName+"'] a);
+            var button = $(".as-selections [data-value='"+this.tagName+"'] a, .as-selections [data-value=' "+this.tagName+"'] a");
             $('.tags-popup').css("opacity", 0);
             $(button).trigger("click");
             $(".modal-bg").hide();
