@@ -203,8 +203,8 @@
 
             $('.picture-thumb .preview')[0].src = $(this.cropping_image)[0].src;
             $('.picture-thumb .preview').css({
-                width: Math.round(rx * $(this.cropping_image)[0].width) + 'px',
-                height: Math.round(ry * $(this.cropping_image)[0].height) + 'px',
+                width: Math.round(rx * $(this.cropping_image).width()) + 'px',
+                height: Math.round(ry * $(this.cropping_image).height()) + 'px',
                 marginLeft: '-' + Math.round(rx * coords.x) + 'px',
                 marginTop: '-' + Math.round(ry * coords.y) + 'px'
             });

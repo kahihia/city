@@ -703,7 +703,7 @@ a {
 	outline:none;
 }
 
-.inputfield{
+body .inputfield{
 	width:262px;
 	height:25px;
 	line-height:25px;
