@@ -171,7 +171,7 @@
                ['Bold','Italic','Underline','StrikeThrough','-','Undo','Redo'],
                ['Table','-','Link','TextColor','BGColor','Source', 'Preview'],
                '/',
-               ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+               ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock']
             ];
 
             CKEDITOR.config.contentsCss = '/static/styles/ckeditor-content.css';
