@@ -1,5 +1,7 @@
 # Create your views here.
 
+from django_xhtml2pdf.utils import generate_pdf
+
 from models import Account, VenueAccount
 from event.models import Event, SingleEvent, FeaturedEvent, Venue
 from django.core.urlresolvers import reverse
@@ -432,8 +434,39 @@ def orders(request):
 
 
 @login_required
-def order_printed(request):
-    return render_to_response('accounts/printed/order_advertising.html')
+def order_advertising_printed(request, order_id):
+    order = AdvertisingOrder.objects.get(pk=order_id)
+    return render_to_response('accounts/order_printed.html',
+                              {'order': order,
+                               'user': order.account.user},
+                              context_instance=RequestContext(request))
+
+
+@login_required
+def order_featured_printed(request, order_id):
+    order = FeaturedEventOrder.objects.get(pk=order_id)
+    return render_to_response('accounts/order_printed.html',
+                              {'order': order,
+                               'user': order.account.user},
+                              context_instance=RequestContext(request))
+
+
+@login_required
+def order_advertising_pdf(request, order_id):
+    order = AdvertisingOrder.objects.get(pk=order_id)
+    resp = HttpResponse(content_type='application/pdf')
+    result = generate_pdf('accounts/order_printed.html', file_object=resp, context={
+                          'order': order, 'user': order.account.user})
+    return result
+
+
+@login_required
+def order_featured_pdf(request, order_id):
+    order = FeaturedEventOrder.objects.get(pk=order_id)
+    resp = HttpResponse(content_type='application/pdf')
+    result = generate_pdf('accounts/order_printed.html', file_object=resp, context={
+                          'order': order, 'user': order.account.user})
+    return result
 
 
 @secure_required

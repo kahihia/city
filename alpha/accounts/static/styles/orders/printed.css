@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.printed-wrapper {
+    width: 980px;
+    position: relative;
+    font-size: 16px;
+    font-family: Arial;
+    padding: 10px;
+}
+
+.printed-logo {
+    background: url("/static/images/header-bg.png") repeat-x scroll 0 0 #e3e3e3;
+    position: absolute;
+    right: 10px;
+    width: 279px;
+    height: 83px;
+}
+
+.printed-logo img {
+    border: none;
+}
+
+.printed-content {
+    padding-top: 80px;
+}
+
+.printed-main-title {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.printed-company-info {
+    float: left;
+}
+
+.printed-number-table {
+    float: right;
+    width: 279px;
+    border-collapse: collapse;
+    text-align: right;
+}
+
+.printed-number-table td {
+    border: 1px solid #000000;
+    padding: 2px;
+}
+
+table tr.grey td, table tr.grey th {
+    background: #bbbbbb;
+}
+
+.printed-details {
+    clear: both;
+    padding-top: 40px;
+}
+
+.printed-billed h2 {
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.printed-items {
+    padding-top: 30px;
+}
+
+.printed-period {
+    font-size: 20px;
+    font-weight: normal;
+    padding: 15px 0;
+}
+
+.printed-items table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.printed-items table th, .printed-items table td {
+    font-weight: normal;
+    border: 1px solid #000000;
+    text-align: left;
+    padding: 2px;
+}
+
+.printed-items table .price {
+    text-align: center;
+}
+
+.printed-sign {
+    text-align: center;
+    padding: 100px 0 10px;
+    border-bottom: 1px solid #000000;
+}

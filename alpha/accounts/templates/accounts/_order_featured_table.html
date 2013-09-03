@@ -23,10 +23,10 @@
             {{ order.featured_event.end_time|date:"F d, Y" }}
         </td>
         <td>
-            <a href="#">
+            <a href="{% url "account_order_featured_pdf" order.id %}">
                 <img src="{{STATIC_URL}}images/pdf-icon.png" alt="Get as PDF" title="Get as PDF" />
             </a>
-            <a href="#">
+            <a href="{% url "account_order_featured_printed" order.id %}">
                 <img src="{{STATIC_URL}}images/print-icon.png" alt="Printed version" title="Printed version">
             </a>
         </td>

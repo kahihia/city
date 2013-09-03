@@ -68,9 +68,21 @@ urlpatterns = patterns('',
         accounts.orders,
         name='account_orders'
     ),
-    url(r'^order-printed/$',
-        accounts.order_printed,
-        name='account_order_printed'
+    url(r'^order-advertising-printed/(?P<order_id>\d+)/$',
+        accounts.order_advertising_printed,
+        name='account_order_advertising_printed'
+    ),
+    url(r'^order-featured-printed/(?P<order_id>\d+)/$',
+        accounts.order_featured_printed,
+        name='account_order_featured_printed'
+    ),
+    url(r'^order-advertising-pdf/(?P<order_id>\d+)/$',
+        accounts.order_advertising_pdf,
+        name='account_order_advertising_pdf'
+    ),
+    url(r'^order-featured-pdf/(?P<order_id>\d+)/$',
+        accounts.order_featured_pdf,
+        name='account_order_featured_pdf'
     ),
     url(r'^set-user-context/(?P<context>[-\w]+)/$',
         accounts.set_context,
