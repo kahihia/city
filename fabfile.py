@@ -29,12 +29,16 @@ def init_virtual_env():
 def upgrade():
     init_virtual_env()
     with cd(env.project_folder):
-        run("git pull origin master")
-        run("pip install -r requirements.txt")
+        run("git pull origin master")        
 
     with cd(env.alpha_folder):
         run("python manage.py collectstatic --noinput")
         run("supervisorctl reload")
+
+def install_requirements():
+    init_virtual_env()
+    with cd(env.project_folder):
+        run("pip install -r requirements.txt")
 
 def migrate(app):
     init_virtual_env()
