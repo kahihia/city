@@ -23,15 +23,22 @@ def prod():
 def host_type():
     run('uname -a')
 
+def init_virtual_env():
+    run("source /root/virtualenvs/cityfusion_env/bin/activate")
+
 def upgrade():
+    init_virtual_env()
     with cd(env.project_folder):
         run("git pull origin master")
+        run("pip install -r requirements.txt")
 
     with cd(env.alpha_folder):
         run("python manage.py collectstatic --noinput")
         run("supervisorctl reload")
 
 def migrate(app):
+    init_virtual_env()
+
     with cd(env.project_folder):
         run("git pull origin master")
 
