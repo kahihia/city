@@ -25,3 +25,5 @@ python-dateutil < 2.0
 BeautifulSoup==3.2.0
 gunicorn
 django-configurations==0.3
+django-xhtml2pdf==0.0.3
+xhtml2pdf==0.0.5

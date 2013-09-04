@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang='en_US' class="preview">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>City Fusion Invoice</title>
+    <link href="/static/styles/orders/printed.css" media="all" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="printed-wrapper">
+        <div class="printed-logo"><img alt="" src="/static/images/logo.png"></div>
+        <div class="printed-content">
+            <h1 class="printed-main-title">Invoice</h1>
+            <div class="printed-company-info">
+                Cityfusion Inc.<br/>
+                Address Here<br/>
+                Saskatoon, SK Postal Code<br/>
+                Canada
+            </div>
+            <table class="printed-number-table">
+                <tr class="grey"><td>Invoice Reference No.</td></tr>
+                <tr><td>#{{ order.id }}</td></tr>
+            </table>
+            <div class="printed-details">
+                <div class="printed-billed">
+                    <h2>Account billed:</h2>
+                    Tansi clothing (abc@inbox.com)<br/>
+                    {{ user.first_name }} {{ user.last_name }}<br/>
+                    521 8th Street East<br/>
+                    Saskatoon S7H 0P9<br/>
+                    Canada
+                </div>
+            </div>
+            <div class="printed-items">
+                <div class="printed-period">
+                    Time period: October 2013
+                </div>
+                <table>
+                    <tr class="grey">
+                        <th>Name</th>
+                        <th class="price">Price (CAD)</th>
+                    </tr>
+                    <tr>
+                        <td>{{ order }}</td>
+                        <td class="price">{{ order.cost_value }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ order.tax_name }}</td>
+                        <td class="price">{{ order.tax_cost }}</td>
+                    </tr>
+                    <tr class="grey">
+                        <td>Total Price</td>
+                        <td class="price">{{ order.total_price }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="printed-sign">
+                Please contact billing@cityfusion.ca with any questions related to this invoice.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
