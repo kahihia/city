@@ -1,4 +1,4 @@
-* {
+html, body {
     margin: 0;
     padding: 0;
 }
@@ -9,14 +9,31 @@
     font-size: 16px;
     font-family: Arial;
     padding: 10px;
+    margin: 0;
+}
+
+.printed-logo-table {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.printed-logo-table {
+    margin: 0;
+    padding: 0;
+}
+
+.printed-logo-right {
+    text-align: right;
+    width: 300px;
+    height: 100px;
+    text-align: right;
+    background: #022e52;
 }
 
 .printed-logo {
-    background: url("/static/images/header-bg.png") repeat-x scroll 0 0 #e3e3e3;
-    position: absolute;
-    right: 10px;
     width: 279px;
-    height: 83px;
+    display: inline-block;
 }
 
 .printed-logo img {
@@ -30,16 +47,38 @@
 .printed-main-title {
     font-size: 48px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin: 0 0 20px 0;
+    text-align: left;
+    padding: 0;
+}
+
+.printed-columns-table {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.printed-columns-table {
+    vertical-align: top;
+    margin-bottom: 40px;
+}
+
+.printed-columns-table .printed-column-right {
+    text-align: right;
+    width: 300px;
 }
 
 .printed-company-info {
-    float: left;
+    text-align: left;
+}
+
+.printed-number-table-block {
+    display: inline-block;
+    width: 300px;
 }
 
 .printed-number-table {
-    float: right;
-    width: 279px;
+    width: 100%;
     border-collapse: collapse;
     text-align: right;
 }
@@ -55,22 +94,29 @@ table tr.grey td, table tr.grey th {
 
 .printed-details {
     clear: both;
-    padding-top: 40px;
+}
+
+.printed-billed {
+    margin: 0;
+    padding: 0;
 }
 
 .printed-billed h2 {
     font-size: 20px;
     font-weight: normal;
+    margin: 40px 0 0 0;
+    padding: 0;
 }
 
 .printed-items {
-    padding-top: 30px;
+    margin: 0;
+    padding: 0;
 }
 
 .printed-period {
     font-size: 20px;
     font-weight: normal;
-    padding: 15px 0;
+    padding: 45px 0 15px;
 }
 
 .printed-items table {

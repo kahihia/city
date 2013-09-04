@@ -164,6 +164,7 @@ INSTALLED_APPS = (
     'endless_pagination',
     'django_filters',
     'guardian',
+    'pdfutils',
     'accounts',
     'userena',
     'django_facebook',

@@ -25,5 +25,4 @@ python-dateutil < 2.0
 BeautifulSoup==3.2.0
 gunicorn
 django-configurations==0.3
-django-xhtml2pdf==0.0.3
-xhtml2pdf==0.0.5
+-e git+https://github.com/h3/django-pdfutils.git@357be58ab1d036570196fdf89528e9834a870285#egg=PDFutils

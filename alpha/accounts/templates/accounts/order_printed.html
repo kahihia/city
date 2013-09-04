@@ -3,22 +3,42 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>City Fusion Invoice</title>
-    <link href="/static/styles/orders/printed.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="{{ STATIC_URL }}styles/orders/printed.css" media="all" rel="stylesheet" type="text/css" />
+    {{ STYLES|safe }}
 </head>
 <body>
     <div class="printed-wrapper">
-        <div class="printed-logo"><img alt="" src="/static/images/logo.png"></div>
+        <table class="printed-logo-table">
+            <tr>
+                <td class="printed-logo-left"></td>
+                <td class="printed-logo-right">
+                    <div class="printed-logo">
+                        <img alt="" src="{{ STATIC_URL }}images/logo.png">
+                    </div>
+                </td>
+            </tr>
+        </table>
         <div class="printed-content">
             <h1 class="printed-main-title">Invoice</h1>
-            <div class="printed-company-info">
-                Cityfusion Inc.<br/>
-                Address Here<br/>
-                Saskatoon, SK Postal Code<br/>
-                Canada
-            </div>
-            <table class="printed-number-table">
-                <tr class="grey"><td>Invoice Reference No.</td></tr>
-                <tr><td>#{{ order.id }}</td></tr>
+            <table class="printed-columns-table">
+                <tr>
+                    <td>
+                        <div class="printed-company-info">
+                            Cityfusion Inc.<br/>
+                            Address Here<br/>
+                            Saskatoon, SK Postal Code<br/>
+                            Canada
+                        </div>
+                    </td>
+                    <td class="printed-column-right">
+                        <div class="printed-number-table-block">
+                            <table class="printed-number-table">
+                                <tr class="grey"><td>Invoice Reference No.</td></tr>
+                                <tr><td>#{{ order.id }}</td></tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
             </table>
             <div class="printed-details">
                 <div class="printed-billed">
