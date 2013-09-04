@@ -77,11 +77,11 @@ urlpatterns = patterns('',
         name='account_order_featured_printed'
     ),
     url(r'^order-advertising-pdf/(?P<order_id>\d+)/$',
-        accounts.order_advertising_pdf,
+        accounts.OrderAdvertisingPdf.as_view(),
         name='account_order_advertising_pdf'
     ),
     url(r'^order-featured-pdf/(?P<order_id>\d+)/$',
-        accounts.order_featured_pdf,
+        accounts.OrderFeaturedPdf.as_view(),
         name='account_order_featured_pdf'
     ),
     url(r'^set-user-context/(?P<context>[-\w]+)/$',

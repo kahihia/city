@@ -1,6 +1,6 @@
 # Create your views here.
 
-from django_xhtml2pdf.utils import generate_pdf
+from pdfutils.reports import Report
 
 from models import Account, VenueAccount
 from event.models import Event, SingleEvent, FeaturedEvent, Venue
@@ -451,22 +451,48 @@ def order_featured_printed(request, order_id):
                               context_instance=RequestContext(request))
 
 
-@login_required
-def order_advertising_pdf(request, order_id):
-    order = AdvertisingOrder.objects.get(pk=order_id)
-    resp = HttpResponse(content_type='application/pdf')
-    result = generate_pdf('accounts/order_printed.html', file_object=resp, context={
-                          'order': order, 'user': order.account.user})
-    return result
+class OrderAdvertisingPdf(Report):
+    title = 'Invoice'
+    template_name = 'accounts/order_printed.html'
+    slug = 'order-report'
+    orientation = 'portrait'
+
+    def get_styles(self):
+        self.styles = ['styles/orders/printed.css']
+        return super(OrderAdvertisingPdf, self).get_styles()
+
+    def get_context_data(self):
+        order = AdvertisingOrder.objects.get(pk=self.kwargs['order_id'])
+
+        context = super(OrderAdvertisingPdf, self).get_context_data()
+        context['order'] = order
+        context['user'] = order.account.user
+        return context
+
+    def get(self, request, **kwargs):
+        return self.render()
 
 
-@login_required
-def order_featured_pdf(request, order_id):
-    order = FeaturedEventOrder.objects.get(pk=order_id)
-    resp = HttpResponse(content_type='application/pdf')
-    result = generate_pdf('accounts/order_printed.html', file_object=resp, context={
-                          'order': order, 'user': order.account.user})
-    return result
+class OrderFeaturedPdf(Report):
+    title = 'Invoice'
+    template_name = 'accounts/order_printed.html'
+    slug = 'order-report'
+    orientation = 'portrait'
+
+    def get_styles(self):
+        self.styles = ['styles/orders/printed.css']
+        return super(OrderFeaturedPdf, self).get_styles()
+
+    def get_context_data(self):
+        order = FeaturedEventOrder.objects.get(pk=self.kwargs['order_id'])
+
+        context = super(OrderFeaturedPdf, self).get_context_data()
+        context['order'] = order
+        context['user'] = order.account.user
+        return context
+
+    def get(self, request, **kwargs):
+        return self.render()
 
 
 @secure_required
