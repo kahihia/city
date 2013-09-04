@@ -5,9 +5,9 @@
 
 <div class="entry-wrapper">
     <header>
-        Total search numbers found ({{eventsFilter.objects_list|length}})
+        Total search numbers found ({{eventsFilter.qs.count}})
     </header>
-    {% paginate 9 eventsFilter.objects_list as events %}
+    {% paginate 9 eventsFilter.qs as events %}
     {% for event in events %}    
         <div class="entry-info  home-page" data-no-turbolink>
             {% short_single_event event %}

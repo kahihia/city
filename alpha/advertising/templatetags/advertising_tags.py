@@ -3,6 +3,7 @@ from django.template.base import Node, NodeList, TemplateSyntaxError
 from ..models import Advertising
 register = template.Library()
 from django.db.models import Q
+from random import choice
 
 
 class RandomNode(Node):
@@ -10,7 +11,6 @@ class RandomNode(Node):
         self.nodelist_options = nodelist_options
 
     def render(self, context):
-        from random import choice
         return choice(self.nodelist_options).render(context)
 
 
@@ -127,6 +127,63 @@ def advertising_group(context, dimensions, css_class="advertising-right"):
         'css_class': css_class
     }
 
+
+def get_event_block_height(tags_count, events_count):
+    min_height = 344
+    tag_height = 27
+    tags_count = min(tags_count, 21)
+    event_height = 84
+    two_event_height = 373
+    events_count = max(events_count, 2) - 2
+
+    total_tags_height = min_height + tags_count * tag_height
+    total_events_height = two_event_height + events_count * event_height
+
+    return max([min_height, total_tags_height, total_events_height])    
+
+@register.inclusion_tag('advertising/advertising_group.html', takes_context=True)
+def advertising_home_group(context):
+    events_on_page = 9
+    tags_count = context["tags"].count()
+    request = context['request']
+
+    page = request.GET.get("page", 1)
+    eventsFilter = context['eventsFilter']
+
+    if (eventsFilter.qs().count() / events_on_page) > int(page):
+        events_count = eventsFilter.qs().count() % events_on_page
+    else:
+        events_count = events_on_page
+
+    total_height = get_event_block_height(tags_count, events_count)
+
+    print events_count
+
+    print total_height
+
+    heights = {
+        250: ["300x100|300x100", "300x250"],
+        300: ["300x100|300x100", "300x250"],
+        350: ["300x250|300x100"],
+        400: ["300x250|300x100"],
+        450: ["300x250|300x100|300x100"],
+        500: ["300x250|300x250", "300x250|300x100|300x100"],
+        550: ["300x250|300x250", "300x250|300x100|300x100"],
+        600: ["300x600", "300x250|300x250|300x100"],
+        650: ["300x600", "300x250|300x250|300x100"],
+        700: ["300x600|300x100", "300x250|300x250|300x100|300x100"],
+        750: ["300x600|300x100", "300x250|300x250|300x250", "300x250|300x250|300x100|300x100"],
+        800: ["300x600|300x100|300x100", "300x250|300x250|300x250"],
+        850: ["300x600|300x250", "300x250|300x250|300x250|300x100", "300x600|300x100|300x100"],
+        900: ["300x600|300x250", "300x250|300x250|300x250|300x100", "300x600|300x100|300x100"],
+        950: ["300x600|300x250|300x100", "300x250|300x250|300x250|300x100|300x100"]
+    }
+
+    for height, dimensions_list in heights.iteritems():
+        if total_height > height:
+            dimensions = choice(dimensions_list)
+
+    return advertising_group(context, dimensions=dimensions)
 
 @register.filter
 def getbykey(dict, key):    
