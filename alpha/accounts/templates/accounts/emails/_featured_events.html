@@ -1,5 +1,6 @@
 {% load event_tags %}
 {% load featured_event %}
+
 <tr>
     <td height="10">
         <div style="line-height:0;">
@@ -8,6 +9,7 @@
     </td>
 </tr>
 <!-- Featured events -->
+{% if featured_events %}
 <tr>
     <td width="10">
         <div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div>
@@ -83,3 +85,5 @@
         </div>
     </td>
 </tr>
+
+{% endif %}

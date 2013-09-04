@@ -72,8 +72,7 @@
                     $(".advertising-territories .region").hide();
                 } else {
                     $(".advertising-territories .region").show();
-                }
-                
+                }                
             });
         },
         initTotalPriceCalculation: function(){

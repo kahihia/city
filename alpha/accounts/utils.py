@@ -52,7 +52,7 @@ def find_similar_events(events):
 
 
 def remind_account_about_events_with_email(account, single_events):
-    featured_events = Event.featured_events.all()[:4]
+    featured_events = Event.featured_events_for_region(account.native_region)
 
     similar_events = find_similar_events(
         Event.future_events.filter(id__in=single_events.values_list("event_id", flat=True))
@@ -123,7 +123,7 @@ def inform_account_about_events_with_tags(account):
 
 
 def inform_account_about_events_with_tag_with_email(account, events, tags_in_venues):
-    featured_events = Event.featured_events.all()[:4]
+    featured_events = Event.featured_events_for_region(account.native_region)
 
     similar_events = find_similar_events(events)
 

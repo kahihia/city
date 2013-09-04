@@ -13,15 +13,39 @@ from gmapi.forms.widgets import LocationWidget
 
 from ckeditor.fields import RichTextFormField
 import dateutil.parser as dateparser
+from cities.models import Region
 
 
 class SetupFeaturedForm(forms.ModelForm):
+    regions = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        queryset=Region.objects.filter(country__code="CA"),
+        required=False
+    )
+
+    start_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
+    end_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
+
     class Meta:
         model = FeaturedEvent
         fields = (
             'start_time',
-            'end_time'
+            'end_time',
+            'all_of_canada',
+            'regions'           
         )
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+
+        all_of_canada = cleaned_data["all_of_canada"]
+
+        regions = cleaned_data["regions"]
+
+        if not all_of_canada and not regions:
+            raise forms.ValidationError("You should choose at least one region")
+
+        return cleaned_data
 
 
 class JSONCharField(forms.CharField):

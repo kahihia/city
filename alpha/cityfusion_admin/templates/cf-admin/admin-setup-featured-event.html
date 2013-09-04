@@ -25,6 +25,18 @@
                 Make "{{ event.name }}" featured
             </h1>
 
+            {%if form.errors %}
+                <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                    <ul style="list-style-type: none;">
+                        <li id="all-info">
+                            {% for error in form.non_field_errors %}
+                                <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                </div>
+            {% endif %}
+
             <form method="post" name="featured-events-setup" >
                 {% csrf_token %}
                 <table class="datetime-table">
@@ -48,7 +60,7 @@
                         </td>
                         <td>
                             <div class="date dropdown">
-                                <input id="start_time_id" type="text" name="start_time" value="{{ form.start_time.value|date:"SHORT_DATE_FORMAT"}}">
+                                {{ form.start_time }}
                             </div>
                         </td>
                         <td class="space">&nbsp;</td>
@@ -57,7 +69,7 @@
                         </td>
                         <td>
                             <div class="date dropdown">
-                                <input id="end_time_id" type="text" name="end_time" value="{{ form.end_time.value|date:"SHORT_DATE_FORMAT"}}">
+                                {{ form.end_time }}
                             </div>
                         </td>
                         <td class="space">&nbsp;</td>
@@ -88,7 +100,32 @@
                             Enter the amount of day event will be featured
                         </td>
                     </tr>
-                </table>                
+                </table>
+
+                <div class="choose-province-block">
+                    <header>Select province/territory to show your <b>featured event (choices)</b></header>
+                    <div class="options">
+                        <div class="teritory-node">
+                            <div class="checkbox">
+                                <input {% if form.all_of_canada.value %}checked="checked"{% endif %} type="checkbox" id="id_all_of_canada" value="true" name="all_of_canada" />
+                                <label for="id_all_of_canada"></label>
+                                <label for="id_all_of_canada">All of Canada</label>
+                            </div>
+                        </div>
+                        {% for region in form.fields.regions.queryset %}
+                        <div class="teritory-node region">
+                            <div class="checkbox">
+                                <input {% for current_region in form.regions.value %}{% if region.pk = current_region|add:0 %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_regions_{{ forloop.counter0 }}" value="{{ region.id }}" name="regions" />
+                                <label for="id_regions_{{ forloop.counter0 }}"></label>
+                                <label for="id_regions_{{ forloop.counter0 }}">
+                                    {{ region.name }}
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="clr"></div>
+                    </div>
+                </div>
 
                 <input type="submit" name="submitoptions" class="button standart submit" value="Save">
 

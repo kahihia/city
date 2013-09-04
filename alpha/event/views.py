@@ -44,9 +44,8 @@ def search_pad(request):
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
-    featured_events = Event.featured_events.all()
-
-    featuredEventsFilter = EventFilter({}, queryset=featured_events)
+    region = location_service.LocationForFeaturedEvent(request).canadian_region
+    featured_events = Event.featured_events_for_region(region)
 
     events = SingleEvent.future_events.all()
 
@@ -69,7 +68,6 @@ def search_pad(request):
 
     return render_to_response('events/search_pad.html', {
                                 'featured_events': featured_events,
-                                'featuredEventsFilter': featuredEventsFilter,
                                 'events': events,
                                 'eventsFilter': eventsFilter,
                                 'top10_tags': top10_tags,
@@ -85,9 +83,8 @@ def browse(request):
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
-    featured_events = Event.featured_events.all().order_by('?')
-
-    featuredEventsFilter = EventFilter({}, queryset=featured_events)
+    region = location_service.LocationForFeaturedEvent(request).canadian_region
+    featured_events = Event.featured_events_for_region(region)
 
     events = SingleEvent.future_events.all()
 
@@ -108,7 +105,6 @@ def browse(request):
 
     return render_to_response('events/browse_events.html', {
                                 'featured_events': featured_events,
-                                'featuredEventsFilter': featuredEventsFilter,
                                 'events': events,
                                 'eventsFilter': eventsFilter,
                                 'tags': tags,
@@ -333,7 +329,7 @@ def setup_featured(request, authentication_key):
         if form.is_valid():
             featured_event = form.save()
 
-            cost = (featured_event.end_time-featured_event.start_time).days * Money(2, CAD)
+            cost = (featured_event.end_time - featured_event.start_time).days * Money(2, CAD)
             total_price = cost
 
             for tax in account.taxes():

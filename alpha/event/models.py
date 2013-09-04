@@ -15,7 +15,7 @@ from .settings import EVENT_PICTURE_DIR
 
 from image_cropping import ImageCropField, ImageRatioField
 
-from django.db.models import Min, Max, Count
+from django.db.models import Min, Max, Count, Q
 
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
@@ -244,6 +244,12 @@ class Event(models.Model):
     def is_fb_posted(self):
         return self.post_to_facebook and self.facebook_event
 
+    @staticmethod
+    def featured_events_for_region(region):
+        return Event.featured_events.filter(
+            Q(featuredevent__all_of_canada=True) | Q(featuredevent__regions__id=region.id)
+        ).order_by('?').annotate(Count("id"))
+
 
 class FutureEventDayManager(models.Manager):
     def get_query_set(self):
@@ -394,6 +400,9 @@ class FeaturedEvent(models.Model):
     clicks = models.IntegerField(default=0)
 
     cost = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+
+    all_of_canada = models.BooleanField(default=True)
+    regions = models.ManyToManyField("cities.Region")
 
     objects = money_manager(models.Manager())
     future = FutureFeaturedEventManager()

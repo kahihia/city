@@ -5,8 +5,8 @@
         var start_date_input, end_date_input, days_to_display,
             that=this;
 
-        start_date_input = $("#start_time_id");
-        end_date_input = $("#end_time_id");
+        start_date_input = $("#id_start_time");
+        end_date_input = $("#id_end_time");
         days_to_display = $("#days_to_display");
 
         $.datepicker.initialized = false;
@@ -18,7 +18,6 @@
             minDate: new Date(),
             onSelect: function(){
                 that.calculate_days_to_display();
-
             }
         });
 
@@ -39,16 +38,33 @@
         this.days_to_display = days_to_display;
 
         this.initTotalPriceCalculation();
+        this.initRegionsSelection();
+
     }
 
     FeaturedSetupPage.prototype = {
         calculate_days_to_display: function(){
             var date1 = this.start_date_input.datepicker('getDate'),
                 date2 = this.end_date_input.datepicker('getDate'),
+                diff = 1, date, month, year;
+
+            if(date1>date2) {
+                year = date1.getFullYear();
+                month = date1.getMonth();
+                date = date1.getDate()+1;
+
+                this.end_date_input.val(
+                    $.datepicker.formatDate(
+                        'mm/dd/yy',
+                        new Date(year, month, date)
+                    )
+                );
                 diff = 1;
-            if (date1 && date2) {
+            } 
+            else if (date1 && date2) {
                 diff = diff + Math.floor((date2.getTime() - date1.getTime()) / 86400000); // ms per day
             }
+
             this.days_to_display.val(diff);
             this.calculateTotalPrice();
         },
@@ -97,8 +113,20 @@
             });
 
             $(".total-price-output").html(totalPrice.toFixed(2));
+        },
+        initRegionsSelection: function(){
+            if($("#id_all_of_canada").prop("checked")){
+                $(".choose-province-block .region").hide();
+            }
 
-        }       
+            $("#id_all_of_canada").on("change", function(){
+                if($(this).prop("checked")){
+                    $(".choose-province-block .region").hide();
+                } else {
+                    $(".choose-province-block .region").show();
+                }
+            });
+        }
     };
 
     function TaxWidget(row){

@@ -306,6 +306,10 @@ class LocationForAdvertising(object):
         return from_user_choice.canadian_region or from_account_settings.canadian_region or from_browser.canadian_region or by_IP.canadian_region
 
 
+class LocationForFeaturedEvent(LocationForAdvertising):
+    pass
+
+
 def user_location(request):
     by_IP = LocationByIP(request)
     from_browser = LocationFromBrowser(request)
