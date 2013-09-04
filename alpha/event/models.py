@@ -246,8 +246,13 @@ class Event(models.Model):
 
     @staticmethod
     def featured_events_for_region(region):
+        if region:
+            region_id = region.id
+        else:
+            region_id = None
+
         return Event.featured_events.filter(
-            Q(featuredevent__all_of_canada=True) | Q(featuredevent__regions__id=region.id)
+            Q(featuredevent__all_of_canada=True) | Q(featuredevent__regions__id=region_id)
         ).order_by('?').annotate(Count("id"))
 
 

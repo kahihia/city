@@ -150,7 +150,7 @@ def advertising_home_group(context):
     page = request.GET.get("page", 1)
     eventsFilter = context['eventsFilter']
 
-    if (eventsFilter.qs().count() / events_on_page) > int(page):
+    if (eventsFilter.qs().count() / events_on_page) < int(page):
         events_count = eventsFilter.qs().count() % events_on_page
     else:
         events_count = events_on_page
