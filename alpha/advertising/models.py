@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.gis.db import models
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
@@ -155,6 +156,9 @@ class AdvertisingOrder(models.Model):
             blank=True,
             default=''
     )
+
+    created = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now())
+    taxes = models.ManyToManyField("accounts.AccountTax")
 
     def __unicode__(self):
         return "Order for %s" % self.campaign

@@ -438,6 +438,9 @@ class FeaturedEventOrder(models.Model):
             default=''
     )
 
+    created = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now())
+    taxes = models.ManyToManyField("accounts.AccountTax")    
+
     def __unicode__(self):
         return "Order to make %s featured from %s to %s" % (self.featured_event, self.featured_event.start_time.date(), self.featured_event.end_time.date())
 

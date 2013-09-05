@@ -342,6 +342,8 @@ def setup_featured(request, authentication_key):
                 account=account
             )
 
+            order.taxes.add(account.taxes())
+
             order.save()
 
             return HttpResponseRedirect(reverse('setup_featured_payment', args=(str(order.id),)))

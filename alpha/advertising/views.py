@@ -65,6 +65,7 @@ def setup(request):
                 account=account
             )
 
+            order.taxes.add(account.taxes())
             order.save()
 
             return HttpResponseRedirect(reverse('advertising_payment', args=(str(order.id),)))
@@ -111,6 +112,8 @@ def deposit_funds_for_campaign(request, campaign_id):
                 campaign=campaign,
                 account=account
             )
+
+            order.taxes.add(account.taxes())
             order.save()
 
             return HttpResponseRedirect(reverse('advertising_payment', args=(str(order.id),)))
