@@ -7,6 +7,13 @@
 
     var AdvertisingScrolling = function(){
         $(window).scroll(this.improvePosition.bind(this));
+
+        setTimeout(function(){
+            $(".advertising-right-container").css({
+                "transition": "top 500ms",
+                "-webkit-transition": "top 500ms",
+            });
+        }, 100);
     };
 
     AdvertisingScrolling.prototype = {
