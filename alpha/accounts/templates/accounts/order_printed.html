@@ -64,7 +64,7 @@
                         <td class="price">{{ order.cost_value }}</td>
                     </tr>
 
-                    {% for tax in order.taxes %}
+                    {% for tax in order.taxes.all %}
                     <tr>
                         <td>{{ tax.tax_name }}</td>
                         <td class="price">{{ tax.cost }}</td>
