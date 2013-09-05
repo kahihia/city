@@ -25,7 +25,7 @@
                 });
             } else {
                 $(".advertising-right-container").css({
-                    top: "auto"
+                    top: "25px"
                 });
             }
         }
