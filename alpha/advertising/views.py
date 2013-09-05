@@ -65,12 +65,13 @@ def setup(request):
                 account=account
             )
 
+            order.save()
+
             for tax in account.taxes():
                 order.taxes.add(
                     AccountTaxCost(account_tax=tax, cost=cost*tax.tax)
                 )
 
-            order.save()
 
             return HttpResponseRedirect(reverse('advertising_payment', args=(str(order.id),)))
 
@@ -117,12 +118,14 @@ def deposit_funds_for_campaign(request, campaign_id):
                 account=account
             )
 
+            
+            order.save()
+
             for tax in account.taxes():
                 order.taxes.add(
                     AccountTaxCost(account_tax=tax, cost=cost*tax.tax)
                 )
 
-            order.save()
 
             return HttpResponseRedirect(reverse('advertising_payment', args=(str(order.id),)))
 
