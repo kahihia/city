@@ -1,5 +1,5 @@
 from django.contrib import admin
-from event.models import Event, SingleEvent, AuditEvent, AuditSingleEvent, AuditPhrase, FakeAuditEvent, FeaturedEvent
+from event.models import Event, SingleEvent, AuditEvent, AuditSingleEvent, AuditPhrase, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
 from event.models import Venue
 
 
@@ -44,3 +44,5 @@ admin.site.register(AuditEvent, AuditEventAdmin)
 admin.site.register(AuditSingleEvent)
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(FeaturedEvent)
+
+admin.site.register(FeaturedEventOrder)
