@@ -115,20 +115,15 @@
                                     {% in_the_loop_popup event %}
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <a href="https://twitter.com/intent/tweet?original_referer=http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}&text={{event.name}}&tw_p=tweetbutton&url=http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" class="action-tweet accented">
-                                        Tweet
-                                    </a>                            
-                                </td>
-                                {% if event.website %}
-                                    <td>
+                            {% if event.website %}
+                                <tr>
+                                    <td colspan="2">
                                         <a href="{{ event.website }}" class="block-header accented view-site" target="_blank">
                                             View Site
                                         </a>
                                     </td>
-                                {% endif %}
-                            </tr>
+                                </tr>
+                            {% endif %}
                             <tr>
                                 <td colspan="2" class="social-buttons">
                                     <!-- AddThis Button BEGIN -->
