@@ -3,7 +3,8 @@
 }
 
 .advertising-right-container {
-    float:right;
+    position: absolute;
+	right: 15px;	
 }
 
 .advertising-right {    

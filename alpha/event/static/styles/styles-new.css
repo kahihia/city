@@ -1,7 +1,7 @@
-
 .content-wrapper {
     padding: 25px 15px 0px;
     color: #454545;
+    position: relative;
 }
 
 .content-wrapper h1 {
