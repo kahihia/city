@@ -345,9 +345,9 @@ def setup_featured(request, authentication_key):
             order.save()
 
             for tax in account.taxes():
-                order.taxes.add(
-                    AccountTaxCost.create(account_tax=tax, cost=cost*tax.tax)
-                )
+                account_tax_cost = AccountTaxCost(account_tax=tax, cost=cost*tax.tax)
+                account_tax_cost.save()
+                order.taxes.add(account_tax_cost)
             
 
             return HttpResponseRedirect(reverse('setup_featured_payment', args=(str(order.id),)))
