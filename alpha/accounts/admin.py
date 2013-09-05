@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from accounts.models import AccountReminding, InTheLoopSchedule, VenueAccount, VenueType, AccountTax
+from accounts.models import AccountReminding, InTheLoopSchedule, VenueAccount, VenueType, AccountTax, AccountTaxCost
 
 
 class VenueAccountAdmin(admin.ModelAdmin):
@@ -14,6 +14,7 @@ class VenueAccountAdmin(admin.ModelAdmin):
 
 admin.site.register(AccountReminding)
 admin.site.register(AccountTax)
+admin.site.register(AccountTaxCost)
 admin.site.register(InTheLoopSchedule)
 admin.site.register(VenueType)
 admin.site.register(VenueAccount, VenueAccountAdmin)
