@@ -158,7 +158,7 @@ class AdvertisingOrder(models.Model):
     )
 
     created = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now())
-    taxes = models.ManyToManyField("accounts.AccountTax")
+    taxes = models.ManyToManyField("accounts.AccountTaxCost")
 
     def __unicode__(self):
         return "Order for %s" % self.campaign
@@ -167,13 +167,6 @@ class AdvertisingOrder(models.Model):
     def cost_value(self):
         return self.budget
 
-    @property
-    def tax_name(self):
-        return self.account.taxes()[0].name
-
-    @property
-    def tax_cost(self):
-        return self.total_price - self.budget
 
 AdvertisingPayment = build_payment_model(AdvertisingOrder, unique=True)
 

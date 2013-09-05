@@ -439,7 +439,7 @@ class FeaturedEventOrder(models.Model):
     )
 
     created = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now())
-    taxes = models.ManyToManyField("accounts.AccountTax")    
+    taxes = models.ManyToManyField("accounts.AccountTaxCost")
 
     def __unicode__(self):
         return "Order to make %s featured from %s to %s" % (self.featured_event, self.featured_event.start_time.date(), self.featured_event.end_time.date())
@@ -447,14 +447,6 @@ class FeaturedEventOrder(models.Model):
     @property
     def cost_value(self):
         return self.cost
-
-    @property
-    def tax_name(self):
-        return self.account.taxes()[0].name
-
-    @property
-    def tax_cost(self):
-        return self.total_price - self.cost
 
 FeaturedEventPayment = build_featured_event_payment_model(FeaturedEventOrder, unique=True)
 

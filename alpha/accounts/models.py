@@ -24,6 +24,8 @@ from django.db.models import Q, Count
 from userena.managers import ASSIGNED_PERMISSIONS
 from guardian.shortcuts import assign
 
+from djmoney.models.fields import MoneyField
+
 
 REMINDER_TYPES = (
     ("HOURS", "Hours before event"),
@@ -362,4 +364,12 @@ class AccountTax(models.Model):
         return "%s(%s) %s" % (self.name, self.tax, self.regions.all())
 
     def pretty_tax(self):
-        return "%g" % (self.tax*100) 
+        return "%g" % (self.tax*100)
+
+
+class AccountTaxCost(models.Model):
+    account_tax = models.ForeignKey(AccountTax)
+    cost = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+
+    def __unicode__(self):
+        return "%s: %s" % (self.account_tax, self.cost)

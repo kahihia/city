@@ -24,7 +24,7 @@ from event.services import facebook_service, location_service, event_service
 from event.forms import SetupFeaturedForm, CreateEventForm, EditEventForm
 from ajaxuploader.views import AjaxFileUploader
 from accounts.decorators import native_region_required
-from accounts.models import VenueAccount
+from accounts.models import VenueAccount, AccountTaxCost
 
 
 def start(request):
@@ -342,7 +342,10 @@ def setup_featured(request, authentication_key):
                 account=account
             )
 
-            order.taxes.add(account.taxes())
+            for tax in account.taxes():
+                order.taxes.add(
+                    AccountTaxCost(account_tax=tax, cost=cost*tax.tax)
+                )
 
             order.save()
 
