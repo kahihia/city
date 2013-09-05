@@ -2,11 +2,16 @@
 	margin-top: 35px;
 }
 
+
 .advertising-right-container {
-    position: absolute;
+    float: right;
+}
+
+.home .advertising-right-container {
+	position: absolute;
 	right: 15px;
-	transition: top 500ms;
-	-webkit-transition: top  500ms;
+	transition: top 100ms;
+	-webkit-transition: top 100ms;
 }
 
 .advertising-right {    

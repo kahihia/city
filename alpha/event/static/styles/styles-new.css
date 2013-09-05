@@ -1,6 +1,9 @@
 .content-wrapper {
     padding: 25px 15px 0px;
-    color: #454545;
+    color: #454545;    
+}
+
+.home .content-wrapper {
     position: relative;
 }
 
