@@ -67,7 +67,7 @@ def setup(request):
             order.save()
 
             for tax in account.taxes():
-                account_tax_cost = AccountTaxCost(account_tax=tax, cost=cost*tax.tax, tax_name=tax.name)
+                account_tax_cost = AccountTaxCost(account_tax=tax, cost=budget*tax.tax, tax_name=tax.name)
                 account_tax_cost.save()
                 order.taxes.add(account_tax_cost)
 
@@ -121,7 +121,7 @@ def deposit_funds_for_campaign(request, campaign_id):
             order.save()
 
             for tax in account.taxes():
-                account_tax_cost = AccountTaxCost(account_tax=tax, cost=cost*tax.tax, tax_name=tax.name)
+                account_tax_cost = AccountTaxCost(account_tax=tax, cost=budget*tax.tax, tax_name=tax.name)
                 account_tax_cost.save()
                 order.taxes.add(account_tax_cost)
 
