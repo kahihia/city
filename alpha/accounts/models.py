@@ -370,6 +370,7 @@ class AccountTax(models.Model):
 class AccountTaxCost(models.Model):
     account_tax = models.ForeignKey(AccountTax)
     cost = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+    tax_name = models.CharField(max_length=255)
 
     def __unicode__(self):
         return "%s: %s" % (self.account_tax, self.cost)

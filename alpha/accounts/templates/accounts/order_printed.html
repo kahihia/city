@@ -63,10 +63,14 @@
                         <td>{{ order }}</td>
                         <td class="price">{{ order.cost_value }}</td>
                     </tr>
+
+                    {% for tax in order.taxes %}
                     <tr>
-                        <td>{{ order.tax_name }}</td>
-                        <td class="price">{{ order.tax_cost }}</td>
+                        <td>{{ tax.tax_name }}</td>
+                        <td class="price">{{ tax.cost }}</td>
                     </tr>
+                    {% endfor %}
+                    
                     <tr class="grey">
                         <td>Total Price</td>
                         <td class="price">{{ order.total_price }}</td>
