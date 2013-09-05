@@ -155,6 +155,15 @@
     -webkit-transform-origin: top left;    
 }
 
+.content-wrapper .event-details .event-actions td.social-buttons a {
+    padding: 0 2px;
+    min-width: inherit;
+}
+
+.content-wrapper .event-details .event-actions td.social-buttons .addthis_bubble_style {
+    height: 16px;
+}
+
 .content-wrapper .event-wrapper .map {
     margin-top: 20px;
 }
