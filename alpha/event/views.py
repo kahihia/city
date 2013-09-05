@@ -346,7 +346,7 @@ def setup_featured(request, authentication_key):
 
             for tax in account.taxes():
                 order.taxes.add(
-                    AccountTaxCost(account_tax=tax, cost=cost*tax.tax)
+                    AccountTaxCost.create(account_tax=tax, cost=cost*tax.tax)
                 )
             
 
