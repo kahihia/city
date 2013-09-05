@@ -1,4 +1,4 @@
-from accounts.models import Account
+from accounts.models import Account, AccountTaxCost
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -10,7 +10,6 @@ from advertising.utils import get_chosen_advertising_types, get_chosen_advertisi
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import native_region_required
 from decimal import Decimal
-
 
 def open(request, advertising_id):
     advertising = get_object_or_404(Advertising, pk=advertising_id)
