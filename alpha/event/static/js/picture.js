@@ -42,6 +42,14 @@
 
             this.cancelButton = $(".cancel-button", this.popup);
             $(this.cancelButton).on('click', function() {
+                $("#id_picture_src").val("");
+                $(".picture-thumb").removeClass("result");
+                $(".picture-thumb .preview").removeAttr("src");
+                $(".picture-thumb .preview").removeAttr("style");
+                if($(".jcrop-holder").length !== 0) {
+                    $(".jcrop-holder").find("img").removeAttr("src");
+                }
+
                 $(".modal-bg").hide();
                 $.fancybox.close();
             });
