@@ -1,4 +1,4 @@
-from accounts.models import VenueAccount, Account
+from accounts.models import VenueAccount
 
 
 def user_context(request):
@@ -6,16 +6,11 @@ def user_context(request):
     if venue_account_id:
         current_venue_account = VenueAccount.objects.get(id=venue_account_id)
     else:
-        current_venue_account = None
-
-    if request.user.id:
-        profile = Account.objects.get(user_id=request.user.id)   
-    else:
-        profile = None     
+        current_venue_account = None    
 
     return {
         "current_venue_account": current_venue_account,
-        "profile": profile
+        "profile": request.profile
     }
 
 
@@ -23,7 +18,7 @@ def taxes_context(request):
     account_taxes = []
 
     if request.user.id:
-        account = Account.objects.get(user_id=request.user.id)
+        account = request.account
         if not account.not_from_canada:
             account_taxes = account.taxes
 

@@ -15,7 +15,7 @@ from .settings import EVENT_PICTURE_DIR
 
 from image_cropping import ImageCropField, ImageRatioField
 
-from django.db.models import Min, Max, Count, Q
+from django.db.models import Min, Max, Count, Q, F
 
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
@@ -100,7 +100,10 @@ class FeaturedManager(models.Manager):
                 featuredevent__start_time__lte=datetime.datetime.now(),
                 featuredevent__end_time__gte=datetime.datetime.now(),
                 featuredevent__active=True
-            ).annotate(Count("id"))
+            )\
+            .annotate(start_time=Max("single_events__start_time"))\
+            .annotate(end_time=Max("single_events__end_time"))\
+            .annotate(Count("id"))
 
 
 class ArchivedManager(models.Manager):
@@ -217,20 +220,6 @@ class Event(models.Model):
         except:
             return None
 
-    def start_time(self):
-        next_day = self.next_day()
-        if next_day:
-            return next_day.start_time
-        else:
-            return None
-
-    def end_time(self):
-        next_day = self.next_day()
-        if next_day:
-            return next_day.end_time
-        else:
-            return None
-
     def base(self):
         return self
 
@@ -260,6 +249,8 @@ class FutureEventDayManager(models.Manager):
     def get_query_set(self):
         return super(FutureEventDayManager, self).get_query_set()\
             .filter(start_time__gte=datetime.datetime.now())\
+            .prefetch_related('event__venue')\
+            .prefetch_related('event__venue__city')\
             .select_related('event')\
             .order_by("start_time")
 
@@ -416,13 +407,11 @@ class FeaturedEvent(models.Model):
         return self.event.name
 
     def click(self):
-        # TODO: calculate cost
-        self.clicks = self.clicks + 1
-        self.save()
+        FeaturedEvent.objects.filter(id=self.id).update(clicks=F("clicks")+1)
+
 
     def view(self):
-        self.views = self.views + 1
-        self.save()
+        FeaturedEvent.objects.filter(id=self.id).update(views=F("views")+1)
 
 
 class FeaturedEventOrder(models.Model):

@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.middleware.csrf import get_token
 from django.contrib.gis.geos import Point
-from django.db.models import Q, Count
+from django.db.models import Q, Count, F
 from django.forms.util import ErrorList
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
@@ -44,9 +44,6 @@ def search_pad(request):
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
-    region = location_service.LocationForFeaturedEvent(request).canadian_region
-    featured_events = Event.featured_events_for_region(region)
-
     events = SingleEvent.future_events.all()
 
     events_all_count = events.count()
@@ -67,7 +64,6 @@ def search_pad(request):
         .order_by('-count')[0:10]
 
     return render_to_response('events/search_pad.html', {
-                                'featured_events': featured_events,
                                 'events': events,
                                 'eventsFilter': eventsFilter,
                                 'top10_tags': top10_tags,
@@ -84,7 +80,14 @@ def browse(request):
     start_time, end_time = utils.get_times_from_request(request)
 
     region = location_service.LocationForFeaturedEvent(request).canadian_region
-    featured_events = Event.featured_events_for_region(region)
+    featured_event_query = Q(featuredevent__all_of_canada=True)
+    if region:
+        featured_event_query = featured_event_query | Q(featuredevent__regions__id=region.id)
+
+    featured_events = Event.featured_events\
+        .filter(featured_event_query)\
+        .order_by('?')\
+        .annotate(Count("id"))
 
     events = SingleEvent.future_events.all()
 
@@ -98,10 +101,14 @@ def browse(request):
 
     eventsFilter = EventFilter(params, queryset=events)
 
-    tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
-        .values('tag', 'tag__name') \
+
+    #.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
+
+    tags = TaggedItem.objects.filter(object_id__in=eventsFilter.qs().values_list("event_id", flat=True)) \
+        .values('tag_id', 'tag__name') \
         .annotate(count=Count('id')) \
         .order_by('-count')
+
 
     return render_to_response('events/browse_events.html', {
                                 'featured_events': featured_events,
@@ -133,24 +140,23 @@ def view(request, slug, date=None):
         else:
             event = Event.future_events.get(slug=slug).next_day()
 
-        base_event = event.event
-        if not base_event.viewed_times:
-            base_event.viewed_times = 1
-        else:
-            base_event.viewed_times = base_event.viewed_times + 1
-        base_event.save()
-
-
         if not event:
             raise ObjectDoesNotExist
+
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))
 
+
+    if not event.viewed_times:
+        Event.events.filter(id=event.event_identifier).update(viewed_times=1)
+    else:
+        Event.events.filter(id=event.event_identifier).update(viewed_times=F('viewed_times')+1)
+
     venue = event.venue
 
-    events_from_venue = SingleEvent.future_events.filter(event__venue_id=venue.id)
+    events_from_venue = SingleEvent.future_events.filter(event__venue_id=venue.id).select_related("event__venue", "event__venue__city")
     if date:
-        events_from_venue = events_from_venue.exclude(id=event.id)
+        events_from_venue = events_from_venue.exclude(event_id=event.event_identifier)
 
     return render_to_response('events/event_detail_page.html', {
             'event': event,

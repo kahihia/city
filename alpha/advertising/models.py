@@ -6,7 +6,7 @@ from cities.models import Region
 from mamona import signals
 from mamona.models import build_payment_model
 from decimal import Decimal
-from django.db.models import Q
+from django.db.models import Q, F
 
 
 class AdvertisingType(models.Model):
@@ -85,7 +85,7 @@ class ActiveAdvertisingManager(models.Manager):
     def get_query_set(self):
         return super(ActiveAdvertisingManager, self).get_query_set().filter(
             (Q(review_status="ACCEPTED") & Q(campaign__enough_money=True)) | Q(campaign__owned_by_admin=True)
-        )
+        ).select_related("campaign")
 
 
 class AdminAdvertisingManager(models.Manager):
@@ -120,22 +120,19 @@ class Advertising(models.Model):
     def __unicode__(self):
         return "%s - %s: %d/%d" % (self.campaign, self.ad_type, self.views, self.clicks)
 
-    def click(self):        
-        self.clicks = self.clicks + 1
+    def click(self):
+        Advertising.objects.filter(id=self.id).update(clicks=F("clicks")+1)
         
         if self.payment_type == "CPC":
             self.campaign.ammount_spent = self.campaign.ammount_spent + self.cpc_price
             self.campaign.save()
-        self.save()
 
     def view(self):
-        self.views = self.views + 1
+        Advertising.objects.filter(id=self.id).update(views=F("views")+1)
 
         if self.payment_type == "CPM":
             self.campaign.ammount_spent = self.campaign.ammount_spent + (self.cpm_price/1000)
             self.campaign.save()
-
-        self.save()
 
     def image_thumb(self):
         return u'<img src="%s" height="60" />' % self.image.url

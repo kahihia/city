@@ -7,9 +7,9 @@
     <h2>Featured Events</h2>
     <div class="features-wrapper" data-no-turbolink>
         {% paginate 6 featured_events using "featured_page" %}
-        {% for event in featured_events %}
-            {% featured_event event %}
-        {% endfor %}
+        {% if featured_events %}
+            {% featured_events_container featured_events %}
+        {% endif %}
         <div class="clr"></div>
     </div>
 

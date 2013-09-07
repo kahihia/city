@@ -49,14 +49,7 @@
                     </div>
                 </td>
                 <!-- List of featured events -->
-                {% for event in featured_events %}
-                    <td height="147" style="border: 5px solid #ffffff" valign="top">
-                        {% featured_event event True %}
-                    </td>
-                    <td width="10" align="left">
-                        <div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div>
-                    </td>
-                {% endfor %}
+                {% featured_events_container featured_events True %}
                 <!-- Space if we have less that 4 items -->
                 <td width="100%"></td>
             </tr>

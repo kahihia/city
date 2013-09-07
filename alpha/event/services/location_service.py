@@ -199,10 +199,14 @@ class LocationFromUserChoice(object):
                     user_location_name = city.name
 
             if self.account:
-                self.account.location_type = user_location_type
-                self.account.location_name = user_location_name
-                self.account.location_id = user_location_id
-                self.account.save()
+                if self.account.location_type != user_location_type or \
+                   self.account.location_name != user_location_name or \
+                   self.account.location_id != user_location_id:
+
+                    self.account.location_type = user_location_type
+                    self.account.location_name = user_location_name
+                    self.account.location_id = user_location_id
+                    self.account.save()
 
             user_location_data["user_location_id"] = user_location_id
             user_location_data["user_location_name"] = user_location_name

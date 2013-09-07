@@ -2,7 +2,7 @@ from django import template
 from django.template.base import Node, NodeList, TemplateSyntaxError
 from ..models import Advertising
 register = template.Library()
-from django.db.models import Q
+from django.db.models import Q, F
 from random import choice
 
 
@@ -70,7 +70,8 @@ def advertising(context, dimensions):
             Q(ad_type__width=width), 
             Q(ad_type__height=height),
             region_query
-        ).order_by('?')[0]
+        ).select_related("campaign")\
+        .order_by('?')[0]
 
         advertising.view()
     except:
@@ -113,14 +114,16 @@ def advertising_group(context, dimensions, css_class="advertising-right"):
         width, height = map(lambda x: int(x), dimensions.split("x"))
 
         ads = Advertising.active.filter(
-            Q(ad_type__width=width), 
-            Q(ad_type__height=height),
-            region_query
-        ).order_by('?')[:nums]
+                Q(ad_type__width=width), 
+                Q(ad_type__height=height),
+                region_query
+            ).select_related("campaign")\
+            .order_by('?')[:nums]
 
         for ad in list(ads):
-            ad.view()
             ads_to_return.append(ad)
+
+    Advertising.objects.filter(id__in=[ad.id for ad in ads_to_return]).update(views=F("views")+1)
 
     return {
         'ads': ads_to_return,

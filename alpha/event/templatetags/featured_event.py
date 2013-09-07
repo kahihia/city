@@ -1,3 +1,4 @@
+from event.models import FeaturedEvent
 from django import template
 from easy_thumbnails.files import get_thumbnailer
 from PIL import Image
@@ -8,13 +9,24 @@ import StringIO
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.conf import settings
+from django.db.models import F
 
 register = template.Library()
 
 
+@register.inclusion_tag('featured/featured_events.html', takes_context=True)
+def featured_events_container(context, events, in_email=False):
+    FeaturedEvent.objects.filter(id__in=[event.id for event in events]).update(views=F('views')+1)
+
+    return {
+        'events': events,
+        'in_email': in_email,
+        'site': context.get("site", "")
+    }
+
 @register.inclusion_tag('featured/featured_event.html', takes_context=True)
 def featured_event(context, event, in_email=False):
-    event.featuredevent_set.all()[0].view()
+    FeaturedEvent.objects.filter(id=event.id).update(views=F('views')+1)
 
     return {
         'event': event,
