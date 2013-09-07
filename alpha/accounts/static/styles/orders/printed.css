@@ -25,7 +25,6 @@ html, body {
 
 .printed-logo-right {
     text-align: right;
-    width: 300px;
     height: 100px;
     text-align: right;
     background: #022e52;
@@ -41,7 +40,7 @@ html, body {
 }
 
 .printed-content {
-    padding-top: 80px;
+    padding: 0;
 }
 
 .printed-main-title {
@@ -49,7 +48,7 @@ html, body {
     font-weight: bold;
     margin: 0 0 20px 0;
     text-align: left;
-    padding: 0;
+    padding: 80px 0 0 0;
 }
 
 .printed-columns-table {

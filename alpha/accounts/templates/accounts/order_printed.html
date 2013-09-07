@@ -10,7 +10,6 @@
     <div class="printed-wrapper">
         <table class="printed-logo-table">
             <tr>
-                <td class="printed-logo-left"></td>
                 <td class="printed-logo-right">
                     <div class="printed-logo">
                         <img alt="" src="{{ STATIC_URL }}images/logo.png">
@@ -43,8 +42,7 @@
             <div class="printed-details">
                 <div class="printed-billed">
                     <h2>Account billed:</h2>
-                    Tansi clothing (abc@inbox.com)<br/>
-                    {{ user.first_name }} {{ user.last_name }}<br/>
+                    {{ user.first_name }} {{ user.last_name }} ({{ user.email }})<br/>
                     521 8th Street East<br/>
                     Saskatoon S7H 0P9<br/>
                     Canada
@@ -52,7 +50,7 @@
             </div>
             <div class="printed-items">
                 <div class="printed-period">
-                    Time period: October 2013
+                    Time period: {{ order.created|date:"M d" }}
                 </div>
                 <table>
                     <tr class="grey">
