@@ -98,6 +98,55 @@ def remind_account_about_events_with_sms(account, single_events):
             logger.error(e)
 
 
+def remind_account_about_deleted_events(account, single_events):
+    if account.reminder_with_email:
+        remind_account_about_deleted_events_with_email(account, single_events)
+
+    if account.reminder_with_sms:
+        remind_account_about_deleted_events_with_sms(account, single_events)
+
+
+def remind_account_about_deleted_events_with_email(account, single_events):
+    featured_events = Event.featured_events_for_region(account.native_region)
+    subject = 'Deleted events from cityfusion'
+
+    message = render_to_string('accounts/emails/reminder_deleted_event_email.html', {
+            "featured_events": featured_events,
+            "events": single_events,
+            "STATIC_URL": "/static/",
+            "advertising_region": account.advertising_region,
+            "site": "http://%s" % Site.objects.get_current().domain
+        })
+    print message
+    msg = EmailMessage(subject,
+               message,
+               "reminder@cityfusion.ca",
+               [account.reminder_email])
+    msg.content_subtype = 'html'
+    msg.send()
+
+    return message
+
+
+def remind_account_about_deleted_events_with_sms(account, single_events):
+    client = TwilioRestClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+
+    for event in single_events:
+
+        body = render_to_string('accounts/sms/reminder_deleted_event_sms.txt', {
+            'event': event
+        })
+
+        try:
+            client.sms.messages.create(
+                to=convert_canadian_phone_number_to_e164(account.reminder_phonenumber),
+                from_=settings.TWILIO_NUMBER,
+                body=body
+            )
+        except TwilioRestException as e:
+            logger.error(e)
+
+
 def inform_account_about_events_with_tags(account):
     events = InTheLoopSchedule.unprocessed_for_account(account)
 

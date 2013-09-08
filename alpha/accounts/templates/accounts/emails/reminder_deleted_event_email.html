@@ -1,0 +1,67 @@
+{% include 'accounts/emails/_header.html' %}
+
+<!-- Content -->
+<table bgcolor="#e3e3e3" width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+    <tr>
+        <td align="center">
+            <table bgcolor="#ffffff" width="670" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+
+                {% include 'accounts/emails/_featured_events.html' %}
+
+                <!-- Email reminders & similar events & ads -->
+                <tr>
+                    <td width="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td>
+
+                    <td>
+                        <table width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+                            <tr>
+                                <td collspan="3" align="left">
+                                    <span style="font-size:20px; font-weight: bold; color: #022e52; font-family: sans-serif;">
+                                        These events was removed
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" width="510">
+                                    <div style="border: 1px solid #cccccc;"><table width="510" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+                                        <tr>
+                                            <td width="10" height="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td width="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td>
+
+                                            <td>
+                                                {% include 'accounts/emails/_events.html' %} 
+                                            </td>
+
+                                            <td width="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td width="10" height="40"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="40" alt="" /></div></td>
+                                        </tr>
+                                        
+                                    </table></div>
+                                </td>
+                                
+                                <td width="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td>
+
+                                {% include 'accounts/emails/_right_ads.html' %}
+                            </tr>
+                            <tr><td height="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td></tr>
+
+                        </table>
+                    </td>
+
+                    <td width="10"><div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}images/emails/blank.gif" width="10" height="10" alt="" /></div></td>
+                </tr>
+
+                {% include 'accounts/emails/_bottom_ads.html' %} 
+                
+            </table>
+        </td>
+    </tr>
+</table>
+
+{% include 'accounts/emails/_footer.html' %}

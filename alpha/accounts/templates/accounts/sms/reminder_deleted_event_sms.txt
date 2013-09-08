@@ -1,0 +1,1 @@
+{{event.name}} in {{event.venue.name}} was removed

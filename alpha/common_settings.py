@@ -118,7 +118,7 @@ MIDDLEWARE_CLASSES = (
     'accounts.middleware.UserProfileMiddleware',
     'event.middleware.LocationMiddleware',
     'turbolinks.middleware.TurbolinksMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -174,7 +174,7 @@ INSTALLED_APPS = (
     'advertising',
     'ckeditor',
     'cityfusion_admin',
-    'debug_toolbar',
+    # 'debug_toolbar',
 )
 
 # A sample logging configuration. The only tangible logging performed
@@ -344,10 +344,16 @@ CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 from datetime import timedelta
 from celery.schedules import crontab
 
+DELETED_EVENTS_REMINDING_INTERVAL = 5
+
 CELERYBEAT_SCHEDULE = {
     'reminding-about-events-every-5-minutes': {
         'task': 'accounts.tasks.remind_accounts_about_events',
         'schedule': timedelta(minutes=5)
+    },
+    'reminding-about-deleted-events-every-5-minutes': {
+        'task': 'accounts.tasks.remind_accounts_about_deleted_events',
+        'schedule': timedelta(minutes=DELETED_EVENTS_REMINDING_INTERVAL)
     },
     'reminding-about-event-every-day': {
         'task': 'accounts.tasks.remind_accounts_about_events_on_week_day',
@@ -357,4 +363,8 @@ CELERYBEAT_SCHEDULE = {
         'task': 'accounts.tasks.inform_accounts_about_new_events_with_tags',
         'schedule': timedelta(hours=3)
     }
+}
+
+SERIALIZATION_MODULES = {
+    'json': 'wadofstuff.django.serializers.json'
 }

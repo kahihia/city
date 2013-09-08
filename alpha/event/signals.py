@@ -1,13 +1,15 @@
 import re
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.core.mail.message import EmailMessage
+from django.core.serializers import serialize
 from django.contrib.gis.db import models
 
-from accounts.models import Account
+from accounts.models import Account, AccountReminding
 from .models import Event, SingleEvent, AuditEvent, AuditPhrase, phrases_query
-from .settings import DEFAULT_FROM_EMAIL
+from .settings import DEFAULT_FROM_EMAIL, DELETED_EVENTS_REMINDING_INTERVAL
 from django.contrib.sites.models import Site
 
 
@@ -48,6 +50,19 @@ def audit_event_catch(instance=None, created=False, **kwargs):
 
 
 def after_single_event_delete(instance=None, **kwargs):
+    existing_reminders = Account.reminder_single_events.through.objects.filter(singleevent_id=instance.id)
+    archived_data = serialize('json', [instance], relations={'event': {'relations': ('venue',)}})
+    notification_time = datetime.now() + timedelta(minutes=int(DELETED_EVENTS_REMINDING_INTERVAL) + 1)
+    for existing_reminder in existing_reminders:
+        reminder = AccountReminding(
+            account=existing_reminder.account,
+            notification_time=notification_time,
+            notification_type='DELETED_EVENT',
+            archived_data=archived_data
+        )
+
+        reminder.save()
+
     Account.reminder_single_events.through.objects.filter(singleevent_id=instance.id).delete()
 
 

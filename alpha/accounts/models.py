@@ -25,6 +25,7 @@ from userena.managers import ASSIGNED_PERMISSIONS
 from guardian.shortcuts import assign
 
 from djmoney.models.fields import MoneyField
+from home.utils import deserialize_json_deep
 
 
 REMINDER_TYPES = (
@@ -213,17 +214,22 @@ class RemindingManager(models.Manager):
     def get_query_set(self):
         return super(RemindingManager, self).get_query_set().filter(notification_time__lte=datetime.datetime.now(), done=False)
 
+    def deleted(self):
+        return self.filter(notification_type='DELETED_EVENT')
+
 
 NOTIFICATION_TYPES = (
     ('DAYS_BEFORE_EVENT', 'Days before event'),
     ('HOURS_BEFORE_EVENT', 'Hours before event'),
     ('ON_WEEK_DAY', 'On week day'),
+    ('DELETED_EVENT', 'Deleted event'),
 )
 
 
 class AccountReminding(models.Model):
     account = models.ForeignKey(Account)
-    single_event = models.ForeignKey('event.SingleEvent')
+    single_event = models.ForeignKey('event.SingleEvent', blank=True, null=True)
+    archived_data = models.TextField(blank=True, null=True)
     notification_time = models.DateTimeField('notification time', auto_now=False, auto_now_add=False)
     notification_type = models.CharField(max_length=25, choices=NOTIFICATION_TYPES)
     done = models.BooleanField(default=False)
@@ -239,7 +245,17 @@ class AccountReminding(models.Model):
         status = "QUEUE"
         if self.done:
             status = "DONE"
-        return "%s at (%s) - %s" % (self.single_event.name, self.notification_time, status)
+        return "%s at (%s) - %s" % (self.title, self.notification_time, status)
+
+    @property
+    def title(self):
+        if self.single_event:
+            return self.single_event.name
+        elif self.archived_data:
+            single_event = deserialize_json_deep(self.archived_data, {'event': {'relations': ('venue',)}})[0]
+            return single_event.name
+        else:
+            return ''
 
 
 class NewInTheLoopEventManager(models.Manager):

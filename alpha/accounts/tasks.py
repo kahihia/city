@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 from celery import task
-from utils import remind_account_about_events, inform_account_about_events_with_tags
+from home.utils import deserialize_json_deep
+
+from utils import remind_account_about_events, inform_account_about_events_with_tags, remind_account_about_deleted_events
 from models import AccountReminding, Account, InTheLoopSchedule
 from event.models import SingleEvent
 
@@ -13,6 +15,18 @@ def remind_accounts_about_events():
         remind_account_about_events(reminding.account, SingleEvent.future_events.filter(id=reminding.single_event.id))
         reminding.processed()
     return hots
+
+
+@task
+def remind_accounts_about_deleted_events():
+    reminders = AccountReminding.hots.deleted()
+
+    for reminder in reminders:
+        single_events = deserialize_json_deep(reminder.archived_data, {'event': {'relations': ('venue',)}})
+        remind_account_about_deleted_events(reminder.account, single_events)
+        reminder.processed()
+
+    return reminders
 
 
 @task
