@@ -10,10 +10,7 @@
         });
 
         this.initEventActions();
-
         this.initMoreLessButtons();
-
-        this.advertisingScrolling = new window.AdvertisingScrolling();
     };
 
     BrowsePage.prototype = {
