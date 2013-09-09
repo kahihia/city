@@ -9,7 +9,7 @@ from event.models import SingleEvent
 
 @task
 def remind_accounts_about_events():
-    hots = AccountReminding.hots.all()
+    hots = AccountReminding.hots.existing()
 
     for reminding in hots:
         remind_account_about_events(reminding.account, SingleEvent.future_events.filter(id=reminding.single_event.id))

@@ -214,8 +214,11 @@ class RemindingManager(models.Manager):
     def get_query_set(self):
         return super(RemindingManager, self).get_query_set().filter(notification_time__lte=datetime.datetime.now(), done=False)
 
+    def existing(self):
+        return self.filter(single_event__isnull=False)
+
     def deleted(self):
-        return self.filter(notification_type='DELETED_EVENT')
+        return self.filter(single_event__isnull=True)
 
 
 NOTIFICATION_TYPES = (
