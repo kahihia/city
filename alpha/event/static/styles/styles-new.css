@@ -8,7 +8,7 @@
 }
 
 .content-wrapper h1 {
-    line-height: 35px;
+    min-height: 35px;
     vertical-align: middle;
     margin:0;
     font-size:20px;
@@ -243,7 +243,7 @@
 }
 
 .secondary-content header{
-    line-height: 35px;
+    min-height: 35px;
     vertical-align: middle;
     text-align: center;
     color: #022e52;
