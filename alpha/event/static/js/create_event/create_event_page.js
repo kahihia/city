@@ -33,10 +33,10 @@
                 var content = $(this).siblings(".balloon-content");
                 $(this).balloon({
                     contents:content,
-                    position:"left bottom",
+                    position:"top",
                     tipSize: 0,
                     offsetX:0,//$.browser.msie?0:25,
-                    offsetY:25,//$.browser.msie?25:0,
+                    offsetY:10,//$.browser.msie?25:0,
                     showDuration: 500, hideDuration: 0,
                     showAnimation: function(d) { this.fadeIn(d); }
                 });
