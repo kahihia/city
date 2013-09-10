@@ -7,6 +7,7 @@
 {% load advertising_tags %}
 {% load admin_event_actions %}
 {% load common_tags %}
+{% load location %}
 
 {% block head %}
     <link href="{{STATIC_URL}}styles/styles-new.css" rel="stylesheet" type="text/css" />
@@ -86,11 +87,11 @@
                         {{event.start_time|contextualize_date}} - {{event.end_time|just_time}}                    
                     </div>
                     <div class="event-description">
-                        <span class="accented">{{ event.venue.name }}</span>
-                        <br>                    
-                        {{ event.venue.city.name_std }}, 
-                        {% if event.venue.street %}{% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}, {% endif %}
-                        {{ event.venue.city.region.name_std }}
+                        <span class="accented">{{ event.venue.name }}</span><br />
+                        {% if event.venue.street %}
+                            <span>{% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}</span>
+                        {% endif %}
+                        {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
                     </div>
                     <div class="event-actions">
                         <table>
