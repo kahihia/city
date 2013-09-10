@@ -250,8 +250,7 @@
 .secondary-content header{
     position: absolute;
     width: 100%;
-    bottom: -40px;
-    min-height: 35px;
+    bottom: -30px;
     vertical-align: middle;
     text-align: center;
     color: #022e52;
