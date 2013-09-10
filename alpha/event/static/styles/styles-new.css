@@ -249,7 +249,8 @@
 
 .secondary-content header{
     position: absolute;
-    bottom: -20px;
+    width: 100%;
+    bottom: -40px;
     min-height: 35px;
     vertical-align: middle;
     text-align: center;
@@ -260,7 +261,7 @@
 
 .secondary-content .content {
     width: 308px;
-    margin-top: 40px;
+    margin-top: 35px;
 }
 
 .secondary-content-table {
