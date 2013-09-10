@@ -242,7 +242,14 @@
     margin-bottom: 10px;
 }
 
+.secondary-content-header-wrapper {
+    position: relative;
+    height: 0;
+}
+
 .secondary-content header{
+    position: absolute;
+    bottom: -20px;
     min-height: 35px;
     vertical-align: middle;
     text-align: center;
@@ -253,6 +260,7 @@
 
 .secondary-content .content {
     width: 308px;
+    margin-top: 40px;
 }
 
 .secondary-content-table {

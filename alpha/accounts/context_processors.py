@@ -17,7 +17,7 @@ def user_context(request):
 def taxes_context(request):
     account_taxes = []
 
-    if request.user.id:
+    if request.account:
         account = request.account
         if not account.not_from_canada:
             account_taxes = account.taxes
