@@ -8,8 +8,10 @@
 }
 
 .content-wrapper h1 {
-    margin:0px;
-    padding:0px 0px 10px;
+    height: 35px;
+    line-height: 35px;
+    vertical-align: middle;
+    margin:0;
     font-size:20px;
     color:#022e52;
 }
@@ -242,12 +244,13 @@
 }
 
 .secondary-content header{
+    height: 35px;
+    line-height: 35px;
+    vertical-align: middle;
     text-align: center;
     color: #022e52;
     font-size: 1.2em;
-    font-weight: bold;
-    margin-top: 6px;
-    margin-bottom: 13px;
+    font-weight: bold;    
 }
 
 .secondary-content .content {
