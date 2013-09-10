@@ -14,7 +14,7 @@ import selectable.forms as selectable
 from event.lookups import CityLookup
 from accounts.lookups import RegionLookup
 from cities.models import Region
-from django_localflavor_ca.forms import CAPhoneNumberField
+from localflavor.ca.forms import CAPhoneNumberField
 from ckeditor.fields import RichTextFormField
 
 
