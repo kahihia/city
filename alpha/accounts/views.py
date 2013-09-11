@@ -568,8 +568,11 @@ def profile_edit(request, username, edit_profile_form=AccountForm,
                 profile.tax_origin_confirmed = False
             profile.save()
 
-            if success_url: redirect_to = success_url
-            else: redirect_to = reverse('userena_profile_detail', kwargs={'username': username})
+            if success_url: 
+                redirect_to = success_url
+                return HttpResponseRedirect(redirect_to)
+            else: 
+                redirect_to = reverse('userena_profile_detail', kwargs={'username': username})
             return redirect(redirect_to)
 
     if not extra_context: extra_context = dict()
