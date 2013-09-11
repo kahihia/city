@@ -547,7 +547,6 @@ def profile_edit(request, username, edit_profile_form=AccountForm,
                              username__iexact=username)
 
     profile = user.get_profile()
-    return HttpResponse(success_url)
 
     user_initial = {
         'first_name': user.first_name,
