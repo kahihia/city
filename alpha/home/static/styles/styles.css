@@ -871,4 +871,5 @@ body .inputfield{
     height: 26px !important;
     line-height: 26px;
     width: 280px;
+    vertical-align: bottom;
 }
