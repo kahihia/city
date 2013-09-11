@@ -114,10 +114,12 @@
         <div class="box visible options">
             <div class="form-block" data-id="form_block">
                 <p>
-                    <input data-ajax-url="{% url 'admin_location_autocomplete' %}" type="hidden" class="bigdrop city-input" data-id="city_input" value=""/>
-                    <input class="events-search-button" data-id="search_button" type="button" value="Search" />
+                    <input type="hidden" class="bigdrop city-input" value="" data-ajax-url="{% url 'admin_location_autocomplete' %}" data-id="city_input" />
+                    AND/OR
+                    <input type="text" class="modern-input" placeholder="Facebook page url" data-id="fb_page_url" />
+                    <input class="events-search-button" type="button" value="Search" data-id="search_button" />
                 </p>
-                <input type="hidden" data-id="city_name" value="" />
+                <input type="hidden" value="" data-id="city_name" />
                 {% csrf_token %}
                 <div class="indicator-block" data-id="indicator_block">
                     <img src="{{ STATIC_URL }}images/ajax-loader.gif"/>

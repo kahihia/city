@@ -11,7 +11,7 @@ from django.template import RequestContext
 from accounts.models import Account
 from event.models import Event, FeaturedEvent, FacebookEvent
 from event.forms import SetupFeaturedForm, CreateEventForm
-from event.services import facebook_service
+from event.services import facebook_services
 from cities.models import City, Country
 from django_facebook.decorators import facebook_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -95,8 +95,8 @@ def post_event_to_facebook(request):
         try:
             event_id = request.POST['event_id']
             event = Event.events.get(pk=int(event_id))
-            facebook_event_id = facebook_service.create_facebook_event(event, request)
-            facebook_service.attach_facebook_event(int(facebook_event_id), event)
+            facebook_event_id = facebook_services.create_facebook_event(event, request)
+            facebook_services.attach_facebook_event(int(facebook_event_id), event)
 
             response = {
                 'success': True,
@@ -129,12 +129,11 @@ def import_facebook_events(request):
 def load_facebook_events(request):
     if request.is_ajax():
         try:
-            data = facebook_service.get_facebook_events_data(
+            service = facebook_services.FacebookImportService(
                 request,
                 request.GET['place'],
-                int(request.GET.get('page', 0))
-            )
-
+                request.GET['fb_page_url'])
+            data = service.get_events_data(int(request.GET.get('page', 0)))
             content = render_to_string('cf-admin/facebook_event_list.html',
                                        {'events': data['events']},
                                        context_instance=RequestContext(request))
