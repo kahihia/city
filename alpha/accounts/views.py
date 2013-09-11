@@ -37,6 +37,13 @@ from accounts.forms import AccountForm
 from userena.decorators import secure_required
 from guardian.decorators import permission_required_or_403
 
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
+
+from django.utils.encoding import force_text
+
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
 
@@ -570,7 +577,7 @@ def profile_edit(request, username, edit_profile_form=AccountForm,
 
             if success_url: 
                 redirect_to = success_url
-                return HttpResponseRedirect(redirect_to)
+                redirect_to = urlparse(force_text(redirect_to)).path
             else: 
                 redirect_to = reverse('userena_profile_detail', kwargs={'username': username})
             return redirect(redirect_to)
