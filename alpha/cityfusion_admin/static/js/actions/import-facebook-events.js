@@ -13,6 +13,7 @@
             self.moreLink = $("[data-id=load_more]");
             self.cityInput = $("[data-id=city_input]");
             self.cityName = $("[data-id=city_name]");
+            self.fbPageInput = $("[data-id=fb_page_url]");
             self.locationLayer = $("[data-id=location_layer]");
             self.locationTr = $("[data-id=location_tr]");
 
@@ -60,7 +61,7 @@
 
         self.initCityInput = function() {
             self.cityInput.select2({
-                placeholder: "Select the city",
+                placeholder: "City name",
                 minimumInputLength: 2,
                 ajax: {
                     url: self.cityInput.data("ajax-url"),
@@ -122,10 +123,14 @@
 
         self.onSearchButtonClick = function() {
             self.place = self.cityName.val();
+            self.fbPageUrl = self.fbPageInput.val();
 
             $("#id_tags__tagautosuggest").data('ui-tagspopup').forCity(self.cityName.val());
 
-            self.loadEvents({"place": self.place}, function() {
+            self.loadEvents({
+                "place": self.place,
+                "fb_page_url": self.fbPageUrl
+            }, function() {
                 self.eventsBlock.empty();
                 $(".form-block").append(self.indicatorBlock.show());
                 self.moreLink.hide();
@@ -136,6 +141,7 @@
             if(self.place) {
                 self.loadEvents({
                     "place": self.place,
+                    "fb_page_url": self.fbPageUrl,
                     "page": self.page
                 }, function() {
                     self.moreLink.append(self.indicatorBlock.show());

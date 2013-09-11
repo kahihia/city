@@ -20,7 +20,7 @@ from moneyed import Money, CAD
 from cities.models import City, Country, Region
 from event.filters import EventFilter
 from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
-from event.services import facebook_service, location_service, event_service
+from event.services import facebook_services, location_service, event_service
 from event.forms import SetupFeaturedForm, CreateEventForm, EditEventForm
 from ajaxuploader.views import AjaxFileUploader
 from accounts.decorators import native_region_required
@@ -207,13 +207,13 @@ def create(request, success_url=None, template_name='events/create/create_event.
 def create_from_facebook(request):
     if request.is_ajax():
         facebook_event_id = request.POST['facebook_event_id']
-        event_data = facebook_service.get_prepared_event_data(request, request.POST)
+        event_data = facebook_services.get_prepared_event_data(request, request.POST)
         form = CreateEventForm(account=request.account, data=event_data)
         if form.is_valid():
             success = False
             try:
                 event = event_service.save_event(request.user, event_data, form)
-                facebook_service.attach_facebook_event(int(facebook_event_id), event)
+                facebook_services.attach_facebook_event(int(facebook_event_id), event)
                 success = True
 
             except:
