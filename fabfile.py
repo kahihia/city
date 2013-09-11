@@ -12,12 +12,14 @@ def dev():
     env.project_folder = '/root/cityfusion_git'
     env.alpha_folder = '/root/cityfusion_git/alpha'
     env.password = "123forfusion"
+    env.branch = "master"
 
 def prod():
     env.hosts = ['root@cityfusion.ca']
     env.project_folder = '/root/cityfusion_git'
     env.alpha_folder = '/root/cityfusion_git/alpha'
     env.password = "123forfusion"
+    env.branch = "prod"
 
 
 def host_type():
@@ -29,7 +31,7 @@ def init_virtual_env():
 def upgrade():
     init_virtual_env()
     with cd(env.project_folder):
-        run("git pull origin master")        
+        run("git pull origin %s" % env.branch)        
 
     with cd(env.alpha_folder):
         run("python manage.py collectstatic --noinput")
@@ -44,7 +46,7 @@ def migrate(app):
     init_virtual_env()
 
     with cd(env.project_folder):
-        run("git pull origin master")
+        run("git pull origin %s" % env.branch)
 
     with cd(env.alpha_folder):
         run("python manage.py migrate %s" % app)

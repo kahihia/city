@@ -101,7 +101,7 @@ html.preview, body.preview {
 .location-wrapper
 {
 	float: left;
-    width: 703px;
+    width: 695px;
 }
 
 .location-wrapper .location-label
@@ -214,7 +214,7 @@ html.preview, body.preview {
 .search-text-box input.search
 {
 	border:0;
-	width:245px;
+	width: 240px;
 	background:none;
 	color:#454545;
 	float:left;
