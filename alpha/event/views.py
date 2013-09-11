@@ -104,10 +104,16 @@ def browse(request):
 
     #.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
 
-    tags = TaggedItem.objects.filter(object_id__in=eventsFilter.qs().values_list("event_id", flat=True)) \
-        .values('tag_id', 'tag__name') \
-        .annotate(count=Count('id')) \
-        .order_by('-count')
+    if "search" in params:
+        tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
+            .values('tag_id', 'tag__name') \
+            .annotate(count=Count('id')) \
+            .order_by('-count')
+    else:
+        tags = TaggedItem.objects.filter(object_id__in=eventsFilter.qs().values_list("event_id", flat=True)) \
+            .values('tag_id', 'tag__name') \
+            .annotate(count=Count('id')) \
+            .order_by('-count')
 
 
     return render_to_response('events/browse_events.html', {
