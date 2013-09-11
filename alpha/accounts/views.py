@@ -577,7 +577,6 @@ def profile_edit(request, username, edit_profile_form=AccountForm,
 
             if success_url: 
                 redirect_to = success_url
-                redirect_to = urlparse(force_text(redirect_to)).path
             else: 
                 redirect_to = reverse('userena_profile_detail', kwargs={'username': username})
             return redirect(redirect_to)
