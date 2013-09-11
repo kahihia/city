@@ -2,6 +2,7 @@ import datetime
 import os
 import urllib
 import json
+from urlparse import urlparse, parse_qsl
 
 from django.db.models import Max, Min
 from django.utils import timezone
@@ -16,27 +17,105 @@ from event.models import Event, FacebookEvent
 from ..settings import FACEBOOK_PAGE_ID, EVENTFUL_ID, CONCERTIN_ID
 
 
-def get_facebook_events_data(request, place, page):
-    paging_delta = 200
+class FacebookImportService(object):
+    PAGING_DELTA = 200
 
-    fb = get_persistent_graph(request)
-    params = {
-        'q': place,
-        'type': 'event',
-        'fields': 'id,name,owner,description,picture,start_time,end_time,location,venue,ticket_uri',
-        'limit': paging_delta
-    }
+    def __init__(self, request, place, page_url):
+        """ Create a new facebook import service object.
 
-    if page:
-        params['offset'] = page * paging_delta
+        @type request: django.core.handlers.wsgi.WSGIRequest
+        @type place: str
+        @param place: city for search and filter by
+        @type page_url: str
+        @param page_url: facebook page url (events owner)
+        """
+        self.request = request
+        self.place = place
+        self.page_url = page_url
 
-    result = fb.get('search', **params)
-    events = _get_filtered_events(result['data'], place.lower())
+        self.page = 0
+        self.graph = get_persistent_graph(request)
+        self.lower_place = self.place.lower()
 
-    return {
-        'events': events,
-        'page': (page + 1) if len(result['data']) == paging_delta else 0
-    };
+    def get_events_data(self, page):
+        """ Get facebook events on the specified page
+
+        @type page: int
+        @rtype: dict
+        """
+        self.page = page
+        if self.page_url:
+            result = self._get_events_by_page_url()
+        else:
+            result = self._get_events_by_place()
+
+        return {
+            'events': self._filter_data(result['data']),
+            'page': (page + 1) if len(result['data']) == self.PAGING_DELTA else 0
+        }
+
+    def _get_events_by_place(self):
+        params = {
+            'q': self.place,
+            'type': 'event',
+            'fields': 'id,name,owner,description,picture,start_time,end_time,location,venue,ticket_uri',
+            'limit': self.PAGING_DELTA
+        }
+
+        if self.page:
+            params['offset'] = self.page * self.PAGING_DELTA
+
+        return self.graph.get('search', **params)
+
+    def _get_events_by_page_url(self):
+        page_id = urlparse(self.page_url).path.split('/')[-1]
+        if not page_id.isdigit():
+            raise Exception('Error: url is invalid')
+
+        params = {
+            'fields': 'id,name,owner,description,picture,start_time,end_time,location,venue,ticket_uri',
+            'limit': self.PAGING_DELTA
+        }
+
+        if self.page:
+            params['offset'] = self.page * self.PAGING_DELTA
+
+        return self.graph.get('%s/events' % page_id, **params)
+
+    def _filter_data(self, data):
+        existing_items = FacebookEvent.objects.all().values_list('eid', flat=True)
+        result = []
+
+        for item in data:
+            if not int(item['id']) in existing_items \
+                    and self._check_place_matching(item) \
+                    and not item['owner']['id'] in [EVENTFUL_ID, CONCERTIN_ID]:
+
+                for key in ['start_time', 'end_time']:
+                    if key in item:
+                        item[key] = dateparser.parse(item[key])
+                    else:
+                        item[key] = None
+
+                    if item[key] and not timezone.is_aware(item[key]):
+                        item[key] = item[key].replace(tzinfo=timezone.utc)
+
+                time_now = datetime.datetime.utcnow().replace(tzinfo=timezone.utc)
+                if item['start_time'] > time_now \
+                        or (item['end_time'] and item['end_time'] > time_now):
+                    item['picture'] = item['picture']['data']['url']
+                    result.append(item)
+        return result
+
+    def _check_place_matching(self, item):
+        """ Check if the item location info complies with the requirements
+
+        @type item: dict
+        @rtype: bool
+        """
+        return not self.lower_place or \
+            'location' in item and self.lower_place in item['location'].lower() or \
+            'venue' in item and 'city' in item['venue'] and self.lower_place in item['venue']['city'].lower()
 
 
 def create_facebook_event(event, request):
@@ -198,31 +277,3 @@ def _get_time_range_json(start_time, end_time):
         is_first = False
 
     return json.dumps(periods)
-
-
-def _get_filtered_events(raw_data, city_name):
-    existing_items = FacebookEvent.objects.all().values_list('eid', flat=True)
-    result = []
-
-    for item in raw_data:
-        if not int(item['id']) in existing_items \
-                and 'location' in item \
-                and city_name in item['location'].lower() \
-                and not item['owner']['id'] in [EVENTFUL_ID, CONCERTIN_ID]:
-
-            for key in ['start_time', 'end_time']:
-                if key in item:
-                    item[key] = dateparser.parse(item[key])
-                else:
-                    item[key] = None
-
-                if item[key] and not timezone.is_aware(item[key]):
-                    item[key] = item[key].replace(tzinfo=timezone.utc)
-
-            time_now = datetime.datetime.utcnow().replace(tzinfo=timezone.utc)
-            if item['start_time'] > time_now \
-                    or (item['end_time'] and item['end_time'] > time_now):
-                item['picture'] = item['picture']['data']['url']
-                result.append(item)
-
-    return result

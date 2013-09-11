@@ -864,3 +864,11 @@ body .inputfield{
     margin: 0 auto;
     padding: 15px 0;
 }
+
+.modern-input {
+    border: 1px solid #aaaaaa !important;
+    border-radius: 4px !important;
+    height: 26px !important;
+    line-height: 26px;
+    width: 280px;
+}
