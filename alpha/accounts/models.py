@@ -306,8 +306,8 @@ class InTheLoopSchedule(models.Model):
 
 
 def add_to_in_the_loop_schedule(sender, instance, created, **kwargs):
-    InTheLoopSchedule.objects.filter(event_id=instance.id).delete()
-    InTheLoopSchedule(event=instance).save()
+    if created:
+        InTheLoopSchedule(event=instance).save()
 
 
 models.signals.post_save.connect(add_to_in_the_loop_schedule, sender=Event)
