@@ -37,6 +37,8 @@ from accounts.forms import AccountForm
 from userena.decorators import secure_required
 from guardian.decorators import permission_required_or_403
 
+import re
+
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
 
@@ -570,7 +572,8 @@ def profile_edit(request, username, edit_profile_form=AccountForm,
 
             if success_url: 
                 redirect_to = success_url
-                return HttpResponseRedirect(redirect_to)
+                # Fix strange bug on production
+                redirect_to = re.sub(r'http:\/([^\/])', r'http://\1', redirect_to)
             else: 
                 redirect_to = reverse('userena_profile_detail', kwargs={'username': username})
             return redirect(redirect_to)

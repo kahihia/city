@@ -8,9 +8,20 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.shortcuts import resolve_url
 import json
+from urlparse import urljoin
+import re
 
 
 REDIRECT_FIELD_NAME_ACCOUNT = "redirect_after_edit_account"
+
+http_re = re.compile('^https?:')
+
+def get_absolute_uri(request):
+    location = request.get_full_path()
+    if not http_re.match(location): 
+        current_uri = '%s://%s%s' % (request.is_secure() and 'https' or 'http', request.get_host(), request.path)
+        location = urljoin(current_uri, location)
+    return location
 
 
 def account_passes_test(test_func, redirect_field_name=REDIRECT_FIELD_NAME, why_message=None):
@@ -21,7 +32,7 @@ def account_passes_test(test_func, redirect_field_name=REDIRECT_FIELD_NAME, why_
             if test_func(account):
                 return view_func(request, *args, **kwargs)
 
-            path = request.build_absolute_uri()
+            path = get_absolute_uri(request)
 
             return HttpResponseRedirect(reverse("user_profile_required", kwargs={
                 "username": account.user.username, 
