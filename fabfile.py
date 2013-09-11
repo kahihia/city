@@ -31,7 +31,7 @@ def init_virtual_env():
 def upgrade():
     init_virtual_env()
     with cd(env.project_folder):
-        run("git pull origin master")        
+        run("git pull origin %s" % env.branch)        
 
     with cd(env.alpha_folder):
         run("python manage.py collectstatic --noinput")
