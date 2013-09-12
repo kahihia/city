@@ -156,13 +156,13 @@
     -webkit-transform-origin: top left;    
 }
 
-.content-wrapper .event-details .event-actions td.social-buttons a {
-    padding: 0 2px;
-    min-width: inherit;
+.event-actions td.social-buttons a {
+    padding: 0 2px !important;
+    min-width: inherit !important;
 }
 
-.content-wrapper .event-details .event-actions td.social-buttons .addthis_bubble_style {
-    height: 16px;
+.event-actions td.social-buttons .addthis_bubble_style {
+    height: 16px !important;
 }
 
 .content-wrapper .event-wrapper .map {
