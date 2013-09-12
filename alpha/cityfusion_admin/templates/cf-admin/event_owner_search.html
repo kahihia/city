@@ -1,0 +1,65 @@
+{% extends 'cf-admin/base.html' %}
+{% load event_tags %}
+{% load admin_menu %}
+{% load endless %}
+{% load cf_pagination %}
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/select2.css" rel="stylesheet" type="text/css" />
+    <script src="{{STATIC_URL}}js/select2.min.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/actions/change-event-owner.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block page %}
+    <div class="tabs-container">
+        {% cf_admin_menu "claim_event" %}
+
+        <div class="box visible options">
+            <h1>
+                Search events
+            </h1>
+            <form method="post" name="search-events" >
+                {% csrf_token %}
+                Please, provide part of event title <br/>
+                <input name="search" placeholder="Title" value="{{ search }}"/>
+                <input type="submit" value="Search" />
+            </form>
+
+            <table class="profile-table" celpadding="0" cellspacing="0">
+                <tr>
+                    <th>Event</th>
+                    <th>Owner</th>
+                    <th width="50%">Change owner</th>
+                </tr>
+                
+                {% for event in events %}
+                <tr>
+                    <td>
+                        <div class="entry-wrapper">
+                            {% event_block event %}
+                        </div>
+                    </td>                    
+                    <td>
+                        {{ event.owner }}
+                    </td>                    
+                    <td>
+                        <form method="post" name="event-change-owner" action="{% url 'change_event_owner' event.slug %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="search" value="{{ search }}">
+                            <input name="owner_id" class="user-input" value="" data-ajax-url="{% url 'admin_user_autocomplete' %}"  />
+                            <input type="submit" value="Change" />
+                        </form>                        
+                    </td>                    
+                </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">
+                            No events was found
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

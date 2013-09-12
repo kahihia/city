@@ -1,5 +1,6 @@
 import datetime
 import json
+from django.contrib.auth.models import User
 from cityfusion_admin.models import ReportEvent, ClaimEvent
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
@@ -15,6 +16,7 @@ from event.services import facebook_services
 from cities.models import City, Country
 from django_facebook.decorators import facebook_required
 from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Q
 
 
 @require_POST
@@ -196,6 +198,26 @@ def location_autocomplete(request):
                 })
 
             return HttpResponse(json.dumps(locations), mimetype='application/json')
+        raise Http404
+    else:
+        raise Http404
+
+@staff_member_required
+def user_autocomplete(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            users = []
+
+            search = request.GET.get('search', '')
+            
+            users = User.objects.filter(Q(username__icontains=search) | Q(first_name__icontains=search) | Q(last_name__icontains=search) | Q(email__icontains=search))[0:10]
+
+            users = [{
+                "id": user.id,
+                "name": user.username,
+            } for user in users]
+            return HttpResponse(json.dumps(users), mimetype='application/json')
+        raise Http404
     else:
         raise Http404
 
@@ -463,3 +485,31 @@ def admin_edit_featured(request, featured_event_id):
 @staff_member_required
 def free_try(request):
     pass
+
+
+@staff_member_required
+def change_event_owner_search(request):
+    events = []
+    search = request.REQUEST.get("search", "")
+    if search:
+        events = Event.future_events.filter(name__icontains=search)
+
+    return render_to_response('cf-admin/event_owner_search.html', {
+        'events': events,
+        'search': search
+    }, context_instance=RequestContext(request))
+
+
+@require_POST
+@staff_member_required
+def change_event_owner(request, slug):
+    owner_id = request.POST.get("owner_id", None)
+    if owner_id:
+        event = Event.events.get(slug=slug)
+        event.owner = User.objects.get(id=owner_id)
+        event.save()
+
+    return HttpResponseRedirect(
+        reverse('change_event_owner_search') + "?search=%s" % request.POST.get("search", "")
+    )
+

@@ -163,3 +163,7 @@ a.add-button {
     padding: 9px 0;
     width: 300px;
 }
+
+.user-input {
+    width:200px;
+}
