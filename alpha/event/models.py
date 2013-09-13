@@ -381,6 +381,9 @@ class FutureFeaturedEventManager(models.Manager):
     def get_query_set(self):
         return super(FutureFeaturedEventManager, self).get_query_set()\
             .filter(event__single_events__start_time__gte=datetime.datetime.now())\
+            .annotate(start_time=Min("event__single_events__start_time"))\
+            .annotate(end_time=Min("event__single_events__end_time"))\
+            .extra(order_by=['start_time'])\
             .annotate(Count("id"))
 
 
