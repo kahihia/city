@@ -135,7 +135,7 @@ def browse(request):
                             }, context_instance=RequestContext(request))
 
 
-def view_featured(request, slug):
+def view_featured(request, slug, date):
     try:
         event = Event.future_events.get(slug=slug, start_time__startswith=date)
     except ObjectDoesNotExist:
