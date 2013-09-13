@@ -169,6 +169,12 @@ body {
     font-weight: bold;
 }
 
+.main-navigation-nav-wrapper ul.categories li.accounts a {
+    background: #032d51;
+    color: #fff;
+    text-align: center;
+}
+
 .main-navigation-nav-wrapper ul.categories li.subheader {
     margin-top:23px;
     height: 34px;

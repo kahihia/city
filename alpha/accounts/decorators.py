@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.shortcuts import resolve_url
 import json
 from urlparse import urljoin
 import re
@@ -33,7 +34,7 @@ def account_passes_test(test_func, redirect_field_name=REDIRECT_FIELD_NAME, why_
 
             path = get_absolute_uri(request)
 
-            return HttpResponseRedirect(reverse("user_profile_required", kwargs= {
+            return HttpResponseRedirect(reverse("user_profile_required", kwargs={
                 "username": account.user.username, 
                 "success_url": path,
                 "why_message": why_message 

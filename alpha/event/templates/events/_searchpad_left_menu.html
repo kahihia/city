@@ -7,6 +7,11 @@
                     Browse All Events
                 </a>
             </li>
+            <li>
+                <a href="{% events_filter_url request eventsFilter function="random" exclude="tag" %}">
+                    Random
+                </a>
+            </li>
             <li class="top5">
                 <a href="javascript:void;" >Top 10 Categories</a>
                 <a href="{% events_filter_url request eventsFilter function="tags"  exclude="tag" %}" class="toggler ajax"></a>
@@ -17,30 +22,16 @@
                     <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}" class="ajax{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}"  >
                         {{tag.tag__name}}
                     </a>
-                </li>                                            
+                </li>
                 {%endfor%}
-            </ul>             
-            <br>
+            </ul>
             <li>
-                <a href="{% events_filter_url request eventsFilter function="reminder" exclude="all" %}" class="ajax auth-required">
-                    Reminder
+                <a href="{% events_filter_url request eventsFilter function="recently_featured" exclude="tag" %}">
+                    Recently Featured
                 </a>
             </li>
-            <li>
-                <a href="{% events_filter_url request eventsFilter function="in_the_loop" exclude="all" %}" class="ajax auth-required">
-                    In the Loop
-                </a>
-            </li>
-            <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="top_viewed" exclude="tag" %}" class="ajax">
-                    Top viewed
-                </a>
-            </li>
-            <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="latest" exclude="tag" %}" class="ajax">
-                    Recently Added
-                </a>
-            </li>            
+            <br />
+            
             <li class="special">
                 <a href="{% events_filter_url request eventsFilter function="night_life"  exclude="tag" %}" class="ajax">
                     Night life
@@ -59,6 +50,19 @@
             <li class="special">
                 <a href="{% events_filter_url request eventsFilter function="family"  exclude="tag" %}" class="ajax">
                     Family
+                </a>
+            </li>
+
+            <br />
+            <br />            
+            <li class="accounts">
+                <a href="{% events_filter_url request eventsFilter function="reminder" exclude="all" %}" class="ajax auth-required">
+                    Reminder Events
+                </a>
+            </li>
+            <li class="accounts">
+                <a href="{% events_filter_url request eventsFilter function="in_the_loop" exclude="all" %}" class="ajax auth-required">
+                    In the Loop Events
                 </a>
             </li>
         </ul>

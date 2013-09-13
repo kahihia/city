@@ -101,8 +101,8 @@ class FeaturedManager(models.Manager):
                 featuredevent__end_time__gte=datetime.datetime.now(),
                 featuredevent__active=True
             )\
-            .annotate(start_time=Max("single_events__start_time"))\
-            .annotate(end_time=Max("single_events__end_time"))\
+            .annotate(start_time=Min("single_events__start_time"))\
+            .annotate(end_time=Min("single_events__end_time"))\
             .annotate(Count("id"))
 
 
@@ -412,6 +412,9 @@ class FeaturedEvent(models.Model):
 
     def view(self):
         FeaturedEvent.objects.filter(id=self.id).update(views=F("views")+1)
+
+    def event_day(self):
+        return Event.future_events.get(id=self.event.id)        
 
 
 class FeaturedEventOrder(models.Model):

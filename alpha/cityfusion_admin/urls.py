@@ -67,6 +67,11 @@ urlpatterns = patterns('',
         name='admin_location_autocomplete'
     ),
 
+    url(r'^users/$',
+        views.user_autocomplete,
+        name='admin_user_autocomplete'
+    ),
+
     # Advertising
     url(r'^admin-advertising/$',
         views.admin_advertising,
@@ -130,4 +135,14 @@ urlpatterns = patterns('',
         views.free_try,
         name='free_try'
     ),
+
+    url(r'^change-event-owner-search$',
+        views.change_event_owner_search,
+        name='change_event_owner_search'
+    ),
+
+    url(r'^change-owner/(?P<slug>[^/]+)$',
+        views.change_event_owner,
+        name='change_event_owner'
+    )
 )

@@ -132,7 +132,7 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
 
 
     def reminder_single_events_in_future(self):
-        return SingleEvent.future_events.filter(id__in=self.reminder_single_events.values('id'))
+        return SingleEvent.future_events.filter(id__in=self.reminder_single_events.values_list('id', flat=True))
 
     def ads(self):
         return Advertising.objects.filter(campaign__account__id=self.id)

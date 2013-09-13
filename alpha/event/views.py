@@ -58,10 +58,17 @@ def search_pad(request):
 
     eventsFilter = EventFilter(params, queryset=events, account=request.account)
 
-    top10_tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
-        .values('tag', 'tag__name') \
-        .annotate(count=Count('id')) \
-        .order_by('-count')[0:10]
+    if "search" in params:
+        top10_tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
+            .values('tag_id', 'tag__name') \
+            .annotate(count=Count('id')) \
+            .order_by('-count')[:10]
+    else:
+        top10_tags = TaggedItem.objects.filter(object_id__in=eventsFilter.qs().values_list("event_id", flat=True)) \
+            .values('tag_id', 'tag__name') \
+            .annotate(count=Count('id')) \
+            .order_by('-count')[:10]
+
 
     return render_to_response('events/search_pad.html', {
                                 'events': events,

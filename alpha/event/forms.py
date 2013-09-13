@@ -260,11 +260,11 @@ class EditEventForm(forms.ModelForm):
                         raise forms.ValidationError("%s is not valid end time. Please use right format" % times["end"])
 
 
-
-
-
-
 class CreateEventForm(EditEventForm):
     class Meta:
         model = Event
         exclude = ('owner', 'authentication_key', 'slug', 'email')
+
+
+class EventSearchForm(forms.Form):
+    search = forms.CharField()

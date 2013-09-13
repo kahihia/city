@@ -27,15 +27,14 @@
             <div class="event-date-wrapper">{{event.start_time|date:"N d, Y fA | l"|title}}</div>                
             <div class="event-description">
                 {{ event.venue.name }}<br>
-                {% if event.venue.street %}{% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}<br>{% endif %}
-                {{ event.venue.city.name_std }}
+                {% if event.venue.street %}{% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}, {% endif %} {{ event.venue.city.name_std }}
             </div>
             <div class="event-actions">                
                 <table>
                     {% if event.tickets %}
                     <tr>
                         <td>
-                            <a href="javascript:void()"  class="action-buy-tickets">
+                            <a href="javascript:void(0);"  class="action-buy-tickets">
                                 Buy Tickets
                             </a>
                             {% buy_tickets_popup event %}
@@ -49,20 +48,34 @@
                             {% remind_me_popup event %}
                         </td>
                         <td class="in-the-loop-td">
-                            <a href="javascript:void()" class="action-in-the-loop">In the Loop</a>
+                            <a href="javascript:void(0);" class="action-in-the-loop">In the Loop</a>
                             {% in_the_loop_popup event %}
                         </td>
                     </tr>
+                     {% if event.website %}
+                        <tr>
+                            <td colspan="2">
+                                <a href="{{ event.website }}" class="block-header accented view-site" target="_blank">
+                                    View Site
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
                     <tr>
-                        <td>
-                            <a href="javascript:void(0);" class="action-facebook-like">
-                                <div href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" class="fb-like" data-href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" data-send="false" data-layout="button_count" data-width="20" data-show-faces="false" data-font="arial"></div>                                
-                            </a>
-                        </td>
-                        <td>
-                            <a href="https://twitter.com/intent/tweet?original_referer=http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}&text={{event.name}}&tw_p=tweetbutton&url=http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" class="action-tweet">
-                                Tweet
-                            </a>                            
+                        <td colspan="2" class="social-buttons">
+                            <!-- AddThis Button BEGIN -->
+                            <div class="addthis_toolbox addthis_default_style addthis_16x16_style">
+                            <a class="addthis_button_facebook"></a>
+                            <a class="addthis_button_twitter"></a>
+                            <a class="addthis_button_google_plusone_share"></a>
+                            <a class="addthis_button_myspace"></a>
+                            <a class="addthis_button_pinterest_share"></a>
+                            <a class="addthis_button_linkedin"></a>
+                            <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
+                            </div>
+                            <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+                            <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5228e9b0617f180a"></script>
+                            <!-- AddThis Button END -->
                         </td>
                     </tr>
                 </table>
