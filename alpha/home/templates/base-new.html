@@ -68,102 +68,103 @@
     {% block userena_head %}{% endblock %}
 </head>
 <body {% block body_attributes %}class="modern"{% endblock %}>
-    {% googleanalyticsjs_push %}
-{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}    
-<div class="wrapper">
-    <div class="page-container">
-        <div class="header"  data-no-turbolink>
-            <div class="primary-header">
-                <div class="logo">
-                    <a href="/">
-                        <img src="{{STATIC_URL}}images/logo.png" />
-                    </a>
-                </div>
+    {% block body_inner %}
+        {% googleanalyticsjs_push %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="wrapper">
+            <div class="page-container">
+                <div class="header"  data-no-turbolink>
+                    <div class="primary-header">
+                        <div class="logo">
+                            <a href="/">
+                                <img src="{{STATIC_URL}}images/logo.png" />
+                            </a>
+                        </div>
 
-                <div class="sign-up-wrapper-top">
-                    {% include '_signin_signup.html' %}
-                    <div class="post-events-for-free">
-                        <a href="{% url 'event_create' %}">
-                            <img src="{{STATIC_URL}}images/post-events-for-free.png" />
-                        </a>
+                        <div class="sign-up-wrapper-top">
+                            {% include '_signin_signup.html' %}
+                            <div class="post-events-for-free">
+                                <a href="{% url 'event_create' %}">
+                                    <img src="{{STATIC_URL}}images/post-events-for-free.png" />
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="clr"></div>
                     </div>
+                    {% include '_main_navigation.html' %}
                 </div>
 
-                <div class="clr"></div>
+                {% block featured %}{% endblock %}
+
+                <div class="content-wrapper">
+                    {% block page %}{% endblock %}
+                    {% block advertising %}{% endblock%}
+                    <div class="clr"></div>
+                </div>
             </div>
-            {% include '_main_navigation.html' %}
-        </div>
 
-        {% block featured %}{% endblock %}
-        
-        <div class="content-wrapper">
-            {% block page %}{% endblock %}
-            {% block advertising %}{% endblock%}
-            <div class="clr"></div>
-        </div>
-    </div>
-
-    <div class="footer-wrapper" data-no-turbolink>
-        <div class="footer-container">
-            {% block advertising_footer %}{% endblock %}
-        </div>
-    </div>
-
-    <div class="footer-site-links" data-no-turbolink>
-        <div class="footer-container">
-            <div class="copyright">&copy; 2012 Cityfusion</div>
-            <div class="footer-site-map">
-                <ul>            
-                    <li><a href="{% url 'staticpage' alias='faq' %}">FAQ</a></li>
-                    <li><a href="/feedback/">Feedback</a></li>
-                    <li><a href="{% url 'staticpage' alias='advertising' %}">Advertising</a></li>
-                    <li><a href="{% url 'staticpage' alias='privacy_policy' %}">Privacy Policy</a></li>
-                    <li class="last"><a href="{% url 'staticpage' alias='terms_of_service' %}">Terms of Service</a></li>
-                    <li class="last">
-                        {% like_button "http://"|add:request.META.HTTP_HOST %}
-                    </li>
-                    <li class="last">
-                        <a href="https://www.facebook.com/cityfusion.ca" target="_blank" class="footer-icon facebook"></a>
-                        <a href="http://www.twitter.com/cityfusion_ca" target="_blank" class="footer-icon twitter"></a>
-                        <a href="#" class="footer-icon email"></a>
-                        <a href="#" class="footer-icon google"></a>
-                        <a href="#" class="footer-icon youtube"></a>
-                    </li>
-                </ul>
+            <div class="footer-wrapper" data-no-turbolink>
+                <div class="footer-container">
+                    {% block advertising_footer %}{% endblock %}
+                </div>
             </div>
-            <div class="clr"></div>
+
+            <div class="footer-site-links" data-no-turbolink>
+                <div class="footer-container">
+                    <div class="copyright">&copy; 2012 Cityfusion</div>
+                    <div class="footer-site-map">
+                        <ul>
+                            <li><a href="{% url 'staticpage' alias='faq' %}">FAQ</a></li>
+                            <li><a href="/feedback/">Feedback</a></li>
+                            <li><a href="{% url 'staticpage' alias='advertising' %}">Advertising</a></li>
+                            <li><a href="{% url 'staticpage' alias='privacy_policy' %}">Privacy Policy</a></li>
+                            <li class="last"><a href="{% url 'staticpage' alias='terms_of_service' %}">Terms of Service</a></li>
+                            <li class="last">
+                                {% like_button "http://"|add:request.META.HTTP_HOST %}
+                            </li>
+                            <li class="last">
+                                <a href="https://www.facebook.com/cityfusion.ca" target="_blank" class="footer-icon facebook"></a>
+                                <a href="http://www.twitter.com/cityfusion_ca" target="_blank" class="footer-icon twitter"></a>
+                                <a href="#" class="footer-icon email"></a>
+                                <a href="#" class="footer-icon google"></a>
+                                <a href="#" class="footer-icon youtube"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="clr"></div>
+                </div>
+            </div>
         </div>
-    </div>    
-</div>
 
-<div class="search-pad-popup">
-    <div class="loader">
-        <img src="/static/images/ajax-loader.gif" />
-    </div>
-</div>
+        <div class="search-pad-popup">
+            <div class="loader">
+                <img src="/static/images/ajax-loader.gif" />
+            </div>
+        </div>
 
-{% load event_tags %}
-{% auth_required_popup %}
+        {% load event_tags %}
+        {% auth_required_popup %}
 
-<script type="text/javascript">
-    function onBlur(el) {
-        if (el.value == '') {
-            el.value = el.defaultValue;
-        }
-    }
-    function onFocus(el) {
-        if (el.value == el.defaultValue) {
-            el.value = '';
-        }
-    }
-</script>
-{% include 'django_facebook/_facebook_js.html' %}
-
+        <script type="text/javascript">
+            function onBlur(el) {
+                if (el.value == '') {
+                    el.value = el.defaultValue;
+                }
+            }
+            function onFocus(el) {
+                if (el.value == el.defaultValue) {
+                    el.value = '';
+                }
+            }
+        </script>
+        {% include 'django_facebook/_facebook_js.html' %}
+    {% endblock body_inner %}
 </body>
 </html>

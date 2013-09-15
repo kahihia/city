@@ -210,27 +210,27 @@ def create(request, success_url=None, template_name='events/create/create_event.
 
 
 @login_required
-@require_POST
 def create_from_facebook(request):
-    if request.is_ajax():
-        facebook_event_id = request.POST['facebook_event_id']
-        event_data = facebook_services.get_prepared_event_data(request, request.POST)
-        form = CreateEventForm(account=request.account, data=event_data)
+    if request.method == 'POST':
+        form = CreateEventForm(account=request.account, data=request.POST)
         if form.is_valid():
             success = False
             try:
-                event = event_service.save_event(request.user, event_data, form)
-                facebook_services.attach_facebook_event(int(facebook_event_id), event)
+                event = event_service.save_event(request.user, request.POST, form)
+                # facebook_services.attach_facebook_event(int(facebook_event_id), event)
                 success = True
-
-            except:
+            except Exception:
                 form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
-
-        return HttpResponse(
-            json.dumps({'success': success, 'info': form.errors}),
-            mimetype='application/json')
     else:
-        raise Http404
+        # facebook_event_id = request.GET['facebook_event_id']
+        event_data = facebook_services.get_prepared_event_data(request, request.GET)
+        form = CreateEventForm(account=request.account, data=event_data)
+        return render_to_response('events/create/create_event_popup.html', {'form': form},
+                                  context_instance=RequestContext(request))
+
+    return HttpResponse(
+        json.dumps({'success': success, 'info': form.errors}),
+        mimetype='application/json')
 
 
 def created(request, slug=None):

@@ -232,7 +232,7 @@ def get_prepared_event_data(request, data):
                 start_time.strftime('%m/%d/%Y'): facebook_event['description']
             }
         }),
-        'tags': data['tags'],
+        'tags': 'Facebook,',
         'tickets': data['tickets'],
         'picture_src': settings.MEDIA_URL + 'uploads/' + image_basename,
         'cropping': ','.join('%d' % n for n in cropping),

@@ -152,19 +152,41 @@
         self.onImportButtonClick = function() {
             self.activeItem = $(this).closest("[data-type=event_item]");
 
-            var buttons = $(this).parent().find("input");
-            buttons.attr("disabled", "true");
+            if($.fancybox) {
+                var eventData = {
+                    "facebook_event_id": self.activeItem.data("event-id"),
+                    "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val(),
+                    "tags": $("#id_tags").val(),
+                    "tickets": $("#id_tickets").val()
+                }
 
-            if($(this).attr("data-complete") === "true") {
-                self.locationTr.hide();
-            }
-            else {
-                self.locationTr.show();
+                $.fancybox.open([
+                    {
+                        type: 'iframe',
+                        href : self.createUrl + "?" + self.prepareUrlParams(eventData)
+                    }
+                ], {
+                    afterLoad:function() {
+                        console.debug("loaded");
+                    }
+                });
             }
 
-            self.resetLocationParams();
-            self.fillTagsAndTickets();
-            self.locationLayer.show();
+//            self.activeItem = $(this).closest("[data-type=event_item]");
+//
+//            var buttons = $(this).parent().find("input");
+//            buttons.attr("disabled", "true");
+//
+//            if($(this).attr("data-complete") === "true") {
+//                self.locationTr.hide();
+//            }
+//            else {
+//                self.locationTr.show();
+//            }
+//
+//            self.resetLocationParams();
+//            self.fillTagsAndTickets();
+//            self.locationLayer.show();
         };
 
         self.onRejectButtonClick = function() {
@@ -265,6 +287,15 @@
             );
 
             $("#id_tickets").val(self.activeItem.data("event-tickets"));
+        };
+
+        self.prepareUrlParams = function(data) {
+            var params = [];
+            $.each(data, function(key, value) {
+                params.push(key + "=" + value);
+            });
+
+            return params.join("&");
         };
 
         self.init();
