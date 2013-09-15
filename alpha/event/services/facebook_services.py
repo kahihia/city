@@ -68,9 +68,7 @@ class FacebookImportService(object):
         return self.graph.get('search', **params)
 
     def _get_events_by_page_url(self):
-        page_id = urlparse(self.page_url).path.split('/')[-1]
-        if not page_id.isdigit():
-            raise Exception('Error: url is invalid')
+        page_identifier = urlparse(self.page_url).path.split('/')[-1]
 
         params = {
             'fields': 'id,name,owner,description,picture,start_time,end_time,location,venue,ticket_uri',
@@ -80,7 +78,7 @@ class FacebookImportService(object):
         if self.page:
             params['offset'] = self.page * self.PAGING_DELTA
 
-        return self.graph.get('%s/events' % page_id, **params)
+        return self.graph.get('%s/events' % page_identifier, **params)
 
     def _filter_data(self, data):
         existing_items = FacebookEvent.objects.all().values_list('eid', flat=True)
