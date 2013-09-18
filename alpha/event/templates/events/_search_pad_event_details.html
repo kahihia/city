@@ -31,17 +31,6 @@
             </div>
             <div class="event-actions">                
                 <table>
-                    {% if event.tickets %}
-                    <tr>
-                        <td>
-                            <a href="javascript:void(0);"  class="action-buy-tickets">
-                                Buy Tickets
-                            </a>
-                            {% buy_tickets_popup event %}
-                        </td>
-                        <td></td>
-                    </tr>
-                    {% endif %}
                     <tr>                        
                         <td>
                             <a href="javascript:void(0);" class="action-remind-me" data-single-event-id="{{ event.id }}">Remind Me</a>
@@ -52,17 +41,25 @@
                             {% in_the_loop_popup event %}
                         </td>
                     </tr>
-                     {% if event.website %}
-                        <tr>
-                            <td colspan="2">
+                    <tr>
+                        {% if event.tickets %}
+                            <td>
+                                <a href="javascript:void(0);"  class="action-buy-tickets">
+                                    Buy Tickets
+                                </a>
+                                {% buy_tickets_popup event %}
+                            </td>
+                        {% endif %}
+                        {% if event.website %}
+                            <td>
                                 <a href="{{ event.website }}" class="block-header accented view-site" target="_blank">
                                     View Site
                                 </a>
                             </td>
-                        </tr>
-                    {% endif %}
+                        {% endif %}
+                    </tr>
                     <tr>
-                        <td colspan="2" class="social-buttons">
+                        <td colspan="2" class="social-buttons" data-id="social_buttons_cell">
                             <!-- AddThis Button BEGIN -->
                             <div class="addthis_toolbox addthis_default_style addthis_16x16_style">
                             <a class="addthis_button_facebook"></a>
@@ -74,7 +71,7 @@
                             <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
                             </div>
                             <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
-                            <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5228e9b0617f180a"></script>
+                            <script data-id="addthis_js" type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5228e9b0617f180a"></script>
                             <!-- AddThis Button END -->
                         </td>
                     </tr>

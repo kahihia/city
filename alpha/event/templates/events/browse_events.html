@@ -1,6 +1,7 @@
 {% extends 'base-with-advertising.html' %} 
 {% load date_formatting %}
 {% load cropping %}
+{% load advertising_tags %}
 
 {% block head %}
 
@@ -20,6 +21,14 @@
 {% endblock %}
 
 {% block body_attributes %}class="modern home"{% endblock %}
+
+{% block advertising %}
+    <div>
+        <div class="advertising-right-container">
+            {% advertising_home_group %}
+        </div>
+    </div>
+{% endblock %}
 
 {% block featured %}
     {% include 'events/_event_featured.html' %}

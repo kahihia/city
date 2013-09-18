@@ -47,13 +47,6 @@
                                 <div class="stat">{{ ad.cpc_price }}</div>
                                 <div class="stat">{{ ad.cpm_price }}</div>
                             </div>
-                            <div class="ad-desc">
-                                <a href="/media/{{ ad.image }}" class="advertising-image" target="_blank">
-                                    {{ ad.ad_type.name }} {{ ad.ad_type.width }}x{{ ad.ad_type.height }}
-                                </a>
-                                <br/>
-                                <a href="{% url 'admin_advertising_remove_ad' ad.id %}" class="danger">Remove ad</a>
-                            </div>
                         </div>
                     </div>
                 {% endfor %}

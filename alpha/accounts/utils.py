@@ -172,7 +172,7 @@ def inform_account_about_events_with_tags(account):
 
 
 def inform_account_about_events_with_tag_with_email(account, events, tags_in_venues):
-    featured_events = Event.featured_events_for_region(account.native_region)
+    featured_events = Event.featured_events_for_region(account.native_region)[:4]
 
     similar_events = find_similar_events(events)
 
