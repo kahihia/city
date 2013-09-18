@@ -1,4 +1,3 @@
-import datetime
 import json
 
 from django.template.loader import render_to_string
@@ -7,10 +6,8 @@ from django.utils.safestring import mark_safe
 from django.core.mail.message import EmailMessage
 from django.conf import settings
 
-import dateutil.parser as dateparser
-
 from event.settings import DEFAULT_FROM_EMAIL
-from event.services import venue_service
+from event.services import venue_service, event_occurance_service
 
 from event.models import SingleEvent
 from django.contrib.sites.models import Site
@@ -41,52 +38,13 @@ def send_event_details_email(event):
     msg.send()
 
 
-def save_when_and_description(data, event):
-    when_json = json.loads(data["when_json"])
-    description_json = json.loads(data["description_json"])
-
-    event.description = description_json['default']
-    single_events = list(event.single_events.all())  # existing single events of the current event
-    single_events_to_save_ids = []
-
-    for year, months in when_json.iteritems():
-        for month, days in months.iteritems():
-            for day, times in days.iteritems():
-                date = datetime.datetime(int(year), int(month), int(day), 0, 0)
-                if date.strftime("%m/%d/%Y") in description_json['days']:
-                    description = description_json['days'][date.strftime("%m/%d/%Y")]
-                else:
-                    description = ""
-                start_time = dateparser.parse(times["start"])
-                start = datetime.datetime(int(year), int(month), int(day), start_time.hour, start_time.minute)
-
-                end_time = dateparser.parse(times["end"])
-                end = datetime.datetime(int(year), int(month), int(day), end_time.hour, end_time.minute)
-
-                single_event = SingleEvent(
-                    event=event,
-                    start_time=start.strftime('%Y-%m-%d %H:%M'),
-                    end_time=end.strftime('%Y-%m-%d %H:%M'),
-                    description=description
-                )
-
-                ext_single_event = get_identic_single_event_from_list(single_event, single_events)
-                if not ext_single_event:
-                    single_event.save()
-                else:
-                    single_events_to_save_ids.append(ext_single_event.id)
-
-    single_events_to_delete_ids = list(set([item.id for item in single_events]).difference(single_events_to_save_ids))
-    SingleEvent.objects.filter(id__in=single_events_to_delete_ids).delete()
-
-
 @transaction.commit_on_success
 def save_event(user, data, form):
     event = form.save()
 
     event.venue = venue_service.get_venue_from_request_data(event, data)
 
-    save_when_and_description(data, event)
+    event_occurance_service.update_occurances(data, event)
 
     if user.is_authenticated():
         event.owner = user
@@ -184,13 +142,3 @@ def prepare_initial_event_data_for_copy(event):
         "tags": event.tags_representation,
         "description_json": json.dumps(description_json)
     }
-
-
-def get_identic_single_event_from_list(single_event, single_event_list):
-    for item in single_event_list:
-        if item.start_time == dateparser.parse(single_event.start_time) \
-            and item.end_time == dateparser.parse(single_event.end_time) \
-                and item.description == single_event.description:
-            return item
-
-    return False

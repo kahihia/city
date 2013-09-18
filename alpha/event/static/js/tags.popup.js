@@ -41,7 +41,7 @@
                 that.setFree();
             });
 
-            $(".as-selections .as-close").live("mousedown", function(){
+            $(".as-selections .as-close").on("mousedown", function(){
                 closing = true;
             });
 
@@ -60,9 +60,9 @@
             var tags = $("#as-values-id_tags__tagautosuggest").val().split(",");
             tags = _.filter(tags, function(tag){ return tag; });
             if(tags.indexOf("Free")!==-1){
-                $("#id_price_free").attr('checked', true);
+                $("#id_price_free").prop('checked', true);
             } else {
-                $("#id_price_free").attr('checked', false);
+                $("#id_price_free").prop('checked', false);
             }
             setTimeout(function(){
                 $("#id_price_free").trigger("changeFromTags");

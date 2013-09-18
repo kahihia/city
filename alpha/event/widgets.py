@@ -1,7 +1,6 @@
 from django import forms
 from django.conf import settings
 from django.template import Template, Context
-from django.forms.widgets import RadioSelect
 from django.utils.safestring import mark_safe
 import json
 
@@ -31,7 +30,7 @@ class WhenWidget(forms.TextInput):
             u'%sjs/jquery-ui.multidatespicker.js' % STATIC_PREFIX,
             u'%sjs/jquery.ui.timepicker.js' % STATIC_PREFIX,
             u'%sjs/jquery.mtz.monthpicker.js' % STATIC_PREFIX,
-            u'%sjs/when.js' % STATIC_PREFIX,
+            u'%sjs/create_event/when.js' % STATIC_PREFIX,
         )
 
 

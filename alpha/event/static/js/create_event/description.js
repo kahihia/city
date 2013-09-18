@@ -169,7 +169,7 @@
                ['Styles','Format','Font','FontSize', 'Maximize'],
                '/',
                ['Bold','Italic','Underline','StrikeThrough','-','Undo','Redo'],
-               ['Table','-','Link','TextColor','BGColor','Source', 'Preview'],
+               ['Table','-','Link','TextColor','BGColor','Source'],
                '/',
                ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock']
             ];

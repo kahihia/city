@@ -149,6 +149,7 @@
 }
 
 .day-value {
+    position: relative;
     width:35px;
     height: 30px;
     padding-top: 5px;
@@ -167,13 +168,41 @@
     color: #000;
 }
 
-.my-time-picker {
+.day-value  .add-new-time-button {
+    position: absolute;
+    color: red;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    padding: 0px;
+    text-align: center;
+    -moz-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    width: 10px;
+    height: 10px;
+    font-size: 14px;
+    line-height: 12px;
+    vertical-align: middle;
+    top: 5px;
+    right: -5px;
+}
+
+.my-time-picker,
+.my-additional-time-picker {
     display:inline-block;
     margin-right:10px;
     text-align:center;
+    vertical-align: top;
 }
 
-.my-time-picker input{
+.my-additional-time-picker {
+    margin-top: 35px;
+}
+
+.my-time-picker input,
+.my-additional-time-picker input{
     width: 50px;
     height: 16px;
     margin: 13px 0;
@@ -197,7 +226,8 @@
     background: #EAEAEA;
     margin-left:9px;
 }
-.my-time-picker .remove {
+.my-time-picker .remove,
+.my-additional-time-picker  .remove {
     width:16px;
     height:16px;
     margin-left:21px;
@@ -308,4 +338,38 @@
 
 #ui-timepicker-div .ui-state-active {
     color: #1C94C4;
+}
+
+.multiple-day-event {
+    position: absolute;
+    right: 20px;
+    bottom: 43px;
+    color:#000;
+    display: none;
+}
+
+.multiple-day-event-popup {
+    position: absolute;
+    bottom: 25px;
+    right: -5px;
+    width: 245px;
+    border: 1px solid #ccc;
+    background: #efefef;
+    color: #000;
+    padding: 5px;
+    display: none;
+}
+
+.multiple-day-event .checkbox.white {
+    width: 17px;
+    height: 17px;
+    border: 1px solid #ccc;
+    background: #fff;
+    margin-left: 9px;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.multiple-day-event .checkbox.white.checked{
+    background: #fff url("/static/images/checked.png") center center no-repeat;
 }

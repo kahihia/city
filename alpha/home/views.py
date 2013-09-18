@@ -17,10 +17,11 @@ def channelfile(request):
     return HttpResponse('''<script src="//connect.facebook.net/en_US/all.js"></script>''')
 
 def facebook_for_turbolinks_js(request):
-    return render_to_response('facebook-for-turbolinks.js', {
+    return render(request, 'facebook-for-turbolinks.js', {
             "FACEBOOK_APP_ID": settings.FACEBOOK_APP_ID,
             "site": Site.objects.get_current().domain
-        }, context_instance=RequestContext(request))
+        }, content_type="application/javascript")
+
 
 def page(request, alias):
     try:

@@ -63,6 +63,13 @@ def picture_file_path(instance=None, filename=None):
     return os.path.join(EVENT_PICTURE_DIR, datetime.date.today().isoformat(), filename)
 
 
+EVENT_TYPES = (
+    ('SINGLE', 'Single'),
+    ('MULTIDAY', 'Multiday'),
+    ('MULTITIME', 'Multitime'),
+)
+
+
 def has_changed(instance, field):
     if not instance.pk:
         return False
@@ -133,7 +140,6 @@ class Event(models.Model):
     featured_events = FeaturedManager()
     archived_events = ArchivedManager()
 
-
     created = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now())
     modified = models.DateTimeField(auto_now=True, default=datetime.datetime.now())
 
@@ -163,6 +169,8 @@ class Event(models.Model):
     viewed_times = models.IntegerField(default=0, blank=True, null=True)
 
     facebook_event = models.ForeignKey('FacebookEvent', blank=True, null=True)
+
+    event_type = models.CharField(max_length=10, choices=EVENT_TYPES, default="SINGLE")
 
     tags = TaggableManager()
 
@@ -255,6 +263,19 @@ class FutureEventDayManager(models.Manager):
             .order_by("start_time")
 
 
+class SingleEventOccurrence(models.Model):
+    """
+    When user create event he can choose one of event types.
+    1. Single Event. User can choose different days. All this days will saved as SingleEvent instance
+    2. Multiple Day Event. User can choose different time for every day. We create one SingleEvent that will start on start time of first day and will finish on finish time of last day.
+    Time for each day will be saved in SingleEventOccurance instance.
+    3. Multiple Time Event. User can choose one day and few times for it. Day will be saved as SingleEvent instance. Each time will be saved as SingleEventOccurance instance.
+    """
+    start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
+    end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
+    description = models.TextField(null=True, blank=True)            
+
+
 class SingleEvent(models.Model):
     """
         Single event is event that occur only once.
@@ -274,7 +295,9 @@ class SingleEvent(models.Model):
     event = models.ForeignKey(Event, blank=False, null=False, related_name='single_events')
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
     end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
-    description = models.TextField(null=True, blank=True)  # additional description
+    description = models.TextField(null=True, blank=True)
+
+    occurrences = models.ManyToManyField(SingleEventOccurrence, blank=True, null=True)
 
     def event_description(self):
         description = self.description

@@ -63,9 +63,9 @@
 
             tags = _.filter(tags, function(tag){ return tag; });
             if(tags.indexOf(this.tagName)===-1) {
-                if(!this.no.attr("checked")) this.no.click();
+                if(!this.no.prop("checked")) this.no.click();
             } else {
-                if(!this.yes.attr("checked")) this.yes.click();
+                if(!this.yes.prop("checked")) this.yes.click();
             }
         }
     };

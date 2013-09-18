@@ -104,6 +104,12 @@ class EditEventForm(forms.ModelForm):
         required=True,
         widget=forms.widgets.HiddenInput()
     )
+    when_multidayevent = forms.BooleanField(widget=forms.HiddenInput())
+    when_multitimeevent = forms.BooleanField(widget=forms.HiddenInput())
+
+
+
+
     description = RichTextFormField(
         required=False
     )
@@ -111,6 +117,7 @@ class EditEventForm(forms.ModelForm):
         required=True,
         widget=forms.widgets.HiddenInput()
     )
+    
 
     price = forms.CharField(
         widget=PriceWidget(),

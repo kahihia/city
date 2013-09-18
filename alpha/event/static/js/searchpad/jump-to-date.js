@@ -42,7 +42,7 @@
             if($(this).is(':checked')) {
                 $(".time-row .inline, .time-row .dropdown", that.scope).removeAttr("disabled");
             } else {
-                $(".time-row .inline, .time-row .dropdown", that.scope).attr("disabled", true);
+                $(".time-row .inline, .time-row .dropdown", that.scope).prop("disabled", true);
             }
         });
 
@@ -50,7 +50,7 @@
             if($(this).is(':checked')) {
                 $(".date-row .inline, .date-row .inline input", that.scope).removeAttr("disabled");
             } else {
-                $(".date-row .inline, .date-row  .inline input", that.scope).attr("disabled", true);
+                $(".date-row .inline, .date-row  .inline input", that.scope).prop("disabled", true);
             }
         });
 
@@ -92,8 +92,8 @@
             });
 
             startDateInput.on("change", function(){
-                var startDate = new Date(Date.parse(startDateInput.attr("value"))),
-                    endDate = new Date(Date.parse(endDateInput.attr("value")));
+                var startDate = new Date(Date.parse(startDateInput.prop("value"))),
+                    endDate = new Date(Date.parse(endDateInput.prop("value")));
 
                 if(startDate>endDate){
                     endDateInput.val(startDateInput.val());
@@ -140,7 +140,7 @@
                 href = "javascript: void;";
             }
 
-            $(this.jumpLink).attr("href", href);
+            $(this.jumpLink).prop("href", href);
         },
         transformDate: function(date){
             var parts = date.split("/"), day, month, year;
