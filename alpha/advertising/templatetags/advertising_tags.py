@@ -186,6 +186,8 @@ def advertising_home_group(context):
         if total_height > height:
             dimensions = choice(dimensions_list)
 
+    print dimensions
+
     return advertising_group(context, dimensions=dimensions)
 
 @register.filter
