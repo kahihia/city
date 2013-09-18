@@ -135,12 +135,18 @@ def advertising_group(context, dimensions, css_class="advertising-right"):
 def get_event_block_height(tags_count, events_count):
     min_height = 344
     tag_height = 27
+    
+    if tags_count > 21:
+        more_button_height = 52
+    else:
+        more_button_height = 0
+
     tags_count = min(tags_count, 21)
     event_height = 84
     two_event_height = 373
     events_count = max(events_count, 2) - 2
 
-    total_tags_height = min_height + tags_count * tag_height
+    total_tags_height = min_height + tags_count * tag_height + more_button_height
     total_events_height = two_event_height + events_count * event_height
 
     return max([min_height, total_tags_height, total_events_height])    
