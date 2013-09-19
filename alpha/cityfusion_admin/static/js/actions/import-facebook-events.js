@@ -16,6 +16,8 @@
             self.fbPageInput = $("[data-id=fb_page_url]");
             self.locationLayer = $("[data-id=location_layer]");
             self.locationTr = $("[data-id=location_tr]");
+            self.fancyboxSelector = ".fancybox-wrap";
+            self.errorsContSelector = "[data-type=errors_cont]";
 
 
             self.loadUrl = self.eventsBlock.data("load-url");
@@ -151,13 +153,13 @@
 
         self.onImportButtonClick = function() {
             self.activeItem = $(this).closest("[data-type=event_item]");
+            var buttons = $(this).parent().find("input");
+            buttons.attr("disabled", "true");
 
             if($.fancybox) {
                 var eventData = {
                     "facebook_event_id": self.activeItem.data("event-id"),
-                    "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val(),
-                    "tags": $("#id_tags").val(),
-                    "tickets": $("#id_tickets").val()
+                    "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val()
                 }
 
                 $.fancybox.open([
@@ -166,8 +168,12 @@
                         href : self.createUrl + "?" + self.prepareUrlParams(eventData)
                     }
                 ], {
-                    afterLoad:function() {
-                        console.debug("loaded");
+                    afterLoad: function() {
+                        $(self.fancyboxSelector + " iframe").contents()
+                                                            .find(".submit").click(self.onSubmitButtonClick);
+                    },
+                    afterClose: function() {
+                        buttons.removeAttr("disabled");
                     }
                 });
             }
@@ -187,6 +193,51 @@
 //            self.resetLocationParams();
 //            self.fillTagsAndTickets();
 //            self.locationLayer.show();
+        };
+
+        self.onSubmitButtonClick = function() {
+            var buttons = self.activeItem.find("input");
+            var sent_form = $(this).closest("form").clone();
+            var tags_as_string = sent_form.find("#as-values-id_tags__tagautosuggest").val();
+            //var errorsContTpl = $(this).closest("body").find(self.errorsContSelector);
+
+            sent_form.find("#id_tags").val(tags_as_string);
+            sent_form.find("#id_tags__tagautosuggest").remove();
+
+            var event_data = sent_form.serializeArray();
+            event_data.push({
+                "name": "facebook_event_id",
+                "value": self.activeItem.data("event-id")
+            });
+
+            $.post(self.createUrl, event_data, function(data) {
+                sent_form = null;
+                $.fancybox.close();
+                if(data.success) {
+                    var message = $("<div/>", {
+                        "class": "alert-success",
+                        "html": "Import completed successfully"
+                    }).insertBefore(self.activeItem);
+
+                    self.activeItem.remove();
+                    delete self.activeItem;
+                }
+                else {
+                    var message = $("<div/>", {
+                        "class": "alert-error",
+                        "html": "Import error"
+                    }).insertBefore(self.activeItem);
+
+                    self.formBlock.append(self.miniIndicator.hide());
+                    buttons.removeAttr("disabled");
+                }
+
+                window.setTimeout(function() {
+                    message.remove();
+                }, 3000);
+            }, 'json');
+
+            return false;
         };
 
         self.onRejectButtonClick = function() {
