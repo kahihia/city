@@ -7,7 +7,7 @@ from django.core.mail.message import EmailMessage
 from django.conf import settings
 
 from event.settings import DEFAULT_FROM_EMAIL
-from event.services import venue_service, event_occurance_service
+from event.services import venue_service, event_occurrence_service
 
 from event.models import SingleEvent
 from django.contrib.sites.models import Site
@@ -44,7 +44,7 @@ def save_event(user, data, form):
 
     event.venue = venue_service.get_venue_from_request_data(event, data)
 
-    event_occurance_service.update_occurances(data, event)
+    event_occurrence_service.update_occurrences(data, event)
 
     if user.is_authenticated():
         event.owner = user

@@ -104,20 +104,26 @@ class EditEventForm(forms.ModelForm):
         required=True,
         widget=forms.widgets.HiddenInput()
     )
-    when_multidayevent = forms.BooleanField(widget=forms.HiddenInput())
-    when_multitimeevent = forms.BooleanField(widget=forms.HiddenInput())
+
+    occurrences_json = forms.CharField(
+        required=False,
+        widget=forms.widgets.HiddenInput()
+    )
 
 
-
+    # SINGLE
+    # MULTIDAY
+    # MULTITIME
+    event_type = forms.CharField(required=True, widget=forms.widgets.HiddenInput())
 
     description = RichTextFormField(
         required=False
     )
+
     description_json = forms.CharField(
         required=True,
         widget=forms.widgets.HiddenInput()
-    )
-    
+    )    
 
     price = forms.CharField(
         widget=PriceWidget(),

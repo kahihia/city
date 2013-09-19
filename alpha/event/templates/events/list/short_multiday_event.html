@@ -1,0 +1,25 @@
+{% load date_formatting %}
+{% load cropping %}
+
+<a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">
+    <div class="entry-img-prev">
+        {% if event.picture %}
+            <img src="{% cropped_thumbnail event.base "cropping" width=60 %}" height="60px" weight="60px" />
+        {% else %}
+            <img src="{{STATIC_URL}}images/default-event.jpg" height="60px" weight="60px" />
+        {% endif %}
+    </div>
+    <div class="entry-details-wrapper">
+        <div class="title">
+            {{ event.name }}
+        </div>
+        <div class="entry-date">
+            {{event.first_occurrence.start_time|date:"D, M d"}} - {{event.last_occurrence.start_time|date:"D, M d"}}            
+            <span class="delimeter">|</span>
+            {{event.first_occurrence.start_time|just_time|lower}} - {{event.first_occurrence.end_time|just_time|lower}}*
+        </div>
+        <div class="entry-description">
+            {{ event.venue.name }}, {% if event.venue.street %}{% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}, {% endif %}{{ event.venue.city.name_std }}
+        </div>
+    </div>
+</a>

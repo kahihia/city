@@ -14,9 +14,21 @@
             {{ event.name }}
         </div>
         <div class="entry-date">
-            {{event.start_time|date:"l, F d, Y"}}
-            <span class="delimeter">|</span>
-            {{event.start_time|just_time}} - {{event.end_time|just_time}}
+            {% if event.event_type == "SINGLE" %}
+                {{event.start_time|date:"l, M d"}}
+                <span class="delimeter">|</span>
+                {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}
+            {% endif %}
+            {% if event.event_type == "MULTIDAY" %}
+                {{event.first_occurrence.start_time|date:"D, M d"}} - {{event.last_occurrence.start_time|date:"D, M d"}}            
+                <span class="delimeter">|</span>
+                {{event.first_occurrence.start_time|just_time|lower}} - {{event.first_occurrence.end_time|just_time|lower}}*
+            {% endif %}
+            {% if event.event_type == "MULTITIME" %}
+                {{event.start_time|date:"l, M d"}}
+                <span class="delimeter">|</span>
+                {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}*
+            {% endif %}
         </div>
         <div class="entry-description">
             {{ event.venue.name }}, {% if event.venue.street %}{% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}, {% endif %}{{ event.venue.city.name_std }}

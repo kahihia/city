@@ -5,14 +5,13 @@ import dateutil.parser as dateparser
 
 
 def update_occurrences(data, event):
-    event_type = data["event_type"]
-    if event_type=="SINGLE":
+    if event.event_type=="SINGLE":
         update_single_events(data, event)
     
-    if event_type=="MULTIDAY":
+    if event.event_type=="MULTIDAY":
         update_multiday_event(data, event)
     
-    if event_type=="MULTITIME":
+    if event.event_type=="MULTITIME":
         update_multitime_event(data, event)
 
 
@@ -89,11 +88,11 @@ def update_multiday_event(data, event):
                 end_time = dateparser.parse(times["end"])
                 end = datetime.datetime(int(year), int(month), int(day), end_time.hour, end_time.minute)
 
-                if not single_event_start_time or single_event_start_time < start:
+                if not single_event_start_time or single_event_start_time > start:
                     single_event_start_time = start
                     single_event_description = description
 
-                if not single_event_start_time or single_event_start_time > start:
+                if not single_event_end_time or single_event_end_time < end:
                     single_event_end_time = end
 
                 single_event_occurrence = SingleEventOccurrence(
@@ -156,18 +155,19 @@ def update_multitime_event(data, event):
                 else:
                     single_events_to_save_ids.append(ext_single_event.id)
 
-    occurrences = json.loads(data["when_occurrences_json"])
+    occurrences = json.loads(data["occurrences_json"])
     for times in occurrences:
-        start_time = dateparser.parse(times["start"])
+        start_time = dateparser.parse(times["startTime"])
         start = datetime.datetime(int(year), int(month), int(day), start_time.hour, start_time.minute)
 
-        end_time = dateparser.parse(times["end"])
+        end_time = dateparser.parse(times["endTime"])
         end = datetime.datetime(int(year), int(month), int(day), end_time.hour, end_time.minute)
 
         single_event_occurrence = SingleEventOccurrence(
             start_time=start.strftime('%Y-%m-%d %H:%M'),
             end_time=end.strftime('%Y-%m-%d %H:%M'),
         )
+        single_event_occurrence.save()
 
         single_event_occurrences.append(single_event_occurrence)
 

@@ -60,7 +60,6 @@
             } else {
                 this.hide();
             }
-            this.save();
         },
         checkIfMultiDayEventPosible: function(){
             if($("#id_when_multitimeevent").val()=="true"){
@@ -77,11 +76,11 @@
 
             return (days.length-1) == (lastDay.getTime() - firstDay.getTime())/oneDay;
         },
-        save: function(){
+        is_turned_on: function(){
             if(this.checkIfMultiDayEventPosible() && $(this.checkbox).hasClass("checked")) {                
-                $("#id_when_multidayevent").val(true);
+                return true;
             } else {
-                $("#id_when_multidayevent").val(false);
+                return false;
             }
         }
     }
@@ -128,7 +127,6 @@
                 }
                 this.visible = false;
             }
-            this.save();
         },
         checkIfMultiTimeEventPosible: function(){
             if($("#id_when_multidayevent").val()=="true"){
@@ -136,11 +134,11 @@
             }
             return this.whenWidget.getDays().length==1;
         },
-        save: function(){
-            if(this.checkIfMultiTimeEventPosible()) {
-                $("#id_when_multitimeevent").val(true);
+        is_turned_on: function(){
+            if(this.checkIfMultiTimeEventPosible() && this.times.length>0) {
+                return true;
             } else {
-                $("#id_when_multitimeevent").val(false);
+                return false;
             }
         },
         addMoreTime: function(){
@@ -163,6 +161,22 @@
             while(this.times.length){
                 this.removeEventTimesWidget(this.times[0]);
             }
+        },
+        getOccurrencesJSON: function(){
+            var dayWidget = $(".days-container .my-time-picker").data("ui-myTimepicker");
+
+            return JSON.stringify(
+                _.map([dayWidget].concat(this.times), function(dayTimePicker){
+                    return dayTimePicker.getValue();
+                })
+            );
+        },
+        validate: function(){
+            for(var i in this.times) if(this.times.hasOwnProperty(i)) {
+                var day = this.times[i].getValue();
+                if(!day.startTime || !day.endTime) return false;
+            }
+            return true;
         }
     }
 
@@ -198,7 +212,18 @@
         });
     }
 
-    EventTimesWidget.prototype = {}
+    EventTimesWidget.prototype = {
+        getValue: function() {
+            return {
+                startTime: $(this.startTime).val(),
+                endTime: $(this.endTime).val()
+            }
+        },
+        setValue: function(value) {
+            $(this.startTime).val(value.startTime);
+            $(this.endTime).val(value.endTime);
+        }
+    }
 
 
     $.widget("ui.when", {
@@ -287,6 +312,7 @@
                     $(that.error).hide();
                     $(that.element).val(that.getText());
                     $("#id_description").data("ui-description").setDays(that.getDays());
+                    that.refreshEventType();
                 } else {
                     $(that.error).show();
                 }
@@ -488,6 +514,10 @@
                     }
                 }
             }
+
+            if(!this.multiTimeEvent.validate()){
+                return false;
+            }
             return true;
         },
         clear: function(open) {
@@ -501,6 +531,17 @@
                     hideOnOverlayClick: false
                 });
             }
+        },
+        refreshEventType: function(){
+            var mode="SINGLE";
+            if(this.multiDayEvent.is_turned_on()){
+                mode = "MULTIDAY";
+            } else if(this.multiTimeEvent.is_turned_on()) {
+                mode = "MULTITIME";
+
+                $("#id_occurrences_json").val(this.multiTimeEvent.getOccurrencesJSON());
+            }
+            $("#id_event_type").val(mode)
         }
 
     });
@@ -713,8 +754,7 @@
                 } else {
                     $(this).toggleClass("checked");
                     if($(this).hasClass("checked")) {
-                        that.setValue(
-                        that.previous().getValue());
+                        that.setValue(that.previous().getValue());
                     } else {
                         that.setValue({
                             startTime: '',

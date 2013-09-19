@@ -48,7 +48,9 @@
 {% block page %}
     <div id="fb-root"></div>
     <div class="primary-content">
-        <h1>Event details</h1>
+        <h1>
+            <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">{{event.name}}</a>            
+        </h1>
         <div class="content">
             <div class="event-wrapper">
                 <div class="event-photo">
@@ -76,15 +78,19 @@
                     {% endif %}
 
                     <div class="title-wrapper">
-                        <div class="title">
-                            <a class="accented" href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">{{event.name}}</a>
-                        </div>
-                        {% if event.price and event.price != "$" %}
-                            <div class="event-price {% if event.price|length < 9 %} short {% endif %}">{{event.price}}</div>
-                        {% endif %}
+                        <div class="event-price">{{event.price}}</div>
                     </div>
+
                     <div class="event-date-wrapper">
-                        {{event.start_time|contextualize_date}} - {{event.end_time|just_time}}                    
+                        {% if event.event_type == "SINGLE" %}
+                            {{event.start_time|date:"l, M d"}}
+                        {% endif %}
+                        {% if event.event_type == "MULTIDAY" %}
+                            {{event.start_time|date:"D, M d"}} - {{event.end_time|date:"D, M d"}}
+                        {% endif %}
+                        {% if event.event_type == "MULTITIME" %}
+                            {{event.start_time|date:"l, M d"}}
+                        {% endif %}
                     </div>
                     <div class="event-description">
                         <span class="accented">{{ event.venue.name }}</span><br />
@@ -94,18 +100,7 @@
                         {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
                     </div>
                     <div class="event-actions">
-                        <table>
-                            {% if event.tickets %}
-                            <tr>
-                                <td>
-                                    <a href="javascript:void()"  class="action-buy-tickets accented">
-                                        Buy Tickets
-                                    </a>
-                                    {% buy_tickets_popup event %}
-                                </td>
-                                <td></td>
-                            </tr>
-                            {% endif %}
+                        <table>                            
                             <tr>
                                 <td>
                                     <a href="javascript:void(0);" class="action-remind-me accented" data-single-event-id="{{ event.id }}">Remind Me</a>
@@ -116,15 +111,27 @@
                                     {% in_the_loop_popup event %}
                                 </td>
                             </tr>
-                            {% if event.website %}
+                            {% if event.website or event.tickets %}
                                 <tr>
+                                    {% if event.website %}
                                     <td colspan="2">
                                         <a href="{{ event.website }}" class="block-header accented view-site" target="_blank">
                                             View Site
                                         </a>
                                     </td>
+                                    {% endif %}
+                                    {% if event.tickets %}
+                                    <td>
+                                        <a href="javascript:void()"  class="action-buy-tickets accented">
+                                            Buy Tickets
+                                        </a>
+                                        {% buy_tickets_popup event %}
+                                    </td>
+                                    {% endif %}
+                                    {% if not event.website or not event.tickets %}<td></td>{% endif %}
                                 </tr>
                             {% endif %}
+                            
                             <tr>
                                 <td colspan="2" class="social-buttons">
                                     <!-- AddThis Button BEGIN -->

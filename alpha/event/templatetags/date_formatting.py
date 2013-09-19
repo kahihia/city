@@ -61,7 +61,7 @@ def just_time(dense_date=None):
     """
     if not dense_date:
         return ''
-    return dense_date.strftime('%-1I:%M %p')
+    return dense_date.strftime('%-1I:%M%p')
 
 
 @register.filter(name='just_time_levi_is_a_good_designer')

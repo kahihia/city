@@ -83,6 +83,7 @@ class FutureManager(models.Manager):
         queryset = super(FutureManager, self).get_query_set()\
             .filter(single_events__start_time__gte=datetime.datetime.now())\
             .select_related('single_events')\
+            .select_related('single_events__occurrences')\
             .annotate(start_time=Min("single_events__start_time"))\
             .annotate(end_time=Min("single_events__end_time"))\
             .extra(order_by=['start_time'])\
@@ -260,6 +261,7 @@ class FutureEventDayManager(models.Manager):
             .prefetch_related('event__venue')\
             .prefetch_related('event__venue__city')\
             .select_related('event')\
+            .select_related('occurrences')\
             .order_by("start_time")
 
 
@@ -315,6 +317,22 @@ class SingleEvent(models.Model):
 
     def base(self):
         return self.event
+
+    def first_occurrence(self):
+        occurrences = self.occurrences.all()
+        first_occurrence = occurrences[0]
+        for occurence in occurrences[1:]:
+            if first_occurrence.start_time > occurence.start_time:
+                first_occurrence = occurence
+        return first_occurrence
+
+    def last_occurrence(self):
+        occurrences = self.occurrences.all()
+        last_occurrence = occurrences[0]
+        for occurence in occurrences[1:]:
+            if last_occurrence.start_time < occurence.start_time:
+                last_occurrence = occurence
+        return last_occurrence        
 
 
 class FacebookEvent(models.Model):
