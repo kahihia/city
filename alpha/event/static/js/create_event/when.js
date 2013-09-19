@@ -39,6 +39,11 @@
     }
 
     MultiDayEvent.prototype = {
+        load: function(){
+            if($("#id_event_type").val()=="MULTIDAY") {
+                $(this.checkbox).addClass("checked");
+            }
+        },
         getElement: function(){
             return this.element;
         },
@@ -94,12 +99,26 @@
         this.addMoreTimeButton = dom("div", {"class": "add-new-time-button", "innerHTML": "+"});
         setTimeout(function(){
             $(whenWidget.deck).on("click", ".add-new-time-button", that.addMoreTime.bind(that));        
-        }, 10);        
+        }, 10);
 
         setInterval(this.refreshWidget.bind(this), 100);
     }
 
     MultiTimeEvent.prototype = {
+        load: function(){
+            if($("#id_event_type").val()=="MULTITIME") {
+                var occurrences = JSON.parse($("#id_occurrences_json").val()),
+                    dayTimes = $(".days-container .my-time-picker").data("ui-myTimepicker").getValue(),
+                    that = this;
+
+                occurrences.forEach(function(occurrence){
+                    if(occurrence.startTime!=dayTimes.startTime && occurrence.endTime!=dayTimes.endTime) {
+                        var timesWidget = that.addMoreTime();
+                        timesWidget.setValue(occurrence);
+                    }
+                });
+            }
+        },
         show: function(){
             var dayWidget = $(".days-container .my-time-picker").data("ui-myTimepicker");
             $(dayWidget.label).append(this.addMoreTimeButton);
@@ -146,6 +165,7 @@
             this.times.push(eventTimesWidget);
 
             $(".days-container .my-time-picker").after(eventTimesWidget.element);
+            return eventTimesWidget;
         },
         removeEventTimesWidget: function(widget){
             var index = this.times.indexOf(widget);
@@ -344,6 +364,9 @@
                 }
             }
             $(this.element).val(this.getText());
+
+            this.multiTimeEvent.load();
+            this.multiDayEvent.load();
         },
         addMonth: function(year, month) {
             var monthContainer, days, date, prevDaysTimePicker;

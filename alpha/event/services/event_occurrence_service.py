@@ -184,4 +184,56 @@ def get_identic_single_event_from_list(single_event, single_event_list):
                 and item.description == single_event.description:
             return item
 
-    return False    
+    return False
+
+
+def prepare_initial_when_and_description_by_occurrence(event, occurrences):
+    when_json = {}
+    description_json = {
+        "default": event.description,
+        "days": {}
+    }
+
+    for occurrence in occurrences:
+        start_time = occurrence.start_time
+        year = start_time.year
+        month = start_time.month
+        day = start_time.day
+
+        if not year in when_json:
+            when_json[year] = {}
+
+        if not month in when_json[year]:
+            when_json[year][month] = {}
+
+        when_json[year][month][day] = {
+            "start": start_time.strftime('%I:%M %p'),
+            "end": occurrence.end_time.strftime('%I:%M %p')
+        }
+
+        description_json["days"][start_time.strftime("%m/%d/%Y")] = occurrence.description
+
+    return (when_json, description_json)
+
+
+def prepare_initial_when_and_description(event):
+    single_events = SingleEvent.objects.filter(event=event)
+
+    if event.event_type=="MULTIDAY":
+        occurrences = single_events[0].sorted_occurrences()
+        return prepare_initial_when_and_description_by_occurrence(event, occurrences)
+    else:
+        return prepare_initial_when_and_description_by_occurrence(event, single_events)
+
+
+def prepare_initial_occurrences(event):
+    if event.event_type=="MULTITIME":
+        single_events = SingleEvent.objects.filter(event=event)
+        occurrences = single_events[0].sorted_occurrences()
+        return [{
+            "startTime": occurrence.start_time.strftime('%I:%M %p'),
+            "endTime": occurrence.end_time.strftime('%I:%M %p')
+        } for occurrence in occurrences ]
+    else:
+        return []
+

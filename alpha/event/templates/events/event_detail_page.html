@@ -41,6 +41,7 @@
     <script type="text/javascript" src="{{STATIC_URL}}fancybox/jquery.fancybox.js"></script>
     <script src="{{STATIC_URL}}js/actions/report-event.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/actions/claim-event.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/event/event-days-switcher.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/event/eventpage.js" type="text/javascript"></script>
 {% endblock %}    
 
@@ -78,7 +79,13 @@
                     {% endif %}
 
                     <div class="title-wrapper">
-                        <div class="event-price">{{event.price}}</div>
+                        <div class="event-price">
+                        {% if event.price and event.price != "$" %}
+                            {{event.price}}                            
+                        {% else %}
+                            Price not set                            
+                        {% endif %}
+                        </div>
                     </div>
 
                     <div class="event-date-wrapper">
@@ -134,14 +141,17 @@
                             
                             <tr>
                                 <td colspan="2" class="social-buttons">
-                                    <!-- AddThis Button BEGIN -->
                                     <div class="addthis_toolbox addthis_default_style addthis_16x16_style">
                                     <a class="addthis_button_facebook"></a>
                                     <a class="addthis_button_twitter"></a>
-                                    <a class="addthis_button_google_plusone_share"></a>
-                                    <a class="addthis_button_myspace"></a>
                                     <a class="addthis_button_pinterest_share"></a>
-                                    <a class="addthis_button_linkedin"></a>
+                                    <a class="addthis_button_google_plusone_share"></a>
+                                    <a class="addthis_button_linkedin"></a>                                    
+                                    <a class="addthis_button_myspace"></a>
+                                    <a class="addthis_button_blogger"></a>
+                                    <a class="addthis_button_email"></a>
+                                    
+                                    
                                     <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
                                     </div>
                                     <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
@@ -153,11 +163,51 @@
                     </div>
                     {% if event.venue %}
                         <div class="venue_map_preview">
-                            <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.venue.location.y }},{{ event.venue.location.x }}&zoom=13&size=100x80&maptype=roadmap
-&markers=color:blue%7C{{ event.venue.location.y }},{{ event.venue.location.x }}&sensor=false">
+                            <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.venue.location.y }},{{ event.venue.location.x }}&zoom=13&size=100x80&maptype=roadmap&markers=color:blue%7C{{ event.venue.location.y }},{{ event.venue.location.x }}&sensor=false">
                             <a href="javascript: void">Full map and directions</a>
                         </div>
                         <div id="venue_map" class="map"></div>                        
+                    {% endif %}
+                    {% if event.event_type == "MULTIDAY" %}
+                    <div class="event-days">
+                        {% for occurrence in event.sorted_occurrences %}
+                            <div class="event-day-switch{% if forloop.first %} active{% endif %}" data-day="{{ occurrence.start_time }}">
+                                {{ occurrence.start_time|date:"D d" }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="show-times">
+                    {% if event.event_type == "SINGLE" %}
+                        <header>
+                            Show Time(s) for {{ event.start_time|date:"D d" }}
+                        </header>
+                        <div class="show-times-wrapper">
+                            {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}
+                        </div>
+                    {% endif %}
+                    {% if event.event_type == "MULTIDAY" %}
+                        {% for occurrence in event.sorted_occurrences %}
+                        <div class="show-time-day{% if forloop.first %} active{% endif %}" data-day="{{ occurrence.start_time }}">
+                            <header>
+                                Show Time(s) for {{ occurrence.start_time|date:"D d" }}
+                            </header>
+                            <div class="show-times-wrapper">
+                                {{occurrence.start_time|just_time|lower}} - {{occurrence.end_time|just_time|lower}}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if event.event_type == "MULTITIME" %}
+                        <header>
+                            Show Time(s) for {{ event.start_time|date:"D d" }}
+                        </header>
+                        <div class="show-times-wrapper">
+                            {% for occurrence in event.sorted_occurrences %}
+                                <div>{{occurrence.start_time|just_time|lower}} - {{occurrence.end_time|just_time|lower}}</div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
                 <div class="description">

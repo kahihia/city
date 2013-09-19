@@ -90,32 +90,8 @@ def prepare_initial_venue_id(event):
 
 
 def prepare_initial_event_data_for_edit(event):
-    when_json = {}
-    description_json = {
-        "default": event.description,
-        "days": {}
-    }
-
-    single_events = SingleEvent.objects.filter(event=event)
-
-    for single_event in single_events:
-        start_time = single_event.start_time
-        year = start_time.year
-        month = start_time.month
-        day = start_time.day
-
-        if not year in when_json:
-            when_json[year] = {}
-
-        if not month in when_json[year]:
-            when_json[year][month] = {}
-
-        when_json[year][month][day] = {
-            "start": start_time.strftime('%I:%M %p'),
-            "end": single_event.end_time.strftime('%I:%M %p')
-        }
-
-        description_json["days"][start_time.strftime("%m/%d/%Y")] = single_event.description
+    when_json, description_json = event_occurrence_service.prepare_initial_when_and_description(event)
+    occurrences = event_occurrence_service.prepare_initial_occurrences(event)
 
     return {
         "linking_venue_mode": "EXIST",
@@ -124,7 +100,8 @@ def prepare_initial_event_data_for_edit(event):
         "location": prepare_initial_location(event),
         "picture_src": prepare_initial_picture_src(event),
         "when_json": json.dumps(when_json),
-        "description_json": json.dumps(description_json)
+        "description_json": json.dumps(description_json),
+        "occurrences_json": json.dumps(occurrences)
     }
 
 

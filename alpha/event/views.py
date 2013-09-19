@@ -182,18 +182,18 @@ def create(request, success_url=None, template_name='events/create/create_event.
     if request.method == 'POST':
         form = CreateEventForm(account=request.account, data=request.POST)
         if form.is_valid():
-            # try:
-            event = event_service.save_event(request.user, request.POST, form)
+            try:
+                event = event_service.save_event(request.user, request.POST, form)
 
-            event_service.send_event_details_email(event)
+                event_service.send_event_details_email(event)
 
-            if success_url is None:
-                success_url = reverse('event_created', kwargs={ 'slug': event.slug })
+                if success_url is None:
+                    success_url = reverse('event_created', kwargs={ 'slug': event.slug })
 
-            return HttpResponseRedirect(success_url)
+                return HttpResponseRedirect(success_url)
 
-            # except:
-            #     form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
+            except:
+                form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
 
     else:
         form = CreateEventForm(account=request.account, initial={

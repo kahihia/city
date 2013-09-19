@@ -320,19 +320,23 @@ class SingleEvent(models.Model):
 
     def first_occurrence(self):
         occurrences = self.occurrences.all()
-        first_occurrence = occurrences[0]
-        for occurence in occurrences[1:]:
-            if first_occurrence.start_time > occurence.start_time:
+        first_occurrence = None
+        for occurence in occurrences:
+            if not first_occurrence or first_occurrence.start_time > occurence.start_time:
                 first_occurrence = occurence
         return first_occurrence
 
     def last_occurrence(self):
         occurrences = self.occurrences.all()
-        last_occurrence = occurrences[0]
-        for occurence in occurrences[1:]:
-            if last_occurrence.start_time < occurence.start_time:
+        last_occurrence = None
+        for occurence in occurrences:
+            if not last_occurrence or last_occurrence.start_time < occurence.start_time:
                 last_occurrence = occurence
-        return last_occurrence        
+        return last_occurrence
+
+    def sorted_occurrences(self):
+        occurrences = self.occurrences.all()
+        return sorted(occurrences, key=lambda occurrence: occurrence.start_time)
 
 
 class FacebookEvent(models.Model):

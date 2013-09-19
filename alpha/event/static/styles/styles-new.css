@@ -15,6 +15,10 @@
     color:#022e52;
 }
 
+.content-wrapper h1 a {
+    color:#022e52;
+}
+
 .content-wrapper .content {
     position: relative;
     width: 675px;
@@ -31,9 +35,15 @@
 
 .content-wrapper .event-wrapper .event-photo {
     display: inline-block;
-    padding: 7px;
+    padding: 10px;
     border: 1px solid #d3d3d3;
     vertical-align: top;
+}
+
+.content-wrapper .event-wrapper .event-photo #photoFancy {
+    height: 265px;
+    width: 265px;
+    display: block;
 }
 
 .content-wrapper .event-wrapper .event-photo .center-cropped{
@@ -59,6 +69,7 @@
 }
 
 .content-wrapper .event-wrapper .event-photo footer {
+    margin-top: 10px;
     font-size:1.0em;
     color: #454545;
     font-weight: bold;
@@ -70,19 +81,22 @@
 
 .content-wrapper .event-wrapper .event-details {
     display: inline-block;
-    width: 345px;
+    width: 344px;
     vertical-align: top;
-    margin-left: 20px;
+    margin-left: 15px;
 }
 
 .content-wrapper .event-details .event-date-wrapper {
-    color: #0260bb;
+    color: #247cc3;
     margin-top: 7px;
+    margin-left: 30px;
+    font-weight: bold;
 }
 
 .content-wrapper .event-details .event-description {
     margin-top: 11px;
     font-weight: bold;
+    margin-left: 30px;
 }
 
 .content-wrapper span.accented,
@@ -385,7 +399,7 @@ a:hover{
 .primary-content .description {
     color: #454545;
     font-size: 14px;
-    margin-top: 10px;
+    margin-top: 18px;
 }
 
 .primary-content .description * {
