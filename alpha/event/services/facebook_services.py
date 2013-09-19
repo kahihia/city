@@ -159,7 +159,8 @@ def get_prepared_event_data(request, data):
                                          description,
                                          pic_big,
                                          location,
-                                         venue
+                                         venue,
+                                         ticket_uri
                                          from event
                                          where eid = %s''' % data['facebook_event_id'])[0]
 
@@ -232,8 +233,8 @@ def get_prepared_event_data(request, data):
                 start_time.strftime('%m/%d/%Y'): facebook_event['description']
             }
         }),
-        'tags': data['tags'],
-        'tickets': data['tickets'],
+        'tags': 'Facebook,',
+        'tickets': facebook_event['ticket_uri'],
         'picture_src': settings.MEDIA_URL + 'uploads/' + image_basename,
         'cropping': ','.join('%d' % n for n in cropping),
         'linking_venue_mode': 'GOOGLE'
