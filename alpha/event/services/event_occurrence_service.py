@@ -69,7 +69,6 @@ def update_multiday_event(data, event):
 
     single_event_start_time = None
     single_event_end_time = None
-    single_event_description = ""
 
     for year, months in when_json.iteritems():
         for month, days in months.iteritems():
@@ -90,7 +89,6 @@ def update_multiday_event(data, event):
 
                 if not single_event_start_time or single_event_start_time > start:
                     single_event_start_time = start
-                    single_event_description = description
 
                 if not single_event_end_time or single_event_end_time < end:
                     single_event_end_time = end
@@ -109,7 +107,7 @@ def update_multiday_event(data, event):
         event=event,
         start_time=single_event_start_time.strftime('%Y-%m-%d %H:%M'),
         end_time=single_event_end_time.strftime('%Y-%m-%d %H:%M'),
-        description=single_event_description
+        description=""
     )
 
     ext_single_event = get_identic_single_event_from_list(single_event, single_events)
@@ -117,6 +115,8 @@ def update_multiday_event(data, event):
         single_event.save()
     else:
         single_events_to_save_ids.append(ext_single_event.id)
+        single_event = ext_single_event
+        single_event.occurrences.all().delete()
 
     single_event.occurrences.add(*single_event_occurrences)
 
@@ -154,6 +154,9 @@ def update_multitime_event(data, event):
                     single_event.save()
                 else:
                     single_events_to_save_ids.append(ext_single_event.id)
+                    single_event = ext_single_event
+                    single_event.occurrences.all().delete()
+
 
     occurrences = json.loads(data["occurrences_json"])
     for times in occurrences:

@@ -26,6 +26,7 @@
 
 
     <link href="{{STATIC_URL}}styles/browse/event_details.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/browse/jquery.bxslider.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/styles-new.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/event/conversation.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
@@ -41,6 +42,7 @@
     <script type="text/javascript" src="{{STATIC_URL}}fancybox/jquery.fancybox.js"></script>
     <script src="{{STATIC_URL}}js/actions/report-event.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/actions/claim-event.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/event/jquery.bxslider.min.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/event/event-days-switcher.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/event/eventpage.js" type="text/javascript"></script>
 {% endblock %}    
@@ -169,13 +171,15 @@
                         <div id="venue_map" class="map"></div>                        
                     {% endif %}
                     {% if event.event_type == "MULTIDAY" %}
-                    <div class="event-days">
+                    <ul class="event-days bxslider">
                         {% for occurrence in event.sorted_occurrences %}
+                        <li>
                             <div class="event-day-switch{% if forloop.first %} active{% endif %}" data-day="{{ occurrence.start_time }}">
                                 {{ occurrence.start_time|date:"D d" }}
                             </div>
+                        </li>
                         {% endfor %}
-                    </div>
+                    </ul>
                     {% endif %}
                 </div>
                 <div class="show-times">
@@ -211,8 +215,20 @@
                     {% endif %}
                 </div>
                 <div class="description">
-                    {% if event.event_description %}
-                        {{ event.event_description|html_urlize|safe }}
+                    {% if event.event_type == "MULTIDAY" %}
+                        {% for occurrence in event.sorted_occurrences %}
+                        <div class="show-day-description {% if forloop.first %} active{% endif %}" data-day="{{ occurrence.start_time }}">
+                            {% if occurrence.description %}
+                                {{ occurrence.description|html_urlize|safe }}
+                            {% else %}
+                                {{ event.event_description|html_urlize|safe }}
+                            {% endif %}                            
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        {% if event.event_description %}
+                            {{ event.event_description|html_urlize|safe }}
+                        {% endif %}
                     {% endif %}
                 </div>
                 <h4 class="tags">

@@ -9,10 +9,24 @@
             var day = $(this).data("day");
             $(".event-day-switch.active").removeClass("active")
             $(".show-time-day.active").removeClass("active")
+            $(".show-day-description.active").removeClass("active")
 
             $(".event-day-switch[data-day='"+day+"']").addClass("active");
             $(".show-time-day[data-day='"+day+"']").addClass("active");
+            $(".show-day-description[data-day='"+day+"']").addClass("active");
         });
+
+        if($(".event-day-switch").length>5){
+            $('.bxslider').bxSlider({
+                infiniteLoop: false,
+                hideControlOnEnd: true,
+                minSlides: 5,
+                maxSlides: 5,
+                slideWidth: 62,
+                slideMargin: 0,
+                pager: false
+            });    
+        }        
     };
 
     EventDaysSwitcher.prototype = {
