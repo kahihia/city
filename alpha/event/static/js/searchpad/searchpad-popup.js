@@ -71,7 +71,7 @@
                 });
             }
 
-                
+            this.initAddThis();
         },
         initSearchTags: function(){
             var that=this;
@@ -91,6 +91,28 @@
                     width: 390,
                     autoOpen: false
                 });
+            }
+        },
+        initAddThis: function() {
+            if(window.addthis) {
+                var addThisCell = $("[data-id=social_buttons_cell]").empty();
+                var toolbox = $("<div/>", {
+                    "id": "addthis_toolbox",
+                    "class": "addthis_toolbox addthis_default_style addthis_16x16_style"
+                });
+
+                var svcs = ["facebook", "twitter", "google_plusone_share", "myspace",
+                            "pinterest_share", "linkedin", "compact"];
+
+                for(var i in svcs) {
+                    toolbox.append("<a class='addthis_button_" + svcs[i] + "'></a>");
+                }
+
+                toolbox.append("<a id='addthis_counter' class='addthis_counter addthis_bubble_style'></a>");
+
+                addThisCell.append(toolbox);
+                window.addthis.toolbox("#addthis_toolbox");
+                window.addthis.counter("#addthis_counter");
             }
         }
     };

@@ -21,23 +21,6 @@
             {% endif %}
         }
 
-        window.Cityfusion = Cityfusion;
-
-        if (navigator.geolocation){
-            navigator.geolocation.getCurrentPosition(function(position){
-                $.ajax("/events/set-browser-location", {
-                    type: "GET",
-                    dataType: "json",
-                    data: { 
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
-                    }
-                }).done(function(data){
-                    if(data.status=="REFRESH") {
-                        document.location.reload()
-                    }
-                });
-            });
-        }
+        window.Cityfusion = Cityfusion;        
     })(jQuery, window, document);
 </script>

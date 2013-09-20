@@ -4,6 +4,7 @@ from ..models import Advertising
 register = template.Library()
 from django.db.models import Q, F
 from random import choice
+from collections import OrderedDict
 
 
 class RandomNode(Node):
@@ -134,12 +135,18 @@ def advertising_group(context, dimensions, css_class="advertising-right"):
 def get_event_block_height(tags_count, events_count):
     min_height = 344
     tag_height = 27
+    
+    if tags_count > 21:
+        more_button_height = 52
+    else:
+        more_button_height = 0
+
     tags_count = min(tags_count, 21)
     event_height = 84
     two_event_height = 373
     events_count = max(events_count, 2) - 2
 
-    total_tags_height = min_height + tags_count * tag_height
+    total_tags_height = min_height + tags_count * tag_height + more_button_height
     total_events_height = two_event_height + events_count * event_height
 
     return max([min_height, total_tags_height, total_events_height])    
@@ -164,27 +171,29 @@ def advertising_home_group(context):
 
     print total_height
 
-    heights = {
-        250: ["300x100|300x100", "300x250"],
-        300: ["300x100|300x100", "300x250"],
-        350: ["300x250|300x100"],
-        400: ["300x250|300x100"],
-        450: ["300x250|300x100|300x100"],
-        500: ["300x250|300x250", "300x250|300x100|300x100"],
-        550: ["300x250|300x250", "300x250|300x100|300x100"],
-        600: ["300x600", "300x250|300x250|300x100"],
-        650: ["300x600", "300x250|300x250|300x100"],
-        700: ["300x600|300x100", "300x250|300x250|300x100|300x100"],
-        750: ["300x600|300x100", "300x250|300x250|300x250", "300x250|300x250|300x100|300x100"],
-        800: ["300x600|300x100|300x100", "300x250|300x250|300x250"],
-        850: ["300x600|300x250", "300x250|300x250|300x250|300x100", "300x600|300x100|300x100"],
-        900: ["300x600|300x250", "300x250|300x250|300x250|300x100", "300x600|300x100|300x100"],
-        950: ["300x600|300x250|300x100", "300x250|300x250|300x250|300x100|300x100"]
-    }
+    heights = OrderedDict([
+        (250, ["300x100|300x100", "300x250"]),
+        (300, ["300x100|300x100", "300x250"]),
+        (350, ["300x250|300x100"]),
+        (400, ["300x250|300x100"]),
+        (450, ["300x250|300x100|300x100"]),
+        (500, ["300x250|300x250", "300x250|300x100|300x100"]),
+        (550, ["300x250|300x250", "300x250|300x100|300x100"]),
+        (600, ["300x600", "300x250|300x250|300x100"]),
+        (650, ["300x600", "300x250|300x250|300x100"]),
+        (700, ["300x600|300x100", "300x250|300x250|300x100|300x100"]),
+        (750, ["300x600|300x100", "300x250|300x250|300x250", "300x250|300x250|300x100|300x100"]),
+        (800, ["300x600|300x100|300x100", "300x250|300x250|300x250"]),
+        (850, ["300x600|300x250", "300x250|300x250|300x250|300x100", "300x600|300x100|300x100"]),
+        (900, ["300x600|300x250", "300x250|300x250|300x250|300x100", "300x600|300x100|300x100"]),
+        (950, ["300x600|300x250|300x100", "300x250|300x250|300x250|300x100|300x100"])
+    ])
 
     for height, dimensions_list in heights.iteritems():
         if total_height > height:
             dimensions = choice(dimensions_list)
+
+    print dimensions
 
     return advertising_group(context, dimensions=dimensions)
 

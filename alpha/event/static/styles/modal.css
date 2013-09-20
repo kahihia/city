@@ -53,6 +53,10 @@
     width: 635px;
 }
 
+.popup-form-wrapper #entry-form {
+    margin: 0 auto;
+}
+
 #entry-form table tr td:nth-of-type(2){
     padding-left: 30px;
 }

@@ -873,3 +873,7 @@ body .inputfield{
     width: 280px;
     vertical-align: bottom;
 }
+
+.popup-form-wrapper {
+    background: #ffffff;
+}

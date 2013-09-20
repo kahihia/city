@@ -221,7 +221,7 @@
     background: url("/static/images/tweet.png") 5px center no-repeat;    
 }
 
-.content-wrapper .event-details .event-actions .view-site {    
+.event-details .event-actions .view-site {
     background: url("/static/images/view-site.png") 2px center no-repeat;
 }
 
