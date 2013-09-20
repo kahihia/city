@@ -33,6 +33,10 @@
     top:-3px;
 }
 
+.popup-form-wrapper .balloon {
+    display: none;
+}
+
 .balloon.inline {
     float: none;
     display: inline-block;
@@ -55,6 +59,10 @@
 
 .popup-form-wrapper #entry-form {
     margin: 0 auto;
+}
+
+.popup-form-wrapper .event-form-errors {
+    display: none;
 }
 
 #entry-form table tr td:nth-of-type(2){

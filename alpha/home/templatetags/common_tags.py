@@ -11,7 +11,7 @@ register = template.Library()
 def html_urlize(value):
     pattern = re.compile(r'(^|[>\n ])(([\w]+?://[\w\#$%&~.\-;:=,?@\[\]+]*)(/[\w\#$%&~/.\-;:=,?@\[\]+]*)?)',
                          re.IGNORECASE | re.DOTALL)
-    return pattern.sub(r'\1<a href="\2">\3</a>', value)
+    return pattern.sub(r'\1<a href="\2">\2</a>', value)
 
 
 @register.simple_tag(takes_context=True)

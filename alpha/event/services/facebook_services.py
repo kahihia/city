@@ -2,7 +2,7 @@ import datetime
 import os
 import urllib
 import json
-from urlparse import urlparse, parse_qsl
+from urlparse import urlparse
 
 from django.db.models import Max, Min
 from django.utils import timezone
@@ -175,7 +175,7 @@ def get_prepared_event_data(request, data):
         else:
             end_time = dateparser.parse(facebook_event['end_time'])
     else:
-        end_time = start_time
+        end_time = start_time + datetime.timedelta(hours=3)
 
     image_basename = os.path.basename(facebook_event['pic_big'])
     image_dist_path = os.path.abspath(os.path.join(settings.MEDIA_ROOT, 'uploads', image_basename))
@@ -216,6 +216,8 @@ def get_prepared_event_data(request, data):
             'venue_name': ''
         }
 
+    description = facebook_event['description'].replace('\n', '<br />\n')
+
     result = {
         'name': facebook_event['name'],
         'user_context_type': 'account',
@@ -226,14 +228,14 @@ def get_prepared_event_data(request, data):
         'website': 'https://www.facebook.com/events/' + data['facebook_event_id'],
         'when': start_time.strftime('%d-%m-%Y'),
         'when_json': _get_time_range_json(start_time, end_time),
-        'description': facebook_event['description'],
+        'description': description,
         'description_json': json.dumps({
-            'default': facebook_event['description'],
+            'default': description,
             'days': {
-                start_time.strftime('%m/%d/%Y'): facebook_event['description']
+                start_time.strftime('%m/%d/%Y'): description
             }
         }),
-        'tags': 'Facebook,',
+        'tags': '',
         'tickets': facebook_event['ticket_uri'],
         'picture_src': settings.MEDIA_URL + 'uploads/' + image_basename,
         'cropping': ','.join('%d' % n for n in cropping),
@@ -248,18 +250,17 @@ def _get_time_range_json(start_time, end_time):
     periods = {}
     is_first, is_last = True, False
 
-    while start_time <= end_time and not is_last:
-        prev_time = start_time
-        start_time += datetime.timedelta(days=1)
-        if start_time < end_time:
-            added_time = prev_time
+    while not is_last:
+        start = start_time.strftime('%-1I:%M %p') if is_first else '12:00 AM'
+        if start_time.strftime('%d%m%Y') != end_time.strftime('%d%m%Y'):
+            end = '11:59 PM'
         else:
-            added_time = end_time
+            end = end_time.strftime('%-1I:%M %p')
             is_last = True
 
-        year = str(added_time.year)
-        month = str(added_time.month)
-        day = str(added_time.day)
+        year = str(start_time.year)
+        month = str(start_time.month)
+        day = str(start_time.day)
 
         if not year in periods:
             periods[year] = {}
@@ -269,10 +270,11 @@ def _get_time_range_json(start_time, end_time):
 
         if not day in periods[year][month]:
             periods[year][month][day] = {
-                'start': added_time.strftime('%-1I:%M %p') if is_first else '12:00 AM',
-                'end': added_time.strftime('%-1I:%M %p') if is_last else '11:59 PM'
+                'start': start,
+                'end': end
             }
 
         is_first = False
+        start_time += datetime.timedelta(days=1)
 
     return json.dumps(periods)
