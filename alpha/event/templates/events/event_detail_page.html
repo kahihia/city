@@ -130,7 +130,7 @@
                                     </td>
                                     {% endif %}
                                     {% if event.tickets %}
-                                    <td { % if not event.website %}colspan="2"{% endif %}>
+                                    <td {% if not event.website %}colspan="2"{% endif %}>
                                         <a href="javascript:void()"  class="action-buy-tickets accented">
                                             Buy Tickets
                                         </a>
