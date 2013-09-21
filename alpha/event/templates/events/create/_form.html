@@ -4,81 +4,83 @@
         {% csrf_token %}
         <!--errors -->
         {%if form.errors %}
-        <h3>Please correct the following:</h3>
-        <div class="errors" style="border:1px solid RED;border-radius:4px;">
-            <ul style="list-style-type: none;">
-                <li id="all-info">
-                    {% for error in form.non_field_errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="all-info">
-                    {% for error in form.venue_name.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="all-info">
-                    {% for error in form.when.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="all-info">
-                    {% for error in form.when_json.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="email-info">
-                    {% for error in form.email.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="image-info">
-                    {% for error in form.username.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="tag-info">
-                    {% for error in form.tags.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="website-info">
-                    {% for error in form.website.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="description-info">
-                    {% for error in form.description.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="price-info">
-                    {% for error in form.price.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="when-info">
-                    {% for error in form.start_time.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="location-info">
-                    {% for error in form.location.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="name-info">
-                    {% for error in form.name.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-                <li id="name-info">
-                    {% for error in form.venue_account_owner.errors %}
-                    <span class="error">{{ error }}</span>
-                    {% endfor %}
-                </li>
-            </ul>
-        </div>
+            <span class="event-form-errors">
+                <h3>Please correct the following:</h3>
+                <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                    <ul style="list-style-type: none;">
+                        <li id="all-info">
+                            {% for error in form.non_field_errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="all-info">
+                            {% for error in form.venue_name.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="all-info">
+                            {% for error in form.when.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="all-info">
+                            {% for error in form.when_json.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="email-info">
+                            {% for error in form.email.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="image-info">
+                            {% for error in form.username.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="tag-info">
+                            {% for error in form.tags.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="website-info">
+                            {% for error in form.website.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="description-info">
+                            {% for error in form.description.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="price-info">
+                            {% for error in form.price.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="when-info">
+                            {% for error in form.start_time.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="location-info">
+                            {% for error in form.location.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="name-info">
+                            {% for error in form.name.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                        <li id="name-info">
+                            {% for error in form.venue_account_owner.errors %}
+                            <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                </div>
+            </span>
         {% endif %}
         <!-- end errors -->
 
