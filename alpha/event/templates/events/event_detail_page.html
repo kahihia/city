@@ -123,14 +123,14 @@
                             {% if event.website or event.tickets %}
                                 <tr>
                                     {% if event.website %}
-                                    <td colspan="2">
+                                    <td {% if not event.tickets %}colspan="2"{% endif %}>
                                         <a href="{{ event.website }}" class="block-header accented view-site" target="_blank">
                                             View Site
                                         </a>
                                     </td>
                                     {% endif %}
                                     {% if event.tickets %}
-                                    <td>
+                                    <td { % if not event.website %}colspan="2"{% endif %}>
                                         <a href="javascript:void()"  class="action-buy-tickets accented">
                                             Buy Tickets
                                         </a>
