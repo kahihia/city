@@ -37,11 +37,22 @@
                         </div>
 
                         <div>
-                            <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|date:"l, F d, Y"}}</span>
-                            <span class="appleLinksBlue" style="color: #cdcdcd; font-size: 12px; font-family: sans-serif;">|</span>
-                            <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|just_time}} - {{event.end_time|just_time}}</span>
+                            {% if event.event_type == "SINGLE" %}
+                                <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|date:"l, M d"}}</span>
+                                <span class="appleLinksBlue" style="color: #cdcdcd; font-size: 12px; font-family: sans-serif;">|</span>
+                                <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}</span>
+                            {% endif %}
+                            {% if event.event_type == "MULTIDAY" %}
+                                <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.first_occurrence.start_time|date:"D, M d"}} - {{event.last_occurrence.start_time|date:"D, M d"}}</span>
+                                <span class="appleLinksBlue" style="color: #cdcdcd; font-size: 12px; font-family: sans-serif;">|</span>
+                                <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.first_occurrence.start_time|just_time|lower}} - {{event.first_occurrence.end_time|just_time|lower}}*</span>
+                            {% endif %}
+                            {% if event.event_type == "MULTITIME" %}
+                                <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|date:"l, M d"}}</span>
+                                <span class="appleLinksBlue" style="color: #cdcdcd; font-size: 12px; font-family: sans-serif;">|</span>
+                                <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}*</span>
+                            {% endif %}                            
                         </div>
-
                         <div>
                             <span class="appleLinksBlack" style="color: #000000; font-size: 12px; font-weight: bold; font-family: sans-serif;">
                                 {{ event.venue.name }}, {% if event.venue.street %}{% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}, {% endif %}{{ event.venue.city.name_std }}

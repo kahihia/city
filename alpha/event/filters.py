@@ -1,4 +1,4 @@
-from models import Event, Venue, SingleEvent
+from models import Event, Venue, SingleEvent, SingleEventOccurrence
 import datetime
 import dateutil.parser as dateparser
 from accounts.models import VenueType
@@ -49,7 +49,9 @@ class DateFilter(Filter):
         else:
             lookup = self.lookup
 
-        return qs.filter(**{'%s__%s' % (self.field, lookup): value})
+        return qs.filter(
+            Q(**{'occurrences__%s__%s' % (self.field, lookup): value}) or Q(**{'%s__%s' % (self.field, lookup): value})
+        )
 
 
 class TimeFilter(Filter):
@@ -59,9 +61,16 @@ class TimeFilter(Filter):
         else:
             operation = "<="
 
-        where = 'EXTRACT(hour from %s) %s %s' % (self.field, operation, value)
+        where = 'EXTRACT(hour from %(field)s) %(operation)s %(value)s' % {
+            "field": self.field, 
+            "operation": operation, 
+            "value": value
+        }
 
-        return qs.extra(where=[where])
+        single_events_query = SingleEvent.objects.extra(where=[where])
+        single_events_occurrences_query = SingleEventOccurrence.objects.extra(where=[where])
+
+        return qs.filter(Q(occurrences__id__in=single_events_occurrences_query) or Q(id__in=single_events_query))
 
 
 class TagsFilter(Filter):
@@ -166,43 +175,38 @@ class FunctionFilter(Filter):
         return qs.filter(event_id__in=ids)
 
     def date_night_filter(self, qs):
-        return qs.filter(event__tagged_items__tag__name__in=["Date Night"])
+        return qs.filter(event__tagged_items__tag__name="Date Night")
+
+    def filter_by_tags_or_search(self, qs, tag):
+        single_event_with_tag = SingleEvent.future_events.filter(event__tagged_items__tag__name=tag)
+
+        single_event_ids = SingleEvent.future_events.extra(
+            where=["""
+                (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleevent"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', '%s')
+            """ % tag.lower()]
+        ).values_list("id", flat=True)
+
+        event_ids = Event.events.extra(
+            where=["""
+                (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", "event_event"."description")), 'D')) @@ plainto_tsquery('pg_catalog.english', '%s')
+            """ % tag.lower()]
+        ).values_list("id", flat=True)
+
+        occurrence_ids = SingleEventOccurrence.objects.extra(
+            where=["""
+                (setweight(to_tsvector('pg_catalog.english', "event_singleeventoccurrence"."description"), 'D')) @@ plainto_tsquery('pg_catalog.english', '%s')
+            """ % tag.lower()]
+        ).values_list("id", flat=True)
+
+        return qs.filter(Q(id__in=single_event_with_tag) | Q(id__in=list(single_event_ids)) | Q(event_id__in=list(event_ids)) | Q(occurrences__id__in=list(occurrence_ids)))
 
     def free_filter(self, qs):
-        # TODO: refactor
-        single_event_with_tag = SingleEvent.future_events.filter(event__tagged_items__tag__name__in=["Free"])
+        return self.filter_by_tags_or_search(qs, "Free").annotate(Count("id"))
 
-        single_event_ids = SingleEvent.future_events.extra(
-            where=["""
-                (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleevent"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', 'free')
-            """]
-        ).values_list("id", flat=True)
-
-        event_ids = Event.events.extra(
-            where=["""                
-                (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", "event_event"."description")), 'D')) @@ plainto_tsquery('pg_catalog.english', 'free')
-            """]
-        ).values_list("id", flat=True)
-
-        return qs.filter(Q(id__in=single_event_with_tag) | Q(id__in=list(single_event_ids)) | Q(event_id__in=list(event_ids)))
 
     def family_filter(self, qs):
-        # https://code.djangoproject.com/ticket/13363
-        # TODO: refactor
-        single_event_with_tag = SingleEvent.future_events.filter(event__tagged_items__tag__name__in=["Family"])
-        single_event_ids = SingleEvent.future_events.extra(
-            where=["""
-                (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleevent"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', 'family')
-            """]
-        ).values_list("id", flat=True)
+        return self.filter_by_tags_or_search(qs, "Family").annotate(Count("id"))
 
-        event_ids = Event.events.extra(
-            where=["""                
-                (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", "event_event"."description")), 'D')) @@ plainto_tsquery('pg_catalog.english', 'family')
-            """]
-        ).values_list("id", flat=True)
-
-        return qs.filter(Q(id__in=single_event_with_tag) | Q(id__in=list(single_event_ids)) | Q(event_id__in=list(event_ids)))
 
     def search_tags(self, function):
         name = search_tags_for_filters.get(function)
@@ -374,20 +378,19 @@ class SearchFilter(Filter):
             repeat_count=Count('id') 
         ).values_list("id", flat=True)
 
-        ids_string = ",".join([str(id) for id in ids])
-
-        where = """
+        where = """            
             (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", "event_event"."description")), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
             OR (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleevent"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
+            OR (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleeventoccurrence"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
         """
 
         if ids:
             ids_string = ",".join([str(id) for id in ids])
             where = """"event_singleevent"."id" IN ("""+ids_string+""") OR """ +where
 
-        return qs.extra(
+        return qs.filter(occurrences__start_time__gte=datetime.datetime.now()).extra(
             where=[where],
-            params=[search_string, search_string]
+            params=[search_string, search_string, search_string]
         ).annotate(Count("id"))
 
 
@@ -545,6 +548,5 @@ class EventFilter(object):
                 ),
                 "remove_url": "?" + self.url_query(exclude="start_time|end_time")
             }]
-
 
         return tags

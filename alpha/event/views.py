@@ -108,9 +108,6 @@ def browse(request):
 
     eventsFilter = EventFilter(params, queryset=events)
 
-
-    #.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
-
     if "search" in params:
         tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
             .values('tag_id', 'tag__name') \

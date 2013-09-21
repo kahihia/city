@@ -107,27 +107,8 @@
     line-height: 22px;
 }
 
-.event-details-block .event-details .event-actions td a iframe {
-    transform: scale(0.9);
-    -ms-transform: scale(0.9); 
-    -webkit-transform: scale(0.9); 
-    -o-transform: scale(0.9); 
-    -moz-transform: scale(0.9); 
-    transform-origin: top left;
-    -ms-transform-origin: top left;
-    -webkit-transform-origin: top left;
-    -moz-transform-origin: top left;
-    -webkit-transform-origin: top left;    
-}
-
-.event-details-block .event-details .event-actions td a.action-facebook-like{
-    padding-left:0;
-}
-
-.event-details-block .event-details .event-actions td a .fb-like {
-    left: 22px;
-    max-height: 17px;
-    top: 2px;
+.event-details-block .event-details .event-actions td.social-buttons a {
+    line-height: inherit;
 }
 
 .event-details-block .event-details .event-actions td a:hover {

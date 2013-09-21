@@ -232,7 +232,6 @@ class Event(models.Model):
     def base(self):
         return self
 
-
     def event_identifier(self):
         return self.id
 
@@ -256,13 +255,15 @@ class Event(models.Model):
 
 class FutureEventDayManager(models.Manager):
     def get_query_set(self):
+        now = datetime.datetime.now()
         return super(FutureEventDayManager, self).get_query_set()\
-            .filter(start_time__gte=datetime.datetime.now())\
-            .prefetch_related('event__venue')\
-            .prefetch_related('event__venue__city')\
+            .filter(Q(start_time__gte=now) or Q(occurrences__start_time__gte=now))\
             .select_related('event')\
             .select_related('occurrences')\
-            .order_by("start_time")
+            .prefetch_related('event__venue')\
+            .prefetch_related('event__venue__city')\
+            .order_by("start_time")\
+            .annotate(Count("id"))
 
 
 class SingleEventOccurrence(models.Model):

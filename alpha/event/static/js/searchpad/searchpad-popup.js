@@ -101,8 +101,7 @@
                     "class": "addthis_toolbox addthis_default_style addthis_16x16_style"
                 });
 
-                var svcs = ["facebook", "twitter", "google_plusone_share", "myspace",
-                            "pinterest_share", "linkedin", "compact"];
+                var svcs = ["facebook", "twitter", "pinterest_share", "google_plusone_share", "linkedin", "myspace", "blogger", "email", "compact"];
 
                 for(var i in svcs) {
                     toolbox.append("<a class='addthis_button_" + svcs[i] + "'></a>");
