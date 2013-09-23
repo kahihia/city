@@ -65,8 +65,7 @@ def picture_file_path(instance=None, filename=None):
 
 EVENT_TYPES = (
     ('SINGLE', 'Single'),
-    ('MULTIDAY', 'Multiday'),
-    ('MULTITIME', 'Multitime'),
+    ('MULTIDAY', 'Multiday')
 )
 
 
@@ -81,7 +80,7 @@ def has_changed(instance, field):
 class FutureManager(models.Manager):
     def get_query_set(self):
         queryset = super(FutureManager, self).get_query_set()\
-            .filter(single_events__start_time__gte=datetime.datetime.now())\
+            .filter(single_events__end_time__gte=datetime.datetime.now())\
             .select_related('single_events')\
             .select_related('single_events__occurrences')\
             .annotate(start_time=Min("single_events__start_time"))\
@@ -95,7 +94,7 @@ class FutureManager(models.Manager):
 class FutureWithoutAnnotationsManager(models.Manager):
     def get_query_set(self):
         queryset = super(FutureWithoutAnnotationsManager, self).get_query_set()\
-            .filter(single_events__start_time__gte=datetime.datetime.now())\
+            .filter(single_events__end_time__gte=datetime.datetime.now())\
             .select_related('single_events')
         return queryset
 
@@ -104,7 +103,7 @@ class FeaturedManager(models.Manager):
     def get_query_set(self):        
         return super(FeaturedManager, self).get_query_set()\
             .filter(
-                single_events__start_time__gte=datetime.datetime.now(),
+                single_events__end_time__gte=datetime.datetime.now(),
                 featuredevent__start_time__lte=datetime.datetime.now(),
                 featuredevent__end_time__gte=datetime.datetime.now(),
                 featuredevent__active=True
@@ -117,7 +116,7 @@ class FeaturedManager(models.Manager):
 class ArchivedManager(models.Manager):
     def get_query_set(self):
         queryset = super(ArchivedManager, self).get_query_set()\
-            .exclude(single_events__start_time__gte=datetime.datetime.now())\
+            .exclude(single_events__end_time__gte=datetime.datetime.now())\
             .select_related('single_events')\
             .annotate(start_time=Max("single_events__start_time"))\
             .annotate(end_time=Max("single_events__end_time"))\
@@ -225,7 +224,7 @@ class Event(models.Model):
 
     def next_day(self):
         try:
-            return SingleEvent.objects.filter(start_time__gte=datetime.datetime.now(), event=self).order_by("start_time")[0]
+            return SingleEvent.objects.filter(end_time__gte=datetime.datetime.now(), event=self).order_by("start_time")[0]
         except:
             return None
 
@@ -257,7 +256,7 @@ class FutureEventDayManager(models.Manager):
     def get_query_set(self):
         now = datetime.datetime.now()
         return super(FutureEventDayManager, self).get_query_set()\
-            .filter(Q(start_time__gte=now) or Q(occurrences__start_time__gte=now))\
+            .filter(Q(end_time__gte=now) or Q(occurrences__end_time__gte=now))\
             .select_related('event')\
             .select_related('occurrences')\
             .prefetch_related('event__venue')\
@@ -426,7 +425,7 @@ class AuditSingleEvent(models.Model):
 class FutureFeaturedEventManager(models.Manager):
     def get_query_set(self):
         return super(FutureFeaturedEventManager, self).get_query_set()\
-            .filter(event__single_events__start_time__gte=datetime.datetime.now())\
+            .filter(event__single_events__end_time__gte=datetime.datetime.now())\
             .annotate(Count("id"))
 
 

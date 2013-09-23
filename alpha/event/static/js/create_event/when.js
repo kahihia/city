@@ -1,4 +1,5 @@
 (function($) {
+    var format = $.datepicker._defaults.dateFormat;
     // For IE8 and earlier version.
     if(!Date.now) {
         Date.now = function() {
@@ -31,9 +32,7 @@
             $(this).toggleClass("checked");
         });
 
-        if($("#id_when_multidayevent").val()=="true") {
-            $(this.checbox).addClass("checked");
-        }
+        this.load();
 
         setInterval(this.refreshWidget.bind(this), 100);
     }
@@ -52,6 +51,7 @@
         },
         hide: function(){
             $(this.element).hide();
+            $(this.checkbox).removeClass("checked");
         },
         showPopup: function(){
             $(this.popup).show();
@@ -66,10 +66,7 @@
                 this.hide();
             }
         },
-        checkIfMultiDayEventPosible: function(){
-            if($("#id_when_multitimeevent").val()=="true"){
-                return false;
-            }
+        checkIfMultiDayEventPosible: function(){            
 
             var days = this.whenWidget.getDays(),
                 oneDay = 24*60*60*1000;
@@ -90,162 +87,6 @@
         }
     }
 
-    function MultiTimeEvent(whenWidget){
-        var that=this;
-        this.whenWidget = whenWidget;
-
-        this.times = [];
-
-        this.addMoreTimeButton = dom("div", {"class": "add-new-time-button", "innerHTML": "+"});
-        setTimeout(function(){
-            $(whenWidget.deck).on("click", ".add-new-time-button", that.addMoreTime.bind(that));        
-        }, 10);
-
-        setInterval(this.refreshWidget.bind(this), 100);
-    }
-
-    MultiTimeEvent.prototype = {
-        load: function(){
-            if($("#id_event_type").val()=="MULTITIME") {
-                var occurrences = JSON.parse($("#id_occurrences_json").val()),
-                    dayTimes = $(".days-container .my-time-picker").data("ui-myTimepicker").getValue(),
-                    that = this;
-
-                occurrences.forEach(function(occurrence){
-                    if(occurrence.startTime!=dayTimes.startTime && occurrence.endTime!=dayTimes.endTime) {
-                        var timesWidget = that.addMoreTime();
-                        timesWidget.setValue(occurrence);
-                    }
-                });
-            }
-        },
-        show: function(){
-            var dayWidget = $(".days-container .my-time-picker").data("ui-myTimepicker");
-            $(dayWidget.label).append(this.addMoreTimeButton);
-            $(this.addMoreTimeButton).show();
-
-            this.dayWidget = dayWidget;
-        },
-        hide: function(){
-            if(this.addMoreTimeButton.parentNode) {
-                this.addMoreTimeButton.parentNode.removeChild(this.addMoreTimeButton);    
-            }
-
-            this.clear();
-        },
-        refreshWidget: function(){
-            if(this.checkIfMultiTimeEventPosible()) {
-                if(!this.visible){
-                    this.show();
-                }
-                
-                this.visible = true;
-            } else {
-                if(this.visible){
-                    this.hide();
-                }
-                this.visible = false;
-            }
-        },
-        checkIfMultiTimeEventPosible: function(){
-            if($("#id_when_multidayevent").val()=="true"){
-                return false;
-            }
-            return this.whenWidget.getDays().length==1;
-        },
-        is_turned_on: function(){
-            if(this.checkIfMultiTimeEventPosible() && this.times.length>0) {
-                return true;
-            } else {
-                return false;
-            }
-        },
-        addMoreTime: function(){
-            var eventTimesWidget = new EventTimesWidget(this);
-            this.times.push(eventTimesWidget);
-
-            $(".days-container .my-time-picker").after(eventTimesWidget.element);
-            return eventTimesWidget;
-        },
-        removeEventTimesWidget: function(widget){
-            var index = this.times.indexOf(widget);
-            if(widget.element.parentNode) {
-                widget.element.parentNode.removeChild(widget.element);    
-            }
-
-            if(index!==-1){
-                this.times.splice(index, 1);
-            }
-        },
-        clear: function(){
-            while(this.times.length){
-                this.removeEventTimesWidget(this.times[0]);
-            }
-        },
-        getOccurrencesJSON: function(){
-            var dayWidget = $(".days-container .my-time-picker").data("ui-myTimepicker");
-
-            return JSON.stringify(
-                _.map([dayWidget].concat(this.times), function(dayTimePicker){
-                    return dayTimePicker.getValue();
-                })
-            );
-        },
-        validate: function(){
-            for(var i in this.times) if(this.times.hasOwnProperty(i)) {
-                var day = this.times[i].getValue();
-                if(!day.startTime || !day.endTime) return false;
-            }
-            return true;
-        }
-    }
-
-    function EventTimesWidget(parent){
-        var that = this;
-        this.parent = parent;
-        this.element = dom("div", {"class": "my-additional-time-picker"}, [
-            this.startTime = dom("input", {"class": "start-time"}),
-            this.endTime = dom("input", {"class": "end-time"}),        
-            this.removeButton = dom("div", {"class": "remove"})
-        ]);        
-            
-        timepickerOptions = {
-            minutes: {
-                interval: 15
-            },
-            hours: {
-                starts: 0,
-                ends: 11
-            },
-            rows: 2,
-            showPeriod: true,
-            defaultTime: '1:00 PM'
-        }
-
-        $(this.startTime).timepicker(timepickerOptions);
-        $(this.endTime).timepicker(timepickerOptions);
-
-        $(this.removeButton).on('click', function() {
-            if(confirm("Do you realy want to remove time?")) {
-                that.parent.removeEventTimesWidget(that);
-            }
-        });
-    }
-
-    EventTimesWidget.prototype = {
-        getValue: function() {
-            return {
-                startTime: $(this.startTime).val(),
-                endTime: $(this.endTime).val()
-            }
-        },
-        setValue: function(value) {
-            $(this.startTime).val(value.startTime);
-            $(this.endTime).val(value.endTime);
-        }
-    }
-
-
     $.widget("ui.when", {
         _create: function() {
             this.months = {
@@ -259,7 +100,6 @@
                 disabledOrEnableMonths;
 
             this.multiDayEvent = new MultiDayEvent(this);
-            this.multiTimeEvent = new MultiTimeEvent(this);
 
             this.deck = dom("div", {"class": "ui-widget when-deck"}, [
                 this.error = dom("div", {"class": "error", "innerHTML": "Please choose the start/end time for the days you've selected"}),
@@ -358,15 +198,15 @@
                         timePicker = _.filter(daysTimePicker.days, function(day) {
                             return day.options.day == di;
                         })[0];
+
                         $(timePicker.startTime).val(start);
                         $(timePicker.endTime).val(end);
+
+                        timePicker.occurrences.load()
                     }
                 }
             }
             $(this.element).val(this.getText());
-
-            this.multiTimeEvent.load();
-            this.multiDayEvent.load();
         },
         addMonth: function(year, month) {
             var monthContainer, days, date, prevDaysTimePicker;
@@ -491,7 +331,8 @@
 
         },
         getJson: function() {
-            var value = {};
+            var value = {},
+                occurrences = {};
             for(var yi in this.months) if(this.months.hasOwnProperty(yi)) {
                 var months = this.months[yi];
                 value[yi] = {};
@@ -504,11 +345,16 @@
                             start: $(times.startTime).val(),
                             end: $(times.endTime).val(),
                         }
+                        if(times.hasMoreThanOneTime()){
+                            var date = new Date(yi, mi - 1, times.options.day);
+                            occurrences[$.datepicker.formatDate(format, new Date(date))] = times.getOccurrences();
+                        }
                     }
                 }
             }
 
             $("#id_when_json").val(JSON.stringify(value));
+            $("#id_occurrences_json").val(JSON.stringify(occurrences));
             return value;
         },
         getDays: function() {
@@ -526,21 +372,21 @@
             return result;
         },
         validate: function() {
-            var json = this.getJson(),
-                valid = true;
-            for(var year in json) if(json.hasOwnProperty(year)) {
-                months = json[year];
-                for(var month in months) if(months.hasOwnProperty(month)) {
-                    days = months[month];
-                    for(var day in days) if(days.hasOwnProperty(day)) {
-                        if(!days[day].start || !days[day].end) return false;
+            var json = this.getJson();            
+
+            for(var yi in this.months) if(this.months.hasOwnProperty(yi)) {
+                var months = this.months[yi];
+                for(var mi in months) if(months.hasOwnProperty(mi)) {
+                    var days = months[mi].days;
+                    for(var di in days) if(days.hasOwnProperty(di)) {
+                        var times = days[di];
+                        if(!times.validate()) {
+                            return false;
+                        }
                     }
                 }
             }
-
-            if(!this.multiTimeEvent.validate()){
-                return false;
-            }
+            
             return true;
         },
         clear: function(open) {
@@ -559,11 +405,8 @@
             var mode="SINGLE";
             if(this.multiDayEvent.is_turned_on()){
                 mode = "MULTIDAY";
-            } else if(this.multiTimeEvent.is_turned_on()) {
-                mode = "MULTITIME";
-
-                $("#id_occurrences_json").val(this.multiTimeEvent.getOccurrencesJSON());
             }
+
             $("#id_event_type").val(mode)
         }
 
@@ -715,6 +558,169 @@
         }
     });
 
+
+    function EventTimesWidget(parent){
+        var that = this;
+        this.parent = parent;
+        this.element = dom("div", {"class": "my-additional-time-picker"}, [
+            this.startTime = dom("input", {"class": "start-time"}),
+            this.endTime = dom("input", {"class": "end-time"}),        
+            this.removeButton = dom("div", {"class": "remove"})
+        ]);        
+            
+        timepickerOptions = {
+            minutes: {
+                interval: 15
+            },
+            hours: {
+                starts: 0,
+                ends: 11
+            },
+            rows: 2,
+            showPeriod: true,
+            defaultTime: '1:00 PM'
+        }
+
+        $(this.startTime).timepicker(timepickerOptions);
+        $(this.endTime).timepicker(timepickerOptions);
+
+        $(this.removeButton).on('click', function() {
+            if(confirm("Do you realy want to remove time?")) {
+                that.parent.removeEventTimesWidget(that);
+            }
+        });
+    }
+
+    EventTimesWidget.prototype = {
+        getValue: function() {
+            return {
+                startTime: $(this.startTime).val(),
+                endTime: $(this.endTime).val()
+            }
+        },
+        setValue: function(value) {
+            $(this.startTime).val(value.startTime);
+            $(this.endTime).val(value.endTime);
+        }
+    }
+
+
+    function Occurrences(myTimepicker){
+        var that=this;
+        this.myTimepicker = myTimepicker;
+
+        this.times = [];
+
+        this.addMoreTimeButton = dom("div", {"class": "add-new-time-button", "innerHTML": "+"});
+        this.popup = dom("div", {"class": "multiple-time-event-popup", "innerHTML": "clicking this adds additional time(s) for this day"})
+
+        $(this.addMoreTimeButton).on("mouseover", this.showPopup.bind(this));
+        $(this.addMoreTimeButton).on("mouseout", this.hidePopup.bind(this));
+
+        $(this.addMoreTimeButton).on("click", that.addMoreTime.bind(that));
+
+        setInterval(this.refreshWidget.bind(this), 100);
+    }
+
+    Occurrences.prototype = {
+        load: function(){
+            var startTime = this.myTimepicker.getValue().startTime,
+                endTime = this.myTimepicker.getValue().endTime,
+                occurrences = JSON.parse($("#id_occurrences_json").val())[this.myTimepicker.getDate()],
+                that = this;
+
+            occurrences && occurrences.forEach(function(occurrence){
+                if(occurrence.startTime!=startTime && occurrence.endTime!=endTime) {
+                    var timesWidget = that.addMoreTime();
+                    timesWidget.setValue(occurrence);
+                }
+            });
+
+        },
+        show: function(){            
+            $(this.myTimepicker.label).append(this.addMoreTimeButton);
+            $(this.myTimepicker.label).append(this.popup);
+            $(this.addMoreTimeButton).show();
+        },
+        hide: function(){
+            if(this.addMoreTimeButton.parentNode) {
+                this.addMoreTimeButton.parentNode.removeChild(this.addMoreTimeButton);
+                this.popup.parentNode.removeChild(this.popup);
+            }
+
+            this.clear();
+        },
+        showPopup: function(){
+            $(this.popup).show();
+        },
+        hidePopup: function(){
+            $(this.popup).hide();
+        },
+        refreshWidget: function(){
+            if(this.checkIfMultiTimeEventPosible()) {
+                if(!this.visible){
+                    this.show();
+                }
+                
+                this.visible = true;
+            } else {
+                if(this.visible){
+                    this.hide();
+                }
+                this.visible = false;
+            }
+        },
+        checkIfMultiTimeEventPosible: function(){
+            return !$(".multiple-day-event .checkbox").hasClass("checked");
+        },
+        is_turned_on: function(){
+            if(this.checkIfMultiTimeEventPosible() && this.times.length>0) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        addMoreTime: function(){
+            var eventTimesWidget = new EventTimesWidget(this);
+            this.times.push(eventTimesWidget);
+
+            if(this.times.length==1) {
+                $(this.myTimepicker.innerWrapper).after(eventTimesWidget.element);
+            } else {
+                $(this.times[this.times.length-2].element).after(eventTimesWidget.element);
+            }
+
+            return eventTimesWidget;
+        },
+        removeEventTimesWidget: function(widget){
+            var index = this.times.indexOf(widget);
+            if(widget.element.parentNode) {
+                widget.element.parentNode.removeChild(widget.element);    
+            }
+
+            if(index!==-1){
+                this.times.splice(index, 1);
+            }
+        },
+        clear: function(){
+            while(this.times.length){
+                this.removeEventTimesWidget(this.times[0]);
+            }
+        },        
+        getValue: function(){
+            return _.map([this.myTimepicker].concat(this.times), function(dayTimePicker){
+                return dayTimePicker.getValue();
+            });
+        },
+        validate: function(){
+            for(var i in this.times) if(this.times.hasOwnProperty(i)) {
+                var day = this.times[i].getValue();
+                if(!day.startTime || !day.endTime) return false;
+            }
+            return true;
+        }
+    }
+
     $.widget("ui.myTimepicker", {
         options: {
             day: null,
@@ -723,15 +729,19 @@
         _create: function() {
             var that = this, timepickerOptions;
 
-            this.label = dom("div", {"class": "day-value", "innerHTML": this.options.day});
-
-            this.startTime = dom("input", {"class": "start-time"});
-            this.endTime = dom("input", {"class": "end-time"});
-            this.autoFill = dom("div", {"class": "checkbox autofill"});
-            this.removeButton = dom("div", {"class": "remove"});
+            this.innerWrapper = dom("div", {"class": "my-time-picker-inner-wrapper"}, [
+                this.label = dom("div", {"class": "day-value", "innerHTML": this.options.day}),
+                this.startTime = dom("input", {"class": "start-time"}),
+                this.endTime = dom("input", {"class": "end-time"}),
+                this.autoFill = dom("div", {"class": "checkbox autofill"}),
+                this.removeButton = dom("div", {"class": "remove"})
+            ]);
+            
             this.daystimeContainer = this.options.container;
 
-            $(this.element).append(this.label).append(this.startTime).append(this.endTime).append(this.autoFill).append(this.removeButton);
+            $(this.element).append(this.innerWrapper);
+
+            this.occurrences = new Occurrences(this);
 
             function changeNext() {
                 if(that.next()) {
@@ -791,6 +801,16 @@
             if($($('.autofill', this.daystimeContainer.daysContainer)[0]).hasClass("checked")){
                 $(this.autoFill).trigger("click");
             }
+        },
+        getDate: function(){
+            var date = new Date(this.options.year, this.options.month - 1, this.options.day);
+            return $.datepicker.formatDate(format, new Date(date));
+        },
+        validate: function(){
+            var value = this.getValue();
+            if(!value.startTime || !value.endTime) return false;
+            return this.occurrences.validate();
+
         },
         isFirst: function(){
             return !this.previous();
@@ -854,25 +874,16 @@
         setValue: function(value) {
             $(this.startTime).val(value.startTime);
             $(this.endTime).val(value.endTime);
-        }
-    });
+        },
+        hasMoreThanOneTime: function(){
+            return this.occurrences.times.length > 0;
+        },
+        getDayUniqKey: function(){
 
-    $(document).ready(function() {
-        setTimeout(function() {
-            $('[data-event="click"] a').on("mousemove", function(e) {
-                if(!('event' in window)) {
-                    window.eventObj = e;
-                }
-            });
-            $("#id_when").when();
-            if($("#id_when_json").val()) {
-                $("#id_when").data("ui-when").setValue(
-                    JSON.parse(
-                        $("#id_when_json").val()
-                    )
-                );
-            };
-        }, 100);
+        },
+        getOccurrences: function(){
+            return this.occurrences.getValue();
+        }
     });
 
 })(jQuery);

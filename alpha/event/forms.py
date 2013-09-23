@@ -113,7 +113,6 @@ class EditEventForm(forms.ModelForm):
 
     # SINGLE
     # MULTIDAY
-    # MULTITIME
     event_type = forms.CharField(required=True, widget=forms.widgets.HiddenInput())
 
     description = RichTextFormField(

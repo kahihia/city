@@ -9,7 +9,6 @@ from django.conf import settings
 from event.settings import DEFAULT_FROM_EMAIL
 from event.services import venue_service, event_occurrence_service
 
-from event.models import SingleEvent
 from django.contrib.sites.models import Site
 
 from django.db import transaction
@@ -110,6 +109,7 @@ def prepare_initial_event_data_for_copy(event):
         "default": event.description,
         "days": {}
     }
+
     return {
         "linking_venue_mode": "EXIST",
         "venue_identifier": prepare_initial_venue_id(event),

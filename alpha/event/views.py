@@ -12,7 +12,7 @@ from django.contrib.gis.geos import Point
 from django.db.models import Q, Count, F
 from django.forms.util import ErrorList
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_GET
 
 from taggit.models import Tag, TaggedItem
 from moneyed import Money, CAD
@@ -146,30 +146,30 @@ def view_featured(request, slug, date):
 def view(request, slug, date=None):
     try:
         if date:
-            event = SingleEvent.future_events.get(event__slug=slug, start_time__startswith=date)
+            single_event = SingleEvent.future_events.get(event__slug=slug, start_time__startswith=date)
         else:
-            event = Event.future_events.get(slug=slug).next_day()
+            single_event = Event.future_events.get(slug=slug).next_day()
 
-        if not event:
+        if not single_event:
             raise ObjectDoesNotExist
 
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))
 
 
-    if not event.viewed_times:
-        Event.events.filter(id=event.event_identifier).update(viewed_times=1)
+    if not single_event.viewed_times:
+        Event.events.filter(id=single_event.event_identifier).update(viewed_times=1)
     else:
-        Event.events.filter(id=event.event_identifier).update(viewed_times=F('viewed_times')+1)
+        Event.events.filter(id=single_event.event_identifier).update(viewed_times=F('viewed_times')+1)
 
-    venue = event.venue
+    venue = single_event.venue
 
     events_from_venue = SingleEvent.future_events.filter(event__venue_id=venue.id).select_related("event__venue", "event__venue__city")
     if date:
-        events_from_venue = events_from_venue.exclude(event_id=event.event_identifier)
+        events_from_venue = events_from_venue.exclude(id=single_event.id)
 
     return render_to_response('events/event_detail_page.html', {
-            'event': event,
+            'event': single_event,
             'events_from_venue': events_from_venue
         }, context_instance=RequestContext(request))
 

@@ -7,6 +7,7 @@
         this.initVenueAccountOwner();
         this.initVenueAutocomplete();
         this.initDescriptionField();
+        this.initWhenWidget();
     }
 
     CreateEventPage.prototype = {
@@ -58,6 +59,22 @@
         },
         initVenueAccountOwner: function(){
             this.venueAccountOwner = new VenueAccountOwnerWidget();
+        },
+        initWhenWidget: function(){
+            $(document).on("mousemove", '[data-event="click"] a', function(e) {
+                if(!('event' in window)) {
+                    window.eventObj = e;
+                }
+            });
+            $("#id_when").when();
+            
+            if($("#id_when_json").val()) {
+                $("#id_when").data("ui-when").setValue(
+                    JSON.parse(
+                        $("#id_when_json").val()
+                    )
+                );
+            };
         }
     };
 

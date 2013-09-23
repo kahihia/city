@@ -97,9 +97,6 @@
                         {% if event.event_type == "MULTIDAY" %}
                             {{event.start_time|date:"D, M d"}} - {{event.end_time|date:"D, M d"}}
                         {% endif %}
-                        {% if event.event_type == "MULTITIME" %}
-                            {{event.start_time|date:"l, M d"}}
-                        {% endif %}
                     </div>
                     <div class="event-description">
                         <span class="accented">{{ event.venue.name }}</span><br />
@@ -120,26 +117,27 @@
                                     {% in_the_loop_popup event %}
                                 </td>
                             </tr>
-                            {% if event.website or event.tickets %}
-                                <tr>
-                                    {% if event.website %}
-                                    <td {% if not event.tickets %}colspan="2"{% endif %}>
-                                        <a href="{{ event.website }}" class="block-header accented view-site" target="_blank">
-                                            View Site
-                                        </a>
-                                    </td>
-                                    {% endif %}
-                                    {% if event.tickets %}
-                                    <td {% if not event.website %}colspan="2"{% endif %}>
-                                        <a href="javascript:void()"  class="action-buy-tickets accented">
-                                            Buy Tickets
-                                        </a>
-                                        {% buy_tickets_popup event %}
-                                    </td>
-                                    {% endif %}
-                                    {% if not event.website or not event.tickets %}<td></td>{% endif %}
-                                </tr>
-                            {% endif %}
+                            
+                            <tr>
+                                {% if event.website %}
+                                <td {% if not event.tickets %}colspan="2"{% endif %}>
+                                    <a href="{{ event.website }}" class="block-header accented view-site" target="_blank">
+                                        View Site
+                                    </a>
+                                </td>
+                                {% endif %}
+                                {% if event.tickets %}
+                                <td {% if not event.website %}colspan="2"{% endif %}>
+                                    <a href="javascript:void()"  class="action-buy-tickets accented">
+                                        Buy Tickets
+                                    </a>
+                                    {% buy_tickets_popup event %}
+                                </td>
+                                {% endif %}
+                                {% if not event.website or not event.tickets %}<td></td>{% endif %}
+                                {% if not event.website and not event.tickets %}<td colspan="2"></td>{% endif %}
+                            </tr>
+                            
                             
                             <tr>
                                 <td colspan="2" class="social-buttons">
@@ -189,7 +187,13 @@
                             Show Time(s) for {{ event.start_time|date:"D d" }}
                         </header>
                         <div class="show-times-wrapper">
-                            {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}
+                            {% if event.sorted_occurrences|length > 0 %}                            
+                                {% for occurrence in event.sorted_occurrences %}
+                                    <div>{{occurrence.start_time|just_time|lower}} - {{occurrence.end_time|just_time|lower}}</div>
+                                {% endfor %}
+                            {% else %}
+                                {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}
+                            {% endif %}                            
                         </div>
                     {% endif %}
                     {% if event.event_type == "MULTIDAY" %}
@@ -203,16 +207,6 @@
                             </div>
                         </div>
                         {% endfor %}
-                    {% endif %}
-                    {% if event.event_type == "MULTITIME" %}
-                        <header>
-                            Show Time(s) for {{ event.start_time|date:"D d" }}
-                        </header>
-                        <div class="show-times-wrapper">
-                            {% for occurrence in event.sorted_occurrences %}
-                                <div>{{occurrence.start_time|just_time|lower}} - {{occurrence.end_time|just_time|lower}}</div>
-                            {% endfor %}
-                        </div>
                     {% endif %}
                 </div>
                 <div class="description">

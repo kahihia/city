@@ -6,7 +6,6 @@
  * Dual licensed under the MIT or GPL version 2 licenses.
  */
 (function( $ ){
-	var eventObj;
 	$.extend($.ui, { multiDatesPicker: { version: "1.6.1" } });
 	
 	$.fn.multiDatesPicker = function(method) {
