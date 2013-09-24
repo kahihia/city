@@ -127,7 +127,7 @@ def create_facebook_event(event, request):
 
     location += ', %s' % event.venue.city.name_std
     dates = Event.events.annotate(start_time=Min("single_events__start_time"))\
-                .annotate(end_time=Max("single_events__end_time")).get(pk=event.id)
+                 .annotate(end_time=Max("single_events__end_time")).get(pk=event.id)
 
     params = {
         'name': event.name,
