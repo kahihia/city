@@ -23,7 +23,7 @@ def claim_event_popup(context, event):
     }
 
 @register.inclusion_tag('actions/actions.html', takes_context=True)
-def admin_event_actions(context):
+def manage_event_actions(context):
     return context
 
 

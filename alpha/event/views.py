@@ -12,10 +12,12 @@ from django.contrib.gis.geos import Point
 from django.db.models import Q, Count, F
 from django.forms.util import ErrorList
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_GET
+from django.contrib import messages
 
 from taggit.models import Tag, TaggedItem
 from moneyed import Money, CAD
+from django_facebook.decorators import facebook_required
 
 from cities.models import City, Country, Region
 from event.filters import EventFilter
@@ -68,7 +70,6 @@ def search_pad(request):
             .values('tag_id', 'tag__name') \
             .annotate(count=Count('id')) \
             .order_by('-count')[:10]
-
 
     return render_to_response('events/search_pad.html', {
                                 'events': events,
@@ -231,6 +232,19 @@ def create_from_facebook(request):
         form = CreateEventForm(account=request.account, data=event_data)
         return render_to_response('events/create/create_event_popup.html', {'form': form},
                                   context_instance=RequestContext(request))
+
+
+@login_required
+@facebook_required
+def post_to_facebook(request, id):
+    event = Event.events.get(pk=id)
+    if not event.facebook_event:
+        # facebook_event_id = facebook_services.create_facebook_event(event, request)
+        # facebook_services.attach_facebook_event(int(facebook_event_id), event)
+        messages.success(request, 'Event was successfully posted to FB.')
+        return HttpResponseRedirect(reverse('event_view', kwargs={'slug': event.slug}))
+    else:
+        raise Exception('Event has already been posted to FB.')
 
 
 def created(request, slug=None):

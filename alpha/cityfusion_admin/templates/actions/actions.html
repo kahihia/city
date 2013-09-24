@@ -4,5 +4,14 @@
 	<a href="{% url 'event_edit' event.authentication_key %}">Edit</a>
 	<a href="{% url 'event_remove' event.authentication_key %}" class="danger-action">Remove</a>	
 	<a href="{% url 'admin_setup_featured' event.event_identifier %}">Make featured</a>
+    {% if event.owner.id == request.user.id and not event.facebook_event %}
+        <a href="{% url 'event_post_to_facebook' event.event.id %}">Post to FB</a>
+    {% endif %}
 </div>
+{% endif %}
+
+{% if not request.user.is_staff and event.owner.id == request.user.id and not event.facebook_event %}
+    <div class="cfadmin-actions">
+        <a href="{% url 'event_post_to_facebook' event.event.id %}">Post to FB</a>
+    </div>
 {% endif %}
