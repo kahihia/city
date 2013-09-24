@@ -18,16 +18,29 @@
 
 }
 
-.jump-popup .time-row, .jump-popup .date-row {
+.jump-popup .time-row {
     margin-top: 15px;
+}
+    
+
+.jump-popup .date-row {
+    margin-top: 10px;
 }
 
 .jump-popup .time-row .checkbox, .jump-popup .date-row .checkbox {
     vertical-align: top;
-    margin-top: 2px;
 }
 
-.jump-popup .end-time, .jump-popup .end-date {
+.jump-popup .end-time {
+    margin-left: 0;
+}
+
+.jump-popup .end-time-checkbox {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.jump-popup .end-date {
     margin-left: 30px;    
 }
 

@@ -17,10 +17,29 @@
     </div>
     <div class="jump-popup">
         <div>
+            <div class="date-row">
+                <div class="checkbox">
+                    <input id="dateJumpToDatePopupCheckbox" type="checkbox" class="date-checkbox" checked>
+                    <label for="dateJumpToDatePopupCheckbox">  </label>
+                </div>                
+                <div class="start-date inline">
+                    Select Start Date
+                    <div class="date dropdown">
+                        <input type="text" 
+                            value="{% if start_date %}{{ start_date|date:"SHORT_DATE_FORMAT"}}{% else %}{% now "SHORT_DATE_FORMAT" %}{% endif %}">
+                    </div>
+                </div>
+                <div class="end-date inline">
+                    Select End Date
+                    <div class="date dropdown">
+                        <input type="text" value="{% if end_date %}{{ end_date|date:"SHORT_DATE_FORMAT"}}{% else %}{% now "SHORT_DATE_FORMAT" %}{% endif %}">
+                    </div>
+                </div>
+            </div>
             <div class="time-row">
                 <div class="checkbox">
-                    <input id="timeJumpToDatePopupCheckbox" type="checkbox" class="time-checkbox">
-                    <label for="timeJumpToDatePopupCheckbox"> </label>
+                    <input id="startTimeJumpToDatePopupCheckbox" type="checkbox" class="start-time-checkbox">
+                    <label for="startTimeJumpToDatePopupCheckbox"> </label>
                 </div>
                 
                 <div class="start-time inline" disabled="disabled">
@@ -50,6 +69,12 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="checkbox end-time-checkbox-wrapper">
+                    <input id="endTimeJumpToDatePopupCheckbox" type="checkbox" class="end-time-checkbox">
+                    <label for="endTimeJumpToDatePopupCheckbox"> </label>
+                </div>
+
                 <div class="end-time inline" disabled="disabled">                  
                     <span>End Time</span>
                     <div class="timepicker ">
@@ -75,25 +100,6 @@
                                 <option value="p.m.">p.m.</option>
                             </select>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="date-row">
-                <div class="checkbox">
-                    <input id="dateJumpToDatePopupCheckbox" type="checkbox" class="date-checkbox" checked>
-                    <label for="dateJumpToDatePopupCheckbox">  </label>
-                </div>                
-                <div class="start-date inline">
-                    Select Start Date
-                    <div class="date dropdown">
-                        <input type="text" 
-                            value="{% if start_date %}{{ start_date|date:"SHORT_DATE_FORMAT"}}{% else %}{% now "SHORT_DATE_FORMAT" %}{% endif %}">
-                    </div>
-                </div>
-                <div class="end-date inline">
-                    Select End Date
-                    <div class="date dropdown">
-                        <input type="text" value="{% if end_date %}{{ end_date|date:"SHORT_DATE_FORMAT"}}{% else %}{% now "SHORT_DATE_FORMAT" %}{% endif %}">
                     </div>
                 </div>
             </div>

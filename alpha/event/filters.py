@@ -50,7 +50,7 @@ class DateFilter(Filter):
             lookup = self.lookup
 
         return qs.filter(
-            Q(**{'occurrences__%s__%s' % (self.field, lookup): value}) or Q(**{'%s__%s' % (self.field, lookup): value})
+            Q(**{'%s__%s' % (self.field, lookup): value}) | Q(**{'occurrences__%s__%s' % (self.field, lookup): value})
         )
 
 
@@ -538,7 +538,7 @@ class EventFilter(object):
             }]
 
         if self.data.get("start_time") and self.data.get("end_time"):
-            start_time = datetime.datetime.now().replace(hour=int(self.data.get("start_time")))            
+            start_time = datetime.datetime.now().replace(hour=int(self.data.get("start_time")))
             end_time = datetime.datetime.now().replace(hour=int(self.data.get("end_time")))
 
             tags += [{
@@ -548,5 +548,22 @@ class EventFilter(object):
                 ),
                 "remove_url": "?" + self.url_query(exclude="start_time|end_time")
             }]
+
+        elif self.data.get("start_time"):
+            start_time = datetime.datetime.now().replace(hour=int(self.data.get("start_time")))
+
+            tags += [{
+                "name": "starts after %s" % start_time.strftime("%I %p"),
+                "remove_url": "?" + self.url_query(exclude="start_time|end_time")
+            }]
+
+        elif self.data.get("end_time"):
+            end_time = datetime.datetime.now().replace(hour=int(self.data.get("end_time")))
+
+            tags += [{
+                "name": "starts before %s" % end_time.strftime("%I %p"),
+                "remove_url": "?" + self.url_query(exclude="start_time|end_time")
+            }]
+
 
         return tags

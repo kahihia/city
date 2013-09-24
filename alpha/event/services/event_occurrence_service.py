@@ -60,9 +60,15 @@ def update_single_events(data, event):
                     occurrences = occurrences_json[occurrences_day_key]
 
                     for occurrence in occurrences:
+                        start_time = dateparser.parse(occurrence["startTime"])
+                        start = datetime.datetime(int(year), int(month), int(day), start_time.hour, start_time.minute)\
+
+                        end_time = dateparser.parse(occurrence["endTime"])
+                        end = datetime.datetime(int(year), int(month), int(day), end_time.hour, end_time.minute)
+
                         single_event_occurrence = SingleEventOccurrence(
-                            start_time=dateparser.parse(occurrence["startTime"]).strftime('%Y-%m-%d %H:%M'),
-                            end_time=dateparser.parse(occurrence["endTime"]).strftime('%Y-%m-%d %H:%M'),
+                            start_time=start.strftime('%Y-%m-%d %H:%M'),
+                            end_time=end.strftime('%Y-%m-%d %H:%M'),
                             description=description
                         )
                         single_event_occurrence.save()

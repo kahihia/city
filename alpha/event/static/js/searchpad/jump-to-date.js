@@ -35,14 +35,23 @@
 
         this.bindChangeLinkEvents();
 
-        this.timeJumpToDateCheckbox = $(".time-checkbox", this.scope);
+        this.startTimeJumpToDateCheckbox = $(".start-time-checkbox", this.scope);
+        this.endTimeJumpToDateCheckbox = $(".end-time-checkbox", this.scope);
         this.dateJumpToDateCheckbox = $(".date-checkbox", this.scope);
 
-        this.timeJumpToDateCheckbox.on("change", function(){
+        this.startTimeJumpToDateCheckbox.on("change", function(){
             if($(this).is(':checked')) {
-                $(".time-row .inline, .time-row .dropdown", that.scope).removeAttr("disabled");
+                $(".start-time.inline, .start-time .dropdown", that.scope).removeAttr("disabled");
             } else {
-                $(".time-row .inline, .time-row .dropdown", that.scope).prop("disabled", true);
+                $(".start-time.inline, .start-time .dropdown", that.scope).attr("disabled", true);
+            }
+        });
+
+        this.endTimeJumpToDateCheckbox.on("change", function(){
+            if($(this).is(':checked')) {
+                $(".end-time.inline, .end-time .dropdown", that.scope).removeAttr("disabled");
+            } else {
+                $(".end-time.inline, .end-time .dropdown", that.scope).attr("disabled", true);
             }
         });
 
@@ -111,31 +120,27 @@
                 href;
 
             if(startMeridian==="p.m."){
-                startTime = (parseInt(startTime) + 12) +":00";
+                startTime = (parseInt(startTime) + 12);
             }
 
             if(endMeridian==="p.m."){
-                endTime = (parseInt(endTime) + 12) +":00";
+                endTime = (parseInt(endTime) + 12);
             }
 
-            if($(this.dateJumpToDateCheckbox).is(":checked") && $(this.timeJumpToDateCheckbox).is(":checked")){
-                href = "{0}&start_date={1}&end_date={2}&start_time={3}&end_time={4}".format(
-                    this.baseUrlQuery,
-                    this.startOfDay(startDate), this.endOfDay(endDate),
-                    startTime.replace(":00", ""), endTime.replace(":00", "")
-                );
-            } else if($(this.dateJumpToDateCheckbox).is(":checked")){
-                href = "{0}&start_date={1}&end_date={2}".format(
-                    this.baseUrlQuery,
-                    this.startOfDay(startDate),
-                    this.endOfDay(endDate)
-                );
-            } else if($(this.timeJumpToDateCheckbox).is(":checked")){
-                href = "{0}&start_time={1}&end_time={2}".format(
-                    this.baseUrlQuery,
-                    startTime.replace(":00", ""),
-                    endTime.replace(":00", "")
-                );
+            if($(this.dateJumpToDateCheckbox).is(":checked") || $(this.startTimeJumpToDateCheckbox).is(":checked") || $(this.endTimeJumpToDateCheckbox).is(":checked")) {
+                href = this.baseUrlQuery;
+
+                if($(this.dateJumpToDateCheckbox).is(":checked")) {
+                    href = href + "&start_date={0}&end_date={1}".format(this.startOfDay(startDate), this.endOfDay(endDate));
+                }
+
+                if($(this.startTimeJumpToDateCheckbox).is(":checked")){
+                    href = href + "&start_time={0}".format(startTime);
+                }
+                if($(this.endTimeJumpToDateCheckbox).is(":checked")){
+                    href = href + "&end_time={0}".format(endTime);
+                }
+
             } else {
                 href = "javascript: void;";
             }
