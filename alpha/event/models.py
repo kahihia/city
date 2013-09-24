@@ -265,6 +265,27 @@ class FutureEventDayManager(models.Manager):
             .annotate(Count("id"))
 
 
+class FeaturedEventDayManager(models.Manager):
+    def get_query_set(self):        
+        return super(FeaturedEventDayManager, self).get_query_set()\
+            .filter(
+                end_time__gte=datetime.datetime.now(),
+                event__featuredevent__start_time__lte=datetime.datetime.now(),
+                event__featuredevent__end_time__gte=datetime.datetime.now(),
+                event__featuredevent__active=True
+            )\
+            .annotate(Count("id"))
+
+
+class ArchivedEventDayManager(models.Manager):
+    def get_query_set(self):
+        return super(ArchivedEventDayManager, self).get_query_set()\
+            .exclude(end_time__gte=datetime.datetime.now())\
+            .select_related('event')\
+            .extra(order_by=['-start_time'])\
+            .annotate(Count("id"))
+
+
 class SingleEventOccurrence(models.Model):
     """
     When user create event he can choose one of event types.
@@ -293,6 +314,8 @@ class SingleEvent(models.Model):
     objects = models.Manager()
 
     future_events = FutureEventDayManager()
+    featured_events = FeaturedEventDayManager()
+    archived_events = ArchivedEventDayManager()
 
     event = models.ForeignKey(Event, blank=False, null=False, related_name='single_events')
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)

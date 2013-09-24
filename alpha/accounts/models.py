@@ -114,10 +114,10 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     cities = models.ManyToManyField(City)
 
     def future_events(self):        
-        return Event.future_events.filter(owner_id=self.user.id)
+        return SingleEvent.future_events.filter(event__owner_id=self.user.id)
 
     def featured_events(self):
-        return Event.featured_events.filter(owner_id=self.user.id)
+        return SingleEvent.featured_events.filter(event__owner_id=self.user.id)
 
     def in_the_loop_events(self):
         region_ids = self.regions.all().values_list("id", flat=True)
