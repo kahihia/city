@@ -1,121 +1,117 @@
 {% load endless %}
 
-{% if ads_items|length %}
-    {% paginate 6 ads_items using "ads_page" as ads %}
+{% if campaigns|length %}
+    {% paginate 5 campaigns using "ads_page" %}
 
-
-    {% with ads|first as ad %}
-    <div class="detailed-view" >
-        <div class="left">
-            <table>
-                <tr>
-                    <td>Campaign Name:</td>
-                    <td data-stat-key="campaign">{{ ad.campaign.name }}</td>
-                </tr>
-                <tr>
-                    <td>Started:</td>
-                    <td data-stat-key="started">{{ ad.campaign.started|date:"b j, Y"|capfirst }}</td>
-                </tr>
-                <tr>
-                    <td>Ended:</td>
-                    <td data-stat-key="ended">
-                        {% if ad.campaign.ended %}
-                            {{ ad.campaign.ended|date:"b j, Y"|capfirst }}
-                        {% else %}
-                            Ongoing
-                        {% endif %}  
-                    </td>
-                </tr>
-                <tr>
-                    <td>Size of Ad:</td>
-                    <td data-stat-key="type">{{ ad.ad_type }}</td>
-                </tr>
-            </table>
+    {% for campaign in campaigns %}
+        <div class="detailed-view" >
+            <div class="left">
+                <table>
+                    <tr>
+                        <td>Campaign Name:</td>
+                        <td data-stat-key="campaign">{{ campaign.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Owner</td>
+                        <td>
+                            {{ campaign.account.user.username }}
+                            {% if campaign.venue_account %}
+                                ({{ campaign.venue_account }})
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Started:</td>
+                        <td data-stat-key="started">{{ campaign.started|date:"b j, Y"|capfirst }}</td>
+                    </tr>
+                    <tr>
+                        <td>Ended:</td>
+                        <td data-stat-key="ended">
+                            {% if campaign.ended %}
+                                {{ campaign.ended|date:"b j, Y"|capfirst }}
+                            {% else %}
+                                Ongoing
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="right">
+                <table>
+                    <tr>
+                        <td>Amount Spent:</td>
+                        <td data-stat-key="spent">{{ campaign.ammount_spent }}</td>
+                    </tr>
+                    <tr>
+                        <td>Amount Remaining:</td>
+                        <td data-stat-key="remaining">
+                            {% if campaign.enough_money %}
+                                {{ campaign.ammount_remaining }}
+                            {% else %}
+                                C$0
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Regions:</td>
+                        <td>
+                            {% if campaign.all_of_canada %}
+                                All of Canada
+                            {% else %}
+                                {{ campaign.regions_representation }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Edit:</td>
+                        <td>
+                            <a href="{% url 'advertising_edit_campaign' campaign.id %}">
+                                <img src="/static/images/edit-icon.png"/>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        <div class="right">
-            <table>
-                <tr>
-                    <td>Impressions:</td>
-                    <td data-stat-key="impressions">{{ ad.views }}</td>
-                </tr>
-                <tr>
-                    <td>Clicks:</td>
-                    <td data-stat-key="clicks">{{ ad.clicks }}</td>
-                </tr>
-                <tr>
-                    <td>Amount Spent:</td>
-                    <td data-stat-key="spent">{{ ad.campaign.ammount_spent }}</td>
-                </tr>
-                <tr>
-                    <td>Amount Remaining:</td>
-                    <td  data-stat-key="remaining">
-                        {% if ad.campaign.enough_money %}
-                            {{ ad.campaign.ammount_remaining }}
-                        {% else %}
-                            C$0
-                        {% endif %}
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    {% endwith %}
 
-    <table class="profile-table ads-stats" celpadding="0" cellspacing="0">
-        <tr>
-            <th class="action">Campaign Name</th>
-            <th class="action">Started</th>
-            <th class="action">Ended</th>
-            <th class="action">Size of Ad</th>
-            <th class="action">Impressions</th>
-            <th class="action">Clicks</th>
-            <th class="action">Dollars Spend</th>
-            <th class="action">Dollars Remaining</th>
-            <th class="action">Edit</th>
-        </tr>
-        {% for ad in ads %}
-        <tr class="ad-line {% if forloop.first %}selected{% endif %}">
-            <td class="action" data-stat-key="campaign">
-                {{ ad.campaign.name }}
-            </td>
-            <td class="action" data-stat-key="started">
-                {{ ad.campaign.started|date:"b j, Y"|capfirst }}
-            </td>
-            <td class="action" data-stat-key="ended">
-                {% if ad.campaign.ended %}
-                    {{ ad.campaign.ended|date:"b j, Y"|capfirst }}
-                {% else %}
-                    Ongoing
-                {% endif %}            
-            </td>
-            <td class="action" data-stat-key="type" data-stat-value="{{ ad.ad_type }}">
-                {{ ad.ad_type.name }}<br>
-                {{ ad.ad_type.width }}x{{ ad.ad_type.height }}
-            </td>
-            <td class="action" data-stat-key="impressions">
-                {{ ad.views }}
-            </td>
-            <td class="action" data-stat-key="clicks">
-                {{ ad.clicks }}
-            </td>
-            <td class="action" data-stat-key="spent">
-                {{ ad.campaign.ammount_spent }}
-            </td>
-            <td class="action" data-stat-key="remaining">
-                {% if ad.campaign.enough_money %}
-                    {{ ad.campaign.ammount_remaining }}
-                {% else %}
-                    C$0
-                {% endif %}
-            </td>            
-            <td class="action">
-                <a href="{% url 'advertising_edit_campaign' ad.campaign.id %}">
-                    Edit
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+        <table class="profile-table ads-stats" celpadding="0" cellspacing="0">
+            <tr>
+                <th class="action">Banner</th>
+                <th class="action">Size of Ad</th>
+                <th class="action">Impressions</th>
+                <th class="action">Clicks</th>
+                <th class="action">CPC</th>
+                <th class="action">CPM</th>
+            </tr>
+            {% for ad in campaign.advertising_set.all %}
+            <tr class="ad-line {% if forloop.first %}selected{% endif %}">
+                <td class="action">
+                    <div class="image">
+                        <a href="/media/{{ ad.image }}" class="advertising-image" target="_blank">
+                            <img class="ads-thumb" width="30" src="/media/{{ ad.image }}" alt="" />
+                        </a>
+                    </div>
+                </td>
+                <td class="action" data-stat-key="type" data-stat-value="{{ ad.ad_type }}">
+                    {{ ad.ad_type.name }}<br>
+                    {{ ad.ad_type.width }}x{{ ad.ad_type.height }}
+                </td>
+                <td class="action" data-stat-key="impressions">
+                    {{ ad.views }}
+                </td>
+                <td class="action" data-stat-key="clicks">
+                    {{ ad.clicks }}
+                </td>
+                <td class="action" data-stat-key="cpc">
+                    {{ ad.cpc_price }}
+                </td>
+                <td class="action" data-stat-key="cpm">
+                    {{ ad.cpm_price }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
 
     {% if pages|length > 1 %}
         <div class="profile-table-pagination">
