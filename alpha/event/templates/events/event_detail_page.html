@@ -56,7 +56,7 @@
         </h1>
         <div class="content">
             <div class="event-wrapper">
-                <div class="event-photo">
+                <div class="event-photo{% if event.event_type == "MULTIDAY" %}{% if not event.venue_account_owner or not event.venue_account_owner.public %} multiday{% endif %}{% endif %}">
                     {% if event.picture %}
                         <a id="photoFancy" href="/media/{{ event.picture }}">
                             <div class="center-cropped" 
@@ -92,10 +92,10 @@
 
                     <div class="event-date-wrapper">
                         {% if event.event_type == "SINGLE" %}
-                            {{event.start_time|date:"l, M d"}}
+                            {{event.start_time|date:"l, N d"}}
                         {% endif %}
                         {% if event.event_type == "MULTIDAY" %}
-                            {{event.start_time|date:"D, M d"}} - {{event.end_time|date:"D, M d"}}
+                            {{event.start_time|date:"D, N d"}} - {{event.end_time|date:"D, N d"}}
                         {% endif %}
                     </div>
                     <div class="event-description">

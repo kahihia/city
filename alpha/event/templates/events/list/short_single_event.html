@@ -15,12 +15,12 @@
         </div>
         <div class="entry-date">
             {% if event.event_type == "SINGLE" %}
-                {{event.start_time|date:"l, M d"}}
+                {{event.start_time|date:"l, N d"}}
                 <span class="delimeter">|</span>
                 {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}{% if event.occurrences.all|length > 0 %}*{% endif %}
             {% endif %}
             {% if event.event_type == "MULTIDAY" %}
-                {{event.first_occurrence.start_time|date:"D, M d"}} - {{event.last_occurrence.start_time|date:"D, M d"}}            
+                {{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.start_time|date:"D, N d"}}            
                 <span class="delimeter">|</span>
                 {{event.first_occurrence.start_time|just_time|lower}} - {{event.first_occurrence.end_time|just_time|lower}}*
             {% endif %}
