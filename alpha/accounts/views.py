@@ -177,10 +177,10 @@ def private_venue_account(request, slug):
         return resp
 
 
-    venue_events = Event.future_events.filter(venue=venue_account.venue)
-    venue_featured_events = Event.featured_events.filter(venue=venue_account.venue)
-    venue_archived_events = Event.archived_events.filter(venue=venue_account.venue)
-    featured_events_stats = FeaturedEvent.objects.filter(event__venue_id=venue_account.venue.id)
+    venue_events = Event.future_events.filter(venue_account_owner=venue_account)
+    venue_featured_events = Event.featured_events.filter(venue_account_owner=venue_account)
+    venue_archived_events = Event.archived_events.filter(venue_account_owner=venue_account)
+    featured_events_stats = FeaturedEvent.objects.filter(event__venue_account_owner=venue_account)
 
     tabs_page = "private-venue-account"
 
@@ -202,8 +202,8 @@ def private_venue_account(request, slug):
 def public_venue_account(request, slug):
     venue_account = VenueAccount.objects.get(slug=slug)
 
-    venue_events = Event.future_events.filter(venue=venue_account.venue)
-    venue_featured_events = Event.featured_events.filter(venue=venue_account.venue)
+    venue_events = Event.future_events.filter(venue_account_owner=venue_account)
+    venue_featured_events = Event.featured_events.filter(venue_account_owner=venue_account)
 
     tabs_page = "public-venue-account"
 

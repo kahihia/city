@@ -1,10 +1,10 @@
 {% load endless %}
 {% load event_tags %}
 
-{% paginate 6 profile.future_events using "account_events" as account_events %}
+{% paginate 6 events using "account_events" %}
 
 <div class="account-entry-wrapper entry-wrapper">
-{% for event in account_events %}    
+{% for event in events %}
     <div class="entry-info {% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}">
         {% short_single_event event %}
 
