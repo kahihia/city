@@ -85,6 +85,7 @@ def update_multiday_event(data, event):
 
     when_json = json.loads(data["when_json"])
     description_json = json.loads(data["description_json"])
+    occurrences_json = json.loads(data["occurrences_json"])
 
     event.description = description_json['default']
 
@@ -114,14 +115,37 @@ def update_multiday_event(data, event):
                 if not single_event_end_time or single_event_end_time < end:
                     single_event_end_time = end
 
-                single_event_occurrence = SingleEventOccurrence(
-                    start_time=start.strftime('%Y-%m-%d %H:%M'),
-                    end_time=end.strftime('%Y-%m-%d %H:%M'),
-                    description=description
-                )
-                single_event_occurrence.save()
 
-                single_event_occurrences.append(single_event_occurrence)
+                occurrences_day_key = date.strftime("%m/%d/%Y")
+
+                if occurrences_day_key in occurrences_json:
+                    occurrences = occurrences_json[occurrences_day_key]
+
+                    for occurrence in occurrences:
+                        start_time = dateparser.parse(occurrence["startTime"])
+                        start = datetime.datetime(int(year), int(month), int(day), start_time.hour, start_time.minute)\
+
+                        end_time = dateparser.parse(occurrence["endTime"])
+                        end = datetime.datetime(int(year), int(month), int(day), end_time.hour, end_time.minute)
+
+                        single_event_occurrence = SingleEventOccurrence(
+                            start_time=start.strftime('%Y-%m-%d %H:%M'),
+                            end_time=end.strftime('%Y-%m-%d %H:%M'),
+                            description=description
+                        )
+                        single_event_occurrence.save()
+                        single_event_occurrences.append(single_event_occurrence)
+
+                else:
+                    single_event_occurrence = SingleEventOccurrence(
+                        start_time=start.strftime('%Y-%m-%d %H:%M'),
+                        end_time=end.strftime('%Y-%m-%d %H:%M'),
+                        description=description
+                    )
+                    single_event_occurrence.save()
+
+                    single_event_occurrences.append(single_event_occurrence)
+
 
 
     single_event = SingleEvent(
@@ -198,6 +222,7 @@ def prepare_initial_occurrences(event):
     if event.event_type=="SINGLE":
         single_events = SingleEvent.objects.filter(event=event)
         occurrences_json = {}
+
         for single_event in single_events:
             occurrences = single_event.sorted_occurrences()
 
@@ -206,6 +231,27 @@ def prepare_initial_occurrences(event):
                 "endTime": occurrence.end_time.strftime('%I:%M %p')
             } for occurrence in occurrences]
         return occurrences_json
-    else:
-        return {}
 
+    if event.event_type=="MULTIDAY":
+        single_event = SingleEvent.objects.filter(event=event)[0]
+
+        occurrences_json = {}
+        
+        occurrences = single_event.sorted_occurrences()
+
+        for occurrence in occurrences:
+            key = occurrence.start_time.strftime("%m/%d/%Y")
+            if key in occurrences_json:
+                occurrences_json[key].append({
+                    "startTime": occurrence.start_time.strftime('%I:%M %p'),
+                    "endTime": occurrence.end_time.strftime('%I:%M %p')
+                })                
+            else:
+                occurrences_json[key] = [{
+                    "startTime": occurrence.start_time.strftime('%I:%M %p'),
+                    "endTime": occurrence.end_time.strftime('%I:%M %p')
+                }]
+
+        return {
+            key: times for key, times in occurrences_json.iteritems() if len(times) > 1
+        }

@@ -619,7 +619,7 @@
 
         $(this.addMoreTimeButton).on("click", that.addMoreTime.bind(that));
 
-        setInterval(this.refreshWidget.bind(this), 100);
+        this.show();
     }
 
     Occurrences.prototype = {
@@ -655,31 +655,7 @@
         },
         hidePopup: function(){
             $(this.popup).hide();
-        },
-        refreshWidget: function(){
-            if(this.checkIfMultiTimeEventPosible()) {
-                if(!this.visible){
-                    this.show();
-                }
-                
-                this.visible = true;
-            } else {
-                if(this.visible){
-                    this.hide();
-                }
-                this.visible = false;
-            }
-        },
-        checkIfMultiTimeEventPosible: function(){
-            return !$(".multiple-day-event .checkbox").hasClass("checked");
-        },
-        is_turned_on: function(){
-            if(this.checkIfMultiTimeEventPosible() && this.times.length>0) {
-                return true;
-            } else {
-                return false;
-            }
-        },
+        },        
         addMoreTime: function(){
             var eventTimesWidget = new EventTimesWidget(this);
             this.times.push(eventTimesWidget);

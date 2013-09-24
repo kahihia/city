@@ -24,6 +24,7 @@ from mamona import signals
 from mamona.models import build_featured_event_payment_model
 from decimal import Decimal
 from ckeditor.fields import RichTextField
+from collections import OrderedDict
 
 
 def picture_file_path(instance=None, filename=None):
@@ -360,6 +361,26 @@ class SingleEvent(models.Model):
     def sorted_occurrences(self):
         occurrences = self.occurrences.all()
         return sorted(occurrences, key=lambda occurrence: occurrence.start_time)
+
+
+    def sorted_occurrences_days(self):
+        occurrences_json = OrderedDict()
+
+        for occurrence in self.sorted_occurrences():
+            key = occurrence.start_time.strftime("%m/%d/%Y")
+
+            if key in occurrences_json:
+                occurrences_json[key].append({
+                    "start_time": occurrence.start_time,
+                    "end_time": occurrence.end_time
+                })                
+            else:
+                occurrences_json[key] = [{
+                    "start_time": occurrence.start_time,
+                    "end_time": occurrence.end_time
+                }]
+
+        return occurrences_json
 
 
 class FacebookEvent(models.Model):

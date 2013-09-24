@@ -171,10 +171,10 @@
                     {% endif %}
                     {% if event.event_type == "MULTIDAY" %}
                     <ul class="event-days bxslider">
-                        {% for occurrence in event.sorted_occurrences %}
+                        {% for  key, occurrences in event.sorted_occurrences_days.items %}
                         <li>
-                            <div class="event-day-switch{% if forloop.first %} active{% endif %}" data-day="{{ occurrence.start_time }}">
-                                {{ occurrence.start_time|date:"D d" }}
+                            <div class="event-day-switch{% if forloop.first %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
+                                {{ occurrences.0.start_time|date:"D d" }}
                             </div>
                         </li>
                         {% endfor %}
@@ -197,13 +197,15 @@
                         </div>
                     {% endif %}
                     {% if event.event_type == "MULTIDAY" %}
-                        {% for occurrence in event.sorted_occurrences %}
-                        <div class="show-time-day{% if forloop.first %} active{% endif %}" data-day="{{ occurrence.start_time }}">
+                        {% for key, occurrences in event.sorted_occurrences_days.items %}
+                        <div class="show-time-day{% if forloop.first %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
                             <header>
-                                Show Time(s) for {{ occurrence.start_time|date:"D d" }}
+                                Show Time(s) for {{ occurrences.0.start_time|date:"D d" }}
                             </header>
                             <div class="show-times-wrapper">
-                                {{occurrence.start_time|just_time|lower}} - {{occurrence.end_time|just_time|lower}}
+                                {% for occurrence in occurrences %}
+                                    <div>{{occurrence.start_time|just_time|lower}} - {{occurrence.end_time|just_time|lower}}</div>
+                                {% endfor %}
                             </div>
                         </div>
                         {% endfor %}
