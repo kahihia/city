@@ -17,4 +17,6 @@ header.event-conversation-header {
     white-space: nowrap;
     padding: 0 5px;
     width: 667px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
