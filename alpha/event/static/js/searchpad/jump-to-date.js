@@ -125,7 +125,7 @@
                 startTime += 12;
             }
 
-            endTime = parseInt(endTime)''
+            endTime = parseInt(endTime);
 
             if(endMeridian==="p.m."){
                 endTime += 12;
