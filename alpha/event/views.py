@@ -13,9 +13,11 @@ from django.db.models import Q, Count, F
 from django.forms.util import ErrorList
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET
+from django.contrib import messages
 
 from taggit.models import Tag, TaggedItem
 from moneyed import Money, CAD
+from django_facebook.decorators import facebook_required
 
 from cities.models import City, Country, Region
 from event.filters import EventFilter
@@ -108,6 +110,9 @@ def browse(request):
 
     eventsFilter = EventFilter(params, queryset=events)
 
+
+    #.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
+
     if "search" in params:
         tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
             .values('tag_id', 'tag__name') \
@@ -146,30 +151,30 @@ def view_featured(request, slug, date):
 def view(request, slug, date=None):
     try:
         if date:
-            single_event = SingleEvent.future_events.get(event__slug=slug, start_time__startswith=date)
+            event = SingleEvent.future_events.get(event__slug=slug, start_time__startswith=date)
         else:
-            single_event = Event.future_events.get(slug=slug).next_day()
+            event = Event.future_events.get(slug=slug).next_day()
 
-        if not single_event:
+        if not event:
             raise ObjectDoesNotExist
 
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))
 
 
-    if not single_event.viewed_times:
-        Event.events.filter(id=single_event.event_identifier).update(viewed_times=1)
+    if not event.viewed_times:
+        Event.events.filter(id=event.event_identifier).update(viewed_times=1)
     else:
-        Event.events.filter(id=single_event.event_identifier).update(viewed_times=F('viewed_times')+1)
+        Event.events.filter(id=event.event_identifier).update(viewed_times=F('viewed_times')+1)
 
-    venue = single_event.venue
+    venue = event.venue
 
     events_from_venue = SingleEvent.future_events.filter(event__venue_id=venue.id).select_related("event__venue", "event__venue__city")
     if date:
-        events_from_venue = events_from_venue.exclude(id=single_event.id)
+        events_from_venue = events_from_venue.exclude(event_id=event.event_identifier)
 
     return render_to_response('events/event_detail_page.html', {
-            'event': single_event,
+            'event': event,
             'events_from_venue': events_from_venue
         }, context_instance=RequestContext(request))
 
@@ -230,6 +235,19 @@ def create_from_facebook(request):
                                   context_instance=RequestContext(request))
 
 
+@login_required
+@facebook_required
+def post_to_facebook(request, id):
+    event = Event.events.get(pk=id)
+    if not event.facebook_event:
+        # facebook_event_id = facebook_services.create_facebook_event(event, request)
+        # facebook_services.attach_facebook_event(int(facebook_event_id), event)
+        messages.success(request, 'Event was successfully posted to FB.')
+        return HttpResponseRedirect(reverse('event_view', kwargs={'slug': event.slug}))
+    else:
+        raise Exception('Event has already been posted to FB.')
+
+
 def created(request, slug=None):
     if slug is None:
         raise Http404
@@ -250,14 +268,14 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
     if request.method == 'POST':
         form = EditEventForm(account=request.account, instance=event, data=request.POST)
         if form.is_valid():
-            # try:
-            event_service.save_event(request.user, request.POST, form)
-            return HttpResponseRedirect(
-                reverse('event_view', kwargs={'slug': event.slug})
-            )
+            try:
+                event_service.save_event(request.user, request.POST, form)
+                return HttpResponseRedirect(
+                    reverse('event_view', kwargs={'slug': event.slug})
+                )
 
-            # except:
-            #     form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
+            except:
+                form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
     else:
         form = EditEventForm(
             account=request.account,
