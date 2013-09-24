@@ -3,79 +3,14 @@
     <form method="post" name="post-events" enctype="multipart/form-data">
         {% csrf_token %}
         <!--errors -->
-        {%if form.errors %}
+        {%if form.non_field_errors %}
             <span class="event-form-errors">
                 <h3>Please correct the following:</h3>
                 <div class="errors" style="border:1px solid RED;border-radius:4px;">
                     <ul style="list-style-type: none;">
                         <li id="all-info">
                             {% for error in form.non_field_errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="all-info">
-                            {% for error in form.venue_name.errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="all-info">
-                            {% for error in form.when.errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="all-info">
-                            {% for error in form.when_json.errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="email-info">
-                            {% for error in form.email.errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="image-info">
-                            {% for error in form.username.errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="tag-info">
-                            {% for error in form.tags.errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="website-info">
-                            {% for error in form.website.errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="description-info">
-                            {% for error in form.description.errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="price-info">
-                            {% for error in form.price.errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="when-info">
-                            {% for error in form.start_time.errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="location-info">
-                            {% for error in form.location.errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="name-info">
-                            {% for error in form.name.errors %}
-                            <span class="error">{{ error }}</span>
-                            {% endfor %}
-                        </li>
-                        <li id="name-info">
-                            {% for error in form.venue_account_owner.errors %}
-                            <span class="error">{{ error }}</span>
+                                <span class="error">{{ error }}</span>
                             {% endfor %}
                         </li>
                     </ul>
@@ -101,7 +36,16 @@
                         </p>
                     </div>
                 </td>
-                <td>{{form.name}}</td>
+                <td>
+                    {{form.name}}
+
+                    {% for error in form.name.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                    {% for error in form.venue_account_owner.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </td>
             </tr>
             <tr class="event-owner-tr">
                 <td>
@@ -172,6 +116,12 @@
                         <div class="reset-button">Clear</div>
                         <div class="submit-button">Submit</div>
                     </div>
+                    {% for error in form.venue_name.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                    {% for error in form.location.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
                 </td>
 
             </tr>
@@ -196,6 +146,16 @@
                     {{form.when_json}}
                     {{form.event_type}}
                     {{form.occurrences_json}}
+                    
+                    {% for error in form.when.errors %}
+                       <div class="error">{{ error }}</div>
+                    {% endfor %}
+                    {% for error in form.when_json.errors %}
+                       <div class="error">{{ error }}</div>
+                    {% endfor %}
+                    {% for error in form.occurrences_json.errors %}
+                       <div class="error">{{ error }}</div>
+                    {% endfor %}
                 </td>
 
             </tr>
@@ -219,6 +179,9 @@
                 </td>
                 <td class="price-td">
                     {{form.price}}
+                    {% for error in form.price.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
                 </td>
             </tr>
             <tr>
@@ -249,6 +212,10 @@
                 <td>
                     {{form.description}}
                     {{form.description_json}}
+
+                    {% for error in form.description.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
                 </td>
             </tr>
             <tr>
@@ -269,7 +236,13 @@
                         </p>
                     </div>
                 </td>
-                <td>{{form.website}}</td>
+                <td>
+                    {{form.website}}
+
+                    {% for error in form.website.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </td>
             </tr>
             <tr>
                 <td colspan="2" class="wheelchair-td">
@@ -334,62 +307,6 @@
                     </ul>
                 </td>
             </tr>
-            {% comment %}
-                <tr>
-                    <td colspan="2" class="wheelchair-td">
-                        Let CityFusion post it to FaceBook?
-                        <a href="javascript:void(0);" class="balloon inline">
-                            <div class="buttonq"></div>
-                        </a>
-                        <div class="balloon-content">
-                            <h3>
-                                Help for
-                                <i>[Let post it to FaceBook ]:</i>
-                            </h3>
-                            <p>
-                                This option allows CityFusion to publish this Event also to FaceBook
-                            </p>
-                        </div>
-                        <ul>
-                            <li>
-                                <div class="radio">
-                                    <input value="True" type="radio" id="id_post_to_facebook_0" name="post_to_facebook" tabindex="9" {% if form.post_to_facebook.value %}checked="checked"{% endif %}>
-                                    <label for="id_post_to_facebook_0"></label>
-                                    <label for="id_post_to_facebook_0">Yes</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div  class="radio">
-                                    <input value="False" type="radio" id="id_post_to_facebook_1" name="post_to_facebook" tabindex="9" {% if not form.post_to_facebook.value %}checked="checked"{% endif %}>
-                                    <label for="id_post_to_facebook_1"></label>
-                                    <label for="id_post_to_facebook_1">No</label>
-                                </div>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Facebook comment &nbsp;
-                        <a href="javascript:void(0);" class="balloon inline">
-                            <div class="buttonq"></div>
-                        </a>
-                        <div class="balloon-content">
-                            <h3>
-                                Help for
-                                <i>[Facebook comment]:</i>
-                            </h3>
-                            <p>
-                                Optional comment that will be attached to the description when
-                                posting to the Facebook
-                            </p>
-                        </div>
-                    </td>
-                    <td>
-                        {{form.comment_for_facebook}}
-                    </td>
-                </tr>
-            {% endcomment %}
             <tr>
                 <td class="tags_bottom">
                     Tags
@@ -419,6 +336,10 @@
                             0
                         </span> of 10 (Max 10 Tags)
                     </span>
+
+                    {% for error in form.tags.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
                 </td>
             </tr>
             <tr>
