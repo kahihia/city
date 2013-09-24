@@ -18,7 +18,7 @@ from django.template.defaultfilters import slugify
 
 from django.core.exceptions import ObjectDoesNotExist
 
-from advertising.models import Advertising
+from advertising.models import Advertising, AdvertisingCampaign
 from cities.models import Region, City
 from django.db.models import Q, Count
 from userena.managers import ASSIGNED_PERMISSIONS
@@ -116,6 +116,9 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     def future_events(self):        
         return Event.future_events.filter(owner_id=self.user.id)
 
+    def featured_events(self):
+        return Event.featured_events.filter(owner_id=self.user.id)
+
     def in_the_loop_events(self):
         region_ids = self.regions.all().values_list("id", flat=True)
         city_ids = self.cities.all().values_list("id", flat=True)
@@ -136,6 +139,9 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
 
     def ads(self):
         return Advertising.objects.filter(campaign__account__id=self.id)
+
+    def campaigns(self):
+        return AdvertisingCampaign.objects.filter(account__id = self.id)
 
     def taxes(self):
         if self.native_region:
@@ -371,6 +377,9 @@ class VenueAccount(models.Model):
 
     def ads(self):
         return Advertising.objects.filter(campaign__venue_account__id=self.id)
+
+    def campaigns(self):
+        return AdvertisingCampaign.objects.filter(venue_account__id=self.id)
 
 
 class AccountTax(models.Model):
