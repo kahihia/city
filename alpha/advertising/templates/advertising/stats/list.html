@@ -4,6 +4,75 @@
     {% paginate 5 campaigns using "ads_page" %}
 
     {% for campaign in campaigns %}
+        <div class="detailed-view" >
+            <div class="left">
+                <table>
+                    <tr>
+                        <td>Campaign Name:</td>
+                        <td data-stat-key="campaign">{{ campaign.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Owner</td>
+                        <td>
+                            {{ campaign.account.user.username }}
+                            {% if campaign.venue_account %}
+                                ({{ campaign.venue_account }})
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Started:</td>
+                        <td data-stat-key="started">{{ campaign.started|date:"b j, Y"|capfirst }}</td>
+                    </tr>
+                    <tr>
+                        <td>Ended:</td>
+                        <td data-stat-key="ended">
+                            {% if campaign.ended %}
+                                {{ campaign.ended|date:"b j, Y"|capfirst }}
+                            {% else %}
+                                Ongoing
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="right">
+                <table>
+                    <tr>
+                        <td>Amount Spent:</td>
+                        <td data-stat-key="spent">{{ campaign.ammount_spent }}</td>
+                    </tr>
+                    <tr>
+                        <td>Amount Remaining:</td>
+                        <td data-stat-key="remaining">
+                            {% if campaign.enough_money %}
+                                {{ campaign.ammount_remaining }}
+                            {% else %}
+                                C$0
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Regions:</td>
+                        <td>
+                            {% if campaign.all_of_canada %}
+                                All of Canada
+                            {% else %}
+                                {{ campaign.regions_representation }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Edit:</td>
+                        <td>
+                            <a href="{% url 'advertising_edit_campaign' campaign.id %}">
+                                <img src="/static/images/edit-icon.png"/>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
         <table class="profile-table ads-stats" celpadding="0" cellspacing="0">
             <tr>
                 <th class="action">Banner</th>
@@ -70,4 +139,6 @@
         <p>You can <a href="{% url 'advertising_setup' %}">create</a> new advertising campaign</p>
     </div>    
 {% endif %}
+
+
 
