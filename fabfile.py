@@ -14,6 +14,13 @@ def dev():
     env.password = "123forfusion"
     env.branch = "master"
 
+def events():
+    env.hosts = ['root@dev.cityfusion.ca']
+    env.project_folder = '/root/cityfusion_git'
+    env.alpha_folder = '/root/cityfusion_git/alpha'
+    env.password = "123forfusion"
+    env.branch = "events_revise"
+
 def prod():
     env.hosts = ['root@cityfusion.ca']
     env.project_folder = '/root/cityfusion_git'
