@@ -40,7 +40,7 @@
                             {% if event.event_type == "SINGLE" %}
                                 <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|date:"l, M d"}}</span>
                                 <span class="appleLinksBlue" style="color: #cdcdcd; font-size: 12px; font-family: sans-serif;">|</span>
-                                <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}{% if event.occurrences|length > 0 %}*{% endif %}</span>
+                                <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}{% if event.occurrences.all|length > 0 %}*{% endif %}</span>
                             {% endif %}
                             {% if event.event_type == "MULTIDAY" %}
                                 <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.first_occurrence.start_time|date:"D, M d"}} - {{event.last_occurrence.start_time|date:"D, M d"}}</span>

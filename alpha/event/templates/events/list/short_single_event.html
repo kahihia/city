@@ -17,7 +17,7 @@
             {% if event.event_type == "SINGLE" %}
                 {{event.start_time|date:"l, M d"}}
                 <span class="delimeter">|</span>
-                {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}{% if event.occurrences|length > 0 %}*{% endif %}
+                {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}{% if event.occurrences.all|length > 0 %}*{% endif %}
             {% endif %}
             {% if event.event_type == "MULTIDAY" %}
                 {{event.first_occurrence.start_time|date:"D, M d"}} - {{event.last_occurrence.start_time|date:"D, M d"}}            
