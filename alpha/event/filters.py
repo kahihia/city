@@ -70,7 +70,7 @@ class TimeFilter(Filter):
         single_events_query = SingleEvent.objects.extra(where=[where])
         single_events_occurrences_query = SingleEventOccurrence.objects.extra(where=[where])
 
-        return qs.filter(Q(occurrences__id__in=single_events_occurrences_query) or Q(id__in=single_events_query))
+        return qs.filter(Q(occurrences__id__in=single_events_occurrences_query) | Q(id__in=single_events_query))
 
 
 class TagsFilter(Filter):

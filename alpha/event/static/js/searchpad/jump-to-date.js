@@ -119,12 +119,16 @@
                 endDate = $(".end-date .date input", this.scope).val(),
                 href;
 
+            startTime = parseInt(startTime);
+
             if(startMeridian==="p.m."){
-                startTime = (parseInt(startTime) + 12);
+                startTime += 12;
             }
 
+            endTime = parseInt(endTime)''
+
             if(endMeridian==="p.m."){
-                endTime = (parseInt(endTime) + 12);
+                endTime += 12;
             }
 
             if($(this.dateJumpToDateCheckbox).is(":checked") || $(this.startTimeJumpToDateCheckbox).is(":checked") || $(this.endTimeJumpToDateCheckbox).is(":checked")) {
