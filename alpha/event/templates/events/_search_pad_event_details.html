@@ -42,19 +42,19 @@
                         </td>
                     </tr>
                     <tr>
+                        {% if event.website %}
+                            <td>
+                                <a href="{{ event.website }}" class="block-header accented view-site" target="_blank">
+                                    View Site
+                                </a>
+                            </td>
+                        {% endif %}
                         {% if event.tickets %}
                             <td>
                                 <a href="javascript:void(0);"  class="action-buy-tickets">
                                     Buy Tickets
                                 </a>
                                 {% buy_tickets_popup event %}
-                            </td>
-                        {% endif %}
-                        {% if event.website %}
-                            <td>
-                                <a href="{{ event.website }}" class="block-header accented view-site" target="_blank">
-                                    View Site
-                                </a>
                             </td>
                         {% endif %}
                     </tr>
