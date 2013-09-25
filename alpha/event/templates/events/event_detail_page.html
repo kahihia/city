@@ -120,19 +120,19 @@
                             
                             <tr>
                                 {% if event.website %}
-                                <td {% if not event.tickets %}colspan="2"{% endif %}>
-                                    <a href="{{ event.website }}" class="block-header accented view-site" target="_blank">
-                                        View Site
-                                    </a>
-                                </td>
+                                    <td {% if not event.tickets %}colspan="2"{% endif %}>
+                                        <a href="{{ event.website }}" class="block-header accented view-site" target="_blank">
+                                            View Site
+                                        </a>
+                                    </td>
                                 {% endif %}
                                 {% if event.tickets %}
-                                <td {% if not event.website %}colspan="2"{% endif %}>
-                                    <a href="javascript:void()"  class="action-buy-tickets accented">
-                                        Buy Tickets
-                                    </a>
-                                    {% buy_tickets_popup event %}
-                                </td>
+                                    <td {% if not event.website %}colspan="2"{% endif %}>
+                                        <a href="javascript:void()"  class="action-buy-tickets accented">
+                                            Buy Tickets
+                                        </a>
+                                        {% buy_tickets_popup event %}
+                                    </td>
                                 {% endif %}
                                 {% if not event.website or not event.tickets %}<td></td>{% endif %}
                                 {% if not event.website and not event.tickets %}<td colspan="2"></td>{% endif %}
