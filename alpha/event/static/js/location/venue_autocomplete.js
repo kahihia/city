@@ -8,13 +8,6 @@
             location_point_input = $('#id_city_1'),
             map_container = $('.location_map');
 
-        if (window.navigator.geolocation){
-            window.navigator.geolocation.getCurrentPosition(function(position){
-                Cityfusion.userLocationLat = position.coords.latitude;
-                Cityfusion.userLocationLng = position.coords.longitude;
-            });
-        }
-
         this.initSuggestForm();
         this.initGeocomplete(location_name_input, location_point_input, map_container);
 

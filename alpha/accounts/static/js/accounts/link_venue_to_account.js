@@ -57,18 +57,10 @@
             var locationNameField = this.locationNameField = $('#id_city_0'),
                 locationPointField = this.locationPointField = $('#id_city_1'),
                 locationMap = this.locationMap = $('.location_map'),
-                that = this, latlng;
-
-            if (window.navigator.geolocation){
-                window.navigator.geolocation.getCurrentPosition(function(position){
-                    window.userLocationLat = position.coords.latitude;
-                    window.userLocationLng = position.coords.longitude;
-                });
-            }
+                that = this, latlng;            
 
             $("#id_place").on("blur", function() {
                 $(".pac-container").removeClass("show");
-                // window.setTimeout(that.setVenueText.bind(that), 10);
             });
 
             $("#id_place").on("focus", function() {
@@ -110,8 +102,6 @@
                 window.userLocationLng = result.geometry.location.lng();
 
                 that.setLocation(window.userLocationLat, window.userLocationLng);
-
-                // window.setTimeout(that.setVenueText.bind(that));
             });
 
             this.initGoogleMap();

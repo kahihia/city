@@ -18,13 +18,6 @@
                 locationMap = this.locationMap = $('.location_map'),
                 that = this, latlng;
 
-            if (window.navigator.geolocation){
-                window.navigator.geolocation.getCurrentPosition(function(position){
-                    Cityfusion.userLocationLat = position.coords.latitude;
-                    Cityfusion.userLocationLng = position.coords.longitude;
-                });
-            }
-
             $("#id_place").on("blur", function() {
                 $(".pac-container").removeClass("show");
             });
