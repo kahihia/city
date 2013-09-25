@@ -154,7 +154,7 @@ class FunctionFilter(Filter):
         return qs
 
     def top_viewed_filter(self, qs):
-        return qs.order_by("event__viewed_times")
+        return qs.exclude(event__viewed_times__isnull=True).order_by("-event__viewed_times")
 
     def latest_filter(self, qs):
         return qs.order_by("-event__created")
