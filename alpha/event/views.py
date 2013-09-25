@@ -239,12 +239,16 @@ def create_from_facebook(request):
 def post_to_facebook(request, id):
     event = Event.events.get(pk=id)
     if not event.facebook_event:
-        # facebook_event_id = facebook_services.create_facebook_event(event, request)
-        # facebook_services.attach_facebook_event(int(facebook_event_id), event)
-        messages.success(request, 'Event was successfully posted to FB.')
-        return HttpResponseRedirect(reverse('event_view', kwargs={'slug': event.slug}))
+        try:
+            facebook_event_id = facebook_services.create_facebook_event(event, request)
+            facebook_services.attach_facebook_event(int(facebook_event_id), event)
+            messages.success(request, 'Event was successfully posted to FB.')
+        except Exception as e:
+            messages.error(request, e.message)
     else:
-        raise Exception('Event has already been posted to FB.')
+        messages.error(request, 'Event has already been posted to FB.')
+
+    return HttpResponseRedirect(reverse('event_view', kwargs={'slug': event.slug}))
 
 
 def created(request, slug=None):
