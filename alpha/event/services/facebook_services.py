@@ -117,9 +117,12 @@ class FacebookImportService(object):
 
 
 def create_facebook_event(event, request):
-    fb = get_persistent_graph(request)
+    graph = get_persistent_graph(request)
     description = '%s\r\n%s' % (strip_tags(event.description),
-        getattr(event, 'comment_for_facebook', ''))
+                  getattr(event, 'comment_for_facebook', ''))
+
+    if event.tickets:
+        description = '%s\r\nTickets: %s' % (description, event.tickets)
 
     location = event.venue.name
     if event.venue.street:
@@ -129,16 +132,19 @@ def create_facebook_event(event, request):
     dates = Event.events.annotate(start_time=Min("single_events__start_time"))\
                  .annotate(end_time=Max("single_events__end_time")).get(pk=event.id)
 
+    if dates.start_time >= dates.end_time:
+        raise Exception('Error: The start time must be greater than the end time')
+
     params = {
         'name': event.name,
-        'start_time': dates.start_time.strftime('%Y-%m-%dT%H:%M:%S+0000'),
-        'end_time': dates.end_time.strftime('%Y-%m-%dT%H:%M:%S+0000'),
+        'start_time': dates.start_time.strftime('%Y-%m-%dT%H:%M:%S-0600'),
+        'end_time': dates.end_time.strftime('%Y-%m-%dT%H:%M:%S-0600'),
         'description': description,
-        'location': location,
-        'ticket_uri': event.tickets
+        'location': location
     }
 
-    result = fb.set('%s/events' % FACEBOOK_PAGE_ID, **params)
+    user_facebook_id = request.user.get_profile().facebook_id
+    result = graph.set('%s/events' % user_facebook_id, **params)
     return result['id']
 
 
