@@ -92,7 +92,7 @@ REVIEWED_STATUS = (
 class ActiveAdvertisingManager(models.Manager):
     def get_query_set(self):
         return super(ActiveAdvertisingManager, self).get_query_set().filter(
-            ((Q(review_status="ACCEPTED") & Q(campaign__enough_money=True)) | Q(campaign__free=True)) & Q(campaign__active_to__gte=datetime.datetime.now())
+            ((Q(review_status="ACCEPTED") & Q(campaign__enough_money=True)) | Q(campaign__free=True)) & (Q(campaign__active_to__isnull=True) | Q(campaign__active_to__gte=datetime.datetime.now()))
         ).select_related("campaign")
 
 
