@@ -27,8 +27,10 @@
                     <tr>
                         <td>Ended:</td>
                         <td data-stat-key="ended">
-                            {% if campaign.ended %}
-                                {{ campaign.ended|date:"b j, Y"|capfirst }}
+                            {% if campaign.is_finished %}
+                                Finished
+                            {% elif campaign.active_to %}
+                                {{ campaign.active_to|date:"b j, Y"|capfirst }}
                             {% else %}
                                 Ongoing
                             {% endif %}
