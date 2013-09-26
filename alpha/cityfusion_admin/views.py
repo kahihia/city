@@ -216,7 +216,7 @@ from advertising.utils import get_chosen_advertising_types, get_chosen_advertisi
 
 @staff_member_required
 def admin_advertising(request):
-    campaigns = AdvertisingCampaign.admin.all()
+    campaigns = AdvertisingCampaign.objects.order_by("started")
     return render_to_response('cf-admin/admin-advertising-list.html', {
             "campaigns": campaigns
         }, context_instance=RequestContext(request))
@@ -225,7 +225,7 @@ def admin_advertising(request):
 @staff_member_required
 def admin_advertising_setup(request):
     account = Account.objects.get(user_id=request.user.id)
-    campaign = AdvertisingCampaign(account=account, owned_by_admin=True)
+    campaign = AdvertisingCampaign(account=account, free=True)
     form = AdvertisingSetupForm(account, instance=campaign)
 
     advertising_types = AdvertisingType.objects.filter(active=True).order_by("id")

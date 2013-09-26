@@ -22,6 +22,8 @@ class AdvertisingSetupForm(forms.ModelForm):
         required=False
     )
 
+    active_to = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'), required=False)
+
     class Meta:
         model = AdvertisingCampaign
         fields = (
@@ -29,7 +31,8 @@ class AdvertisingSetupForm(forms.ModelForm):
             'regions',
             'all_of_canada',
             'website',
-            'venue_account'
+            'venue_account',
+            'active_to'
         )
 
     def __init__(self, account, *args, **kwargs):

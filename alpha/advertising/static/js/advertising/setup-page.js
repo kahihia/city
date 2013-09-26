@@ -3,6 +3,7 @@
 
     function AdvertisingSetupPage(){
         this.initVenueAccountWidget();
+        this.initActiveToWidget();
         this.initAdTypeSelection();
         this.initRegionSelection();
         this.initTotalPriceCalculation();
@@ -11,6 +12,11 @@
     AdvertisingSetupPage.prototype = {
         initVenueAccountWidget: function(){
             this.venueAccount = new VenueAccountOwnerWidget();
+        },
+        initActiveToWidget: function(){
+            $("#id_active_to").datepicker({
+                minDate: new Date()                
+            });
         },
         initAdTypeSelection: function(){
             var that=this;

@@ -113,6 +113,8 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     regions = models.ManyToManyField(Region)
     cities = models.ManyToManyField(City)
 
+    money = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+
     def future_events(self):        
         return Event.future_events.filter(owner_id=self.user.id)
 
