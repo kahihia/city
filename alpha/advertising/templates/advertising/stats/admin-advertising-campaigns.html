@@ -20,7 +20,7 @@
             <th class="action">Amount Remaining</th>
             <th class="action">Regions</th>
             <th class="action">Actions</th>
-        </tr>        
+        </tr>
         {% for campaign in campaigns %}
         <tr>
             <td class="action">
@@ -85,6 +85,11 @@
 
             </td>
             <td class="action">
+                <div>
+                    <a href="{% url 'admin_share_stats' campaign.id %}">
+                        Share
+                    </a>
+                </div>
                 <a href="{% url 'admin_advertising_edit_campaign' campaign.id %}">
                     <img src="/static/images/edit-icon.png"/>
                 </a>

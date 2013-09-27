@@ -39,18 +39,18 @@
                         <div class="entry-wrapper">
                             {% event_block event %}
                         </div>
-                    </td>                    
+                    </td>
                     <td>
                         {{ event.owner }}
-                    </td>                    
+                    </td>
                     <td>
                         <form method="post" name="event-change-owner" action="{% url 'change_event_owner' event.slug %}">
                             {% csrf_token %}
                             <input type="hidden" name="search" value="{{ search }}">
                             <input name="owner_id" class="user-input" value="" data-ajax-url="{% url 'admin_user_autocomplete' %}"  />
                             <input type="submit" value="Change" />
-                        </form>                        
-                    </td>                    
+                        </form>
+                    </td>
                 </tr>
                 {% empty %}
                     <tr>

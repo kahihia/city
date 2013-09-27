@@ -77,6 +77,12 @@ class AdvertisingCampaign(models.Model):
         return self.active_to and self.active_to < datetime.datetime.now()
 
 
+class ShareAdvertisingCampaign(models.Model):
+    campaign = models.ForeignKey(AdvertisingCampaign)
+    account = models.ForeignKey("accounts.Account")
+
+
+
 PAYMENT_TYPE = (
     ('CPM', 'CPM'),
     ('CPC', 'CPC'),

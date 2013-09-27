@@ -7,7 +7,10 @@ def find_nearest_city(location, cities=None):
     if not cities:
         cities = City.objects.filter(venue__event__single_events__start_time__gte=datetime.datetime.now()).select_related("region", "region__country").annotate(Count('id'))
 
-    return cities.distance(location).select_related("region", "region__country").order_by('distance')[0]
+    try:
+        return cities.distance(location).select_related("region", "region__country").order_by('distance')[0]
+    except:
+        return None
 
 
 def get_dates_from_request(request):

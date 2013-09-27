@@ -1,0 +1,29 @@
+<table class="profile-table" celpadding="0" cellspacing="0">
+    <tr>
+        <th class="action">Campaign Name</th>
+        <th class="action">Amount Spent</th>
+        <th class="action">Amount Remaining</th>
+        <th class="action">Regions</th>
+
+    </tr>
+    <tr>
+        <td class="action">
+            {{ campaign.name }}
+        </td>
+        <td class="action">{{ campaign.ammount_spent }}</td>
+        <td class="action">
+            {% if campaign.enough_money %}
+                {{ campaign.ammount_remaining }}
+            {% else %}
+                C$0
+            {% endif %}
+        </td>
+        <td class="action">
+            {% if campaign.all_of_canada %}
+                All of Canada
+            {% else %}
+                {{ campaign.regions_representation }}
+            {% endif %}
+        </td>
+    </tr>
+</table>

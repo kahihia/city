@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 
 from accounts.models import Account
+from advertising.models import ShareAdvertisingCampaign
 from event.models import Event, FeaturedEvent, FacebookEvent
 from event.forms import SetupFeaturedForm, CreateEventForm
 from event.services import facebook_services
@@ -475,4 +476,26 @@ def change_event_owner(request, slug):
     return HttpResponseRedirect(
         reverse('change_event_owner_search') + "?search=%s" % request.POST.get("search", "")
     )
+
+
+@staff_member_required
+def admin_share_stats(request, campaign_id):
+    campaign = AdvertisingCampaign.objects.get(id=campaign_id)
+    
+    if request.method == 'POST':
+        account_id = request.POST.get("account_id")
+        
+        account = Account.objects.get(id=account_id)
+
+        ShareAdvertisingCampaign.objects.get_or_create(
+            account=account,
+            campaign=campaign
+        )        
+
+        return HttpResponseRedirect(reverse('admin_advertising'))
+
+    return render_to_response('cf-admin/admin-share-stats.html', {
+            'campaign': campaign,
+            'shared_with': Account.objects.filter(shareadvertisingcampaign__campaign_id=campaign_id)
+        }, context_instance=RequestContext(request))
 
