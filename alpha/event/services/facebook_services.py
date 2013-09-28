@@ -246,7 +246,9 @@ def get_prepared_event_data(request, data):
         'tickets': facebook_event['ticket_uri'],
         'picture_src': settings.MEDIA_URL + 'uploads/' + image_basename,
         'cropping': ','.join('%d' % n for n in cropping),
-        'linking_venue_mode': 'GOOGLE'
+        'linking_venue_mode': 'GOOGLE',
+        'event_type': 'SINGLE',
+        'occurrences_json': []
     }
 
     result.update(location_data)
