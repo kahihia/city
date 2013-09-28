@@ -224,9 +224,12 @@ def create_from_facebook(request):
                 success = True
             except Exception:
                 form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
+            info = ''
+        else:
+            info = form.errors['__all__'][0]
 
         return HttpResponse(
-            json.dumps({'success': success, 'info': form.errors['__all__'][0]}),
+            json.dumps({'success': success, 'info': info}),
             mimetype='application/json')
     else:
         event_data = facebook_services.get_prepared_event_data(request, request.GET)
