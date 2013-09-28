@@ -31,10 +31,10 @@
             <ul class="tabs right-tabs">
                 <li class="current"><a href="{% url 'advertising_edit_campaign' campaign.id %}"><span>Edit</span></a></li>
                 <li><a href="{% url 'advertising_deposit_funds_for_campaign' campaign.id %}">Deposit Funds</a></li>
-                <li><a href="{% url 'advertising_remove_campaign' campaign.id %}" class="danger-action" data-confirm-message="Are you sure? All ads and statistics will be lost">Remove</a></li>                
+                <li><a href="{% url 'advertising_remove_campaign' campaign.id %}" class="danger-action" data-confirm-message="Are you sure? All ads and statistics will be lost">Remove</a></li>
             </ul>
         </div>
-        <div class="content box visible">            
+        <div class="content box visible">
             <div class="main-content account-options">
                 {%if form.errors %}
                     <div class="errors" style="border:1px solid RED;border-radius:4px;">
@@ -50,10 +50,15 @@
                                 {% endfor %}
                             </li>
                             <li id="all-info">
+                                {% for error in form.active_to.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </li>
+                            <li id="all-info">
                                 {% for error in form.website.errors %}
                                     <span class="error">{{ error }}</span>
                                 {% endfor %}
-                            </li>                            
+                            </li>
                         </ul>
                     </div>
                     
@@ -61,7 +66,7 @@
                 <form  enctype="multipart/form-data" method="post" name="advertising-campaign-edit" >
                     {% csrf_token %}
                     <div class="campaign-name">
-                        Name of Campaign                        
+                        Name of Campaign
                         {{ form.name }}
                         Enter the name of your campaign.
                     </div>
@@ -75,8 +80,13 @@
                         Campaign website URL
                         {{ form.website }}
                     </div>
+
+                    <div class="campaign-active-to">
+                        Will be active till
+                        {{ form.active_to }}
+                    </div>
                     
-                    Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner, etc.                    
+                    Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner, etc.
                     <div class="advertising-types">
                         <table cellspacing="0" cellpadding="0">
                             <tr>
@@ -124,7 +134,7 @@
                                             Cost per click
                                         </p>
                                     </div>
-                                </th>                                
+                                </th>
                                 <th>
                                     CPM Prices
                                     <a href="javascript:void;" class="balloon">
@@ -154,7 +164,7 @@
                                             Price for 1 click
                                         </p>
                                     </div>
-                                </th>                                
+                                </th>
                             </tr>
                             <tr class="empty-tr">
                                 <td></td>
@@ -171,21 +181,21 @@
                                         <input type="checkbox" id="id_advertising_type_{{ advertising_type.id }}" value="{{ advertising_type.id }}" name="advertising_types" data-ad-type="{{ advertising_type.id }}" {% if advertising_type.id in chosen_advertising_types %}checked="checked"{% endif %}>
                                         <label for="id_advertising_type_{{ advertising_type.id }}"></label>
                                         <label for="id_advertising_type_{{ advertising_type.id }}">{{ advertising_type }}</label>
-                                    </div>                                    
+                                    </div>
                                 </td>
                                 <td class="ad-type-col">
-                                    <div class="radio">                                        
+                                    <div class="radio">
                                         <input type="radio" id="advertising_type_{{ advertising_type.id }}_cpm" value="CPM" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}" {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CPM" %}checked="checked"{% endifequal %}>
                                         <label for="advertising_type_{{ advertising_type.id }}_cpm"></label>
                                     </div>
                                 </td>
                                 <td class="ad-type-col">
-                                    <div class="radio">                                        
+                                    <div class="radio">
                                         <input type="radio" id="advertising_type_{{ advertising_type.id }}_cpc" value="CPC" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}" {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CPC" %}checked="checked"{% endifequal %}>
                                         <label for="advertising_type_{{ advertising_type.id }}_cpc"></label>
                                     </div>
-                                </td>                                
-                                <td class="center">                                    
+                                </td>
+                                <td class="center">
                                     {{ advertising_type.cpm_price }}
                                 </td>
                                 <td class="center">
@@ -250,7 +260,7 @@
 
                     <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
                 </form>
-            </div>                
+            </div>
         </div>
     </div>
 {% endblock %}

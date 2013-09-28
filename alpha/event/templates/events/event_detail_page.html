@@ -76,9 +76,7 @@
                     {% endif %}
                 </div>
                 <div class="event-details">
-                    {% if request.user.is_staff %}
-                        {% manage_event_actions %}
-                    {% endif %}
+                    {% manage_event_actions %}
 
                     <div class="title-wrapper">
                         <div class="event-price">

@@ -4,12 +4,6 @@
 {% load dictionary_tags %}
 {% load setup_advertising %}
 
-{% block title %}
-    {% blocktrans with profile.user.username as username %}
-        {{username }} reminder options
-    {% endblocktrans %}
-{% endblock %} 
-
 {% block head %}
     <link href="{{STATIC_URL}}styles/advertising-setup.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
@@ -47,6 +41,11 @@
                                 {% endfor %}
                             </li>
                             <li id="all-info">
+                                {% for error in form.active_to.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </li>
+                            <li id="all-info">
                                 {% for error in form.order_budget.errors %}
                                     <span class="error">{{ error }}</span>
                                 {% endfor %}
@@ -58,7 +57,7 @@
                 <form  enctype="multipart/form-data" method="post" name="advertising-setup" >
                     {% csrf_token %}
                     <div class="campaign-name">
-                        Name of Campaign                        
+                        Name of Campaign
                         {{ form.name }}
                         Enter the name of your campaign.
                     </div>
@@ -71,7 +70,12 @@
                     <div class="campaign-name">
                         Campaign website URL
                         {{ form.website }}
-                    </div>                    
+                    </div>
+
+                    <div class="campaign-active-to">
+                        Will be active till
+                        {{ form.active_to }}
+                    </div>
                     
                     {% setup_advertising_types %}
                     {% setup_advertising_upload %}

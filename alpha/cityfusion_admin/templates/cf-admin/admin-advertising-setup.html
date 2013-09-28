@@ -45,6 +45,11 @@
                                     {% endfor %}
                                 </li>
                                 <li id="all-info">
+                                    {% for error in form.active_to.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li id="all-info">
                                     {% for error in form.website.errors %}
                                         <span class="error">{{ error }}</span>
                                     {% endfor %}
@@ -68,6 +73,11 @@
                         <div class="campaign-name">
                             Campaign website URL
                             {{ form.website }}
+                        </div>
+
+                        <div class="campaign-active-to">
+                            Will be active till
+                            {{ form.active_to }}
                         </div>
 
                         {% setup_advertising_types %}

@@ -223,4 +223,12 @@ def admin_advertising_campaigns(context, campaigns):
     return {
         'campaigns': campaigns,
         'request': request
+    }
+
+@register.inclusion_tag('advertising/stats/advertising-campaign-stats.html', takes_context=True)
+def advertising_campaign_stats(context, campaign):
+    request = context["request"]
+    return {
+        'campaign': campaign,
+        'request': request
     }    

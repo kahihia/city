@@ -129,7 +129,7 @@
             {% include 'accounts/_in_the_loop_events_table.html' %}
         </div>
         <div class="box{% if active_tab == "advertising-stats" %} visible{% endif %} advertising-stats">
-            {% include 'advertising/stats/list.html' with campaigns=profile.campaigns %}
+            {% include 'advertising/stats/list.html' with campaigns=profile.shared_campaigns %}
         </div>
     </div>
 

@@ -18,7 +18,7 @@ from django.template.defaultfilters import slugify
 
 from django.core.exceptions import ObjectDoesNotExist
 
-from advertising.models import Advertising, AdvertisingCampaign
+from advertising.models import Advertising, AdvertisingCampaign, ShareAdvertisingCampaign
 from cities.models import Region, City
 from django.db.models import Q, Count
 from userena.managers import ASSIGNED_PERMISSIONS
@@ -113,6 +113,8 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     regions = models.ManyToManyField(Region)
     cities = models.ManyToManyField(City)
 
+    money = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+
     def future_events(self):        
         return SingleEvent.future_events.filter(event__owner_id=self.user.id)
 
@@ -164,6 +166,11 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
             return None
 
         return self.native_region
+
+    def shared_campaigns(self):
+        return AdvertisingCampaign.objects.filter(
+            Q(account=self) | Q(shareadvertisingcampaign__account=self)
+        )
 
 
 def create_facebook_profile(sender, instance, created, **kwargs):

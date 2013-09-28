@@ -197,30 +197,31 @@ def get_prepared_event_data(request, data):
         bias = ((img_height - img_width) / 2)
         cropping = [0, bias, img_width, bias + img_width]
 
+    city = street = ''
+    longitude = latitude = 0
+
     if facebook_event['venue']:
         city = facebook_event['venue'].get('city', '')
-        longitude = facebook_event['venue'].get('longitude', '')
-        latitude = facebook_event['venue'].get('latitude', '')
+        street = facebook_event['venue'].get('street', '')
+        longitude = facebook_event['venue'].get('longitude', 0)
+        latitude = facebook_event['venue'].get('latitude', 0)
 
-    if not facebook_event['venue'] or not (city and longitude and latitude):
-        location_data = {param: data[param] for param in ['place', 'geo_venue', 'geo_street',
-                                                          'geo_city', 'geo_address', 'geo_country',
-                                                          'geo_longtitude', 'geo_latitude', 'geo_street_number',
-                                                          'street', 'location_lng', 'location_lat', 'city_0',
-                                                          'city_1', 'city_identifier', 'venue_name']}
-    else:
-        location_data = {
-            'place': facebook_event['location'],
-            'geo_venue': facebook_event['location'],
-            'geo_street': facebook_event['venue'].get('street', ''),
-            'geo_street_number': '',
-            'geo_city': city,
-            'geo_longtitude': longitude,
-            'location_lng': longitude,
-            'geo_latitude': latitude,
-            'location_lat': latitude,
-            'venue_name': ''
-        }
+    if not (city and longitude and latitude):
+        city = street = ''
+        longitude = latitude = 0
+
+    location_data = {
+        'place': facebook_event.get('location', ''),
+        'geo_venue': facebook_event.get('location', ''),
+        'geo_street': street,
+        'geo_street_number': '',
+        'geo_city': city,
+        'geo_longtitude': longitude,
+        'location_lng': longitude,
+        'geo_latitude': latitude,
+        'location_lat': latitude,
+        'venue_name': ''
+    }
 
     description = facebook_event['description'].replace('\n', '<br />\n')
 
@@ -245,7 +246,9 @@ def get_prepared_event_data(request, data):
         'tickets': facebook_event['ticket_uri'],
         'picture_src': settings.MEDIA_URL + 'uploads/' + image_basename,
         'cropping': ','.join('%d' % n for n in cropping),
-        'linking_venue_mode': 'GOOGLE'
+        'linking_venue_mode': 'GOOGLE',
+        'event_type': 'SINGLE',
+        'occurrences_json': []
     }
 
     result.update(location_data)

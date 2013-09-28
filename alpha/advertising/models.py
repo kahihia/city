@@ -43,9 +43,11 @@ class AdvertisingCampaign(models.Model):
     started = models.DateTimeField(auto_now=True, auto_now_add=True)
     ended = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
 
+    active_to = models.DateTimeField('active to', null=True, blank=True, auto_now=False, auto_now_add=False)
+
     website = models.URLField()
 
-    owned_by_admin = models.BooleanField(default=False)
+    free = models.BooleanField(default=False)
 
     objects = money_manager(models.Manager())
     admin = AdminAdvertisingCampaignManager()
@@ -68,6 +70,18 @@ class AdvertisingCampaign(models.Model):
     def regions_representation(self):
         return ", ".join(self.regions.all().values_list("name", flat=True))
 
+    def is_active(self):
+        return (self.enough_money or self.free) and (not self.active_to or self.active_to > datetime.datetime.now())
+
+    def is_finished(self):
+        return self.active_to and self.active_to < datetime.datetime.now()
+
+
+class ShareAdvertisingCampaign(models.Model):
+    campaign = models.ForeignKey(AdvertisingCampaign)
+    account = models.ForeignKey("accounts.Account")
+
+
 
 PAYMENT_TYPE = (
     ('CPM', 'CPM'),
@@ -84,13 +98,13 @@ REVIEWED_STATUS = (
 class ActiveAdvertisingManager(models.Manager):
     def get_query_set(self):
         return super(ActiveAdvertisingManager, self).get_query_set().filter(
-            (Q(review_status="ACCEPTED") & Q(campaign__enough_money=True)) | Q(campaign__owned_by_admin=True)
+            ((Q(review_status="ACCEPTED") & Q(campaign__enough_money=True)) | Q(campaign__free=True)) & (Q(campaign__active_to__isnull=True) | Q(campaign__active_to__gte=datetime.datetime.now()))
         ).select_related("campaign")
 
 
-class AdminAdvertisingManager(models.Manager):
+class FreeAdvertisingManager(models.Manager):
     def get_query_set(self):
-        return super(AdminAdvertisingManager, self).get_query_set().filter(campaign__owned_by_admin=True)
+        return super(FreeAdvertisingManager, self).get_query_set().filter(campaign__free=True)
 
 
 class PendingAdvertisingManager(models.Manager):
@@ -114,7 +128,7 @@ class Advertising(models.Model):
 
     objects = models.Manager()
     active = ActiveAdvertisingManager()
-    admin = AdminAdvertisingManager()
+    free = FreeAdvertisingManager()
     pending = PendingAdvertisingManager()
 
     def __unicode__(self):
