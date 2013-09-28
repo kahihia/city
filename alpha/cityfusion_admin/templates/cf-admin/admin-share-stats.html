@@ -1,0 +1,46 @@
+{% extends 'cf-admin/base.html' %}
+{% load admin_menu %}
+{% load advertising_tags %}
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/select2.css" rel="stylesheet" type="text/css" />
+    <script src="{{STATIC_URL}}js/select2.min.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/actions/share-advertising-stats-page.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block page %}
+    <div class="tabs-container">
+        {% cf_admin_menu "admin_advertising" %}
+        <div class="box visible options">
+            <ul class="tabs">
+                <li>
+                    <a href="{% url 'admin_advertising' %}"><span>Advertising list</span></a>
+                </li>
+                <li>
+                    <a href="{% url 'admin_advertising_setup' %}"><span>Create new campaign</span></a>
+                </li>
+                <li>
+                    <a href="{% url 'admin_advertising_review' %}"><span>Review ads</span></a>
+                </li>
+            </ul>
+            <div class="box visible options">
+                <h1>Share advertising campaign with</h1>
+                <form method="post" name="share-campaign-stats" action="{% url 'admin_share_stats' campaign.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="campaign_id" value="{{ campaign.id }}">
+                    <input name="account_id" class="user-input" value="" data-ajax-url="{% url 'admin_user_autocomplete' %}"  />
+                    <input type="submit" value="Share" />
+                </form>
+                <br>
+                {% if shared_with.count > 0 %}
+                    Already shared with:
+                    {% for account in shared_with %}
+                        <span class="shared-with">{{ account.user }}</span>
+                    {% endfor %}
+                {% endif %}
+                {% advertising_campaign_stats campaign %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

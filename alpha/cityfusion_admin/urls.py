@@ -136,5 +136,10 @@ urlpatterns = patterns('',
     url(r'^change-owner/(?P<slug>[^/]+)$',
         views.change_event_owner,
         name='change_event_owner'
+    ),
+
+    url(r'^share-stats/(?P<campaign_id>\d+)$',
+        views.admin_share_stats,
+        name='admin_share_stats'
     )
 )

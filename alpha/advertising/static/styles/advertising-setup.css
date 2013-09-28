@@ -22,13 +22,14 @@ body .hintbox {
     width: 300px;
 }
 
-.campaign-name {
+.campaign-name, .campaign-active-to  {
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
 #id_name,
-#id_website {
+#id_website,
+#id_active_to {
     width: 190px;
     margin-left: 20px;
     margin-right: 10px;

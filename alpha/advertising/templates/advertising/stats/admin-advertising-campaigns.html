@@ -6,7 +6,7 @@
     <table class="profile-table" celpadding="0" cellspacing="0">
         <tr>
             <th class="action">Campaign Name</th>
-            <th class="action">Owner</th>
+            <th class="action">Status</th>
             <th class="action">
                 <div class="col image">&nbsp;</div>
                 <div class="stats">
@@ -20,17 +20,34 @@
             <th class="action">Amount Remaining</th>
             <th class="action">Regions</th>
             <th class="action">Actions</th>
-        </tr>        
+        </tr>
         {% for campaign in campaigns %}
         <tr>
             <td class="action">
                 {{ campaign.name }}
             </td>
-            <td>
-                <a href="{% url "admin:accounts_account_change" campaign.account.id %}" target="_blank">{{ campaign.account.user.username }}</a>
-                {% if campaign.venue_account %}
-                    ({{ campaign.venue_account }})
-                {% endif %}
+            <td class="action">
+                {% if campaign.is_active %}
+                    <div>Active{% if campaign.free %}(free){% endif %}</div>
+                    {% if campaign.free %}
+                        <div>
+                            <a href="{% url "deactivate_free_campaign" campaign.id %}">Deactivate</a>
+                        </div>
+                    {% endif %}
+                    {% if campaign.active_to %}
+                        Active till {{ campaign.active_to|date:"b j, Y"|capfirst }}
+                    {% endif %}
+                {% else %}
+                    {% if not campaign.enough_money %}
+                        <div>Not enough money</div>
+                        <div>
+                            <a href="{% url "activate_free_campaign" campaign.id %}">Free activation</a>
+                        </div>
+                    {% endif %}
+                    {% if campaign.is_finished %}
+                        <div>Finished</div>
+                    {% endif %}
+                {% endif%}
             </td>
             <td class="action">
                 {% for ad in campaign.advertising_set.all %}
@@ -68,6 +85,11 @@
 
             </td>
             <td class="action">
+                <div>
+                    <a href="{% url 'admin_share_stats' campaign.id %}">
+                        Share
+                    </a>
+                </div>
                 <a href="{% url 'admin_advertising_edit_campaign' campaign.id %}">
                     <img src="/static/images/edit-icon.png"/>
                 </a>

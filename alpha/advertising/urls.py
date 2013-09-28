@@ -33,4 +33,12 @@ urlpatterns = patterns('',
         views.advertising_order,
         name='advertising_order'
     ),
+    url(r'^activate-free-campaign/(?P<campaign_id>\d+)/$',
+        views.activate_free_campaign,
+        name="activate_free_campaign"
+    ),
+    url(r'^deactivate-free-campaign/(?P<campaign_id>\d+)/$',
+        views.deactivate_free_campaign,
+        name="deactivate_free_campaign"
+    )    
 )

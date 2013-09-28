@@ -1,16 +1,6 @@
 {% extends 'events/create/create_event.html' %}
 {% block body_inner %}
     <div class="popup-form-wrapper">
-        <div data-type="errors_cont" style="display:none;">
-            <h3>Please correct the following:</h3>
-            <div style="border:1px solid RED;border-radius:4px;" class="errors">
-                <ul style="list-style-type: none;">
-                    <li id="all-info" data-type="error_item" style="display:none;">
-                        <span class="error" data-type="error_item_text"></span>
-                    </li>
-                </ul>
-            </div>
-        </div>
         {% include 'events/create/_form.html' %}
     </div>
 {% endblock body_inner  %}

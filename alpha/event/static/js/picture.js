@@ -164,27 +164,23 @@
                     h:selected[3]-selected[1]
                 }, that.jcrop.getWidgetSize());
             });
+            
         },
         changeImage: function(image_path) {
             var that = this;
             if(this.cropping_image) {
-                $(this.cropping_image).attr('src', image_path);
-                this.jcrop.setImage(image_path);
-            } else {
-                this.cropping_image = $("<img id='id_cropping-image'>");
-
-                this.cropping_image.attr('src', image_path);
-                $(this.cropping).after(this.cropping_image);
-                that.initJcrop();
+                $(this.cropping_image).remove();
+                this.jcrop.destroy();
             }
-            this.changeImagePosition();
+
+            this.cropping_image = $("<img id='id_cropping-image'>");
+            this.cropping_image.attr('src', image_path);
+            $(this.cropping).after(this.cropping_image);
+
+            that.initJcrop();
         },
         saveThumbnail: function() {
             $(this.cropping).val();
-        },
-        changeImagePosition: function() {
-            var image_height = $(this.image_cropping).height();
-
         },
         crop_indication: function(selected) {
             // indicate if cropped area gets smaller than the specified minimal cropping

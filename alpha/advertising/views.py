@@ -200,7 +200,7 @@ def edit_campaign(request, campaign_id):
 
 
 def remove_campaign(request, campaign_id):
-    campaign = AdvertisingCampaign.objects.get(id=campaign_id)    
+    campaign = AdvertisingCampaign.objects.get(id=campaign_id)
 
     if campaign.account.user != request.user:
         resp = render_to_response('403.html', context_instance=RequestContext(request))
@@ -230,4 +230,17 @@ def advertising_order(request, order_id):
     return render_to_response('advertising/order.html', {
         "order": order,
         "payment": payment
-    }, context_instance=RequestContext(request))    
+    }, context_instance=RequestContext(request))
+
+
+def activate_free_campaign(request, campaign_id):
+    AdvertisingCampaign.objects.filter(id=campaign_id).update(free=True)
+
+    return HttpResponseRedirect(reverse('admin_advertising'))
+
+def deactivate_free_campaign(request, campaign_id):
+    AdvertisingCampaign.objects.filter(id=campaign_id).update(free=False)
+
+    return HttpResponseRedirect(reverse('admin_advertising'))    
+
+
