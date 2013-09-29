@@ -151,7 +151,7 @@ def view_featured(request, slug, date):
 def view(request, slug, date=None):
     try:
         if date:
-            event = SingleEvent.future_events.get(event__slug=slug, start_time__startswith=date)
+            event = SingleEvent.future_events.filter(event__slug=slug, start_time__startswith=date)[0]
         else:
             event = Event.future_events.get(slug=slug).next_day()
 
@@ -278,14 +278,14 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
     if request.method == 'POST':
         form = EditEventForm(account=request.account, instance=event, data=request.POST)
         if form.is_valid():
-            try:
-                event_service.save_event(request.user, request.POST, form)
-                return HttpResponseRedirect(
-                    reverse('event_view', kwargs={'slug': event.slug})
-                )
+            # try:
+            event_service.save_event(request.user, request.POST, form)
+            return HttpResponseRedirect(
+                reverse('event_view', kwargs={'slug': event.slug})
+            )
 
-            except:
-                form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
+            # except:
+            #     form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
     else:
         form = EditEventForm(
             account=request.account,
