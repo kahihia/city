@@ -17,7 +17,7 @@
         });
 
         if($(".event-day-switch").length>5){
-            $('.bxslider').bxSlider({
+            var slider = $('.bxslider').bxSlider({
                 infiniteLoop: false,
                 hideControlOnEnd: true,
                 minSlides: 5,
@@ -25,7 +25,13 @@
                 slideWidth: 62,
                 slideMargin: 0,
                 pager: false
-            });    
+            });
+            $(".event-day-switch").each(function(index){
+                if($(this).hasClass("active")){
+                    slider.goToSlide((index+1)/5);    
+                }                
+            });
+            
         }        
     };
 
