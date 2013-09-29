@@ -26,8 +26,8 @@
                 slideMargin: 0,
                 pager: false
             });
-            $(".event-day-switch").each(function(element, index){
-                if($(element).hasClass("active")){
+            $(".event-day-switch").each(function(index){
+                if($(this).hasClass("active")){
                     slider.goToSlide(index+1);    
                 }                
             });
