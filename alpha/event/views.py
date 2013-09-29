@@ -175,7 +175,8 @@ def view(request, slug, date=None):
 
     return render_to_response('events/event_detail_page.html', {
             'event': event,
-            'events_from_venue': events_from_venue
+            'events_from_venue': events_from_venue,
+            'now': datetime.datetime.now()
         }, context_instance=RequestContext(request))
 
 

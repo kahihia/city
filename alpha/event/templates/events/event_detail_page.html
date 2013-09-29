@@ -171,7 +171,7 @@
                     <ul class="event-days bxslider">
                         {% for  key, occurrences in event.sorted_occurrences_days.items %}
                         <li>
-                            <div class="event-day-switch{% if forloop.first %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
+                            <div class="event-day-switch{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if ccurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
                                 {{ occurrences.0.start_time|date:"D d" }}
                             </div>
                         </li>
@@ -192,7 +192,7 @@
                     {% endif %}
                     {% if event.event_type == "MULTIDAY" %}
                         {% for key, occurrences in event.sorted_occurrences_days.items %}
-                        <div class="show-time-day{% if forloop.first %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
+                        <div class="show-time-day{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if ccurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
                             <header>
                                 Show Time(s) for {{ occurrences.0.start_time|date:"D d" }}
                             </header>
@@ -208,7 +208,7 @@
                 <div class="description">
                     {% if event.event_type == "MULTIDAY" %}
                         {% for occurrence in event.sorted_occurrences %}
-                        <div class="show-day-description {% if forloop.first %} active{% endif %}" data-day="{{ occurrence.start_time }}">
+                        <div class="show-day-description {% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if ccurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrence.start_time }}">
                             {% if occurrence.description %}
                                 {{ occurrence.description|html_urlize|safe }}
                             {% else %}
