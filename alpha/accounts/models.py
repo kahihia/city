@@ -18,7 +18,7 @@ from django.template.defaultfilters import slugify
 
 from django.core.exceptions import ObjectDoesNotExist
 
-from advertising.models import Advertising, AdvertisingCampaign, ShareAdvertisingCampaign
+from advertising.models import Advertising, AdvertisingCampaign
 from cities.models import Region, City
 from django.db.models import Q, Count
 from userena.managers import ASSIGNED_PERMISSIONS
