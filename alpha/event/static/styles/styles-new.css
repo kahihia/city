@@ -21,6 +21,11 @@
 
 .content-wrapper h1 a {
     color:#022e52;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    text-overflow: ellipsis;
+    display: inline-block;
 }
 
 .content-wrapper .content {
