@@ -171,8 +171,8 @@
                     <ul class="event-days bxslider">
                         {% for  key, occurrences in event.sorted_occurrences_days.items %}
                         <li>
-                            <div class="event-day-switch{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if ccurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
-                                {{ occurrences.0.start_time|date:"D d" }}
+                            <div class="event-day-switch{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if occurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
+                                 {{ occurrences.0.start_time|date:"D d" }}
                             </div>
                         </li>
                         {% endfor %}
@@ -192,7 +192,7 @@
                     {% endif %}
                     {% if event.event_type == "MULTIDAY" %}
                         {% for key, occurrences in event.sorted_occurrences_days.items %}
-                        <div class="show-time-day{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if ccurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
+                        <div class="show-time-day{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if occurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
                             <header>
                                 Show Time(s) for {{ occurrences.0.start_time|date:"D d" }}
                             </header>
