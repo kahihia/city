@@ -118,6 +118,10 @@ class FacebookImportService(object):
 
 def create_facebook_event(event, request):
     graph = get_persistent_graph(request)
+
+    if not graph:
+        raise Exception('Error: facebook authentication is required')
+
     description = '%s\r\n%s' % (strip_tags(event.description),
                   getattr(event, 'comment_for_facebook', ''))
 
@@ -144,6 +148,13 @@ def create_facebook_event(event, request):
     }
 
     user_facebook_id = request.user.get_profile().facebook_id
+    if not user_facebook_id:
+        user_facebook_info = graph.get('me')
+        if user_facebook_info and 'id' in user_facebook_info:
+            user_facebook_id = user_facebook_info['id']
+        else:
+            raise Exception('Error while event posting. Please inform administrator.')
+
     result = graph.set('%s/events' % user_facebook_id, **params)
     return result['id']
 
