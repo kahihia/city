@@ -3,6 +3,7 @@ import os
 import urllib
 import json
 from urlparse import urlparse
+from HTMLParser import HTMLParser
 
 from django.db.models import Max, Min
 from django.utils import timezone
@@ -122,7 +123,8 @@ def create_facebook_event(event, request):
     if not graph:
         raise Exception('Error: facebook authentication is required')
 
-    description = '%s\r\n%s' % (strip_tags(event.description),
+    parser = HTMLParser()
+    description = '%s\r\n%s' % (strip_tags(parser.unescape(event.description)),
                   getattr(event, 'comment_for_facebook', ''))
 
     if event.tickets:

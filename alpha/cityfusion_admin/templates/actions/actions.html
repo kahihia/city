@@ -6,10 +6,10 @@
         <a href="{% url 'admin_setup_featured' event.event_identifier %}">Make featured</a>
         {% if event.owner.id == request.user.id %}
             {% if not event.facebook_event %}
-                <a href="{% url 'event_post_to_facebook' event.event.id %}">Post to FB</a>
+                <a href="{% url 'event_post_to_facebook' event.id %}">Post to FB</a>
             {% else %}
                 <a href="https://www.facebook.com/events/{{ event.facebook_event.eid }}/" target="_blank">
-                    View on the Facebook
+                    View on FB
                 </a>
             {% endif %}
         {% endif %}
@@ -22,7 +22,7 @@
             <a href="{% url 'event_post_to_facebook' event.event.id %}">Post to FB</a>
         {% else %}
             <a href="https://www.facebook.com/events/{{ event.facebook_event.eid }}/" target="_blank">
-                View the FB event
+                View on FB
             </a>
         {% endif %}
     </div>

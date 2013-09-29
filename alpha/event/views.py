@@ -242,12 +242,12 @@ def create_from_facebook(request):
 @login_required
 @facebook_required
 def post_to_facebook(request, id):
-    event = Event.events.get(pk=id)
-    if request.user.id == event.owner.id:
-        if not event.facebook_event:
+    single_event = SingleEvent.objects.get(pk=id)
+    if request.user.id == single_event.event.owner.id:
+        if not single_event.event.facebook_event:
             try:
-                facebook_event_id = facebook_services.create_facebook_event(event, request)
-                facebook_services.attach_facebook_event(int(facebook_event_id), event)
+                facebook_event_id = facebook_services.create_facebook_event(single_event.event, request)
+                facebook_services.attach_facebook_event(int(facebook_event_id), single_event.event)
                 messages.success(request, 'Event was successfully posted to FB.')
             except Exception as e:
                 messages.error(request, e.message)
@@ -256,7 +256,10 @@ def post_to_facebook(request, id):
     else:
         messages.error(request, 'You do not have permission to publish this event.')
 
-    return HttpResponseRedirect(reverse('event_view', kwargs={'slug': event.slug}))
+    return HttpResponseRedirect(reverse('event_view', kwargs = {
+        'slug': single_event.slug,
+        'date': single_event.start_time.strftime('%Y-%m-%d')
+    }))
 
 
 def created(request, slug=None):
