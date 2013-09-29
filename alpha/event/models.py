@@ -398,7 +398,7 @@ class SingleEvent(models.Model):
         return occurrences_json
 
     def same_date_events(self):
-        return SingleEvent.future_events.filter(start_time__startswith=self.start_time.date()).order_by("start_time")
+        return SingleEvent.future_events.filter(event_id=self.event.id, start_time__startswith=self.start_time.date()).order_by("start_time")
 
 
 class FacebookEvent(models.Model):
