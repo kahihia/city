@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.core.validators import URLValidator
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+import dateutil.parser as dateparser
 
 from cities.models import City, Country
 import string
@@ -297,7 +298,14 @@ class SingleEventOccurrence(models.Model):
     """
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
     end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
-    description = models.TextField(null=True, blank=True)            
+    description = models.TextField(null=True, blank=True) 
+
+    def save(self, *args, **kwargs):
+        if self.end_time < self.start_time:
+            self.end_time = dateparser.parse(self.end_time) + datetime.timedelta(days=1)
+
+        super(SingleEventOccurrence, self).save(*args, **kwargs)
+        return self
 
 
 class SingleEvent(models.Model):
@@ -324,6 +332,13 @@ class SingleEvent(models.Model):
     description = models.TextField(null=True, blank=True)
 
     occurrences = models.ManyToManyField(SingleEventOccurrence, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.end_time < self.start_time:
+            self.end_time = dateparser.parse(self.end_time) + datetime.timedelta(days=1)
+
+        super(SingleEvent, self).save(*args, **kwargs)
+        return self
 
     def event_description(self):
         description = self.description
@@ -381,6 +396,9 @@ class SingleEvent(models.Model):
                 }]
 
         return occurrences_json
+
+    def same_date_events(self):
+        return SingleEvent.future_events.filter(start_time__startswith=self.start_time.date()).order_by("start_time")
 
 
 class FacebookEvent(models.Model):

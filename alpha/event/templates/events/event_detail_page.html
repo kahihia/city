@@ -185,13 +185,9 @@
                             Show Time(s) for {{ event.start_time|date:"D d" }}
                         </header>
                         <div class="show-times-wrapper">
-                            {% if event.sorted_occurrences|length > 0 %}                            
-                                {% for occurrence in event.sorted_occurrences %}
-                                    <div>{{occurrence.start_time|just_time|lower}} - {{occurrence.end_time|just_time|lower}}</div>
-                                {% endfor %}
-                            {% else %}
-                                {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}
-                            {% endif %}                            
+                            {% for occurrence in event.same_date_events %}
+                                <div>{{occurrence.start_time|just_time|lower}} - {{occurrence.end_time|just_time|lower}}</div>
+                            {% endfor %}                            
                         </div>
                     {% endif %}
                     {% if event.event_type == "MULTIDAY" %}
