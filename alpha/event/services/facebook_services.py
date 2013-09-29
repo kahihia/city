@@ -210,22 +210,23 @@ def get_prepared_event_data(request, data):
         bias = ((img_height - img_width) / 2)
         cropping = [0, bias, img_width, bias + img_width]
 
-    city = street = ''
+    location = city = street = ''
     longitude = latitude = 0
 
     if facebook_event['venue']:
+        location = facebook_event.get('location', '')
         city = facebook_event['venue'].get('city', '')
         street = facebook_event['venue'].get('street', '')
         longitude = facebook_event['venue'].get('longitude', 0)
         latitude = facebook_event['venue'].get('latitude', 0)
 
     if not (city and longitude and latitude):
-        city = street = ''
+        location = city = street = ''
         longitude = latitude = 0
 
     location_data = {
-        'place': facebook_event.get('location', ''),
-        'geo_venue': facebook_event.get('location', ''),
+        'place': location,
+        'geo_venue': location,
         'geo_street': street,
         'geo_street_number': '',
         'geo_city': city,
