@@ -372,7 +372,7 @@ class SearchFilter(Filter):
 
     def filter(self, qs, search_string):
         # Use limits for ids query for optimization
-        ids = SingleEvent.future_events.filter( 
+        events_with_tags = SingleEvent.future_events.filter( 
             event__tagged_items__tag__name=search_string 
         ).annotate(
             repeat_count=Count('id') 
@@ -384,11 +384,13 @@ class SearchFilter(Filter):
             OR (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleeventoccurrence"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
         """
 
-        if ids:
-            ids_string = ",".join([str(id) for id in ids])
+        if events_with_tags:
+            ids_string = ",".join([str(id) for id in events_with_tags])
             where = """"event_singleevent"."id" IN ("""+ids_string+""") OR """ +where
 
-        return qs.filter(occurrences__start_time__gte=datetime.datetime.now()).extra(
+        return qs.filter(
+            Q(occurrences__end_time__gte=datetime.datetime.now()) | Q(end_time__gte=datetime.datetime.now()) | Q(event__event_type__isnull=False) # Force event table joining
+        ).extra(
             where=[where],
             params=[search_string, search_string, search_string]
         ).annotate(Count("id"))

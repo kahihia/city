@@ -28,7 +28,7 @@
             });
             $(".event-day-switch").each(function(index){
                 if($(this).hasClass("active")){
-                    slider.goToSlide((index+1)/5);    
+                    slider.goToSlide(parseInt((index+1)/5));    
                 }                
             });
             
