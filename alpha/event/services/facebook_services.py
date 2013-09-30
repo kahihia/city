@@ -3,6 +3,7 @@ import os
 import urllib
 import json
 from urlparse import urlparse
+from HTMLParser import HTMLParser
 
 from django.db.models import Max, Min
 from django.utils import timezone
@@ -122,7 +123,8 @@ def create_facebook_event(event, request):
     if not graph:
         raise Exception('Error: facebook authentication is required')
 
-    description = '%s\r\n%s' % (strip_tags(event.description),
+    parser = HTMLParser()
+    description = '%s\r\n%s' % (strip_tags(parser.unescape(event.description)),
                   getattr(event, 'comment_for_facebook', ''))
 
     if event.tickets:
@@ -208,22 +210,23 @@ def get_prepared_event_data(request, data):
         bias = ((img_height - img_width) / 2)
         cropping = [0, bias, img_width, bias + img_width]
 
-    city = street = ''
+    location = city = street = ''
     longitude = latitude = 0
 
     if facebook_event['venue']:
+        location = facebook_event.get('location', '')
         city = facebook_event['venue'].get('city', '')
         street = facebook_event['venue'].get('street', '')
         longitude = facebook_event['venue'].get('longitude', 0)
         latitude = facebook_event['venue'].get('latitude', 0)
 
     if not (city and longitude and latitude):
-        city = street = ''
+        location = city = street = ''
         longitude = latitude = 0
 
     location_data = {
-        'place': facebook_event.get('location', ''),
-        'geo_venue': facebook_event.get('location', ''),
+        'place': location,
+        'geo_venue': location,
         'geo_street': street,
         'geo_street_number': '',
         'geo_city': city,
