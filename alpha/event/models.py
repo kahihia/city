@@ -258,7 +258,7 @@ class FutureEventDayManager(models.Manager):
     def get_query_set(self):
         now = datetime.datetime.now()
         return super(FutureEventDayManager, self).get_query_set()\
-            .filter(Q(end_time__gte=now) or Q(occurrences__end_time__gte=now))\
+            .filter(Q(end_time__gte=now) | Q(occurrences__end_time__gte=now))\
             .select_related('event')\
             .select_related('occurrences')\
             .prefetch_related('event__venue')\
