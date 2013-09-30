@@ -110,10 +110,8 @@ def browse(request):
 
     eventsFilter = EventFilter(params, queryset=events)
 
-
-    #.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
-
     if "search" in params:
+
         tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
             .values('tag_id', 'tag__name') \
             .annotate(count=Count('id')) \
@@ -242,12 +240,12 @@ def create_from_facebook(request):
 @login_required
 @facebook_required
 def post_to_facebook(request, id):
-    single_event = SingleEvent.objects.get(pk=id)
-    if request.user.id == single_event.event.owner.id:
-        if not single_event.event.facebook_event:
+    event = Event.events.get(pk=id)
+    if request.user.id == event.owner.id:
+        if not event.facebook_event:
             try:
-                facebook_event_id = facebook_services.create_facebook_event(single_event.event, request)
-                facebook_services.attach_facebook_event(int(facebook_event_id), single_event.event)
+                facebook_event_id = facebook_services.create_facebook_event(event, request)
+                facebook_services.attach_facebook_event(int(facebook_event_id), event)
                 messages.success(request, 'Event was successfully posted to FB.')
             except Exception as e:
                 messages.error(request, e.message)
@@ -256,10 +254,7 @@ def post_to_facebook(request, id):
     else:
         messages.error(request, 'You do not have permission to publish this event.')
 
-    return HttpResponseRedirect(reverse('event_view', kwargs = {
-        'slug': single_event.slug,
-        'date': single_event.start_time.strftime('%Y-%m-%d')
-    }))
+    return HttpResponseRedirect(reverse('event_view', kwargs={'slug': event.slug}))
 
 
 def created(request, slug=None):
