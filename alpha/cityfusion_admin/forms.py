@@ -1,6 +1,6 @@
 from django import forms
-from advertising.model import ShareAdvertisingCampaign
+from djmoney.forms.fields import MoneyField
 
-class ShareAdvertisingStatsForm(forms.ModelForm):
-	 class Meta:
-        model = ShareAdvertisingCampaign
+
+class FreeTryForm(forms.Form):
+    budget = MoneyField()

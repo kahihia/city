@@ -122,22 +122,22 @@ urlpatterns = patterns('',
         views.admin_deactivate_featured,
         name='admin_deactivate_featured'
     ),
-
     url(r'^free-try/$',
         views.free_try,
         name='free_try'
     ),
-
+    url(r'^remove-free-try/(?P<account_id>\d+)$',
+        views.remove_free_try,
+        name='admin_remove_free_try'
+    ),
     url(r'^change-event-owner-search$',
         views.change_event_owner_search,
         name='change_event_owner_search'
     ),
-
     url(r'^change-owner/(?P<slug>[^/]+)$',
         views.change_event_owner,
         name='change_event_owner'
     ),
-
     url(r'^share-stats/(?P<campaign_id>\d+)$',
         views.admin_share_stats,
         name='admin_share_stats'

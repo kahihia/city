@@ -1,0 +1,58 @@
+{% extends 'cf-admin/base.html' %}
+{% load admin_menu %}
+{% load endless %}
+{% load cf_pagination %}
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/select2.css" rel="stylesheet" type="text/css" />
+    <script src="{{STATIC_URL}}js/select2.min.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/actions/free-try-page.js" type="text/javascript"></script>    
+{% endblock %}
+
+{% block page %}
+    <div class="tabs-container">
+        {% cf_admin_menu "free_try" %}
+        <div class="box visible options">
+            <h1>Get free try for user</h1>
+            <form method="post" name="share-campaign-stats" action="{% url 'free_try' %}">
+                {% csrf_token %}
+                <input type="text" id="id_budget" name="budget" value="0.0" placeholder="free budget">
+                <input type="hidden" name="budget_currency" value="CAD">
+                <input name="user_id" class="user-input" value="" data-ajax-url="{% url 'admin_user_autocomplete' %}"  />
+                <input type="submit" value="Free try" />
+            </form>
+
+            <table class="profile-table" celpadding="0" cellspacing="0">
+                <tr>
+                    <th class="action">Account</th>
+                    <th class="action">Free budget</th>
+                    <th class="action">Actions</th>
+                </tr>
+                {% paginate 10 free_tries %}
+                {% for free_try in free_tries %}
+                <tr>
+                    <td class="action">
+                        {{ free_try.account.user }}
+                    </td>                    
+                    <td class="action">
+                        {{ free_try.budget }}
+                    </td>                    
+                    <td class="action">
+                        <a href="{% url "admin_remove_free_try" free_try.id %}" target="_blank">
+                            Remove
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">
+                            No free tries was found
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% cf_pagination %}            
+        </div>
+    </div>
+{% endblock %}

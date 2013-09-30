@@ -1,7 +1,10 @@
 import datetime
 import json
+from decimal import Decimal
+from moneyed import Money, CAD
 from django.contrib.auth.models import User
 from cityfusion_admin.models import ReportEvent, ClaimEvent
+from cityfusion_admin.forms import FreeTryForm
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -9,7 +12,7 @@ from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
 
-from accounts.models import Account
+from accounts.models import Account, FreeTry
 from advertising.models import ShareAdvertisingCampaign
 from event.models import Event, FeaturedEvent, FacebookEvent
 from event.forms import SetupFeaturedForm, CreateEventForm
@@ -448,7 +451,38 @@ def admin_edit_featured(request, featured_event_id):
 
 @staff_member_required
 def free_try(request):
-    pass
+    form = FreeTryForm()
+
+    if request.method == 'POST':
+        form = FreeTryForm(data=request.POST)
+        user_id = request.POST.get("user_id", None)
+        if user_id and form.is_valid():
+            budget = Decimal(request.POST["budget"])
+            try:
+                free_try = FreeTry.objects.get(account__user_id=user_id)
+                free_try.budget = free_try.budget + Money(budget, CAD)
+            except:
+                free_try = FreeTry(
+                    account=Account.objects.get(user_id=user_id),
+                    budget=Money(budget, CAD)
+                )                
+
+            free_try.save()
+
+    free_tries = FreeTry.objects.all()
+
+    return render_to_response('cf-admin/admin-free-try.html', {
+        'free_tries': free_tries,
+        'form': form
+    }, context_instance=RequestContext(request))
+
+
+
+@staff_member_required
+def remove_free_try(request, free_try_id):
+    free_try = FreeTry.objects.get(id=free_try_id)
+    free_try.delete()
+    return HttpResponseRedirect(reverse('free_try'))
 
 
 @staff_member_required
