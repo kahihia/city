@@ -177,6 +177,7 @@ def get_prepared_event_data(request, data):
                                          end_time,
                                          description,
                                          pic_big,
+                                         pic_cover,
                                          location,
                                          venue,
                                          ticket_uri
@@ -196,9 +197,13 @@ def get_prepared_event_data(request, data):
     else:
         end_time = start_time + datetime.timedelta(hours=3)
 
-    image_basename = os.path.basename(facebook_event['pic_big'])
+    image_source = facebook_event['pic_cover']['source'] if facebook_event['pic_cover'] \
+        and 'source' in facebook_event['pic_cover'] \
+        else facebook_event['pic_big']
+
+    image_basename = os.path.basename(image_source)
     image_dist_path = os.path.abspath(os.path.join(settings.MEDIA_ROOT, 'uploads', image_basename))
-    urllib.urlretrieve(facebook_event['pic_big'], image_dist_path)
+    urllib.urlretrieve(image_source, image_dist_path)
 
     img = Image.open(image_dist_path)
     img_width, img_height = img.size
