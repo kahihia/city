@@ -7,6 +7,7 @@
         this.initAdTypeSelection();
         this.initRegionSelection();
         this.initTotalPriceCalculation();
+        this.initSwitchPaymemtModes();
     }
 
     AdvertisingSetupPage.prototype = {
@@ -108,7 +109,18 @@
             });
 
             $(".total-price-output").html(totalPrice.toFixed(2));
+        },
+        initSwitchPaymemtModes: function(){
+            if($("#id_budget_type").val()=="BONUS") {
+                $('[data-tab-id="setup-bonus-budget"]').click();
+            }
+            $('[data-tab-id="setup-bonus-budget"]').on("click", function(){
+                $("#id_budget_type").val("BONUS");
+            });
 
+            $('[data-tab-id="setup-real-budget"]').on("click", function(){
+                $("#id_budget_type").val("REAL");
+            });
         }
     };
 

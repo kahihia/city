@@ -135,42 +135,34 @@ class AdvertisingCampaignEditForm(AdvertisingSetupForm):
         return cleaned_data
 
 
-class FreeAdvertisingSetupForm(AdvertisingSetupForm):
-    budget = MoneyField(min_value=Money(10, CAD))
+class PaidAdvertisingSetupForm(AdvertisingSetupForm):
 
-    class Meta:
-        model = AdvertisingCampaign
-        fields = (
-            'name',
-            'regions',
-            'all_of_canada',
-            'website',
-            'venue_account',
-            'active_to',
-            'budget'
-        )
+    # BONUS - when user can not found venue in google autocomplete he can suggest new venue
+    # REAL - user can choose venue with help of google autocomplete widget
+    budget_type = forms.CharField(required=True, widget=forms.widgets.HiddenInput())
 
-    def __init__(self, *args, **kwargs):
-        super(FreeAdvertisingSetupForm, self).__init__(*args, **kwargs)
-
-        self.fields['budget'].error_messages['min_value'] = 'Ensure budget is greater than or equal to %(limit_value)s'
+    bonus_budget = MoneyField(required=False)
+    order_budget = MoneyField(required=False)
 
     def clean(self):
-        cleaned_data = super(FreeAdvertisingSetupForm, self).clean()
-        budget = cleaned_data["budget"]
+        cleaned_data = super(PaidAdvertisingSetupForm, self).clean()
+        budget_type = cleaned_data["budget_type"]
+        if budget_type=="BONUS":
+            bonus_budget = cleaned_data["bonus_budget"]
 
-        if budget > self.account.free_try().budget:
-            raise forms.ValidationError('Ensure budget is not greater than %s' % self.account.free_try().budget)
+            if bonus_budget > self.account.bonus_budget:
+                raise forms.ValidationError('Ensure budget is not greater than %s' % self.account.bonus_budget)
 
-        return cleaned_data
+            if bonus_budget < Money(10, CAD):
+                raise forms.ValidationError('Ensure budget is greater than or equal to %s' % Money(10, CAD))
 
-class PaidAdvertisingSetupForm(AdvertisingSetupForm):
-    order_budget = MoneyField(min_value=Money(10, CAD))
+        if budget_type=="REAL":
+            order_budget = cleaned_data["bonus_budget"]
 
-    def __init__(self, *args, **kwargs):
-        super(PaidAdvertisingSetupForm, self).__init__(*args, **kwargs)
+            if order_budget < Money(10, CAD):
+                raise forms.ValidationError('Ensure budget is greater than or equal to %s' % Money(10, CAD))
 
-        self.fields['order_budget'].error_messages['min_value'] = 'Ensure budget is greater than or equal to %(limit_value)s'
+        return cleaned_data        
 
 
 class DepositFundsForCampaignForm(forms.Form):
@@ -178,4 +170,4 @@ class DepositFundsForCampaignForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(DepositFundsForCampaignForm, self).__init__(*args, **kwargs)
-        self.fields['order_budget'].error_messages['min_value'] = 'Ensure budget is greater than or equal to %(limit_value)s'
+        self.fields['order_budget'].error_messages['max_value'] = 'Ensure budget is greater than or equal to %(limit_value)s'

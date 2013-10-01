@@ -9,10 +9,6 @@ urlpatterns = patterns('',
         views.setup,
         name='advertising_setup'
     ),
-    url(r'^free-setup/$',
-        views.free_setup,
-        name='advertising_free_setup'
-    ),
     url(r'^open/(?P<advertising_id>\d+)/$',
         views.open,
         name='advertising_open'

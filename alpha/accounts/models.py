@@ -26,7 +26,7 @@ from guardian.shortcuts import assign
 
 from djmoney.models.fields import MoneyField
 from home.utils import deserialize_json_deep
-
+from djmoney.models.managers import money_manager
 
 REMINDER_TYPES = (
     ("HOURS", "Hours before event"),
@@ -113,6 +113,10 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     regions = models.ManyToManyField(Region)
     cities = models.ManyToManyField(City)
 
+    bonus_budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+
+    accounts = money_manager(models.Manager())
+
     def future_events(self):        
         return SingleEvent.future_events.filter(event__owner_id=self.user.id)
 
@@ -170,12 +174,6 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
             Q(account=self) | Q(shareadvertisingcampaign__account=self)
         )
 
-    def free_try(self):
-        try:
-            return FreeTry.objects.get(account_id=self.id)
-        except:
-            return None
-
 
 def create_facebook_profile(sender, instance, created, **kwargs):
     if created:
@@ -225,11 +223,6 @@ post_save.connect(sync_schedule_after_reminder_settings_was_changed, sender=Acco
 
 m2m_changed.connect(sync_schedule_after_reminder_single_events_was_modified,
                     sender=Account.reminder_single_events.through)
-
-
-class FreeTry(models.Model):
-    account = models.ForeignKey(Account)
-    budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
 
 
 class RemindingManager(models.Manager):

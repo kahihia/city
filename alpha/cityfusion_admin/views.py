@@ -12,7 +12,7 @@ from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
 
-from accounts.models import Account, FreeTry
+from accounts.models import Account
 from advertising.models import ShareAdvertisingCampaign
 from event.models import Event, FeaturedEvent, FacebookEvent
 from event.forms import SetupFeaturedForm, CreateEventForm
@@ -20,7 +20,7 @@ from event.services import facebook_services
 from cities.models import City, Country
 from django_facebook.decorators import facebook_required
 from django.contrib.admin.views.decorators import staff_member_required
-from django.db.models import Q
+from django.db.models import Q, F
 
 
 @require_POST
@@ -457,31 +457,23 @@ def free_try(request):
         form = FreeTryForm(data=request.POST)
         user_id = request.POST.get("user_id", None)
         if user_id and form.is_valid():
-            budget = Decimal(request.POST["budget"])
-            try:
-                free_try = FreeTry.objects.get(account__user_id=user_id)
-                free_try.budget = free_try.budget + Money(budget, CAD)
-            except:
-                free_try = FreeTry(
-                    account=Account.objects.get(user_id=user_id),
-                    budget=Money(budget, CAD)
-                )                
+            budget = Decimal(request.POST["bonus_budget"])
+            Account.accounts.filter(user_id=user_id).update(bonus_budget=F("bonus_budget")+budget)
 
-            free_try.save()
+    accounts_with_bonus = Account.accounts.filter(bonus_budget__gt=0)
 
-    free_tries = FreeTry.objects.all()
+
 
     return render_to_response('cf-admin/admin-free-try.html', {
-        'free_tries': free_tries,
+        'accounts_with_bonus': accounts_with_bonus,
         'form': form
     }, context_instance=RequestContext(request))
 
 
 
 @staff_member_required
-def remove_free_try(request, free_try_id):
-    free_try = FreeTry.objects.get(id=free_try_id)
-    free_try.delete()
+def remove_free_try(request, account_id):
+    account = Account.objects.filter(id=account_id).update(bonus_budget=0)
     return HttpResponseRedirect(reverse('free_try'))
 
 

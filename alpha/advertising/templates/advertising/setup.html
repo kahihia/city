@@ -12,6 +12,7 @@
     <script src="{{STATIC_URL}}js/jquery.balloon.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>    
     <script src="{{STATIC_URL}}js/create_event/venue_account_owner.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/tabs.js"></script>
     <script src="{{STATIC_URL}}js/advertising/setup-page.js" type="text/javascript"></script>
 {% endblock %}
 
@@ -46,6 +47,11 @@
                                 {% endfor %}
                             </li>
                             <li id="all-info">
+                                {% for error in form.bonus_budget.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </li>
+                            <li id="all-info">
                                 {% for error in form.order_budget.errors %}
                                     <span class="error">{{ error }}</span>
                                 {% endfor %}
@@ -55,12 +61,6 @@
                     
                 {% endif %}
                 <form  enctype="multipart/form-data" method="post" name="advertising-setup" >
-                    {% if account.free_try %}
-                        <p>
-                            You have {{ account.free_try.budget }} for try.<br>
-                            Do you want to try campaign for free? - <a href="{% url 'advertising_free_setup' %}">Yes</a>
-                        </p>
-                    {% endif %}
                     {% csrf_token %}
                     <div class="campaign-name">
                         Name of Campaign

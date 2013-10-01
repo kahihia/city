@@ -3,4 +3,4 @@ from djmoney.forms.fields import MoneyField
 
 
 class FreeTryForm(forms.Form):
-    budget = MoneyField()
+    bonus_budget = MoneyField()

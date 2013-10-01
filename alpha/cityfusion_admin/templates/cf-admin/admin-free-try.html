@@ -17,8 +17,8 @@
             <h1>Get free try for user</h1>
             <form method="post" name="share-campaign-stats" action="{% url 'free_try' %}">
                 {% csrf_token %}
-                <input type="text" id="id_budget" name="budget" value="0.0" placeholder="free budget">
-                <input type="hidden" name="budget_currency" value="CAD">
+                <input type="text" id="id_budget" name="bonus_budget" value="0.0" placeholder="free budget">
+                <input type="hidden" name="bonus_budget_currency" value="CAD">
                 <input name="user_id" class="user-input" value="" data-ajax-url="{% url 'admin_user_autocomplete' %}"  />
                 <input type="submit" value="Free try" />
             </form>
@@ -29,17 +29,17 @@
                     <th class="action">Free budget</th>
                     <th class="action">Actions</th>
                 </tr>
-                {% paginate 10 free_tries %}
-                {% for free_try in free_tries %}
+                {% paginate 10 accounts_with_bonus %}
+                {% for account in accounts_with_bonus %}
                 <tr>
                     <td class="action">
-                        {{ free_try.account.user }}
+                        {{ account.user }}
                     </td>                    
                     <td class="action">
-                        {{ free_try.budget }}
+                        {{ account.bonus_budget }}
                     </td>                    
                     <td class="action">
-                        <a href="{% url "admin_remove_free_try" free_try.id %}" target="_blank">
+                        <a href="{% url "admin_remove_free_try" account.id %}">
                             Remove
                         </a>
                     </td>

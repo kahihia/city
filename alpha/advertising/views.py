@@ -4,13 +4,14 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from advertising.models import AdvertisingCampaign, AdvertisingType, Advertising, AdvertisingOrder
-from advertising.forms import PaidAdvertisingSetupForm, FreeAdvertisingSetupForm, AdvertisingCampaignEditForm, DepositFundsForCampaignForm
+from advertising.forms import PaidAdvertisingSetupForm, AdvertisingCampaignEditForm, DepositFundsForCampaignForm
 from advertising.utils import get_chosen_advertising_types, get_chosen_advertising_payment_types, get_chosen_advertising_images
 
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import native_region_required
 from decimal import Decimal
 from moneyed import Money, CAD
+from django.db.models import F
 
 def open(request, advertising_id):
     advertising = get_object_or_404(Advertising, pk=advertising_id)
@@ -33,7 +34,13 @@ def setup(request):
     if request.method == 'POST':
         form = PaidAdvertisingSetupForm(account, instance=campaign, data=request.POST, files=request.FILES)
         if form.is_valid():
+            budget_type = request.POST["budget_type"]
             advertising_campaign = form.save()
+
+            if budget_type=="BONUS":
+                advertising_campaign.budget = Decimal(request.POST["bonus_budget"])
+                advertising_campaign.save()
+                Account.objects.filter(user_id=request.user.id).update(bonus_budget=F("bonus_budget")-advertising_campaign.budget.amount)
 
             chosen_advertising_types = get_chosen_advertising_types(campaign, request)
             chosen_advertising_payment_types = get_chosen_advertising_payment_types(campaign, request)
@@ -52,88 +59,38 @@ def setup(request):
 
                 advertising.save()
 
-            budget = Decimal(request.POST["order_budget"])
-            total_price = budget
+            if budget_type=="BONUS":
+                return HttpResponseRedirect('/accounts/%s/' % request.user.username)
 
-            for tax in account.taxes():
-                total_price = total_price + (budget * tax.tax)
+            if budget_type=="REAL":
+                order_budget = Decimal(request.POST["order_budget"])
+                total_price = budget
 
-            order = AdvertisingOrder(
-                budget=budget,
-                total_price=total_price,
-                campaign=advertising_campaign,
-                account=account
-            )
+                for tax in account.taxes():
+                    total_price = total_price + (order_budget * tax.tax)
 
-            order.save()
+                order = AdvertisingOrder(
+                    budget=order_budget,
+                    total_price=total_price,
+                    campaign=advertising_campaign,
+                    account=account
+                )
 
-            for tax in account.taxes():
-                account_tax_cost = AccountTaxCost(account_tax=tax, cost=budget*tax.tax, tax_name=tax.name)
-                account_tax_cost.save()
-                order.taxes.add(account_tax_cost)
+                order.save()
+
+                for tax in account.taxes():
+                    account_tax_cost = AccountTaxCost(account_tax=tax, cost=order_budget*tax.tax, tax_name=tax.name)
+                    account_tax_cost.save()
+                    order.taxes.add(account_tax_cost)
 
 
-            return HttpResponseRedirect(reverse('advertising_payment', args=(str(order.id),)))
+                return HttpResponseRedirect(reverse('advertising_payment', args=(str(order.id),)))
 
     chosen_advertising_types = get_chosen_advertising_types(campaign, request)
     chosen_advertising_payment_types = get_chosen_advertising_payment_types(campaign, request)
     chosen_advertising_images = get_chosen_advertising_images(campaign, request)
 
     return render_to_response('advertising/setup.html', {
-        "form": form,
-        "advertising_types": advertising_types,
-        "chosen_advertising_types": chosen_advertising_types,
-        "chosen_advertising_payment_types": chosen_advertising_payment_types,
-        "chosen_advertising_images": chosen_advertising_images,
-        "account": account
-
-    }, context_instance=RequestContext(request))
-
-
-@login_required
-@native_region_required(why_message="native_region_required")
-def free_setup(request):
-    account = Account.objects.get(user_id=request.user.id)
-    campaign = AdvertisingCampaign(account=account, venue_account=request.current_venue_account)
-
-    form = FreeAdvertisingSetupForm(account, instance=campaign)
-
-    advertising_types = AdvertisingType.objects.filter(active=True).order_by("id")
-
-    if request.method == 'POST':
-        form = FreeAdvertisingSetupForm(account, instance=campaign, data=request.POST, files=request.FILES)
-        if form.is_valid():
-            advertising_campaign = form.save()
-
-            chosen_advertising_types = get_chosen_advertising_types(campaign, request)
-            chosen_advertising_payment_types = get_chosen_advertising_payment_types(campaign, request)
-            chosen_advertising_images = get_chosen_advertising_images(campaign, request)
-
-            for advertising_type_id in chosen_advertising_types:
-                advertising_type = AdvertisingType.objects.get(id=advertising_type_id)
-                advertising = Advertising(
-                    ad_type=advertising_type,
-                    campaign=advertising_campaign,
-                    payment_type=chosen_advertising_payment_types[advertising_type_id],
-                    image=chosen_advertising_images[advertising_type_id],
-                    cpm_price=advertising_type.cpm_price,
-                    cpc_price=advertising_type.cpc_price
-                )
-                advertising.save() 
-
-            budget = Decimal(request.POST["budget"])
-
-            free_try = account.free_try()
-            free_try.budget = free_try.budget - Money(budget, CAD)
-            free_try.save()
-
-            return HttpResponseRedirect('/accounts/%s/' % request.user.username)
-
-    chosen_advertising_types = get_chosen_advertising_types(campaign, request)
-    chosen_advertising_payment_types = get_chosen_advertising_payment_types(campaign, request)
-    chosen_advertising_images = get_chosen_advertising_images(campaign, request)
-
-    return render_to_response('advertising/free-setup.html', {
         "form": form,
         "advertising_types": advertising_types,
         "chosen_advertising_types": chosen_advertising_types,

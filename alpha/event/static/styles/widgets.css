@@ -284,6 +284,10 @@ ul#box-nav li.selected {
     border-top-right-radius: 5px;
 }
 
+.tabs-container.no-borders ul.tabs li {
+    border-bottom: 1px solid #dcdcdc;
+}
+
 .tabs-container ul.tabs li.current, .tabs-container ul.tabs li:hover {
     background: rgb(250,250,250); /* Old browsers */
     /* IE9 SVG, needs conditional override of 'filter' to 'none' */
@@ -312,6 +316,10 @@ ul#box-nav li.selected {
   border-right: 2px solid #e1e1e1;
   border-bottom: 2px solid #e1e1e1;  
 }
+
+ .tabs-container.no-borders .box {
+    border: none;
+ }
 
 .tabs-container .box .empty {
     margin: 20px;
