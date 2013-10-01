@@ -1,5 +1,5 @@
 {{ form.budget_type }}
-{% if account.bonus_budget > 0 %}
+{% if account.bonus_budget.amount > 0 %}
 <div class="tabs-container no-borders">
     <ul class="tabs right" data-page-id="setup-advertising-campaign">
         {% if account.bonus_budget %}
