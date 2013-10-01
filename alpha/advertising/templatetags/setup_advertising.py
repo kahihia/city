@@ -16,4 +16,8 @@ def setup_advertising_regions(context):
 
 @register.inclusion_tag('advertising/setup/payments.html', takes_context=True)
 def setup_advertising_payments(context):
+    return context
+
+@register.inclusion_tag('advertising/setup/free_budget.html', takes_context=True)
+def setup_advertising_free_budget(context):
     return context    

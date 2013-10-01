@@ -46,7 +46,7 @@
                                 {% endfor %}
                             </li>
                             <li id="all-info">
-                                {% for error in form.order_budget.errors %}
+                                {% for error in form.free_budget.errors %}
                                     <span class="error">{{ error }}</span>
                                 {% endfor %}
                             </li>
@@ -54,13 +54,7 @@
                     </div>
                     
                 {% endif %}
-                <form  enctype="multipart/form-data" method="post" name="advertising-setup" >
-                    {% if account.free_try %}
-                        <p>
-                            You have {{ account.free_try.budget }} for try.<br>
-                            Do you want to try campaign for free? - <a href="{% url 'advertising_free_setup' %}">Yes</a>
-                        </p>
-                    {% endif %}
+                <form  enctype="multipart/form-data" method="post" name="advertising-setup" >                    
                     {% csrf_token %}
                     <div class="campaign-name">
                         Name of Campaign
@@ -86,7 +80,7 @@
                     {% setup_advertising_types %}
                     {% setup_advertising_upload %}
                     {% setup_advertising_regions %}
-                    {% setup_advertising_payments %}
+                    {% setup_advertising_free_budget %}
                     <div class="pay-now-footer">
                         <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
                     </div>

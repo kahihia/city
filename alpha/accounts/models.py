@@ -170,6 +170,12 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
             Q(account=self) | Q(shareadvertisingcampaign__account=self)
         )
 
+    def free_try(self):
+        try:
+            return FreeTry.objects.get(account_id=self.id)
+        except:
+            return None
+
 
 def create_facebook_profile(sender, instance, created, **kwargs):
     if created:

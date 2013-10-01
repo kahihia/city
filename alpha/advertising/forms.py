@@ -38,6 +38,8 @@ class AdvertisingSetupForm(forms.ModelForm):
     def __init__(self, account, *args, **kwargs):
         super(AdvertisingSetupForm, self).__init__(*args, **kwargs)
 
+        self.account = account
+
         self.fields['venue_account'].widget = ChooseUserContextWidget(account)
 
         self.fields['name'].error_messages['required'] = 'Campaign name is required'
@@ -130,9 +132,37 @@ class AdvertisingCampaignEditForm(AdvertisingSetupForm):
             elif int(advertising_type.id) not in self.instance.advertising_set.values_list("ad_type_id", flat=True):
                 raise forms.ValidationError("You should upload image for all advertising types")
 
-        return cleaned_data        
+        return cleaned_data
 
 
+class FreeAdvertisingSetupForm(AdvertisingSetupForm):
+    budget = MoneyField(min_value=Money(10, CAD))
+
+    class Meta:
+        model = AdvertisingCampaign
+        fields = (
+            'name',
+            'regions',
+            'all_of_canada',
+            'website',
+            'venue_account',
+            'active_to',
+            'budget'
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(FreeAdvertisingSetupForm, self).__init__(*args, **kwargs)
+
+        self.fields['budget'].error_messages['min_value'] = 'Ensure budget is greater than or equal to %(limit_value)s'
+
+    def clean(self):
+        cleaned_data = super(FreeAdvertisingSetupForm, self).clean()
+        budget = cleaned_data["budget"]
+
+        if budget > self.account.free_try().budget:
+            raise forms.ValidationError('Ensure budget is not greater than %s' % self.account.free_try().budget)
+
+        return cleaned_data
 
 class PaidAdvertisingSetupForm(AdvertisingSetupForm):
     order_budget = MoneyField(min_value=Money(10, CAD))
