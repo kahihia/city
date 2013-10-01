@@ -149,8 +149,8 @@ class FunctionFilter(Filter):
 
     def recently_featured_filter(self, qs):
         return qs.filter(event__featuredevent__isnull=False)\
-                 .order_by('event__featuredevent__start_time', 'event', 'start_time')\
-                 .distinct('event__featuredevent__start_time', 'event')
+                .order_by('event__featuredevent__start_time', 'event', 'start_time')
+                 
 
     def reminder_filter(self, qs):
         return qs.filter(id__in=self.account.reminder_single_events_in_future().values("id"))
