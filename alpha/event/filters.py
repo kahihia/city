@@ -376,7 +376,7 @@ class SearchFilter(Filter):
     def filter(self, qs, search_string):
         # Use limits for ids query for optimization
         events_with_tags = SingleEvent.future_events.filter( 
-            event__tagged_items__tag__name=search_string 
+            event__tagged_items__tag__name__iexact=search_string 
         ).annotate(
             repeat_count=Count('id') 
         ).values_list("id", flat=True)
