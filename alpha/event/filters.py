@@ -150,7 +150,8 @@ class FunctionFilter(Filter):
     def recently_featured_filter(self, qs):
         return qs.filter(
                 event__featuredevent__start_time__lte=datetime.datetime.now(),
-                event__featuredevent__end_time__gte=datetime.datetime.now()
+                event__featuredevent__end_time__gte=datetime.datetime.now(),
+                event__featuredevent__active=True
             ).order_by('-event__featuredevent__start_time', 'start_time')
 
 
