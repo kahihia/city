@@ -389,11 +389,12 @@ def admin_setup_featured(request, event_id):
     )
 
     form = SetupFeaturedForm(
+        account=account,
         instance=featured_event
     )
 
     if request.method == 'POST':
-        form = SetupFeaturedForm(instance=featured_event, data=request.POST)
+        form = SetupFeaturedForm(account=account, instance=featured_event, data=request.POST)
 
         if form.is_valid():
             featured_event = form.save()
@@ -432,11 +433,12 @@ def admin_deactivate_featured(request, featured_event_id):
 def admin_edit_featured(request, featured_event_id):
     featured_event = FeaturedEvent.objects.get(id=featured_event_id)
     form = SetupFeaturedForm(
+        account=request.account,
         instance=featured_event
     )
     
     if request.method == 'POST':
-        form = SetupFeaturedForm(instance=featured_event, data=request.POST)
+        form = SetupFeaturedForm(account=request.account, instance=featured_event, data=request.POST)
 
         if form.is_valid():
             featured_event = form.save()

@@ -1,0 +1,49 @@
+{{ form.budget_type }}
+{% if account.bonus_budget.amount > 0 %}
+<div class="tabs-container no-borders with-margin">
+    <ul class="tabs right" data-page-id="setup-featured-event-payments">
+        <li data-tab-id="setup-bonus-budget" class="setup-bonus-budget">
+            <span>Try for free</span>
+        </li>
+        <li data-tab-id="setup-real-budget" class="setup-real-budget current">
+            <span>Pay now with</span>
+        </li>
+    </ul>
+    <div class="box">
+        <div class="pay-now-header">
+            Try for free
+        </div>
+        <div class="pay-now-widget">
+            <div class="info">
+                <div class="budget">
+                    <table class="taxes">
+                        <tr>
+                            <td colspan="3">
+                                You have bonus - {{ account.bonus_budget }}.
+                            </td>
+                        </tr>
+                        <tr class="total-price-row">
+                            <td>
+                                Total:
+                            </td>
+                            <td>
+                                C$<span class="bonus-price-output">
+                                    0
+                                </span>
+                                <input type="hidden" value="0" name="bonus_budget" id="id_bonus_budget">
+                                <input type="hidden" name="bonus_budget_currency" value="CAD">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box visible">
+        {% include 'featured/setup_real_payments.html' %}
+    </div>
+</div>
+{% else %}
+    {% include 'featured/setup_real_payments.html' %}
+{% endif %}
+

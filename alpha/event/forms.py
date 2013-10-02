@@ -14,6 +14,7 @@ from gmapi.forms.widgets import LocationWidget
 from ckeditor.fields import RichTextFormField
 import dateutil.parser as dateparser
 from cities.models import Region
+from djmoney.forms.fields import MoneyField
 
 
 class SetupFeaturedForm(forms.ModelForm):
@@ -26,6 +27,12 @@ class SetupFeaturedForm(forms.ModelForm):
     start_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
     end_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
 
+    bonus_budget = MoneyField(required=False)
+
+    # BONUS - when user can not found venue in google autocomplete he can suggest new venue
+    # REAL - user can choose venue with help of google autocomplete widget
+    budget_type = forms.CharField(required=True, widget=forms.widgets.HiddenInput(), initial="REAL")
+
     class Meta:
         model = FeaturedEvent
         fields = (
@@ -34,6 +41,11 @@ class SetupFeaturedForm(forms.ModelForm):
             'all_of_canada',
             'regions'           
         )
+
+    def __init__(self, account, *args, **kwargs):
+        super(SetupFeaturedForm, self).__init__(*args, **kwargs)
+
+        self.account = account        
 
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -44,6 +56,14 @@ class SetupFeaturedForm(forms.ModelForm):
 
         if not all_of_canada and not regions:
             raise forms.ValidationError("You should choose at least one region")
+
+        budget_type = cleaned_data["budget_type"]
+
+        if budget_type=="BONUS":
+            bonus_budget = cleaned_data["bonus_budget"]
+
+            if bonus_budget > self.account.bonus_budget:
+                raise forms.ValidationError('Ensure budget is lower than or equal to %s' % self.account.bonus_budget)
 
         return cleaned_data
 

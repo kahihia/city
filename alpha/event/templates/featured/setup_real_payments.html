@@ -1,0 +1,79 @@
+<div class="pay-now-header">
+    Pay Now With
+</div>
+<div class="pay-now-widget">
+     <div class="info">
+        <input type="hidden" value="2" id="id_day_cost">
+        <table class="taxes">
+            {% if account_taxes %}
+                {% for tax in account_taxes %}
+                    <tr class="tax-row">
+                        <td>
+                            <input type="hidden" value="{{ tax.tax }}" class="tax-input">
+                            {{ tax.name }} ({{ tax.pretty_tax }}%):
+                        </td>
+                        <td>
+                            C$<span class="tax-price">
+                                0
+                            </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            <tr class="total-price-row">
+                <td>
+                    Total:
+                </td>
+                <td>
+                    C$<span class="total-price-output">
+                        0
+                    </span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="choose-payment-system">
+        <table>
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <input id="payment_paypal_id" type="radio" name="payment_system" value="paypal" checked="checked" >
+                        <label for="payment_paypal_id"></label>
+                        <label for="payment_paypal_id">
+                            <img src="{{ STATIC_URL }}/images/featured/paypal.png"/>
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    <div class="checkbox disabled">
+                        <input id="payment_visa_id" type="radio" name="payment_system" value="visa" disabled>
+                        <label for="payment_visa_id"></label>
+                        <label for="payment_visa_id">
+                            <img src="{{ STATIC_URL }}/images/featured/visa.png"/>
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="checkbox disabled">
+                        <input id="payment_email_money_id" type="radio" name="payment_system" value="email_money_transfer" disabled>
+                        <label for="payment_email_money_id"></label>
+                        <label for="payment_email_money_id">
+                            <img src="{{ STATIC_URL }}/images/featured/email_money_transfer.png"/>
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    <div class="checkbox disabled">
+                        <input id="payment_master_card_id" type="radio" name="payment_system" value="master_card" disabled>
+                        <label for="payment_master_card_id"></label>
+                        <label for="payment_master_card_id">
+                            <img src="{{ STATIC_URL }}/images/featured/master_card.png"/>
+                        </label>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

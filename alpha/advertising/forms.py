@@ -139,7 +139,7 @@ class PaidAdvertisingSetupForm(AdvertisingSetupForm):
 
     # BONUS - when user can not found venue in google autocomplete he can suggest new venue
     # REAL - user can choose venue with help of google autocomplete widget
-    budget_type = forms.CharField(required=True, widget=forms.widgets.HiddenInput())
+    budget_type = forms.CharField(required=True, widget=forms.widgets.HiddenInput(), initial="REAL")
 
     bonus_budget = MoneyField(required=False)
     order_budget = MoneyField(required=False)
@@ -151,7 +151,7 @@ class PaidAdvertisingSetupForm(AdvertisingSetupForm):
             bonus_budget = cleaned_data["bonus_budget"]
 
             if bonus_budget > self.account.bonus_budget:
-                raise forms.ValidationError('Ensure budget is not greater than %s' % self.account.bonus_budget)
+                raise forms.ValidationError('Ensure budget is lower than or equal to %s' % self.account.bonus_budget)
 
             if bonus_budget < Money(10, CAD):
                 raise forms.ValidationError('Ensure budget is greater than or equal to %s' % Money(10, CAD))

@@ -27,6 +27,8 @@ from event.forms import SetupFeaturedForm, CreateEventForm, EditEventForm
 from ajaxuploader.views import AjaxFileUploader
 from accounts.decorators import native_region_required
 from accounts.models import VenueAccount, AccountTaxCost
+from decimal import Decimal
+from accounts.models import Account
 
 
 def start(request):
@@ -362,41 +364,54 @@ def setup_featured(request, authentication_key):
     venue_account_featured_stats = FeaturedEvent.objects.filter(event__venue_id=event.venue.id)
 
     form = SetupFeaturedForm(
+        account=account,
         instance=featured_event
     )
 
     if request.method == 'POST':
-        form = SetupFeaturedForm(instance=featured_event, data=request.POST)
+        form = SetupFeaturedForm(account=account, instance=featured_event, data=request.POST)
 
         if form.is_valid():
             featured_event = form.save()
 
-            cost = (featured_event.end_time - featured_event.start_time).days * Money(2, CAD)
-            total_price = cost
+            budget_type = request.POST["budget_type"]
 
-            for tax in account.taxes():
-                total_price = total_price + (cost * tax.tax)
+            if budget_type == "BONUS":
+                featured_event.active = True
+                featured_event.save()
+                budget = Decimal(request.POST["bonus_budget"])
+                Account.objects.filter(user_id=request.user.id).update(bonus_budget=F("bonus_budget")-budget)
 
-            order = FeaturedEventOrder(
-                cost=cost,
-                total_price=total_price,
-                featured_event=featured_event,
-                account=account
-            )
+                return HttpResponseRedirect('/accounts/%s/' % request.user.username)
 
-            order.save()
+            if budget_type == "REAL":
+                cost = (featured_event.end_time - featured_event.start_time).days * Money(2, CAD)
+                total_price = cost
 
-            for tax in account.taxes():
-                account_tax_cost = AccountTaxCost(account_tax=tax, cost=cost*tax.tax, tax_name=tax.name)
-                account_tax_cost.save()
-                order.taxes.add(account_tax_cost)
-            
+                for tax in account.taxes():
+                    total_price = total_price + (cost * tax.tax)
 
-            return HttpResponseRedirect(reverse('setup_featured_payment', args=(str(order.id),)))
+                order = FeaturedEventOrder(
+                    cost=cost,
+                    total_price=total_price,
+                    featured_event=featured_event,
+                    account=account
+                )
+
+                order.save()
+
+                for tax in account.taxes():
+                    account_tax_cost = AccountTaxCost(account_tax=tax, cost=cost*tax.tax, tax_name=tax.name)
+                    account_tax_cost.save()
+                    order.taxes.add(account_tax_cost)
+                
+
+                return HttpResponseRedirect(reverse('setup_featured_payment', args=(str(order.id),)))
 
     return render_to_response('events/setup_featured_event.html', {
             'form': form,
-            'featured_events_stats': venue_account_featured_stats
+            'featured_events_stats': venue_account_featured_stats,
+            'account': account
         }, context_instance=RequestContext(request))
 
 
