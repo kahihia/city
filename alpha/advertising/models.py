@@ -27,6 +27,13 @@ class AdminAdvertisingCampaignManager(models.Manager):
     def get_query_set(self):
         return super(AdminAdvertisingCampaignManager, self).get_query_set()
 
+class AdvertisinCampaignWithUnsusedMoney(models.Manager)        :
+    def get_query_set(self):
+        return super(AdvertisinCampaignWithUnsusedMoney, self).get_query_set().filter(
+            active_to__lt=datetime.datetime.now(),
+            enough_money=True
+        )
+
 
 class AdvertisingCampaign(models.Model):
     name = models.CharField(max_length=128)
@@ -51,6 +58,7 @@ class AdvertisingCampaign(models.Model):
 
     objects = money_manager(models.Manager())
     admin = AdminAdvertisingCampaignManager()
+    with_unused_money = AdvertisinCampaignWithUnsusedMoney()
 
     def save(self, *args, **kwargs):
         if self.ammount_spent >= self.budget:
@@ -80,7 +88,6 @@ class AdvertisingCampaign(models.Model):
 class ShareAdvertisingCampaign(models.Model):
     campaign = models.ForeignKey(AdvertisingCampaign)
     account = models.ForeignKey("accounts.Account")
-
 
 
 PAYMENT_TYPE = (
