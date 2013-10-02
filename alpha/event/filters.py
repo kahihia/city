@@ -148,9 +148,12 @@ class FunctionFilter(Filter):
         return qs
 
     def recently_featured_filter(self, qs):
-        return qs.filter(event__featuredevent__isnull=False)\
-                 .order_by('event__featuredevent__start_time', 'event', 'start_time')\
-                 .distinct('event__featuredevent__start_time', 'event')
+        return qs.filter(
+                event__featuredevent__start_time__lte=datetime.datetime.now(),
+                event__featuredevent__end_time__gte=datetime.datetime.now(),
+                event__featuredevent__active=True
+            ).order_by('-event__featuredevent__start_time', 'start_time')
+
 
     def reminder_filter(self, qs):
         return qs.filter(id__in=self.account.reminder_single_events_in_future().values("id"))
@@ -373,7 +376,7 @@ class SearchFilter(Filter):
     def filter(self, qs, search_string):
         # Use limits for ids query for optimization
         events_with_tags = SingleEvent.future_events.filter( 
-            event__tagged_items__tag__name=search_string 
+            event__tagged_items__tag__name__iexact=search_string 
         ).annotate(
             repeat_count=Count('id') 
         ).values_list("id", flat=True)

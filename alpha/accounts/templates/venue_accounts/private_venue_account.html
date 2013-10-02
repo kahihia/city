@@ -197,9 +197,6 @@
                 <li data-tab-id="venue-archived-events" {% if active_tab == "venue-archived-events" %}class="current"{% endif %}>
                     <span>Archived events</span>
                 </li>
-                <li data-tab-id="venue-featured-stats" {% if active_tab == "venue-featured-stats" %}class="current"{% endif %}>
-                    <span>Featured stats</span>
-                </li>
                 <li data-tab-id="venue-advertising-stats" {% if active_tab == "venue-advertising-stats" %}class="current"{% endif %}>
                    <span>Advertising Stats</span>
                 </li>
@@ -212,9 +209,6 @@
             </div>
             <div class="box{% if active_tab == "venue-archived-events" %} visible{% endif %}">
                 {% include 'venue_accounts/_venue_archived_events_table.html' %}
-            </div>
-            <div class="box{% if active_tab == "venue-featured-stats" %} visible{% endif %}">
-                {% include 'venue_accounts/_venue_featured_stats_table.html' %}
             </div>
             <div class="box{% if active_tab == "venue-advertising-stats" %} visible{% endif %} advertising-stats">
                 {% include 'advertising/stats/list.html' with ads_items=venue_account.campaigns %}

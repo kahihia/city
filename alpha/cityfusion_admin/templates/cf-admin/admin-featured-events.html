@@ -30,10 +30,12 @@
                 <tr>
                     <th>Event</th>
                     <th>Status</th>
+                    <th>Views</th>
+                    <th>Clicks</th>
                     <th>Owned by</th>
                     <th>From-To</th>
-                    <th>Edit</th>
-                    <th>Remove</th>
+                    <th>Regions</th>
+                    <th>Actions</th>
                 </tr>
 
                 {% paginate 10 featured_events %}
@@ -49,19 +51,32 @@
                             Off(<a href="{% url "admin_activate_featured" featured_event.id %}">Activate</a>)
                         {% endif %}
                     </td>
+                    <td>{{ featured_event.views }}</td>
+                    <td>{{ featured_event.clicks }}</td>
                     <td>
                         {% if featured_event.owner %}
                             <a href="{% url "admin:accounts_account_change" featured_event.owner.id %}" target="_blank">{{ featured_event.owner.user.username }}</a>
                         {% endif %}
                     </td>
-                    <td>
-                        {{ featured_event.start_time|date:"b d, Y"|title }} - {{ featured_event.end_time|date:"b d, Y"|title }}
+                    <td align="center">
+                        {{ featured_event.start_time|date:"b d, Y"|title }}
+                        <br/>-<br/>
+                        {{ featured_event.end_time|date:"b d, Y"|title }}
                     </td>
                     <td>
-                        <a href="{% url "admin_edit_featured" featured_event.id %}">Edit</a>
+                        {% if featured_event.all_of_canada %}
+                            All of Canada
+                        {% else %}
+                            {{ featured_event.regions_representation }}
+                        {% endif %}
                     </td>
                     <td>
-                        <a href="{% url "admin_remove_featured" featured_event.id %}">Remove</a>
+                        <a href="{% url "admin_edit_featured" featured_event.id %}">
+                            <img src="/static/images/edit-icon.png"/>
+                        </a>
+                        <a href="{% url "admin_remove_featured" featured_event.id %}" class="danger">
+                            <img src="/static/images/delete-icon.png"/>
+                        </a>
                     </td>
                 </tr>
                 {% empty %}
