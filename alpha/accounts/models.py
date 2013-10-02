@@ -114,7 +114,7 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     cities = models.ManyToManyField(City)
 
     bonus_budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
-    
+
     accounts = money_manager(models.Manager())
 
     def future_events(self):        
