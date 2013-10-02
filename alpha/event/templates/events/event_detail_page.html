@@ -59,9 +59,10 @@
                 <div class="event-photo{% if event.event_type == "MULTIDAY" %}{% if not event.venue_account_owner or not event.venue_account_owner.public %} multiday{% endif %}{% endif %}">
                     {% if event.picture %}
                         <a id="photoFancy" href="/media/{{ event.picture }}">
-                            <div class="center-cropped" 
-                                style="background: url('{% cropped_thumbnail event.base "cropping" height=265 %}') center center no-repeat;">
-                            </div>​
+                            <img class="center-cropped" 
+                                src="{% cropped_thumbnail event.base "cropping" height=265 %}">
+                            <div class="detail-view"></div>
+
                         </a>
                     {% else %}
                         <div class="center-cropped default" style="background-image: url('{{STATIC_URL}}images/default-event.jpg');"></div>

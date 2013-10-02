@@ -62,6 +62,7 @@
     height: 265px;
     width: 265px;
     display: block;
+    position: relative;
 }
 
 .content-wrapper .event-wrapper .event-photo .center-cropped{
@@ -72,7 +73,8 @@
     height: 265px;
 }
 
-.content-wrapper .event-wrapper .event-photo .center-cropped:after {
+
+.content-wrapper .event-wrapper .event-photo .detail-view {
     position: absolute;
     content: "";
     width: 80px;

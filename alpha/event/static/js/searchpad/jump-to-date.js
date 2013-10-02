@@ -28,7 +28,32 @@
             $("input", this).datepicker("show");
         });
 
-        $(".start-date .date input, .end-date .date input", this.scope).datepicker();
+        $(".start-date .date input", this.scope).datepicker({
+            onSelect: function (date) {
+                var date2 = $('.start-date .date input').datepicker('getDate');
+                date2.setDate(date2.getDate());
+                $(".end-date .date input").datepicker('setDate', date2);
+                //sets minDate to dt1 date + 1
+                $(".end-date .date input").datepicker('option', 'minDate', date2);
+            }    
+        });
+
+        $(".end-date .date input", this.scope).datepicker({
+            onClose: function () {
+                var dt1 = $('.start-date .date input').datepicker('getDate');
+                var dt2 = $('.end-date .date input').datepicker('getDate');
+                //check to prevent a user from entering a date below date of dt1
+                if (dt2 <= dt1) {
+                    var minDate = $('.end-date .date input').datepicker('option', 'minDate');
+                    $('.end-date .date input').datepicker('setDate', minDate);
+                }
+            }            
+        });
+        
+    
+        
+
+        
 
         this.jumpLink = $(".jump-to-date-button", this.scope);
         this.baseUrlQuery = this.jumpLink.data("base-url-query");

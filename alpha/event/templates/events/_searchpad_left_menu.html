@@ -8,7 +8,7 @@
                 </a>
             </li>
             <li>
-                <a href="{% events_filter_url request eventsFilter function="random" exclude="tag" %}">
+                <a href="{% events_filter_url request eventsFilter function="random" exclude="tag" %}" class="ajax">
                     Random
                 </a>
             </li>
@@ -26,7 +26,7 @@
                 {%endfor%}
             </ul>
             <li>
-                <a href="{% events_filter_url request eventsFilter function="recently_featured" exclude="tag" %}">
+                <a href="{% events_filter_url request eventsFilter function="recently_featured" exclude="tag" %}" class="ajax">
                     Recently Featured
                 </a>
             </li>
