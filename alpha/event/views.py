@@ -169,7 +169,7 @@ def view(request, slug, date=None):
 
     events_from_venue = SingleEvent.future_events.filter(event__venue_id=venue.id).select_related("event__venue", "event__venue__city")
     if date:
-        events_from_venue = events_from_venue.exclude(event_id=event.event_identifier)
+        events_from_venue = events_from_venue.exclude(id=event.id)
 
     return render_to_response('events/event_detail_page.html', {
             'event': event,
