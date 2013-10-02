@@ -178,7 +178,8 @@ def private_venue_account(request, slug):
 
 
     venue_events = SingleEvent.future_events.filter(event__venue_account_owner=venue_account)
-    venue_featured_events = SingleEvent.featured_events.filter(event__venue_account_owner=venue_account)
+    # venue_featured_events = SingleEvent.featured_events.filter(event__venue_account_owner=venue_account)
+    venue_featured_events = FeaturedEvent.objects.filter(event__venue_account_owner=venue_account)
     venue_archived_events = SingleEvent.archived_events.filter(event__venue_account_owner=venue_account)
     featured_events_stats = FeaturedEvent.objects.filter(event__venue_account_owner=venue_account)
 
