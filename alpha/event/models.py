@@ -521,7 +521,15 @@ class FeaturedEvent(models.Model):
         FeaturedEvent.objects.filter(id=self.id).update(views=F("views")+1)
 
     def event_day(self):
-        return Event.future_events.get(id=self.event.id)        
+        try:
+            event = Event.future_events.get(id=self.event.id)
+        except Event.DoesNotExist:
+            event = Event.archived_events.get(id=self.event.id)
+
+        return event
+
+    def regions_representation(self):
+        return ", ".join(self.regions.all().values_list("name", flat=True))
 
 
 class FeaturedEventOrder(models.Model):
