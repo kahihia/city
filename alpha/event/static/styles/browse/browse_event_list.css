@@ -142,6 +142,39 @@
     font-weight: bold;
 }
 
+.account-featured-table .entry-info {
+    width: 280px !important;
+}
+
+.account-featured-table .entry-info .entry-details-wrapper .title {
+    white-space: normal;
+    width: 195px;
+}
+
+.account-featured-table {
+    width: 672px !important;
+    border-collapse: collapse;
+}
+
+.account-featured-table th,
+.account-featured-table td {
+    text-align: center;
+    border-bottom: 1px solid #CCCCCC;
+    padding: 10px;
+}
+
+.account-featured-table th {
+    background: linear-gradient(to bottom, #FAFAFA 0%, #EAEAEA 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+
+.account-featured-table td {
+    background: none repeat scroll 0 0 #F4F4F4;
+}
+
+.account-featured-table td.no-padding {
+    padding: 0;
+}
+
 .entry-info {
     position: relative;
 }

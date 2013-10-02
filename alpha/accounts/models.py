@@ -6,7 +6,7 @@ from userena.models import UserenaBaseProfile
 from django.contrib.gis.db import models
 from taggit_autosuggest.managers import TaggableManager
 
-from event.models import Event, SingleEvent, Venue
+from event.models import Event, SingleEvent, FeaturedEvent, Venue
 
 from django_facebook.models import FacebookProfileModel
 
@@ -114,14 +114,14 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     cities = models.ManyToManyField(City)
 
     bonus_budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
-
+    
     accounts = money_manager(models.Manager())
 
     def future_events(self):        
         return SingleEvent.future_events.filter(event__owner_id=self.user.id)
 
     def featured_events(self):
-        return SingleEvent.featured_events.filter(event__owner_id=self.user.id)
+        return FeaturedEvent.objects.filter(owner__id=self.id)
 
     def in_the_loop_events(self):
         region_ids = self.regions.all().values_list("id", flat=True)

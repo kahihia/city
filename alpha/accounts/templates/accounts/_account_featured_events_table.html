@@ -5,39 +5,64 @@
 
 
 {% paginate 6 events %}
-<div class="account-entry-wrapper entry-wrapper">
-{% for event in events %}
-    <div class="entry-info">
-        <div class="entry-img-prev">
-            {% if event.picture %}
-                <img src="{% cropped_thumbnail event.base "cropping" width=60 %}" height="60px" weight="60px">
-            {% else %}
-                <img src="{{STATIC_URL}}images/default-event.jpg" height="60px" weight="60px">
-            {% endif %}
-        </div>
-        <div class="entry-details-wrapper">                                  
-            <div class="title">
-                <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">
-                    {{event.name}}&nbsp;
-                </a>                    
-            </div>
-            <div class="entry-date">
-                {{event.start_time|date:"l, F d, Y"}}
-                <span class="delimeter">|</span>
-                {{event.start_time|just_time}} - {{event.end_time|just_time}}
-            </div>
-            <div class="entry-description">                    
-                {{ event.venue.name }}, {% if event.venue.street %}{{ event.venue.street }}, {% endif %}{{ event.venue.city.name_std }}
-            </div>                
-        </div>        
-        <div class="clr"></div>
-    </div>
-{% empty %}
-    <p>
-        no featured events
-    </p>
-{%endfor%}
-</div>
+<table class="account-featured-table account-entry-wrapper entry-wrapper">
+    <tr>
+        <th class="action">Event</th>
+        <th class="action">Status</th>
+        <th class="action">Views</th>
+        <th class="action">Clicks</th>
+        <th class="action">From-To</th>
+        <th class="action">Regions</th>
+    </tr>
+    {% for event in events %}
+        <tr>
+            <td class="no-padding">
+                <div class="entry-info">
+                    <div class="entry-img-prev">
+                        {% if event.event_day.picture %}
+                            <img src="{% cropped_thumbnail event.event_day.base "cropping" width=60 %}" height="60px" weight="60px">
+                        {% else %}
+                            <img src="{{ STATIC_URL }}images/default-event.jpg" height="60px" weight="60px">
+                        {% endif %}
+                    </div>
+                    <div class="entry-details-wrapper">
+                        <div class="title">
+                            <a href="{% url 'event_view' event.event_day.slug event.event_day.start_time|date:"Y-m-d" %}">
+                                {{ event.event_day.name }}&nbsp;
+                            </a>
+                        </div>
+                    </div>
+                    <div class="clr"></div>
+                </div>
+            </td>
+            <td>
+                {% if event.active %}
+                    On
+                {% else %}
+                    Off
+                {% endif %}
+            </td>
+            <td>{{ event.views }}</td>
+            <td>{{ event.clicks }}</td>
+            <td align="center">
+                {{ event.start_time|date:"b d, Y"|title }}
+                <br/>-<br/>
+                {{ event.end_time|date:"b d, Y"|title }}
+            </td>
+            <td>
+                {% if event.all_of_canada %}
+                    All of Canada
+                {% else %}
+                    {{ event.regions_representation }}
+                {% endif %}
+            </td>
+        </tr>
+    {% empty %}
+        <p>
+            no featured events
+        </p>
+    {%endfor%}
+</table>
 
 <div class="entry-navigation-np">
     <p>
