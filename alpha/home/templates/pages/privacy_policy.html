@@ -263,10 +263,10 @@
                             <div class="list-entry-text first">
                                 As our business grows and changes, we expect to revise or enhance these policies from
                                 time-to-time. We will post the current version of our Privacy Policy on our website
-                                located at <a href="{{ "http://www."|add:request.META.HTTP_HOST }}">{{ "www."|add:request.META.HTTP_HOST }}</a>
+                                located at <a href="{{ "http://"|add:request.META.HTTP_HOST }}">{{ request.META.HTTP_HOST }}</a>
                                 and will communicate material changes to our Privacy Policy
                                 to users and the public by posting a notice on our website located at
-                                <a href="{{ "http://www."|add:request.META.HTTP_HOST }}">{{ "www."|add:request.META.HTTP_HOST }}</a>
+                                <a href="{{ "http://"|add:request.META.HTTP_HOST }}">{{ request.META.HTTP_HOST }}</a>
                                 for ten days following the change. If any modification is unacceptable to you, you shall
                                 cease using our Services. If you do not cease using our Services, you will be conclusively
                                 deemed to have accepted the change.
