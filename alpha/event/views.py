@@ -170,7 +170,7 @@ def view(request, slug, date=None):
 
     events_from_venue = SingleEvent.future_events.filter(event__venue_id=venue.id).select_related("event__venue", "event__venue__city")
     if date:
-        events_from_venue = events_from_venue.exclude(event_id=event.event_identifier)
+        events_from_venue = events_from_venue.exclude(id=event.id)
 
     return render_to_response('events/event_detail_page.html', {
             'event': event,
@@ -226,7 +226,7 @@ def create_from_facebook(request):
                 form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
             info = ''
         else:
-            info = form.errors['__all__'][0]
+            info = form.errors
 
         return HttpResponse(
             json.dumps({'success': success, 'info': info}),

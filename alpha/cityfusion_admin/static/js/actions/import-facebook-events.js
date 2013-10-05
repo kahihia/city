@@ -15,11 +15,15 @@
             self.cityName = $("[data-id=city_name]");
             self.fbPageInput = $("[data-id=fb_page_url]");
             self.fancyboxSelector = ".fancybox-wrap";
+            self.formErrorsTplSelector = "[data-id=form_errors_tpl]";
+            self.formErrorsItemsSelector = "[data-type=form_errors_items]";
+            self.formErrorItemSelector = "[data-type=form_error_item]";
 
 
             self.loadUrl = self.eventsBlock.data("load-url");
             self.createUrl = self.eventsBlock.data("create-url");
             self.rejectUrl = self.eventsBlock.data("reject-url");
+            self.clearGraphUrl = self.eventsBlock.data("graph-clear-url");
 
             self.reset();
             self.initCityInput();
@@ -99,65 +103,72 @@
         };
 
         self.onSearchButtonClick = function() {
-            self.place = self.cityName.val();
-            self.fbPageUrl = self.fbPageInput.val();
+            self.checkFBLogin(function() {
+                self.place = self.cityName.val();
+                self.fbPageUrl = self.fbPageInput.val();
 
-            $("#id_tags__tagautosuggest").data('ui-tagspopup').forCity(self.cityName.val());
+                $("#id_tags__tagautosuggest").data('ui-tagspopup').forCity(self.cityName.val());
 
-            self.loadEvents({
-                "place": self.place,
-                "fb_page_url": self.fbPageUrl
-            }, function() {
-                self.eventsBlock.empty();
-                $(".form-block").append(self.indicatorBlock.show());
-                self.moreLink.hide();
+                self.loadEvents({
+                    "place": self.place,
+                    "fb_page_url": self.fbPageUrl
+                }, function() {
+                    self.eventsBlock.empty();
+                    $(".form-block").append(self.indicatorBlock.show());
+                    self.moreLink.hide();
+                });
             });
         };
 
         self.onMoreLinkClick = function() {
-            if(self.place) {
-                self.loadEvents({
-                    "place": self.place,
-                    "fb_page_url": self.fbPageUrl,
-                    "page": self.page
-                }, function() {
-                    self.moreLink.append(self.indicatorBlock.show());
-                });
-            }
+            self.checkFBLogin(function() {
+                if(self.place) {
+                    self.loadEvents({
+                        "place": self.place,
+                        "fb_page_url": self.fbPageUrl,
+                        "page": self.page
+                    }, function() {
+                        self.moreLink.append(self.indicatorBlock.show());
+                    });
+                }
+            });
         };
 
         self.onImportButtonClick = function() {
             self.activeItem = $(this).closest("[data-type=event_item]");
             var buttons = $(this).parent().find("input");
-            buttons.attr("disabled", "true");
 
-            if($.fancybox) {
-                var eventData = {
-                    "facebook_event_id": self.activeItem.data("event-id"),
-                    "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val()
+            self.checkFBLogin(function() {
+                buttons.attr("disabled", "true");
+
+                if($.fancybox) {
+                    var eventData = {
+                        "facebook_event_id": self.activeItem.data("event-id"),
+                        "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val()
+                    }
+
+                    $.fancybox.open([
+                        {
+                            type: 'iframe',
+                            href : self.createUrl + "?" + self.prepareUrlParams(eventData)
+                        }
+                    ], {
+                        afterLoad: function() {
+                            $(self.fancyboxSelector + " iframe").contents()
+                                                                .find(".submit").click(self.onSubmitButtonClick);
+                        },
+                        afterClose: function() {
+                            buttons.removeAttr("disabled");
+                        }
+                    });
                 }
-
-                $.fancybox.open([
-                    {
-                        type: 'iframe',
-                        href : self.createUrl + "?" + self.prepareUrlParams(eventData)
-                    }
-                ], {
-                    afterLoad: function() {
-                        $(self.fancyboxSelector + " iframe").contents()
-                                                            .find(".submit").click(self.onSubmitButtonClick);
-                    },
-                    afterClose: function() {
-                        buttons.removeAttr("disabled");
-                    }
-                });
-            }
-
+            });
         };
 
         self.onSubmitButtonClick = function() {
-            var buttons = self.activeItem.find("input");
-            var sent_form = $(this).closest("form").clone();
+            var button = $(this);
+            var existing_form = button.closest("form");
+            var sent_form = existing_form.clone();
             var tags_as_string = sent_form.find("#as-values-id_tags__tagautosuggest").val();
 
             sent_form.find("#id_tags").val(tags_as_string);
@@ -171,8 +182,9 @@
 
             $.post(self.createUrl, event_data, function(data) {
                 sent_form = null;
-                $.fancybox.close();
                 if(data.success) {
+                    $.fancybox.close();
+
                     var message = $("<div/>", {
                         "class": "alert-success",
                         "html": "Import completed successfully"
@@ -180,20 +192,33 @@
 
                     self.activeItem.remove();
                     delete self.activeItem;
+
+                    window.setTimeout(function() {
+                        message.remove();
+                    }, 3000);
                 }
                 else {
-                    var message = $("<div/>", {
-                        "class": "alert-error",
-                        "html": "Import error:<br/>" + data.info
-                    }).insertBefore(self.activeItem);
+                    var errors = button.closest("body").find(self.formErrorsTplSelector)
+                                       .clone().removeAttr("data-id")
+                                       .attr("data-type", "new_form_errors");
+                    var errorsItems = errors.find(self.formErrorsItemsSelector);
+                    var errorItem = errors.find(self.formErrorItemSelector);
 
-                    self.formBlock.append(self.miniIndicator.hide());
-                    buttons.removeAttr("disabled");
+                    errorsItems.empty();
+                    $.each(data.info, function(key, value) {
+                        var newErrorItem = errorItem.clone();
+                        newErrorItem.find("span").text(value[0]);
+                        errorsItems.append(newErrorItem);
+                    });
+
+
+                    existing_form.find("[data-type=new_form_errors]").remove();
+                    existing_form.prepend(errors.show());
+
+                    $(self.fancyboxSelector + " iframe").contents()
+                        .find("html, body").animate({ scrollTop: 0 }, 10);
                 }
 
-                window.setTimeout(function() {
-                    message.remove();
-                }, 3000);
             }, 'json');
 
             return false;
@@ -223,6 +248,29 @@
             });
 
             return params.join("&");
+        };
+
+        self.checkFBLogin = function(successCallback) {
+            if(typeof(FB) === "undefined") {
+                alert("Facebook library isn't ready yet. Please, wait.");
+                return;
+            }
+
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    successCallback();
+                } else {
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            $.post(self.clearGraphUrl, "", function(data) {
+                               if(data.success) {
+                                   successCallback();
+                               }
+                            }, 'json');
+                        }
+                    });
+                }
+            });
         };
 
         self.init();
