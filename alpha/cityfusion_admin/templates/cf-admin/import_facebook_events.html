@@ -22,6 +22,7 @@
     <script src="{{STATIC_URL}}js/location/venue_autocomplete.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/select2.min.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/actions/import-facebook-events.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/facebook-for-turbolinks.js"></script>
 
     {% include 'variables.html' %}
 
@@ -114,7 +115,9 @@
         <div class="box visible options">
             <div class="form-block" data-id="form_block">
                 <p>
-                    <input type="hidden" class="bigdrop city-input" value="" data-ajax-url="{% url 'admin_location_autocomplete' %}" data-id="city_input" />
+                    <input type="hidden" class="bigdrop city-input" value=""
+                           data-ajax-url="{% url 'admin_location_autocomplete' %}"
+                           data-id="city_input" />
                     AND/OR
                     <input type="text" class="modern-input" placeholder="Facebook page url" data-id="fb_page_url" />
                     <input class="events-search-button" type="button" value="Search" data-id="search_button" />
@@ -127,7 +130,11 @@
                 <img class="mini-indicator" data-id="mini_indicator" src="{{ STATIC_URL }}images/mini-ajax-loader.gif" />
             </div>
             <div>
-                <div class="entry-wrapper" data-id="facebook_events_list" data-load-url="{% url 'load_facebook_events' %}" data-create-url="{% url 'event_create_from_facebook' %}" data-reject-url={% url 'reject_facebook_event' %}></div>
+                <div class="entry-wrapper" data-id="facebook_events_list"
+                     data-load-url="{% url 'load_facebook_events' %}"
+                     data-create-url="{% url 'event_create_from_facebook' %}"
+                     data-reject-url="{% url 'reject_facebook_event' %}"
+                     data-graph-clear-url="{% url 'clear_facebook_graph' %}"></div>
                 <div data-id="load_more" class="load-more">
                     Load more
                 </div>

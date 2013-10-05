@@ -15,7 +15,7 @@ from event.models import Event, FeaturedEvent, FacebookEvent
 from event.forms import SetupFeaturedForm, CreateEventForm
 from event.services import facebook_services
 from cities.models import City, Country
-from django_facebook.decorators import facebook_required
+from django_facebook.decorators import facebook_required_lazy
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Q
 
@@ -80,7 +80,6 @@ def claim_event_list(request):
 
 
 @staff_member_required
-@facebook_required
 def import_facebook_events(request):
     form = CreateEventForm(account=request.account, initial={
         "venue_account_owner": request.current_venue_account
@@ -92,6 +91,7 @@ def import_facebook_events(request):
 
 
 @staff_member_required
+@facebook_required_lazy
 def load_facebook_events(request):
     if request.is_ajax():
         try:
@@ -129,6 +129,14 @@ def reject_facebook_event(request):
         return HttpResponse(json.dumps({'success': True}), mimetype='application/json')
     else:
         raise Http404
+
+
+@staff_member_required
+def clear_facebook_cached_graph(request):
+    if 'graph' in request.session:
+        request.session.pop('graph')
+
+    return HttpResponse(json.dumps({'success': True}), mimetype='application/json')
 
 
 @staff_member_required

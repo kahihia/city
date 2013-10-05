@@ -225,7 +225,7 @@ def create_from_facebook(request):
                 form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
             info = ''
         else:
-            info = form.errors['__all__'][0]
+            info = form.errors
 
         return HttpResponse(
             json.dumps({'success': success, 'info': info}),
