@@ -136,6 +136,14 @@ urlpatterns = patterns('',
         views.remove_free_try,
         name='admin_remove_free_try'
     ),
+    url(r'^bonus-campaigns/$',
+        views.bonus_campaigns,
+        name='bonus_campaigns'
+    ),
+    url(r'^remove-bonus-campaign/(?P<campaign_id>\d+)$',
+        views.remove_bonus_campaign,
+        name='admin_remove_bonus_campaign'
+    ),
     url(r'^change-event-owner-search$',
         views.change_event_owner_search,
         name='change_event_owner_search'

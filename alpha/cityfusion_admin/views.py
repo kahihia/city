@@ -4,7 +4,7 @@ from decimal import Decimal
 from moneyed import Money, CAD
 from django.contrib.auth.models import User
 from cityfusion_admin.models import ReportEvent, ClaimEvent
-from cityfusion_admin.forms import FreeTryForm
+from cityfusion_admin.forms import FreeTryForm, BonusCampaignForm
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -12,7 +12,7 @@ from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
 
-from accounts.models import Account
+from accounts.models import Account, BonusCampaign
 from advertising.models import ShareAdvertisingCampaign
 from event.models import Event, FeaturedEvent, FacebookEvent
 from event.forms import SetupFeaturedForm, CreateEventForm
@@ -472,19 +472,42 @@ def free_try(request):
 
     accounts_with_bonus = Account.accounts.filter(bonus_budget__gt=0)
 
-
-
     return render_to_response('cf-admin/admin-free-try.html', {
         'accounts_with_bonus': accounts_with_bonus,
         'form': form
     }, context_instance=RequestContext(request))
 
 
-
 @staff_member_required
 def remove_free_try(request, account_id):
     account = Account.objects.filter(id=account_id).update(bonus_budget=0)
     return HttpResponseRedirect(reverse('free_try'))
+
+
+@staff_member_required
+def bonus_campaigns(request):
+    form = BonusCampaignForm()
+
+    if request.method == 'POST':
+        form = BonusCampaignForm(data=request.POST)
+
+        if form.is_valid():
+            bonus_campaign = form.save()
+
+            return HttpResponseRedirect(reverse('bonus_campaigns'))
+
+    bonus_campaigns = BonusCampaign.objects.all()
+
+    return render_to_response('cf-admin/admin-bonus-campaigns.html', {
+        'bonus_campaigns': bonus_campaigns,
+        'form': form
+    }, context_instance=RequestContext(request))
+
+
+@staff_member_required
+def remove_bonus_campaign(request, campaign_id):
+    BonusCampaign.objects.filter(id=campaign_id).delete()
+    return HttpResponseRedirect(reverse('bonus_campaigns'))
 
 
 @staff_member_required
