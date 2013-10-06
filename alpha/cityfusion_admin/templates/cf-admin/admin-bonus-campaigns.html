@@ -20,12 +20,18 @@
                 {{ form.start_time }}
                 {{ form.end_time }}
                 <input type="submit" value="Create" />
+                <br />
+                <div class="checkbox">
+                    {{ form.apply_to_old_accounts }}<label for="id_apply_to_old_accounts"></label> &nbsp;&nbsp;apply to old users
+                </div>
+                
             </form>
 
             <table class="profile-table" celpadding="0" cellspacing="0">
                 <tr>
                     <th class="action">Budget</th>
                     <th class="action">Period</th>
+                    <th class="action">Users</th>
                     <th class="action">Actions</th>
                 </tr>
                 {% paginate 10 bonus_campaigns %}
@@ -36,7 +42,14 @@
                     </td>                    
                     <td class="action">
                         {{ bonus_campaign.start_time }} - {{ bonus_campaign.end_time }}
-                    </td>                    
+                    </td>  
+                    <td class="action">
+                        {% if bonus_campaign.apply_to_old_accounts %}
+                            All
+                        {% else %}
+                            New only
+                        {% endif %}
+                    </td>                  
                     <td class="action">
                         <a href="{% url "admin_remove_bonus_campaign" bonus_campaign.id %}">
                             Remove

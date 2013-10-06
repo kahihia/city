@@ -438,8 +438,21 @@ class BonusCampaign(models.Model):
 
     budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
 
+    apply_to_old_accounts = models.BooleanField(default=False)
+
     occurring_bonuses = OccurringBonusesManager()
     objects = models.Manager()
 
     def __unicode__(self):
         return "Bonus %s(%s-%s)" % (self.budget, self.start_time, self.end_time)
+
+
+def copy_occurring_bonus_to_old_users(sender, instance, created, **kwargs):
+    bonus_campaign = instance
+    if created and bonus_campaign.apply_to_old_accounts:        
+        Account.objects.all().update(
+            bonus_budget=F("bonus_budget")+bonus_campaign.budget.amount
+        )
+
+
+post_save.connect(copy_occurring_bonus_to_old_users, sender=BonusCampaign)

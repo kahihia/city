@@ -16,5 +16,6 @@ class BonusCampaignForm(forms.ModelForm):
         fields = (
             'start_time',
             'end_time',
-            'budget'
+            'budget',
+            'apply_to_old_accounts'
         )
