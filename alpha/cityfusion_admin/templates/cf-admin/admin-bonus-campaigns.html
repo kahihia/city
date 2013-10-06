@@ -15,8 +15,8 @@
             <h1>Create new bonus campaign</h1>
             <form method="post" name="create-new-bonus-campaign" action="{% url 'bonus_campaigns' %}">
                 {% csrf_token %}
-                <input type="text" id="id_budget" name="bonus_budget" value="0.0" placeholder="bonus budget">
-                <input type="hidden" name="bonus_budget_currency" value="CAD">
+                <input type="text" id="id_budget" name="budget" value="0.0" placeholder="bonus budget">
+                <input type="hidden" name="budget_currency" value="CAD">
                 {{ form.start_time }}
                 {{ form.end_time }}
                 <input type="submit" value="Create" />

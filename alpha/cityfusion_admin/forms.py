@@ -7,7 +7,7 @@ class FreeTryForm(forms.Form):
     bonus_budget = MoneyField()
 
 class BonusCampaignForm(forms.ModelForm):
-    bonus_budget = MoneyField()
+    budget = MoneyField()
     start_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
     end_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
 
@@ -16,5 +16,5 @@ class BonusCampaignForm(forms.ModelForm):
         fields = (
             'start_time',
             'end_time',
-            'bonus_budget'
+            'budget'
         )

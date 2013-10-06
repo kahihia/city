@@ -27,6 +27,7 @@ from guardian.shortcuts import assign
 from djmoney.models.fields import MoneyField
 from home.utils import deserialize_json_deep
 from djmoney.models.managers import money_manager
+from django.db.models import F
 
 REMINDER_TYPES = (
     ("HOURS", "Hours before event"),
@@ -192,7 +193,7 @@ def copy_occurring_bonus(sender, instance, created, **kwargs):
         account = instance
 
         for bonus_campaign in BonusCampaign.occurring_bonuses.all():
-            Account.objects.filter(id=account_id).update(
+            Account.objects.filter(id=account.id).update(
                 bonus_budget=F("bonus_budget")+bonus_campaign.budget.amount
             )
 
@@ -441,4 +442,4 @@ class BonusCampaign(models.Model):
     objects = models.Manager()
 
     def __unicode__(self):
-        return "Bonus %s(%s-%s)" % (budget, start_time, end_time)
+        return "Bonus %s(%s-%s)" % (self.budget, self.start_time, self.end_time)
