@@ -496,6 +496,7 @@ def bonus_campaigns(request):
             if apply_to_old_accounts:
                 budget = Decimal(request.POST["budget"])
                 Account.objects.all().update(bonus_budget=F("bonus_budget")+budget)
+                return HttpResponseRedirect(reverse('free_try'))
             else:
                 bonus_campaign = form.save()
 
