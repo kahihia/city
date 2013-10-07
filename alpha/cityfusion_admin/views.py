@@ -135,14 +135,6 @@ def reject_facebook_event(request):
 
 
 @staff_member_required
-def clear_facebook_cached_graph(request):
-    if 'graph' in request.session:
-        request.session.pop('graph')
-
-    return HttpResponse(json.dumps({'success': True}), mimetype='application/json')
-
-
-@staff_member_required
 def location_autocomplete(request):
     if request.is_ajax():
         if request.method == 'GET':

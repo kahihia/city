@@ -9,12 +9,24 @@
     margin-bottom: 8px;
 }
 
+.entry-wrapper .block-link {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 .entry-wrapper .entry-info{
     width: 422px;
     height: 66px;
     padding: 7px 14px;
     background: #f7f7f7;
     margin-bottom: 4px;
+    position: relative;
+}
+
+.entry-wrapper .entry-info.with-all-actions {
+    padding-left: 20px;
 }
 
 .entry-wrapper .entry-info:nth-child(even) {
@@ -51,6 +63,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
     width: 520px;
+}
+
+.entry-wrapper .entry-info .checkbox-field {
+    position: absolute;
+    left: 2px;
+    top: 33px;
+    opacity: 1;
+    height: auto;
+    width: auto;
 }
 
 .entry-date .date-line {

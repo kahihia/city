@@ -608,4 +608,11 @@ def redirect_to_active_user_context(request):
 
     else:
         return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))
-    
+
+
+@login_required
+def clear_facebook_cached_graph(request):
+    if 'graph' in request.session:
+        request.session.pop('graph')
+
+    return HttpResponse(json.dumps({'success': True}), mimetype='application/json')

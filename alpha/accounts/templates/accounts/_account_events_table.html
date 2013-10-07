@@ -4,30 +4,35 @@
 {% paginate 6 events using "account_events" %}
 
 <div class="account-entry-wrapper entry-wrapper">
-{% for event in events %}
-    <div class="entry-info {% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}">
-        {% short_single_event event %}
-
-        <div class="event-edit-actions">
-            <a href="{% url 'event_edit' event.authentication_key %}">
-                Edit
-            </a>
-            <a href="{% url 'event_copy' event.authentication_key %}">
-                Copy
-            </a>
-            <a href="{% url 'event_remove' event.authentication_key %}" class="danger-action">
-                Delete
-            </a>
-            {% if not event.is_featured %}
-                <a href="{% url 'event_setup_featured' event.authentication_key %}">
-                    Make Featured Event
-                </a>
+    <a class="block-link" href="javascript:void(0);" data-id="fb_post_button">Post selected to FB</a>
+    {% for event in events %}
+        <div class="entry-info {% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}">
+            {% if not event.facebook_event %}
+                <input class="checkbox-field" type="checkbox" data-type="event_check" data-event-id="{{ event.event.id }}" />
             {% endif %}
-        </div>
 
-        <div class="clr"></div>
-    </div>
-{%endfor%}
+            {% short_single_event event %}
+
+            <div class="event-edit-actions">
+                <a href="{% url 'event_edit' event.authentication_key %}">
+                    Edit
+                </a>
+                <a href="{% url 'event_copy' event.authentication_key %}">
+                    Copy
+                </a>
+                <a href="{% url 'event_remove' event.authentication_key %}" class="danger-action">
+                    Delete
+                </a>
+                {% if not event.is_featured %}
+                    <a href="{% url 'event_setup_featured' event.authentication_key %}">
+                        Make Featured Event
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="clr"></div>
+        </div>
+    {%endfor%}
 </div>
 
 {% if pages|length > 1 %}
@@ -51,3 +56,9 @@
         </span>        
     </div>
 {% endif %}
+<div data-type="hidden_elements">
+    <input type="hidden" data-id="clear_graph_url" value="{% url 'clear_facebook_graph' %}" />
+    <input type="hidden" data-id="multipost_to_facebook" value="{% url 'event_multipost_to_facebook' %}" />
+    {% csrf_token %}
+    <img class="mini-indicator" data-id="mini_indicator" src="{{ STATIC_URL }}images/mini-ajax-loader.gif" />
+</div>

@@ -91,5 +91,9 @@ urlpatterns = patterns('',
     url(r'^user-context-profile/$',
         accounts.redirect_to_active_user_context,
         name="user_account_context_page"
+    ),
+        url(r'^clear-facebook-graph/$',
+        accounts.clear_facebook_cached_graph,
+        name='clear_facebook_graph'
     )
 )
