@@ -27,6 +27,7 @@ from guardian.shortcuts import assign
 from djmoney.models.fields import MoneyField
 from home.utils import deserialize_json_deep
 from djmoney.models.managers import money_manager
+from django.db.models import F
 
 REMINDER_TYPES = (
     ("HOURS", "Hours before event"),
@@ -187,6 +188,16 @@ def create_facebook_profile(sender, instance, created, **kwargs):
             assign(perm[0], user, user)
 
 
+def copy_occurring_bonus(sender, instance, created, **kwargs):
+    if created:
+        account = instance
+
+        for bonus_campaign in BonusCampaign.occurring_bonuses.all():
+            Account.objects.filter(id=account.id).update(
+                bonus_budget=F("bonus_budget")+bonus_campaign.budget.amount
+            )
+
+
 def add_single_events_to_schedule(account, events):
     for event_day in events:
         if account.reminder_active_type == "DAYS":
@@ -219,6 +230,7 @@ def sync_schedule_after_reminder_settings_was_changed(sender, instance, created,
     add_single_events_to_schedule(instance, instance.reminder_single_events.all())
 
 post_save.connect(create_facebook_profile, sender=User)
+post_save.connect(copy_occurring_bonus, sender=Account)
 post_save.connect(sync_schedule_after_reminder_settings_was_changed, sender=Account)
 
 m2m_changed.connect(sync_schedule_after_reminder_single_events_was_modified,
@@ -411,3 +423,25 @@ class AccountTaxCost(models.Model):
 
     def __unicode__(self):
         return "%s: %s" % (self.account_tax, self.cost)
+
+
+class OccurringBonusesManager(models.Manager):
+    def get_query_set(self):
+        now = datetime.datetime.now()
+        return super(OccurringBonusesManager, self).get_query_set()\
+            .filter(start_time__lte=now, end_time__gte=now)
+
+
+class BonusCampaign(models.Model):
+    start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
+    end_time = models.DateTimeField('ending time', auto_now=False, auto_now_add=False)
+
+    budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+
+    apply_to_old_accounts = models.BooleanField(default=False)
+
+    occurring_bonuses = OccurringBonusesManager()
+    objects = models.Manager()
+
+    def __unicode__(self):
+        return "Bonus %s(%s-%s)" % (self.budget, self.start_time, self.end_time)

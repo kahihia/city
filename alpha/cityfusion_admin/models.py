@@ -96,4 +96,8 @@ CF_ADMIN_MENU = {
         "urlname": "import_facebook_events",
         "linktext": "Import from Facebook"
     },
+    "bonus_campaigns": {
+        "urlname": "bonus_campaigns",
+        "linktext": "Bonus campaigns"
+    }
 }

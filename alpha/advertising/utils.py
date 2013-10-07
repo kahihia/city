@@ -1,3 +1,5 @@
+from django.core.mail.message import EmailMessage
+
 def get_chosen_advertising_types(campaign, request):
     if "advertising_types" in request.POST:
         return map(lambda x: int(x), request.POST.getlist("advertising_types"))
@@ -19,4 +21,25 @@ def get_chosen_advertising_images(campaign, request):
         return chosen_advertising_images        
     else:
         return {}
+
+
+def inform_user_that_money_was_spent(campaign):
+    account = campaign.account
+    subject = "Not enouch money to run campaign %s." % (campaign.name)
+
+    message = render_to_string('advertising/emails/money_was_spent.html', {
+            "campaign": campaign,
+            "account": account,
+            "STATIC_URL": "/static/",
+            "site": "http://%s" % Site.objects.get_current().domain
+        })
+
+    msg = EmailMessage(subject,
+               message,
+               "reminder@cityfusion.ca",
+               [account.user.email])
+    msg.content_subtype = 'html'
+    msg.send()
+
+    return message
 

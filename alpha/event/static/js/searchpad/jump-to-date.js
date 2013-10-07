@@ -35,7 +35,7 @@
                 $(".end-date .date input").datepicker('setDate', date2);
                 //sets minDate to dt1 date + 1
                 $(".end-date .date input").datepicker('option', 'minDate', date2);
-            }    
+            }
         });
 
         $(".end-date .date input", this.scope).datepicker({
@@ -47,13 +47,8 @@
                     var minDate = $('.end-date .date input').datepicker('option', 'minDate');
                     $('.end-date .date input').datepicker('setDate', minDate);
                 }
-            }            
+            }
         });
-        
-    
-        
-
-        
 
         this.jumpLink = $(".jump-to-date-button", this.scope);
         this.baseUrlQuery = this.jumpLink.data("base-url-query");

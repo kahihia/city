@@ -7,6 +7,7 @@ from mamona import signals
 from mamona.models import build_payment_model
 from decimal import Decimal
 from django.db.models import Q, F
+from utils import inform_user_that_money_was_spent
 
 
 class AdvertisingType(models.Model):
@@ -63,6 +64,7 @@ class AdvertisingCampaign(models.Model):
     def save(self, *args, **kwargs):
         if self.ammount_spent >= self.budget:
             self.enough_money = False
+            inform_user_that_money_was_spent(self)
         else:
             self.enough_money = True        
 
