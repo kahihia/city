@@ -244,7 +244,8 @@ def post_to_facebook(request, id):
     if request.user.id == event.owner.id:
         if not event.facebook_event:
             try:
-                facebook_event_id = facebook_services.create_facebook_event(event, request)
+                facebook_user_id = facebook_services.get_facebook_user_id(request)
+                facebook_event_id = facebook_services.create_facebook_event(event, request, facebook_user_id)
                 facebook_services.attach_facebook_event(int(facebook_event_id), event)
                 messages.success(request, 'Event was successfully posted to FB.')
             except Exception as e:
@@ -255,6 +256,30 @@ def post_to_facebook(request, id):
         messages.error(request, 'You do not have permission to publish this event.')
 
     return HttpResponseRedirect(reverse('event_view', kwargs={'slug': event.slug}))
+
+
+@login_required
+@facebook_required
+def multipost_to_facebook(request):
+    event_ids = request.POST.getlist('event_ids[]')
+    posted = []
+
+    if len(event_ids):
+        events = Event.events.filter(pk__in=event_ids)
+        facebook_user_id = facebook_services.get_facebook_user_id(request)
+        for event in events:
+            if not event.facebook_event:
+                try:
+                    facebook_event_id = facebook_services.create_facebook_event(event, request, facebook_user_id)
+                    facebook_services.attach_facebook_event(int(facebook_event_id), event)
+                    posted.append(event.id)
+                except Exception:
+                    pass
+
+    return HttpResponse(json.dumps({
+        'success': True,
+        'posted': posted
+    }), mimetype='application/json')
 
 
 def created(request, slug=None):
@@ -277,14 +302,14 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
     if request.method == 'POST':
         form = EditEventForm(account=request.account, instance=event, data=request.POST)
         if form.is_valid():
-            # try:
-            event_service.save_event(request.user, request.POST, form)
-            return HttpResponseRedirect(
-                reverse('event_view', kwargs={'slug': event.slug})
-            )
+            try:
+                event_service.save_event(request.user, request.POST, form)
+                return HttpResponseRedirect(
+                    reverse('event_view', kwargs={'slug': event.slug})
+                )
 
-            # except:
-            #     form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
+            except:
+                form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
     else:
         form = EditEventForm(
             account=request.account,
