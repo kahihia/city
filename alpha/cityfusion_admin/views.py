@@ -492,7 +492,12 @@ def bonus_campaigns(request):
         form = BonusCampaignForm(data=request.POST)
 
         if form.is_valid():
-            bonus_campaign = form.save()
+            apply_to_old_accounts = request.POST.get("apply_to_old_accounts", False)
+            if apply_to_old_accounts:
+                budget = Decimal(request.POST["budget"])
+                Account.objects.all().update(bonus_budget=F("bonus_budget")+budget)
+            else:
+                bonus_campaign = form.save()
 
             return HttpResponseRedirect(reverse('bonus_campaigns'))
 

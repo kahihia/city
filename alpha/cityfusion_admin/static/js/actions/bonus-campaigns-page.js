@@ -2,6 +2,7 @@
     'use strict';
 
     var BonusCampaignsPage = function(){
+        this.initApplyBonusModes();
         this.initDatePickers();
     }
 
@@ -25,6 +26,15 @@
                         var minDate = $("#id_end_time").datepicker('option', 'minDate');
                         $("#id_end_time").datepicker('setDate', minDate);
                     }
+                }
+            });
+        },
+        initApplyBonusModes: function(){
+            $("#id_apply_to_old_accounts").on("change", function(){
+                if($(this).prop("checked")) {
+                    $("#id_start_time, #id_end_time").hide();
+                } else {
+                    $("#id_start_time, #id_end_time").show();
                 }
             });
         }

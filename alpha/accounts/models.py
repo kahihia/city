@@ -445,14 +445,3 @@ class BonusCampaign(models.Model):
 
     def __unicode__(self):
         return "Bonus %s(%s-%s)" % (self.budget, self.start_time, self.end_time)
-
-
-def copy_occurring_bonus_to_old_users(sender, instance, created, **kwargs):
-    bonus_campaign = instance
-    if created and bonus_campaign.apply_to_old_accounts:        
-        Account.objects.all().update(
-            bonus_budget=F("bonus_budget")+bonus_campaign.budget.amount
-        )
-
-
-post_save.connect(copy_occurring_bonus_to_old_users, sender=BonusCampaign)
