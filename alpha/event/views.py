@@ -395,7 +395,7 @@ def setup_featured(request, authentication_key):
         form = SetupFeaturedForm(instance=featured_event, data=request.POST)
 
         if form.is_valid():
-            featured_event = form.save()
+            featured_event = form.save()            
 
             cost = (featured_event.end_time - featured_event.start_time).days * Money(2, CAD)
             total_price = cost
