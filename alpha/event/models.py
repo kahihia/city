@@ -510,6 +510,13 @@ class FeaturedEvent(models.Model):
     objects = money_manager(models.Manager())
     future = FutureFeaturedEventManager()
 
+    def save(self, *args, **kwargs):
+        self.end_time = self.end_time.replace(hour=23, minute=59, second=59, microsecond=0)
+
+        super(FeaturedEvent, self).save(*args, **kwargs)
+        return self
+
+
     def __unicode__(self):
         return self.event.name
 

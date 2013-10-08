@@ -261,25 +261,31 @@ def post_to_facebook(request, id):
 
 @login_required
 @facebook_required
-def multipost_to_facebook(request):
-    event_ids = request.POST.getlist('event_ids[]')
-    posted = []
+def post_to_facebook_ajax(request):
+    success = False
+    error = ''
 
-    if len(event_ids):
-        events = Event.events.filter(pk__in=event_ids)
-        facebook_user_id = facebook_services.get_facebook_user_id(request)
-        for event in events:
-            if not event.facebook_event:
-                try:
-                    facebook_event_id = facebook_services.create_facebook_event(event, request, facebook_user_id)
-                    facebook_services.attach_facebook_event(int(facebook_event_id), event)
-                    posted.append(event.id)
-                except Exception:
-                    pass
+    event_id = request.POST.get('event_id')
+    try:
+        event = Event.events.get(pk=event_id)
+    except Event.DoesNotExist as e:
+        event = None
+        error = e.message
+
+    if event and not event.facebook_event:
+        try:
+            facebook_user_id = facebook_services.get_facebook_user_id(request)
+            facebook_event_id = facebook_services.create_facebook_event(event, request, facebook_user_id)
+            facebook_services.attach_facebook_event(int(facebook_event_id), event)
+            success = True
+        except Exception as e:
+            error = e.message
+    else:
+        error = 'Event has already been posted to FB'
 
     return HttpResponse(json.dumps({
-        'success': True,
-        'posted': posted
+        'success': success,
+        'error': error
     }), mimetype='application/json')
 
 
@@ -397,7 +403,7 @@ def setup_featured(request, authentication_key):
         form = SetupFeaturedForm(account=account, instance=featured_event, data=request.POST)
 
         if form.is_valid():
-            featured_event = form.save()
+            featured_event = form.save()            
 
             budget_type = request.POST["budget_type"]
 

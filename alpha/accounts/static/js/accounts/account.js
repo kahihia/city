@@ -6,14 +6,16 @@
 
         self.init = function() {
             self.clearGraphUrl = $("[data-type=hidden_elements] [data-id=clear_graph_url]").val();
-            self.multipostFBUrl = $("[data-type=hidden_elements] [data-id=multipost_to_facebook]").val();
+            self.postFBUrl = $("[data-type=hidden_elements] [data-id=post_to_facebook_url]").val();
 
             self.csrfToken = $("[data-type=hidden_elements] input[name=csrfmiddlewaretoken]").val();
             self.eventCheckerSelector = "[data-type=event_check]";
+            self.postFBButtonSelector = "[data-id=fb_post_button]";
             self.miniIndicator = $("[data-id=mini_indicator]");
             self.multipostFBBusy = false;
+            self.eventsToPostCount = 0;
 
-            $("body").on("click", "[data-id=fb_post_button]", self.onFBPostButtonClick);
+            $("body").on("click", self.postFBButtonSelector, self.onFBPostButtonClick);
         }
 
         self.onFBPostButtonClick = function() {
@@ -25,37 +27,56 @@
                     var checkedEvents = $(self.eventCheckerSelector + ":checked");
                     if(checkedEvents.length !== 0) {
                         button.append(self.miniIndicator.show());
+                        self.eventsToPostCount = checkedEvents.length;
 
                         var ids = [];
                         $.each(checkedEvents, function() {
                             ids.push($(this).data("event-id"));
                         });
 
-                        $.post(self.multipostFBUrl, {
-                            "csrfmiddlewaretoken": self.csrfToken,
-                            "event_ids": ids
-                        }, function(data) {
-                            if(data.success) {
-                                self.miniIndicator.hide();
-
-                                var message = $("<div/>", {
-                                    "class": "alert-success",
-                                    "html": data.posted.length + " out of " + ids.length + " events posted successfully"
-                                }).insertAfter(button);
-
-                                $.each(data.posted, function() {
-                                    $(self.eventCheckerSelector + "[data-event-id=" + this + "]").remove();
-                                });
-
-                                window.setTimeout(function() {
-                                    message.remove();
-                                }, 4000);
-
-                                self.multipostFBBusy = false;
-                            }
-                        }, 'json');
+                        self.executeFBPosting(ids);
+                    }
+                    else {
+                        self.multipostFBBusy = false;
                     }
                 });
+            }
+        };
+
+        self.executeFBPosting = function(eventIds) {
+            if(eventIds.length !== 0) {
+                var eventId = eventIds.shift();
+                var eventNum = self.eventsToPostCount - eventIds.length;
+                $.post(self.postFBUrl, {
+                    "csrfmiddlewaretoken": self.csrfToken,
+                    "event_id": eventId
+                }, function(data) {
+                    if(data.success) {
+                        self.miniIndicator.hide();
+
+                        var message = $("<div/>", {
+                            "class": "alert-success",
+                            "html": eventNum + " out of " + self.eventsToPostCount + " events posted successfully"
+                        }).insertAfter($(self.postFBButtonSelector));
+
+                        $(self.eventCheckerSelector + "[data-event-id=" + eventId + "]").remove();
+                        self.executeFBPosting(eventIds);
+                    }
+                    else {
+                        var message = $("<div/>", {
+                            "class": "alert-error",
+                            "html": "Error while posting " + eventNum + " out of "
+                                        + self.eventsToPostCount + " event: " + data.error
+                        }).insertAfter($(self.postFBButtonSelector));
+                    }
+
+                    window.setTimeout(function() {
+                        message.remove();
+                    }, 4000);
+                }, 'json');
+            }
+            else {
+                self.multipostFBBusy = false;
             }
         };
 
@@ -65,23 +86,17 @@
                 return;
             }
 
-            FB.getLoginStatus(function(response) {
-                if (response.status === 'connected') {
-                    successCallback();
-                } else {
-                    FB.login(function(response) {
-                        if (response.authResponse) {
-                            $.post(self.clearGraphUrl, {
-                                "csrfmiddlewaretoken": self.csrfToken
-                            }, function(data) {
-                               if(data.success) {
-                                   successCallback();
-                               }
-                            }, 'json');
-                        }
-                    }, {scope: 'create_event'});
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    $.post(self.clearGraphUrl, {
+                        "csrfmiddlewaretoken": self.csrfToken
+                    }, function(data) {
+                       if(data.success) {
+                           successCallback();
+                       }
+                    }, 'json');
                 }
-            });
+            }, {scope: 'create_event'});
         };
 
         self.init();

@@ -4,7 +4,7 @@
 {% paginate 6 events using "account_events" %}
 
 <div class="account-entry-wrapper entry-wrapper">
-    <a class="block-link" href="javascript:void(0);" data-id="fb_post_button">Post selected to FB</a>
+    <input type="button" value="Post selected to FB" class="button standart submit" data-id="fb_post_button" />
     {% for event in events %}
         <div class="entry-info {% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}">
             {% if not event.facebook_event %}
@@ -58,7 +58,7 @@
 {% endif %}
 <div data-type="hidden_elements">
     <input type="hidden" data-id="clear_graph_url" value="{% url 'clear_facebook_graph' %}" />
-    <input type="hidden" data-id="multipost_to_facebook" value="{% url 'event_multipost_to_facebook' %}" />
+    <input type="hidden" data-id="post_to_facebook_url" value="{% url 'event_post_to_facebook_ajax' %}" />
     {% csrf_token %}
     <img class="mini-indicator" data-id="mini_indicator" src="{{ STATIC_URL }}images/mini-ajax-loader.gif" />
 </div>
