@@ -37,11 +37,6 @@ def setup(request):
             budget_type = request.POST["budget_type"]
             advertising_campaign = form.save()
 
-            if budget_type=="BONUS":
-                advertising_campaign.budget = Decimal(request.POST["bonus_budget"])
-                advertising_campaign.save()
-                Account.objects.filter(user_id=request.user.id).update(bonus_budget=F("bonus_budget")-advertising_campaign.budget.amount)
-
             chosen_advertising_types = get_chosen_advertising_types(campaign, request)
             chosen_advertising_payment_types = get_chosen_advertising_payment_types(campaign, request)
             chosen_advertising_images = get_chosen_advertising_images(campaign, request)
@@ -60,6 +55,7 @@ def setup(request):
                 advertising.save()
 
             if budget_type=="BONUS":
+                Account.objects.filter(user_id=request.user.id).update(bonus_budget=F("bonus_budget")-advertising_campaign.budget.amount)
                 return HttpResponseRedirect('/accounts/%s/' % request.user.username)
 
             if budget_type=="REAL":
