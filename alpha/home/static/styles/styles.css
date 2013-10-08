@@ -815,6 +815,8 @@ body .inputfield{
     margin: 10px 0;
     padding: 10px;
     font-size: 13px;
+    max-width: 400px;
+    border-radius: 4px;
 }
 
 .alert-success {

@@ -54,10 +54,6 @@ urlpatterns = patterns('',
         views.reject_facebook_event,
         name='reject_facebook_event'
     ),
-    url(r'^clear-facebook-graph/$',
-        views.clear_facebook_cached_graph,
-        name='clear_facebook_graph'
-    ),
 
 
     url(r'^locations/$',
