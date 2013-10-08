@@ -1,4 +1,5 @@
 import datetime
+from moneyed import Money, CAD
 from django.contrib.gis.db import models
 from djmoney.models.fields import MoneyField
 from djmoney.models.managers import money_manager
@@ -8,6 +9,13 @@ from mamona.models import build_payment_model
 from decimal import Decimal
 from django.db.models import Q, F
 from utils import inform_user_that_money_was_spent
+
+def has_changed(instance, field):
+    if not instance.pk:
+        return False
+    old_value = instance.__class__._default_manager.filter(pk=instance.pk).values(field).get()[field]
+
+    return not getattr(instance, field) == old_value  
 
 
 class AdvertisingType(models.Model):
@@ -62,11 +70,12 @@ class AdvertisingCampaign(models.Model):
     with_unused_money = AdvertisinCampaignWithUnsusedMoney()
 
     def save(self, *args, **kwargs):
-        if self.ammount_spent >= self.budget:
-            self.enough_money = False
-            inform_user_that_money_was_spent(self)
-        else:
-            self.enough_money = True        
+        if has_changed(self, 'budget') and self.budget>Money(0, CAD):
+            if self.ammount_spent >= self.budget:
+                self.enough_money = False
+                inform_user_that_money_was_spent(self)
+            else:
+                self.enough_money = True
 
         super(AdvertisingCampaign, self).save(*args, **kwargs)
         return self

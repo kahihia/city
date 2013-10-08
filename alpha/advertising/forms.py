@@ -6,6 +6,7 @@ from django.core.files.images import get_image_dimensions
 
 from djmoney.forms.fields import MoneyField
 from moneyed import Money, CAD
+from decimal import Decimal
 from accounts.widgets import ChooseUserContextWidget
 
 
@@ -162,7 +163,20 @@ class PaidAdvertisingSetupForm(AdvertisingSetupForm):
             if order_budget < Money(10, CAD):
                 raise forms.ValidationError('Ensure budget is greater than or equal to %s' % Money(10, CAD))
 
-        return cleaned_data        
+        return cleaned_data
+
+    def save(self, commit=True):
+        campaign = super(PaidAdvertisingSetupForm, self).save(commit=False)
+
+        cleaned_data = self.clean()
+
+        budget_type = cleaned_data["budget_type"]
+        if budget_type=="BONUS":
+            campaign.budget = cleaned_data["bonus_budget"]
+
+        if commit:
+            campaign.save()
+        return campaign
 
 
 class DepositFundsForCampaignForm(forms.Form):

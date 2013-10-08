@@ -1,4 +1,6 @@
 from django.core.mail.message import EmailMessage
+from django.template.loader import render_to_string
+from django.contrib.sites.models import Site
 
 def get_chosen_advertising_types(campaign, request):
     if "advertising_types" in request.POST:
