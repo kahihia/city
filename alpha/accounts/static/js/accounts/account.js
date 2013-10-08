@@ -26,7 +26,7 @@
                 self.checkFBLogin(function() {
                     var checkedEvents = $(self.eventCheckerSelector + ":checked");
                     if(checkedEvents.length !== 0) {
-                        button.append(self.miniIndicator.show());
+                        self.miniIndicator.show().insertAfter(button);
                         self.eventsToPostCount = checkedEvents.length;
 
                         var ids = [];
@@ -52,12 +52,10 @@
                     "event_id": eventId
                 }, function(data) {
                     if(data.success) {
-                        self.miniIndicator.hide();
-
                         var message = $("<div/>", {
                             "class": "alert-success",
                             "html": eventNum + " out of " + self.eventsToPostCount + " events posted successfully"
-                        }).insertAfter($(self.postFBButtonSelector));
+                        }).insertBefore($(self.postFBButtonSelector));
 
                         $(self.eventCheckerSelector + "[data-event-id=" + eventId + "]").remove();
                         self.executeFBPosting(eventIds);
@@ -67,7 +65,7 @@
                             "class": "alert-error",
                             "html": "Error while posting " + eventNum + " out of "
                                         + self.eventsToPostCount + " event: " + data.error
-                        }).insertAfter($(self.postFBButtonSelector));
+                        }).insertBefore($(self.postFBButtonSelector));
                     }
 
                     window.setTimeout(function() {
@@ -76,6 +74,7 @@
                 }, 'json');
             }
             else {
+                self.miniIndicator.hide();
                 self.multipostFBBusy = false;
             }
         };
