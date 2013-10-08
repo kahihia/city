@@ -59,9 +59,9 @@ urlpatterns = patterns('',
         event.post_to_facebook,
         name='event_post_to_facebook'
     ),
-    url(r'^multipost-to-facebook/$',
-        event.multipost_to_facebook,
-        name='event_multipost_to_facebook'
+    url(r'^post-to-facebook-ajax/$',
+        event.post_to_facebook_ajax,
+        name='event_post_to_facebook_ajax'
     ),
 
     url(r'^start$', event.start, name="start"),
