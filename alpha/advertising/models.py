@@ -70,12 +70,13 @@ class AdvertisingCampaign(models.Model):
     with_unused_money = AdvertisinCampaignWithUnsusedMoney()
 
     def save(self, *args, **kwargs):
-        if has_changed(self, 'budget') and self.budget>Money(0, CAD):
+        if self.ammount_spent >= self.budget:
+            self.enough_money = False
+        else:
+            self.enough_money = True
+        if has_changed(self, 'ammount_spent') and self.budget>Money(0, CAD):
             if self.ammount_spent >= self.budget:
-                self.enough_money = False
                 inform_user_that_money_was_spent(self)
-            else:
-                self.enough_money = True
 
         super(AdvertisingCampaign, self).save(*args, **kwargs)
         return self
