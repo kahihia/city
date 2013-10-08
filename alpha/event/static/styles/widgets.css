@@ -164,6 +164,7 @@ input[type=radio]:checked + label {
 body .button, 
 ul#box-nav li,
 input[type=submit],
+#attachments-uploader .qq-upload-button,
 #file-uploader .qq-upload-button {
     display: inline-block;
     cursor: pointer;
@@ -187,6 +188,7 @@ input[type=submit],
 }
 
 body .button.standart,
+#attachments-uploader .qq-upload-button,
 #file-uploader .qq-upload-button {
     width: 137px;
     height: 30px;
@@ -203,6 +205,7 @@ body .button.big-button {
 .button:hover,
 ul#box-nav li:hover,
 input[type=submit]:hover
+#attachments-uploader .qq-upload-button:hover,
 #file-uploader .qq-upload-button:hover {
   /*background-image: url("/images/ie9_button_hovered.svg");*/
   background: -webkit-gradient(linear, center top, center bottom, color-stop(0.05, #f6f6f6), color-stop(1, #fff));
@@ -409,8 +412,13 @@ fieldset legend{
 }
 
 /* File ajax upload */
-.qq-upload-list {
+#attachments-uploader .qq-upload-list,
+#file-uploader .qq-upload-list {
     display:none;
+}
+
+#attachments-uploader .qq-upload-list li {
+    list-style: none;
 }
 
 .picture {
@@ -421,10 +429,11 @@ fieldset legend{
     display:none;
 }
 
-#file-uploader {
+#attachments-uploader, #file-uploader {
     margin-left:10px;
 }
 
+#attachments-uploader .qq-upload-button,
 #file-uploader .qq-upload-button {
     margin-top: 0px;
     line-height: 30px;
@@ -441,14 +450,35 @@ fieldset legend{
     display: none !important;
 }
 
+#attachments-uploader .qq-upload-button input,
 #file-uploader .qq-upload-button input {
     height: 100%;
     width: 100%;
 }
 
+#attachments-uploader .qq-upload-button:hover,
 #file-uploader .qq-upload-button:hover {
     color: #234;
     border:1px solid #79B7E7;
+}
+
+.attachment-list .attachment {
+    border: 1px dotted #ddd;
+    margin-top: 3px;
+    padding: 5px;
+}
+
+.attachment-list .attachment span {
+    margin-right: 10px;    
+}
+
+.attachment-list .attachment .remove-attachment-button {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url("/static/images/accounts/remove16x16.png") no-repeat;
+    cursor: pointer;
+    float: right;
 }
 
 .popup {

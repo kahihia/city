@@ -8,6 +8,7 @@ from django.conf import settings
 
 from event.settings import DEFAULT_FROM_EMAIL
 from event.services import venue_service, event_occurrence_service
+from event.models import EventAttachment
 
 from django.contrib.sites.models import Site
 
@@ -53,6 +54,15 @@ def save_event(user, data, form):
         event.picture.name = data["picture_src"].replace(settings.MEDIA_URL, "")
 
     event = event.save()
+    event.eventattachment_set.clear()
+
+    if data["attachments"]:
+        attachments = data["attachments"].split(";")
+        for attachment in attachments:
+            EventAttachment.objects.get_or_create(
+                event=event,
+                attachment=attachment.replace(settings.MEDIA_URL, "")
+            )
 
     return event
 
@@ -80,6 +90,9 @@ def prepare_initial_location(event):
 
 def prepare_initial_picture_src(event):
     return "/media/%s" % event.picture
+
+def prepare_initial_attachments(event):
+    pass
 
 
 def prepare_initial_venue_id(event):
