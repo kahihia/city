@@ -92,7 +92,7 @@ class HTML5EmailInput(forms.TextInput):
 class EditEventForm(forms.ModelForm):
     class Meta:
         model = Event
-        exclude = ('owner', 'authentication_key', 'slug', 'email')
+        exclude = ('owner', 'authentication_key', 'slug', 'email', 'facebook_event')
 
     # There will be four modes, how we will detect wich venue user choose
     # SUGGEST - when user can not found venue in google autocomplete he can suggest new venue
@@ -295,7 +295,7 @@ class EditEventForm(forms.ModelForm):
 class CreateEventForm(EditEventForm):
     class Meta:
         model = Event
-        exclude = ('owner', 'authentication_key', 'slug', 'email')
+        exclude = ('owner', 'authentication_key', 'slug', 'email', 'facebook_event')
 
 
 class EventSearchForm(forms.Form):

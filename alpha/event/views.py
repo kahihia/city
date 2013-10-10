@@ -283,10 +283,12 @@ def post_to_facebook_ajax(request):
     else:
         error = 'Event has already been posted to FB'
 
-    return HttpResponse(json.dumps({
-        'success': success,
-        'error': error
-    }), mimetype='application/json')
+    params = {'success': success, 'error': error}
+
+    if error and event:
+        params['event_link'] = reverse('event_edit', kwargs={'authentication_key': event.authentication_key})
+
+    return HttpResponse(json.dumps(params), mimetype='application/json')
 
 
 def created(request, slug=None):
