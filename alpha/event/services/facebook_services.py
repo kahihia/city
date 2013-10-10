@@ -124,11 +124,10 @@ def create_facebook_event(event, request, facebook_user_id):
         raise Exception('Error: facebook authentication is required')
 
     parser = HTMLParser()
-    description = '%s\r\n%s' % (strip_tags(parser.unescape(event.description)),
-                  getattr(event, 'comment_for_facebook', ''))
+    description = strip_tags(parser.unescape(event.description))
 
     if event.tickets:
-        description = '%s\r\nTickets: %s' % (description, event.tickets)
+        description = '%s\r\n\nTickets: %s' % (description, event.tickets)
 
     location = event.venue.name
     if event.venue.street:
