@@ -14,8 +14,10 @@
             self.miniIndicator = $("[data-id=mini_indicator]");
             self.multipostFBBusy = false;
             self.eventsToPostCount = 0;
+            self.successPostCount = 0;
 
             $("body").on("click", self.postFBButtonSelector, self.onFBPostButtonClick);
+            $("body").on("change", self.eventCheckerSelector, self.onEventCheckboxChange);
         }
 
         self.onFBPostButtonClick = function() {
@@ -43,39 +45,51 @@
             }
         };
 
+        self.onEventCheckboxChange = function() {
+            var eventId = $(this).data("event-id");
+            $(self.eventCheckerSelector + "[data-event-id=" + eventId + "]")
+                .not(this).
+                removeAttr("checked");
+        },
+
         self.executeFBPosting = function(eventIds) {
             if(eventIds.length !== 0) {
                 var eventId = eventIds.shift();
-                var eventNum = self.eventsToPostCount - eventIds.length;
                 $.post(self.postFBUrl, {
                     "csrfmiddlewaretoken": self.csrfToken,
                     "event_id": eventId
                 }, function(data) {
                     if(data.success) {
-                        var message = $("<div/>", {
-                            "class": "alert-success",
-                            "html": eventNum + " out of " + self.eventsToPostCount + " events posted successfully"
-                        }).insertBefore($(self.postFBButtonSelector));
+                        var message = self.createSuccessMessage();
+                        self.successPostCount++;
+                        message.html(self.successPostCount + " out of " + self.eventsToPostCount
+                                              + " events posted to Facebook");
 
                         $(self.eventCheckerSelector + "[data-event-id=" + eventId + "]").remove();
-                        self.executeFBPosting(eventIds);
                     }
                     else {
+                        var errorHtml = "Error while event posting: \"" + data.error + "\".";
+                        if(data.event_link) {
+                            errorHtml += " <a target='_blank' href='"+ data.event_link + "'>Link to the event</a>.";
+                        }
+
                         var message = $("<div/>", {
                             "class": "alert-error",
-                            "html": "Error while posting " + eventNum + " out of "
-                                        + self.eventsToPostCount + " event: " + data.error
+                            "html": errorHtml
                         }).insertBefore($(self.postFBButtonSelector));
                     }
 
-                    window.setTimeout(function() {
-                        message.remove();
-                    }, 4000);
+                    self.executeFBPosting(eventIds);
                 }, 'json');
             }
             else {
                 self.miniIndicator.hide();
                 self.multipostFBBusy = false;
+
+                var message = self.createSuccessMessage();
+                message.html(self.successPostCount + " out of " + self.eventsToPostCount
+                                              + " events posted to Facebook. "
+                                              + "Operation complete!");
             }
         };
 
@@ -96,6 +110,18 @@
                     }, 'json');
                 }
             }, {scope: 'create_event'});
+        };
+
+        self.createSuccessMessage = function() {
+            var message = $("[data-id=success_posting_message]");
+            if(message.length === 0) {
+                var message = $("<div/>", {
+                    "class": "alert-success",
+                    "data-id": "success_posting_message"
+                }).insertBefore($(self.postFBButtonSelector));
+            }
+
+            return message;
         };
 
         self.init();

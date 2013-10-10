@@ -831,6 +831,12 @@ body .inputfield{
     color: #b94a48;
 }
 
+.alert-error a {
+    color: #b94a48;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
 .modal-background {
     display: none;
     position: fixed;
