@@ -64,6 +64,7 @@
                 '<ul class="qq-upload-list"></ul>' +
              '</div>'
         });
+        this.loadAttachments();
     }
 
     Attachments.prototype = {
@@ -84,10 +85,16 @@
             var value, attachments;
 
             value = $(this.input).val();
-            attachments = value.split(";");
+            if(value) {
+                attachments = value.split(";");
+
+                attachments.forEach(function(attachment){
+                    this.addAttachment(attachment.replace(/^.*(\\|\/|\:)/, ''), attachment);
+                }, this);
+            }
         },
         saveValue: function(){
-            var value = return this.attachments.map(function(attachment){
+            var value = this.attachments.map(function(attachment){
                 return attachment.filepath;
             }).join(";");
 

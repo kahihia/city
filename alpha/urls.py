@@ -12,6 +12,7 @@ handler404 = 'home.views.custom_404'
 
 urlpatterns = patterns(
     '',
+    url(r'^elfinder/', include('elfinder.urls')),
     # Examples:
     url(r'^channel.html$', 'home.views.channelfile'),
     url(r'^facebook-for-turbolinks.js$', 'home.views.facebook_for_turbolinks_js'),
@@ -32,7 +33,6 @@ urlpatterns = patterns(
     url(r'^facebook/', include('django_facebook.urls')),
     url(r'^advertising/', include('advertising.urls')),
     url(r'^page/(?P<alias>[\.\w-]+)/$', 'home.views.page', name='staticpage'),
-
 
     url(r'^accounts/signin/$',
        userena_views.signin,

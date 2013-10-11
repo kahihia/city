@@ -261,6 +261,9 @@ class EventAttachment(models.Model):
     event = models.ForeignKey(Event, blank=False, null=False)
     attachment = models.FileField(upload_to=attachment_file_path, blank=True, null=True)
 
+    def filename(self):
+        return os.path.basename(self.attachment.name)
+
 
 class FutureEventDayManager(models.Manager):
     def get_query_set(self):

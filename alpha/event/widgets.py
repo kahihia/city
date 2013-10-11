@@ -159,10 +159,6 @@ class AttachmentsWidget(forms.TextInput):
         super(AttachmentsWidget, self).__init__(*args, **kwargs)
         self.attachments = forms.widgets.HiddenInput()
 
-    def value_from_datadict(self, data, files, name):
-        attachments = self.attachments.value_from_datadict(data, files, 'attachments')
-        return attachments.split(";")
-
     def render(self, name, value, *args, **kwargs):
         if value == "/media/":
             value = ""
