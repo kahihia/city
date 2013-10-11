@@ -10,7 +10,7 @@
     <script type="text/javascript" src="/static/date/js/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/static/date/js/jquery-migrate-1.2.1.js"></script>
     <script type="text/javascript" src="/static/date/js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script type="text/javascript" src="/static/elfinder/js/elfinder.full.js"></script>
+    <script type="text/javascript" src="/static/elfinder/js/elfinder.min.js"></script>
 
 <script type="text/javascript">
     //<![CDATA[
@@ -31,6 +31,7 @@
                 window.close();
             },
             resizable: false,
+            customData : { csrfmiddlewaretoken : '{{ csrf_token }}',  },
             onlyMimes: ["image"],
             commands: ['open', 'reload', 'quicklook', 'rm', 'rename', 'upload', 'search', 'view', 'sort']
         }).elfinder('instance');
@@ -39,6 +40,6 @@
 </script>
 </head>
 <body>
-<div id="elfinder"></div>
+<div class="finder"></div>
 </body>
 </html>
