@@ -4,7 +4,7 @@ import string
 from django import forms
 from django.forms.widgets import RadioSelect
 from event.models import Event, FeaturedEvent
-from event.widgets import WhenWidget, PriceWidget, GeoCompleteWidget, AjaxCropWidget, ChooseUserContextWidget
+from event.widgets import WhenWidget, PriceWidget, GeoCompleteWidget, AjaxCropWidget, ChooseUserContextWidget, AttachmentsWidget
 from django.utils.translation import ugettext_lazy as _
 
 from lookups import CityLookup
@@ -142,7 +142,12 @@ class EditEventForm(forms.ModelForm):
     description_json = forms.CharField(
         required=True,
         widget=forms.widgets.HiddenInput()
-    )    
+    )
+
+    attachments = forms.CharField(
+        widget=AttachmentsWidget(),
+        required=False
+    )
 
     price = forms.CharField(
         widget=PriceWidget(),
