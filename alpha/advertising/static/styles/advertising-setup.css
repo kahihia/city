@@ -28,11 +28,20 @@ body .hintbox {
 }
 
 #id_name,
-#id_website,
-#id_active_to {
+#id_website {
     width: 190px;
     margin-left: 20px;
     margin-right: 10px;
+}
+
+#id_active_to,
+#id_active_from {
+    width: 100px;
+    margin: 0;
+}
+
+#id_active_from {
+    margin-left: 20px;
 }
 
 .campaign-owner .dropdown {

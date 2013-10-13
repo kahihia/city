@@ -6,7 +6,7 @@
     <table class="profile-table" celpadding="0" cellspacing="0">
         <tr>
             <th class="action">Campaign Name</th>
-            <th class="action">Status</th>
+            <th class="action">Status/Active period</th>            
             <th class="action">
                 <div class="col image">&nbsp;</div>
                 <div class="stats">
@@ -34,9 +34,6 @@
                             <a href="{% url "deactivate_free_campaign" campaign.id %}">Deactivate</a>
                         </div>
                     {% endif %}
-                    {% if campaign.active_to %}
-                        Active till {{ campaign.active_to|date:"b j, Y"|capfirst }}
-                    {% endif %}
                 {% else %}
                     {% if not campaign.enough_money %}
                         <div>Not enough money</div>
@@ -47,7 +44,18 @@
                     {% if campaign.is_finished %}
                         <div>Finished</div>
                     {% endif %}
-                {% endif%}
+                    {% if campaign.is_future %}
+                        <div>Future</div>
+                    {% endif %}
+                {% endif %}
+                <br>
+                {% if campaign.active_from and campaign.active_to %}
+                    {{ campaign.active_from|date:"b j, Y"|capfirst }} - {{ campaign.active_to|date:"b j, Y"|capfirst }}
+                {% elif campaign.active_from %}
+                    Active from {{ campaign.active_from|date:"b j, Y"|capfirst }}
+                {% elif campaign.active_to %}
+                    Active till {{ campaign.active_to|date:"b j, Y"|capfirst }}
+                {% endif %}
             </td>
             <td class="action">
                 {% for ad in campaign.advertising_set.all %}

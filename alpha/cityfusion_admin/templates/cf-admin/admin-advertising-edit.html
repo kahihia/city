@@ -11,6 +11,7 @@
     <script src="{{STATIC_URL}}js/jquery.balloon.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>    
     <script src="{{STATIC_URL}}js/create_event/venue_account_owner.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/date-range.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/advertising/setup-page.js" type="text/javascript"></script>
 {% endblock %}
 
@@ -79,8 +80,8 @@
                         </div>
 
                         <div class="campaign-active-to">
-                            Will be active until
-                            {{ form.active_to }}
+                            Will be active
+                            {{ form.active_from }} - {{ form.active_to }}
                         </div>
 
 

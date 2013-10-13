@@ -59,6 +59,7 @@ class AdvertisingCampaign(models.Model):
     started = models.DateTimeField(auto_now=True, auto_now_add=True)
     ended = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
 
+    active_from = models.DateTimeField('active to', null=True, blank=True, auto_now=False, auto_now_add=False)
     active_to = models.DateTimeField('active to', null=True, blank=True, auto_now=False, auto_now_add=False)
 
     website = models.URLField()
@@ -91,10 +92,14 @@ class AdvertisingCampaign(models.Model):
         return ", ".join(self.regions.all().values_list("name", flat=True))
 
     def is_active(self):
-        return (self.enough_money or self.free) and (not self.active_to or self.active_to > datetime.datetime.now())
+        now = datetime.datetime.now()
+        return (self.enough_money or self.free) and (not self.active_from or self.active_from < now) and (not self.active_to or self.active_to > now)
 
     def is_finished(self):
         return self.active_to and self.active_to < datetime.datetime.now()
+
+    def is_future(self):
+        return self.active_from and self.active_from > datetime.datetime.now()
 
 
 class ShareAdvertisingCampaign(models.Model):
@@ -116,8 +121,11 @@ REVIEWED_STATUS = (
 
 class ActiveAdvertisingManager(models.Manager):
     def get_query_set(self):
+        now = datetime.datetime.now()
         return super(ActiveAdvertisingManager, self).get_query_set().filter(
-            ((Q(review_status="ACCEPTED") & Q(campaign__enough_money=True)) | Q(campaign__free=True)) & (Q(campaign__active_to__isnull=True) | Q(campaign__active_to__gte=datetime.datetime.now()))
+            ((Q(review_status="ACCEPTED") & Q(campaign__enough_money=True)) | Q(campaign__free=True)) & 
+            (Q(campaign__active_to__isnull=True) | Q(campaign__active_to__gte=now)) &
+            (Q(campaign__active_from__isnull=True) | Q(campaign__active_from__lte=now))
         ).select_related("campaign")
 
 

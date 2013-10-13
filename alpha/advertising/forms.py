@@ -23,7 +23,9 @@ class AdvertisingSetupForm(forms.ModelForm):
         required=False
     )
 
+    active_from = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'), required=False)
     active_to = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'), required=False)
+
 
     class Meta:
         model = AdvertisingCampaign
@@ -33,6 +35,7 @@ class AdvertisingSetupForm(forms.ModelForm):
             'all_of_canada',
             'website',
             'venue_account',
+            'active_from',
             'active_to'
         )
 

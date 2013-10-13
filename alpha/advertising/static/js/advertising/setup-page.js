@@ -15,9 +15,11 @@
             this.venueAccount = new VenueAccountOwnerWidget();
         },
         initActiveToWidget: function(){
-            $("#id_active_to").datepicker({
-                minDate: new Date()                
-            });
+            this.dateRange = new DateRange(
+                document.getElementById("id_active_from"),
+                document.getElementById("id_active_to"),
+                true
+            )
         },
         initAdTypeSelection: function(){
             var that=this;

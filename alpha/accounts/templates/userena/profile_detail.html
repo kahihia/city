@@ -102,7 +102,13 @@
                 <hr />
                 <span>
                     Members since {{ profile.user.date_joined|date:"F d, Y" }}
-                </span>                
+                </span> 
+                {% if profile.bonus_budget.amount > 0 %}   
+                <br>            
+                <span>
+                    Bonus budget - {{ profile.bonus_budget }}                    
+                </span>
+                {% endif %}
                 
                 {% venue_accounts %}
             </div>
