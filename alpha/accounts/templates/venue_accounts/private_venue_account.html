@@ -27,7 +27,7 @@
 {% block page %}
     <div class="primary-content">
         <h1>
-            {{ venue_account.venue.name }}(<a href="{% url 'userena_profile_detail' venue_account.account.user.username %}">{{ venue_account.account.user.username }}</a>)
+            {{ venue_account.venue.name }}<a href="{% url 'userena_profile_detail' venue_account.account.user.username %}">({{ venue_account.account.user.username }})</a>
         </h1>
         <div class="content account-profile">
             <div class="main-content account-profile">
