@@ -144,6 +144,38 @@ class AjaxCropWidget(forms.TextInput):
         return mark_safe(html)
 
 
+class AttachmentsWidget(forms.TextInput):
+    class Media:
+        js = (
+            "%sjs/fileuploader.js" % STATIC_PREFIX,
+            "%sjs/create_event/attachments.js" % STATIC_PREFIX,
+        )
+
+        css = {'all': (
+            "%sajaxuploader/css/fileuploader.css" % STATIC_PREFIX,
+        )}
+
+    def __init__(self, *args, **kwargs):
+        super(AttachmentsWidget, self).__init__(*args, **kwargs)
+        self.attachments = forms.widgets.HiddenInput()
+
+    def render(self, name, value, *args, **kwargs):
+        if value == "/media/":
+            value = ""
+        if value:
+            html = self.attachments.render("attachments", "", {"id": 'id_attachments', "value": "%s" % (value)})
+        else:
+            html = self.attachments.render("attachments", "", {"id": 'id_attachments'})
+
+        html += Template("""<div id="attachments-uploader" data-csrf-token="{{ csrf_token }}">
+            <noscript>
+                <p>Please enable JavaScript to use file uploader.</p>
+            </noscript>
+        </div>""").render(Context({}))
+        return mark_safe(html)
+
+
+
 class ChooseUserContextWidget(forms.Widget):
     class Media:
         js = (

@@ -223,6 +223,18 @@
                         {% endif %}
                     {% endif %}
                 </div>
+                {% if event.eventattachment_set.count > 0 %}
+                <div class="attachments">                    
+                    <h3>
+                        Attachments:
+                    </h3>
+                    {% for attachment in event.eventattachment_set.all %}
+                        <div>
+                            <a href="/media/{{ attachment.attachment }}">{{ attachment.filename }}</a>
+                        </div>                        
+                    {% endfor %}
+                </div>
+                {% endif %}
                 <h4 class="tags">
                     {% for tag in event.tags.all %}
                         <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">

@@ -12,7 +12,7 @@ from taggit_autosuggest.managers import TaggableManager
 import os
 
 import datetime
-from .settings import EVENT_PICTURE_DIR
+from .settings import EVENT_PICTURE_DIR, EVENT_ATTACHMENT_DIR
 
 from image_cropping import ImageCropField, ImageRatioField
 
@@ -63,6 +63,9 @@ def picture_file_path(instance=None, filename=None):
     object, which handles the storage and retrieval of your files.
     """
     return os.path.join(EVENT_PICTURE_DIR, datetime.date.today().isoformat(), filename)
+
+def attachment_file_path(instance=None, filename=None):
+    return os.path.join(EVENT_ATTACHMENT_DIR, datetime.date.today().isoformat(), filename)
 
 
 EVENT_TYPES = (
@@ -262,6 +265,14 @@ class Event(models.Model):
         return Event.featured_events.filter(
             Q(featuredevent__all_of_canada=True) | Q(featuredevent__regions__id=region_id)
         ).order_by('?').annotate(Count("id"))
+
+
+class EventAttachment(models.Model):
+    event = models.ForeignKey(Event, blank=False, null=False)
+    attachment = models.FileField(upload_to=attachment_file_path, blank=True, null=True)
+
+    def filename(self):
+        return os.path.basename(self.attachment.name)
 
 
 class FutureEventDayManager(models.Manager):

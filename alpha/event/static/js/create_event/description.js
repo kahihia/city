@@ -167,12 +167,13 @@
                ['Styles','Format','Font','FontSize', 'Maximize'],
                '/',
                ['Bold','Italic','Underline','StrikeThrough','-','Undo','Redo'],
-               ['Table','-','Link','TextColor','BGColor','Source','Preview'],
+               ['Table', 'Image','-','Link','TextColor','BGColor','Source','Preview'],
                '/',
                ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock']
             ];
 
             CKEDITOR.config.contentsCss = '/static/styles/ckeditor-content.css';
+            CKEDITOR.config.filebrowserBrowseUrl = '/elfinder';
 
             CKEDITOR.replace("id_description");
 
@@ -190,7 +191,7 @@
                 });
 
                 CKEDITOR.instances.id_description.on('paste', function(e){
-                    e.data.html = e.data.dataValue.replace(/\s*width="[^"]*"/g, '');
+                    // e.data.html = e.data.dataValue.replace(/\s*width="[^"]*"/g, '');
 
                     setTimeout(function(){ 
                         that.saveCurrentDay();
@@ -203,6 +204,12 @@
                         that.updateWarning(
                             CKEDITOR.instances.id_description.getData()
                         );
+                    }, 1);
+                });
+
+                CKEDITOR.instances.id_description.on('change', function(e){
+                    setTimeout(function(){ 
+                        that.saveCurrentDay();
                     }, 1);
                 });
             });

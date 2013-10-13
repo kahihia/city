@@ -28,3 +28,5 @@ django-configurations==0.3
 -e git+https://github.com/h3/django-pdfutils.git@357be58ab1d036570196fdf89528e9834a870285#egg=PDFutils
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django_toolbar
 wadofstuff-django-serializers==1.1.0
+
+django-mptt

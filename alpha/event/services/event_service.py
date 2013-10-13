@@ -8,6 +8,7 @@ from django.conf import settings
 
 from event.settings import DEFAULT_FROM_EMAIL
 from event.services import venue_service, event_occurrence_service
+from event.models import EventAttachment
 
 from django.contrib.sites.models import Site
 
@@ -53,6 +54,15 @@ def save_event(user, data, form):
         event.picture.name = data["picture_src"].replace(settings.MEDIA_URL, "")
 
     event = event.save()
+    event.eventattachment_set.all().delete()
+
+    if data["attachments"]:
+        attachments = data["attachments"].split(";")
+        for attachment in attachments:
+            EventAttachment.objects.get_or_create(
+                event=event,
+                attachment=attachment.replace(settings.MEDIA_URL, "")
+            )
 
     return event
 
@@ -81,6 +91,11 @@ def prepare_initial_location(event):
 def prepare_initial_picture_src(event):
     return "/media/%s" % event.picture
 
+def prepare_initial_attachments(event):
+    attachments = event.eventattachment_set.values_list("attachment", flat=True)
+    attachments = map(lambda attachment: "/media/%s" % attachment, attachments)
+    return ";".join(attachments)
+
 
 def prepare_initial_venue_id(event):
     if event.venue:
@@ -98,6 +113,7 @@ def prepare_initial_event_data_for_edit(event):
         "place": prepare_initial_place(event),            
         "location": prepare_initial_location(event),
         "picture_src": prepare_initial_picture_src(event),
+        "attachments": prepare_initial_attachments(event),
         "when_json": json.dumps(when_json),
         "description_json": json.dumps(description_json),
         "occurrences_json": json.dumps(occurrences)
@@ -116,6 +132,7 @@ def prepare_initial_event_data_for_copy(event):
         "place": prepare_initial_place(event),
         "location": prepare_initial_location(event),
         "picture_src": prepare_initial_picture_src(event),
+        "attachments": prepare_initial_attachments(event),
         "tags": event.tags_representation,
         "description_json": json.dumps(description_json)
     }
