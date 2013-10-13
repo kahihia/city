@@ -23,7 +23,8 @@
     position: relative;
 }
 
-.entry-wrapper .entry-info.with-all-actions {
+.entry-wrapper .entry-info.with-all-actions,
+.entry-wrapper .entry-info.without-make-feature-action {
     padding-left: 20px;
 }
 
@@ -63,7 +64,8 @@
     width: 520px;
 }
 
-.entry-wrapper .entry-info .checkbox-field {
+.entry-wrapper .entry-info .checkbox-field,
+.entry-wrapper .entry-info .facebook-event-link {
     position: absolute;
     left: 2px;
     top: 33px;
