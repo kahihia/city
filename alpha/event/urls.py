@@ -53,16 +53,17 @@ urlpatterns = patterns('',
     ),
     url(r'^create-from-facebook/$',
         event.create_from_facebook,
-        name='event_create_from_facebook'
-    ),
+        name='event_create_from_facebook'),
     url(r'^post-to-facebook/(?P<id>\d+)/$',
         event.post_to_facebook,
-        name='event_post_to_facebook'
-    ),
+        name='event_post_to_facebook'),
     url(r'^post-to-facebook-ajax/$',
         event.post_to_facebook_ajax,
-        name='event_post_to_facebook_ajax'
-    ),
+        name='event_post_to_facebook_ajax'),
+
+    url(r'^bind-to-venue/$',
+        event.bind_to_venue,
+        name='event_bind_to_venue'),
 
     url(r'^start$', event.start, name="start"),
     url(r'^ajax-upload$', event.import_uploader, name="my_ajax_upload"),
