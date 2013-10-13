@@ -9,7 +9,25 @@
                 <table>
                     <tr>
                         <td>Campaign Name:</td>
-                        <td data-stat-key="campaign">{{ campaign.name }}</td>
+                        <td>{{ campaign.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Status</td>
+                        <td>
+                            {% if campaign.is_active %}
+                                Active
+                            {% else %}
+                                {% if not campaign.enough_money %}
+                                    Not enough money                        
+                                {% endif %}
+                                {% if campaign.is_finished %}
+                                    Finished
+                                {% endif %}
+                                {% if campaign.is_future %}
+                                    Future
+                                {% endif %}
+                            {% endif %}
+                        </td>
                     </tr>
                     <tr>
                         <td>Owner</td>
@@ -22,11 +40,11 @@
                     </tr>
                     <tr>
                         <td>Started:</td>
-                        <td data-stat-key="started">{{ campaign.started|date:"b j, Y"|capfirst }}</td>
+                        <td>{{ campaign.started|date:"b j, Y"|capfirst }}</td>
                     </tr>
                     <tr>
                         <td>Ended:</td>
-                        <td data-stat-key="ended">
+                        <td>
                             {% if campaign.is_finished %}
                                 Finished
                             {% elif campaign.active_to %}
@@ -41,12 +59,15 @@
             <div class="right">
                 <table>
                     <tr>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <td>Amount Spent:</td>
-                        <td data-stat-key="spent">{{ campaign.ammount_spent }}</td>
+                        <td>{{ campaign.ammount_spent }}</td>
                     </tr>
                     <tr>
                         <td>Amount Remaining:</td>
-                        <td data-stat-key="remaining">
+                        <td>
                             {% if campaign.enough_money %}
                                 {{ campaign.ammount_remaining }}
                             {% else %}
