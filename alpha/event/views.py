@@ -295,12 +295,14 @@ def bind_to_venue(request):
     venue_account = load_model(VenueAccount, request.POST.get('venue_account_id', 0))
 
     if event and venue_account:
-        if venue_account.account == request.user.get_profile():
+        user = request.user
+        if venue_account.account == user.get_profile()\
+                and event.owner == user:
             event.venue_account_owner = venue_account
             event.save()
             success = True
         else:
-            error = 'You do not have permission to publish this event.'
+            error = 'You do not have permission to perform this operation.'
     else:
         error = 'Incorrect parameters.'
 
