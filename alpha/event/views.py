@@ -247,7 +247,10 @@ def post_to_facebook(request, id):
                 facebook_user_id = facebook_services.get_facebook_user_id(request)
                 facebook_event_id = facebook_services.create_facebook_event(event, request, facebook_user_id)
                 facebook_services.attach_facebook_event(int(facebook_event_id), event)
-                messages.success(request, 'Event was successfully posted to FB.')
+                messages.success(request, '''Event was successfully posted to FB.
+                                             You're welcome to edit your event
+                                             <a href="https://www.facebook.com/events/%s">here</a> on
+                                             Facebook to add its photo''' % facebook_event_id)
             except Exception as e:
                 messages.error(request, e.message)
         else:
