@@ -9,11 +9,9 @@
     margin-bottom: 8px;
 }
 
-.entry-wrapper .block-link {
-    display: block;
-    margin-bottom: 15px;
-    font-weight: bold;
-    text-decoration: underline;
+.entry-wrapper .button.standart {
+    width: auto;
+    margin: 0 0 15px 0;
 }
 
 .entry-wrapper .entry-info{
