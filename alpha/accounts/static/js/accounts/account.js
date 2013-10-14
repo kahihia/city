@@ -158,7 +158,10 @@
                 var message = self.createSuccessMessage();
                 message.html(self.successProcessCount + " out of " + self.eventsToProcessCount
                                               + " events posted to Facebook. "
-                                              + "Operation complete!");
+                                              + "Operation complete!<br/>"
+                                              + "You're welcome to edit your events on Facebook "
+                                              + "to add their photos (just click the icon on the left of the "
+                                              + "necessary event).");
             }
         };
 
@@ -180,7 +183,7 @@
                     else {
                         var message = $("<div/>", {
                             "class": "alert-error",
-                            "html": "Error while event binding: \"" + data.error + "\"."
+                            "html": "Error while event binding: \"" + data.error + "\""
                         });
 
                         self.eventContainer.prepend(message);
@@ -223,7 +226,6 @@
 
         self.makeCheckBoxesForFBPosting = function() {
             self.venueSelect.hide();
-            self.eventContainer.find(self.eventCheckerSelector + "," + self.facebookLinkSelector).remove();
 
             $(self.eventItemSelector).each(function() {
                 var facebookEventId = $(this).data("facebook-event-id");
@@ -231,28 +233,40 @@
                     var link = self.facebookLinkTpl.clone();
                     link.attr("href", "https://www.facebook.com/events/" + facebookEventId + "/");
 
-                    $(this).append(link);
+                    $(this).find(self.eventCheckerSelector + "," + self.facebookLinkSelector).remove();
+                    $(this).prepend(link);
                 }
                 else {
                     var eventId = $(this).data("event-id");
                     var check = self.eventCheckTpl.clone();
                     check.attr("data-event-id", eventId);
 
-                    $(this).prepend(self.eventCheckTpl.clone().attr("data-event-id", eventId));
+                    var existingCheck = $(this).find(self.eventCheckerSelector + ":checked");
+                    if(existingCheck.length !== 0) {
+                        check.prop("checked", true);
+                    }
+
+                    $(this).find(self.eventCheckerSelector + "," + self.facebookLinkSelector).remove();
+                    $(this).prepend(check);
                 }
             });
         };
 
         self.makeCheckBoxesForEventTransferring = function() {
             self.venueSelect.show();
-            self.eventContainer.find(self.eventCheckerSelector + "," + self.facebookLinkSelector).remove();
 
             $(self.eventItemSelector).each(function() {
                     var eventId = $(this).data("event-id");
                     var check = self.eventCheckTpl.clone();
                     check.attr("data-event-id", eventId);
 
-                    $(this).prepend(self.eventCheckTpl.clone().attr("data-event-id", eventId));
+                    var existingCheck = $(this).find(self.eventCheckerSelector + ":checked");
+                    if(existingCheck.length !== 0) {
+                        check.prop("checked", true);
+                    }
+
+                    $(this).find(self.eventCheckerSelector + "," + self.facebookLinkSelector).remove();
+                    $(this).prepend(check);
             });
         };
 
