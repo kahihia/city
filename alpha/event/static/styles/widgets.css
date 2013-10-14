@@ -164,6 +164,7 @@ input[type=radio]:checked + label {
 body .button, 
 ul#box-nav li,
 input[type=submit],
+#images-uploader .qq-upload-button,
 #attachments-uploader .qq-upload-button,
 #file-uploader .qq-upload-button {
     display: inline-block;
@@ -188,6 +189,7 @@ input[type=submit],
 }
 
 body .button.standart,
+#images-uploader .qq-upload-button,
 #attachments-uploader .qq-upload-button,
 #file-uploader .qq-upload-button {
     width: 137px;
@@ -204,7 +206,8 @@ body .button.big-button {
 
 .button:hover,
 ul#box-nav li:hover,
-input[type=submit]:hover
+input[type=submit]:hover,
+#images-uploader .qq-upload-button:hover,
 #attachments-uploader .qq-upload-button:hover,
 #file-uploader .qq-upload-button:hover {
   /*background-image: url("/images/ie9_button_hovered.svg");*/
@@ -420,11 +423,13 @@ fieldset legend{
 }
 
 /* File ajax upload */
+#images-uploader .qq-upload-list,
 #attachments-uploader .qq-upload-list,
 #file-uploader .qq-upload-list {
     display:none;
 }
 
+#images-uploader .qq-upload-list li,
 #attachments-uploader .qq-upload-list li {
     list-style: none;
 }
@@ -437,10 +442,11 @@ fieldset legend{
     display:none;
 }
 
-#attachments-uploader, #file-uploader {
+#images-uploader, #attachments-uploader, #file-uploader {
     margin-left:10px;
 }
 
+#images-uploader .qq-upload-button,
 #attachments-uploader .qq-upload-button,
 #file-uploader .qq-upload-button {
     margin-top: 0px;
@@ -458,12 +464,14 @@ fieldset legend{
     display: none !important;
 }
 
+#images-uploader .qq-upload-button input,
 #attachments-uploader .qq-upload-button input,
 #file-uploader .qq-upload-button input {
     height: 100%;
     width: 100%;
 }
 
+#images-uploader .qq-upload-button:hover,
 #attachments-uploader .qq-upload-button:hover,
 #file-uploader .qq-upload-button:hover {
     color: #234;

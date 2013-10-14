@@ -167,16 +167,15 @@
                ['Styles','Format','Font','FontSize', 'Maximize'],
                '/',
                ['Bold','Italic','Underline','StrikeThrough','-','Undo','Redo'],
-               ['Table', 'Image','-','Link','TextColor','BGColor','Source','Preview'],
+               ['Table','-','Link','TextColor','BGColor','Source','Preview'],
                '/',
                ['NumberedList','BulletedList','-','Outdent','Indent','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock']
             ];
 
             CKEDITOR.config.contentsCss = '/static/styles/ckeditor-content.css';
-            CKEDITOR.config.filebrowserBrowseUrl = '/elfinder';
+            // CKEDITOR.config.filebrowserBrowseUrl = '/elfinder';
 
             CKEDITOR.replace("id_description");
-
             
             CKEDITOR.instances.id_description.on("instanceReady", function(){
                 CKEDITOR.instances.id_description.on('key', function(e){

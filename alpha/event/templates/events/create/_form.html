@@ -234,7 +234,7 @@
                         </p>
                     </div>
                 </td>
-                <td class="price-td">
+                <td>
                     {{ form.attachments }}
                     {% for error in form.attachments.errors %}
                         <div class="error">{{ error }}</div>
@@ -386,7 +386,7 @@
                     {{form.tickets}}
                 </td>
             </tr>
-            <tr class="picture">
+            <tr class="images">
                 <td>
                     Images
                     <a href="javascript:void(0);" class="balloon">
@@ -403,15 +403,10 @@
                     </div>
                 </td>
                 <td>
-                    {{ form.picture_src }}
-                    <div class='full-screen-popup' data-thumb-width="180" data-thumb-height="180">
-                        {{ form.cropping }}
-                        <div class='save-button'>Save image</div>
-                        <div class='cancel-button'>Cancel</div>
-                    </div>
-                    <div class="picture-thumb">
-                        <img src="" class="preview">
-                    </div>
+                    {{ form.images }}
+                    {% for error in form.images.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
                 </td>
             </tr>
             <tr></tr>

@@ -275,6 +275,14 @@ class EventAttachment(models.Model):
         return os.path.basename(self.attachment.name)
 
 
+class EventImage(models.Model):
+    event = models.ForeignKey(Event, blank=False, null=False)
+
+    main = models.BooleanField(default=False)
+    picture = ImageCropField(upload_to=picture_file_path, blank=True, null=True, help_text='The event picture')
+    cropping = ImageRatioField('picture', '180x180', size_warning=True, allow_fullsize=True)
+
+
 class FutureEventDayManager(models.Manager):
     def get_query_set(self):
         now = datetime.datetime.now()

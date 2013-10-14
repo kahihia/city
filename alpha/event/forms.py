@@ -4,7 +4,7 @@ import string
 from django import forms
 from django.forms.widgets import RadioSelect
 from event.models import Event, FeaturedEvent
-from event.widgets import WhenWidget, PriceWidget, GeoCompleteWidget, AjaxCropWidget, ChooseUserContextWidget, AttachmentsWidget
+from event.widgets import WhenWidget, PriceWidget, GeoCompleteWidget, AjaxCropWidget, ChooseUserContextWidget, AttachmentsWidget, EventImagesWidget
 from django.utils.translation import ugettext_lazy as _
 
 from lookups import CityLookup
@@ -158,6 +158,11 @@ class EditEventForm(forms.ModelForm):
     post_to_facebook = forms.BooleanField(
         widget=RadioSelect(choices=YES_OR_NO),
         required=False,
+    )
+
+    images = forms.CharField(
+        widget=EventImagesWidget(),
+        required=False
     )
 
     picture_src = forms.CharField(

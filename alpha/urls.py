@@ -12,7 +12,7 @@ handler404 = 'home.views.custom_404'
 
 urlpatterns = patterns(
     '',
-    url(r'^elfinder/', include('elfinder.urls')),
+    # url(r'^elfinder/', include('elfinder.urls')),
     # Examples:
     url(r'^channel.html$', 'home.views.channelfile'),
     url(r'^facebook-for-turbolinks.js$', 'home.views.facebook_for_turbolinks_js'),

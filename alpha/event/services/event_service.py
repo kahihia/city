@@ -91,10 +91,20 @@ def prepare_initial_location(event):
 def prepare_initial_picture_src(event):
     return "/media/%s" % event.picture
 
+
 def prepare_initial_attachments(event):
     attachments = event.eventattachment_set.values_list("attachment", flat=True)
     attachments = map(lambda attachment: "/media/%s" % attachment, attachments)
     return ";".join(attachments)
+
+
+def prepare_initial_images(event):
+    images = event.eventimage_set.all()
+    images = [
+        "/media/%s!%s" % (imageModel.picture, imageModel.cropping) for imageModel in images
+    ]
+
+    return ";".join(images)
 
 
 def prepare_initial_venue_id(event):
@@ -114,6 +124,7 @@ def prepare_initial_event_data_for_edit(event):
         "location": prepare_initial_location(event),
         "picture_src": prepare_initial_picture_src(event),
         "attachments": prepare_initial_attachments(event),
+        "images": prepare_initial_images(event),
         "when_json": json.dumps(when_json),
         "description_json": json.dumps(description_json),
         "occurrences_json": json.dumps(occurrences)
@@ -133,6 +144,7 @@ def prepare_initial_event_data_for_copy(event):
         "location": prepare_initial_location(event),
         "picture_src": prepare_initial_picture_src(event),
         "attachments": prepare_initial_attachments(event),
+        "images": prepare_initial_images(event),
         "tags": event.tags_representation,
         "description_json": json.dumps(description_json)
     }

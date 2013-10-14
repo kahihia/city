@@ -175,6 +175,33 @@ class AttachmentsWidget(forms.TextInput):
         return mark_safe(html)
 
 
+class EventImagesWidget(forms.TextInput):
+    class Media:
+        js = (
+            "%sjs/fileuploader.js" % STATIC_PREFIX,
+            "%sjs/create_event/images.js" % STATIC_PREFIX,
+        )
+        css = {'all': (
+            "%sajaxuploader/css/fileuploader.css" % STATIC_PREFIX,
+        )}
+
+    def __init__(self, *args, **kwargs):
+        super(EventImagesWidget, self).__init__(*args, **kwargs)
+        self.images = forms.widgets.HiddenInput()
+
+    def render(self, name, value, *args, **kwargs):
+        if value:
+            html = self.images.render("images", "", {"id": 'id_images', "value": "%s" % (value)})
+        else:
+            html = self.images.render("images", "", {"id": 'id_images'})
+
+        html += Template("""<div id="images-uploader" data-csrf-token="{{ csrf_token }}">
+            <noscript>
+                <p>Please enable JavaScript to use file uploader.</p>
+            </noscript>
+        </div>""").render(Context({}))
+        return mark_safe(html)
+
 
 class ChooseUserContextWidget(forms.Widget):
     class Media:

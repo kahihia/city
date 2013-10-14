@@ -175,8 +175,8 @@ INSTALLED_APPS = (
     'advertising',
     'ckeditor',
     'cityfusion_admin',
-    'mptt',
-    'elfinder'
+    # 'mptt',
+    # 'elfinder'
     # 'debug_toolbar',
 )
 
