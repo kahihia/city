@@ -168,6 +168,29 @@ a.add-button {
     width:200px;
 }
 
+.pure-events-list {
+    padding-top: 15px;
+}
+
+.pure-events-list .event-check-field {
+    width: auto;
+    height: auto;
+    opacity: 1;
+    vertical-align: middle;
+}
+
+.pure-events-list .entry-wrapper {
+    padding-top: 0;
+}
+
+.pure-events-list .entry-info {
+    margin: 0;
+}
+
+.pure-events-list td {
+    padding: 2px;
+}
+
 .shared-with {
     background: rgb(250,250,250); /* Old browsers */
     /* IE9 SVG, needs conditional override of 'filter' to 'none' */

@@ -140,6 +140,15 @@ urlpatterns = patterns('',
         name='change_event_owner'
     ),
 
+    url(r'^change-owner-ajax/$',
+        views.change_event_owner_ajax,
+        name='change_event_owner_ajax'
+    ),
+
+    url(r'^mass-event-transfer$',
+        views.event_mass_transfer,
+        name='mass_event_transfer'),
+
     url(r'^share-stats/(?P<campaign_id>\d+)$',
         views.admin_share_stats,
         name='admin_share_stats'

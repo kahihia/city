@@ -1,0 +1,86 @@
+{% extends 'cf-admin/base.html' %}
+{% load event_tags %}
+{% load admin_menu %}
+{% load endless %}
+{% load cf_pagination %}
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/select2.css" rel="stylesheet" type="text/css" />
+    <script src="{{STATIC_URL}}js/select2.min.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/actions/change-event-owner.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block page %}
+    <div class="tabs-container">
+        {% cf_admin_menu 'event_owner' %}
+        <div class="box visible options">
+            <ul class="tabs">
+                <li>
+                    <a href="{% url 'change_event_owner_search' %}"><span>Change owner</span></a>
+                </li>
+                <li class="current">
+                    <span>Mass event transferring</span>
+                </li>
+            </ul>
+            <div class="box visible options">
+                <h1>
+                    Transfer events
+                </h1>
+
+                <table>
+                    <tr>
+                        <td width="290">
+                            <form method="get" name="search-events" >
+                                Events owner: <br/>
+                                <input name="owner_id" class="user-input"
+                                       data-ajax-url="{% url 'admin_user_autocomplete' %}"
+                                       data-id="owner_id" />
+                                <input type="submit" value="Search" />
+                                {% if owner %}
+                                    <input type="hidden"
+                                           data-id="owner_id_init_data"
+                                           data-user-name="{{ owner.username }}"
+                                           data-user-id="{{ owner.id }}" />
+                                {% endif %}
+                            </form>
+                        </td>
+                        <td>
+                            Transfer events to: <br/>
+                            <input name="new_owner_id" class="user-input"
+                                   data-ajax-url="{% url 'admin_user_autocomplete' %}"
+                                   data-id="target_id" />
+                            <input type="submit" value="Transfer" data-id="transfer_button" />
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="pure-events-list" data-id="event_container" data-transfer-url="{% url 'change_event_owner_ajax' %}">
+                    {% csrf_token %}
+                    <table celpadding="0" cellspacing="0">
+                        {% for event in events %}
+                            <tr>
+                                <td width="20">
+                                    <input type="checkbox" class="event-check-field"
+                                           data-type="event_check"
+                                           data-event-id="{{ event.id }}" />
+                                </td>
+                                <td>
+                                    <div class="entry-wrapper">
+                                        {% event_block event %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="2">
+                                    No events was found
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
