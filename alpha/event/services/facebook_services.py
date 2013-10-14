@@ -129,6 +129,8 @@ def create_facebook_event(event, request, facebook_user_id):
     if event.tickets:
         description = '%s\r\n\nTickets: %s' % (description, event.tickets)
 
+    description = '%s\r\n\n%s' % (description, 'www.cityfusion.ca')
+
     location = event.venue.name
     if event.venue.street:
         location += ', %s' % event.venue.street
