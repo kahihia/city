@@ -536,6 +536,36 @@ def change_event_owner(request, slug):
 
 
 @staff_member_required
+def event_mass_transfer(request):
+    events = []
+    try:
+        owner = User.objects.get(pk=request.REQUEST.get('owner_id', 0))
+    except User.DoesNotExist:
+        owner = None
+
+    if owner:
+        events = Event.future_events.filter(owner=owner)
+
+    return render_to_response('cf-admin/event_mass_transfer.html', {
+        'events': events,
+        'owner': owner,
+    }, context_instance=RequestContext(request))
+
+
+@require_POST
+@staff_member_required
+def change_event_owner_ajax(request):
+    event_id = request.POST.get('event_id', None)
+    owner_id = request.POST.get('owner_id', None)
+    if event_id and owner_id:
+        event = Event.events.get(pk=event_id)
+        event.owner = User.objects.get(id=owner_id)
+        event.save()
+
+    return HttpResponse(json.dumps({'success': True}), mimetype='application/json')
+
+
+@staff_member_required
 def admin_share_stats(request, campaign_id):
     campaign = AdvertisingCampaign.objects.get(id=campaign_id)
     
