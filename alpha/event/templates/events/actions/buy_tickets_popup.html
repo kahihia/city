@@ -6,8 +6,8 @@
             Buy tickets
         </h1>
         <div class="content">
-            {% if event.is_tickets_representet_with_url %}
-                Please, visit <a href="{{ event.tickets }}" target="_blank">website</a>
+            {% if event.is_tickets_field_url %}
+                Please, visit <a href="{{ event.tickets_url }}" target="_blank">website</a>
             {% else %}
                 {{ event.tickets }}
             {% endif %}

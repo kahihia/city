@@ -47,7 +47,7 @@
 
 
             <li class="subheader all-categories">
-                <a href="{% events_filter_url request eventsFilter function="tags" exclude="tag|datetime" %}" >All Categories</a>                
+                <a href="{% events_filter_url request eventsFilter function="tags" exclude="tag|datetime" %}" >All Tags</a>
             </li>
             <ul class="categories">
                 {% for tag in tags %}                
@@ -56,7 +56,7 @@
                             {{tag.tag__name}}
                         </a>
                     </li>
-                {%endfor%}                
+                {%endfor%}
             </ul>
             {% if tags|length > 21 %}
                 <div class="more-button">

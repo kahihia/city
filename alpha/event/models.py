@@ -216,13 +216,23 @@ class Event(models.Model):
             active=True
         ).count() > 0
 
-    def is_tickets_representet_with_url(self):
+    def is_tickets_field_url(self):
         url_validator = URLValidator()
         try:
-            url_validator(self.tickets)
+            tickets_url = self.tickets 
+            if not tickets_url.startswith('http'):
+                tickets_url = "http://%s" % self.tickets
+            url_validator(tickets_url)
             return True
         except ValidationError:
             return False
+
+    def tickets_url(self):
+        if not self.tickets.startswith('http'):
+            return "http://%s" % self.tickets
+        else:
+            return self.tickets
+
 
     def next_day(self):
         try:
