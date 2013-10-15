@@ -146,13 +146,18 @@
 
         this.images = [];
         this.uploader = new ImageUploader(function(filename, responseJSON){
-            that.addCroppedImages(filename, responseJSON.filepath);
+            var widget = that.addCroppedImages(filename, responseJSON.filepath);
+            that.setActiveCroppedImage(widget);
+            that.openCroppingPopup();
         });
 
         this.activeCroppedWidget = new ActiveCroppedWidget();
     }
 
     CroppedImages.prototype = {
+        openCroppingPopup: function(){
+
+        },
         setActiveCroppedImage: function(croppedImage){
             this.activeCroppedWidget.setActiveWidget(croppedImage);
 
@@ -161,6 +166,8 @@
             var widget = new CroppedImageWidget(filename, filepath, cropping, this);
             this.images.push(widget);
             $(this.element).append(widget.element);
+
+            return widget;
         },
         removeCroppedImage: function(widget){
             this.images.splice(this.images.indexOf(widget), 1);
