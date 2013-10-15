@@ -70,13 +70,15 @@
 <body {% block body_attributes %}class="modern"{% endblock %}>
     {% block body_inner %}
         {% googleanalyticsjs_push %}
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        {% block messages %}
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endblock messages %}
         <div class="wrapper">
             <div class="page-container">
                 <div class="header"  data-no-turbolink>
