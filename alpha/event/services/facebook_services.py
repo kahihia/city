@@ -140,7 +140,7 @@ def create_facebook_event(event, request, facebook_user_id):
                  .annotate(end_time=Max("single_events__end_time")).get(pk=event.id)
 
     if dates.start_time >= dates.end_time:
-        raise Exception('Error: The start time must be greater than the end time')
+        dates.end_time += datetime.timedelta(days=1)
 
     params = {
         'name': event.name,
