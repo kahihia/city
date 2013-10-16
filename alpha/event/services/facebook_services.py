@@ -129,15 +129,13 @@ def create_facebook_event(event, request, facebook_user_id):
     if event.tickets:
         description = '%s\r\n\nTickets: %s' % (description, event.tickets)
 
-    description = '%s\r\n\n%s' % (description, 'www.cityfusion.ca')
-
     location = event.venue.name
     if event.venue.street:
         location += ', %s' % event.venue.street
 
     location += ', %s' % event.venue.city.name_std
-    dates = Event.events.annotate(start_time=Min("single_events__start_time"))\
-                 .annotate(end_time=Max("single_events__end_time")).get(pk=event.id)
+    dates = Event.events.annotate(start_time=Min('single_events__start_time'))\
+                 .annotate(end_time=Max('single_events__end_time')).get(pk=event.id)
 
     if dates.start_time >= dates.end_time:
         dates.end_time += datetime.timedelta(days=1)
