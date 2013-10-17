@@ -28,6 +28,7 @@
             },
             template: '<div class="qq-uploader">' +
                 '<div class="qq-upload-button">Upload a file</div>' +
+                '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
                 '<div class="qq-upload-indicator-block attachment-upload-progress-bar inv" data-id="upload_indicator_block">' +
                     '<img src="/static/images/mini-ajax-loader.gif" alt="" />' +
                     '<a class="qq-uploading-cancel attachment-upload-cancel" data-id="uploading_cancel" href="javascript:void(0);">' +
