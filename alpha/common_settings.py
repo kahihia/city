@@ -368,3 +368,5 @@ CELERYBEAT_SCHEDULE = {
 SERIALIZATION_MODULES = {
     'json': 'wadofstuff.django.serializers.json'
 }
+
+ADVERTISING_TYPE_CPC_ON = False

@@ -2,6 +2,7 @@
 {% load i18n %} 
 {% load url from future %} 
 {% load dictionary_tags %}
+{% load setup_advertising %}
 
 {% block title %}
     {% blocktrans with profile.user.username as username %}
@@ -84,134 +85,9 @@
                     <div class="campaign-active-to">
                         Will be active till
                         {{ form.active_to }}
-                    </div>
-                    
-                    Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner, etc.
-                    <div class="advertising-types">
-                        <table cellspacing="0" cellpadding="0">
-                            <tr>
-                                <th>
-                                    Size of Ad
-                                    <a href="javascript:void;" class="balloon">
-                                        <div class="buttonq mini"></div>
-                                    </a>
-                                    <div class="balloon-content">
-                                        <h3>
-                                            Help - Advertising Campaign
-                                            <i>[Size]:</i>
-                                        </h3>
-                                        <p>
-                                            Choose ad size
-                                        </p>
-                                    </div>
-                                </th>
-                                <th class="ad-type-col">
-                                    CPM
-                                    <a href="javascript:void;" class="balloon">
-                                        <div class="buttonq mini"></div>
-                                    </a>
-                                    <div class="balloon-content">
-                                        <h3>
-                                            Help - Advertising Campaign
-                                            <i>[CPM]:</i>
-                                        </h3>
-                                        <p>
-                                            Cost per view
-                                        </p>
-                                    </div>
-                                </th>
-                                <th class="ad-type-col">
-                                    CPC
-                                    <a href="javascript:void;" class="balloon">
-                                        <div class="buttonq mini"></div>
-                                    </a>
-                                    <div class="balloon-content">
-                                        <h3>
-                                            Help - Advertising Campaign
-                                            <i>[CPC]:</i>
-                                        </h3>
-                                        <p>
-                                            Cost per click
-                                        </p>
-                                    </div>
-                                </th>
-                                <th>
-                                    CPM Prices
-                                    <a href="javascript:void;" class="balloon">
-                                        <div class="buttonq mini"></div>
-                                    </a>
-                                    <div class="balloon-content">
-                                        <h3>
-                                            Help - Advertising Campaign
-                                            <i>[CPM Price]:</i>
-                                        </h3>
-                                        <p>
-                                            Price for 1000 views
-                                        </p>
-                                    </div>
-                                </th>
-                                <th>
-                                    CPC Prices
-                                    <a href="javascript:void;" class="balloon">
-                                        <div class="buttonq mini"></div>
-                                    </a>
-                                    <div class="balloon-content">
-                                        <h3>
-                                            Help - Advertising Campaign
-                                            <i>[CPC Price]:</i>
-                                        </h3>
-                                        <p>
-                                            Price for 1 click
-                                        </p>
-                                    </div>
-                                </th>
-                            </tr>
-                            <tr class="empty-tr">
-                                <td></td>
-                                <td class="ad-type-col"></td>
-                                <td class="ad-type-col"></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                    </div>                    
 
-                            {% for advertising_type in advertising_types %}
-                            <tr>
-                                <td class="ad-type-description-col">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="id_advertising_type_{{ advertising_type.id }}" value="{{ advertising_type.id }}" name="advertising_types" data-ad-type="{{ advertising_type.id }}" {% if advertising_type.id in chosen_advertising_types %}checked="checked"{% endif %}>
-                                        <label for="id_advertising_type_{{ advertising_type.id }}"></label>
-                                        <label for="id_advertising_type_{{ advertising_type.id }}">{{ advertising_type }}</label>
-                                    </div>
-                                </td>
-                                <td class="ad-type-col">
-                                    <div class="radio">
-                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cpm" value="CPM" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}" {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CPM" %}checked="checked"{% endifequal %}>
-                                        <label for="advertising_type_{{ advertising_type.id }}_cpm"></label>
-                                    </div>
-                                </td>
-                                <td class="ad-type-col">
-                                    <div class="radio">
-                                        <input type="radio" id="advertising_type_{{ advertising_type.id }}_cpc" value="CPC" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}" {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CPC" %}checked="checked"{% endifequal %}>
-                                        <label for="advertising_type_{{ advertising_type.id }}_cpc"></label>
-                                    </div>
-                                </td>
-                                <td class="center">
-                                    {{ advertising_type.cpm_price }}
-                                </td>
-                                <td class="center">
-                                    {{ advertising_type.cpc_price }}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            <tr class="empty-tr">
-                                <td></td>
-                                <td class="ad-type-col"></td>
-                                <td class="ad-type-col"></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </table>
-                    </div>
+                    {% setup_advertising_types %}
 
                     <div class="advertising-uploads">
                         <table>
