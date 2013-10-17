@@ -47,7 +47,18 @@
     <script src="{{STATIC_URL}}js/event/eventpage.js" type="text/javascript"></script>
 {% endblock %}    
 
-
+{% block messages %}
+    {% if messages %}
+        <ul class="messages" data-no-hide="true">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    <button type="button" class="close">×</button>
+                    {{ message|safe }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock messages %}
 {% block page %}
     <div id="fb-root"></div>
     <div class="primary-content">

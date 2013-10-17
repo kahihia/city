@@ -3,13 +3,22 @@
 
 {% paginate 6 events using "account_events" %}
 
-<div class="account-entry-wrapper entry-wrapper">
-    <input type="button" value="Post selected to FB" class="button standart submit" data-id="fb_post_button" />
+<div class="account-entry-wrapper entry-wrapper" data-id="event_container">
+    <select autocomplete="off" data-id="action_select">
+        <option value="post_selected_to_fb">Post selected to FB</option>
+        <option value="bind_selected_to_venue">Bind selected to the venue</option>
+    </select>
+    <select style="display:none;" data-id="venue_select">
+        {% for venue_account in profile.venueaccount_set.all %}
+            <option value="{{ venue_account.id }}">{{ venue_account.venue.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="button" value="Execute" class="button standart submit" data-id="execute_button" />
     {% for event in events %}
-        <div class="entry-info {% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}">
-            {% if not event.facebook_event %}
-                <input class="checkbox-field" type="checkbox" data-type="event_check" data-event-id="{{ event.event.id }}" />
-            {% endif %}
+        <div class="entry-info {% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}"
+             data-type="event_item"
+             data-event-id="{{ event.event.id }}"
+             {% if event.facebook_event %}data-facebook-event-id="{{ event.facebook_event.eid }}"{% endif %}>
 
             {% short_single_event event %}
 
@@ -56,9 +65,14 @@
         </span>        
     </div>
 {% endif %}
-<div data-type="hidden_elements">
-    <input type="hidden" data-id="clear_graph_url" value="{% url 'clear_facebook_graph' %}" />
-    <input type="hidden" data-id="post_to_facebook_url" value="{% url 'event_post_to_facebook_ajax' %}" />
+<div data-type="hidden_elements" style="display:none;">
+    <input type="hidden" value="{% url 'clear_facebook_graph' %}" data-id="clear_graph_url" />
+    <input type="hidden" value="{% url 'event_post_to_facebook_ajax' %}" data-id="post_to_facebook_url" />
+    <input type="hidden" value="{% url 'event_bind_to_venue' %}" data-id="bind_to_venue_url" />
     {% csrf_token %}
-    <img class="mini-indicator" data-id="mini_indicator" src="{{ STATIC_URL }}images/mini-ajax-loader.gif" />
+    <img class="mini-indicator" src="{{ STATIC_URL }}images/mini-ajax-loader.gif" data-id="mini_indicator" />
+    <input class="checkbox-field" type="checkbox" data-type="event_check" />
+    <a class="facebook-event-link" target="_blank" data-type="facebook_event_link">
+        <img src="{{ STATIC_URL }}images/facebook-icon-mini.png" />
+    </a>
 </div>

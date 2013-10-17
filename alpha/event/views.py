@@ -247,7 +247,10 @@ def post_to_facebook(request, id):
                 facebook_user_id = facebook_services.get_facebook_user_id(request)
                 facebook_event_id = facebook_services.create_facebook_event(event, request, facebook_user_id)
                 facebook_services.attach_facebook_event(int(facebook_event_id), event)
-                messages.success(request, 'Event was successfully posted to FB.')
+                messages.success(request, '''Event was successfully posted to FB.
+                                             You're welcome to edit your event
+                                             <a href="https://www.facebook.com/events/%s">here</a> on
+                                             Facebook to add its photo''' % facebook_event_id)
             except Exception as e:
                 messages.error(request, e.message)
         else:
@@ -261,15 +264,13 @@ def post_to_facebook(request, id):
 @login_required
 @facebook_required
 def post_to_facebook_ajax(request):
-    success = False
-    error = ''
+    success, error, facebook_event_id = False, '', 0
 
     event_id = request.POST.get('event_id')
     try:
         event = Event.events.get(pk=event_id)
     except Event.DoesNotExist as e:
-        event = None
-        error = e.message
+        event, error = None, e.message
 
     if event and not event.facebook_event:
         try:
@@ -282,10 +283,34 @@ def post_to_facebook_ajax(request):
     else:
         error = 'Event has already been posted to FB'
 
-    return HttpResponse(json.dumps({
-        'success': success,
-        'error': error
-    }), mimetype='application/json')
+    params = {'success': success, 'error': error, 'facebook_event_id': facebook_event_id}
+
+    if error and event:
+        params['event_link'] = reverse('event_edit', kwargs={'authentication_key': event.authentication_key})
+
+    return HttpResponse(json.dumps(params), mimetype='application/json')
+
+
+@login_required
+def bind_to_venue(request):
+    success, error = False, ''
+    event = load_model(Event, request.POST.get('event_id', 0), 'events')
+    venue_account = load_model(VenueAccount, request.POST.get('venue_account_id', 0))
+
+    if event and venue_account:
+        user = request.user
+        if venue_account.account == user.get_profile()\
+                and event.owner == user:
+            event.venue_account_owner = venue_account
+            event.save()
+            success = True
+        else:
+            error = 'You do not have permission to perform this operation.'
+    else:
+        error = 'Incorrect parameters.'
+
+    return HttpResponse(json.dumps({'success': success, 'error': error}), mimetype='application/json')
+
 
 
 def created(request, slug=None):
@@ -674,4 +699,14 @@ def set_browser_location(request):
 
     return HttpResponse(json.dumps({
         "status": status
-    }), mimetype="application/json")    
+    }), mimetype="application/json")
+
+
+def load_model(cls, pk, manager='objects'):
+    try:
+        model = getattr(cls, manager).get(pk=pk)
+    except cls.DoesNotExist:
+        model = None
+
+    return model
+

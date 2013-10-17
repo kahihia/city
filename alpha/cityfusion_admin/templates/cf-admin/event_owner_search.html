@@ -13,53 +13,62 @@
 
 {% block page %}
     <div class="tabs-container">
-        {% cf_admin_menu "claim_event" %}
-
+        {% cf_admin_menu 'event_owner' %}
         <div class="box visible options">
-            <h1>
-                Search events
-            </h1>
-            <form method="post" name="search-events" >
-                {% csrf_token %}
-                Please, provide part of event title <br/>
-                <input name="search" placeholder="Title" value="{{ search }}"/>
-                <input type="submit" value="Search" />
-            </form>
+            <ul class="tabs">
+                <li class="current">
+                    <span>Change owner</span>
+                </li>
+                <li>
+                    <a href="{% url 'mass_event_transfer' %}"><span>Mass event transferring</span></a>
+                </li>
+            </ul>
+            <div class="box visible options">
+                <h1>
+                    Search events
+                </h1>
+                <form method="post" name="search-events" >
+                    {% csrf_token %}
+                    Please, provide part of event title <br/>
+                    <input name="search" placeholder="Title" value="{{ search }}"/>
+                    <input type="submit" value="Search" />
+                </form>
 
-            <table class="profile-table" celpadding="0" cellspacing="0">
-                <tr>
-                    <th>Event</th>
-                    <th>Owner</th>
-                    <th width="50%">Change owner</th>
-                </tr>
-                
-                {% for event in events %}
-                <tr>
-                    <td>
-                        <div class="entry-wrapper">
-                            {% event_block event %}
-                        </div>
-                    </td>
-                    <td>
-                        {{ event.owner }}
-                    </td>
-                    <td>
-                        <form method="post" name="event-change-owner" action="{% url 'change_event_owner' event.slug %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="search" value="{{ search }}">
-                            <input name="owner_id" class="user-input" value="" data-ajax-url="{% url 'admin_user_autocomplete' %}"  />
-                            <input type="submit" value="Change" />
-                        </form>
-                    </td>
-                </tr>
-                {% empty %}
+                <table class="profile-table" celpadding="0" cellspacing="0">
                     <tr>
-                        <td colspan="4">
-                            No events was found
+                        <th>Event</th>
+                        <th>Owner</th>
+                        <th width="50%">Change owner</th>
+                    </tr>
+
+                    {% for event in events %}
+                    <tr>
+                        <td>
+                            <div class="entry-wrapper">
+                                {% event_block event %}
+                            </div>
+                        </td>
+                        <td>
+                            {{ event.owner }}
+                        </td>
+                        <td>
+                            <form method="post" name="event-change-owner" action="{% url 'change_event_owner' event.slug %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="search" value="{{ search }}">
+                                <input name="owner_id" class="user-input" value="" data-ajax-url="{% url 'admin_user_autocomplete' %}"  />
+                                <input type="submit" value="Change" />
+                            </form>
                         </td>
                     </tr>
-                {% endfor %}
-            </table>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4">
+                                No events was found
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
     </div>
 {% endblock %}
