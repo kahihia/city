@@ -4,21 +4,38 @@
     function AttachmentWidget(filename, filepath, attachmentsWidget){
         var that = this;
         this.attachmentsWidget = attachmentsWidget;
+        this.filename = filename;
         this.filepath = filepath;
 
         this.element = dom("div", {"class": "attachment"}, [
             dom("span", {"innerHTML": filename}),
-            this.removeButton = dom("div", {"class": "remove-attachment-button"})
+            this.removeButton = dom("i", {"class": "icon-remove"}),
+            this.previewButton = dom("i", {"class": "icon-eye-open"})
         ]);
 
         $(this.removeButton).on("click", function(){
             that.remove();
         });
+
+        $(this.previewButton).on("click", function(){
+            that.preview();
+        });
+
+        if(!/\.(gif|jpg|jpeg|tiff|png)$/i.test(this.filename)){
+            $(this.previewButton).hide();                
+        }
     }
 
     AttachmentWidget.prototype = {
         remove: function(){
             this.attachmentsWidget.removeAttachment(this);
+        },
+        preview: function(){
+            $.fancybox(this.filepath, {
+                autoSize: true,
+                closeBtn: true,
+                hideOnOverlayClick: false
+            });
         }
     }
 

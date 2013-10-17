@@ -4,7 +4,7 @@
 <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">
     <div class="entry-img-prev">
         {% if event.picture %}
-            <img src="{% cropped_thumbnail event.base "cropping" width=60 %}" height="60px" weight="60px" />
+            <img src="{% cropped_thumbnail event.image "cropping" width=60 %}" height="60px" weight="60px" />
         {% else %}
             <img src="{{STATIC_URL}}images/default-event.jpg" height="60px" weight="60px" />
         {% endif %}

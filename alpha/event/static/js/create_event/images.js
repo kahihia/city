@@ -9,9 +9,9 @@
             element: $("#images-uploader")[0],
             allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
             sizeLimit: 33554432,
-            onComplete: function(filename, responseJSON) {
+            onComplete: function(id, filename, responseJSON) {
                 if(responseJSON.success) {
-                    callback.call(filename, responseJSON);
+                    callback(filename, responseJSON);
                 } else {
                     this.failed = true;
                 }
@@ -35,137 +35,168 @@
         });
     }
 
-    function CroppedImageWidget(filename, filepath, cropping, imagesWidget){
+    function CroppingImageWidget(filename, filepath, cropping, imagesWidget){
         var that = this;
         this.imagesWidget = imagesWidget;
         this.filepath = filepath;
+        this.selected = {
+            x: cropping[0],
+            y: cropping[1],
+            x2: cropping[2],
+            y2: cropping[3],
+            w: cropping[2]-cropping[0], 
+            h: cropping[3]-cropping[1]
+        };
+
         this.cropping = cropping;
 
         this.element = dom("div", {"class": "attachment"}, [
             dom("span", {"innerHTML": filename}),
-            this.selectButton = dom("div", {"class": "select-image-button"}),
-            this.removeButton = dom("div", {"class": "remove-image-button"})
+            this.removeButton = dom("i", {"class": "icon-remove"}),
+            this.editButton = dom("i", {"class": "icon-pencil"}),
+            dom("div", {"class": "picture-thumb result"}, [
+                this.preview = dom("img", {
+                    "src": filepath,
+                    "class": "preview"
+                })
+            ])
         ]);
+
+        this.initPopup();
+
+        setTimeout(function(){
+            that.showPreview();
+        }, 1000);
 
         $(this.removeButton).on("click", function(){
             that.remove();
         });
 
-        $(this.selectButton).on("click", function(){
-            that.select();
+        $(this.editButton).on("click", function(){
+            that.edit();
+        });
+
+        $(this.preview).on("click", function(){
+            that.edit();
         });
     }
 
-    CroppedImageWidget.prototype = {
-        select: function(){
-            this.imagesWidget.setActiveCroppedImage(this);
-            this.element.addClass("active");
-        },
-        unselect: function(){
-            this.element.removeClass("active");
-        },
+    CroppingImageWidget.prototype = {        
         remove: function(){
             this.imagesWidget.removeCroppedImage(this);
         },
-        preview: function(){
-            $.fancybox($(this.previewPopup()), {
+        edit: function(){
+            this.openPopup();
+        },
+        setSelected: function(selected){
+            this.selected = selected;
+        },
+        getValue: function(){
+            return this.filepath + "!" + [this.selected.x, this.selected.y, this.selected.x2, this.selected.y2].join(",");
+        },
+        initPopup: function(){
+             this.popup = dom("div", {
+                "class": "full-screen-popup",
+                "data-thumb-width": "180",
+                "data-thumb-height": "180"
+            }, [
+                this.image = dom("img", {
+                    "class": "cropping-image",
+                    "src": this.filepath
+                }),
+                this.saveButton = dom("div", {"class": "save-button", "innerHTML": "Save image"}),
+                this.cancelButton = dom("div", {"class": "cancel-button", "innerHTML": "Cancel"})
+            ]);
+
+            this.initJcrop();
+
+            $(document.body).append(this.popup);
+
+            $(this.cancelButton).on('click', function() {
+                $.fancybox.close();
+            });
+
+            $(this.saveButton).on('click', function() {
+                $.fancybox.close();
+                // that.saveThumbnail();
+            });
+
+        },
+        openPopup: function(){
+            $.fancybox($(this.popup), {
                 autoSize: true,
                 closeBtn: false,
                 hideOnOverlayClick: false
             });
         },
-        setSelected: function(selected){
-            this.selected = selected;
-        }
-
-    }
-
-    function ActiveCroppedWidget(){
-        var that = this;
-        this.activeWidget = null;
-        this.image = dom("image", {
-            src: "/static/images/default-event.jpg"
-        });
-
-        $(this.image).Jcrop({
-            aspectRatio: 1,
-            minSize: [50, 50],
-            boxWidth: 800,
-            boxHeight: 500,
-            onSelect: function(selected){
-                if(that.activeWidget) {
-                    that.activeWidget.setSelected(selected);
-                    that.showPreview(selected, that.jcrop.getWidgetSize());
-                }
-            },
-            onChange: function(selected){
-              if(that.activeWidget) {
-                    that.activeWidget.setSelected(selected);
-                    that.showPreview(selected, that.jcrop.getWidgetSize());
-                }  
-            }
-        }, function(){
-            that.jcrop = this;
-        });
-    }
-
-    ActiveCroppedWidget.prototype = {
-        setActiveWidget: function(croppedImage){
-            this.activeWidget = croppedImage;
-        },
-        createPreview: function(){
-            this.previewContainer = dom("div", {"class": "image-thumb"}, [
-                this,preview = dom("image", {
-                    "class": "preview"
-                })
-            ]);
-        },
         showPreview: function(){
-            var rx, ry;
-            if(!this.preview) {
-                this.createPreview();
-            }
+            var rx, ry;            
 
-            this.preview.src = this.activeWidget.filepath;
-            
-
-            rx = 180 / this.activeWidget.selected.w;
-            ry = 180 / this.activeWidget.selected.h;
+            rx = 180 / this.selected.w;
+            ry = 180 / this.selected.h;
 
             $(this.preview).css({
                 width: Math.round(rx * $(this.image).width()) + 'px',
                 height: Math.round(ry * $(this.image).height()) + 'px',
-                marginLeft: '-' + Math.round(rx * this.activeWidget.selected.x) + 'px',
-                marginTop: '-' + Math.round(ry * this.activeWidget.selected.y) + 'px'  
+                marginLeft: '-' + Math.round(rx * this.selected.x) + 'px',
+                marginTop: '-' + Math.round(ry * this.selected.y) + 'px'  
             });
-        }
-    }
+        },
+        initJcrop: function(){
+            var that = this;
+            $(this.image).Jcrop({
+                aspectRatio: 1,
+                minSize: [50, 50],
+                boxWidth: 800,
+                boxHeight: 500,
+                element: this.image,
+                setSelect: this.cropping,
+                onSelect: this.onSelect.bind(this),
+                onChange: this.onSelect.bind(this)
+            }, function(){
+                that.jcrop = this;
+            });
+        },
+        onSelect: function(selected){
+            if(this.jcrop) {
+                this.selected = selected;
+                this.showPreview(selected, this.jcrop.getWidgetSize());
+                this.imagesWidget.saveValue();
+            }
 
-    function CroppedImages(){
+        }
+    }    
+
+    function CroppedImages(input){
         var that = this;
 
+        this.input = input;
         this.images = [];
+        this.element = dom("div", {"class": "attachment-list"});
+
+        $(input).after(this.element);        
+
+        
         this.uploader = new ImageUploader(function(filename, responseJSON){
-            var widget = that.addCroppedImages(filename, responseJSON.filepath);
-            that.setActiveCroppedImage(widget);
-            that.openCroppingPopup();
+            var widget = that.addCroppedImage(
+                filename,
+                responseJSON.path,
+                [0, 0, $(that.popup).data("thumb-height"), $(that.popup).data("thumb-width")]
+            );
+
+            widget.edit();
         });
 
-        this.activeCroppedWidget = new ActiveCroppedWidget();
+        this.loadImages();
     }
 
-    CroppedImages.prototype = {
-        openCroppingPopup: function(){
-
-        },
-        setActiveCroppedImage: function(croppedImage){
-            this.activeCroppedWidget.setActiveWidget(croppedImage);
-
-        },
+    CroppedImages.prototype = {        
         addCroppedImage: function(filename, filepath, cropping){
-            var widget = new CroppedImageWidget(filename, filepath, cropping, this);
+            var widget = new CroppingImageWidget(filename, filepath, cropping, this);
             this.images.push(widget);
             $(this.element).append(widget.element);
+
+            this.saveValue();
 
             return widget;
         },
@@ -180,22 +211,31 @@
 
             value = $(this.input).val();
             if(value) {
-                cropped_images = value.split(";");
+                images = value.split(";");
 
-                cropped_images.forEach(function(cropped_image){
+                images.forEach(function(cropped_image){
                     var data = cropped_image.split("!"),
                         image = data[0],
-                        cropping = data[1].split(",");
+                        cropping = _.map(data[1].split(","), function(val){
+                            return parseInt(val);
+                        });
 
                     this.addCroppedImage(image.replace(/^.*(\\|\/|\:)/, ''), image, cropping);
                 }, this);
             }
+        },
+        saveValue: function(){
+            var value = this.images.map(function(imageWidget){
+                return imageWidget.getValue();
+            }).join(";");
+
+            $(this.input).val(value);
         }
     }
 
     $(document).on("ready page:load", function(){
         new CroppedImages(
-            document.getElementById("id_cropped_images")
+            document.getElementById("id_images")
         );
     });
 

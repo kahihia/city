@@ -15,7 +15,7 @@
                         <div style="border: 1px solid #cccccc;">
                             <div style="border: 4px solid #ffffff;">
                                 <a target="_blank" href="{{site}}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" style="text-decoration:none; border: none; display: block; line-height:0px;">
-                                    <img src="{% if event.picture %}{{site}}{% cropped_thumbnail event.base "cropping" width=61 %}{% else %}{{site}}{{STATIC_URL}}images/default-event-61x61.jpg{% endif %}" style="display: block;"/>
+                                    <img src="{% if event.picture %}{{site}}{% cropped_thumbnail event.image "cropping" width=61 %}{% else %}{{site}}{{STATIC_URL}}images/default-event-61x61.jpg{% endif %}" style="display: block;"/>
                                 </a>
                             </div>
                         </div>

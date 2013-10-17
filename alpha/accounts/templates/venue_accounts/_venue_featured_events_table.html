@@ -20,7 +20,7 @@
                 <div class="entry-info">
                     <div class="entry-img-prev">
                         {% if event.event_day.picture %}
-                            <img src="{% cropped_thumbnail event.event_day.base "cropping" width=60 %}" height="60px" weight="60px">
+                            <img src="{% cropped_thumbnail event.event_day.image "cropping" width=60 %}" height="60px" weight="60px">
                         {% else %}
                             <img src="{{ STATIC_URL }}images/default-event.jpg" height="60px" weight="60px">
                         {% endif %}

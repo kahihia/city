@@ -9,7 +9,7 @@
         <a href="{% url 'event_view_featured' event.slug event.start_time|date:"Y-m-d" %}">
             <div class="featured-img-wrapper">
                 {% if event.picture %}
-                    <img src="{% cropped_thumbnail event.base "cropping" width=154 %}" height="153px" width="154px">
+                    <img src="{% cropped_thumbnail event.image "cropping" width=154 %}" height="153px" width="154px">
                 {% else %}
                     <img src="/static/images/default-event.jpg" height="153px" width="154px">
                 {% endif %}

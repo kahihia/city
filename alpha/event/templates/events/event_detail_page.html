@@ -16,7 +16,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="http://{{ request.META.HTTP_HOST }}/events/view/{{event.slug}}/" />
     {% if event.picture %}
-        <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{% cropped_thumbnail event.base "cropping" height=200 %}" />    
+        <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{% cropped_thumbnail event.image "cropping" height=200 %}" />    
     {% else %}
         <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{{STATIC_URL}}images/default-event.jpg" />
     {% endif %}
@@ -57,12 +57,11 @@
         <div class="content">
             <div class="event-wrapper">
                 <div class="event-photo{% if event.event_type == "MULTIDAY" %}{% if not event.venue_account_owner or not event.venue_account_owner.public %} multiday{% endif %}{% endif %}">
-                    {% if event.picture %}
-                        <a id="photoFancy" href="/media/{{ event.picture }}">
+                    {% if event.sorted_images.count > 0 %}
+                        <a id="photoFancy" href="/media/{{ event.sorted_images.0.picture }}">
                             <img class="center-cropped" 
-                                src="{% cropped_thumbnail event.base "cropping" height=265 %}">
+                                src="{% cropped_thumbnail event.sorted_images.0 "cropping" height=265 %}">
                             <div class="detail-view"></div>
-
                         </a>
                     {% else %}
                         <div class="center-cropped default" style="background-image: url('{{STATIC_URL}}images/default-event.jpg');"></div>
@@ -180,6 +179,19 @@
                     </ul>
                     {% endif %}
                 </div>
+                {% if event.sorted_images.count > 1 %}
+                    <div class="images-list">
+                    {% for image in event.sorted_images_tail %}
+                        <a id="photoFancy" href="/media/{{ image.picture }}">
+                            <div class="mini-image-preview-wrapper">
+                                <img class="mini-image-preview" src="{% cropped_thumbnail image "cropping" height=50 %}">
+                            </div>
+                            
+                        </a>
+
+                    {% endfor %}
+                    </div>
+                {% endif %}
                 <div class="show-times">
                     {% if event.event_type == "SINGLE" %}
                         <header>

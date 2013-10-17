@@ -478,14 +478,33 @@ fieldset legend{
     border:1px solid #79B7E7;
 }
 
+.attachment-list {
+    margin-bottom: 5px;
+}
+
 .attachment-list .attachment {
     border: 1px dotted #ddd;
     margin-top: 3px;
     padding: 5px;
 }
 
-.attachment-list .attachment span {
-    margin-right: 10px;    
+.attachment-list .attachment.active {
+    background-color: #eee;
+}
+
+.attachment-list .attachment i {
+    float: right;
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.attachment-list .attachment i:hover {
+    color: #06C;
+}
+
+.attachment-list .attachment i.icon-remove:hover {
+    color: red;
 }
 
 .attachment-list .attachment .remove-attachment-button {

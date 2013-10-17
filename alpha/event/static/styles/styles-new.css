@@ -84,6 +84,17 @@
     background: url("/static/images/event/loop.png") no-repeat;    
 }
 
+.content-wrapper .event-wrapper .images-list {
+    margin-top: 8px;    
+}
+
+.content-wrapper .event-wrapper .images-list .mini-image-preview-wrapper {
+    border: 1px solid #e2e2e2;
+    padding: 4px;
+    display: inline-block;
+    margin-right: 5px;
+}
+
 .content-wrapper .event-wrapper .event-photo .center-cropped.default:after {
     display: none;
 }

@@ -150,9 +150,6 @@ class Event(models.Model):
 
     authentication_key = models.CharField(max_length=40)
     slug = models.SlugField(unique=True, max_length=255)
-
-    picture = ImageCropField(upload_to=picture_file_path, blank=True, null=True, help_text='The event picture')
-    cropping = ImageRatioField('picture', '180x180', size_warning=True, allow_fullsize=True)
     
     owner = models.ForeignKey(User, blank=True, null=True)
     venue_account_owner = models.ForeignKey('accounts.VenueAccount', blank=True, null=True, on_delete=models.SET_NULL)
@@ -255,6 +252,29 @@ class Event(models.Model):
     def is_fb_posted(self):
         return self.post_to_facebook and self.facebook_event
 
+    @property
+    def sorted_images(self):
+        return self.eventimage_set.order_by("order")
+
+    @property
+    def sorted_images_tail(self):
+        return self.sorted_images[1:]
+
+    @property
+    def image(self):
+        try:
+            return self.sorted_images[0]
+        except:
+            return None
+
+    @property
+    def picture(self):
+        try:
+            return self.sorted_images[0].picture
+        except:
+            return None
+
+
     @staticmethod
     def featured_events_for_region(region):
         if region:
@@ -278,7 +298,7 @@ class EventAttachment(models.Model):
 class EventImage(models.Model):
     event = models.ForeignKey(Event, blank=False, null=False)
 
-    main = models.BooleanField(default=False)
+    order = models.PositiveIntegerField(default=1)
     picture = ImageCropField(upload_to=picture_file_path, blank=True, null=True, help_text='The event picture')
     cropping = ImageRatioField('picture', '180x180', size_warning=True, allow_fullsize=True)
 

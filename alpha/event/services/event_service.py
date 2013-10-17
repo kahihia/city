@@ -8,7 +8,7 @@ from django.conf import settings
 
 from event.settings import DEFAULT_FROM_EMAIL
 from event.services import venue_service, event_occurrence_service
-from event.models import EventAttachment
+from event.models import EventAttachment, EventImage
 
 from django.contrib.sites.models import Site
 
@@ -50,12 +50,10 @@ def save_event(user, data, form):
         event.owner = user
         event.email = user.email
 
-    if data["picture_src"]:
-        event.picture.name = data["picture_src"].replace(settings.MEDIA_URL, "")
 
     event = event.save()
-    event.eventattachment_set.all().delete()
 
+    event.eventattachment_set.all().delete()
     if data["attachments"]:
         attachments = data["attachments"].split(";")
         for attachment in attachments:
@@ -63,6 +61,22 @@ def save_event(user, data, form):
                 event=event,
                 attachment=attachment.replace(settings.MEDIA_URL, "")
             )
+
+    event.eventimage_set.all().delete()
+    if data["images"]:
+        images = data["images"].split(";")
+
+        order = 1
+
+        for image in images:
+            image_src, cropping = image.split("!")
+            EventImage.objects.get_or_create(
+                event=event,
+                picture=image_src.replace(settings.MEDIA_URL, ""),
+                cropping=cropping,
+                order=order
+            )
+            order = order + 1
 
     return event
 
@@ -99,7 +113,7 @@ def prepare_initial_attachments(event):
 
 
 def prepare_initial_images(event):
-    images = event.eventimage_set.all()
+    images = event.eventimage_set.order_by("order")
     images = [
         "/media/%s!%s" % (imageModel.picture, imageModel.cropping) for imageModel in images
     ]
@@ -122,7 +136,6 @@ def prepare_initial_event_data_for_edit(event):
         "venue_identifier": prepare_initial_venue_id(event),
         "place": prepare_initial_place(event),            
         "location": prepare_initial_location(event),
-        "picture_src": prepare_initial_picture_src(event),
         "attachments": prepare_initial_attachments(event),
         "images": prepare_initial_images(event),
         "when_json": json.dumps(when_json),
@@ -142,7 +155,6 @@ def prepare_initial_event_data_for_copy(event):
         "venue_identifier": prepare_initial_venue_id(event),
         "place": prepare_initial_place(event),
         "location": prepare_initial_location(event),
-        "picture_src": prepare_initial_picture_src(event),
         "attachments": prepare_initial_attachments(event),
         "images": prepare_initial_images(event),
         "tags": event.tags_representation,
