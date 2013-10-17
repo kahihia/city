@@ -202,20 +202,6 @@ def get_prepared_event_data(request, data):
         and 'source' in facebook_event['pic_cover'] \
         else facebook_event['pic_big']
 
-    image_basename = os.path.basename(image_source)
-    image_dist_path = os.path.abspath(os.path.join(settings.MEDIA_ROOT, 'uploads', image_basename))
-    urllib.urlretrieve(image_source, image_dist_path)
-
-    img = Image.open(image_dist_path)
-    img_width, img_height = img.size
-
-    if img_width > img_height:
-        bias = int((img_width - img_height) / 2)
-        cropping = [bias, 0, bias + img_height, img_height]
-    else:
-        bias = ((img_height - img_width) / 2)
-        cropping = [0, bias, img_width, bias + img_width]
-
     location = city = street = ''
     longitude = latitude = 0
 
@@ -264,8 +250,9 @@ def get_prepared_event_data(request, data):
         }),
         'tags': '',
         'tickets': facebook_event['ticket_uri'],
-        'picture_src': settings.MEDIA_URL + 'uploads/' + image_basename,
-        'cropping': ','.join('%d' % n for n in cropping),
+        'images': _get_images_json(image_source),
+        'picture_src': '',
+        'cropping': '',
         'linking_venue_mode': 'GOOGLE',
         'event_type': 'SINGLE',
         'occurrences_json': []
@@ -307,3 +294,28 @@ def _get_time_range_json(start_time, end_time):
         start_time += datetime.timedelta(days=1)
 
     return json.dumps(periods)
+
+
+def _get_images_json(image_source):
+    image_basename = os.path.basename(image_source)
+    image_dist_path = os.path.abspath(os.path.join(settings.MEDIA_ROOT, 'uploads', image_basename))
+    urllib.urlretrieve(image_source, image_dist_path)
+
+    img = Image.open(image_dist_path)
+    img_width, img_height = img.size
+
+    if img_width > img_height:
+        bias = int((img_width - img_height) / 2)
+        cropping = [bias, 0, bias + img_height, img_height]
+    else:
+        bias = ((img_height - img_width) / 2)
+        cropping = [0, bias, img_width, bias + img_width]
+
+    images_data = {
+        'images': [{
+            'filepath': settings.MEDIA_URL + 'uploads/' + image_basename,
+            'cropping': ','.join('%d' % n for n in cropping)
+        }]
+    }
+
+    return json.dumps(images_data)

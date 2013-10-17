@@ -71,6 +71,9 @@
 
         self.postToFB = function(button) {
             self.checkFBLogin(function() {
+//                if($.fancybox) {
+//                    $.fancybox($("#choice-window"));
+//                }
                 var checkedEvents = $(self.eventCheckerSelector + ":checked");
                 if(checkedEvents.length !== 0) {
                     self.miniIndicator.show().insertAfter(button);
