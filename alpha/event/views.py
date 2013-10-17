@@ -377,9 +377,7 @@ def copy(request, authentication_key, template_name='events/create/copy_event.ht
             website=basic_event.website,
             tickets=basic_event.tickets,
             owner=basic_event.owner,
-            venue_account_owner=basic_event.venue_account_owner,
-            picture=basic_event.picture,
-            cropping=basic_event.cropping,
+            venue_account_owner=basic_event.venue_account_owner
         )
 
         form = CreateEventForm(
