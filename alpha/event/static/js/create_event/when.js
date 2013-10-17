@@ -718,18 +718,9 @@
             $(this.element).append(this.innerWrapper);
 
             this.occurrences = new Occurrences(this);
-
-            function changeNext() {
-                if(that.next()) {
-                    if(that.next().isAutoFill()) {
-                        that.next().setValue(
-                        that.getValue());
-                    }
-                    that.next().changeNext()
-                }
-            };
+            
             timepickerOptions = {
-                onClose: changeNext,
+                onClose: this.changeNext.bind(this),
                 minutes: {
                     interval: 15
                 },
@@ -825,9 +816,10 @@
         },
         changeNext: function() {
             if(this.next()) {
-                if(this.next().isAutoFill()) {
+                if(this.isAutoFill() && this.next().isAutoFill()) {
                     this.next().setValue(
-                    this.getValue());
+                        this.getValue()
+                    );
                 }
                 this.next().changeNext()
             }
