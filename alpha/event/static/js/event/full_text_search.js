@@ -3,9 +3,15 @@
     'use strict';
 
     var FullTextSearch = function(){
+        var that = this;
         this.searchInput = $("input.search");
         this.searchButton = $(".search-submission");
         this.searchButton.on("click", this.search.bind(this));
+        this.searchInput.keyup(function(event){
+            if(event.keyCode == 13){
+                that.search();
+            }
+        });
     };
 
     FullTextSearch.prototype = {
