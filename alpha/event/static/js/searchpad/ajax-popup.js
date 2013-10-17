@@ -1,7 +1,7 @@
 ;(function($, window, document, undefined) {
     'use strict';
 
-    function ajaxPopup(content, type){
+    function ajaxPopup(content, type, noHide){
         var popup= $('<div>').addClass("ajax-popup").addClass("type"),
             left = ($(window).width()/2)-190,
             top = ($(window).height()/2)-100;
@@ -13,12 +13,14 @@
 
         $('body').append(popup);
 
-        setTimeout(function(){
-            popup.fadeOut(1000);
+        if(!noHide) {
             setTimeout(function(){
-                popup.remove();
-            }, 1000);
-        }, 2000);
+                popup.fadeOut(1000);
+                setTimeout(function(){
+                    popup.remove();
+                }, 1000);
+            }, 2000);
+        }
     }
 
     window.ajaxPopup = ajaxPopup;
