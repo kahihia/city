@@ -53,7 +53,6 @@
             var fileId = $("images-uploader .image-upload-cancel").data("file-id");
             this.uploader._handler.cancel(fileId);
             this.hideProgressBar();
-
         }
     }
 
@@ -114,7 +113,10 @@
             this.selected = selected;
         },
         getValue: function(){
-            return this.filepath + "!" + [this.selected.x, this.selected.y, this.selected.x2, this.selected.y2].join(",");
+            return {
+                filepath: this.filepath,
+                cropping: [this.selected.x, this.selected.y, this.selected.x2, this.selected.y2].join(",")
+            };
         },
         initPopup: function(){
              this.popup = dom("div", {
@@ -233,25 +235,26 @@
 
             value = $(this.input).val();
             if(value) {
-                images = value.split(";");
+                images = JSON.parse(value).images;
 
-                images.forEach(function(cropped_image){
-                    var data = cropped_image.split("!"),
-                        image = data[0],
-                        cropping = _.map(data[1].split(","), function(val){
+                images.forEach(function(image){                    
+                    var filepath = image.filepath,
+                        cropping = _.map(image.cropping.split(","), function(val){
                             return parseInt(val);
                         });
 
-                    this.addCroppedImage(image.replace(/^.*(\\|\/|\:)/, ''), image, cropping);
+                    this.addCroppedImage(filepath.replace(/^.*(\\|\/|\:)/, ''), filepath, cropping);
                 }, this);
             }
         },
         saveValue: function(){
-            var value = this.images.map(function(imageWidget){
+            var images = this.images.map(function(imageWidget){
                 return imageWidget.getValue();
-            }).join(";");
+            });
 
-            $(this.input).val(value);
+            $(this.input).val(JSON.stringify({
+                images: images
+            }));
         }
     }
 

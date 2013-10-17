@@ -64,12 +64,12 @@ def save_event(user, data, form):
 
     event.eventimage_set.all().delete()
     if data["images"]:
-        images = data["images"].split(";")
+        images = json.loads(data["images"])["images"]
 
         order = 1
 
         for image in images:
-            image_src, cropping = image.split("!")
+            image_src, cropping = image["filepath"], image["cropping"]
             EventImage.objects.get_or_create(
                 event=event,
                 picture=image_src.replace(settings.MEDIA_URL, ""),
@@ -114,11 +114,15 @@ def prepare_initial_attachments(event):
 
 def prepare_initial_images(event):
     images = event.eventimage_set.order_by("order")
-    images = [
-        "/media/%s!%s" % (imageModel.picture, imageModel.cropping) for imageModel in images
-    ]
 
-    return ";".join(images)
+    images_json = {
+        "images": map(lambda imageModel: {
+                "filepath": "/media/%s" % imageModel.picture,
+                "cropping": imageModel.cropping
+            }, images)
+    }
+    
+    return json.dumps(images_json)
 
 
 def prepare_initial_venue_id(event):
