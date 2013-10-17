@@ -6,33 +6,54 @@
         this.uploader = new qq.FileUploader({
             action: "/events/ajax-upload",
             multiple: false,
-            element: $("#images-uploader")[0],
+            element: document.getElementById("images-uploader"),
             allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
             sizeLimit: 33554432,
             onComplete: function(id, filename, responseJSON) {
                 if(responseJSON.success) {
                     callback(filename, responseJSON);
+                    that.hideProgressBar();
                 } else {
                     this.failed = true;
                 }
-            },            
+            },
+            onSubmit: function(id, fileName) {
+                that.showProgressBar();
+                $(".image-upload-cancel").attr("data-file-id", id);
+            },
             params: {
                 'csrf_token': crsf_token,
                 'csrf_name': 'csrfmiddlewaretoken',
                 'csrf_xname': 'X-CSRFToken'
             },
             template: '<div class="qq-uploader">' +
-                '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
                 '<div class="qq-upload-button">Upload a file</div>' +
-                '<div class="qq-upload-indicator-block inv" data-id="upload_indicator_block">' +
+                '<div class="qq-upload-indicator-block image-upload-progress-bar inv" data-id="upload_indicator_block">' +
                     '<img src="/static/images/mini-ajax-loader.gif" alt="" />' +
-                    '<a class="qq-uploading-cancel" data-id="uploading_cancel" href="javascript:void(0);">' +
+                    '<a class="qq-uploading-cancel image-upload-cancel" data-id="uploading_cancel" href="javascript:void(0);">' +
                         'Cancel' +
                     '</a>' +
                 '</div>' +
                 '<ul class="qq-upload-list"></ul>' +
              '</div>'
         });
+
+        $("images-uploader .image-upload-cancel").on("click", this.cancelUpload.bind(this))
+    }
+
+    ImageUploader.prototype = {
+        showProgressBar: function(){
+            $(".image-upload-progress-bar").removeClass("inv");
+        },
+        hideProgressBar: function(){
+            $(".image-upload-progress-bar").addClass("inv");
+        },
+        cancelUpload: function(){
+            var fileId = $("images-uploader .image-upload-cancel").data("file-id");
+            this.uploader._handler.cancel(fileId);
+            this.hideProgressBar();
+
+        }
     }
 
     function CroppingImageWidget(filename, filepath, cropping, imagesWidget){
@@ -64,9 +85,9 @@
 
         this.initPopup();
 
-        setTimeout(function(){
+        setInterval(function(){
             that.showPreview();
-        }, 1000);
+        }, 500);
 
         $(this.removeButton).on("click", function(){
             that.remove();

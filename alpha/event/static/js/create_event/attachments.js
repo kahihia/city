@@ -1,6 +1,61 @@
 ;(function($, window, document, undefined) {
     'use strict';
 
+    function AttachmentUploader(callback){
+        var that = this;
+        this.uploader = new qq.FileUploader({
+            action: "/events/ajax-upload",
+            multiple: false,
+            element: document.getElementById("attachments-uploader"),
+            allowedExtensions: ['jpg', 'jpeg', 'png', 'gif', 'pdf'],
+            sizeLimit: 33554432,
+            onComplete: function(id, filename, responseJSON) {
+                if(responseJSON.success) {
+                    callback(filename, responseJSON);
+                    that.hideProgressBar();
+                } else {
+                    this.failed = true;
+                }
+            },
+            onSubmit: function(id, fileName) {
+                that.showProgressBar();
+                $(".image-upload-cancel").attr("data-file-id", id);
+            },
+            params: {
+                'csrf_token': crsf_token,
+                'csrf_name': 'csrfmiddlewaretoken',
+                'csrf_xname': 'X-CSRFToken'
+            },
+            template: '<div class="qq-uploader">' +
+                '<div class="qq-upload-button">Upload a file</div>' +
+                '<div class="qq-upload-indicator-block attachment-upload-progress-bar inv" data-id="upload_indicator_block">' +
+                    '<img src="/static/images/mini-ajax-loader.gif" alt="" />' +
+                    '<a class="qq-uploading-cancel image-upload-cancel" data-id="uploading_cancel" href="javascript:void(0);">' +
+                        'Cancel' +
+                    '</a>' +
+                '</div>' +
+                '<ul class="qq-upload-list"></ul>' +
+             '</div>'
+        });
+
+        $("#attachments-uploader .attachment-upload-cancel").on("click", this.cancelUpload.bind(this))
+    }
+
+    AttachmentUploader.prototype = {
+        showProgressBar: function(){
+            $(".attachment-upload-progress-bar").removeClass("inv");
+        },
+        hideProgressBar: function(){
+            $(".attachment-upload-progress-bar").addClass("inv");
+        },
+        cancelUpload: function(){
+            var fileId = $("#attachments-uploader .attachment-upload-cancel").data("file-id");
+            this.uploader._handler.cancel(fileId);
+            this.hideProgressBar();
+
+        }
+    }
+
     function AttachmentWidget(filename, filepath, attachmentsWidget){
         var that = this;
         this.attachmentsWidget = attachmentsWidget;
@@ -47,40 +102,10 @@
 
         $(input).after(this.element);
 
-        this.uploader = new qq.FileUploader({
-            action: "/events/ajax-upload",
-            element: document.getElementById("attachments-uploader"),
-            multiple: true,
-            allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png', 'gif'],
-            sizeLimit: 33554432,
-            onComplete: function(id, fileName, responseJSON) {
-                if(responseJSON.success) {
-                    that.addAttachment(fileName, responseJSON.path);
-                } else {
-                    if(console.log) console.log("upload failed!");
-                    alert("Something go wrong on server. Please contact administrator.");
-                }
-            },
-            onSubmit: function(id, fileName) {
-                
-            },
-            params: {
-                'csrf_token': crsf_token,
-                'csrf_name': 'csrfmiddlewaretoken',
-                'csrf_xname': 'X-CSRFToken'
-            },
-            template: '<div class="qq-uploader">' +
-                '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
-                '<div class="qq-upload-button">Upload a file</div>' +
-                '<div class="qq-upload-indicator-block inv" data-id="upload_indicator_block">' +
-                    '<img src="/static/images/mini-ajax-loader.gif" alt="" />' +
-                    '<a class="qq-uploading-cancel" data-id="uploading_cancel" href="javascript:void(0);">' +
-                        'Cancel' +
-                    '</a>' +
-                '</div>' +
-                '<ul class="qq-upload-list"></ul>' +
-             '</div>'
+        this.uploader = new AttachmentUploader(function(filename, responseJSON){
+            that.addAttachment(filename, responseJSON.path);
         });
+
         this.loadAttachments();
     }
 
