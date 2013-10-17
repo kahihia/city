@@ -19,7 +19,7 @@
             },
             onSubmit: function(id, fileName) {
                 that.showProgressBar();
-                $(".image-upload-cancel").attr("data-file-id", id);
+                $(".attachment-upload-cancel").attr("data-file-id", id);
             },
             params: {
                 'csrf_token': crsf_token,
@@ -30,7 +30,7 @@
                 '<div class="qq-upload-button">Upload a file</div>' +
                 '<div class="qq-upload-indicator-block attachment-upload-progress-bar inv" data-id="upload_indicator_block">' +
                     '<img src="/static/images/mini-ajax-loader.gif" alt="" />' +
-                    '<a class="qq-uploading-cancel image-upload-cancel" data-id="uploading_cancel" href="javascript:void(0);">' +
+                    '<a class="qq-uploading-cancel attachment-upload-cancel" data-id="uploading_cancel" href="javascript:void(0);">' +
                         'Cancel' +
                     '</a>' +
                 '</div>' +
