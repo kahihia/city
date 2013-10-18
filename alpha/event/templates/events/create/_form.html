@@ -219,29 +219,6 @@
                 </td>
             </tr>
             <tr>
-                <td valign="top" class="top-align">
-                    Attachments
-                    <a href="javascript:void;" class="balloon">
-                        <div class="buttonq"></div>
-                    </a>
-                    <div class="balloon-content">
-                        <h3>
-                            Help for
-                            <i>[attachments]:</i>
-                        </h3>
-                        <p>
-                            Attachments
-                        </p>
-                    </div>
-                </td>
-                <td>
-                    {{ form.attachments }}
-                    {% for error in form.attachments.errors %}
-                        <div class="error">{{ error }}</div>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
                 <td>
                     Website
                     <a href="javascript:void;" class="balloon">
@@ -387,7 +364,7 @@
                 </td>
             </tr>
             <tr class="images">
-                <td>
+                <td valign="top" class="top-align">
                     Images
                     <a href="javascript:void(0);" class="balloon">
                         <div class="buttonq"></div>
@@ -413,6 +390,29 @@
                         <div class="save-button">Save image</div>
                         <div class="cancel-button">Cancel</div>
                     </div>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" class="top-align">
+                    Attachments
+                    <a href="javascript:void;" class="balloon">
+                        <div class="buttonq"></div>
+                    </a>
+                    <div class="balloon-content">
+                        <h3>
+                            Help for
+                            <i>[attachments]:</i>
+                        </h3>
+                        <p>
+                            Attachments
+                        </p>
+                    </div>
+                </td>
+                <td>
+                    {{ form.attachments }}
+                    {% for error in form.attachments.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
                 </td>
             </tr>
             <tr></tr>

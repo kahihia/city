@@ -27,7 +27,7 @@
                 'csrf_xname': 'X-CSRFToken'
             },
             template: '<div class="qq-uploader">' +
-                '<div class="qq-upload-button">Upload a file</div>' +
+                '<div class="qq-upload-button">Attach a file</div>' +
                 '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
                 '<div class="qq-upload-indicator-block attachment-upload-progress-bar inv" data-id="upload_indicator_block">' +
                     '<img src="/static/images/mini-ajax-loader.gif" alt="" />' +

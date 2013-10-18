@@ -27,7 +27,7 @@
                 'csrf_xname': 'X-CSRFToken'
             },
             template: '<div class="qq-uploader">' +
-                '<div class="qq-upload-button">Upload a file</div>' +
+                '<div class="qq-upload-button">Upload an Image</div>' +
                 '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
                 '<div class="qq-upload-indicator-block image-upload-progress-bar inv" data-id="upload_indicator_block">' +
                     '<img src="/static/images/mini-ajax-loader.gif" alt="" />' +
@@ -205,7 +205,7 @@
             var widget = that.addCroppedImage(
                 filename,
                 responseJSON.path,
-                [0, 0, $(that.popup).data("thumb-height"), $(that.popup).data("thumb-width")]
+                [0, 0, 180, 180]
             );
 
             widget.edit();

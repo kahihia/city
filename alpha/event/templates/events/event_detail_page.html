@@ -253,7 +253,7 @@
                     </h3>
                     {% for attachment in event.eventattachment_set.all %}
                         <div>
-                            <a href="/media/{{ attachment.attachment }}">{{ attachment.filename }}</a>
+                            <a target="_blank" href="/media/{{ attachment.attachment }}">{{ attachment.filename }}</a>
                         </div>                        
                     {% endfor %}
                 </div>
