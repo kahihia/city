@@ -69,7 +69,7 @@
             <div class="event-wrapper">
                 <div class="event-photo{% if event.event_type == "MULTIDAY" %}{% if not event.venue_account_owner or not event.venue_account_owner.public %} multiday{% endif %}{% endif %}">
                     {% if event.sorted_images.count > 0 %}
-                        <a id="photoFancy" href="/media/{{ event.sorted_images.0.picture }}">
+                        <a id="photoFancy"  rel="galery" href="/media/{{ event.sorted_images.0.picture }}">
                             <img class="center-cropped" 
                                 src="{% cropped_thumbnail event.sorted_images.0 "cropping" height=265 %}">
                             <div class="detail-view"></div>
@@ -193,7 +193,7 @@
                 {% if event.sorted_images.count > 1 %}
                     <div class="images-list">
                     {% for image in event.sorted_images_tail %}
-                        <a id="photoFancy" href="/media/{{ image.picture }}">
+                        <a id="photoFancy" rel="galery" href="/media/{{ image.picture }}">
                             <div class="mini-image-preview-wrapper">
                                 <img class="mini-image-preview" src="{% cropped_thumbnail image "cropping" height=50 %}">
                             </div>
