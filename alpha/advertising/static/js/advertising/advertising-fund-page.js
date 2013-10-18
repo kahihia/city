@@ -3,7 +3,7 @@
 
     function AdvertisingFundPage(){
         this.initTotalPriceCalculation();
-        // this.initSwitchPaymemtModes();
+        this.initSwitchPaymemtModes();
     }
 
     AdvertisingFundPage.prototype = {        

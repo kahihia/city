@@ -108,38 +108,49 @@ def deposit_funds_for_campaign(request, campaign_id):
         resp.status_code = 403
         return resp
 
-    form = DepositFundsForCampaignForm()
+    form = DepositFundsForCampaignForm(account=account)
 
     if request.method == 'POST':
-        form = DepositFundsForCampaignForm(data=request.POST)
+        form = DepositFundsForCampaignForm(account=account, data=request.POST)
         if form.is_valid():
-            budget = Decimal(request.POST["order_budget"])
-            total_price = budget
+            budget_type = request.POST["budget_type"]
 
-            for tax in account.taxes():
-                total_price = total_price + (budget * tax.tax)
+            if budget_type=="BONUS":
+                budget = Decimal(request.POST["bonus_budget"])
 
-            order = AdvertisingOrder(
-                budget=budget,
-                total_price=total_price,
-                campaign=campaign,
-                account=account
-            )
+                Account.objects.filter(user_id=request.user.id).update(bonus_budget=F("bonus_budget")-budget)
+                AdvertisingCampaign.objects.filter(id=campaign.id).update(budget=F("budget")+budget)
+                return HttpResponseRedirect('/accounts/%s/' % request.user.username)
+
+            if budget_type=="REAL":
+                order_budget = Decimal(request.POST["order_budget"])
+                total_price = order_budget
+
+                for tax in account.taxes():
+                    total_price = total_price + (order_budget * tax.tax)
+
+                order = AdvertisingOrder(
+                    budget=order_budget,
+                    total_price=total_price,
+                    campaign=campaign,
+                    account=account
+                )
+
+                order.save()
+
+                for tax in account.taxes():
+                    account_tax_cost = AccountTaxCost(account_tax=tax, cost=order_budget*tax.tax, tax_name=tax.name)
+                    account_tax_cost.save()
+                    order.taxes.add(account_tax_cost)
 
 
-            order.save()
+                return HttpResponseRedirect(reverse('advertising_payment', args=(str(order.id),)))
 
-            for tax in account.taxes():
-                account_tax_cost = AccountTaxCost(account_tax=tax, cost=budget*tax.tax, tax_name=tax.name)
-                account_tax_cost.save()
-                order.taxes.add(account_tax_cost)
-
-
-            return HttpResponseRedirect(reverse('advertising_payment', args=(str(order.id),)))
 
     return render_to_response('advertising/campaign/deposit_funds.html', {
         "campaign": campaign,
-        "form": form
+        "form": form,
+        "account": account
     }, context_instance=RequestContext(request))
 
 def edit_campaign(request, campaign_id):

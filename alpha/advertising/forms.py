@@ -140,7 +140,6 @@ class AdvertisingCampaignEditForm(AdvertisingSetupForm):
 
 
 class PaidAdvertisingSetupForm(AdvertisingSetupForm):
-
     # BONUS - when user can not found venue in google autocomplete he can suggest new venue
     # REAL - user can choose venue with help of google autocomplete widget
     budget_type = forms.CharField(required=True, widget=forms.widgets.HiddenInput(), initial="REAL")
@@ -161,7 +160,7 @@ class PaidAdvertisingSetupForm(AdvertisingSetupForm):
                 raise forms.ValidationError('Ensure budget is greater than or equal to %s' % Money(10, CAD))
 
         if budget_type=="REAL":
-            order_budget = cleaned_data["bonus_budget"]
+            order_budget = cleaned_data["order_budget"]
 
             if order_budget < Money(10, CAD):
                 raise forms.ValidationError('Ensure budget is greater than or equal to %s' % Money(10, CAD))
@@ -183,8 +182,34 @@ class PaidAdvertisingSetupForm(AdvertisingSetupForm):
 
 
 class DepositFundsForCampaignForm(forms.Form):
-    order_budget = MoneyField(min_value=Money(10, CAD))
+    # BONUS - when user can not found venue in google autocomplete he can suggest new venue
+    # REAL - user can choose venue with help of google autocomplete widget
+    budget_type = forms.CharField(required=True, widget=forms.widgets.HiddenInput(), initial="REAL")
 
-    def __init__(self, *args, **kwargs):
+    bonus_budget = MoneyField(required=False)
+    order_budget = MoneyField(required=False)
+
+    def __init__(self, account, *args, **kwargs):
+        self.account = account
         super(DepositFundsForCampaignForm, self).__init__(*args, **kwargs)
-        self.fields['order_budget'].error_messages['max_value'] = 'Ensure budget is greater than or equal to %(limit_value)s'
+
+    def clean(self):
+        cleaned_data = super(DepositFundsForCampaignForm, self).clean()
+        budget_type = cleaned_data["budget_type"]
+        
+        if budget_type=="BONUS":
+            bonus_budget = cleaned_data["bonus_budget"]
+
+            if bonus_budget > self.account.bonus_budget:
+                raise forms.ValidationError('Ensure budget is lower than or equal to %s' % self.account.bonus_budget)
+
+            if bonus_budget < Money(10, CAD):
+                raise forms.ValidationError('Ensure budget is greater than or equal to %s' % Money(10, CAD))
+
+        if budget_type=="REAL":
+            order_budget = cleaned_data["order_budget"]
+
+            if order_budget < Money(10, CAD):
+                raise forms.ValidationError('Ensure budget is greater than or equal to %s' % Money(10, CAD))
+
+        return cleaned_data
