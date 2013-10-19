@@ -75,8 +75,17 @@
     <a class="facebook-event-link" target="_blank" data-type="facebook_event_link">
         <img src="{{ STATIC_URL }}images/facebook-icon-mini.png" />
     </a>
-    <div id="choice-window">
-        <h1>Hello</h1>
-        <input type="button" value="Button" onclick="console.debug(123434)" />
+    <div class="modal-choice-window" data-id="choice_window">
+        <div class="row title">I want to publish event as:</div>
+        <div class="row">
+            <input type="radio" name="fb_owner_type" value="user" autocomplete="off" checked data-type="fb_owner_type"> User
+        </div>
+        <div class="row">
+            <input type="radio" name="fb_owner_type" value="page" autocomplete="off" data-type="fb_owner_type"> Page
+            <select data-id="fb_pages_select" style="display:none;"></select>
+        </div>
+        <div class="row btn">
+            <input type="button" value="Ok" data-id="fb_post_ok" />
+        </div>
     </div>
 </div>

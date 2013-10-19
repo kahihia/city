@@ -217,3 +217,31 @@
     position: relative;
     top:3px;
 }
+
+.modal-choice-window {
+    min-width: 200px;
+    width: auto;
+    padding: 5px;
+    overflow: visible;
+}
+
+.modal-choice-window .row {
+    line-height: 25px;
+    white-space: nowrap;
+}
+
+.modal-choice-window .title {
+    font-weight: bold;
+}
+
+.modal-choice-window .btn {
+    text-align: center;
+    padding-top: 10px;
+}
+
+.modal-choice-window input {
+    width: auto;
+    height: auto;
+    opacity: 1;
+    position: relative;
+}

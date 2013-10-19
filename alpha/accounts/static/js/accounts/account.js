@@ -21,12 +21,18 @@
             self.eventContainer = $("[data-id=event_container]");
             self.venueSelect = $("[data-id=venue_select]");
             self.miniIndicator = $("[data-id=mini_indicator]");
+            self.fbPagesSelect = $("[data-id=fb_pages_select]");
+            self.fbChoiceWindow = $("[data-id=choice_window]");
+            self.fbPostOkSelector = "[data-id=fb_post_ok]";
+            self.fbOwnerTypeSelector = "[data-type=fb_owner_type]";
 
             self.executeBusy = false;
 
             $("body").on("click", self.executeButtonSelector, self.onExecuteButtonClick);
             $("body").on("change", self.eventCheckerSelector, self.onEventCheckboxChange);
             $("body").on("change", self.actionSelector, self.onActionSelectChange);
+            $("body").on("click", self.fbOwnerTypeSelector, self.onFBOwnerTypeRadioClick);
+            $("body").on("click", self.fbPostOkSelector, self.onPostFBOkClick);
 
             self.reset();
             self.makeCheckBoxesForFBPosting();
@@ -34,19 +40,23 @@
 
         self.onExecuteButtonClick = function() {
             if(!self.executeBusy) {
-                $(self.actionSelector).prop("disabled", true);
+                var checkedEvents = $(self.eventCheckerSelector + ":checked");
+                if(checkedEvents.length !== 0) {
 
-                self.executeBusy = true;
-                self.reset();
+                    $(self.actionSelector).prop("disabled", true);
 
-                var action = $(self.actionSelector).val();
-                var button = $(this);
+                    self.executeBusy = true;
+                    self.reset();
 
-                if(action === "post_selected_to_fb") {
-                    self.postToFB(button);
-                }
-                else if(action === "bind_selected_to_venue") {
-                    self.bindToVenue(button);
+                    var action = $(self.actionSelector).val();
+                    var button = $(this);
+
+                    if(action === "post_selected_to_fb") {
+                        self.postToFB(button);
+                    }
+                    else if(action === "bind_selected_to_venue") {
+                        self.bindToVenue(button);
+                    }
                 }
             }
         };
@@ -65,18 +75,28 @@
         self.onEventCheckboxChange = function() {
             var eventId = $(this).data("event-id");
             $(self.eventCheckerSelector + "[data-event-id=" + eventId + "]")
-                .not(this).
-                removeAttr("checked");
+                .not(this)
+                .removeAttr("checked");
         };
 
-        self.postToFB = function(button) {
-            self.checkFBLogin(function() {
-//                if($.fancybox) {
-//                    $.fancybox($("#choice-window"));
-//                }
+        self.onFBOwnerTypeRadioClick = function() {
+            var fbOwnerType = $(this).val();
+            if(fbOwnerType === "page") {
+                self.fbPagesSelect.show();
+            }
+            else {
+                self.fbPagesSelect.hide();
+            }
+        };
+
+        self.onPostFBOkClick = function() {
+            if($.fancybox) {
+                self.fancyBox.endProcessOnClose = false;
+                $.fancybox.close();
+
                 var checkedEvents = $(self.eventCheckerSelector + ":checked");
                 if(checkedEvents.length !== 0) {
-                    self.miniIndicator.show().insertAfter(button);
+                    self.miniIndicator.show().insertAfter($(self.executeButtonSelector));
                     self.eventsToProcessCount = checkedEvents.length;
 
                     var ids = [];
@@ -87,10 +107,49 @@
                     self.executeFBPosting(ids);
                 }
                 else {
-                    self.executeBusy = false;
-                    $(self.actionSelector).prop("disabled", false);
+                    self.finishPostToFB();
+                }
+
+            }
+        };
+
+        self.postToFB = function(button) {
+            self.checkFBLogin(function() {
+                var checkedEvents = $(self.eventCheckerSelector + ":checked");
+                if($.fancybox) {
+                    $.fancybox(self.fbChoiceWindow, {
+                        "beforeLoad": function() {
+                            self.fancyBox = this;
+                            self.fancyBox.endProcessOnClose = true;
+                            if(self.fbPagesSelect.children().length === 0) {
+                                FB.api('/me/accounts', { limit: 100 }, function(response) {
+                                    var pages = response.data;
+                                    $.each(pages, function() {
+                                        self.fbPagesSelect.append($("<option/>", {
+                                            "value": this.id,
+                                            "text": this.name
+                                        }));
+                                    });
+                                });
+                            }
+                        },
+                        "afterClose": function() {
+                            if(self.fancyBox.endProcessOnClose) {
+                                self.finishPostToFB();
+                            }
+                        },
+                        scrolling: "visible"
+                    });
+                }
+                else {
+                    self.finishPostToFB();
                 }
             });
+        };
+
+        self.finishPostToFB = function() {
+            self.executeBusy = false;
+            $(self.actionSelector).prop("disabled", false);
         };
 
         self.bindToVenue = function(button) {
@@ -118,10 +177,17 @@
         self.executeFBPosting = function(eventIds) {
             if(eventIds.length !== 0) {
                 var eventId = eventIds.shift();
-                $.post(self.postToFBUrl, {
+                var data = {
                     "csrfmiddlewaretoken": self.csrfToken,
                     "event_id": eventId
-                }, function(data) {
+                }
+
+                data["owner_type"] = $("[data-type=fb_owner_type]:checked").val();
+                if(data["owner_type"] === "page") {
+                    data["page_id"] = self.fbPagesSelect.val();
+                }
+
+                $.post(self.postToFBUrl, data, function(data) {
                     if(data.success) {
                         var message = self.createSuccessMessage();
                         self.successProcessCount++;
@@ -155,8 +221,7 @@
             }
             else {
                 self.miniIndicator.hide();
-                self.executeBusy = false;
-                $(self.actionSelector).prop("disabled", false);
+                self.finishPostToFB();
 
                 var message = self.createSuccessMessage();
                 message.html(self.successProcessCount + " out of " + self.eventsToProcessCount

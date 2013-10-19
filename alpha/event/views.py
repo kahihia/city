@@ -267,6 +267,7 @@ def post_to_facebook_ajax(request):
     success, error, facebook_event_id = False, '', 0
 
     event_id = request.POST.get('event_id')
+    facebook_owner_type = request.POST.get('owner_type')
     try:
         event = Event.events.get(pk=event_id)
     except Event.DoesNotExist as e:
@@ -274,8 +275,13 @@ def post_to_facebook_ajax(request):
 
     if event and not event.facebook_event:
         try:
-            facebook_user_id = facebook_services.get_facebook_user_id(request)
-            facebook_event_id = facebook_services.create_facebook_event(event, request, facebook_user_id)
+            if facebook_owner_type == 'user':
+                facebook_owner_id = facebook_services.get_facebook_user_id(request)
+            else:
+                facebook_owner_id = request.POST.get('page_id')
+
+            facebook_event_id = facebook_services.create_facebook_event(event, request,
+                                                                        facebook_owner_id, facebook_owner_type)
             facebook_services.attach_facebook_event(int(facebook_event_id), event)
             success = True
         except Exception as e:
