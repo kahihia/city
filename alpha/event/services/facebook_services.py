@@ -117,7 +117,7 @@ class FacebookImportService(object):
             'venue' in item and 'city' in item['venue'] and self.lower_place in item['venue']['city'].lower()
 
 
-def create_facebook_event(event, request, facebook_user_id):
+def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type='user'):
     graph = get_persistent_graph(request)
 
     if not graph:
@@ -126,7 +126,7 @@ def create_facebook_event(event, request, facebook_user_id):
     parser = HTMLParser()
     description = strip_tags(parser.unescape(event.description))
 
-    if event.tickets:
+    if facebook_owner_type == 'user' and event.tickets:
         description = '%s\r\n\nTickets: %s' % (description, event.tickets)
 
     location = event.venue.name
@@ -148,7 +148,10 @@ def create_facebook_event(event, request, facebook_user_id):
         'location': location
     }
 
-    result = graph.set('%s/events' % facebook_user_id, **params)
+    if facebook_owner_type == 'page' and event.tickets:
+        params['ticket_uri'] = event.tickets
+
+    result = graph.set('%s/events' % facebook_owner_id, **params)
     return result['id']
 
 
