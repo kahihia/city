@@ -34,6 +34,7 @@ Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner,
                     </p>
                 </div>
             </th>
+            {% if settings.ADVERTISING_TYPE_CPC_ON %}
             <th class="ad-type-col">
                 CPC
                 <a href="javascript:void;" class="balloon">
@@ -48,7 +49,8 @@ Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner,
                         Cost per click
                     </p>
                 </div>
-            </th>                                
+            </th>
+            {% endif %}
             <th>
                 CPM Prices
                 <a href="javascript:void;" class="balloon">
@@ -64,6 +66,7 @@ Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner,
                     </p>
                 </div>
             </th>
+            {% if settings.ADVERTISING_TYPE_CPC_ON %}
             <th>
                 CPC Prices
                 <a href="javascript:void;" class="balloon">
@@ -78,14 +81,15 @@ Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner,
                         Price for 1 click
                     </p>
                 </div>
-            </th>                                
+            </th>
+            {% endif %}
         </tr>
         <tr class="empty-tr">
             <td></td>
             <td class="ad-type-col"></td>
-            <td class="ad-type-col"></td>
+            {% if settings.ADVERTISING_TYPE_CPC_ON %}<td class="ad-type-col"></td>{% endif %}
             <td></td>
-            <td></td>
+            {% if settings.ADVERTISING_TYPE_CPC_ON %}<td></td>{% endif %}
         </tr>
 
         {% for advertising_type in advertising_types %}
@@ -103,26 +107,31 @@ Pick the type of ad(s) they want to put on City Fusion: Box, Skyscraper, Banner,
                     <label for="advertising_type_{{ advertising_type.id }}_cpm"></label>
                 </div>
             </td>
+            {% if settings.ADVERTISING_TYPE_CPC_ON %}
             <td class="ad-type-col">
                 <div class="radio">                                        
                     <input type="radio" id="advertising_type_{{ advertising_type.id }}_cpc" value="CPC" name="advertising_payment_type.{{ advertising_type.id }}" data-ad-type="{{ advertising_type.id }}" {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CPC" %}checked="checked"{% endifequal %}>
                     <label for="advertising_type_{{ advertising_type.id }}_cpc"></label>
                 </div>
-            </td>                                
-            <td class="center">                                    
+            </td>
+            {% endif %}
+
+            <td class="center">
                 {{ advertising_type.cpm_price }}
             </td>
+            {% if settings.ADVERTISING_TYPE_CPC_ON %}
             <td class="center">
                 {{ advertising_type.cpc_price }}
             </td>
+            {% endif %}
         </tr>
         {% endfor %}
         <tr class="empty-tr">
             <td></td>
             <td class="ad-type-col"></td>
-            <td class="ad-type-col"></td>
+            {% if settings.ADVERTISING_TYPE_CPC_ON %}<td class="ad-type-col"></td>{% endif %}
             <td></td>
-            <td></td>
+            {% if settings.ADVERTISING_TYPE_CPC_ON %}<td></td>{% endif %}
         </tr>
     </table>
 </div>
