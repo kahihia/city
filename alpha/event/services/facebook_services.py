@@ -1,7 +1,12 @@
 import datetime
+import time
 import os
 import urllib
 import json
+import hashlib
+import mimetypes
+import base64
+import textwrap
 from urlparse import urlparse
 from HTMLParser import HTMLParser
 
@@ -322,3 +327,24 @@ def _get_images_json(image_source):
     }
 
     return json.dumps(images_data)
+
+
+def _get_multipart_data_from_image(image):
+    """ Generates multipart data based on image file
+
+    @type image: str
+    @param image: full path to an image file
+    @rtype: str
+    """
+    eol = '\r\n';
+    mime_boundary = hashlib.md5(str(int(time.time()))).hexdigest()
+
+    with open(image, 'rb') as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+
+    result = '--%s%s' % (mime_boundary, eol)
+    result = '%sContent-Disposition: form-data; name="imagedata"; filename="%s"%s' % (result, os.path.basename(image), eol)
+    result = '%sContent-Type: %s%s' % (result, mimetypes.guess_type(image)[0], eol)
+    result = '%sContent-Transfer-Encoding: base64%s%s' % (result, eol, eol)
+    result = '%s%s%s' % (result, '\r\n'.join(textwrap.wrap(encoded_string, 76)), eol)
+    return '%s--%s--%s%s' % (result, mime_boundary, eol, eol)
