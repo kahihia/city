@@ -30,3 +30,4 @@ django-configurations==0.3
 wadofstuff-django-serializers==1.1.0
 
 django-mptt
+poster==0.8.1

@@ -2,11 +2,8 @@ import datetime
 import time
 import os
 import urllib
+import urllib2
 import json
-import hashlib
-import mimetypes
-import base64
-import textwrap
 from urlparse import urlparse
 from HTMLParser import HTMLParser
 
@@ -18,6 +15,8 @@ from django.conf import settings
 from PIL import Image
 import dateutil.parser as dateparser
 from django_facebook.api import get_persistent_graph
+from poster.encode import multipart_encode
+from poster.streaminghttp import register_openers
 
 from event.models import Event, FacebookEvent
 from ..settings import FACEBOOK_PAGE_ID, EVENTFUL_ID, CONCERTIN_ID
@@ -131,6 +130,9 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
     parser = HTMLParser()
     description = strip_tags(parser.unescape(event.description))
 
+    googlemap_link = 'http://maps.google.com/?ie=UTF8&hq=&ll=%s,%s&z=13' % (event.location.y, event.location.x)
+    description = '%s\r\n\nLocation: %s' % (description, googlemap_link)
+
     if facebook_owner_type == 'user' and event.tickets:
         description = '%s\r\n\nTickets: %s' % (description, event.tickets)
 
@@ -156,8 +158,14 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
     if facebook_owner_type == 'page' and event.tickets:
         params['ticket_uri'] = event.tickets
 
-    result = graph.set('%s/events' % facebook_owner_id, **params)
-    return result['id']
+    facebook_event_id = graph.set('%s/events' % facebook_owner_id, **params)['id']
+
+    event_image = os.path.abspath(os.path.join(settings.MEDIA_ROOT, event.sorted_images[0].picture.path))
+    graph_url = '%s%s/picture?access_token=%s' % (graph.api_url, facebook_event_id, graph.access_token)
+
+    _send_multipart_image_data(graph_url, event_image)
+
+    return facebook_event_id
 
 
 def attach_facebook_event(facebook_event_id, related_event):
@@ -329,22 +337,19 @@ def _get_images_json(image_source):
     return json.dumps(images_data)
 
 
-def _get_multipart_data_from_image(image):
-    """ Generates multipart data based on image file
+def _send_multipart_image_data(url, image):
+    """ Generate and send multipart image data
 
+    @type url: str
     @type image: str
     @param image: full path to an image file
     @rtype: str
     """
-    eol = '\r\n';
-    mime_boundary = hashlib.md5(str(int(time.time()))).hexdigest()
-
-    with open(image, 'rb') as image_file:
-        encoded_string = base64.b64encode(image_file.read())
-
-    result = '--%s%s' % (mime_boundary, eol)
-    result = '%sContent-Disposition: form-data; name="imagedata"; filename="%s"%s' % (result, os.path.basename(image), eol)
-    result = '%sContent-Type: %s%s' % (result, mimetypes.guess_type(image)[0], eol)
-    result = '%sContent-Transfer-Encoding: base64%s%s' % (result, eol, eol)
-    result = '%s%s%s' % (result, '\r\n'.join(textwrap.wrap(encoded_string, 76)), eol)
-    return '%s--%s--%s%s' % (result, mime_boundary, eol, eol)
+    register_openers()
+    values = {'source': open(image)}
+    data, headers = multipart_encode(values)
+    headers['User-agent'] = 'Open Facebook Python'
+    request = urllib2.Request(url, data, headers)
+    request.unverifiable = True
+    response = urllib2.urlopen(request)
+    return response.read()
