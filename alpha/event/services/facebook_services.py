@@ -160,10 +160,11 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
 
     facebook_event_id = graph.set('%s/events' % facebook_owner_id, **params)['id']
 
-    event_image = os.path.abspath(os.path.join(settings.MEDIA_ROOT, event.sorted_images[0].picture.path))
-    graph_url = '%s%s/picture?access_token=%s' % (graph.api_url, facebook_event_id, graph.access_token)
-
-    _send_multipart_image_data(graph_url, event_image)
+    event_images = list(event.sorted_images)
+    if len(event_images) > 0:
+        event_image = os.path.abspath(os.path.join(settings.MEDIA_ROOT, event_images[0].picture.path))
+        graph_url = '%s%s/picture?access_token=%s' % (graph.api_url, facebook_event_id, graph.access_token)
+        _send_multipart_image_data(graph_url, event_image)
 
     return facebook_event_id
 
