@@ -226,10 +226,7 @@
                 var message = self.createSuccessMessage();
                 message.html(self.successProcessCount + " out of " + self.eventsToProcessCount
                                               + " events posted to Facebook. "
-                                              + "Operation complete!<br/>"
-                                              + "You're welcome to edit your events on Facebook "
-                                              + "to add their photos (just click the icon on the left of the "
-                                              + "necessary event).");
+                                              + "Operation complete!");
             }
         };
 
