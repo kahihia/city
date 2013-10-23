@@ -11,6 +11,10 @@
             this.params[key] = value;
             return this;
         },
+        removeFilter: function(key){
+            delete this.params[key];
+            return this;
+        },
         getURL: function(){
             return "/events?" + $.param(this.params, true);
         }        

@@ -7,6 +7,7 @@
     var SearchByLocation = function(){
         var that = this, request,
             currentSearchValue = $(".location-text-box input").val();
+
         this.searchList = $(".search-lists ul");
         this.searchInput = $(".location-text-box input");
 
@@ -49,7 +50,7 @@
             });
         },
         findByLocation: function(id, type, text){
-            window.location = window.filters.setFilter("location", type+"|"+id).getURL();
+            window.location = window.filters.removeFilter("page").setFilter("location", type+"|"+id).getURL();
         },
 
         refreshLocationList: function(data){
