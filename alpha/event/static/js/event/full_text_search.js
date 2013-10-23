@@ -16,7 +16,7 @@
 
     FullTextSearch.prototype = {
         search: function(){
-            window.location = window.filters.setFilter("search", this.searchInput.val()).getURL();
+            window.location = window.filters.removeFilter("page").setFilter("search", this.searchInput.val()).getURL();
         }
     };
 
