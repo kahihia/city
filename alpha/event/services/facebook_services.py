@@ -170,9 +170,13 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
 
 
 def attach_facebook_event(facebook_event_id, related_event):
-    facebook_event = FacebookEvent.objects.create(eid=facebook_event_id)
+    facebook_event = create_facebook_event(facebook_event_id)
     related_event.facebook_event = facebook_event
     related_event.save()
+
+
+def create_facebook_event(facebook_event_id):
+    return FacebookEvent.objects.create(eid=facebook_event_id)
 
 
 def get_facebook_user_id(request):
