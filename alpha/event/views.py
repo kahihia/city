@@ -218,9 +218,8 @@ def create_from_facebook(request):
         form = CreateEventForm(account=request.account, data=request.POST)
         if form.is_valid():
             try:
-                facebook_event_id = request.POST['facebook_event_id']
-                event = event_service.save_event(request.user, request.POST, form)
-                facebook_services.attach_facebook_event(int(facebook_event_id), event)
+                # @todo remove "facebook_event_id param" passing from js
+                event_service.save_event(request.user, request.POST, form)
                 success = True
             except Exception:
                 form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])

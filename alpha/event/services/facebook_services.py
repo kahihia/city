@@ -131,7 +131,7 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
     description = strip_tags(parser.unescape(event.description))
 
     googlemap_link = 'http://maps.google.com/?ie=UTF8&hq=&ll=%s,%s&z=13' % (event.location.y, event.location.x)
-    description = '%s\r\n\nLocation: %s' % (description, googlemap_link)
+    description = '%s\r\n\nLocation: %s\r\n\nPrice: %s' % (description, googlemap_link, event.price)
 
     if facebook_owner_type == 'user' and event.tickets:
         description = '%s\r\n\nTickets: %s' % (description, event.tickets)
