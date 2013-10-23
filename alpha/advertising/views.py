@@ -60,7 +60,7 @@ def setup(request):
 
             if budget_type=="REAL":
                 order_budget = Decimal(request.POST["order_budget"])
-                total_price = budget
+                total_price = order_budget
 
                 for tax in account.taxes():
                     total_price = total_price + (order_budget * tax.tax)
