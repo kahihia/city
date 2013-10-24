@@ -67,6 +67,9 @@ class EndlessPage(utils.UnicodeMixin):
             template_name, loader.get_template(template_name))
         return template.render(RequestContext(self._request, context))
 
+    def per_page_url(self, count):
+        return 'count=%s' % count
+
 
 class PageList(utils.UnicodeMixin):
     """A sequence of endless pages."""

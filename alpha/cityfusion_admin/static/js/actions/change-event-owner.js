@@ -44,6 +44,7 @@
             this.transferUrl = this.eventContainer.data("transfer-url");
 
             $("body").on("click", "[data-id=transfer_button]", {obj: this}, this.onTransferButtonClick);
+            $("body").on("click", "[data-id=select_all_button]", this.onSelectAllButtonClick);
         },
 
         onTransferButtonClick: function(event) {
@@ -70,6 +71,18 @@
                 else {
                     self.transferBusy = false;
                 }
+            }
+        },
+
+        onSelectAllButtonClick: function() {
+            var checked = parseInt($(this).attr("data-checked"));
+            if(!checked) {
+                $(this).attr("data-checked", 1);
+                $("[data-type=event_check]").prop("checked", true);
+            }
+            else {
+                $(this).attr("data-checked", 0);
+                $("[data-type=event_check]").prop("checked", false);
             }
         },
 

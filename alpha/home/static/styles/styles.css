@@ -882,6 +882,14 @@ body .inputfield{
     vertical-align: bottom;
 }
 
+.modern-input.short {
+    width: 200px;
+}
+
+.options .modern-input {
+    vertical-align: middle;
+}
+
 .popup-form-wrapper {
     background: #ffffff;
 }

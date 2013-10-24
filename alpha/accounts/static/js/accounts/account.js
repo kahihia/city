@@ -25,6 +25,7 @@
             self.fbChoiceWindow = $("[data-id=choice_window]");
             self.fbPostOkSelector = "[data-id=fb_post_ok]";
             self.fbOwnerTypeSelector = "[data-type=fb_owner_type]";
+            self.selectAllSelector = "[data-id=select_all_button]";
 
             self.executeBusy = false;
 
@@ -33,6 +34,7 @@
             $("body").on("change", self.actionSelector, self.onActionSelectChange);
             $("body").on("click", self.fbOwnerTypeSelector, self.onFBOwnerTypeRadioClick);
             $("body").on("click", self.fbPostOkSelector, self.onPostFBOkClick);
+            $("body").on("click", self.selectAllSelector, self.onSelectAllButtonClick);
 
             self.reset();
             self.makeCheckBoxesForFBPosting();
@@ -110,6 +112,18 @@
                     self.finishPostToFB();
                 }
 
+            }
+        };
+
+        self.onSelectAllButtonClick = function() {
+            var checked = parseInt($(this).attr("data-checked"));
+            if(!checked) {
+                $(this).attr("data-checked", 1);
+                $(self.eventCheckerSelector).prop("checked", true);
+            }
+            else {
+                $(this).attr("data-checked", 0);
+                $(self.eventCheckerSelector).prop("checked", false);
             }
         };
 

@@ -21,3 +21,24 @@ def like_button(context, url):
            '&amp;send=false&amp;appId=%s" scrolling="no" frameborder="0" style="border:none; ' \
            'overflow:hidden; width:82px; height:21px; vertical-align: middle;" allowTransparency="true">' \
            '</iframe>' % (urllib.quote(url), settings.FACEBOOK_APP_ID)
+
+
+def callMethod(obj, methodName):
+    method = getattr(obj, methodName)
+
+    if obj.__dict__.has_key("__callArg"):
+        ret = method(*obj.__callArg)
+        del obj.__callArg
+        return ret
+    return method()
+
+
+def args(obj, arg):
+    if not obj.__dict__.has_key("__callArg"):
+        obj.__callArg = []
+
+    obj.__callArg += [arg]
+    return obj
+
+register.filter("call", callMethod)
+register.filter("args", args)

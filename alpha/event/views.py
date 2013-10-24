@@ -220,7 +220,7 @@ def create_from_facebook(request):
             try:
                 facebook_event_id = request.POST['facebook_event_id']
                 event_service.save_event(request.user, request.POST, form)
-                facebook_services.create_facebook_event(facebook_event_id)
+                facebook_services.save_facebook_event(facebook_event_id)
                 success = True
             except Exception:
                 form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])

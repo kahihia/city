@@ -544,11 +544,13 @@ def event_mass_transfer(request):
         owner = None
 
     if owner:
-        events = Event.future_events.filter(owner=owner)
+        search = request.REQUEST.get('search', '')
+        events = Event.future_events.filter(owner=owner, name__icontains=search)
 
     return render_to_response('cf-admin/event_mass_transfer.html', {
         'events': events,
         'owner': owner,
+        'search': search,
     }, context_instance=RequestContext(request))
 
 

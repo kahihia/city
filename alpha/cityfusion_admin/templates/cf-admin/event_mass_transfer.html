@@ -30,19 +30,32 @@
 
                 <table>
                     <tr>
-                        <td width="290">
+                        <td width="495">
                             <form method="get" name="search-events" >
-                                Events owner: <br/>
-                                <input name="owner_id" class="user-input"
-                                       data-ajax-url="{% url 'admin_user_autocomplete' %}"
-                                       data-id="owner_id" />
-                                <input type="submit" value="Search" />
-                                {% if owner %}
-                                    <input type="hidden"
-                                           data-id="owner_id_init_data"
-                                           data-user-name="{{ owner.username }}"
-                                           data-user-id="{{ owner.id }}" />
-                                {% endif %}
+                                <table>
+                                    <tr>
+                                        <td>
+                                            Events owner: <br/>
+                                            <input name="owner_id" class="user-input"
+                                                   data-ajax-url="{% url 'admin_user_autocomplete' %}"
+                                                   data-id="owner_id" />
+                                            {% if owner %}
+                                                <input type="hidden"
+                                                       data-id="owner_id_init_data"
+                                                       data-user-name="{{ owner.username }}"
+                                                       data-user-id="{{ owner.id }}" />
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            Part of event title: <br/>
+                                            <input type="text" name="search"
+                                                   value="{{ search }}"
+                                                   class="modern-input short"
+                                                   placeholder="Title" />
+                                            <input type="submit" value="Search" />
+                                        </td>
+                                    </tr>
+                                </table>
                             </form>
                         </td>
                         <td>
@@ -56,6 +69,7 @@
                 </table>
 
                 <div class="pure-events-list" data-id="event_container" data-transfer-url="{% url 'change_event_owner_ajax' %}">
+                    <a href="javascript:void(0);" data-id="select_all_button">Select / Deselect all</a><br/><br/>
                     {% csrf_token %}
                     <table celpadding="0" cellspacing="0">
                         {% for event in events %}
