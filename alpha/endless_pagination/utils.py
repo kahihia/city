@@ -160,10 +160,13 @@ def get_elastic_page_numbers(current_page, num_pages):
 
 
 def get_querystring_for_page(
-        request, page_number, querystring_key, default_number=1):
+        request, page_number, querystring_key, default_number=1, **kwargs):
     """Return a querystring pointing to *page_number*."""
     querydict = request.GET.copy()
     querydict[querystring_key] = page_number
+
+    if 'per_page' in kwargs:
+        querydict['per_page'] = kwargs['per_page']
     # For the default page number (usually 1) the querystring is not required.
     # if page_number == default_number:
     #     del querydict[querystring_key]

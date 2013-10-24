@@ -406,6 +406,7 @@ def profile_detail(request, username, template_name=userena_settings.USERENA_PRO
     extra_context['hide_email'] = userena_settings.USERENA_HIDE_EMAIL
     extra_context['location'] = request.user_location["user_location_lat_lon"]
     extra_context['is_admin'] = user.is_superuser
+    extra_context['per_page'] = int(request.GET.get('per_page', 6))
 
     tabs_page = "profile-detail"
     active_tab = request.session.get(tabs_page, "account-events")

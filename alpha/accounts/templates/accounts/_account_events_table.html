@@ -2,7 +2,7 @@
 {% load event_tags %}
 {% load common_tags %}
 
-{% paginate 6 events using "account_events" %}
+{% paginate per_page events using "account_events" %}
 
 <div class="account-entry-wrapper entry-wrapper" data-id="event_container">
     <select autocomplete="off" data-id="action_select">
@@ -52,6 +52,14 @@
     <div class="profile-table-pagination">
         <span class="pagintation-wrapper">
             {% get_pages %}
+
+            Records per page:
+            <span class="per-page-links">
+                <a {% if per_page == 6 %}class="current"{% endif %} href="{{ pages.current|args:6|call:'per_page_url' }}">6</a>
+                <a {% if per_page == 20 %}class="current"{% endif %} href="{{ pages.current|args:20|call:'per_page_url' }}">20</a>
+                <a {% if per_page == 50 %}class="current"{% endif %} href="{{ pages.current|args:50|call:'per_page_url' }}">50</a>
+                <a {% if per_page == 100 %}class="current"{% endif %} href="{{ pages.current|args:100|call:'per_page_url' }}">100</a>
+            </span>
 
             {% if pages.current.is_first %}
                 <span class="prev"></span>

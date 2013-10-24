@@ -68,7 +68,9 @@ class EndlessPage(utils.UnicodeMixin):
         return template.render(RequestContext(self._request, context))
 
     def per_page_url(self, count):
-        return 'count=%s' % count
+        return utils.get_querystring_for_page(
+            self._request, self.number, self.querystring_key,
+            default_number=1, per_page=count)
 
 
 class PageList(utils.UnicodeMixin):

@@ -212,3 +212,14 @@ a.add-button {
     color: #5dacfd;
     margin-right: 5px;
 }
+
+.per-page-links a {
+    color: #454545;
+    line-height: 18px;
+    text-decoration: underline;
+}
+
+.per-page-links a.current {
+    font-weight: bold;
+    text-decoration: none;
+}
