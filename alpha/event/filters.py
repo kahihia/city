@@ -1,4 +1,4 @@
-from models import Event, Venue, SingleEvent, SingleEventOccurrence
+from models import Event, Venue, SingleEvent
 import datetime
 import dateutil.parser as dateparser
 from accounts.models import VenueType
@@ -50,7 +50,7 @@ class DateFilter(Filter):
             lookup = self.lookup
 
         return qs.filter(
-            Q(**{'%s__%s' % (self.field, lookup): value}) | Q(**{'occurrences__%s__%s' % (self.field, lookup): value})
+            Q(**{'%s__%s' % (self.field, lookup): value})
         )
 
 
@@ -68,9 +68,8 @@ class TimeFilter(Filter):
         }
 
         single_events_query = SingleEvent.objects.extra(where=[where])
-        single_events_occurrences_query = SingleEventOccurrence.objects.extra(where=[where])
 
-        return qs.filter(Q(occurrences__id__in=single_events_occurrences_query) | Q(id__in=single_events_query))
+        return qs.filter(Q(id__in=single_events_query))
 
 
 class TagsFilter(Filter):
@@ -194,14 +193,9 @@ class FunctionFilter(Filter):
                 (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", "event_event"."description")), 'D')) @@ plainto_tsquery('pg_catalog.english', '%s')
             """ % tag.lower()]
         ).values_list("id", flat=True)
+        
 
-        occurrence_ids = SingleEventOccurrence.objects.extra(
-            where=["""
-                (setweight(to_tsvector('pg_catalog.english', "event_singleeventoccurrence"."description"), 'D')) @@ plainto_tsquery('pg_catalog.english', '%s')
-            """ % tag.lower()]
-        ).values_list("id", flat=True)
-
-        return qs.filter(Q(id__in=single_event_with_tag) | Q(id__in=list(single_event_ids)) | Q(event_id__in=list(event_ids)) | Q(occurrences__id__in=list(occurrence_ids)))
+        return qs.filter(Q(id__in=single_event_with_tag) | Q(id__in=list(single_event_ids)) | Q(event_id__in=list(event_ids)))
 
     def free_filter(self, qs):
         return self.filter_by_tags_or_search(qs, "Free").annotate(Count("id"))
@@ -384,7 +378,6 @@ class SearchFilter(Filter):
         where = """            
             (setweight(to_tsvector('pg_catalog.english', coalesce("event_event"."name", "event_event"."description")), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
             OR (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleevent"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
-            OR (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleeventoccurrence"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
         """
 
         if events_with_tags:
@@ -392,10 +385,10 @@ class SearchFilter(Filter):
             where = """"event_singleevent"."id" IN ("""+ids_string+""") OR """ +where
 
         return qs.filter(
-            Q(occurrences__end_time__gte=datetime.datetime.now()) | Q(end_time__gte=datetime.datetime.now()) | Q(event__event_type__isnull=False) # Force event table joining
+            Q(end_time__gte=datetime.datetime.now()) | Q(event__event_type__isnull=False) # Force event table joining
         ).extra(
             where=[where],
-            params=[search_string, search_string, search_string]
+            params=[search_string, search_string]
         ).annotate(Count("id"))
 
 

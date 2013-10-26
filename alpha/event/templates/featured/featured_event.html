@@ -1,12 +1,12 @@
 {% load cropping %}
 {% load featured_event %}
 {% if in_email %}
-    <a target="_blank" href="{{site}}{% url 'event_view_featured' event.slug event.start_time|date:"Y-m-d" %}" style="text-decoration:none; border: none; display: block; line-height:0px;">
+    <a target="_blank" href="{{site}}{% featured_event_link event %}" style="text-decoration:none; border: none; display: block; line-height:0px;">
         <img src="{{site}}/{% feature_event_as_image event %}" style="border-collapse:collapse; border: none;" />
     </a>
 {% else %}
     <div class="features">
-        <a href="{% url 'event_view_featured' event.slug event.start_time|date:"Y-m-d" %}">
+        <a href="{% featured_event_link event %}">
             <div class="featured-img-wrapper">
                 {% if event.picture %}
                     <img src="{% cropped_thumbnail event.image "cropping" width=154 %}" height="153px" width="154px">
@@ -17,7 +17,7 @@
             <div class="featured-img-details">
                 <div class="featured-img-details-wrapper">
                     <div class="featured-title">
-                        <a href="{% url 'event_view_featured' event.slug event.start_time|date:"Y-m-d" %}">{{event.name}}</a>
+                        <a href="{% featured_event_link event %}">{{event.name}}</a>
                     </div>
                     <div class="featured-date">
                         {{ event.start_time|date:"b d, Y | fA"|title }}-{{event.end_time|date:"fA"|title}}
@@ -26,7 +26,7 @@
                         {{ event.venue.name }}
                     </div>
                     <div class="featured-details-link">
-                        <a href="{% url 'event_view_featured' event.slug event.start_time|date:"Y-m-d" %}">
+                        <a href="{% featured_event_link event %}">
                             event details
                         </a>
                     </div>

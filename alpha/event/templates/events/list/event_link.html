@@ -1,0 +1,7 @@
+{% if event.event_type == "MULTIDAY" %}
+	{% url 'event_view' event.slug %}
+{% elif event.start_time %}
+	{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}
+{% else %}
+	{% url 'event_view' event.slug %}
+{% endif %}

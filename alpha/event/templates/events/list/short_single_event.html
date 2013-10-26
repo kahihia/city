@@ -1,7 +1,8 @@
 {% load date_formatting %}
 {% load cropping %}
+{% load event_tags %}
 
-<a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">
+<a href="{% event_link event %}">
     <div class="entry-img-prev">
         {% if event.picture %}
             <img src="{% cropped_thumbnail event.image "cropping" width=60 %}" height="60px" weight="60px" />
@@ -17,7 +18,7 @@
             {% if event.event_type == "SINGLE" %}
                 {{event.start_time|date:"l, N d"}}
                 <span class="delimeter">|</span>
-                {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}{% if event.occurrences.all|length > 0 %}*{% endif %}
+                {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}
             {% endif %}
             {% if event.event_type == "MULTIDAY" %}
                 {{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.start_time|date:"D, N d"}}            

@@ -37,7 +37,10 @@ urlpatterns = patterns('',
         event.view,
         name='event_view'
     ),
-
+    url(r'^view-featured/(?P<slug>[^/]+)/$',
+        event.view_featured,
+        name='event_view_featured'
+    ),
     url(r'^view-featured/(?P<slug>[^/]+)/(?P<date>[-\w]+)/$',
         event.view_featured,
         name='event_view_featured'

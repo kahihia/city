@@ -1,5 +1,6 @@
 {% load date_formatting %}
 {% load cropping %}
+{% load event_tags %}
 
 <div class="entry-info home-page">
     <div class="entry-img-prev">
@@ -11,7 +12,7 @@
     </div>
     <div class="entry-details-wrapper">
         <div class="title">
-            <a href="{% if event.start_time %}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}{% else %}{% url 'event_view' event.slug %}{% endif %}">
+            <a href="{% event_link event %}">
                 {{event.name}}&nbsp;
             </a>                    
         </div>

@@ -87,13 +87,13 @@ class FutureManager(models.Manager):
         queryset = super(FutureManager, self).get_query_set()\
             .filter(single_events__end_time__gte=datetime.datetime.now())\
             .select_related('single_events')\
-            .select_related('single_events__occurrences')\
             .annotate(start_time=Min("single_events__start_time"))\
             .annotate(end_time=Min("single_events__end_time"))\
             .extra(order_by=['start_time'])\
             .annotate(Count("id"))
 
         return queryset
+
 
 # manager will help me to outflank django restriction https://code.djangoproject.com/ticket/13363
 class FutureWithoutAnnotationsManager(models.Manager):
@@ -253,6 +253,24 @@ class Event(models.Model):
         return self.post_to_facebook and self.facebook_event
 
     @property
+    def first_occurrence(self):
+        occurrences = self.single_events.all()
+        first_occurrence = None
+        for occurence in occurrences:
+            if not first_occurrence or first_occurrence.start_time > occurence.start_time:
+                first_occurrence = occurence
+        return first_occurrence
+
+    @property
+    def last_occurrence(self):
+        occurrences = self.single_events.all()
+        last_occurrence = None
+        for occurence in occurrences:
+            if not last_occurrence or last_occurrence.start_time < occurence.start_time:
+                last_occurrence = occurence
+        return last_occurrence
+
+    @property
     def sorted_images(self):
         return self.eventimage_set.order_by("order")
 
@@ -303,17 +321,28 @@ class EventImage(models.Model):
     cropping = ImageRatioField('picture', '180x180', size_warning=True, allow_fullsize=True)
 
 
-class FutureEventDayManager(models.Manager):
+class BaseFutureEventDayManager(models.Manager):
     def get_query_set(self):
         now = datetime.datetime.now()
-        return super(FutureEventDayManager, self).get_query_set()\
-            .filter(Q(end_time__gte=now) | Q(occurrences__end_time__gte=now))\
+        return super(BaseFutureEventDayManager, self).get_query_set()\
+            .filter(end_time__gte=now)\
             .select_related('event')\
-            .select_related('occurrences')\
             .prefetch_related('event__venue')\
             .prefetch_related('event__venue__city')\
             .order_by("start_time")\
             .annotate(Count("id"))
+
+class FutureEventDayManager(BaseFutureEventDayManager):
+    def get_query_set(self):
+        return super(FutureEventDayManager, self).get_query_set()\
+            .filter(is_occurrence=False)
+
+
+class HomePageEventDayManager(BaseFutureEventDayManager):
+    def get_query_set(self):
+        return super(HomePageEventDayManager, self).get_query_set()\
+            .exclude(Q(is_occurrence=False) & Q(event__event_type="MULTIDAY"))
+
 
 
 class FeaturedEventDayManager(models.Manager):
@@ -337,6 +366,7 @@ class ArchivedEventDayManager(models.Manager):
             .annotate(Count("id"))
 
 
+# TODO: remove model after migration 0050 will be processed on production server
 class SingleEventOccurrence(models.Model):
     """
     When user create event he can choose one of event types.
@@ -347,7 +377,7 @@ class SingleEventOccurrence(models.Model):
     """
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
     end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
-    description = models.TextField(null=True, blank=True) 
+    description = models.TextField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.end_time < self.start_time:
@@ -379,8 +409,7 @@ class SingleEvent(models.Model):
     start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
     end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
     description = models.TextField(null=True, blank=True)
-
-    occurrences = models.ManyToManyField(SingleEventOccurrence, blank=True, null=True)
+    is_occurrence = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if self.end_time < self.start_time:
@@ -406,31 +435,35 @@ class SingleEvent(models.Model):
     def base(self):
         return self.event
 
+    @property
     def first_occurrence(self):
-        occurrences = self.occurrences.all()
+        occurrences = self.event.single_events.filter(is_occurrence=True)
         first_occurrence = None
         for occurence in occurrences:
             if not first_occurrence or first_occurrence.start_time > occurence.start_time:
                 first_occurrence = occurence
         return first_occurrence
 
+    @property
     def last_occurrence(self):
-        occurrences = self.occurrences.all()
+        occurrences = self.event.single_events.filter(is_occurrence=True)
         last_occurrence = None
         for occurence in occurrences:
             if not last_occurrence or last_occurrence.start_time < occurence.start_time:
                 last_occurrence = occurence
         return last_occurrence
 
+    @property
     def sorted_occurrences(self):
-        occurrences = self.occurrences.all()
+        occurrences = self.event.single_events.filter(is_occurrence=True)
         return sorted(occurrences, key=lambda occurrence: occurrence.start_time)
 
 
+    @property
     def sorted_occurrences_days(self):
         occurrences_json = OrderedDict()
 
-        for occurrence in self.sorted_occurrences():
+        for occurrence in self.sorted_occurrences:
             key = occurrence.start_time.strftime("%m/%d/%Y")
 
             if key in occurrences_json:
@@ -448,6 +481,23 @@ class SingleEvent(models.Model):
 
     def same_date_events(self):
         return SingleEvent.future_events.filter(event_id=self.event.id, start_time__startswith=self.start_time.date()).order_by("start_time")
+
+    @staticmethod
+    def venue_events(venue):
+        multiday_events = []
+        hidden_single_events = []
+        single_events = SingleEvent.future_events.filter(event__venue_id=venue.id).select_related("event__venue", "event__venue__city")
+
+        for single_event in single_events:
+            if single_event.event_type=="MULTIDAY":
+                if single_event.event_id in multiday_events:
+                    hidden_single_events.append(single_event.id)
+                else:
+                    multiday_events.append(single_event.event_id)
+
+        return single_events.exclude(id__in=hidden_single_events)
+
+
 
 
 class FacebookEvent(models.Model):

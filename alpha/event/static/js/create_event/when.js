@@ -76,7 +76,7 @@
             firstDay = days[0];
             lastDay = days[days.length-1];
 
-            return (days.length-1) == (lastDay.getTime() - firstDay.getTime())/oneDay;
+            return (days.length-1) == Math.round((lastDay.getTime() - firstDay.getTime())/oneDay);
         },
         is_turned_on: function(){
             if(this.checkIfMultiDayEventPosible() && $(this.checkbox).hasClass("checked")) {                

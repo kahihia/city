@@ -45,14 +45,19 @@ def redirect(request):
 
 
 def search_pad(request):
+    search_params = ["search", "tag", "period", "start_date", "end_date", "start_time", "end_time"]
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
-    events = SingleEvent.future_events.all()
+    params = request.GET.copy()
+
+    if set(search_params) & set(params.keys()):
+        events = SingleEvent.future_events.all()
+    else:
+        events = SingleEvent.homepage_events.all()
 
     events_all_count = events.count()
 
-    params = request.GET.copy()
     location_from_user_choice = location_service.LocationFromUserChoice(request)
     if not "location" in params:
         params["location"] = "%s|%s" % (
@@ -87,6 +92,7 @@ def search_pad(request):
 
 
 def browse(request):
+    search_params = ["search", "tag", "period", "start_date", "end_date", "start_time", "end_time"]
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
@@ -100,9 +106,14 @@ def browse(request):
         .order_by('?')\
         .annotate(Count("id"))
 
-    events = SingleEvent.future_events.all()
-
     params = request.GET.copy()
+
+    if set(search_params) & set(params.keys()):
+        events = SingleEvent.future_events.all()
+    else:
+        events = SingleEvent.homepage_events.all()
+
+    
     location_from_user_choice = location_service.LocationFromUserChoice(request)
     if not "location" in params:
         params["location"] = "%s|%s" % (
@@ -136,23 +147,30 @@ def browse(request):
                             }, context_instance=RequestContext(request))
 
 
-def view_featured(request, slug, date):
+def view_featured(request, slug, date=None):
     try:
-        event = Event.future_events.get(slug=slug, start_time__startswith=date)
+        event = Event.future_events.get(slug=slug)
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))   
         
-    event.featuredevent_set.all()[0].click() 
+    event.featuredevent_set.all()[0].click()
 
-    return HttpResponseRedirect(reverse('event_view', args=(slug, date))) 
+    if date:
+        return HttpResponseRedirect(reverse('event_view', args=(slug, date))) 
+    else:
+        return HttpResponseRedirect(reverse('event_view', args=(slug, ))) 
+
 
 
 def view(request, slug, date=None):
     try:
         if date:
-            event = SingleEvent.future_events.filter(event__slug=slug, start_time__startswith=date)[0]
+            event = SingleEvent.future_events.get(Q(event__slug=slug) & (Q(start_time__startswith=date) | Q(event__event_type="MULTIDAY")))
         else:
-            event = Event.future_events.get(slug=slug).next_day()
+            try:
+                event = SingleEvent.future_events.get(event__slug=slug, event__event_type="MULTIDAY", is_occurrence=False)
+            except:
+                event = Event.future_events.get(slug=slug).next_day()
 
         if not event:
             raise ObjectDoesNotExist
@@ -168,9 +186,10 @@ def view(request, slug, date=None):
 
     venue = event.venue
 
-    events_from_venue = SingleEvent.future_events.filter(event__venue_id=venue.id).select_related("event__venue", "event__venue__city")
+    events_from_venue = SingleEvent.venue_events(venue)
     if date:
         events_from_venue = events_from_venue.exclude(id=event.id)
+
 
     return render_to_response('events/event_detail_page.html', {
             'event': event,
