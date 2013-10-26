@@ -1,5 +1,6 @@
 {% load cropping %}
 {% load date_formatting %}
+{% load event_tags %}
 <!-- List of events -->
 <table width="510" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
     {% for event in events %}
@@ -14,7 +15,7 @@
                     <td width="60" valign="top">
                         <div style="border: 1px solid #cccccc;">
                             <div style="border: 4px solid #ffffff;">
-                                <a target="_blank" href="{{site}}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" style="text-decoration:none; border: none; display: block; line-height:0px;">
+                                <a target="_blank" href="{{site}}{% event_link event %}" style="text-decoration:none; border: none; display: block; line-height:0px;">
                                     <img src="{% if event.picture %}{{site}}{% cropped_thumbnail event.base "cropping" width=61 %}{% else %}{{site}}{{STATIC_URL}}images/default-event-61x61.jpg{% endif %}" style="display: block;"/>
                                 </a>
                             </div>
@@ -30,7 +31,7 @@
                     <td width="325" valign="top" align="left">
                         <div>
                             <span style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif;">
-                                <a target="_blank" href="{{site}}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none;">
+                                <a target="_blank" href="{{site}}{% event_link event %}" style="color: #0066cc; font-size: 13px; font-weight: bold; font-family: sans-serif; text-decoration:none;">
                                     {{ event.name }}
                                 </a>          
                             </span>
@@ -40,7 +41,7 @@
                             {% if event.event_type == "SINGLE" %}
                                 <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|date:"l, M d"}}</span>
                                 <span class="appleLinksBlue" style="color: #cdcdcd; font-size: 12px; font-family: sans-serif;">|</span>
-                                <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}{% if event.occurrences.all|length > 0 %}*{% endif %}</span>
+                                <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}</span>
                             {% endif %}
                             {% if event.event_type == "MULTIDAY" %}
                                 <span class="appleLinksBlue" style="color: #247cc3; font-size: 12px; font-family: sans-serif;">{{event.first_occurrence.start_time|date:"D, M d"}} - {{event.last_occurrence.start_time|date:"D, M d"}}</span>

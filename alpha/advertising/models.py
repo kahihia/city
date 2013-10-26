@@ -82,7 +82,6 @@ class ShareAdvertisingCampaign(models.Model):
     account = models.ForeignKey("accounts.Account")
 
 
-
 PAYMENT_TYPE = (
     ('CPM', 'CPM'),
     ('CPC', 'CPC'),

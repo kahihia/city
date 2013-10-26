@@ -54,6 +54,13 @@ def event_block(context, event):
     }
 
 
+@register.inclusion_tag('events/list/event_link.html', takes_context=True)
+def event_link(context, event):
+    return {
+        'event': event
+    }
+
+
 @register.inclusion_tag('events/list/short_single_event.html', takes_context=True)
 def short_single_event(context, event):
     STATIC_URL = context['STATIC_URL']

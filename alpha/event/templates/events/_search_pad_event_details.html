@@ -7,7 +7,7 @@
 {% for event in events %}
     <div class="event-details-block" data-no-turbolink>
         <div class="event-img">
-            <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">
+            <a href="{% event_link event %}">
                 {% if event.picture %}
                     <img src="{% cropped_thumbnail event.base "cropping" width=175 %}" height="175px" weight="175px">
                 {% else %}
@@ -18,7 +18,7 @@
         <div class="event-details">
             <div class="title-wrapper">
                 <div class="title">
-                    <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">{{event.name}}</a>
+                    <a href="{% event_link event %}">{{event.name}}</a>
                 </div>
                 {% if event.price and event.price != "$" %}
                     <div class="event-price {% if event.price|length < 9 %} short {% endif %}">{{event.price}}</div>

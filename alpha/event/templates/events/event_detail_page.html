@@ -63,7 +63,7 @@
     <div id="fb-root"></div>
     <div class="primary-content">
         <h1>
-            <a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">{{event.name}}</a>            
+            <a href="{% event_link event %}">{{event.name}}</a>            
         </h1>
         <div class="content">
             <div class="event-wrapper">
@@ -73,7 +73,6 @@
                             <img class="center-cropped" 
                                 src="{% cropped_thumbnail event.base "cropping" height=265 %}">
                             <div class="detail-view"></div>
-
                         </a>
                     {% else %}
                         <div class="center-cropped default" style="background-image: url('{{STATIC_URL}}images/default-event.jpg');"></div>
@@ -99,13 +98,12 @@
                         {% endif %}
                         </div>
                     </div>
-
                     <div class="event-date-wrapper">
                         {% if event.event_type == "SINGLE" %}
                             {{event.start_time|date:"l, N d"}}
                         {% endif %}
                         {% if event.event_type == "MULTIDAY" %}
-                            {{event.start_time|date:"D, N d"}} - {{event.end_time|date:"D, N d"}}
+                            {{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.end_time|date:"D, N d"}}
                         {% endif %}
                     </div>
                     <div class="event-description">
@@ -127,7 +125,6 @@
                                     {% in_the_loop_popup event %}
                                 </td>
                             </tr>
-                            
                             <tr>
                                 {% if event.website %}
                                 <td {% if not event.tickets %}colspan="2"{% endif %}>
@@ -146,9 +143,7 @@
                                 {% endif %}
                                 {% if not event.website or not event.tickets %}<td></td>{% endif %}
                                 {% if not event.website and not event.tickets %}<td colspan="2"></td>{% endif %}
-                            </tr>
-                            
-                            
+                            </tr>                            
                             <tr>
                                 <td colspan="2" class="social-buttons">
                                     <!-- AddThis Button BEGIN -->
@@ -261,7 +256,7 @@
         <div class="event-conversation content">
             
 
-            <div class="fb-comments" data-href="http://{{ request.META.HTTP_HOST }}{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}" data-width="630" data-num-posts="5"></div>
+            <div class="fb-comments" data-href="http://{{ request.META.HTTP_HOST }}{% event_link event %}" data-width="630" data-num-posts="5"></div>
         </div>
     </div>
 
@@ -286,7 +281,7 @@
                                 <td>{{ venue_event.start_time|date:"D, M d" }}</td>
                                 <td>{{ venue_event.start_time|date:"fA"|title }}</td>
                                 <td>
-                                    <a href="{% url 'event_view' venue_event.slug venue_event.start_time|date:"Y-m-d" %}">
+                                    <a href="{% event_link venue_event %}">
                                         {{ venue_event.name }}
                                     </a>
                                 </td>

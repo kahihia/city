@@ -34,6 +34,12 @@ def featured_event(context, event, in_email=False):
         'site': context.get("site", "")
     }
 
+@register.inclusion_tag('events/list/featured_event_link.html', takes_context=True)
+def featured_event_link(context, event):
+    return {
+        'event': event
+    }    
+
 
 def truncatesmart(value, limit=80):
     """
