@@ -18,7 +18,6 @@ class Migration(SchemaMigration):
         # Deleting field 'SingleEvent.is_occurrence'
         db.delete_column(u'event_singleevent', 'is_occurrence')
 
-
     models = {
         u'accounts.account': {
             'Meta': {'object_name': 'Account'},
@@ -26,6 +25,8 @@ class Migration(SchemaMigration):
             'access_token': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'all_of_canada': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'blog_url': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'bonus_budget': ('djmoney.models.fields.MoneyField', [], {'default': "'0.0'", 'max_digits': '10', 'decimal_places': '2', 'default_currency': "'CAD'"}),
+            'bonus_budget_currency': ('djmoney.models.fields.CurrencyField', [], {'default': "'CAD'", 'max_length': '3'}),
             'cities': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['cities.City']", 'symmetrical': 'False'}),
             'date_of_birth': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'facebook_id': ('django.db.models.fields.BigIntegerField', [], {'unique': 'True', 'null': 'True', 'blank': 'True'}),
@@ -212,18 +213,16 @@ class Migration(SchemaMigration):
             'audited': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'authentication_key': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
             'comment_for_facebook': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 10, 25, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
-            'cropping': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 10, 16, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('ckeditor.fields.RichTextField', [], {'blank': 'True'}),
             'email': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'event_type': ('django.db.models.fields.CharField', [], {'default': "'SINGLE'", 'max_length': '10'}),
             'facebook_event': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['event.FacebookEvent']", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'location': ('django.contrib.gis.db.models.fields.PointField', [], {}),
-            'modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 10, 25, 0, 0)', 'auto_now': 'True', 'blank': 'True'}),
+            'modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 10, 16, 0, 0)', 'auto_now': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '250'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True', 'blank': 'True'}),
-            'picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'post_to_facebook': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'price': ('django.db.models.fields.CharField', [], {'default': "'Free'", 'max_length': '40', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'}),
@@ -232,6 +231,20 @@ class Migration(SchemaMigration):
             'venue_account_owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.VenueAccount']", 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
             'viewed_times': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),
             'website': ('django.db.models.fields.URLField', [], {'default': "''", 'max_length': '200', 'null': 'True', 'blank': 'True'})
+        },
+        u'event.eventattachment': {
+            'Meta': {'object_name': 'EventAttachment'},
+            'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'event': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['event.Event']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
+        u'event.eventimage': {
+            'Meta': {'object_name': 'EventImage'},
+            'cropping': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'event': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['event.Event']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'order': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'}),
+            'picture': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
         },
         u'event.facebookevent': {
             'Meta': {'object_name': 'FacebookEvent'},
@@ -263,7 +276,7 @@ class Migration(SchemaMigration):
             'account': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.Account']"}),
             'cost': ('djmoney.models.fields.MoneyField', [], {'default': "'0.0'", 'max_digits': '10', 'decimal_places': '2', 'default_currency': "'CAD'"}),
             'cost_currency': ('djmoney.models.fields.CurrencyField', [], {'default': "'CAD'", 'max_length': '3'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 10, 25, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 10, 16, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
             'featured_event': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['event.FeaturedEvent']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'status': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'blank': 'True'}),
@@ -279,7 +292,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_occurrence': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'start_time': ('django.db.models.fields.DateTimeField', [], {})
-        },
+        }
         u'event.singleeventoccurrence': {
             'Meta': {'object_name': 'SingleEventOccurrence'},
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
@@ -311,6 +324,6 @@ class Migration(SchemaMigration):
             'object_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
             'tag': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'taggit_taggeditem_items'", 'to': u"orm['taggit.Tag']"})
         }
-    }
+    }       
 
     complete_apps = ['event']

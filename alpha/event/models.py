@@ -402,6 +402,7 @@ class SingleEvent(models.Model):
     objects = models.Manager()
 
     future_events = FutureEventDayManager()
+    homepage_events = HomePageEventDayManager()
     featured_events = FeaturedEventDayManager()
     archived_events = ArchivedEventDayManager()
 
