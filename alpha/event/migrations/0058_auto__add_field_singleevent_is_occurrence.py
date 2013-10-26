@@ -292,7 +292,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_occurrence': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'start_time': ('django.db.models.fields.DateTimeField', [], {})
-        }
+        },
         u'event.singleeventoccurrence': {
             'Meta': {'object_name': 'SingleEventOccurrence'},
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
