@@ -139,48 +139,6 @@ class AdvertisingCampaignEditForm(AdvertisingSetupForm):
         return cleaned_data
 
 
-class PaidAdvertisingSetupForm(AdvertisingSetupForm):
-    # BONUS - when user can not found venue in google autocomplete he can suggest new venue
-    # REAL - user can choose venue with help of google autocomplete widget
-    budget_type = forms.CharField(required=True, widget=forms.widgets.HiddenInput(), initial="REAL")
-
-    bonus_budget = MoneyField(required=False)
-    order_budget = MoneyField(required=False)
-
-    def clean(self):
-        cleaned_data = super(PaidAdvertisingSetupForm, self).clean()
-        budget_type = cleaned_data["budget_type"]
-        if budget_type=="BONUS":
-            bonus_budget = cleaned_data["bonus_budget"]
-
-            if bonus_budget > self.account.bonus_budget:
-                raise forms.ValidationError('Ensure budget is lower than or equal to %s' % self.account.bonus_budget)
-
-            if bonus_budget < Money(10, CAD):
-                raise forms.ValidationError('Ensure budget is greater than or equal to %s' % Money(10, CAD))
-
-        if budget_type=="REAL":
-            order_budget = cleaned_data["order_budget"]
-
-            if order_budget < Money(10, CAD):
-                raise forms.ValidationError('Ensure budget is greater than or equal to %s' % Money(10, CAD))
-
-        return cleaned_data
-
-    def save(self, commit=True):
-        campaign = super(PaidAdvertisingSetupForm, self).save(commit=False)
-
-        cleaned_data = self.clean()
-
-        budget_type = cleaned_data["budget_type"]
-        if budget_type=="BONUS":
-            campaign.budget = cleaned_data["bonus_budget"]
-
-        if commit:
-            campaign.save()
-        return campaign
-
-
 class DepositFundsForCampaignForm(forms.Form):
     # BONUS - when user can not found venue in google autocomplete he can suggest new venue
     # REAL - user can choose venue with help of google autocomplete widget

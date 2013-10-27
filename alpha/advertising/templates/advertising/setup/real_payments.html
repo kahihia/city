@@ -69,14 +69,14 @@
                     </div>
                 </td>
                 <td>
-                    <div class="checkbox disabled">
-                        <input id="payment_visa_id" type="radio" name="payment_system" value="visa" disabled>
-                        <label for="payment_visa_id"></label>
-                        <label for="payment_visa_id">
-                            <img src="{{ STATIC_URL }}/images/featured/visa.png"/>
+                    <div class="checkbox {% if not account.bonus_budget %}disabled{% endif %}">
+                        <input id="payment_bonus_id" type="radio" name="payment_system" value="bonus" checked="checked" >
+                        <label for="payment_bonus_id"></label>
+                        <label for="payment_bonus_id">
+                            <img src="{{ STATIC_URL }}/images/featured/bonus.png"/>
                         </label>
                     </div>
-                </td>
+                </td>                
             </tr>
             <tr>
                 <td>
