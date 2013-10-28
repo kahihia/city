@@ -45,7 +45,7 @@ def update_single_events(data, event):
                     end_time = dateparser.parse(occurrence[end_key])
                     end = datetime.datetime(int(year), int(month), int(day), end_time.hour, end_time.minute)
 
-                    if not multiday_end_time or multiday_end_time > end:
+                    if not multiday_end_time or multiday_end_time < end:
                         multiday_end_time = end
 
                     if occurrences_day_key in description_json['days']:
@@ -67,6 +67,8 @@ def update_single_events(data, event):
                         single_event.save()
                     else:
                         single_event = ext_single_event
+                        single_event.is_occurrence = (event.event_type=="MULTIDAY")
+                        single_event.save()
                         single_events_to_save_ids.append(ext_single_event.id)
 
     if event.event_type=="MULTIDAY":
@@ -82,7 +84,7 @@ def update_single_events(data, event):
         if not ext_single_event:
             single_event.save()
         else:
-            single_event = ext_single_event
+            single_event = ext_single_event            
             single_events_to_save_ids.append(ext_single_event.id)
 
     single_events_to_delete_ids = list(set([item.id for item in single_events]).difference(single_events_to_save_ids))

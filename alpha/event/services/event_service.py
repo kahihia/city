@@ -44,14 +44,13 @@ def save_event(user, data, form):
 
     event.venue = venue_service.get_venue_from_request_data(event, data)
 
-    event_occurrence_service.update_occurrences(data, event)
-
     if user.is_authenticated():
         event.owner = user
         event.email = user.email
 
-
     event = event.save()
+
+    event_occurrence_service.update_occurrences(data, event)    
 
     event.eventattachment_set.all().delete()
     if data["attachments"]:
