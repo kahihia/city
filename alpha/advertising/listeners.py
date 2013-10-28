@@ -1,7 +1,9 @@
+from django.db.models import F
 from mamona import signals
 
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
+from advertising.models import AdvertisingCampaign
 
 def order_to_payment_listener(sender, order=None, payment=None, **kwargs):
     if order.__class__.__name__ == "AdvertisingOrder":
@@ -15,13 +17,15 @@ def payment_status_changed_listener(sender, instance=None, old_status=None, new_
             instance.order.status = 's'
 
             campaign = instance.order.campaign
-            campaign.budget = campaign.budget + instance.order.budget
+            AdvertisingCampaign.objects.filter(id=campaign.id).update(budget=F("budget")+instance.order.budget.ammount)
             campaign.save()
 
             instance.order.save()
+
         elif new_status == 'failed':
             instance.order.status = 'f'
             instance.order.save()
+
         elif new_status == 'partially_paid':
             instance.order.status = 'p'
 
