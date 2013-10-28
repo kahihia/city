@@ -17,7 +17,7 @@ def payment_status_changed_listener(sender, instance=None, old_status=None, new_
             instance.order.status = 's'
 
             campaign = instance.order.campaign
-            AdvertisingCampaign.objects.filter(id=campaign.id).update(budget=F("budget")+instance.order.budget.amount)
+            AdvertisingCampaign.objects.filter(id=campaign.id).update(budget=F("budget")+instance.order.budget)
             campaign.save()
 
             instance.order.save()
