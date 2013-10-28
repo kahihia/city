@@ -89,7 +89,7 @@
                                 <td>#order-{{ order.id }}</td>
                                 <td>{{ order.budget }}</td>
                                 <td>{{ order.created }}</td>
-                                <td>{% if order.status %}{{ order.status }}{% else %}not paid{% endif %}</td>
+                                <td>{% if order.status %}{{ order.get_status_display }}{% else %}not paid{% endif %}</td>
                             </tr>
                             {% endfor %}
                             <tr>
