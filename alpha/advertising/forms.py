@@ -137,37 +137,3 @@ class AdvertisingCampaignEditForm(AdvertisingSetupForm):
                 raise forms.ValidationError("You should upload image for all advertising types")
 
         return cleaned_data
-
-
-class DepositFundsForCampaignForm(forms.Form):
-    # BONUS - when user can not found venue in google autocomplete he can suggest new venue
-    # REAL - user can choose venue with help of google autocomplete widget
-    budget_type = forms.CharField(required=True, widget=forms.widgets.HiddenInput(), initial="REAL")
-
-    bonus_budget = MoneyField(required=False)
-    order_budget = MoneyField(required=False)
-
-    def __init__(self, account, *args, **kwargs):
-        self.account = account
-        super(DepositFundsForCampaignForm, self).__init__(*args, **kwargs)
-
-    def clean(self):
-        cleaned_data = super(DepositFundsForCampaignForm, self).clean()
-        budget_type = cleaned_data["budget_type"]
-        
-        if budget_type=="BONUS":
-            bonus_budget = cleaned_data["bonus_budget"]
-
-            if bonus_budget > self.account.bonus_budget:
-                raise forms.ValidationError('Ensure budget is lower than or equal to %s' % self.account.bonus_budget)
-
-            if bonus_budget < Money(10, CAD):
-                raise forms.ValidationError('Ensure budget is greater than or equal to %s' % Money(10, CAD))
-
-        if budget_type=="REAL":
-            order_budget = cleaned_data["order_budget"]
-
-            if order_budget < Money(10, CAD):
-                raise forms.ValidationError('Ensure budget is greater than or equal to %s' % Money(10, CAD))
-
-        return cleaned_data

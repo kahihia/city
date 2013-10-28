@@ -11,15 +11,9 @@
             this.totalPriceCalculation = new TotalPriceCalculation();
         },
         initSwitchPaymemtModes: function(){
-            if($("#id_budget_type").val()=="BONUS") {
-                $('[data-tab-id="setup-bonus-budget"]').click();
-            }
-            $('[data-tab-id="setup-bonus-budget"]').on("click", function(){
-                $("#id_budget_type").val("BONUS");
-            });
-
-            $('[data-tab-id="setup-real-budget"]').on("click", function(){
-                $("#id_budget_type").val("REAL");
+            $(".choose-payment-system input").on("click", function(){
+                $(".info").removeClass("active");
+                $(".info." + document.forms["advertising-campaign-deposit-funds"].elements["payments_module"].value).addClass("active");
             });
         }
     };

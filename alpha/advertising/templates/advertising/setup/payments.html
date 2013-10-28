@@ -2,13 +2,13 @@
     Pay Now With
 </div>
 <div class="pay-now-widget">
-    <div class="info">
+    <div class="info paypal {% if payments_module == "paypal" %}active{% endif %}" >
         <div class="budget">
             <table>
                 <tr>
                     <td>Budget(CAD):</td>
                     <td>
-                        <input type="text" id="id_budget" name="order_budget" value="0.0">
+                        <input type="text" id="id_budget" name="order_budget" value="{{ form.order_budget.value.0 }}">
                         <input type="hidden" name="order_budget_currency" value="CAD">
                     </td>
                     <td>
@@ -56,12 +56,45 @@
             </tr>
         </table>
     </div>
+    <div class="info bonus {% if payments_module == "bonus" %}active{% endif %}">
+        <div class="budget">
+            <table>
+                <tr>
+                    <td colspan="3">
+                        You have {{ account.bonus_budget }} bonus.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Budget(CAD):</td>
+                    <td>
+                        <input type="text" id="id_bonus_budget" name="bonus_budget" value="{{ form.bonus_budget.value.0 }}">
+                        <input type="hidden" name="bonus_budget_currency" value="CAD">
+                    </td>
+                    <td>
+                        <a href="javascript:void;" class="balloon">
+                            <div class="buttonq"></div>
+                        </a>
+                        <div class="balloon-content">
+                            <h3>
+                                Help - Advertising Campaign
+                                <i>[Budget]:</i>
+                            </h3>
+                            <p>
+                                Budget for campaign
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
     <div class="choose-payment-system">
         <table>
             <tr>
                 <td>
                     <div class="checkbox">
-                        <input id="payment_paypal_id" type="radio" name="payment_system" value="paypal" checked="checked" >
+                        <input id="payment_paypal_id" type="radio" name="payments_module" value="paypal" {% if payments_module == "paypal" %}checked="checked"{% endif %} >
                         <label for="payment_paypal_id"></label>
                         <label for="payment_paypal_id">
                             <img src="{{ STATIC_URL }}/images/featured/paypal.png"/>
@@ -70,7 +103,7 @@
                 </td>
                 <td>
                     <div class="checkbox {% if not account.bonus_budget %}disabled{% endif %}">
-                        <input id="payment_bonus_id" type="radio" name="payment_system" value="bonus" checked="checked" >
+                        <input id="payment_bonus_id" type="radio" name="payments_module" value="bonus"  {% if payments_module == "bonus" %}checked="checked"{% endif %} >
                         <label for="payment_bonus_id"></label>
                         <label for="payment_bonus_id">
                             <img src="{{ STATIC_URL }}/images/featured/bonus.png"/>
@@ -81,7 +114,7 @@
             <tr>
                 <td>
                     <div class="checkbox disabled">
-                        <input id="payment_email_money_id" type="radio" name="payment_system" value="email_money_transfer" disabled>
+                        <input id="payment_email_money_id" type="radio" name="payments_module" value="email_money_transfer" disabled>
                         <label for="payment_email_money_id"></label>
                         <label for="payment_email_money_id">
                             <img src="{{ STATIC_URL }}/images/featured/email_money_transfer.png"/>
@@ -90,7 +123,7 @@
                 </td>
                 <td>
                     <div class="checkbox disabled">
-                        <input id="payment_master_card_id" type="radio" name="payment_system" value="master_card" disabled>
+                        <input id="payment_master_card_id" type="radio" name="payments_module" value="master_card" disabled>
                         <label for="payment_master_card_id"></label>
                         <label for="payment_master_card_id">
                             <img src="{{ STATIC_URL }}/images/featured/master_card.png"/>
@@ -101,63 +134,3 @@
         </table>
     </div>
 </div>
-
-{{ form.budget_type }}
-{% if account.bonus_budget.amount > 0 %}
-<div class="tabs-container no-borders">
-    <ul class="tabs right" data-page-id="setup-advertising-campaign">
-        {% if account.bonus_budget %}
-            <li data-tab-id="setup-bonus-budget" class="setup-bonus-budget">
-                <span>Try for free</span>
-            </li>
-        {% endif %}        
-        <li data-tab-id="setup-real-budget" class="setup-real-budget current">
-            <span>Pay now with</span>
-        </li>
-    </ul>
-    <div class="box">
-        <div class="pay-now-header">
-            Try for free
-        </div>
-        <div class="pay-now-widget">
-            <div class="info">
-                <div class="budget">
-                    <table>
-                        <tr>
-                            <td colspan="3">
-                                You have {{ account.bonus_budget }} bonus to try.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Budget(CAD):</td>
-                            <td>
-                                <input type="text" id="id_bonus_budget" name="bonus_budget" value="0.0">
-                                <input type="hidden" name="bonus_budget_currency" value="CAD">
-                            </td>
-                            <td>
-                                <a href="javascript:void;" class="balloon">
-                                    <div class="buttonq"></div>
-                                </a>
-                                <div class="balloon-content">
-                                    <h3>
-                                        Help - Advertising Campaign
-                                        <i>[Budget]:</i>
-                                    </h3>
-                                    <p>
-                                        Budget for campaign
-                                    </p>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="box visible">
-        {% include 'advertising/setup/real_payments.html' %}
-    </div>
-</div>
-{% else %}
-    {% include 'advertising/setup/real_payments.html' %}
-{% endif %}

@@ -14,6 +14,7 @@
     <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />    
     <link href="{{STATIC_URL}}styles/advertising-setup.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
 
     <script src="{{STATIC_URL}}js/jquery.balloon.js" type="text/javascript"></script>
@@ -50,6 +51,11 @@
                                     <span class="error">{{ error }}</span>
                                 {% endfor %}
                             </li>
+                            <li id="all-info">
+                                {% for error in form.bonus_budget.errors %}
+                                    <span class="error">{{ error }}</span>
+                                {% endfor %}
+                            </li>
                         </ul>
                     </div>
                 {% endif %}
@@ -57,12 +63,47 @@
                     {% csrf_token %}                    
                     <div class="actual-budget">
                         <p>
-                            Your already spent {{ campaign.ammount_spent }} from {{ campaign.budget }}.
+                            Current budget - {{ campaign.budget }}. Your already spent {{ campaign.ammount_spent }}
                         </p>                        
                     </div>
+
                     {% setup_advertising_payments %}
+
                     <div class="pay-now-footer">
                         <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
+                    </div>
+
+                    <div class="order-history">
+                        <table class="profile-table" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th colspan="4">Orders history</th>
+                            </tr>
+                            <tr>
+                                <th>Order id</th>
+                                <th>Budget</th>
+                                <th>Created at</th>
+                                <th>Status</th>
+                            </tr>
+                            {% for order in campaign.advertisingorder_set.all %}
+                            <tr>
+                                <td>#order-{{ order.id }}</td>
+                                <td>{{ order.budget }}</td>
+                                <td>{{ order.created }}</td>
+                                <td>{% if order.status %}{{ order.status }}{% else %}not paid{% endif %}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="4">Bonuses</td>
+                            </tr>
+                            {% for bonus in campaign.bonusadvertisingtransaction_set.all %}
+                            <tr>
+                                <td>#bonus-{{ bonus.id }}</td>
+                                <td>{{ bonus.budget }}</td>
+                                <td>{{ bonus.processed_at }}</td>
+                                <td>bonus</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
                     </div>
                 </form>
             </div>                

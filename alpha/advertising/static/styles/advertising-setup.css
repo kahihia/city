@@ -172,8 +172,12 @@ body .hintbox {
     margin-left: 15px;
     width: 365px;
     color: #000;
-    font-size: 16px;    
-    
+    font-size: 16px;
+    display: none;    
+}
+
+.pay-now-widget .info.active {
+    display: block;
 }
 
 .pay-now-widget .info table.taxes {

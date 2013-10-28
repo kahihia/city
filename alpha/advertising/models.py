@@ -182,6 +182,12 @@ class Advertising(models.Model):
     image_thumb.allow_tags = True
 
 
+class BonusAdvertisingTransaction(models.Model):
+    budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+    campaign = models.ForeignKey(AdvertisingCampaign)
+    processed_at = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now)
+
+
 class AdvertisingOrder(models.Model):
     budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
     total_price = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD') # with taxes
