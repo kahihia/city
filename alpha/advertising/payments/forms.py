@@ -33,7 +33,7 @@ class PaidSetupForm(AdvertisingSetupForm):
     bonus_budget = MoneyField(required=False)
 
     def __init__(self, *args, **kwargs):
-        super(PaidFundForm, self).__init__(*args, **kwargs)
+        super(PaidSetupForm, self).__init__(*args, **kwargs)
 
         self.fields['order_budget'].error_messages['min_value'] = 'Ensure budget is greater than or equal to %(limit_value)s'
 
