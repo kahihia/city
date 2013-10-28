@@ -107,6 +107,11 @@
     font-size: 16px;
     font-style: italic;
     font-weight: bold;
+    display: none;
+}
+
+.pay-now-widget .info.active {
+    display: block;
 }
 
 .pay-now-widget .info table.taxes {

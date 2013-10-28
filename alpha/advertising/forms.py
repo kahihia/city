@@ -26,7 +26,6 @@ class AdvertisingSetupForm(forms.ModelForm):
     active_from = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'), required=False)
     active_to = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'), required=False)
 
-
     class Meta:
         model = AdvertisingCampaign
         fields = (

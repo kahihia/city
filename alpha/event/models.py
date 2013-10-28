@@ -639,6 +639,12 @@ class FeaturedEvent(models.Model):
         return ", ".join(self.regions.all().values_list("name", flat=True))
 
 
+class BonusFeaturedEventTransaction(models.Model):
+    budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+    featured_event = models.ForeignKey(FeaturedEvent)
+    processed_at = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now)            
+
+
 class FeaturedEventOrder(models.Model):
     cost = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
     total_price = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD') # with taxes

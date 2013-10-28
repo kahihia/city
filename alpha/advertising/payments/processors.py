@@ -5,10 +5,11 @@ from advertising.models import AdvertisingOrder, AdvertisingCampaign, BonusAdver
 from accounts.models import Account, AccountTaxCost
 from decimal import Decimal
 
+
 class BasePaymentProcessor(object):
     def __init__(self, account, campaign, request):
         self.account = account
-        self.campaign = campaign        
+        self.campaign = campaign
         self.request = request
 
     def process_setup(self):

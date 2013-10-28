@@ -113,9 +113,7 @@
                 totalPrice += +tax.price();
             });
 
-            $(".bonus-price-output").html(cost.toFixed(2));
-            $("#id_bonus_budget").val(cost.toFixed(2));
-
+            $(".bonus-price-output").html(cost.toFixed(2));            
             $(".total-price-output").html(totalPrice.toFixed(2));
         },
         initRegionsSelection: function(){
@@ -132,15 +130,9 @@
             });
         },
         initSwitchPaymemtModes: function(){
-            if($("#id_budget_type").val()=="BONUS") {
-                $('[data-tab-id="setup-bonus-budget"]').click();
-            }
-            $('[data-tab-id="setup-bonus-budget"]').on("click", function(){
-                $("#id_budget_type").val("BONUS");
-            });
-
-            $('[data-tab-id="setup-real-budget"]').on("click", function(){
-                $("#id_budget_type").val("REAL");
+            $(".choose-payment-system input").on("click", function(){
+                $(".info").removeClass("active");
+                $(".info." + document.forms["featured-events-setup"].elements["payments_module"].value).addClass("active");
             });
         }
     };

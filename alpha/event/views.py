@@ -13,23 +13,20 @@ from django.db.models import Q, Count, F
 from django.forms.util import ErrorList
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET
-from django.contrib import messages
 
 from taggit.models import Tag, TaggedItem
-from moneyed import Money, CAD
 from django_facebook.decorators import facebook_required
 
 from cities.models import City, Country, Region
 from event.filters import EventFilter
 from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
 from event.services import facebook_services, location_service, event_service
-from event.forms import SetupFeaturedForm, CreateEventForm, EditEventForm
+from event.forms import CreateEventForm, EditEventForm, SetupFeaturedForm
 from ajaxuploader.views import AjaxFileUploader
 from accounts.decorators import native_region_required
-from accounts.models import VenueAccount, AccountTaxCost
-from decimal import Decimal
-from accounts.models import Account
-
+from accounts.models import VenueAccount
+from event.payments.processors import process_setup_featured
+from moneyed import CAD
 
 def start(request):
     csrf_token = get_token(request)
@@ -407,7 +404,7 @@ def remove(request, authentication_key):
 @native_region_required(why_message="native_region_required")
 def setup_featured(request, authentication_key):
     account = request.account
-    event = Event.events.get(authentication_key__exact=authentication_key)    
+    event = Event.events.get(authentication_key__exact=authentication_key)
 
     featured_event = FeaturedEvent(
         event=event,
@@ -416,57 +413,25 @@ def setup_featured(request, authentication_key):
         end_time=datetime.date.today() + datetime.timedelta(days=15)
     )
 
-    venue_account_featured_stats = FeaturedEvent.objects.filter(event__venue_id=event.venue.id)
+    payments_module = request.POST.get("payments_module", "paypal")
 
-    form = SetupFeaturedForm(
-        account=account,
-        instance=featured_event
-    )
+    form = SetupFeaturedForm(account, instance=featured_event)
+
+    venue_account_featured_stats = FeaturedEvent.objects.filter(event__venue_id=event.venue.id)    
 
     if request.method == 'POST':
-        form = SetupFeaturedForm(account=account, instance=featured_event, data=request.POST)
+        form = SetupFeaturedForm(account, instance=featured_event, data=request.POST)
 
         if form.is_valid():
-            featured_event = form.save()            
+            featured_event = form.save()
 
-            budget_type = request.POST["budget_type"]
-
-            if budget_type == "BONUS":
-                featured_event.active = True
-                featured_event.save()
-                budget = Decimal(request.POST["bonus_budget"])
-                Account.objects.filter(user_id=request.user.id).update(bonus_budget=F("bonus_budget")-budget)
-
-                return HttpResponseRedirect('/accounts/%s/' % request.user.username)
-
-            if budget_type == "REAL":
-                cost = (featured_event.end_time - featured_event.start_time).days * Money(2, CAD)
-                total_price = cost
-
-                for tax in account.taxes():
-                    total_price = total_price + (cost * tax.tax)
-
-                order = FeaturedEventOrder(
-                    cost=cost,
-                    total_price=total_price,
-                    featured_event=featured_event,
-                    account=account
-                )
-
-                order.save()
-
-                for tax in account.taxes():
-                    account_tax_cost = AccountTaxCost(account_tax=tax, cost=cost*tax.tax, tax_name=tax.name)
-                    account_tax_cost.save()
-                    order.taxes.add(account_tax_cost)
-                
-
-                return HttpResponseRedirect(reverse('setup_featured_payment', args=(str(order.id),)))
+            return process_setup_featured(payments_module, account, featured_event, request)
 
     return render_to_response('events/setup_featured_event.html', {
             'form': form,
             'featured_events_stats': venue_account_featured_stats,
-            'account': account
+            'account': account,
+            'payments_module': payments_module
         }, context_instance=RequestContext(request))
 
 
