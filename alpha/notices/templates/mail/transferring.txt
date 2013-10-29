@@ -6,7 +6,7 @@
         </h1>
 
         {% for event in events %}
-        	<a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">{{ event.name }}</a>
+        	<a href="{% url 'event_view' event.slug event.next_day.start_time|date:"Y-m-d" %}">{{ event.name }}</a>
         	<br/>
 		{% endfor %}
 
