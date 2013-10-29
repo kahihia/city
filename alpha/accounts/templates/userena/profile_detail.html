@@ -122,6 +122,7 @@
         <ul class="tabs" data-page-id="profile-detail">
             <li data-tab-id="account-events" {% if active_tab == "account-events" %}class="current"{% endif %}><span>{{ profile.user.username }} Events</span></li>
             <li data-tab-id="account-featured-events" {% if active_tab == "account-featured-events" %}class="current"{% endif %}><span>Featured Events</span></li>
+            <li data-tab-id="account-archived-events" {% if active_tab == "account-archived-events" %}class="current"{% endif %}><span>Archived Events</span></li>
             <li data-tab-id="reminder" {% if active_tab == "reminder" %}class="current"{% endif %}><span>Reminder</span></li>
             <li data-tab-id="in-the-loop" {% if active_tab == "in-the-loop" %}class="current"{% endif %}><span>In the Loop</span></li>
             <li data-tab-id="advertising-stats" {% if active_tab == "advertising-stats" %}class="current"{% endif %}><span>Advertising Stats</span></li>
@@ -132,6 +133,9 @@
         </div>
         <div class="box{% if active_tab == "account-featured-events" %} visible{% endif %}">
             {% include 'accounts/_account_featured_events_table.html' with events=profile.featured_events %}
+        </div>
+        <div class="box{% if active_tab == "account-archived-events" %} visible{% endif %}">
+            {% include 'accounts/_account_archived_events_table.html' with events=profile.archived_events %}
         </div>
         <div class="box{% if active_tab == "reminder" %} visible{% endif %}">
             {% include 'accounts/_reminder_events_table.html' %}
