@@ -259,6 +259,11 @@
                         self.successProcessCount++;
                         message.html(self.successProcessCount + " out of " + self.eventsToProcessCount
                                               + " events bound to the venue.");
+
+                        var elem = $(self.eventItemSelector + "[data-event-id=" + eventId + "]")
+                                    .find("[data-type=venue_title]");
+                        var text = self.venueSelect.text();
+                        elem.html(text);
                     }
                     else {
                         var message = $("<div/>", {

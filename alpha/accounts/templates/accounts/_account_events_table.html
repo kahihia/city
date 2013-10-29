@@ -34,6 +34,12 @@
 
             {% short_single_event event %}
 
+            <div class="venue-title" data-type="venue_title">
+                {% if event.venue_account_owner %}
+                    by {{ event.venue_account_owner.venue.name }}
+                {% endif %}
+            </div>
+
             <div class="event-edit-actions">
                 <a href="{% url 'event_edit' event.authentication_key %}">
                     Edit

@@ -736,3 +736,9 @@
     text-decoration: underline;
     font-weight: bold;
 }
+
+.venue-title {
+    position: absolute;
+    right: 7px;
+    top: 2px;
+}
