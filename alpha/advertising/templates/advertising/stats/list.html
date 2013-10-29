@@ -102,7 +102,7 @@
                 <th class="action">Size of Ad</th>
                 <th class="action">Impressions</th>
                 <th class="action">Clicks</th>
-                <th class="action">CPC</th>
+                {% if settings.ADVERTISING_TYPE_CPC_ON %}<th class="action">CPC</th>{% endif %}
                 <th class="action">CPM</th>
             </tr>
             {% for ad in campaign.advertising_set.all %}
@@ -124,9 +124,11 @@
                 <td class="action">
                     {{ ad.clicks }}
                 </td>
+                {% if settings.ADVERTISING_TYPE_CPC_ON %}
                 <td class="action">
                     {{ ad.cpc_price }}
                 </td>
+                {% endif %}
                 <td class="action">
                     {{ ad.cpm_price }}
                 </td>

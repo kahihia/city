@@ -12,7 +12,7 @@
                 <div class="stats">
                     <div class="col">Impressions</div>
                     <div class="col">Clicks</div>
-                    <div class="col">CPC</div>
+                    {% if settings.ADVERTISING_TYPE_CPC_ON %}<div class="col">CPC</div>{% endif %}
                     <div class="col">CPM</div>
                 </div>
             </th>
@@ -69,7 +69,7 @@
                             <div>
                                 <div class="stat">{{ ad.views }}</div>
                                 <div class="stat">{{ ad.clicks }}</div>
-                                <div class="stat">{{ ad.cpc_price }}</div>
+                                {% if settings.ADVERTISING_TYPE_CPC_ON %}<div class="stat">{{ ad.cpc_price }}</div>{% endif %}
                                 <div class="stat">{{ ad.cpm_price }}</div>
                             </div>
                         </div>
