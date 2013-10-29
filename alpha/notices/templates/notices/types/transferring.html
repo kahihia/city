@@ -1,0 +1,9 @@
+<div class="notice-item" data-type="notice_item">
+    {% csrf_token %}
+    <button type="button" class="close"
+            data-type="notice_close_button"
+            data-notice-id="{{ notice_id }}">×</button>
+    {{ event_count }} events have been transferred to you. You can
+    <a href="{{ accept_link }}" data-type="transferring_accept_link">Accept</a>
+    or <a href="{{ reject_link }}" data-type="transferring_reject_link">Reject</a> them.
+</div>

@@ -33,6 +33,7 @@ urlpatterns = patterns(
     url(r'^facebook/', include('django_facebook.urls')),
     url(r'^advertising/', include('advertising.urls')),
     url(r'^page/(?P<alias>[\.\w-]+)/$', 'home.views.page', name='staticpage'),
+    url(r'^notices/', include('notices.urls')),
 
     url(r'^accounts/signin/$',
        userena_views.signin,

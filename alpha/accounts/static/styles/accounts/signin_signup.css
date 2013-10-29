@@ -128,10 +128,10 @@
 
 .user-profile {
     width: 185px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     text-overflow: ellipsis;
     padding-right: 20px;
-
+    position: relative;
 }
 
 .user-profile a span{
@@ -190,3 +190,20 @@
     margin-top: 5px;  
 }
 
+.notices-block {
+    padding: 5px 0 0 37px;
+    position: absolute;
+    left: 0;
+    top: 30px;
+}
+
+a.notices-count {
+    color: #ffffff !important;
+    font-weight: bold;
+    top: 0 !important;
+    line-height: 22px !important;
+}
+
+a.notices-count:hover {
+    text-decoration: underline;
+}

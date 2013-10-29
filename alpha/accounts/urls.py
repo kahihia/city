@@ -92,8 +92,13 @@ urlpatterns = patterns('',
         accounts.redirect_to_active_user_context,
         name="user_account_context_page"
     ),
-        url(r'^clear-facebook-graph/$',
+    url(r'^clear-facebook-graph/$',
         accounts.clear_facebook_cached_graph,
-        name='clear_facebook_graph'
-    )
+        name='clear_facebook_graph'),
+    url(r'^accept-transferring/(?P<transferring_id>\d+)/$',
+        accounts.accept_transferring,
+        name='accept_transferring'),
+    url(r'^reject-transferring/(?P<transferring_id>\d+)/$',
+        accounts.reject_transferring,
+        name='reject_transferring'),
 )
