@@ -668,7 +668,14 @@ class FeaturedEventOrder(models.Model):
     def cost_value(self):
         return self.cost
 
+
+class EventTransferring(models.Model):
+    target = models.ForeignKey(User, blank=False, null=False)
+    events = models.ManyToManyField(Event)
+
+
 FeaturedEventPayment = build_featured_event_payment_model(FeaturedEventOrder, unique=True)
+
 
 def get_items(self):
         """Retrieves item list using signal query. Listeners must fill

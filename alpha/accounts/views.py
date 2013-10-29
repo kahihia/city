@@ -3,7 +3,7 @@
 from pdfutils.reports import Report
 
 from models import Account, VenueAccount
-from event.models import Event, SingleEvent, FeaturedEvent, Venue
+from event.models import Event, SingleEvent, FeaturedEvent, Venue, EventTransferring
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -617,3 +617,42 @@ def clear_facebook_cached_graph(request):
         request.session.pop('graph')
 
     return HttpResponse(json.dumps({'success': True}), mimetype='application/json')
+
+
+@login_required
+def accept_transferring(request, transferring_id):
+    success = False
+    try:
+        transferring = EventTransferring.objects.get(pk=transferring_id)
+    except EventTransferring.DoesNotExist:
+        transferring = None
+
+    if transferring and transferring.target:
+        for event in transferring.events.all():
+            event.owner = transferring.target
+            event.save()
+
+            transferring.events.remove(event)
+
+        transferring.delete()
+        success = True
+
+    return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
+
+
+@login_required
+def reject_transferring(request, transferring_id):
+    success = False
+    try:
+        transferring = EventTransferring.objects.get(pk=transferring_id)
+    except EventTransferring.DoesNotExist:
+        transferring = None
+
+    if transferring and transferring.target:
+        for event in transferring.events:
+            transferring.events.remove(event)
+
+        transferring.delete()
+        success = True
+
+    return HttpResponse(json.dumps({'success': success}), mimetype='application/json')

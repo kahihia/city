@@ -1,0 +1,18 @@
+<html>
+<head></head>
+    <body>
+        <h1>
+        	This is the list of events that have been transferred to you on <a href="http://{{ site }}/">{{ site }}</a>.
+        </h1>
+
+        {% for event in events %}
+        	<a href="{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}">{{ event.name }}</a>
+        	<br/>
+		{% endfor %}
+
+        <h2>You can accept or reject transferring in your account:</h2>
+        <a href="{% url 'userena_profile_detail' user.username %}">{% url 'userena_profile_detail' user.username %}</a>
+
+        <p>Have a great day.</p>
+    </body>
+</html>

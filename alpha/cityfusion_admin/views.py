@@ -1,7 +1,6 @@
 import datetime
 import json
 from decimal import Decimal
-from moneyed import Money, CAD
 from django.contrib.auth.models import User
 from cityfusion_admin.models import ReportEvent, ClaimEvent
 from cityfusion_admin.forms import FreeTryForm, BonusCampaignForm
@@ -14,9 +13,10 @@ from django.template import RequestContext
 
 from accounts.models import Account, BonusCampaign
 from advertising.models import ShareAdvertisingCampaign
-from event.models import Event, FeaturedEvent, FacebookEvent
+from event.models import Event, FeaturedEvent, FacebookEvent, EventTransferring
 from event.forms import SetupFeaturedForm, CreateEventForm
 from event.services import facebook_services
+from notices import services as notice_services
 from cities.models import City, Country
 from django_facebook.decorators import facebook_required_lazy
 from django.contrib.admin.views.decorators import staff_member_required
@@ -538,14 +538,19 @@ def change_event_owner(request, slug):
 @staff_member_required
 def event_mass_transfer(request):
     events = []
+    transferred_events = EventTransferring.events.through.objects.all().values_list('event_id', flat=True)
+
     try:
         owner = User.objects.get(pk=request.REQUEST.get('owner_id', 0))
     except User.DoesNotExist:
         owner = None
 
+    search = request.REQUEST.get('search', '')
+
     if owner:
-        search = request.REQUEST.get('search', '')
-        events = Event.future_events.filter(owner=owner, name__icontains=search)
+        events = Event.future_events.filter(owner=owner).exclude(id__in=transferred_events)
+        if search:
+            events = events.filter(name__icontains=search)
 
     return render_to_response('cf-admin/event_mass_transfer.html', {
         'events': events,
@@ -559,10 +564,38 @@ def event_mass_transfer(request):
 def change_event_owner_ajax(request):
     event_id = request.POST.get('event_id', None)
     owner_id = request.POST.get('owner_id', None)
-    if event_id and owner_id:
-        event = Event.events.get(pk=event_id)
-        event.owner = User.objects.get(id=owner_id)
-        event.save()
+    identifier = request.POST.get('identifier', '')
+    stored_identifier = request.session.get('transfer_identifier', '')
+    is_last = bool(int(request.POST.get('is_last', 0)))
+
+    try:
+        if event_id and owner_id and identifier:
+            event = Event.events.get(pk=event_id)
+            target = User.objects.get(id=owner_id)
+
+            if not stored_identifier or identifier != stored_identifier:
+                event_transferring = EventTransferring.objects.create(target=target)
+                request.session['transfer_identifier'] = identifier
+                request.session['transfer_id'] = event_transferring.id
+            else:
+                event_transferring = EventTransferring.objects.get(pk=int(request.session['transfer_id']))
+
+            event_transferring.events.add(event)
+            success = True
+    except Exception:
+        success = False
+    finally:
+        if is_last and target and event_transferring:
+            events = list(event_transferring.events.all())
+            notice_services.create_notice('transferring', target, {
+                'subject': 'CityFusion: events have been transferred to you.',
+                'user': target,
+                'events': events
+            }, {
+                'event_count': len(events),
+                'accept_link': reverse('accept_transferring', kwargs={'transferring_id': event_transferring.id}),
+                'reject_link': reverse('reject_transferring', kwargs={'transferring_id': event_transferring.id})
+            })
 
     return HttpResponse(json.dumps({'success': True}), mimetype='application/json')
 

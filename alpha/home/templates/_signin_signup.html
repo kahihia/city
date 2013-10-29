@@ -1,4 +1,5 @@
 {% load cropping %}
+{% load notices_tags %}
 <div class="sign-up-and-facebook">
     <!--start login-->
     <div class="login-entry-info">
@@ -10,7 +11,7 @@
                             <img src="{{ request.account.get_mugshot_url }}" alt="Your mugshot" widrh="29" height="29" />
                             <span>
                                 {{ user.username }}
-                            </span>                            
+                            </span>
                         </a>
                     {% else %}
                         <a href="{% url 'private_venue_account' slug=current_venue_account.slug %}">
@@ -25,7 +26,8 @@
                         </a>
                     {% endif %}
                     <div class="choose-user-profile-button">
-                    </div>                                        
+                    </div>
+                    {% notices_block user %}
                 </li>                
                 <li>
                     <a href="{% url 'userena_signout' %}">Sign out</a>

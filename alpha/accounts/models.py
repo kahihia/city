@@ -7,6 +7,7 @@ from django.contrib.gis.db import models
 from taggit_autosuggest.managers import TaggableManager
 
 from event.models import Event, SingleEvent, FeaturedEvent, Venue
+from notices.models import Notice
 
 from django_facebook.models import FacebookProfileModel
 
@@ -174,6 +175,9 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
         return AdvertisingCampaign.objects.filter(
             Q(account=self) | Q(shareadvertisingcampaign__account=self)
         )
+
+    def notices(self):
+        return Notice.objects.filter(user__id=self.user.id, read=False)
 
 
 def create_facebook_profile(sender, instance, created, **kwargs):
