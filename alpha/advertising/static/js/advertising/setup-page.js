@@ -88,10 +88,7 @@
             this.totalPriceCalculation = new TotalPriceCalculation();
         },
         initSwitchPaymemtModes: function(){
-            $(".choose-payment-system input").on("click", function(){
-                $(".info").removeClass("active");
-                $(".info." + document.forms["advertising-setup"].elements["payments_module"].value).addClass("active");
-            });
+            
         }
     };
 
