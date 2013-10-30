@@ -6,7 +6,7 @@
         <div class="budget">
             <table class="taxes">
                 <tr>
-                    <td>Budget(CAD):</td>
+                    <td>Budget, C$:</td>
                     <td>
                         <input type="text" id="id_budget" name="order_budget" value="{{ form.order_budget.value.0 }}">
                         <input type="hidden" name="order_budget_currency" value="CAD">
@@ -25,11 +25,11 @@
                             </p>
                         </div>
                     </td>
-                </tr>
-                <tr>
+                </tr>                
+                <tr {% if account.bonus_budget.amount <= 0 %}style="display: none;"{% endif %}>
                     <td>
                         <div>
-                            Bonus Money {{ account.bonus_budget }}
+                            Apply Bonus? (up to {{ account.bonus_budget }})
                         </div>
                     </td>
                     <td>
@@ -38,12 +38,13 @@
                     </td>
                     <td></td>
                 </tr>
+                
                 {% if account_taxes %}
                     {% for tax in account_taxes %}
                         <tr class="tax-row">
                             <td>
                                 <input type="hidden" value="{{ tax.tax }}" class="tax-input">
-                                {{ tax.name }} ({{ tax.pretty_tax }}%):
+                                {{ tax.name }}, {{ tax.pretty_tax }}%:
                             </td>
                             <td>
                                 C$<span class="tax-price">
@@ -55,10 +56,20 @@
                 {% endif %}
                 <tr class="total-price-row">
                     <td>
-                        Total:
+                        Due:
                     </td>
                     <td>
                         C$<span class="total-price-output">
+                            0
+                        </span>
+                    </td>
+                </tr>
+                <tr class="total-budget-row" {% if account.bonus_budget.amount <= 0 %}style="display: none;"{% endif %}>
+                    <td>
+                        Total Due:
+                    </td>
+                    <td>
+                        C$<span class="total-budget-output">
                             0
                         </span>
                     </td>
@@ -70,7 +81,7 @@
         <table>
             <tr>
                 <td>
-                    <div class="checkbox">
+                    <div class="checkbox paypal">
                         <input id="payment_paypal_id" type="radio" name="payment_system" value="paypal" checked="checked" >
                         <label for="payment_paypal_id"></label>
                         <label for="payment_paypal_id">
@@ -110,4 +121,5 @@
             </tr>
         </table>
     </div>
+    <div class="clear"></div>
 </div>
