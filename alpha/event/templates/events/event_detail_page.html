@@ -90,10 +90,7 @@
                             {% endif %}
                         </div>
                     {% else %}
-                         <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
-                            <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}">
-                            <div class="detail-view"></div>
-                        </a>
+                        <div class="center-cropped default" style="background-image: url('{{STATIC_URL}}images/default-event.jpg');"></div>
                     {% endif %}
                     {% if event.venue_account_owner and event.venue_account_owner.public %}
                     <footer>
