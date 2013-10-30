@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from event.models import FeaturedEventOrder, FeaturedEvent, BonusFeaturedEventTransaction
 from accounts.models import Account, AccountTaxCost
 from moneyed import Money, CAD
+from decimal import Decimal
 
 
 class BasePaymentProcessor(object):
@@ -22,6 +23,9 @@ class BasePaymentProcessor(object):
 class PaypalPaymentProcessor(BasePaymentProcessor):
     def process_setup(self):
         cost = (self.featured_event.end_time - self.featured_event.start_time).days * Money(2, CAD)
+        bonus = Money(Decimal(self.request.POST["bonus"]), CAD)
+        cost = cost - bonus
+
         total_price = cost
 
         for tax in self.account.taxes():

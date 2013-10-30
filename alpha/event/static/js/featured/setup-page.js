@@ -2,12 +2,13 @@
     'use strict';
 
     function FeaturedSetupPage(){
-        var start_date_input, end_date_input, days_to_display,
+        var start_date_input, end_date_input, days_to_display, bonus,
             that=this;
 
         start_date_input = $("#id_start_time");
         end_date_input = $("#id_end_time");
         days_to_display = $("#days_to_display");
+        bonus = $("#id_bonus");
 
         $.datepicker.initialized = false;
         $(".dropdown.date").on("click", function(){
@@ -28,14 +29,13 @@
             }
         });
 
-        days_to_display.on("change", function(){
-            that.calculate_end_date();
-
-        });
+        days_to_display.on("change", this.calculate_end_date.bind(this));
+        bonus.on("change", this.calculateTotalPrice.bind(this));
 
         this.start_date_input = start_date_input;
         this.end_date_input = end_date_input;
         this.days_to_display = days_to_display;
+        this.bonus = bonus;
 
         this.initTotalPriceCalculation();
         this.initRegionsSelection();
@@ -103,18 +103,34 @@
             this.days_to_display.keyup(this.calculateTotalPrice.bind(this));
             this.days_to_display.on("change", this.calculateTotalPrice.bind(this));
         },
+        checkBonus: function(costWithoutBonus){            
+            if(costWithoutBonus>0){
+                $(".choose-payment-system .checkbox.paypal").removeClass("disabled");
+            } else {
+                $(".choose-payment-system .checkbox").addClass("disabled");
+            }
+        },
         calculateTotalPrice: function(){
             var that = this,
                 cost = +this.days_to_display.val() * + this.dayCost.val(),
-                totalPrice = cost;
+                costWithoutBonus = cost - parseFloat(this.bonus.val()),
+                totalPrice = costWithoutBonus;
 
-            _.forEach(this.taxes, function(tax){
-                tax.calculatePrice(+cost);
-                totalPrice += +tax.price();
-            });
+            this.checkBonus(costWithoutBonus);
 
-            $(".bonus-price-output").html(cost.toFixed(2));            
-            $(".total-price-output").html(totalPrice.toFixed(2));
+            if(costWithoutBonus<0) {
+                alert("Bonus can not be greater than budget");
+                this.bonus.val(cost);
+                this.calculateTotalPrice()
+            } else {
+                _.forEach(this.taxes, function(tax){
+                    tax.calculatePrice(+costWithoutBonus);
+                    totalPrice += +tax.price();
+                });
+
+                $(".total-price-output").html(costWithoutBonus.toFixed(2));
+                $(".total-price-with-taxes-output").html(totalPrice.toFixed(2));
+            }
         },
         initRegionsSelection: function(){
             if($("#id_all_of_canada").prop("checked")){
@@ -129,12 +145,7 @@
                 }
             });
         },
-        initSwitchPaymemtModes: function(){
-            $(".choose-payment-system input").on("click", function(){
-                $(".info").removeClass("active");
-                $(".info." + document.forms["featured-events-setup"].elements["payments_module"].value).addClass("active");
-            });
-        }
+        initSwitchPaymemtModes: function(){}
     };
 
     function TaxWidget(row){

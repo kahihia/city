@@ -14,6 +14,7 @@ from gmapi.forms.widgets import LocationWidget
 from ckeditor.fields import RichTextFormField
 import dateutil.parser as dateparser
 from cities.models import Region
+from djmoney.forms.fields import MoneyField
 
 
 class SetupFeaturedForm(forms.ModelForm):
@@ -25,6 +26,8 @@ class SetupFeaturedForm(forms.ModelForm):
 
     start_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
     end_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
+
+    bonus = MoneyField(required=False)
 
     class Meta:
         model = FeaturedEvent
@@ -45,10 +48,15 @@ class SetupFeaturedForm(forms.ModelForm):
 
         all_of_canada = cleaned_data["all_of_canada"]
 
+        bonus = cleaned_data["bonus"]
+
         regions = cleaned_data["regions"]
 
         if not all_of_canada and not regions:
             raise forms.ValidationError("You should choose at least one region")
+
+        if bonus > self.account.bonus_budget:
+            raise forms.ValidationError('Ensure bonus is lower than or equal to %s' % self.account.bonus_budget)
 
         return cleaned_data
 

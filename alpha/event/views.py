@@ -415,7 +415,9 @@ def setup_featured(request, authentication_key):
 
     payments_module = request.POST.get("payments_module", "paypal")
 
-    form = SetupFeaturedForm(account, instance=featured_event)
+    form = SetupFeaturedForm(account, instance=featured_event, initial = {
+        "bonus": (0, CAD)
+    })
 
     venue_account_featured_stats = FeaturedEvent.objects.filter(event__venue_id=event.venue.id)    
 
