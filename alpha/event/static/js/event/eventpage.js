@@ -12,6 +12,7 @@
         this.reportEvent = new ReportEvent();
         this.claimEvent = new ClaimEvent();
         this.daysSwitcher = new EventDaysSwitcher();
+        this.imageViewer = new ImageViewer();
     };
 
     EventPage.prototype = {
