@@ -2,9 +2,9 @@
     Pay Now With
 </div>
 <div class="pay-now-widget">
-    <div class="info paypal {% if payments_module == "paypal" %}active{% endif %}" >
+    <div class="info active">
         <div class="budget">
-            <table>
+            <table class="taxes">
                 <tr>
                     <td>Budget(CAD):</td>
                     <td>
@@ -26,75 +26,52 @@
                         </div>
                     </td>
                 </tr>
-            </table>
-        </div>
-        <table class="taxes">
-            {% if account_taxes %}
-                {% for tax in account_taxes %}
-                    <tr class="tax-row">
-                        <td>
-                            <input type="hidden" value="{{ tax.tax }}" class="tax-input">
-                            {{ tax.name }} ({{ tax.pretty_tax }}%):
-                        </td>
-                        <td>
-                            C$<span class="tax-price">
-                                0
-                            </span>
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-            <tr class="total-price-row">
-                <td>
-                    Total:
-                </td>
-                <td>
-                    C$<span class="total-price-output">
-                        0
-                    </span>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="info bonus {% if payments_module == "bonus" %}active{% endif %}">
-        <div class="budget">
-            <table>
                 <tr>
-                    <td colspan="3">
-                        You have {{ account.bonus_budget }} bonus.
+                    <td>
+                        <div>
+                            Bonus Money {{ account.bonus_budget }}
+                        </div>
                     </td>
-                </tr>
-                <tr>
-                    <td>Budget(CAD):</td>
                     <td>
                         <input type="text" id="id_bonus_budget" name="bonus_budget" value="{{ form.bonus_budget.value.0 }}">
                         <input type="hidden" name="bonus_budget_currency" value="CAD">
                     </td>
+                    <td></td>
+                </tr>
+                {% if account_taxes %}
+                    {% for tax in account_taxes %}
+                        <tr class="tax-row">
+                            <td>
+                                <input type="hidden" value="{{ tax.tax }}" class="tax-input">
+                                {{ tax.name }} ({{ tax.pretty_tax }}%):
+                            </td>
+                            <td>
+                                C$<span class="tax-price">
+                                    0
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                <tr class="total-price-row">
                     <td>
-                        <a href="javascript:void;" class="balloon">
-                            <div class="buttonq"></div>
-                        </a>
-                        <div class="balloon-content">
-                            <h3>
-                                Help - Advertising Campaign
-                                <i>[Budget]:</i>
-                            </h3>
-                            <p>
-                                Budget for campaign
-                            </p>
-                        </div>
+                        Total:
+                    </td>
+                    <td>
+                        C$<span class="total-price-output">
+                            0
+                        </span>
                     </td>
                 </tr>
             </table>
         </div>
     </div>
-
     <div class="choose-payment-system">
         <table>
             <tr>
                 <td>
                     <div class="checkbox">
-                        <input id="payment_paypal_id" type="radio" name="payments_module" value="paypal" {% if payments_module == "paypal" %}checked="checked"{% endif %} >
+                        <input id="payment_paypal_id" type="radio" name="payment_system" value="paypal" checked="checked" >
                         <label for="payment_paypal_id"></label>
                         <label for="payment_paypal_id">
                             <img src="{{ STATIC_URL }}/images/featured/paypal.png"/>
@@ -102,14 +79,14 @@
                     </div>
                 </td>
                 <td>
-                    <div class="checkbox {% if not account.bonus_budget %}disabled{% endif %}">
-                        <input id="payment_bonus_id" type="radio" name="payments_module" value="bonus"  {% if payments_module == "bonus" %}checked="checked"{% endif %} >
-                        <label for="payment_bonus_id"></label>
-                        <label for="payment_bonus_id">
-                            <img src="{{ STATIC_URL }}/images/featured/bonus.png"/>
+                    <div class="checkbox disabled">
+                        <input id="payment_visa_id" type="radio" name="payment_system" value="visa" disabled>
+                        <label for="payment_visa_id"></label>
+                        <label for="payment_visa_id">
+                            <img src="{{ STATIC_URL }}/images/featured/visa.png"/>
                         </label>
                     </div>
-                </td>                
+                </td>
             </tr>
             <tr>
                 <td>

@@ -11,10 +11,7 @@
             this.totalPriceCalculation = new TotalPriceCalculation();
         },
         initSwitchPaymemtModes: function(){
-            $(".choose-payment-system input").on("click", function(){
-                $(".info").removeClass("active");
-                $(".info." + document.forms["advertising-campaign-deposit-funds"].elements["payments_module"].value).addClass("active");
-            });
+
         }
     };
 

@@ -204,6 +204,14 @@ body .hintbox {
 
 .pay-now-widget .budget table td:first-child {
     text-align: left;
+    width: 150px;    
+    font-size: 14px;
+}
+
+.pay-now-widget .budget table td:first-child div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .pay-now-widget .budget table td:last-child {

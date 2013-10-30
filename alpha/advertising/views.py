@@ -5,8 +5,8 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from advertising.models import AdvertisingCampaign, AdvertisingType, Advertising, AdvertisingOrder
 from advertising.forms import AdvertisingCampaignEditForm
-from advertising.payments.forms import BaseSetupForm, BaseFundForm, setup_form, fund_form
-from advertising.payments.processors import process_fund_campaign, process_setup_campaign
+from advertising.payments.forms import PaypalSetupForm, PaypalFundForm
+from advertising.payments.processors import process_payment_for_campaign
 from advertising.utils import get_chosen_advertising_types, get_chosen_advertising_payment_types, get_chosen_advertising_images
 
 from django.contrib.auth.decorators import login_required
@@ -29,9 +29,7 @@ def setup(request):
     account = Account.objects.get(user_id=request.user.id)
     campaign = AdvertisingCampaign(account=account, venue_account=request.current_venue_account)
 
-    payments_module = request.POST.get("payments_module", "paypal")
-
-    form = BaseSetupForm(account, instance=campaign, initial = { 
+    form = PaypalSetupForm(account, instance=campaign, initial = { 
         "bonus_budget": (0, CAD),
         "order_budget": (0, CAD)
     })
@@ -39,8 +37,7 @@ def setup(request):
     advertising_types = AdvertisingType.objects.filter(active=True).order_by("id")
 
     if request.method == 'POST':
-        SetupForm = setup_form(payments_module)
-        form = SetupForm(account, instance=campaign, data=request.POST, files=request.FILES)
+        form = PaypalSetupForm(account, instance=campaign, data=request.POST, files=request.FILES)
 
         if form.is_valid():
             advertising_campaign = form.save()
@@ -62,7 +59,7 @@ def setup(request):
 
                 advertising.save()
 
-            return process_setup_campaign(payments_module, account, advertising_campaign, request)
+            return process_payment_for_campaign(account, advertising_campaign, request)
 
     chosen_advertising_types = get_chosen_advertising_types(campaign, request)
     chosen_advertising_payment_types = get_chosen_advertising_payment_types(campaign, request)
@@ -74,9 +71,7 @@ def setup(request):
         "chosen_advertising_types": chosen_advertising_types,
         "chosen_advertising_payment_types": chosen_advertising_payment_types,
         "chosen_advertising_images": chosen_advertising_images,
-        "account": account,
-        "payments_module": payments_module
-
+        "account": account
     }, context_instance=RequestContext(request))
 
 
@@ -86,30 +81,26 @@ def deposit_funds_for_campaign(request, campaign_id):
     account = Account.objects.get(user_id=request.user.id)    
     campaign = AdvertisingCampaign.objects.get(id=campaign_id)
 
-    payments_module = request.POST.get("payments_module", "paypal")
-
     if campaign.account.user != request.user:
         resp = render_to_response('403.html', context_instance=RequestContext(request))
         resp.status_code = 403
         return resp
 
-    form = BaseFundForm(account=account, initial = { 
+    form = PaypalFundForm(account=account, initial = { 
         "bonus_budget": (0, CAD),
         "order_budget": (0, CAD)
     })
 
     if request.method == 'POST':
-        FundForm = fund_form(payments_module)
-        form = FundForm(account=account, data=request.POST)
+        form = PaypalFundForm(account=account, data=request.POST)
 
         if form.is_valid():
-            return process_fund_campaign(payments_module, account, campaign, request)
+            return process_payment_for_campaign(account, campaign, request)
 
     return render_to_response('advertising/campaign/deposit_funds.html', {
         "campaign": campaign,
         "form": form,
-        "account": account,
-        "payments_module": payments_module
+        "account": account
     }, context_instance=RequestContext(request))
 
 
@@ -195,8 +186,6 @@ def remove_campaign(request, campaign_id):
 def payment(request, order_id):
     order = get_object_or_404(AdvertisingOrder, pk=order_id)
 
-    # form = PaypalConfirmationForm()
-
     return render_to_response('advertising/payment.html', {
         "order": order
     }, context_instance=RequestContext(request))
@@ -204,8 +193,6 @@ def payment(request, order_id):
 def advertising_order(request, order_id):
     order = get_object_or_404(AdvertisingOrder, pk=order_id)
     payment = order.payment_set.all()[0]
-
-    # form = PaypalConfirmationForm()
 
     return render_to_response('advertising/order.html', {
         "order": order,
