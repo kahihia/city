@@ -146,9 +146,11 @@ body .hintbox {
 }
 
 .pay-now-widget {
-    margin-top: 5px;  
+    display: table;
+    margin-top: 5px;
+    padding-bottom: 10px;
     width: 650px;
-    height: 125px;
+    
     border: 1px solid #d3d3d3;
     border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -203,8 +205,9 @@ body .hintbox {
 }
 
 .pay-now-widget .budget table td:first-child {
+    white-space: nowrap;
     text-align: left;
-    width: 150px;    
+    width: 50%;
     font-size: 14px;
 }
 
@@ -212,6 +215,7 @@ body .hintbox {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 11px;
 }
 
 .pay-now-widget .budget table td:last-child {
