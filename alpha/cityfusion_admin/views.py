@@ -537,20 +537,22 @@ def change_event_owner(request, slug):
 
 @staff_member_required
 def event_mass_transfer(request):
-    events = []
+    events, owner, search = [], None, ''
     transferred_events = EventTransferring.events.through.objects.all().values_list('event_id', flat=True)
 
-    try:
-        owner = User.objects.get(pk=request.REQUEST.get('owner_id', 0))
-    except User.DoesNotExist:
-        owner = None
+    owner_id = request.REQUEST.get('owner_id', 0)
+    if owner_id:
+        try:
+            owner = User.objects.get(pk=owner_id)
+        except User.DoesNotExist:
+            owner = None
 
-    search = request.REQUEST.get('search', '')
+        search = request.REQUEST.get('search', '')
 
-    if owner:
-        events = Event.future_events.filter(owner=owner).exclude(id__in=transferred_events)
-        if search:
-            events = events.filter(name__icontains=search)
+        if owner:
+            events = Event.future_events.filter(owner=owner).exclude(id__in=transferred_events)
+            if search:
+                events = events.filter(name__icontains=search)
 
     return render_to_response('cf-admin/event_mass_transfer.html', {
         'events': events,

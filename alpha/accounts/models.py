@@ -179,6 +179,9 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     def notices(self):
         return Notice.objects.filter(user__id=self.user.id, read=False)
 
+    def notices_history(self):
+        return Notice.objects.filter(user__id=self.user.id, read=True)
+
 
 def create_facebook_profile(sender, instance, created, **kwargs):
     if created:

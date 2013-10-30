@@ -11,7 +11,10 @@
     </select>
     <select style="display:none;" data-id="venue_select">
         {% for venue_account in profile.venueaccount_set.all %}
-            <option value="{{ venue_account.id }}">{{ venue_account.venue.name }}</option>
+            <option value="{{ venue_account.id }}"
+                    data-venue-link="{% url 'public_venue_account' venue_account.slug %}">
+                {{ venue_account.venue.name }}
+            </option>
         {% endfor %}
     </select>
     <input type="button" value="Execute" class="button standart submit" data-id="execute_button" />
@@ -36,7 +39,10 @@
 
             <div class="venue-title" data-type="venue_title">
                 {% if event.venue_account_owner %}
-                    by {{ event.venue_account_owner.venue.name }}
+                    by
+                    <a href="{% url 'public_venue_account' event.venue_account_owner.slug %}">
+                        {{ event.venue_account_owner.venue.name }}
+                    </a>
                 {% endif %}
             </div>
 

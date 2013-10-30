@@ -263,7 +263,8 @@
                         var elem = $(self.eventItemSelector + "[data-event-id=" + eventId + "]")
                                     .find("[data-type=venue_title]");
                         var text = self.venueSelect.text();
-                        elem.html(text);
+                        var link = $('option:selected', self.venueSelect).data("venue-link");
+                        elem.html("by <a href='" + link + "'>" + text + "</a>");
                     }
                     else {
                         var message = $("<div/>", {
