@@ -24,19 +24,19 @@ class BasePaymentProcessor(object):
 
 class PaypalPaymentProcessor(BasePaymentProcessor):
     def process_bonus(self):
-        bonus_budget = Decimal(self.request.POST["bonus_budget"])
+        bonus = Decimal(self.request.POST["bonus"])
 
-        if bonus_budget:
+        if bonus:
             BonusAdvertisingTransaction.objects.create(
                 campaign=self.campaign,
-                budget=bonus_budget
+                budget=bonus
             )
 
-            Account.objects.filter(user_id=self.request.user.id).update(bonus_budget=F("bonus_budget")-bonus_budget)
-            AdvertisingCampaign.objects.filter(id=self.campaign.id).update(budget=F("budget")+bonus_budget)
+            Account.objects.filter(user_id=self.request.user.id).update(bonus_budget=F("bonus_budget")-bonus)
+            AdvertisingCampaign.objects.filter(id=self.campaign.id).update(budget=F("budget")+bonus)
 
     def process_order(self):
-        order_budget = Decimal(self.request.POST["order_budget"])
+        order_budget = Decimal(self.request.POST["budget"]) - Decimal(self.request.POST["bonus"])
 
         if order_budget:
             total_price = order_budget

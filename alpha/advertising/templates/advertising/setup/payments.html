@@ -8,8 +8,8 @@
                 <tr>
                     <td>Budget, C$:</td>
                     <td>
-                        <input type="text" id="id_budget" name="order_budget" value="{{ form.order_budget.value.0 }}">
-                        <input type="hidden" name="order_budget_currency" value="CAD">
+                        <input type="text" id="id_budget" name="budget" value="{{ form.budget.value.0 }}">
+                        <input type="hidden" name="budget_currency" value="CAD">
                     </td>
                     <td>
                         <a href="javascript:void;" class="balloon">
@@ -33,12 +33,22 @@
                         </div>
                     </td>
                     <td>
-                        <input type="text" id="id_bonus_budget" name="bonus_budget" value="{{ form.bonus_budget.value.0 }}">
-                        <input type="hidden" name="bonus_budget_currency" value="CAD">
+                        <input type="text" id="id_bonus" name="bonus" value="{{ form.bonus.value.0 }}">
+                        <input type="hidden" name="bonus_currency" value="CAD">
                     </td>
                     <td></td>
                 </tr>
-                
+
+                <tr class="total-price-row" {% if account.bonus_budget.amount <= 0 %}style="display: none;"{% endif %}>
+                    <td>
+                        Due:
+                    </td>
+                    <td>
+                        C$<span class="total-price-output">
+                            0
+                        </span>
+                    </td>
+                </tr>                
                 {% if account_taxes %}
                     {% for tax in account_taxes %}
                         <tr class="tax-row">
@@ -56,24 +66,14 @@
                 {% endif %}
                 <tr class="total-price-row">
                     <td>
-                        Due:
-                    </td>
-                    <td>
-                        C$<span class="total-price-output">
-                            0
-                        </span>
-                    </td>
-                </tr>
-                <tr class="total-budget-row" {% if account.bonus_budget.amount <= 0 %}style="display: none;"{% endif %}>
-                    <td>
                         Total Due:
                     </td>
                     <td>
-                        C$<span class="total-budget-output">
+                        C$<span class="total-price-with-taxes-output">
                             0
                         </span>
                     </td>
-                </tr>
+                </tr>                
             </table>
         </div>
     </div>
