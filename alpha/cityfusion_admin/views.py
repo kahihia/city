@@ -602,6 +602,7 @@ def change_event_owner_ajax(request):
             }, {
                 'event_count': len(events),
                 'event_links': event_links,
+                'date': datetime.date.today().strftime('%A, %b. %d'),
                 'accept_link': reverse('accept_transferring', kwargs={'transferring_id': event_transferring.id}),
                 'reject_link': reverse('reject_transferring', kwargs={'transferring_id': event_transferring.id})
             })

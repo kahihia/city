@@ -1,3 +1,14 @@
 <div class="notice-item-history" data-type="notice_item">
-    {{ event_count }} events have been transferred to you.
+    {{ event_count }} events have been transferred to you by CityFusion administration on the {{ date }}.
+    <br/><br/>
+    <div data-type="accordion">
+        <h3>Event list:</h3>
+        <div>
+            {% for name, link in event_links %}
+                <p>
+                    <a href="{{ link }}" target="_blank">{{ name }}</a>
+                </p>
+            {% endfor %}
+        </div>
+    </div>
 </div>

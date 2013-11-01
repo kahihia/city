@@ -742,9 +742,17 @@
     top: -9px;
 }
 
+.notice-item a,
+.notice-item-history a {
+    text-decoration: underline;
+}
+
 .notice-item a {
     color: #468847;
-    text-decoration: underline;
+}
+
+.notice-item-history a {
+    color: #222222;
 }
 
 .notice-item a.b {
@@ -756,20 +764,43 @@
     border: 1px solid #82a673;
 }
 
-.notice-item .ui-accordion-header {
+.notice-item-history .ui-state-default {
+    background: #bbbbbb;
+    border: 1px solid #666666;
+}
+
+.notice-item .ui-accordion-header,
+.notice-item-history .ui-accordion-header {
     padding-left: 15px;
+    font-size: 13px;
+}
+
+.notice-item .ui-accordion-header {
     color: #468847;
+}
+
+.notice-item-history .ui-accordion-header {
+    color: #222222;
+}
+
+.notice-item .ui-accordion-content,
+.notice-item-history .ui-accordion-content {
+    padding: 0 15px;
     font-size: 13px;
 }
 
 .notice-item .ui-accordion-content {
     background: #adc8a2;
     border: 1px solid #82a673;
-    padding: 0 15px;
-    font-size: 13px;
 }
 
-.notice-item .ui-accordion-header .ui-icon {
+.notice-item-history .ui-accordion-content {
+    background: #bbbbbb;
+    border: 1px solid #666666;
+}
+
+.notice-item .ui-accordion-header .ui-icon,
+.notice-item-history .ui-accordion-header .ui-icon {
     left: 1px;
 }
 

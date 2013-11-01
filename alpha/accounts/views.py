@@ -649,7 +649,7 @@ def reject_transferring(request, transferring_id):
         transferring = None
 
     if transferring and transferring.target:
-        for event in transferring.events:
+        for event in transferring.events.all():
             transferring.events.remove(event)
 
         transferring.delete()
