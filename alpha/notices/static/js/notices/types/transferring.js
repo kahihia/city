@@ -18,5 +18,12 @@
 
             return false;
         });
+
+        $("[data-type=accordion]").each(function() {
+            $(this).accordion({
+                collapsible: true,
+                active: false
+            });
+        });
     });
 })(jQuery, window, document);

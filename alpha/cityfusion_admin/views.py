@@ -589,12 +589,19 @@ def change_event_owner_ajax(request):
     finally:
         if is_last and target and event_transferring:
             events = list(event_transferring.events.all())
+            event_links = []
+            for event in events:
+                date = event.next_day().start_time.strftime('%Y-%m-%d')
+                link = reverse('event_view', kwargs={'slug': event.slug, 'date': date})
+                event_links.append((event.name, link))
+
             notice_services.create_notice('transferring', target, {
                 'subject': 'CityFusion: events have been transferred to you.',
                 'user': target,
                 'events': events
             }, {
                 'event_count': len(events),
+                'event_links': event_links,
                 'accept_link': reverse('accept_transferring', kwargs={'transferring_id': event_transferring.id}),
                 'reject_link': reverse('reject_transferring', kwargs={'transferring_id': event_transferring.id})
             })

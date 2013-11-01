@@ -51,6 +51,7 @@
     <h1>
         My account
     </h1>
+    {% include 'notices/_list.html' with notices=profile.notices %}
     <div class="content account-profile">
         <div class="main-content">
             <div class="account-left">
@@ -114,7 +115,6 @@
                 
                 {% venue_accounts %}
             </div>
-            {% include 'notices/_list.html' with notices=profile.notices %}
             <div class="clr"></div>
         </div>
     </div>

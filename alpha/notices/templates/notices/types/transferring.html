@@ -4,6 +4,17 @@
             data-type="notice_close_button"
             data-notice-id="{{ notice_id }}">×</button>
     {{ event_count }} events have been transferred to you. You can
-    <a href="{{ accept_link }}" data-type="transferring_accept_link">Accept</a>
-    or <a href="{{ reject_link }}" data-type="transferring_reject_link">Reject</a> them.
+    <a class="b" href="{{ accept_link }}" data-type="transferring_accept_link">Accept</a>
+    or <a class="b" href="{{ reject_link }}" data-type="transferring_reject_link">Reject</a> them.
+    <br/><br/>
+    <div data-type="accordion">
+        <h3>Event list:</h3>
+        <div>
+            {% for name, link in event_links %}
+                <p>
+                    <a href="{{ link }}" target="_blank">{{ name }}</a>
+                </p>
+            {% endfor %}
+        </div>
+    </div>
 </div>
