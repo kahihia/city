@@ -125,6 +125,9 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     def featured_events(self):
         return FeaturedEvent.objects.filter(owner__id=self.id)
 
+    def archived_events(self):
+        return SingleEvent.archived_events.filter(event__owner_id=self.id)
+
     def in_the_loop_events(self):
         region_ids = self.regions.all().values_list("id", flat=True)
         city_ids = self.cities.all().values_list("id", flat=True)

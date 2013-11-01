@@ -23,6 +23,7 @@
         var that = this;
 
         this.budget = $("#id_budget");
+        this.bonus = $("#id_bonus");
         this.taxes = [];
 
         this.taxRows = $(".tax-row");
@@ -36,20 +37,39 @@
 
         this.budget.keyup(this.calculateTotalPrice.bind(this));
         this.budget.on("change", this.calculateTotalPrice.bind(this));
+
+        this.bonus.keyup(this.calculateTotalPrice.bind(this));
+        this.bonus.on("change", this.calculateTotalPrice.bind(this));
     }
 
     TotalPriceCalculation.prototype = {
+        checkBonus: function(){
+            var bonus = +this.bonus.val(),
+                budget = +this.budget.val();
+            if(bonus>budget) {
+                alert("Bonus can not be greater than budget");
+                this.bonus.val("0.0");
+            }
+            if(bonus!=budget) {
+                $(".choose-payment-system .checkbox.paypal").removeClass("disabled");
+            } else {
+                $(".choose-payment-system .checkbox").addClass("disabled");
+            }
+        },
         calculateTotalPrice: function(){
-            var that = this;
-            var totalPrice = +that.budget.val();
+            this.checkBonus();
+
+            var totalPrice = +this.budget.val() - parseFloat(this.bonus.val()),
+                totalPriceWithTaxes = totalPrice;            
 
             _.forEach(this.taxes, function(tax){
-                tax.calculatePrice(+that.budget.val());
-                totalPrice += +tax.price();
-            });
+                tax.calculatePrice(totalPrice);
+                totalPriceWithTaxes += +tax.price();
+            });            
 
             $(".total-price-output").html(totalPrice.toFixed(2));
-        }        
+            $(".total-price-with-taxes-output").html(totalPriceWithTaxes.toFixed(2));
+        }
     };   
 
 

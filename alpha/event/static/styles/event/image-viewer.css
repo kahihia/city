@@ -1,0 +1,33 @@
+.image-viewer {
+    width: 265px;
+    overflow: hidden;
+    position: relative;
+}
+
+.image-viewer-content {
+    position: relative;
+    left: 0;
+    width: 100000px;
+}
+
+.image-viewer-content a {
+    float:left;
+}
+
+.image-viewer .image-viewer-controls {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    bottom: 5px;
+    left: 5px;
+    width: 249px;
+    color: #fff;
+    padding: 3px;
+}
+
+.image-viewer .image-viewer-controls .prev,
+.image-viewer .image-viewer-controls .next {
+    float: right;
+    margin-right: 5px;
+    margin-top: 3px;
+    cursor: pointer;
+}

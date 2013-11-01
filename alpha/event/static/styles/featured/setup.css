@@ -74,7 +74,7 @@
     font-size: 16px;
     font-style: italic;
     font-weight: bold;
-    margin-left: 360px;
+    margin-left: 380px;
 }
 
 .pay-now-widget {
@@ -101,8 +101,9 @@
 
 .pay-now-widget .info {
     float: left;
-    margin: 20px;    
-    width: 265px;
+    margin-left: 15px;    
+    margin-top: 15px;
+    width: 340px;
     color: #000;
     font-size: 16px;
     font-style: italic;
@@ -110,12 +111,24 @@
     display: none;
 }
 
+
+
 .pay-now-widget .info.active {
     display: block;
 }
 
-.pay-now-widget .info table.taxes {
-    width: 220px;
+.pay-now-widget .info table td:first-child {
+    white-space: nowrap;
+    text-align: left;
+    width: 50%;
+    font-size: 14px;
+}
+
+.pay-now-widget .info table td:first-child div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 11px;
 }
 
 .pay-now-widget .info table.taxes .total-price-row {

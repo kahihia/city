@@ -3,8 +3,30 @@
 </div>
 <div class="pay-now-widget">
     <input type="hidden" value="2" id="id_day_cost">
-    <div class="info paypal {% if payments_module == "paypal" %}active{% endif %}">
-        <table class="taxes">
+    <div class="info active">
+        <table class="taxes">            
+            <tr {% if account.bonus_budget.amount <= 0 %}style="display: none;"{% endif %}>
+                <td>
+                    <div>
+                        Apply Bonus? (up to {{ account.bonus_budget }})
+                    </div>
+                </td>
+                <td>
+                    <input type="text" id="id_bonus" name="bonus" value="{{ form.bonus.value.0 }}">
+                    <input type="hidden" name="bonus_currency" value="CAD">
+                </td>
+                <td></td>
+            </tr>
+            <tr class="total-price-row" {% if account.bonus_budget.amount <= 0 %}style="display: none;"{% endif %}>
+                <td>
+                    Due:
+                </td>
+                <td>
+                    C$<span class="total-price-output">
+                        0
+                    </span>
+                </td>
+            </tr>
             {% if account_taxes %}
                 {% for tax in account_taxes %}
                     <tr class="tax-row">
@@ -22,41 +44,22 @@
             {% endif %}
             <tr class="total-price-row">
                 <td>
-                    Total:
+                    Total Due:
                 </td>
                 <td>
-                    C$<span class="total-price-output">
+                    C$<span class="total-price-with-taxes-output">
                         0
                     </span>
                 </td>
             </tr>
         </table>
-    </div>
-    <div class="info bonus {% if payments_module == "bonus" %}active{% endif %}">
-        <table class="taxes">
-            <tr>
-                <td colspan="3">
-                    You have {{ account.bonus_budget }} bonus.
-                </td>
-            </tr>
-            <tr class="total-price-row">
-                <td>
-                    Budget:
-                </td>
-                <td>
-                    C$<span class="bonus-price-output">
-                        0
-                    </span>
-                </td>
-            </tr>
-        </table>
-    </div>
+    </div>    
     <div class="choose-payment-system">
         <table>
             <tr>
                 <td>
-                    <div class="checkbox">
-                        <input id="payment_paypal_id" type="radio" name="payments_module" value="paypal" {% if payments_module == "paypal" %}checked="checked"{% endif %} >
+                    <div class="checkbox paypal">
+                        <input id="payment_paypal_id" type="radio" name="payment_system" value="paypal" checked="checked" >
                         <label for="payment_paypal_id"></label>
                         <label for="payment_paypal_id">
                             <img src="{{ STATIC_URL }}/images/featured/paypal.png"/>
@@ -64,11 +67,11 @@
                     </div>
                 </td>
                 <td>
-                    <div class="checkbox {% if not account.bonus_budget %}disabled{% endif %}">
-                        <input id="payment_bonus_id" type="radio" name="payments_module" value="bonus"  {% if payments_module == "bonus" %}checked="checked"{% endif %} >
-                        <label for="payment_bonus_id"></label>
-                        <label for="payment_bonus_id">
-                            <img src="{{ STATIC_URL }}/images/featured/bonus.png"/>
+                    <div class="checkbox disabled">
+                        <input id="payment_visa_id" type="radio" name="payment_system" value="visa" disabled>
+                        <label for="payment_visa_id"></label>
+                        <label for="payment_visa_id">
+                            <img src="{{ STATIC_URL }}/images/featured/visa.png"/>
                         </label>
                     </div>
                 </td>

@@ -256,19 +256,13 @@
                 return;
             }
 
-            FB.getLoginStatus(function(response) {
-                if (response.status === 'connected') {
-                    successCallback();
-                } else {
-                    FB.login(function(response) {
-                        if (response.authResponse) {
-                            $.post(self.clearGraphUrl, "", function(data) {
-                               if(data.success) {
-                                   successCallback();
-                               }
-                            }, 'json');
-                        }
-                    });
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    $.post(self.clearGraphUrl, "", function(data) {
+                       if(data.success) {
+                           successCallback();
+                       }
+                    }, 'json');
                 }
             });
         };

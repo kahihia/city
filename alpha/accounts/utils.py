@@ -52,7 +52,7 @@ def find_similar_events(events):
 
 
 def remind_account_about_events_with_email(account, single_events):
-    featured_events = Event.featured_events_for_region(account.native_region)
+    featured_events = Event.featured_events_for_region(account.native_region)[0:4]
 
     similar_events = find_similar_events(
         Event.future_events.filter(id__in=single_events.values_list("event_id", flat=True))
@@ -107,7 +107,7 @@ def remind_account_about_deleted_events(account, single_events):
 
 
 def remind_account_about_deleted_events_with_email(account, single_events):
-    featured_events = Event.featured_events_for_region(account.native_region)
+    featured_events = Event.featured_events_for_region(account.native_region)[:4]
     subject = 'Deleted events from cityfusion'
 
     message = render_to_string('accounts/emails/reminder_deleted_event_email.html', {

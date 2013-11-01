@@ -30,8 +30,8 @@ def setup(request):
     campaign = AdvertisingCampaign(account=account, venue_account=request.current_venue_account)
 
     form = PaypalSetupForm(account, instance=campaign, initial = { 
-        "bonus_budget": (0, CAD),
-        "order_budget": (0, CAD)
+        "bonus": (0, CAD),
+        "budget": (0, CAD)
     })
 
     advertising_types = AdvertisingType.objects.filter(active=True).order_by("id")
@@ -87,8 +87,8 @@ def deposit_funds_for_campaign(request, campaign_id):
         return resp
 
     form = PaypalFundForm(account=account, initial = { 
-        "bonus_budget": (0, CAD),
-        "order_budget": (0, CAD)
+        "bonus": (0, CAD),
+        "budget": (0, CAD)
     })
 
     if request.method == 'POST':

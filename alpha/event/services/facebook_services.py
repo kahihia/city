@@ -290,7 +290,13 @@ def _get_time_range_json(start_time, end_time):
     while not is_last:
         start = start_time.strftime('%-1I:%M %p') if is_first else '12:00 AM'
         if start_time.strftime('%d%m%Y') != end_time.strftime('%d%m%Y'):
-            end = '11:59 PM'
+            delta = datetime.date(end_time.year, end_time.month, end_time.day)\
+                    - datetime.date(start_time.year, start_time.month, start_time.day)
+            if is_first and delta.days == 1:
+                end = end_time.strftime('%-1I:%M %p')
+                is_last = True
+            else:
+                end = '11:59 PM'
         else:
             end = end_time.strftime('%-1I:%M %p')
             is_last = True
