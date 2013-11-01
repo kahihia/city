@@ -180,10 +180,10 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
         )
 
     def notices(self):
-        return Notice.objects.filter(user__id=self.user.id, read=False)
+        return Notice.objects.filter(user__id=self.user.id, read=False).order_by('-id')
 
     def notices_history(self):
-        return Notice.objects.filter(user__id=self.user.id, read=True)
+        return Notice.objects.filter(user__id=self.user.id).order_by('-id')
 
 
 def create_facebook_profile(sender, instance, created, **kwargs):
