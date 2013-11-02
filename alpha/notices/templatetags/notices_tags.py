@@ -13,6 +13,7 @@ def notice_item(context, notice, history=False):
     params = json.loads(notice.log)
     params['notice_id'] = notice.id
     params['csrf_token'] = context['csrf_token']
+    params['read'] = notice.read
 
     template_name = notice.type + '_history' if history else notice.type
     return render_to_string('notices/types/%s.html' % template_name, params)
