@@ -20,17 +20,6 @@
             var noticeItem = button.closest(self.noticeItemSelector);
 
             self.readNotice(csrf, noticeId, noticeItem);
-
-//            var params = {
-//                "csrfmiddlewaretoken": csrf,
-//                "notice_id": button.data("notice-id")
-//            };
-//
-//            $.post(self.readNoticeUrl, params, function(data) {
-//                if(data.success) {
-//                    button.closest(self.noticeItemSelector).remove();
-//                }
-//            }, 'json');
         };
 
         self.readNotice = function(csrf, noticeId, noticeItem) {
