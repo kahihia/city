@@ -403,7 +403,7 @@ def _get_images_json(image_source):
 
 
 def _send_multipart_data(url, values):
-    """ Generate and send multipart image data
+    """ Generate and send multipart data
 
     @type url: str
     @type values: dict
