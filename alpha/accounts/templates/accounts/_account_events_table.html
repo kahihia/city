@@ -33,6 +33,7 @@
         <div class="entry-info {% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}"
              data-type="event_item"
              data-event-id="{{ event.event.id }}"
+             data-single-event-id="{{ event.id }}"
              {% if event.facebook_event %}data-facebook-event-id="{{ event.facebook_event.eid }}"{% endif %}>
 
             {% short_single_event event %}

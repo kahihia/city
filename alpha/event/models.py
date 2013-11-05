@@ -163,14 +163,9 @@ class Event(models.Model):
     website = models.URLField(blank=True, null=True, default='')
     tickets = models.CharField('tickets', max_length=250, blank=True, null=True)
 
-    post_to_facebook = models.BooleanField(default=False, blank=True)
-    comment_for_facebook = models.CharField(max_length=255, blank=True, null=True)
-
     audited = models.BooleanField(default=False)
 
     viewed_times = models.IntegerField(default=0, blank=True, null=True)
-
-    facebook_event = models.ForeignKey('FacebookEvent', blank=True, null=True)
 
     event_type = models.CharField(max_length=10, choices=EVENT_TYPES, default="SINGLE")
 
@@ -250,7 +245,7 @@ class Event(models.Model):
         return self.description
 
     def is_fb_posted(self):
-        return self.post_to_facebook and self.facebook_event
+        return self.facebook_event
 
     @property
     def first_occurrence(self):
@@ -411,6 +406,7 @@ class SingleEvent(models.Model):
     end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
     description = models.TextField(null=True, blank=True)
     is_occurrence = models.BooleanField(default=False)
+    facebook_event = models.ForeignKey('FacebookEvent', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.end_time < self.start_time:

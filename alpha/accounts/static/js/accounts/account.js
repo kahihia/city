@@ -104,7 +104,10 @@
 
                     var ids = [];
                     $.each(checkedEvents, function() {
-                        ids.push($(this).data("event-id"));
+                        var eventId = $(this).data("event-id");
+                        if($.inArray(eventId, ids) === -1) {
+                            ids.push(eventId);
+                        }
                     });
 
                     self.executeFBPosting(ids);
@@ -208,13 +211,13 @@
                         self.successProcessCount++;
                         message.html(self.successProcessCount + " out of " + self.eventsToProcessCount
                                               + " events posted to Facebook.");
-
-                        $(self.eventCheckerSelector + "[data-event-id=" + eventId + "]").each(function() {
+                        $.each(data.facebook_event_ids, function(singleEventId, fbEventId) {
+                            var checker = $(self.eventCheckerSelector + "[data-single-event-id=" + singleEventId + "]");
                             var link = self.facebookLinkTpl.clone();
-                            link.attr("href", "https://www.facebook.com/events/" + data.facebook_event_id + "/");
+                            link.attr("href", "https://www.facebook.com/events/" + fbEventId + "/");
 
-                            $(this).parent().attr("data-facebook-event-id", data.facebook_event_id);
-                            $(this).replaceWith(link);
+                            checker.parent().attr("data-facebook-event-id", fbEventId);
+                            checker.replaceWith(link);
                         });
                     }
                     else {
@@ -324,8 +327,10 @@
                 }
                 else {
                     var eventId = $(this).data("event-id");
+                    var singleEventId = $(this).data("single-event-id");
                     var check = self.eventCheckTpl.clone();
                     check.attr("data-event-id", eventId);
+                    check.attr("data-single-event-id", singleEventId);
 
                     var existingCheck = $(this).find(self.eventCheckerSelector + ":checked");
                     if(existingCheck.length !== 0) {
