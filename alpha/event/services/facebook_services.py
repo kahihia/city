@@ -149,7 +149,7 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
 
     common_params = {
         'name': event.name,
-        'description': description,
+        'description': unicode(description).encode('utf-8'),
         'location': location
     }
 
