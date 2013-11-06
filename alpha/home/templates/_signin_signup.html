@@ -6,7 +6,8 @@
         <ul>
             {% if user.is_authenticated %}
                 <li class="user-profile">
-                    {% if not current_venue_account %} 
+                    {% if not current_venue_account %}
+                        {% notices_block user %}
                         <a href="{% url 'userena_profile_detail' user.username %}">
                             <img src="{{ request.account.get_mugshot_url }}" alt="Your mugshot" widrh="29" height="29" />
                             <span>
@@ -27,7 +28,6 @@
                     {% endif %}
                     <div class="choose-user-profile-button">
                     </div>
-                    {% notices_block user %}
                 </li>                
                 <li>
                     <a href="{% url 'userena_signout' %}">Sign out</a>

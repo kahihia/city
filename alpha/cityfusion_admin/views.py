@@ -537,20 +537,22 @@ def change_event_owner(request, slug):
 
 @staff_member_required
 def event_mass_transfer(request):
-    events = []
+    events, owner, search = [], None, ''
     transferred_events = EventTransferring.events.through.objects.all().values_list('event_id', flat=True)
 
-    try:
-        owner = User.objects.get(pk=request.REQUEST.get('owner_id', 0))
-    except User.DoesNotExist:
-        owner = None
+    owner_id = request.REQUEST.get('owner_id', 0)
+    if owner_id:
+        try:
+            owner = User.objects.get(pk=owner_id)
+        except User.DoesNotExist:
+            owner = None
 
-    search = request.REQUEST.get('search', '')
+        search = request.REQUEST.get('search', '')
 
-    if owner:
-        events = Event.future_events.filter(owner=owner).exclude(id__in=transferred_events)
-        if search:
-            events = events.filter(name__icontains=search)
+        if owner:
+            events = Event.future_events.filter(owner=owner).exclude(id__in=transferred_events)
+            if search:
+                events = events.filter(name__icontains=search)
 
     return render_to_response('cf-admin/event_mass_transfer.html', {
         'events': events,
@@ -587,12 +589,20 @@ def change_event_owner_ajax(request):
     finally:
         if is_last and target and event_transferring:
             events = list(event_transferring.events.all())
+            event_links = []
+            for event in events:
+                date = event.next_day().start_time.strftime('%Y-%m-%d')
+                link = reverse('event_view', kwargs={'slug': event.slug, 'date': date})
+                event_links.append((event.name, link))
+
             notice_services.create_notice('transferring', target, {
                 'subject': 'CityFusion: events have been transferred to you.',
                 'user': target,
                 'events': events
             }, {
                 'event_count': len(events),
+                'event_links': event_links,
+                'date': datetime.datetime.now().strftime('%A, %b. %d, %I:%M %p'),
                 'accept_link': reverse('accept_transferring', kwargs={'transferring_id': event_transferring.id}),
                 'reject_link': reverse('reject_transferring', kwargs={'transferring_id': event_transferring.id})
             })

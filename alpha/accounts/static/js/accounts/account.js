@@ -104,7 +104,10 @@
 
                     var ids = [];
                     $.each(checkedEvents, function() {
-                        ids.push($(this).data("event-id"));
+                        var eventId = $(this).data("event-id");
+                        if($.inArray(eventId, ids) === -1) {
+                            ids.push(eventId);
+                        }
                     });
 
                     self.executeFBPosting(ids);
@@ -209,12 +212,23 @@
                         message.html(self.successProcessCount + " out of " + self.eventsToProcessCount
                                               + " events posted to Facebook.");
 
-                        $(self.eventCheckerSelector + "[data-event-id=" + eventId + "]").each(function() {
-                            var link = self.facebookLinkTpl.clone();
-                            link.attr("href", "https://www.facebook.com/events/" + data.facebook_event_id + "/");
+                        var index = 0;
+                        $.each(data.facebook_event_ids, function(singleEventId, fbEventId) {
+                            var checker = $(self.eventCheckerSelector + "[data-single-event-id=" + singleEventId + "]");
+                            if(checker.length === 0 && index === 0) {
+                                var eventChecker = $(self.eventCheckerSelector + "[data-event-id=" + eventId + "]");
+                                if(!data.facebook_event_ids[eventChecker.attr("single-event-id")]) {
+                                    checker = eventChecker;
+                                }
+                            }
 
-                            $(this).parent().attr("data-facebook-event-id", data.facebook_event_id);
-                            $(this).replaceWith(link);
+                            var link = self.facebookLinkTpl.clone();
+                            link.attr("href", "https://www.facebook.com/events/" + fbEventId + "/");
+
+                            checker.parent().attr("data-facebook-event-id", fbEventId);
+                            checker.replaceWith(link);
+
+                            index++;
                         });
                     }
                     else {
@@ -263,7 +277,8 @@
                         var elem = $(self.eventItemSelector + "[data-event-id=" + eventId + "]")
                                     .find("[data-type=venue_title]");
                         var text = self.venueSelect.text();
-                        elem.html(text);
+                        var link = $('option:selected', self.venueSelect).data("venue-link");
+                        elem.html("by <a href='" + link + "'>" + text + "</a>");
                     }
                     else {
                         var message = $("<div/>", {
@@ -323,8 +338,10 @@
                 }
                 else {
                     var eventId = $(this).data("event-id");
+                    var singleEventId = $(this).data("single-event-id");
                     var check = self.eventCheckTpl.clone();
                     check.attr("data-event-id", eventId);
+                    check.attr("data-single-event-id", singleEventId);
 
                     var existingCheck = $(this).find(self.eventCheckerSelector + ":checked");
                     if(existingCheck.length !== 0) {

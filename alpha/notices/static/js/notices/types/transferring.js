@@ -7,16 +7,23 @@
             var link = $(this);
             var csrf = link.closest(window.noticesService.noticeItemSelector)
                            .find("input[name=csrfmiddlewaretoken]").val();
+            var noticeId = link.data("notice-id");
+            var noticeItem = link.closest(window.noticesService.noticeItemSelector);
 
-            $.post(link.attr("href"), {"csrfmiddlewaretoken": csrf}, function(data) {
+            $.post(link.attr("href"), {"csrfmiddlewaretoken": csrf, "notice_id": noticeId}, function(data) {
                 if(data.success) {
-                    link.closest(window.noticesService.noticeItemSelector)
-                        .find(window.noticesService.closeButtonSelector)
-                        .trigger("click");
+                    noticeItem.remove();
                 }
             }, 'json');
 
             return false;
+        });
+
+        $("[data-type=accordion]").each(function() {
+            $(this).accordion({
+                collapsible: true,
+                active: false
+            });
         });
     });
 })(jQuery, window, document);

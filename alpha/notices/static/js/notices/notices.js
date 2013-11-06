@@ -16,15 +16,21 @@
         self.onCloseButtonClick = function() {
             var button = $(this);
             var csrf = button.closest(self.noticeItemSelector).find("input[name=csrfmiddlewaretoken]").val();
+            var noticeId = button.data("notice-id");
+            var noticeItem = button.closest(self.noticeItemSelector);
 
+            self.readNotice(csrf, noticeId, noticeItem);
+        };
+
+        self.readNotice = function(csrf, noticeId, noticeItem) {
             var params = {
                 "csrfmiddlewaretoken": csrf,
-                "notice_id": button.data("notice-id")
+                "notice_id": noticeId
             };
 
             $.post(self.readNoticeUrl, params, function(data) {
                 if(data.success) {
-                    button.closest(self.noticeItemSelector).remove();
+                    noticeItem.remove();
                 }
             }, 'json');
         };

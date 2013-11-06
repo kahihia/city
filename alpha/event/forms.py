@@ -145,11 +145,6 @@ class EditEventForm(forms.ModelForm):
     price = forms.CharField(
         required=False,
         initial="$"
-    )    
-
-    post_to_facebook = forms.BooleanField(
-        widget=RadioSelect(choices=YES_OR_NO),
-        required=False,
     )
 
     images = forms.CharField(
@@ -159,7 +154,6 @@ class EditEventForm(forms.ModelForm):
 
     website = forms.URLField(required=False)
     tickets = forms.CharField(required=False)
-    comment_for_facebook = forms.CharField(required=False)
 
     def __init__(self, account, *args, **kwargs):
         self.city_required = False
@@ -197,8 +191,6 @@ class EditEventForm(forms.ModelForm):
 
         self.fields['website'].widget.attrs['tabindex'] = 6
         self.fields['website'].error_messages['invalid'] = 'Enter a valid website url'
-
-        self.fields['comment_for_facebook'].widget.attrs['tabindex'] = 10
 
         self.fields['tags'].error_messages['required'] = 'Please enter at least one tag'
         self.fields['tags'].widget.attrs['tabindex'] = 11
