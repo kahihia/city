@@ -14,6 +14,13 @@ def dev():
     env.password = "123forfusion"
     env.branch = "master"
 
+def redesign():
+    env.hosts = ['root@dev.cityfusion.ca']
+    env.project_folder = '/root/cityfusion_redesign'
+    env.alpha_folder = '/root/cityfusion_redesign/alpha'
+    env.password = "123forfusion"
+    env.branch = "redesign"
+
 def free_try():
     env.hosts = ['root@dev.cityfusion.ca']
     env.project_folder = '/root/cityfusion_git'

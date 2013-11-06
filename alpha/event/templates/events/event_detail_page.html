@@ -63,11 +63,11 @@
 {% endblock messages %}
 {% block page %}
     <div id="fb-root"></div>
-    <div class="primary-content">
+    <div class="primary-content event-details-primary-content">
         <h1>
             <a href="{% event_link event %}">{{event.name}}</a>
         </h1>
-        <div class="primary-content">
+        <div class="primary-content event-details-primary-content">
             <div class="event-wrapper">
                 {% manage_event_actions %}
                 <table>
@@ -278,7 +278,7 @@
             </div>
         </div>
 
-        <div class="primary-content">
+        <div class="primary-content event-details-primary-content">
             <header class="event-conversation-header">
                 Join a conversation about "{{ event.name }}"
             </header>
