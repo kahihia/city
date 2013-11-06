@@ -70,7 +70,7 @@
         <div class="content">
             <div class="event-wrapper">
                 <div class="event-photo{% if event.event_type == "MULTIDAY" %}{% if not event.venue_account_owner or not event.venue_account_owner.public %} multiday{% endif %}{% endif %}">
-                    {% if event.sorted_images.count > 1 %}
+                    {% if event.sorted_images.count > 0 %}
                         <div class="image-viewer">
                             <div class="image-viewer-content">
                             {% for image in event.sorted_images %}
@@ -81,13 +81,15 @@
                             {% endfor %}
                             </div>
 
+                            {% if event.sorted_images.count > 1 %}
                             <div class="image-viewer-controls">                                
                                 <div class="next" data-ga-label="Photo Scroll Link"><i class="icon-chevron-right"></i></div>
                                 <div class="prev"><i class="icon-chevron-left"></i></div>
                                 <span class="page-no">1</span> of <span id="images-total">{{ event.sorted_images.count }}</span>
                             </div>
+                            {% endif %}
                         </div>
-                    {% elif event.sorted_images.count > 0 %}
+                    {% else %}
                         <div class="center-cropped default" style="background-image: url('{{STATIC_URL}}images/default-event.jpg');"></div>
                     {% endif %}
                     {% if event.venue_account_owner and event.venue_account_owner.public %}
