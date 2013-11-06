@@ -427,7 +427,7 @@ def setup_featured(request, authentication_key):
         if form.is_valid():
             featured_event = form.save()
 
-            return process_setup_featured(payments_module, account, featured_event, request)
+            return process_setup_featured(account, featured_event, request)
 
     return render_to_response('events/setup_featured_event.html', {
             'form': form,
