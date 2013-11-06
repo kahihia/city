@@ -34,21 +34,6 @@ class WhenWidget(forms.TextInput):
         )
 
 
-class PriceWidget(forms.TextInput):
-    class Media(object):
-        js = (
-            u'%sjs/price.js' % STATIC_PREFIX,
-        )
-
-    def render(self, name, value, *args, **kwargs):
-        html = """<div class="checkbox"><input type='checkbox' id="id_price_free" """
-        if value=="Free":
-            html += ' checked="checked" '
-        html += """><label for="id_price_free"></label><label for="id_price_free" class="price-free-label">Free</label></div>"""
-        html += super(forms.TextInput, self).render(name, value, *args, **kwargs)
-        return mark_safe(html)
-
-
 class GeoCompleteWidget(forms.TextInput):
     def __init__(self, *args, **kw):
         super(GeoCompleteWidget, self).__init__(*args, **kw)
@@ -178,6 +163,7 @@ class AttachmentsWidget(forms.TextInput):
 class EventImagesWidget(forms.TextInput):
     class Media:
         js = (
+            "%simage_cropping/js/jquery.Jcrop.min.js" % STATIC_PREFIX,
             "%sjs/fileuploader.js" % STATIC_PREFIX,
             "%sjs/create_event/images.js" % STATIC_PREFIX,
         )
@@ -242,7 +228,10 @@ class ChooseUserContextWidget(forms.Widget):
             return user_context_id
 
     def render(self, name, value, *args, **kwargs):
-        html = """<div class="dropdown venue-account-owner-dropdown inputfield rborder" data-dropdown-class="venue-account-owner-dropdown-list"><select id="id_venue_account_owner">"""
+        html = """
+            <div class="dropdown venue-account-owner-dropdown" data-dropdown-class="venue-account-owner-dropdown-list">
+                <select id="id_venue_account_owner">
+        """
         for choice in self.choices:
             html += "<option"
             if choice["id"] == value:

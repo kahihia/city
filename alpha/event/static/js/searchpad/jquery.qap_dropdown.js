@@ -1,95 +1,84 @@
-(function ($) {
-    $.fn.qap_dropdown = function () {
-        this.each(function () {
-            if(this.isDropdown) return;
-            this.isDropdown = true;
-            var element = $(this),
-                item_pos = jQuery(this).offset(),
-                dropdownClass = jQuery(this).data("dropdown-class");
+;(function($, window, document, undefined) {
+    'use strict';    
 
-            // hasChild() workaround
-            if (element.children('label.dropdown-label').length > 0 && element.children('label.dropdown-spanner').length > 0 && element.children('div.dropdown-content').length > 0) {
-                return false;
+    function Dropdown(element, options){
+        var that=this;
+        element = $(element);
+        this.element = element;
+        this.itemPosition = jQuery(element).offset();
+        this.dropdownClass = jQuery(element).data("dropdown-class");
+
+        this.select = element.children('select');
+        this.build();
+
+        this.element.on('click', this.open.bind(this));
+
+        if(that.element.data("value")){
+            $("[value='"+ this.element.data("value") +"']", this.content).click();
+        }
+
+        if(options) {
+            this.onChange = options.onChange;
+        }
+        
+    }
+
+    Dropdown.prototype = {
+        checkEmptiness: function(){
+            if (this.select.val().length === 0) {
+                this.label.addClass('empty');
+            } else {
+                this.label.removeClass('empty');
             }
+        },
+        empty: function(){
+            this.label.remove();
+            this.spanner.remove();
+        },
+        refresh: function(){
+            this.empty();
+            this.content.empty();
+            this.build();
+        },
+        buildBasicElements: function(){
+            this.label = $('<label class="dropdown-label"></label>');
+            this.content = $('<div class="dropdown-content">').addClass(this.dropdownClass);
+            this.spanner = $('<label class="dropdown-spanner"></label>');
+            this.element.append(this.spanner);
+            this.element.append(this.label);
 
-            var select = element.children('select');
-            var label = $('<label class="dropdown-label"></label>');
-            var content = $('<div class="dropdown-content">').addClass(dropdownClass);
-            var spanner = $('<label class="dropdown-spanner"></label>');
+            $(this.content).css('left', (this.itemPosition.left) + 'px').css('top', (this.itemPosition.top + jQuery(this.element).outerHeight())).appendTo($("body"));
 
-            element.append(spanner);
-            //element.append(content);
-            element.append(label);
+            this.emptyElement = (typeof(this.select.children('[val=""]').html()) == 'undefined' || this.select.children('[val=""]').html().empty()) ? this.select.children().first() : this.select.children('[val=""]');
+            this.selectedElement = this.select.children(':selected').first();
+            this.selectedHTML = this.selectedElement.html();
 
-            $(content).css('left', (item_pos.left) + 'px').css('top', (item_pos.top + jQuery(this).outerHeight())).appendTo($("body"));
-
-            var empty_element = (typeof(select.children('[val=""]').html()) == 'undefined' || select.children('[val=""]').html().empty()) ? select.children().first() : select.children('[val=""]');
-            var selected_element = select.children(':selected').first(), selected_html = selected_element.html();
-
-            var checkEmptiness = function () {
-                if (select.val().length === 0) {
-                    label.addClass('empty');
-                } else {
-                    label.removeClass('empty');
-                }
-            };
-
-            if (selected_element.attr('data-source')) {
+            if (this.selectedElement.attr('data-source')) {
                 $.ajax({
-                    url:selected_element.attr('data-source'),
-                    async:false,
-                    success:function (data) {
-                        selected_html = data;
+                    url: this.selectedElement.attr('data-source'),
+                    async: false,
+                    success: function (data) {
+                        that.selectedHTML = data;
                     }
                 });
             }
 
-            label.attr('for', element.attr('id'));
-            label.html(selected_html || empty_element.html());
-
-            checkEmptiness();
-
-            $(document).click(function () {
-                $('.dropdown.toggled').removeClass('toggled');
-                $('.dropdown-content.toggled').removeClass('toggled');
-
-            });
-
-            $(document).keydown(function (e) {
-                e = e || window.event;
-
-                if (e.keyCode == 27) {
-                    $('.dropdown.toggled').removeClass('toggled');
-                    $('.dropdown-content.toggled').removeClass('toggled');
-                }
-            });
-
-            element.on('click', function (e) {
-                if($(this).attr("disabled")) return;
-                item_pos = jQuery(this).offset();
-                $(content).css('left', (item_pos.left) + 'px').css('top', (item_pos.top + jQuery(this).outerHeight()));
-                e.stopPropagation();
-
-                var already_toggled = $('.dropdown.toggled');
-
-                if (already_toggled.length > 0 && element.hasClass('toggled') !== true){
-                    already_toggled.removeClass('toggled');
-                    $('.dropdown-content.toggled').removeClass('toggled');
-                }
-
-                element.toggleClass('toggled');
-                content.toggleClass('toggled');
-            });
-
-            select.children('option').each(function (i, option) {
+            this.label.attr('for', this.element.attr('id'));
+            this.label.html(this.selectedHTML || this.emptyElement.html());
+        },
+        buildOptions: function(){
+            var that = this;
+            this.select.children('option').each(function (i, option) {
+                var child, html, value;
                 option = $(option);
 
-                var child = $('<div class="dropdown-child"></div>');
-                var html = option.html(), val = option.val();
+                child = $('<div class="dropdown-child"></div>');
+                html = option.html();
+                value = option.val();
 
                 if (option.attr('data-source')) {
                     $.ajax({
-                        url:option.attr('data-source'),
+                        url: option.attr('data-source'),
                         async:false,
                         success:function (data) {
                             html = data;
@@ -98,29 +87,75 @@
                 }
 
                 child.html(html);
-                child.attr('value', val);
+                child.attr('value', value);
 
-                content.append(child);
+                that.content.append(child);
 
                 child.click(function (e) {
                     e.stopPropagation();
-                    select.children('[selected]').removeAttr('selected');
+                    that.select.children('[selected]').removeAttr('selected');
                     $(this).attr('selected', 'selected');
 
-                    select.val($(this).attr('value'));
-                    label.html($(this).html());
+                    that.select.val($(this).attr('value'));
+                    that.label.html($(this).html());
 
-                    checkEmptiness();
+                    that.checkEmptiness();
                     $('.dropdown.toggled').removeClass('toggled');
                     $('.dropdown-content.toggled').removeClass('toggled');
 
-                    $(element).trigger("dropdown.change");
+                    that.onChange && that.onChange(value, html);
+
+                    $(that.element).trigger("dropdown.change");
                 });
             });
+        },
+        open: function(e){
+            var alreadyToggled;
+            if(this.element.attr("disabled")) return;
+            this.itemPosition = jQuery(this.element).offset();
 
-            if(element.data("value")){
-                $("[value='"+ element.data("value") +"']", content).click();
+            $(this.content).css('left', (this.itemPosition.left) + 'px').css('top', (this.itemPosition.top + jQuery(this.element).outerHeight()));
+            e.stopPropagation();
+
+            alreadyToggled = $('.dropdown.toggled');
+
+            if (alreadyToggled.length > 0 && this.element.hasClass('toggled') !== true){
+                alreadyToggled.removeClass('toggled');
+                $('.dropdown-content.toggled').removeClass('toggled');
             }
+
+            this.element.toggleClass('toggled');
+            this.content.toggleClass('toggled');
+        },
+        build: function(){
+            this.buildBasicElements();
+            this.checkEmptiness();
+            this.buildOptions();
+        }
+    }
+
+    $.fn.qap_dropdown = function () {
+        this.each(function () {
+            new Dropdown(this);
         });
     };
-})(jQuery);
+
+    $(document).on("ready page:load", function(){
+        $(document).click(function () {
+            $('.dropdown.toggled').removeClass('toggled');
+            $('.dropdown-content.toggled').removeClass('toggled');
+        });
+
+        $(document).keydown(function (e) {
+            e = e || window.event;
+
+            if (e.keyCode == 27) {
+                $('.dropdown.toggled').removeClass('toggled');
+                $('.dropdown-content.toggled').removeClass('toggled');
+            }
+        });
+    });
+
+    window.Dropdown = Dropdown;
+
+})(jQuery, window, document);

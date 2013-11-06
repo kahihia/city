@@ -42,16 +42,14 @@
 }
 
 .show-map {
+    position: absolute;
+    right: -40px;
+    top: 0;
     width:24px;
     height:24px;
     background: url('/static/images/map.png') no-repeat;
     cursor: pointer;
-    display: inline-block;
-    margin-left:20px;
-    padding-top:5px;
-    position:relative;
-    float: right;
-    margin-right: 27px;
+    display: block;    
 }
 
 .location_map {    

@@ -30,8 +30,8 @@ ul.tagit li.tagit-choice .ui-icon {
 ul.tagit li.tagit-choice .tagit-close .text-icon {
     display: inline;
     font-family: arial, sans-serif;
-    font-size: 16px;
-    line-height: 16px;
+    font-size: 13px;
+    line-height: 12px;
     color: #000;
 }
 
@@ -52,34 +52,18 @@ ul.tagit input[type="text"] {
 }
 
 
-
-ul.searchTags {
+ul.searchtags {
     position: relative;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 3px;
+    padding-right: 3px;
     padding-top: 4px;
-    
-    border: 1px solid #e3e3e3;
-    width: 442px;
-    min-height: 33px;
-    text-align: left;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    text-align: left;    
     font-size:0;
     margin-top: 5px;
 }
 
-ul.searchTags .search-button {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    width: 66px;
-    height: 33px;
-    background: url("/static/images/searchpad/search-button.png") no-repeat;
-}
 
-body ul.searchTags li.tagit-choice {
+body ul.searchtags li.tagit-choice {
     position: relative;
     display: inline-block;
     list-style: none;
@@ -87,10 +71,10 @@ body ul.searchTags li.tagit-choice {
 
     padding-left: 10px;
     padding-right: 30px;
-    height: 26px;
-    max-height: 26px;
-    min-height: 26px;
-    line-height: 26px;
+    height: 18px;
+    max-height: 18px;
+    min-height: 18px;
+    line-height: 18px;
     border: 1px solid #ededed;
     vertical-align: top;
     background: #e3e3e3;
@@ -104,38 +88,35 @@ body ul.searchTags li.tagit-choice {
     font-weight: normal;
 }
 
-ul.searchTags .ui-effects-wrapper {
+ul.searchtags .ui-effects-wrapper {
     display: inline-block;
 }
 
-ul.searchTags li span.tagit-label {    
+ul.searchtags li span.tagit-label {    
     color: #454545;
 }
 
-ul.searchTags li a.tagit-close {
+ul.searchtags li a.tagit-close {
     position: absolute;
     text-align: center;
     cursor: pointer;
-    top: 5px;
+    top: 2px;
     right: 5px;
-    width: 15px;
-    height: 15px;   
-    background: #dcdcdc; 
-
+    width: 12px;
+    height: 12px;
+    background: #dcdcdc;
     -webkit-border-radius: 15px;
     -moz-border-radius: 15px;
     border-radius: 15px;
-
     border: 1px solid #000;
 }
 
-ul.searchTags li a.tagit-close:hover {
+ul.searchtags li a.tagit-close:hover {
     
 }
 
-/*.l#searchTags li a.tagit-close .text-icon,
-ul.searchTags li a.tagit-close .ui-icon-close,*/
-ul.searchTags li.tagit-new {
+/*.l#searchtags li a.tagit-close .text-icon,
+ul.searchtags li a.tagit-close .ui-icon-close,*/
+ul.searchtags li.tagit-new {
     display:none;
 }
-

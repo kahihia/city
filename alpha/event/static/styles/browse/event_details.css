@@ -1,3 +1,7 @@
+.primary-content {
+    width: 684px;
+}
+
 .event-details-block{
     width: 470px;
 }
@@ -192,8 +196,8 @@
 }
 
 .venue_map_preview {
+    float: right;
     vertical-align: middle;
-    margin-left: 50px;    
     line-height: 100px;
 }
 
@@ -243,11 +247,6 @@
     line-height: 22px;
     text-align: center;
     vertical-align: middle;
-
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-
     border: 1px solid #c4c4c4;
     background: #fff;
     color: #000;
@@ -260,6 +259,7 @@
 
 .show-times {
     margin-top: 5px;
+    margin-left: 3px;
     font-size:12px;
     color:#022e52;
 }
@@ -287,3 +287,48 @@
 .show-day-description.active {
     display: block;
 }
+
+.attachments {
+    display: block;
+    background: url("/static/images/event/attachment-icon.png") 20px 6px no-repeat #9c9b9b;
+    padding: 7px;
+    padding-left: 45px;
+}
+
+.attachments a {
+    color: #225b96;
+    text-decoration: underline;
+}
+
+.tags {
+    display: block;
+    background: url("/static/images/tag_icon.png") 20px 6px no-repeat #c6c6c6;
+    padding: 7px;
+    padding-left: 45px;    
+}
+
+.tags a { 
+    color: #02294a;
+}
+
+.report-and-claim {
+    display: block;
+    background: #fff;
+    text-align: right;
+    height: 30px;
+    line-height: 30px;
+    color: #817f7f;
+}
+
+.report-and-claim .report-event-button,
+.report-and-claim .claim-event-button {
+    margin-left: 12px;
+    margin-right: 12px;
+    color: #817f7f;
+    cursor: pointer;
+}
+
+.event-conversation {
+    background: #fff;
+}
+

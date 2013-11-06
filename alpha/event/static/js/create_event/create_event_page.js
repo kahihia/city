@@ -7,6 +7,7 @@
         this.initVenueAccountOwner();
         this.initVenueAutocomplete();
         this.initDescriptionField();
+        this.initPriceField();
         this.initWhenWidget();
     }
 
@@ -48,14 +49,18 @@
         },
         initDescriptionField: function(){
             var value = $("#id_description_json").val();
-            $("#id_description").description();
+            this.descriptionWidget = new DescriptionWidget(document.getElementById("id_description"));            
             
             if(value){
                 var json = JSON.parse(value);
                 $("#id_description").html(json["default"]);
-                $("#id_description").data("ui-description").setValue(json);
-                $("#id_description").data("ui-description").saveCurrentDay();
+                this.descriptionWidget.setValue(json);
+                this.descriptionWidget.saveCurrentDay();
             }
+        },
+        initPriceField: function(){
+            var priceInput = $("#id_price");
+            this.price = new PriceWidget(priceInput);
         },
         initVenueAccountOwner: function(){
             this.venueAccountOwner = new VenueAccountOwnerWidget();

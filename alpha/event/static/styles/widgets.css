@@ -3,25 +3,20 @@ input#id_price[readonly] {
     color: rgb(84, 84, 84);
 }
 
-.modern .content-wrapper input[type="text"],
-.modern .content-wrapper input[type="password"],
-.modern .popup input[type="text"],
-.modern .popup input[type="password"] {
+.content-wrapper input[type="text"],
+.content-wrapper input[type="password"],
+.popup input[type="text"],
+.popup input[type="password"] {
+    outline: 0;
     color: #454545;
     background: #fff;
-    border: 1px solid #ababab;
-    outline: 0;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
+    border: 1px solid #ababab;            
     padding: 0 5px;
-    height: 20px;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
+    height: 26px;
+    line-height: 26px;
 }
 
-.modern textarea {
+textarea {
     color: #454545;
     background: #fff;
     border: 1px solid #ababab;
@@ -61,8 +56,8 @@ input#id_price[readonly] {
     position:absolute;
     right: 0;
     top: 0;
-    width: 15px;
-    height: 15px;
+    width: 24px;
+    height: 24px;
     background: url("/static/images/widgets/dropdown.png") no-repeat;
 }
 
@@ -162,8 +157,24 @@ input[type=radio]:checked + label {
 }
 
 body .button, 
-ul#box-nav li,
-input[type=submit],
+input[type=submit] {
+    height: 26px;
+    line-height: 24px;
+    vertical-align: middle;
+    color: #fff;
+    background: #808080;
+    padding-left: 35px;
+    padding-right: 35px;
+    border: 0px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.button:hover,
+input[type=submit]:hover {
+    background: #022e52;
+}
+
 #images-uploader .qq-upload-button,
 #attachments-uploader .qq-upload-button,
 #file-uploader .qq-upload-button {
@@ -179,16 +190,12 @@ input[type=submit],
     background: -o-linear-gradient(center top, #fff 5%, #f6f6f6 100%);
     background: -ms-linear-gradient(center top, #fff 5%, #f6f6f6 100%);
     background: linear-gradient(center top, #fff 5%, #f6f6f6 100%);
-    background-color: #fff;
-    -webkit-border-radius: 7px;
-    -moz-border-radius: 7px;
-    border-radius: 7px;
+    background-color: #fff;    
     border: 1px solid #ebebeb;
     text-decoration: none;
     text-shadow: 1px 1px 0 #fff;
 }
 
-body .button.standart,
 #images-uploader .qq-upload-button,
 #attachments-uploader .qq-upload-button,
 #file-uploader .qq-upload-button {
@@ -200,13 +207,6 @@ body .button.standart,
     padding: 5px auto;
 }
 
-body .button.big-button {
-    width: 160px;
-}
-
-.button:hover,
-ul#box-nav li:hover,
-input[type=submit]:hover,
 #images-uploader .qq-upload-button:hover,
 #attachments-uploader .qq-upload-button:hover,
 #file-uploader .qq-upload-button:hover {
@@ -473,10 +473,6 @@ fieldset legend{
     display:none;
 }
 
-#images-uploader, #attachments-uploader, #file-uploader {
-    margin-left:10px;
-}
-
 #images-uploader .qq-upload-button,
 #attachments-uploader .qq-upload-button,
 #file-uploader .qq-upload-button {
@@ -484,10 +480,10 @@ fieldset legend{
     line-height: 30px;
     vertical-align: middle;
     border: 1px solid #E6E6E6;
-    -moz-border-radius: 10px;
-    -khtml-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
+    -moz-border-radius: 0;
+    -khtml-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
     cursor: pointer;
 }
 
@@ -763,8 +759,4 @@ body .event-actions-popup .in-the-loop-popup-content {
 
 .warn {
     color: #cc3b3b;
-}
-
-.create-event-table {
-    width: 530px;
 }

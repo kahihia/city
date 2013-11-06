@@ -171,7 +171,7 @@
                     $.fancybox.close();
                     $(that.error).hide();
                     $(that.element).val(that.getText());
-                    $("#id_description").data("ui-description").setDays(that.getDays());
+                    window.createEventPage.descriptionWidget.setDays(that.getDays());
                     that.refreshEventType();
                 } else {
                     $(that.error).show();

@@ -41,5 +41,114 @@
 }
 
 .messages{
-    list-style-type: none; text-align: center;
+    list-style-type: none; 
+    text-align: center;
+}
+
+.left-menu {
+    width: 182px;
+    background: #c6c6c6;
+    float: left;
+    margin-right: 15px;
+}
+
+.left-menu .switchers {
+    padding: 6px;
+}
+
+.left-menu .switchers a {
+    display: inline-block;
+    width: 83px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    color: #022e52;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.left-menu .switchers.sort a {
+    text-transform: none;
+}
+
+.left-menu .switchers a.selected,
+.left-menu .switchers a:hover {
+    background: #fff;
+    border: 1px solid #83929e;
+    width: 81px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+}
+
+.left-menu ul.categories {
+    margin: 0;    
+    padding: 14px 10px;
+    border-top: 1px solid #506b80;
+    background: #022e52;
+}
+
+.left-menu ul.categories li {
+    list-style: none;
+    padding-left: 9px;    
+    border-bottom: 1px solid #c6c6c6;
+    height: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+}
+
+.left-menu ul.categories.tags li {
+    border-bottom: none;
+}
+
+.left-menu ul.categories li a{
+    color: #fff;
+}
+
+.left-menu ul.categories li a:hover,
+.left-menu ul.categories li a.selected {
+    color: #2c8ed9;
+}
+
+.left-menu .all-tags a {
+    display: block;
+    vertical-align: middle;
+    text-align: center;
+    background: #fff;
+    color: #022e52;
+    height: 23px;
+    line-height: 23px;
+    text-transform: uppercase;
+}
+
+.events-container {
+    width: 478px;
+    float: left;
+}
+
+.events-container .searchtags-wrapper {
+    position: relative;
+    background: #c6c6c6;
+    padding-top: 9px;
+    padding-bottom: 7px;
+    padding-left: 17px;
+    padding-right: 18px;
+}
+
+.events-container .searchtags-wrapper ul.searchtags {
+    min-height: 24px;
+    margin: 0;
+    background: #f1f1f1;
+    border: 1px solid #33546f;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    vertical-align: middle;
+}
+
+.searchtags-wrapper .searchtags-placeholder {
+    position: absolute;
+    color: #999;
+    top: 16px;
+    left: 25px;
+    z-index: 10;
 }

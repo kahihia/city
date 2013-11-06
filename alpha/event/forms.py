@@ -4,7 +4,7 @@ import string
 from django import forms
 from django.forms.widgets import RadioSelect
 from event.models import Event, FeaturedEvent
-from event.widgets import WhenWidget, PriceWidget, GeoCompleteWidget, AjaxCropWidget, ChooseUserContextWidget, AttachmentsWidget, EventImagesWidget
+from event.widgets import WhenWidget, GeoCompleteWidget, ChooseUserContextWidget, AttachmentsWidget, EventImagesWidget
 from django.utils.translation import ugettext_lazy as _
 
 from lookups import CityLookup
@@ -143,7 +143,6 @@ class EditEventForm(forms.ModelForm):
     )
 
     price = forms.CharField(
-        widget=PriceWidget(),
         required=False,
         initial="$"
     )    
@@ -156,12 +155,7 @@ class EditEventForm(forms.ModelForm):
     images = forms.CharField(
         widget=EventImagesWidget(),
         required=False
-    )
-
-    picture_src = forms.CharField(
-        widget=AjaxCropWidget(),
-        required=False
-    )
+    )    
 
     website = forms.URLField(required=False)
     tickets = forms.CharField(required=False)
@@ -177,7 +171,6 @@ class EditEventForm(forms.ModelForm):
             self.fields['email'].widget = HTML5EmailInput(attrs={'class': 'text wide'})
             self.fields['email'].label = _(u'Email Address')
 
-        self.fields['name'].widget.attrs['class'] = 'inputfield rborder'
         self.fields['name'].widget.attrs['tabindex'] = 1
         self.fields['name'].error_messages['required'] = 'Event name is required'
         self.fields['name'].label = _(u'Event Name')
@@ -185,19 +178,14 @@ class EditEventForm(forms.ModelForm):
         self.fields['linking_venue_mode'].error_messages['required'] = 'Your event cannot miss a location'
 
         self.fields['place'].error_messages['required'] = 'Your event cannot miss a location'
-        self.fields['place'].widget.attrs['class'] = 'inputfield rborder'
         self.fields['place'].label = _(u'Location')
         self.fields['place'].widget.attrs['tabindex'] = 2
 
-        # Suggest venue popup
-        self.fields['venue_name'].widget.attrs['class'] = 'inputfield rborder'
-        self.fields['street'].widget.attrs['class'] = 'inputfield rborder'
+        # Suggest venue popup       
 
         self.fields['city'].error_messages['required'] = 'Your event cannot miss a city'
-        self.fields['city'].widget.attrs['class'] = 'inputfield rborder'
         self.fields['city'].label = _(u'City')
 
-        self.fields['when'].widget.attrs['class'] = 'inputfield rborder'
         self.fields['when'].widget.attrs['readonly'] = True
         self.fields['when'].widget.attrs['placeholder'] = "Click to select"
         self.fields['when'].error_messages['required'] = 'Please choose at least one date'
@@ -205,28 +193,17 @@ class EditEventForm(forms.ModelForm):
 
         self.fields['when_json'].error_messages['required'] = 'Please choose at least one date'
 
-        self.fields['price'].widget.attrs['class'] = 'inputfield rborder'
-        self.fields['price'].label = _(u'Price')
-        self.fields['price'].widget.attrs['tabindex'] = 4
+        self.fields['description'].widget = forms.widgets.Textarea(attrs={'class': 'textarea', 'tabindex': 5})
 
-        self.fields['description'].widget = forms.widgets.Textarea(attrs={'class': 'textarea rborder', 'tabindex': 5})
-
-        self.fields['website'].widget.attrs['class'] = 'inputfield rborder'
         self.fields['website'].widget.attrs['tabindex'] = 6
         self.fields['website'].error_messages['invalid'] = 'Enter a valid website url'
 
-        self.fields['comment_for_facebook'].widget.attrs['class'] = 'inputfield rborder'
         self.fields['comment_for_facebook'].widget.attrs['tabindex'] = 10
 
         self.fields['tags'].error_messages['required'] = 'Please enter at least one tag'
-        self.fields['tags'].widget.attrs['class'] = 'inputfield rborder'
         self.fields['tags'].widget.attrs['tabindex'] = 11
 
-        self.fields['tickets'].widget.attrs['class'] = 'inputfield rborder'
         self.fields['tickets'].widget.attrs['tabindex'] = 12
-
-
-        self.fields['picture_src'].label = _(u'Image')
 
     def clean(self):
         cleaned_data = self.cleaned_data

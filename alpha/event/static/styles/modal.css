@@ -51,20 +51,6 @@
     top:10px;
 }
 
-#entry-form {
-    padding: 20px 20px;
-    border: 1px solid #ccc;
-    width: 635px;
-}
-
-.popup-form-wrapper #entry-form {
-    margin: 0 auto;
-}
-
 .popup-form-wrapper .event-form-errors {
     display: none;
-}
-
-#entry-form table tr td:nth-of-type(2){
-    padding-left: 30px;
 }

@@ -8,11 +8,21 @@
         Total search numbers found ({{eventsFilter.qs.count}})
     </header>
     {% paginate 9 eventsFilter.qs as events %}
-    {% for event in events %}    
-        <div class="entry-info  home-page" data-no-turbolink>
-            {% short_single_event event %}
-        </div>
-    {%endfor%}
+    {% regroup events by start_time|date:"h:i A" as events_start_time_group %}
+
+    {% for event_group in events_start_time_group %}
+        <header class="time-group">
+            <span>
+                {{ event_group.grouper }}
+            </span>
+        </header>
+        {% for event in event_group.list %}
+            <div class="entry-info home-page" data-no-turbolink>
+                {% short_single_event event %}
+            </div>
+        {%endfor%}
+    {% endfor %}    
+    
 </div>
 
 <div class="entry-navigation-np">

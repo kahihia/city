@@ -1,12 +1,12 @@
 <div class="modal-bg"></div>
-<div id="entry-form">
+<div class="event-posting-form">
     <form method="post" name="post-events" enctype="multipart/form-data">
         {% csrf_token %}
         <!--errors -->
         {%if form.non_field_errors %}
             <span class="event-form-errors">
                 <h3>Please correct the following:</h3>
-                <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                <div class="errors" style="border:1px solid RED;">
                     <ul style="list-style-type: none;">
                         <li id="all-info">
                             {% for error in form.non_field_errors %}
@@ -20,418 +20,304 @@
         <!-- end errors -->
 
         {{ form.linking_venue_mode }}
-        <table class="create-event-table">
-            <tr>
-                <td class="create-event-td">
-                    Event Name
-                    <a href="javascript:void;" class="balloon">
-                        <div class="buttonq"></div>
-                    </a>
-                    <div class="balloon-content">
-                        <h3>
-                            Help for <i>[Event name]:</i>
-                        </h3>
-                        <p>
-                            Insert a name that will stand out
-                        </p>
-                    </div>
-                </td>
-                <td>
-                    {{form.name}}
 
-                    {% for error in form.name.errors %}
-                        <div class="error">{{ error }}</div>
-                    {% endfor %}
-                    {% for error in form.venue_account_owner.errors %}
-                        <div class="error">{{ error }}</div>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr class="event-owner-tr">
-                <td>
-                    Event Owner
-                    <a href="javascript:void;"  class="balloon">
-                        <div class="buttonq"></div>
-                    </a>
-                    <div class="balloon-content">
-                        <h3>
-                            Help for <i>[Owner]:</i>
-                        </h3>
-                        <p>
-                            Choose account wich will be owner of this event
-                        </p>
-                    </div>
-                </td>
-                <td>
-                    {{ form.venue_account_owner }}
-                </td>
-            </tr>
-            <tr class="location-tr">
-                <td>
-                    Venue
-                    <a href="javascript:void;"  class="balloon">
-                        <div class="buttonq"></div>
-                    </a>
-                    <div class="balloon-content">
-                        <h3>
-                            Help for <i>[Location]:</i>
-                        </h3>
-                        <p>
-                            Type in the name of the venue. However, if you do not find your event, type it in manually by selecting “Suggest a New Venue”
-                        </p>
-                    </div>
-                </td>
-                <td>
-                    <div class="location">{{ form.place }}</div>
-                    <div class="show-map"></div>
-                    {{ form.venue_identifier }}
-                    <div class="suggest">
-                        <div class="error">
-                            All fields is required
-                        </div>
-                        <table>
-                            <tr>
-                                <td>Venue name</td>
-                                <td>{{form.venue_name}}</td>
-                            </tr>
-                            <tr>
-                                <td>Street address</td>
-                                <td>{{form.street}}</td>
-                            </tr>
-                            <tr>
-                                <td>City</td>
-                                <td>
-                                    {{form.city}}
-                                    {{form.city_identifier}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Location</td>
-                                <td>
-                                    <div class="location_map">{{form.location}}</div>
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="cancel-button">Cancel</div>
-                        <div class="reset-button">Clear</div>
-                        <div class="submit-button">Submit</div>
-                    </div>
-                    {% for error in form.venue_name.errors %}
-                        <div class="error">{{ error }}</div>
-                    {% endfor %}
-                    {% for error in form.location.errors %}
-                        <div class="error">{{ error }}</div>
-                    {% endfor %}
-                </td>
+        <header>
+            Event Name
+        </header>
+        <div class="event-posting-field">
+            {{form.name}}
+            {% for error in form.name.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+            {% for error in form.venue_account_owner.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
 
-            </tr>
-            <tr>
-                <td>
-                    When
-                    <a href="javascript:void;" class="balloon">
-                        <div class="buttonq"></div>
-                    </a>
-                    <div class="balloon-content">
-                        <h3>
-                            Help for
-                            <i>[when]:</i>
-                        </h3>
-                        <p>
-                            Pick your dates and times
-                        </p>
-                    </div>
-                </td>
-                <td>
-                    {{form.when}}
-                    {{form.when_json}}
-                    {{form.event_type}}
-                    {{form.occurrences_json}}
-                    
-                    {% for error in form.when.errors %}
-                       <div class="error">{{ error }}</div>
-                    {% endfor %}
-                    {% for error in form.when_json.errors %}
-                       <div class="error">{{ error }}</div>
-                    {% endfor %}
-                    {% for error in form.occurrences_json.errors %}
-                       <div class="error">{{ error }}</div>
-                    {% endfor %}
-                </td>
+        <header>
+            Event Owner
+        </header>
+        <div class="event-posting-field">
+            {{ form.venue_account_owner }}
+        </div>
 
-            </tr>
-            <tr>
-                <td valign="top" class="top-align">
-                    Price
-                    <a href="javascript:void;" class="balloon">
-                        <div class="buttonq"></div>
-                    </a>
-                    <div class="balloon-content">
-                        <h3>
-                            Help for
-                            <i>[enterance]:</i>
-                        </h3>
-                        <p>
-                            Select Free if the event is free to the public.
-                            Or you can use things like: $25 / Free before 8pm,
-                            then $10 after / $10 adults, 12 & under Free
-                        </p>
-                    </div>
-                </td>
-                <td class="price-td">
-                    {{form.price}}
-                    {% for error in form.price.errors %}
-                        <div class="error">{{ error }}</div>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td valign="top">
-                    Description
-                    <a href="javascript:void;" class="balloon">
-                        <div class="buttonq"></div>
-                    </a>
-                    <div class="balloon-content">
-                        <h3>
-                            Help for
-                            <i>[Description]:</i>
-                        </h3>
-                        <p>
-                            Type in your event with much detail for the public. Note that certain words will be inserted as tags to help you. Further, for events that are more than one day, you can change them individually by selecting them on the dropdown
-                        </p>
-                    </div>
-                    <br>
-                    <div class="description-select-day-widget">
-                        <div class="description-days-container">
-                            <span class="result">Same for All Days</span>
-                            <div class="selected-result">Same for All</div>
-                            <ul class="days-list active"></ul>
-                        </div>
-                    </div>
+        <header>
+            Venue
+        </header>
+        <div class="event-posting-field">
+            <div class="location">{{ form.place }}</div>
+            <div class="show-map"></div>
+            {{ form.venue_identifier }}
+            <div class="suggest">
+                <div class="error">
+                    All fields is required
+                </div>
+                <table>
+                    <tr>
+                        <td>Venue name</td>
+                        <td>{{form.venue_name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Street address</td>
+                        <td>{{form.street}}</td>
+                    </tr>
+                    <tr>
+                        <td>City</td>
+                        <td>
+                            {{form.city}}
+                            {{form.city_identifier}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Location</td>
+                        <td>
+                            <div class="location_map">{{form.location}}</div>
+                        </td>
+                    </tr>
+                </table>
+                <div class="cancel-button">Cancel</div>
+                <div class="reset-button">Clear</div>
+                <div class="submit-button">Submit</div>
+            </div>
+            {% for error in form.venue_name.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+            {% for error in form.location.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
 
-                </td>
-                <td>
+        <header>
+            When
+        </header>
+        <div class="event-posting-field">
+            {{form.when}}
+            {{form.when_json}}
+            {{form.event_type}}
+            {{form.occurrences_json}}
+            
+            {% for error in form.when.errors %}
+               <div class="error">{{ error }}</div>
+            {% endfor %}
+            {% for error in form.when_json.errors %}
+               <div class="error">{{ error }}</div>
+            {% endfor %}
+            {% for error in form.occurrences_json.errors %}
+               <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="event-posting-price">
+            <header>
+                Price
+            </header>            
+            <div class="free-checkbox">
+                <div class="checkbox">
+                    <input type="checkbox" id="id_price_free">
+                    <label for="id_price_free"></label>
+                    <label for="id_price_free" class="price-free-label">Free</label>
+                </div>
+            </div>
+            <div class="price-input">
+                {{ form.price }}
+            </div>            
+            {% for error in form.price.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <header>
+            Description
+        </header>
+        <div class="event-posting-field">
+            <div class="event-posting-description">
+                <div class="label">
+                    Change Event details
+                </div>
+
+                <div class="description-dropdown dropdown" data-dropdown-class="description-dropdown-list">
+                    <select id="id_description_days">
+                        <option value="default">Same for all</option>                        
+                    </select>
+                </div>
+                <div class="richeditor">
                     {{form.description}}
                     {{form.description_json}}
+                </div>
+            </div>
+            
 
-                    {% for error in form.description.errors %}
-                        <div class="error">{{ error }}</div>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Website
-                    <a href="javascript:void;" class="balloon">
-                        <div class="buttonq"></div>
-                    </a>
-                    <div class="balloon-content">
-                        <h3>
-                            Help for
-                            <i>[Website]:</i>
-                        </h3>
-                        <p>
-                            Insert website of the event if they have one otherwise you can leave blank. <br/>
-                            <strong>E.g:</strong>. www.event.ca
+            {% for error in form.description.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
 
-                        </p>
-                    </div>
-                </td>
-                <td>
-                    {{form.website}}
+        <header>
+            Website
+        </header>
+        <div class="event-posting-field">
+            {{form.website}}
 
-                    {% for error in form.website.errors %}
-                        <div class="error">{{ error }}</div>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="wheelchair-td">
-                    Wheelchair Accessible
-                    <ul>
-                        <li>
-                            <div class="radio">
-                                <input value="True" type="radio" id="id_wheelchair_0" name="wheelchair" tabindex="7">
-                                <label for="id_wheelchair_0"></label>
-                                <label for="id_wheelchair_0">Yes</label>
-                            </div>
-                        </li>
-                        <li>
-                            <div  class="radio">
-                                <input value="False" type="radio" id="id_wheelchair_1" name="wheelchair" tabindex="7" checked="checked">
-                                <label for="id_wheelchair_1"></label>
-                                <label for="id_wheelchair_1">No</label>
-                            </div>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="wheelchair-td">
-                    Would you take a date to this event?
-                    <ul>
-                        <li>
-                            <div class="radio">
-                                <input value="True" type="radio" id="id_date_night_0" name="date_night" tabindex="8">
-                                <label for="id_date_night_0"></label>
-                                <label for="id_date_night_0">Yes</label>
-                            </div>
-                        </li>
-                        <li>
-                            <div  class="radio">
-                                <input value="False" type="radio" id="id_date_night_1" name="date_night" tabindex="8" checked="checked">
-                                <label for="id_date_night_1"></label>
-                                <label for="id_date_night_1">No</label>
-                            </div>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="wheelchair-td">
-                    Is this event Family Friendly?
-                    <ul>
-                        <li>
-                            <div class="radio">
-                                <input value="True" type="radio" id="id_family_0" name="family" tabindex="9">
-                                <label for="id_family_0"></label>
-                                <label for="id_family_0">Yes</label>
-                            </div>
-                        </li>
-                        <li>
-                            <div  class="radio">
-                                <input value="False" type="radio" id="id_family_1" name="family" tabindex="9" checked="checked">
-                                <label for="id_family_1"></label>
-                                <label for="id_family_1">No</label>
-                            </div>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td class="tags_bottom">
-                    Tags
-                    <a href="javascript:void(0);" class="balloon">
-                        <div class="buttonq"></div>
-                    </a>
-                    <div class="balloon-content">
-                        <h3>
-                            Help for
-                            <i>[tags]:</i>
-                        </h3>
-                        <p>
-                            Select tags that best describe your event. Insert your event by using the “tab” button or a comma
-                        </p>
-                    </div>
-                </td>
-                <td>
-                    <div class="tags-popup-wrapper">
-                        <div class="tags-popup">
-                            <div class="tags-container"></div>
-                            <div class="close-button">Close</div>
+            {% for error in form.website.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <header>
+            Tickets
+        </header>
+        <div class="event-posting-field">
+            {{form.tickets}}
+        </div>
+
+        <div class="boolean-tags">
+            <header class="single">
+                Wheelchair Accessible
+            </header>
+            <div class="event-posting-field">
+                <ul>
+                    <li>
+                        <div class="radio">
+                            <input value="True" type="radio" id="id_wheelchair_0" name="wheelchair" tabindex="7">
+                            <label for="id_wheelchair_0"></label>
+                            <label for="id_wheelchair_0">Yes</label>
                         </div>
-                    </div>
-                    {{form.tags}}
-                    <span class="tags-counter-container">
-                        <span class="tags-counter">
-                            0
-                        </span> of 10 (Max 10 Tags)
-                    </span>
+                    </li>
+                    <li>
+                        <div  class="radio">
+                            <input value="False" type="radio" id="id_wheelchair_1" name="wheelchair" tabindex="7" checked="checked">
+                            <label for="id_wheelchair_1"></label>
+                            <label for="id_wheelchair_1">No</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-                    {% for error in form.tags.errors %}
-                        <div class="error">{{ error }}</div>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Tickets
-                    <a href="javascript:void(0);" class="balloon">
-                        <div class="buttonq"></div>
-                    </a>
-                    <div class="balloon-content">
-                        <h3>
-                            Help for
-                            <i>[tickets]:</i>
-                        </h3>
-                        <p>
-                            <strong>Eg.</strong>
-                            Door / www.ticket.ca / (306)256- xxxxx
-                        </p>
-                    </div>
-                </td>
-                <td>
-                    {{form.tickets}}
-                </td>
-            </tr>
-            <tr class="images">
-                <td valign="top" class="top-align">
-                    Images
-                    <a href="javascript:void(0);" class="balloon">
-                        <div class="buttonq"></div>
-                    </a>
-                    <div class="balloon-content">
-                        <h3>
-                            Help for
-                            <i>[image]:</i>
-                        </h3>
-                        <p>
-                            Upload an image used for your event. Max size is 32Mb.
-                        </p>
-                    </div>
-                </td>
-                <td>
-                    {{ form.images }}
-                    {% for error in form.images.errors %}
-                        <div class="error">{{ error }}</div>
-                    {% endfor %}
+        <div class="boolean-tags">
+            <header>
+                Would you take a date to this event?
+            </header>
+            <div class="event-posting-field">
+                <ul>
+                    <li>
+                        <div class="radio">
+                            <input value="True" type="radio" id="id_date_night_0" name="date_night" tabindex="8">
+                            <label for="id_date_night_0"></label>
+                            <label for="id_date_night_0">Yes</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div  class="radio">
+                            <input value="False" type="radio" id="id_date_night_1" name="date_night" tabindex="8" checked="checked">
+                            <label for="id_date_night_1"></label>
+                            <label for="id_date_night_1">No</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-                    <div class="full-screen-popup" data-thumb-width="180" data-thumb-height="180">
-                        <img class="cropping-image" src="/static/images/default-event.jpg">
-                        <div class="save-button">Save image</div>
-                        <div class="cancel-button">Cancel</div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td valign="top" class="top-align">
-                    Attachments
-                    <a href="javascript:void;" class="balloon">
-                        <div class="buttonq"></div>
-                    </a>
-                    <div class="balloon-content">
-                        <h3>
-                            Help for
-                            <i>[attachments]:</i>
-                        </h3>
-                        <p>
-                            Attachments
-                        </p>
-                    </div>
-                </td>
-                <td>
-                    {{ form.attachments }}
-                    {% for error in form.attachments.errors %}
-                        <div class="error">{{ error }}</div>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr></tr>
-            <tr>
-                <td colspan="3">&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input type="submit" name="submitevents" class="button standart submit" value="{% block submit_button %}Post Event{% endblock %}" />
-                </td>
-                <td>&nbsp;</td>
-            </tr>
-        </table>
+        <div class="boolean-tags">
+            <header>
+                Is this event Family Friendly?
+            </header>
+            <div class="event-posting-field">
+                <ul>
+                    <li>
+                        <div class="radio">
+                            <input value="True" type="radio" id="id_family_0" name="family" tabindex="9">
+                            <label for="id_family_0"></label>
+                            <label for="id_family_0">Yes</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div  class="radio">
+                            <input value="False" type="radio" id="id_family_1" name="family" tabindex="9" checked="checked">
+                            <label for="id_family_1"></label>
+                            <label for="id_family_1">No</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="boolean-tags">
+            <header class="single">
+                Is this a night life event?
+            </header>
+            <div class="event-posting-field">
+                <ul>
+                    <li>
+                        <div class="radio">
+                            <input value="True" type="radio" id="id_night_life_0" name="night_life" tabindex="9">
+                            <label for="id_night_life_0"></label>
+                            <label for="id_night_life_0">Yes</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div  class="radio">
+                            <input value="False" type="radio" id="id_night_life_1" name="night_life" tabindex="9" checked="checked">
+                            <label for="id_night_life_1"></label>
+                            <label for="id_night_life_1">No</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        
+
+        <header>
+            Tags
+            <span class="tags-counter-container">
+                (Max 10 Tags)
+                <span class="tags-counter">                    
+                    0
+                </span> of 10 
+            </span>
+        </header>
+        <div class="event-posting-field">
+            <div class="tags-popup-wrapper">
+                <div class="tags-popup">
+                    <div class="tags-container"></div>
+                    <div class="close-button">Close</div>
+                </div>
+            </div>
+            {{form.tags}}            
+
+            {% for error in form.tags.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <header>
+            Images
+        </header>
+        <div class="event-posting-field">
+            {{ form.images }}
+            {% for error in form.images.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+
+            <div class="full-screen-popup" data-thumb-width="180" data-thumb-height="180">
+                <img class="cropping-image" src="/static/images/default-event.jpg">
+                <div class="save-button">Save image</div>
+                <div class="cancel-button">Cancel</div>
+            </div>
+        </div>
+
+        <header>
+            Attachments
+        </header>
+        <div class="event-posting-field">
+            {{ form.attachments }}
+            {% for error in form.attachments.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="submit-wrapper">
+            <input type="submit" value="Post Event">
+        </div>
     </form>
-
-
-    <!--end.main-navigation-content-nav-->
-
-    <div class="clr"></div>
-
 </div>

@@ -1,72 +1,82 @@
 {% load query_filter %}
-<div class="main-navigation-nav">
-   <div class="main-navigation-nav-wrapper">
-        <ul class="categories">            
-            <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="recently_featured" exclude="tag" %}">
-                    Featured
-                </a>
-            </li>
-            <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="top_viewed" exclude="tag" %}">
-                    Top viewed
-                </a>
-            </li>
-            <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="latest" exclude="tag" %}">
-                    Recently Added
-                </a>
-            </li>
-            <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="random" exclude="tag" %}">
-                    Random
-                </a>
-            </li>
-            <br>
-
-            <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="night_life"  exclude="tag" %}">
-                    Night life
-                </a>
-            </li>
-            <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="date_night"  exclude="tag" %}">
-                    Date Night
-                </a>
-            </li>
-            <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="free"  exclude="tag" %}">
-                    Free
-                </a>
-            </li>
-            <li class="special">
-                <a href="{% events_filter_url request eventsFilter function="family"  exclude="tag" %}">
-                    Family
-                </a>
-            </li>
-
-
-            <li class="subheader all-categories">
-                <a href="{% events_filter_url request eventsFilter function="tags" exclude="tag|datetime" %}" >All Tags</a>
-            </li>
-            <ul class="categories">
-                {% for tag in tags %}                
-                    <li class="category{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}{% if forloop.counter > 21 %} more{% endif %}" >
-                        <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"  {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}>
-                            {{tag.tag__name}}
-                        </a>
-                    </li>
-                {%endfor%}
-            </ul>
-            {% if tags|length > 21 %}
-                <div class="more-button">
-                    more
-                </div>
-                <div class="less-button">
-                    less
-                </div>
-            {% endif %}
-
-        </ul>
+<div class="left-menu">
+    <div class="switchers">
+        <a href="{% events_filter_url request eventsFilter function="reminder" exclude="all" %}" class="ajax auth-required">
+            Reminder Events
+        </a>
+        <a href="{% events_filter_url request eventsFilter function="in_the_loop" exclude="all" %}" class="ajax auth-required">
+            In the Loop Events
+        </a>
     </div>
-</div>   
+    <ul class="categories">
+        <li>
+            <a href="{% events_filter_url request eventsFilter function="recently_featured" exclude="tag" %}">
+                Featured
+            </a>
+        </li>
+        <li>
+            <a href="{% events_filter_url request eventsFilter function="top_viewed" exclude="tag" %}">
+                Top viewed
+            </a>
+        </li>
+        <li>
+            <a href="{% events_filter_url request eventsFilter function="latest" exclude="tag" %}">
+                Recently Added
+            </a>
+        </li>
+        <li>
+            <a href="{% events_filter_url request eventsFilter function="random" exclude="tag" %}">
+                Random
+            </a>
+        </li>
+        <li>
+            <a href="{% events_filter_url request eventsFilter function="night_life"  exclude="tag" %}">
+                Night life
+            </a>
+        </li>
+        <li>
+            <a href="{% events_filter_url request eventsFilter function="date_night"  exclude="tag" %}">
+                Date Night
+            </a>
+        </li>
+        <li>
+            <a href="{% events_filter_url request eventsFilter function="free"  exclude="tag" %}">
+                Free
+            </a>
+        </li>
+        <li>
+            <a href="{% events_filter_url request eventsFilter function="family"  exclude="tag" %}">
+                Family
+            </a>
+        </li>
+    </ul>
+    <div class="all-tags">
+        <a href="{% events_filter_url request eventsFilter function="tags" exclude="tag|datetime" %}" >All Tags</a>
+    </div>
+    <div class="switchers sort">
+        <a href="">
+            Sort by ABC
+        </a>
+        <a href="">
+            Sort by 123
+        </a>
+    </div>           
+
+    <ul class="categories tags">
+        {% for tag in tags %}
+            <li class="category{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}{% if forloop.counter > 21 %} more{% endif %}" >
+                <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"  {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}>
+                    {{tag.tag__name}}
+                </a>
+            </li>
+        {%endfor%}
+    </ul>
+    {% if tags|length > 21 %}
+        <div class="more-button">
+            more
+        </div>
+        <div class="less-button">
+            less
+        </div>
+    {% endif %}
+</div>

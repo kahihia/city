@@ -1,0 +1,18 @@
+<div class="events-container">
+    {% include 'events/_searchpad_datetime_menu.html' %}
+    <div class="searchtags-wrapper">
+        {% if not eventsFilter.search_tags %}
+            <span class="searchtags-placeholder">
+                Select Tags to Refine your Search
+            </span>
+        {% endif %}
+        <ul class="searchtags browse">            
+            {% for tag in eventsFilter.search_tags %}
+                <li data-remove-url="{{ tag.remove_url }}">
+                    {{ tag.name }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>    
+    {% include 'events/_browse_events_list.html' %}
+</div>

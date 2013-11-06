@@ -3,8 +3,7 @@
 {% load featured_event %}
 
 {% if featured_events %}
-<div class="featured-area">
-    <h2>Featured Events</h2>
+<div class="featured-area">    
     <div class="features-wrapper" data-no-turbolink>
         {% paginate 6 featured_events using "featured_page" %}
         {% if featured_events %}
@@ -12,20 +11,16 @@
         {% endif %}
         <div class="clr"></div>
     </div>
+    <h2>Featured Events</h2>
 
     <div class="features-navigation">
         {% get_pages %}
         <ul>
             <span class="step-links">
-                <a href="{{ pages.first.url }}">
-                    first
-                </a>
-
                 {% if pages.current.is_first %}
                     <a class="prev" href="{{ pages.first.url }}">
                         prev
                     </a>
-                    
                 {% else %}
                     <a class="prev" href="{{ pages.previous.url }}">
                         prev
@@ -49,10 +44,6 @@
                         next
                     </a>
                 {% endif %}
-
-                <a href="{{ pages.last.url }}">
-                    last
-                </a>
             </span>
         </ul>
     </div>

@@ -4,7 +4,7 @@
 {% load advertising_tags %}
 
 {% block head %}
-    <link href="{{STATIC_URL}}styles/create_event.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/event/posting.css" rel="stylesheet" type="text/css" />
     {% include_ui_theme 'ui-lightness' %}
     <link href="{{STATIC_URL}}styles/datepicker.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/when.css" rel="stylesheet" type="text/css" />
@@ -39,6 +39,7 @@
     <script src="{{STATIC_URL}}ckeditor/ckeditor/ckeditor.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/create_event/dombuilder.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/create_event/description.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/create_event/price.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/create_event/boolean_tags.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/create_event/create_event_page.js" type="text/javascript"></script>
 {% endblock %}
@@ -49,25 +50,20 @@
 
 {% block page %}
     <div class="primary-content {% if form.city_required %}new_venue{% endif %}">
-        <div class="main-content">
-            <h1>Post Events</h1>
+        <div class="event-posting">
+            <h1>
+                Post Event
+            </h1>
             {% include 'events/create/_form.html' %}
         </div>
-        <div class="clr"></div>
+        <div class="event-posting-tips">            
+            <h1>
+                Event posting tips
+            </h1>
+            {% include 'events/create/posting-tips.html' %}            
+        </div>
+        <div class="clear"></div>
     </div>
 {% endblock %}
 
 
-{% block advertising %}
-    <div class="advertising-with-margin">
-        {% random %}
-            <div class="advertising-right-container">
-                {% advertising_group "300x600|300x250" %}
-            </div>
-        {% or %}
-            <div class="advertising-right-container">
-                {% advertising_group "300x250|300x250|300x250" %}
-            </div>
-        {% endrandom %}
-    </div>
-{% endblock%}

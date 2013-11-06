@@ -1,8 +1,10 @@
-(function($) {
+;(function($, window, document, undefined) {
+    'use strict';
+
     var format = $.datepicker._defaults.dateFormat,
         delimeter = /\b/;
 
-    sortByDays = function(obj){
+    function sortByDays(obj){
         var keys = [];
         var sorted_obj = {};
 
@@ -29,126 +31,89 @@
         return sorted_obj;
     };
 
-    $.widget("ui.description", {
-        _create: function() {
-            var that = this;
-            this.textarea = $(this.element);
-            this.selectDayWidget = $(".description-select-day-widget");
-            this.toggler = $(".toggle", this.selectDayWidget);
-            this.daysListContainer = $(".days-list", this.selectDayWidget);
-            this.result = $(".result", this.selectDayWidget);
-            this.selectedResult = $(".selected-result", this.selectDayWidget);
-            this.descriptionDaysContainer = $(".description-days-container");
+    function DescriptionWidget(element){
+        var that = this;
 
-            $(this.toggler).on("click", function() {
-                $(that.descriptionDaysContainer).toggleClass("active");
-            });
-            $(this.selectedResult).on("click", function() {
-                $(that.daysListContainer).toggleClass("active");
-            });
+        element.descriptionWidget = this;
+        
+        this.data = {
+            "default":"",
+            days: {}
+        };
 
-            $(this.element).on("blur", function(e){
-                that.saveCurrentDay();
-                if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
-                    $("#id_tags__tagautosuggest").data('ui-tagspopup').autoTagsDetect(
-                        $("#id_description").val()
-                    );
-                }
-            });
-            $("#id_description").on("keyup", function(e){
-                if(that.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
-                    $("#id_tags__tagautosuggest").data('ui-tagspopup').autoTagsDetect(
-                        $("#id_description").val()
-                    );
-                }
-            });
+        this.currentDay = "default";
 
-            this.data = {
-                "default":"",
-                days: {}
-            };
+        this.element = element;
+        this.description = $("#id_description");
+        this.textarea = $(this.element);
+        this.dropdown = new Dropdown($(".description-dropdown")[0], {
+            onChange: function(value, text){
+                that.setCurrentDay(value, text);
+            }
+        });
+        this.select = $("select", this.dropdown.element);
+        
 
-            this.currentDay = "default";
-            this.save();
-            this.setupCKEditor();
+        $(this.element).on("blur", this.updateTags.bind(this));
+        $(this.description).on("keyup", this.updateTags.bind(this));
+
+
+        this.save();
+        this.setupCKEditor();
+    }
+
+    DescriptionWidget.prototype = {
+        updateTags: function(e){
+            this.saveCurrentDay();
+            if(this.currentDay=="default" && !delimeter.test(String.fromCharCode(e.keyCode))){
+                $("#id_tags__tagautosuggest").data('ui-tagspopup').autoTagsDetect(
+                    $("#id_description").val()
+                );
+            }
         },
-        setValue: function(value){            
+        setValue: function(value){
             this.data = value;
-            this.drawWidget();
+            this.refreshWidget()
         },
-        setDays: function(days) {
+        setDays: function(days){
             var oldDays = this.data.days;
-            this.data.days = {}
-            for(var i in days) if(days.hasOwnProperty(i)) {
-                var day = $.datepicker.formatDate(format, new Date(days[i]));
+            this.data.days = {};
+            days.forEach(function(day, i){
+                day = $.datepicker.formatDate(format, new Date(day));
                 this.data.days[day] = oldDays[day] || "";
-            }
-            this.drawWidget();
+            }, this);
+
+            this.refreshWidget();
             this.save();
         },
-        sortDays: function(){            
+        sortDays: function(){
             this.data.days = sortByDays(this.data.days);
-        },
-        drawWidget: function() {
-            this.sortDays();
-            
-            var days = this.data.days,
-                that = this;
-            
-            $(this.daysListContainer).empty();
-            defaultWidget = $("<li>").attr("data-value", "default").html("Same for All");
-            $(this.daysListContainer).append(defaultWidget);
-            $(defaultWidget).on("click", function() {
-                that.setCurrentDay("default", $(this).html());
-            });
-            for(var day in days) if(days.hasOwnProperty(day)) {
-                var value = days[day],
-                    dayWidget;
-                dayWidget = $("<li>").attr("data-value", day);
-                if(day == this.currentDay) {
-                    $(dayWidget).addClass("selected");
-                }
-                $(dayWidget).html($.datepicker.formatDate('D, M d', new Date(day)));
-                $(this.daysListContainer).append(dayWidget);
-                dayWidget.day = day;
-                $(dayWidget).on("click", function() {
-                    that.setCurrentDay(
-                        $(this).attr("data-value"), $(this).html()
-                    );
-                });
-            }
-            if(!(this.currentDay in this.selectedResult)) {
-                this.setCurrentDay("default", "Same for All");
-            }
         },
         saveCurrentDay: function() {
             var days = this.data.days;
             $("#id_description").val(CKEDITOR.instances.id_description.getData()); 
 
             if(this.currentDay == "default") {
-                for(var day_key in days){
-                    var day = days[day_key];
+                for(var di in days){
+                    var day = days[di];
                     if(day==this.data["default"]) {
-                        days[day_key] = $(this.textarea).val();
+                        days[di] = $(this.textarea).val();
                     }
                 }
                 this.data["default"] = $(this.textarea).val();
             } else {
-                if(!(this.currentDay in this.selectedResult)) {
+                if(this.currentDay != this.select[0].options[this.select[0].selectedIndex].text) {
                     days[this.currentDay] = $(this.textarea).val();
                 }
             }
             this.save();            
         },
-        setCurrentDay: function(value, label) {
-            $(this.result).html(label);
-            $(this.selectedResult).html(label);
-            $(".selected", this.daysListContainer).removeClass("selected");
+        setCurrentDay: function(value, label){
             this.saveCurrentDay();
+
             this.currentDay = value;
             if(value == "default") {
                 $(this.textarea).val(this.data["default"]);
-                $(this.result).html(label + " Days");
             } else {
                 $(this.textarea).val(this.data.days[value] || this.data["default"]);
             }            
@@ -212,19 +177,36 @@
                     }, 1);
                 });
             });
-        }        
-    });
+        },
+        refreshWidget: function(){
+            var days, that, select, defaultOption;
+            this.sortDays();
+            
+            days = this.data.days;
+            that = this;
 
-    $(document).ready(function(){
-        setTimeout(function(){
-            var value = $("#id_description_json").val();
-            $("#id_description").description();
-            if(value){
-                var json = JSON.parse(value);
-                $("#id_description").html(json["default"]);
-                $("#id_description").data("ui-description").setValue(json);
-                $("#id_description").data("ui-description").saveCurrentDay();
+            select = $("select", this.dropdown.element);
+            select.empty();            
+
+            defaultOption = dom("option", {
+                value: "default",
+                innerHTML: "Same for all"
+            });
+
+            select.append(defaultOption);
+
+            for(var day in days) if(days.hasOwnProperty(day)){
+                var option = dom("option", {
+                    value: day,
+                    innerHTML: $.datepicker.formatDate('D, M d', new Date(day))
+                });
+
+                select.append(option);
             }
-        },100);
-    });
-})(jQuery);
+
+            this.dropdown.refresh();
+        }
+    }
+
+    window.DescriptionWidget = DescriptionWidget;    
+})(jQuery, window, document);

@@ -1,5 +1,5 @@
 .content-wrapper {
-    padding: 25px 15px 0px;
+    margin-top: 12px;
     color: #454545;    
 }
 
@@ -14,7 +14,6 @@
     font-size:20px;
     color:#022e52;
     text-overflow: ellipsis;
-    width: 667px;
     white-space: nowrap;
     font-weight: normal;
 }
@@ -28,44 +27,49 @@
     display: inline-block;
 }
 
-.content-wrapper .content {
+.event-wrapper {
     position: relative;
-    width: 675px;
+    background: #fdfcfc;
     border: 1px solid #ccc;
-}
-
-.content-wrapper .event-wrapper {
-    padding-left: 9px;
+    padding-left: 13px;
     padding-top: 13px;
     padding-right: 15px;
-    padding-bottom: 12px;
+    padding-bottom: 30px;
     vertical-align: top;
 }
 
-.content-wrapper .event-wrapper .event-photo {
+.event-wrapper table td {
+    vertical-align: top;
+}
+
+.event-wrapper table td.event-details-td {
+    position: relative;
+}
+
+.event-wrapper .event-photo {
     display: inline-block;
     padding: 10px;
     border: 1px solid #d3d3d3;
     vertical-align: top;
 }
 
-.content-wrapper .event-wrapper .event-photo.multiday {
+.event-wrapper .event-photo.multiday {
     min-height: 291px;
     vertical-align: middle;
 }
 
-.content-wrapper .event-wrapper .event-photo.multiday #photoFancy {
+.event-wrapper .event-photo.multiday #photoFancy {
     margin-top: 15px;
 }
 
-.content-wrapper .event-wrapper .event-photo #photoFancy {
+.event-wrapper .event-photo #photoFancy {
     height: 265px;
     width: 265px;
     display: block;
     position: relative;
 }
 
-.content-wrapper .event-wrapper .event-photo .center-cropped{
+.event-wrapper .event-photo .center-cropped{
     cursor: pointer;
     position: relative;
     background-position: center center;
@@ -74,7 +78,7 @@
 }
 
 
-.content-wrapper .event-wrapper .event-photo .detail-view {
+.event-wrapper .event-photo .detail-view {
     position: absolute;
     content: "";
     width: 80px;
@@ -84,164 +88,146 @@
     background: url("/static/images/event/loop.png") no-repeat;    
 }
 
-.content-wrapper .event-wrapper .images-list {
+.event-wrapper .images-list {
     margin-top: 8px;    
 }
 
-.content-wrapper .event-wrapper .images-list .mini-image-preview-wrapper {
+.event-wrapper .images-list .mini-image-preview-wrapper {
     border: 1px solid #e2e2e2;
     padding: 4px;
     display: inline-block;
     margin-right: 5px;
 }
 
-.content-wrapper .event-wrapper .event-photo .center-cropped.default:after {
+.event-wrapper .event-photo .center-cropped.default:after {
     display: none;
 }
 
-.content-wrapper .event-wrapper .event-photo footer {
+.event-wrapper .event-photo footer {
     margin-top: 10px;
     font-size:1.0em;
-    color: #454545;
+    color: #000;    
+}
+
+.event-wrapper .event-photo footer a {
     font-weight: bold;
 }
 
-.content-wrapper .event-wrapper .event-photo footer span {
-    color:#0260bb;
-}
-
-.content-wrapper .event-wrapper .event-details {
+.event-wrapper .event-details {
+    position: relative;
     display: inline-block;
     width: 344px;
     vertical-align: top;
     margin-left: 15px;
 }
 
+.event-wrapper .event-details-bottom {
+    position: absolute;
+    bottom: 0;
+    margin-left: 15px;
+}
+
+.content-wrapper .event-details .event-date-and-venue {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.content-wrapper .event-details .event-date-and-venue td {
+    vertical-align: top;
+}
+
 .content-wrapper .event-details .event-date-wrapper {
-    color: #247cc3;
-    margin-top: 7px;
-    margin-left: 30px;
-    font-weight: normal;
+    color: #0260bb;
+    margin-top: 5px;
+    font-weight: bold;
 }
 
-.content-wrapper .event-details .event-description {
+.content-wrapper .event-details .event-venue {
     margin-top: 11px;
-    font-weight: normal;
-    margin-left: 30px;
-}
-
-.content-wrapper span.accented,
-.content-wrapper a.accented {
-    color: #06c;
-    font-size: 1.0em;
-    text-decoration: none;
-    font-weight: normal;
+    color: #022e52;
+    font-weight: bold;
 }
 
 .content-wrapper .event-details .title-wrapper {
     position: relative;    
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #02345c;
     width: 100%;
-    padding-bottom: 5px;
 }
 
 .content-wrapper .event-details .event-price {
-    background: url("/static/images/ticket_icon.png") 5px 0px no-repeat;
-    color: #ff6601;
-    padding-left: 30px;
-    font-size: 1.1em;
+    color: #0260bb;        
     font-weight: normal;
-}
-
-.content-wrapper .event-details .event-price.short {
-    position: absolute;
-    right: 2px;
-    bottom: 5px;
-}
-
-.content-wrapper .event-details .event-actions {
-    margin-top: 12px;
-}
-
-.content-wrapper .event-details .event-actions table {
-    width: 100%;
-    border-spacing:0;
-    border-collapse:collapse;
-    border-top: 1px solid #ddd;
-}
-
-.content-wrapper .event-details .event-actions td {
-    border-bottom: 1px solid #ddd;
-    width: 50%;
-    max-width: 80px;
-    height: 23px;
-    max-height: 23px;
-    min-height: 23px;
+    width: 190px;
+    height: 40px;
+    line-height: 40px;
     vertical-align: middle;
+    display: block;
+    white-space: nowrap;    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    font-weight: bold;
 }
 
-.content-wrapper .event-details .event-actions td a {
-    text-decoration: none;
-    padding-left: 25px;
-    color: #0168cd;
+.content-wrapper .event-details .title-wrapper .action-buy-tickets {
+    position: absolute;
+    display: block;
+    width: 130px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    vertical-align: middle;
+    color: #0260bb;
+    right: 0;
+    top: 0;
+    border: 1px solid #bedefe;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+
+    box-shadow: 2px 2px 6px #eee;
+}
+
+.content-wrapper .event-details .title-wrapper .action-buy-tickets:hover {
+    box-shadow: 2px 2px 6px #eaeaea;
+
+}
+
+.content-wrapper .event-details-bottom .event-actions {
+    width: 100%;
+    border-top: 1px solid #02345c;
+    border-bottom: 1px solid #02345c;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    margin-bottom: 10px;
+}
+
+.content-wrapper .event-details-bottom .event-actions .relative-wrapper {
     position: relative;
-    min-width: 30px;
-    height:100%;
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;    
 }
 
-.content-wrapper .event-details .event-actions td a iframe {
-    transform: scale(0.9);
-    -ms-transform: scale(0.9); 
-    -webkit-transform: scale(0.9); 
-    -o-transform: scale(0.9); 
-    -moz-transform: scale(0.9); 
-    transform-origin: top left;
-    -ms-transform-origin: top left;
-    -webkit-transform-origin: top left;
-    -moz-transform-origin: top left;
-    -webkit-transform-origin: top left;    
+.content-wrapper .event-details-bottom .event-actions a{
+    display: block;
+    width: 101px;
+    background: #0260bb;    
+    text-align: center;
+    height: 16px;
+    line-height: 16px;
+    text-transform: uppercase;        
+    font-size: 13px;
+    color: #fff;
 }
 
-.event-actions td.social-buttons a {
-    padding: 0 2px !important;
-    min-width: inherit !important;
+.content-wrapper .event-details-bottom .bx-wrapper {
+    height: 37px;
 }
 
-.event-actions td.social-buttons .addthis_bubble_style {
-    height: 16px !important;
-}
-
-.content-wrapper .event-wrapper .map {
-    margin-top: 20px;
-}
-
-.content-wrapper .event-details .event-actions td a.action-facebook-like{
-    padding-left:0;
-}
-
-.content-wrapper .event-details .event-actions td a .fb-like {
-    left: 25px;
-    max-height: 17px;
-}
-
-.content-wrapper .event-details .event-actions td a:hover {
-    text-decoration: underline;
-}
-
-.content-wrapper .event-details .event-actions .action-buy-tickets {      
-    background: url("/static/images/buy-ticket.png") 5px center no-repeat;
-}
-
-.content-wrapper .event-details .event-actions .action-remind-me {    
-    background: url("/static/images/remind-me.png") 5px center no-repeat;
-}
-
-.content-wrapper .event-details .event-actions .action-in-the-loop {    
-    background: url("/static/images/in-the-loop.png") 5px center no-repeat;    
-}
-
-.content-wrapper .event-details .event-actions .action-facebook-like {    
-    background: url("/static/images/like.png") 5px center no-repeat;    
+.content-wrapper .event-details-bottom .event-actions .action-view-site {
+    background: #6e6d6d;    
 }
 
 .footer-site-map .action-facebook-like {
@@ -257,7 +243,7 @@
     background: url("/static/images/view-site.png") 2px center no-repeat;
 }
 
-.content-wrapper .event-wrapper .tags{
+.event-wrapper .tags{
     width: 540px;
     padding-left:25px;
     font-size:11px;
@@ -265,17 +251,16 @@
     background:url(/static/images/tag_icon.png) left no-repeat;
 }
 
-.content-wrapper .event-wrapper .tags a {
+.event-wrapper .tags a {
     color:#5dacfd;
     text-decoration: none;
 }
-.content-wrapper .event-wrapper .tags a:hover {
+.event-wrapper .tags a:hover {
     color: #0168cd;
 }
 
 .primary-content {
     float:left;
-    margin-bottom: 20px;
 }
 
 .primary-content.preview {
@@ -415,7 +400,7 @@
 }
 
 a {
-    color: #5dacfd;
+    color: #0067cc;
     text-decoration: none;
     cursor: pointer;
 }
@@ -429,13 +414,14 @@ a:hover{
 }
 
 .primary-content .description {
-    color: #454545;
+    margin-left: 3px;
+    color: #000;
     font-size: 14px;
     margin-top: 18px;
 }
 
 .primary-content .description * {
-    color: #454545;
+    color: #000;
     font-size: 14px;
 }
 

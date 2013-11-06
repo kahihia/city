@@ -563,5 +563,4 @@ class EventFilter(object):
                 "remove_url": "?" + self.url_query(exclude="start_time|end_time")
             }]
 
-
         return tags

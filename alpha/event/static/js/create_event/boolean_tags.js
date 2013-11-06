@@ -74,6 +74,7 @@
         new BooleanTag("date_night", "Date Night");
         new BooleanTag("family", "Family");
         new BooleanTag("wheelchair", "Wheelchair");
+        new BooleanTag("night_life", "Night Life");
     });
 
 })(jQuery, window, document);

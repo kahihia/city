@@ -20,7 +20,7 @@
     &gt; Browse
 {% endblock %}
 
-{% block body_attributes %}class="modern home"{% endblock %}
+{% block body_attributes %}class="home"{% endblock %}
 
 {% block advertising %}
     <div>
@@ -47,28 +47,9 @@
         </div>
     {% endif %}
     <div class="primary-content">
-        <div class="content">
-            
-            <div class="main-content">                
-                {% include 'events/_browse_left_menu.html' %}                
-
-                <div class="main-navigation-content-nav">
-                    <div class="main-navigation-content-nav-wrapper">
-                        {% include 'events/_searchpad_datetime_menu.html' %}
-
-                        <ul class="searchTags browse">
-                            {% for tag in eventsFilter.search_tags %}
-                                <li data-remove-url="{{ tag.remove_url }}">
-                                    {{ tag.name }}
-                                </li>
-                            {% endfor %}
-                        </ul>
-
-                        {% include 'events/_browse_events_list.html' %}
-                    </div>
-                </div>
-                <div class="clr"></div>
-            </div>
+        <div class="content">            
+            {% include 'events/_browse_left_menu.html' %}
+            {% include 'events/_browse_events_container.html' %}
         </div>
     </div>
 {% endblock %}

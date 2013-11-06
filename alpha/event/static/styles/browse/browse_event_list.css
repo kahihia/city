@@ -1,5 +1,9 @@
 .entry-wrapper {
-    padding-left: 8px;
+    background: #fdfcfc;
+    border: 1px solid #c6c6c6;
+    padding-top: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
 }
 
 .entry-wrapper header{
@@ -9,18 +13,36 @@
     margin-bottom: 8px;
 }
 
+.entry-wrapper .time-group {
+    width: 100%;
+    border-bottom: 2px solid #619cd7;
+    margin-bottom: 0;
+}
+
+.entry-wrapper .time-group span {
+    display: block;
+    background: #619cd7;
+    width: 80px;
+    height: 11px;
+    line-height: 11px;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
 .entry-wrapper .button.standart {
     width: auto;
     margin: 0 0 15px 0;
 }
 
 .entry-wrapper .entry-info{
-    width: 422px;
-    height: 66px;
-    padding: 7px 14px;
-    background: #f7f7f7;
-    margin-bottom: 4px;
     position: relative;
+    height: 65px;
+    padding: 10px 5px;
+    margin-bottom: 4px;
+    
 }
 
 .entry-wrapper .entry-info.with-all-actions,
@@ -28,12 +50,12 @@
     padding-left: 20px;
 }
 
-.entry-wrapper .entry-info:nth-child(even) {
-    background: #e3e3e3;    
+.entry-wrapper div.entry-info:nth-of-type(even) {
+    background: #fdfcfc;    
 }
 
-.entry-wrapper .entry-info:nth-child(odd) {
-    background: #f7f7f7;    
+.entry-wrapper div.entry-info:nth-of-type(odd) {
+    background: #ecebeb;    
 }
 
 .entry-wrapper .entry-info.extended {
@@ -130,10 +152,10 @@
 .entry-wrapper .entry-info .entry-details-wrapper .title,
 .entry-wrapper .entry-info .auctions-details-wrapper .title {
     color: #000;
-    font-size:1.1em;
+    font-size: 1.1em;
     font-weight: bold;
-    margin-top:3px;
-    margin-bottom:3px;
+    margin-top: 3px;
+    margin-bottom: 3px;
 }
 
 .entry-wrapper .entry-info .entry-details-wrapper .title a,
@@ -153,8 +175,13 @@
     color: #2c8ed9;    
 }
 
+.entry-wrapper .entry-info .entry-details-wrapper .entry-date .event-date{
+    min-width: 125px;
+}
+
 .entry-wrapper .entry-info .entry-details-wrapper .entry-date .delimeter {
-    color: #ccc;
+    margin-left: 16px;
+    margin-right: 16px;
 }
 
 .entry-wrapper .entry-info .entry-details-wrapper .entry-description {

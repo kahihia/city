@@ -3,7 +3,7 @@
 
     var BrowsePage = function(){
         this.initJumpToDate();
-        $(".browse.searchTags").tagit({
+        $(".browse.searchtags").tagit({
             afterTagRemoved: function(e, ui){
                 window.location = $(ui.tag).data("remove-url");
             }
@@ -16,7 +16,7 @@
     BrowsePage.prototype = {
         initJumpToDate: function(){
             this.jumpToDate = new window.JumpToDate(
-                $(".main-content")
+                $(".primary-content")
             );
         },
         initEventActions: function(){
