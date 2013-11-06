@@ -156,7 +156,7 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
     if facebook_owner_type == 'page' and event.tickets:
         common_params['ticket_uri'] = event.tickets
 
-    if event.event_type == 'MULTIDAY':
+    if event.is_multiday():
         single_events = list(SingleEvent.homepage_events.filter(event=event))
     else:
         single_events = list(SingleEvent.future_events.filter(event=event))
@@ -200,6 +200,9 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
 
                 attached_images[image_name] = open(event_image)
 
+    if not len(posted_single_events):
+        raise Exception('Error: no events for posting')
+
     values = {
         'access_token': graph.access_token,
         'batch': json.dumps(batch)
@@ -219,6 +222,11 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
     for i in range(0, len(posted_single_events)):
         attach_facebook_event(int(facebook_event_ids[i]), posted_single_events[i])
         result[posted_single_events[i].id] = facebook_event_ids[i]
+
+    if event.is_multiday():
+        single_event = SingleEvent.objects.filter(event=event, is_occurrence=False)[0]
+        single_event.facebook_event = posted_single_events[0].facebook_event
+        single_event.save()
 
     return result
 

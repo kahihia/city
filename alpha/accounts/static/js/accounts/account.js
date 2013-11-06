@@ -211,13 +211,24 @@
                         self.successProcessCount++;
                         message.html(self.successProcessCount + " out of " + self.eventsToProcessCount
                                               + " events posted to Facebook.");
+
+                        var index = 0;
                         $.each(data.facebook_event_ids, function(singleEventId, fbEventId) {
                             var checker = $(self.eventCheckerSelector + "[data-single-event-id=" + singleEventId + "]");
+                            if(checker.length === 0 && index === 0) {
+                                var eventChecker = $(self.eventCheckerSelector + "[data-event-id=" + eventId + "]");
+                                if(!data.facebook_event_ids[eventChecker.attr("single-event-id")]) {
+                                    checker = eventChecker;
+                                }
+                            }
+
                             var link = self.facebookLinkTpl.clone();
                             link.attr("href", "https://www.facebook.com/events/" + fbEventId + "/");
 
                             checker.parent().attr("data-facebook-event-id", fbEventId);
                             checker.replaceWith(link);
+
+                            index++;
                         });
                     }
                     else {

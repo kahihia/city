@@ -211,6 +211,9 @@ class Event(models.Model):
             active=True
         ).count() > 0
 
+    def is_multiday(self):
+        return self.event_type == 'MULTIDAY'
+
     def is_tickets_field_url(self):
         url_validator = URLValidator()
         try:
