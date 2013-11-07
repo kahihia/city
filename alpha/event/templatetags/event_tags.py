@@ -1,4 +1,5 @@
 from django import template
+from django.template.loader import render_to_string
 
 register = template.Library()
 
@@ -54,13 +55,6 @@ def event_block(context, event):
     }
 
 
-@register.inclusion_tag('events/list/event_link.html', takes_context=True)
-def event_link(context, event):
-    return {
-        'event': event
-    }
-
-
 @register.inclusion_tag('events/list/short_single_event.html', takes_context=True)
 def short_single_event(context, event):
     STATIC_URL = context['STATIC_URL']
@@ -76,3 +70,8 @@ def auth_required_popup(context):
     return {
         "account": request.account
     }
+
+
+@register.simple_tag(takes_context=True)
+def event_link(context, event):
+    return render_to_string('events/list/event_link.html', {'event': event}).strip()
