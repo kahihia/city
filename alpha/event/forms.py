@@ -15,6 +15,7 @@ from ckeditor.fields import RichTextFormField
 import dateutil.parser as dateparser
 from cities.models import Region
 from djmoney.forms.fields import MoneyField
+from moneyed import Money, CAD
 
 
 class SetupFeaturedForm(forms.ModelForm):
@@ -27,7 +28,7 @@ class SetupFeaturedForm(forms.ModelForm):
     start_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
     end_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
 
-    bonus = MoneyField(required=False)
+    # bonus = MoneyField(required=False) temporarily removed
 
     class Meta:
         model = FeaturedEvent
@@ -46,14 +47,14 @@ class SetupFeaturedForm(forms.ModelForm):
     def clean(self):
         cleaned_data = self.cleaned_data
 
-        all_of_canada = cleaned_data["all_of_canada"]
+        all_of_canada = cleaned_data['all_of_canada']
 
-        bonus = cleaned_data["bonus"]
+        bonus = cleaned_data['bonus'] if 'bonus' in cleaned_data else Money(0, CAD)
 
-        regions = cleaned_data["regions"]
+        regions = cleaned_data['regions']
 
         if not all_of_canada and not regions:
-            raise forms.ValidationError("You should choose at least one region")
+            raise forms.ValidationError('You should choose at least one region')
 
         if bonus > self.account.bonus_budget:
             raise forms.ValidationError('Ensure bonus is lower than or equal to %s' % self.account.bonus_budget)
