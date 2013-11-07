@@ -25,9 +25,10 @@
     width: 100%;
     text-overflow: ellipsis;
     display: inline-block;
+    vertical-align: middle;
 }
 
-.event-wrapper {
+.event-wrapper, .primary-wrapper {
     position: relative;
     background: #fdfcfc;
     border: 1px solid #ccc;
@@ -111,6 +112,11 @@
 
 .event-wrapper .event-photo footer a {
     font-weight: bold;
+}
+
+.event-wrapper .event-details-block {
+    position:relative;
+    height: 285px;
 }
 
 .event-wrapper .event-details {
@@ -410,7 +416,7 @@ a:hover{
 }
 
 .primary-content p {
-    color: #454545;
+    color: #000000;
 }
 
 .primary-content .description {

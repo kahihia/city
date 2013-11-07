@@ -29,8 +29,8 @@
         <h1>
             {{ venue_account.venue.name }}<a href="{% url 'userena_profile_detail' venue_account.account.user.username %}">({{ venue_account.account.user.username }})</a>
         </h1>
-        <div class="content account-profile">
-            <div class="main-content account-profile">
+        <div class="account-profile">
+            <div class="primary-wrapper account-profile">
                 <div class="account-left">
                     <div class="venue-account-avatar">
                         {% if venue_account.picture %}

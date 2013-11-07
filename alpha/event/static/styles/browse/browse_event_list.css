@@ -37,6 +37,10 @@
     margin: 0 0 15px 0;
 }
 
+.entry-wrapper .button.standart.nomargin {
+    margin: 0;
+}
+
 .entry-wrapper .entry-info{
     position: relative;
     height: 65px;
@@ -200,7 +204,7 @@
 }
 
 .account-featured-table {
-    width: 672px !important;
+    width: 100% !important;
     border-collapse: collapse;
 }
 

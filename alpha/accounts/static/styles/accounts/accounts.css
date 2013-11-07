@@ -372,13 +372,13 @@
 
 .edit-event-account-button {
     margin-top: 12px;
-    width: 154px;
+    width: 85px;
     height: 34px;
     line-height: 34px;
     color: #0066cc;
     text-align: center;
     vertical-align: middle;
-    font-size:16px;
+    display: inline-block;
 }
 
 .public-or-private .button {
@@ -486,7 +486,11 @@
 }
 
 .account-entry-wrapper {
-    width: 710px;
+    width: 650px;
+}
+
+.account-primary-content {
+    width: 684px;
 }
 
 .account-entry-wrapper .entry-info {

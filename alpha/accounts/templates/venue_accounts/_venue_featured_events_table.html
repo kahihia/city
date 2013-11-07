@@ -5,64 +5,66 @@
 
 
 {% paginate 6 venue_featured_events %}
-<table class="account-featured-table account-entry-wrapper entry-wrapper">
-    <tr>
-        <th class="action">Event</th>
-        <th class="action">Status</th>
-        <th class="action">Views</th>
-        <th class="action">Clicks</th>
-        <th class="action">From-To</th>
-        <th class="action">Regions</th>
-    </tr>
-    {% for event in venue_featured_events %}
+<div class="account-entry-wrapper entry-wrapper">
+    <table class="account-featured-table account-entry-wrapper entry-wrapper">
         <tr>
-            <td class="no-padding">
-                <div class="entry-info">
-                    <div class="entry-img-prev">
-                        {% if event.event_day.picture %}
-                            <img src="{% cropped_thumbnail event.event_day.image "cropping" width=60 %}" height="60px" weight="60px">
-                        {% else %}
-                            <img src="{{ STATIC_URL }}images/default-event.jpg" height="60px" weight="60px">
-                        {% endif %}
-                    </div>
-                    <div class="entry-details-wrapper">
-                        <div class="title">
-                            <a href="{% event_link event.event %}">
-                                {{ event.event_day.name }}&nbsp;
-                            </a>
-                        </div>
-                    </div>
-                    <div class="clr"></div>
-                </div>
-            </td>
-            <td>
-                {% if event.active %}
-                    On
-                {% else %}
-                    Off
-                {% endif %}
-            </td>
-            <td>{{ event.views }}</td>
-            <td>{{ event.clicks }}</td>
-            <td align="center">
-                {{ event.start_time|date:"b d, Y"|title }}
-                <br/>-<br/>
-                {{ event.end_time|date:"b d, Y"|title }}
-            </td>
-            <td>
-                {% if event.all_of_canada %}
-                    All of Canada
-                {% else %}
-                    {{ event.regions_representation }}
-                {% endif %}
-            </td>
+            <th class="action">Event</th>
+            <th class="action">Status</th>
+            <th class="action">Views</th>
+            <th class="action">Clicks</th>
+            <th class="action">From-To</th>
+            <th class="action">Regions</th>
         </tr>
-    {% empty %}
-        <p>
-            no featured events
-        </p>
-    {%endfor%}
-</table>
+        {% for event in venue_featured_events %}
+            <tr>
+                <td class="no-padding">
+                    <div class="entry-info">
+                        <div class="entry-img-prev">
+                            {% if event.event_day.picture %}
+                                <img src="{% cropped_thumbnail event.event_day.image "cropping" width=60 %}" height="60px" weight="60px">
+                            {% else %}
+                                <img src="{{ STATIC_URL }}images/default-event.jpg" height="60px" weight="60px">
+                            {% endif %}
+                        </div>
+                        <div class="entry-details-wrapper">
+                            <div class="title">
+                                <a href="{% event_link event.event %}">
+                                    {{ event.event_day.name }}&nbsp;
+                                </a>
+                            </div>
+                        </div>
+                        <div class="clr"></div>
+                    </div>
+                </td>
+                <td>
+                    {% if event.active %}
+                        On
+                    {% else %}
+                        Off
+                    {% endif %}
+                </td>
+                <td>{{ event.views }}</td>
+                <td>{{ event.clicks }}</td>
+                <td align="center">
+                    {{ event.start_time|date:"b d, Y"|title }}
+                    <br/>-<br/>
+                    {{ event.end_time|date:"b d, Y"|title }}
+                </td>
+                <td>
+                    {% if event.all_of_canada %}
+                        All of Canada
+                    {% else %}
+                        {{ event.regions_representation }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <p>
+                no featured events
+            </p>
+        {%endfor%}
+    </table>
+</div>
 
 <div class="entry-navigation-np">
     <p>

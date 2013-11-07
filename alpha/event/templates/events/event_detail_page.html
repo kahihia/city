@@ -105,99 +105,101 @@
                             </div>
                         </td>
                         <td class="event-details-td">
-                            <div class="event-details">
-                                <div class="title-wrapper">
-                                    <div class="event-price">
-                                        {% if event.price and event.price != "$" %}
-                                            {{event.price}}
-                                        {% else %}
-                                            Price not set
+                            <div class="event-details-block">
+                                <div class="event-details">
+                                    <div class="title-wrapper">
+                                        <div class="event-price">
+                                            {% if event.price and event.price != "$" %}
+                                                {{event.price}}
+                                            {% else %}
+                                                Price not set
+                                            {% endif %}
+                                        </div>
+                                        {% if event.tickets %}
+                                            <a href="javascript:void()"  class="action-buy-tickets accented">
+                                                Buy tickets
+                                            </a>
+                                            {% buy_tickets_popup event %}
                                         {% endif %}
                                     </div>
-                                    {% if event.tickets %}                                
-                                        <a href="javascript:void()"  class="action-buy-tickets accented">
-                                            Buy tickets
-                                        </a>
-                                        {% buy_tickets_popup event %}
+                                    <table class="event-date-and-venue">
+                                        <tr>
+                                            <td>
+                                                <div class="event-date-wrapper">
+                                                    {% if event.event_type == "SINGLE" %}
+                                                        {{event.start_time|date:"l, N d"}}
+                                                    {% endif %}
+                                                    {% if event.event_type == "MULTIDAY" %}
+                                                        {{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.end_time|date:"D, N d"}}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="event-venue">
+                                                    <span class="accented">{{ event.venue.name }}</span><br />
+                                                    {% if event.venue.street %}
+                                                        {% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}
+                                                    {% endif %}
+                                                    {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
+                                                </div>
+                                            </td>
+                                            {% if event.venue %}
+                                            <td>
+                                                <div class="venue_map_preview">
+                                                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.venue.location.y }},{{ event.venue.location.x }}&zoom=13&size=100x80&maptype=roadmap&markers=color:blue%7C{{ event.venue.location.y }},{{ event.venue.location.x }}&sensor=false">
+                                                </div>
+                                                <div id="venue_map" class="map"></div>
+                                            </td>
+                                            {% endif %}
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="event-details-bottom">
+                                    <div class="event-actions">
+                                        <div class="relative-wrapper">
+                                            <a href="javascript:void(0);" class="action-remind-me" data-single-event-id="{{ event.id }}">Remind Me</a>
+                                            {% remind_me_popup event %}
+                                        </div>
+                                        <div class="relative-wrapper">
+                                            <a href="javascript:void()" class="action-in-the-loop">In the Loop</a>
+                                            {% in_the_loop_popup event %}
+                                        </div>
+                                        <div class="relative-wrapper">
+                                            <a href="{{ event.website }}" class="action-view-site" target="_blank">
+                                                View Site
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="social-buttons">
+                                        <!-- AddThis Button BEGIN -->
+                                        <div class="addthis_toolbox addthis_default_style addthis_16x16_style">
+                                        <a class="addthis_button_facebook"></a>
+                                        <a class="addthis_button_twitter"></a>
+                                        <a class="addthis_button_pinterest_share"></a>
+                                        <a class="addthis_button_google_plusone_share"></a>
+                                        <a class="addthis_button_linkedin"></a>
+                                        <a class="addthis_button_myspace"></a>
+                                        <a class="addthis_button_blogger"></a>
+                                        <a class="addthis_button_email"></a>
+
+
+                                        <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
+                                        </div>
+                                        <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+                                        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5228e9b0617f180a"></script>
+                                        <!-- AddThis Button END -->
+                                    </div>
+                                    {% if event.event_type == "MULTIDAY" %}
+                                    <ul class="event-days bxslider">
+                                        {% for  key, occurrences in event.sorted_occurrences_days.items %}
+                                        <li>
+                                            <div class="event-day-switch{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if occurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
+                                                 {{ occurrences.0.start_time|date:"D d" }}
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
                                     {% endif %}
                                 </div>
-                                <table class="event-date-and-venue">
-                                    <tr>
-                                        <td>
-                                            <div class="event-date-wrapper">
-                                                {% if event.event_type == "SINGLE" %}
-                                                    {{event.start_time|date:"l, N d"}}
-                                                {% endif %}
-                                                {% if event.event_type == "MULTIDAY" %}
-                                                    {{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.end_time|date:"D, N d"}}
-                                                {% endif %}
-                                            </div>
-                                            <div class="event-venue">
-                                                <span class="accented">{{ event.venue.name }}</span><br />
-                                                {% if event.venue.street %}
-                                                    {% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}
-                                                {% endif %}
-                                                {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
-                                            </div>
-                                        </td>
-                                        {% if event.venue %}
-                                        <td>
-                                            <div class="venue_map_preview">
-                                                <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.venue.location.y }},{{ event.venue.location.x }}&zoom=13&size=100x80&maptype=roadmap&markers=color:blue%7C{{ event.venue.location.y }},{{ event.venue.location.x }}&sensor=false">
-                                            </div>
-                                            <div id="venue_map" class="map"></div>
-                                        </td>
-                                        {% endif %}
-                                    </tr>
-                                </table>                                
-                            </div>
-                            <div class="event-details-bottom">
-                                <div class="event-actions">
-                                    <div class="relative-wrapper">
-                                        <a href="javascript:void(0);" class="action-remind-me" data-single-event-id="{{ event.id }}">Remind Me</a>
-                                        {% remind_me_popup event %}
-                                    </div>
-                                    <div class="relative-wrapper">
-                                        <a href="javascript:void()" class="action-in-the-loop">In the Loop</a>
-                                        {% in_the_loop_popup event %}
-                                    </div>
-                                    <div class="relative-wrapper">
-                                        <a href="{{ event.website }}" class="action-view-site" target="_blank">
-                                            View Site
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div class="social-buttons">
-                                    <!-- AddThis Button BEGIN -->
-                                    <div class="addthis_toolbox addthis_default_style addthis_16x16_style">
-                                    <a class="addthis_button_facebook"></a>
-                                    <a class="addthis_button_twitter"></a>
-                                    <a class="addthis_button_pinterest_share"></a>
-                                    <a class="addthis_button_google_plusone_share"></a>
-                                    <a class="addthis_button_linkedin"></a>
-                                    <a class="addthis_button_myspace"></a>
-                                    <a class="addthis_button_blogger"></a>
-                                    <a class="addthis_button_email"></a>
-                                    
-                                    
-                                    <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
-                                    </div>
-                                    <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
-                                    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5228e9b0617f180a"></script>
-                                    <!-- AddThis Button END -->
-                                </div>
-                                {% if event.event_type == "MULTIDAY" %}
-                                <ul class="event-days bxslider">
-                                    {% for  key, occurrences in event.sorted_occurrences_days.items %}
-                                    <li>
-                                        <div class="event-day-switch{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if occurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
-                                             {{ occurrences.0.start_time|date:"D d" }}
-                                        </div>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                                {% endif %}
                             </div>
                         </td>
                     </tr>

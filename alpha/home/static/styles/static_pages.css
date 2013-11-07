@@ -1,13 +1,22 @@
+.page-primary-content {
+    width: 684px;
+}
+
 .content.page {
     min-height: 455px;
 }
 
 .inner-content {
 	padding: 20px 18px;
+    color: #000000;
 }
 
 .inner-content .indent-block {
     padding-left: 16px;
+}
+
+.inner-content .indent-block .button {
+    display: inline-block;
 }
 
 .entries-list {
@@ -40,7 +49,7 @@
 }
 
 .num-entries-list li .list-entry-text {
-    color: #454545;
+    color: #000000;
     font-size: 12px;
     font-weight: normal;
 }

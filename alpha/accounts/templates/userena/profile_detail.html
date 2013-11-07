@@ -52,8 +52,8 @@
         My account
     </h1>
     {% include 'notices/_list.html' with notices=profile.notices %}
-    <div class="content account-profile">
-        <div class="main-content">
+    <div class="account-profile account-primary-content">
+        <div class="primary-wrapper">
             <div class="account-left">
                 <div class="account-avatar">
                     <img class="mugshot" src="{{ profile.get_mugshot_url }}" alt="{% trans "

@@ -257,7 +257,7 @@ ul#box-nav li.selected {
 
 .tabs-container {
     margin-top: 10px;
-    width: 675px;
+    width: 684px;
     margin-bottom: 10px;
 }
 
@@ -317,10 +317,6 @@ ul#box-nav li.selected {
 
 .tabs-container .box {
   display: none;
-  border-left: 1px solid #d4d4d4;
-  border-top: 1px solid #d4d4d4;
-  border-right: 2px solid #e1e1e1;
-  border-bottom: 2px solid #e1e1e1;  
 }
 
  .tabs-container.no-borders .box {
