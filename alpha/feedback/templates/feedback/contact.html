@@ -3,19 +3,12 @@
 
 {% block head %}
     <link type="text/css" href="{{STATIC_URL}}css/feedback.css" rel="stylesheet" />
-    <link type="text/css" href="{{STATIC_URL}}js/libs/selectBox/css/jquery.selectbox.css" rel="stylesheet" />
-    <script type="text/javascript" src="{{STATIC_URL}}js/libs/selectBox/js/jquery.selectbox-0.2.min.js"></script>
-    <script type="text/javascript">
-        $("document").ready(function() {
-            $("form select").selectbox();
-        });
-    </script>
 {% endblock %}
 
 {% block page %}
     <h1>Feedback/Contact Form</h1>
-    <div class="primary-content">
-        <div class="content">
+    <div class="primary-content item-primary-content">
+        <div class="primary-wrapper">
             <div class="main-content">
                 <div class="inner-content">
                     <form id="contact" method="post">
@@ -33,7 +26,7 @@
                             <tr>
                                 <td></td>
                                 <td>
-                                    <input type="submit" class="button-grey" value="Send">
+                                    <input type="submit" class="button" value="Send">
                                 </td>
                             </tr>
                         </table>
@@ -42,4 +35,8 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        var select = $(".venue-account-owner-dropdown select");
+        $(".venue-account-owner-dropdown").qap_dropdown();
+    </script>
 {% endblock %}

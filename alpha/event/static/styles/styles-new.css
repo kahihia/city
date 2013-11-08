@@ -273,6 +273,10 @@
     float: none;
 }
 
+.item-primary-content {
+    width: 684px;
+}
+
 .secondary-content {
     float:right;
     width: 310px;

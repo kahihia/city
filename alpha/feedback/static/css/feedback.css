@@ -69,3 +69,37 @@ form .sbOptions a {
 form .sbToggle, form .sbToggle:hover {
     background: url(/static/js/libs/selectBox/img/selection_arrow.png) 5px 5px no-repeat;
 }
+
+.dropdown {
+    border: 1px solid #ababab;
+    height: 28px;
+    line-height: 26px;
+    width: 385px;
+    margin: 2px 0;
+}
+
+.dropdown:after {
+    height: 28px;
+}
+
+.dropdown-content {
+    display: none;
+    width: 405px;
+    position: absolute;
+    background: #fff;
+    z-index: 8031;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 0;
+}
+
+.dropdown-content.toggled {
+    display: block;
+}
+
+.dropdown-content .dropdown-child{
+    padding: 5px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+    background: #eeeeee;
+}
