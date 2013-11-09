@@ -184,19 +184,21 @@ class EditEventForm(forms.ModelForm):
         self.fields['when'].widget.attrs['readonly'] = True
         self.fields['when'].widget.attrs['placeholder'] = "Click to select"
         self.fields['when'].error_messages['required'] = 'Please choose at least one date'
-        self.fields['when'].widget.attrs['tabindex'] = 3
 
         self.fields['when_json'].error_messages['required'] = 'Please choose at least one date'
 
-        self.fields['description'].widget = forms.widgets.Textarea(attrs={'class': 'textarea', 'tabindex': 5})
+        self.fields['price'].widget.attrs['tabindex'] = 3
 
-        self.fields['website'].widget.attrs['tabindex'] = 6
+        self.fields['description'].widget = forms.widgets.Textarea(attrs={'class': 'textarea', 'tabindex': 4})
+
+        self.fields['website'].widget.attrs['tabindex'] = 5
         self.fields['website'].error_messages['invalid'] = 'Enter a valid website url'
 
-        self.fields['tags'].error_messages['required'] = 'Please enter at least one tag'
-        self.fields['tags'].widget.attrs['tabindex'] = 11
+        self.fields['tickets'].widget.attrs['tabindex'] = 6
 
-        self.fields['tickets'].widget.attrs['tabindex'] = 12
+        self.fields['tags'].error_messages['required'] = 'Please enter at least one tag'
+        self.fields['tags'].widget.attrs['tabindex'] = 7
+
 
     def clean(self):
         cleaned_data = self.cleaned_data

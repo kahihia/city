@@ -55,15 +55,15 @@
                 <table>
                     <tr>
                         <td>Venue name</td>
-                        <td>{{form.venue_name}}</td>
+                        <td class="content-input-text">{{form.venue_name}}</td>
                     </tr>
                     <tr>
                         <td>Street address</td>
-                        <td>{{form.street}}</td>
+                        <td class="content-input-text">{{form.street}}</td>
                     </tr>
                     <tr>
                         <td>City</td>
-                        <td>
+                        <td class="content-input-text">
                             {{form.city}}
                             {{form.city_identifier}}
                         </td>
@@ -177,14 +177,14 @@
                 <ul>
                     <li>
                         <div class="radio">
-                            <input value="True" type="radio" id="id_wheelchair_0" name="wheelchair" tabindex="7">
+                            <input value="True" type="radio" id="id_wheelchair_0" name="wheelchair">
                             <label for="id_wheelchair_0"></label>
                             <label for="id_wheelchair_0">Yes</label>
                         </div>
                     </li>
                     <li>
                         <div  class="radio">
-                            <input value="False" type="radio" id="id_wheelchair_1" name="wheelchair" tabindex="7" checked="checked">
+                            <input value="False" type="radio" id="id_wheelchair_1" name="wheelchair" checked="checked">
                             <label for="id_wheelchair_1"></label>
                             <label for="id_wheelchair_1">No</label>
                         </div>
@@ -201,14 +201,14 @@
                 <ul>
                     <li>
                         <div class="radio">
-                            <input value="True" type="radio" id="id_date_night_0" name="date_night" tabindex="8">
+                            <input value="True" type="radio" id="id_date_night_0" name="date_night">
                             <label for="id_date_night_0"></label>
                             <label for="id_date_night_0">Yes</label>
                         </div>
                     </li>
                     <li>
                         <div  class="radio">
-                            <input value="False" type="radio" id="id_date_night_1" name="date_night" tabindex="8" checked="checked">
+                            <input value="False" type="radio" id="id_date_night_1" name="date_night" checked="checked">
                             <label for="id_date_night_1"></label>
                             <label for="id_date_night_1">No</label>
                         </div>
@@ -225,14 +225,14 @@
                 <ul>
                     <li>
                         <div class="radio">
-                            <input value="True" type="radio" id="id_family_0" name="family" tabindex="9">
+                            <input value="True" type="radio" id="id_family_0" name="family">
                             <label for="id_family_0"></label>
                             <label for="id_family_0">Yes</label>
                         </div>
                     </li>
                     <li>
                         <div  class="radio">
-                            <input value="False" type="radio" id="id_family_1" name="family" tabindex="9" checked="checked">
+                            <input value="False" type="radio" id="id_family_1" name="family" checked="checked">
                             <label for="id_family_1"></label>
                             <label for="id_family_1">No</label>
                         </div>
@@ -249,14 +249,14 @@
                 <ul>
                     <li>
                         <div class="radio">
-                            <input value="True" type="radio" id="id_night_life_0" name="night_life" tabindex="9">
+                            <input value="True" type="radio" id="id_night_life_0" name="night_life">
                             <label for="id_night_life_0"></label>
                             <label for="id_night_life_0">Yes</label>
                         </div>
                     </li>
                     <li>
                         <div  class="radio">
-                            <input value="False" type="radio" id="id_night_life_1" name="night_life" tabindex="9" checked="checked">
+                            <input value="False" type="radio" id="id_night_life_1" name="night_life" checked="checked">
                             <label for="id_night_life_1"></label>
                             <label for="id_night_life_1">No</label>
                         </div>
@@ -317,7 +317,7 @@
         </div>
 
         <div class="submit-wrapper">
-            <input type="submit" value="Post Event">
+            <input type="submit" value="Post Event" tabindex="8">
         </div>
     </form>
 </div>

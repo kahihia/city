@@ -138,7 +138,9 @@
                                                     {% if event.venue.street %}
                                                         {% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}
                                                     {% endif %}
-                                                    {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
+                                                    <div class="event-venue-name">
+                                                        {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
+                                                    </div>
                                                 </div>
                                             </td>
                                             {% if event.venue %}

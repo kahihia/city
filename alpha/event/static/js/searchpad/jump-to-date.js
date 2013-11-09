@@ -18,7 +18,7 @@
         this.openButton = $(".jump-popup-opener", this.scope);
         this.popup = $(".jump-popup", this.scope);
 
-        this.openButton.on("click", this.openPopup.bind(this));
+        this.openButton.on("click", this.togglePopup.bind(this));
         $(document).on("click", this.closeIfNotPopup.bind(this));
 
         $(".time, .meridian", this.scope).qap_dropdown();
@@ -89,10 +89,19 @@
     };
 
     JumpToDate.prototype = {
+        togglePopup: function(e) {
+            if(this.popup.is(":visible")) {
+                this.closePopup();
+            }
+            else {
+                this.openPopup();
+            }
+
+            e.stopPropagation();
+        },
         openPopup: function(e){
             this.popup.show();
             this.openButton.addClass("active");
-            e.stopPropagation();
         },
         closePopup: function(e){
             this.popup.hide();

@@ -6,7 +6,8 @@ input#id_price[readonly] {
 .content-wrapper input[type="text"],
 .content-wrapper input[type="password"],
 .popup input[type="text"],
-.popup input[type="password"] {
+.popup input[type="password"],
+.content-input-text input {
     outline: 0;
     color: #454545;
     background: #fff;
@@ -14,6 +15,11 @@ input#id_price[readonly] {
     padding: 0 5px;
     height: 26px;
     line-height: 26px;
+}
+
+.content-input-text input {
+    border-radius: 0;
+    min-width: 200px;
 }
 
 textarea {

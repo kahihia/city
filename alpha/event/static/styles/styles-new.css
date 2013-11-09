@@ -154,6 +154,11 @@
     font-weight: bold;
 }
 
+.content-wrapper .event-details .event-venue-name {
+    width: 225px;
+    white-space: normal;
+}
+
 .content-wrapper .event-details .title-wrapper {
     position: relative;    
     border-bottom: 1px solid #02345c;
