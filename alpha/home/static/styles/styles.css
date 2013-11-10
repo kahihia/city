@@ -83,6 +83,10 @@ html.preview, body.preview {
     text-align: left;
 }
 
+.post-events-for-free {
+    margin-top: 5px;
+}
+
 .post-events-for-free a,
 .post-events-for-free a:hover {
     margin: 0;
@@ -136,8 +140,8 @@ html.preview, body.preview {
 
 .menu-wrapper ul.main-menu li a {
     text-transform: uppercase;
-    height: 25px;
-    line-height: 25px;
+    height: 28px;
+    line-height: 28px;
 }
 
 .menu-wrapper ul.main-menu li a .hover-effect {
@@ -163,12 +167,14 @@ html.preview, body.preview {
     width: 350px;
     float: left;
     height: 25px;
+    padding-top: 3px;
 }
 
 .location-wrapper .location-selection-wrapper,
 .search-wrapper .search-selection-wrapper {
     position:relative;
     display: inline-block;
+    vertical-align: top;
 }
 
 .location-selection-wrapper:hover .search-lists {
@@ -195,8 +201,8 @@ html.preview, body.preview {
 .location-wrapper .location-label,
 .search-wrapper .search-label {
     display: inline-block;
-    font-size: 14px;
-    margin-top: 5px;
+    font-size: 12px;
+    margin-top: 4px;
     color: #5189c0;
 }
 
@@ -340,7 +346,7 @@ table.schedule-bar-menu {
     margin: 0;
     padding: 0;
     background: #c6c6c6;
-    border-bottom: 1px solid #022e52;
+    border-bottom: 2px solid #022e52;
     color: #022e52;
 }
 
@@ -351,12 +357,14 @@ table.schedule-bar-menu td {
     height: 20px;
     line-height: 20px;
     vertical-align: middle;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 13px;
+    padding-right: 13px;
 }
 
 table.schedule-bar-menu td a {
     color: #022e52;
+    font-size: 11px;
+    font-weight: bold;
 }
 
 table.schedule-bar-menu td:hover,

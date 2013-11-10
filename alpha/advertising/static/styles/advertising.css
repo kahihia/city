@@ -18,3 +18,8 @@
     margin-bottom: 4px;
     text-align: center;
 }
+
+.advertising-right.first {
+    padding-top: 0;
+    border-top: 0;
+}

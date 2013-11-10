@@ -14,7 +14,7 @@
     bottom: 7px;
     margin: 0;
     text-transform: uppercase;;
-    font-size: 18px;
+    font-size: 16px;
     font-family: HelveticaNeueLTCom;
     font-weight: bold;
 }
@@ -87,8 +87,8 @@
 
 .features-navigation {
     position: absolute;
-    bottom: 10px;
-    right: 5px;
+    bottom: 6px;
+    right: 6px;
 }
 
 .features-navigation ul {
@@ -100,10 +100,12 @@
 
 .features-navigation ul a {
     float:left;
-    padding: 5px 10px;
+    padding: 2px 5px;
     background: #fdfcfc;
     text-decoration: none;
-    color: #838586;    
+    color: #838586;
+    text-transform: uppercase;
+    font-size: 10px;
 }
 
 .features-navigation ul a:hover {
@@ -112,11 +114,13 @@
 }
 
 .features-navigation .step-links a.current{
-    border: none;
-    background: #616161;
-    box-shadow: inset 0px 0px 8px rgba(0,0,0, .5), 0px 1px 0px rgba(255,255,255, .8);
-    color: #f0f0f0;
-    text-shadow: 0px 0px 3px rgba(0,0,0, .5);
+    padding: 2px 8px;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+}
+
+.features-navigation .step-links a.current:hover {
+    color: #838586;
 }
 
 .entry-navigation-np ul {

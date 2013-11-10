@@ -1,5 +1,5 @@
 {% for ad in ads %}
-    <div class="{{ css_class }}">
+    <div class="{{ css_class }}{% if forloop.counter  == 1 %} first{% endif %}">
         <a target="_blank" href="{% url 'advertising_open' ad.id %}">
             <img src="/media/{{ ad.image }}" />
         </a>

@@ -50,33 +50,37 @@
             </a>
         </li>
     </ul>
-    <div class="all-tags">
-        <a href="{% events_filter_url request eventsFilter function="tags" exclude="tag|datetime" %}" >All Tags</a>
-    </div>
-    <div class="switchers sort">
-        <a href="">
-            Sort by ABC
-        </a>
-        <a href="">
-            Sort by 123
-        </a>
-    </div>           
+    <div class="all-tags-container">
+        <div class="all-tags">
+            <a href="{% events_filter_url request eventsFilter function="tags" exclude="tag|datetime" %}" >All Tags</a>
+        </div>
+        <div class="switchers sort">
+            <a href="{% events_filter_url request eventsFilter function="tags" sort="abc" %}">
+                Sort by ABC
+            </a>
+            <a href="{% events_filter_url request eventsFilter function="tags" sort="123" %}">
+                Sort by 123
+            </a>
+        </div>
 
-    <ul class="categories tags">
-        {% for tag in tags %}
-            <li class="category{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}{% if forloop.counter > 21 %} more{% endif %}" >
-                <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"  {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}>
-                    {{tag.tag__name}}
-                </a>
-            </li>
-        {%endfor%}
-    </ul>
-    {% if tags|length > 21 %}
-        <div class="more-button">
-            more
-        </div>
-        <div class="less-button">
-            less
-        </div>
-    {% endif %}
+        <ul class="categories tags">
+            {% for tag in tags %}
+                <li class="category{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}{% if forloop.counter > 21 %} more{% endif %}" >
+                    <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"  {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}>
+                        {{tag.tag__name}}
+                    </a>
+                </li>
+            {%endfor%}
+        </ul>
+        {% if tags|length > 21 %}
+            <div class="more-less-buttons">
+                <div class="more-button">
+                    more
+                </div>
+                <div class="less-button">
+                    less
+                </div>
+            </div>
+        {% endif %}
+    </div>
 </div>

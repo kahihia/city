@@ -63,12 +63,19 @@
     padding-bottom: 10px;
     text-align: center;
     color: #022e52;
-    font-size: 12px;
+    font-size: 10px;
     text-transform: uppercase;
+    font-weight: bold;
+    line-height: 14px;
 }
 
 .left-menu .switchers.sort a {
     text-transform: none;
+    padding: 5px 0;
+}
+
+.left-menu .switchers.sort a:hover {
+    padding: 4px 0;
 }
 
 .left-menu .switchers a.selected,
@@ -91,22 +98,23 @@
     list-style: none;
     padding-left: 9px;    
     border-bottom: 1px solid #c6c6c6;
-    height: 20px;
     line-height: 20px;
     vertical-align: middle;
+    max-width: 145px;
 }
 
 .left-menu ul.categories.tags li {
     border-bottom: none;
 }
 
-.left-menu ul.categories li a{
-    color: #fff;
+.left-menu ul.categories li a {
+    color: #fdfcfc;
+    font-size: 13px;
 }
 
 .left-menu ul.categories li a:hover,
 .left-menu ul.categories li a.selected {
-    color: #2c8ed9;
+    color: #619cd7;
 }
 
 .left-menu .all-tags a {
@@ -118,6 +126,41 @@
     height: 23px;
     line-height: 23px;
     text-transform: uppercase;
+    font-weight: bold;
+}
+
+.all-tags-container li.category.more {
+    display: none;
+}
+
+.all-tags-container.more li.category.more {
+    display: block;
+}
+
+.more-less-buttons {
+    background: #022e52;
+    padding: 20px 0;
+}
+
+.more-button, .less-button {
+    color: #c6c6c6;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.all-tags-container.more .more-button {
+    display: none;
+}
+
+.less-button {
+    display: none;
+}
+
+.all-tags-container.more .less-button {
+    display: block;
 }
 
 .events-container {

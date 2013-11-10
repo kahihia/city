@@ -453,6 +453,9 @@ class EventFilter(object):
                 data[key] = self.filters[key].upgrade_value(data, kwargs[key])
 
         query_list = [self.filters[key].url_query(data) for key, value in data.iteritems() if value and key in self.filters]
+        if 'sort' in kwargs:
+            query_list.append('sort=%s' % kwargs['sort'])
+
         return "&".join(query_list)
 
     def exclude(self, data, keys):

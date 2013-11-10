@@ -117,9 +117,14 @@
     top: -2px;
     height: 29px;
     line-height: 29px;
-    color: #022e52;
-    font-weight: bold;
+    color: #999999;
     vertical-align: top;
+    font-size: 12px;
+}
+
+.sign-up-and-facebook .login-entry-info ul li a:hover {
+    font-weight: normal;
+    text-decoration: underline;
 }
 
 .sign-up-and-facebook .login-entry-info ul li a.login_with_facebook {

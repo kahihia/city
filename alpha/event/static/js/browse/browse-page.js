@@ -41,11 +41,11 @@
         },
         initMoreLessButtons: function(){
             $(".more-button").on("click", function(){
-                $(".main-navigation-nav-wrapper").addClass('more');
+                $(".all-tags-container").addClass('more');
             });
 
             $(".less-button").on("click", function(){
-                $(".main-navigation-nav-wrapper").removeClass('more');
+                $(".all-tags-container").removeClass('more');
             });
         }
     };

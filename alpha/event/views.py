@@ -120,16 +120,19 @@ def browse(request):
 
     eventsFilter = EventFilter(params, queryset=events)
 
-    if "search" in params:
+    if 'search' in params:
         tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
             .values('tag_id', 'tag__name') \
-            .annotate(count=Count('id')) \
-            .order_by('-count')
+            .annotate(count=Count('id'))
     else:
         tags = TaggedItem.objects.filter(object_id__in=eventsFilter.qs().values_list("event_id", flat=True)) \
             .values('tag_id', 'tag__name') \
-            .annotate(count=Count('id')) \
-            .order_by('-count')
+            .annotate(count=Count('id'))
+
+    if 'sort' in params and params['sort'] == 'abc':
+        tags = tags.order_by('tag__name')
+    else:
+        tags = tags.order_by('-count')
 
 
     return render_to_response('events/browse_events.html', {
@@ -140,7 +143,8 @@ def browse(request):
                                 'start_date': start_date,
                                 'end_date': end_date,
                                 'start_time': start_time,
-                                'end_time': end_time
+                                'end_time': end_time,
+                                'period': params.get('period', '')
                             }, context_instance=RequestContext(request))
 
 
