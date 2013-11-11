@@ -474,9 +474,10 @@ table.schedule-bar-menu td.selected a {
 
 .copyright
 {
-    float:left;
+    float: left;
     font-size: 13px;
-    color:#fff;
+    color: #fff;
+    padding-top: 2px;
 }
 
 .footer-site-map
