@@ -467,7 +467,7 @@ table.schedule-bar-menu td.selected a {
 .footer-site-links
 {
     width:auto;
-    padding:20px 10px;
+    padding: 9px 10px 3px 10px;
     background:#022E52;
     text-align:center;
 }
@@ -475,7 +475,7 @@ table.schedule-bar-menu td.selected a {
 .copyright
 {
     float:left;
-    font-size:14px;
+    font-size: 13px;
     color:#fff;
 }
 
@@ -537,7 +537,7 @@ table.schedule-bar-menu td.selected a {
     display:inline-block;
     color:#fff;
     text-decoration:none;
-    font-size:14px;
+    font-size: 13px;
 }
 
 .footer-site-map ul li a:hover

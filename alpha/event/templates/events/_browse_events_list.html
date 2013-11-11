@@ -21,36 +21,43 @@
                 {% short_single_event event %}
             </div>
         {%endfor%}
-    {% endfor %}    
+    {% endfor %}
+
+    <div class="entry-navigation-np">
+        <p>
+            <ul>
+                {% get_pages %}
+
+                <span class="step-links">
+                    {% if pages.current.is_first %}
+                        <span class="prev">
+                            prev
+                        </span>
+                    {% else %}
+                        <a href="{{ pages.previous.url }}" class="prev">
+                            prev
+                        </a>
+                    {% endif %}
+
+                    {% for page in pages %}
+                        <a href="{{ page.url }}"
+                            class="page{% if page.is_current %} current{%endif%}">
+                            {{ page.number }}
+                        </a>
+                    {% endfor %}
+
+                    {% if pages.current.is_last %}
+                        <span class="next">
+                            next
+                        </span>
+                    {% else %}
+                        <a href="{{ pages.next.url }}" class="next">
+                            next
+                        </a>
+                    {% endif %}
+                </span>
+            </ul>
+        </p>
+    </div>
     
-</div>
-
-<div class="entry-navigation-np">
-    <p>
-        <ul>
-            {% get_pages %} 
-
-            <span class="step-links">
-                {% if pages.current.is_first %}
-                    <span>
-                        <img src="{{STATIC_URL}}images/entry-prev.png">
-                    </span>
-                {% else %}
-                    <a href="{{ pages.previous.url }}">
-                        <img src="{{STATIC_URL}}images/entry-prev.png">
-                    </a>
-                {% endif %}
-
-                {% if pages.current.is_last %}
-                    <span>
-                        <img src="{{STATIC_URL}}images/entry-next.png">
-                    </span>
-                {% else %}
-                    <a href="{{ pages.next.url }}">
-                        <img src="{{STATIC_URL}}images/entry-next.png">
-                    </a>
-                {% endif %}
-            </span>
-        </ul>
-    </p>
 </div>

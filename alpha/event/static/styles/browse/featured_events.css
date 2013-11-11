@@ -106,6 +106,11 @@
     color: #838586;
     text-transform: uppercase;
     font-size: 10px;
+    border-right: 1px solid #cccccc;
+}
+
+.features-navigation ul a.next {
+    border: 0;
 }
 
 .features-navigation ul a:hover {
@@ -113,10 +118,8 @@
     color: #022e52;
 }
 
-.features-navigation .step-links a.current{
+.features-navigation .step-links a{
     padding: 2px 8px;
-    border-left: 1px solid #cccccc;
-    border-right: 1px solid #cccccc;
 }
 
 .features-navigation .step-links a.current:hover {
@@ -127,7 +130,50 @@
     padding-left: 0;
 }
 
+.entry-navigation-np .step-links {
+    display: inline-block;
+    border-left: 1px solid #c8c4c4;
+    border-radius: 2px;
+    background: #ebeeef;
+    margin: 6px 0 5px 0;
+}
+
+.entry-navigation-np .step-links a,
+.entry-navigation-np .step-links span {
+    text-transform: uppercase;
+    display: block;
+    float: left;
+    text-align: center;
+    color: #838586;
+    font-size: 11px;
+    padding: 2px 5px;
+    line-height: 14px;
+    border: 1px solid #c8c4c4;
+    border-left: 0;
+}
+
+.entry-navigation-np .step-links a.prev,
+.entry-navigation-np .step-links span.prev {
+    border-left: 0;
+}
+
+.entry-navigation-np .step-links a.page {
+    padding: 2px 8px;
+}
+
+.entry-navigation-np .step-links a:hover {
+    color: #022e52;
+}
+
+.entry-navigation-np .step-links a.current:hover {
+    color: #838586;
+    cursor: default;
+}
+
+.entry-navigation-np .step-links span {
+    opacity: 1;
+}
+
 .entry-navigation-np .step-links a {
     text-decoration: none;
 }
-    
