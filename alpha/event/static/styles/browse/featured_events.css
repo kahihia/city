@@ -120,10 +120,12 @@
 
 .features-navigation .step-links a{
     padding: 2px 8px;
+    line-height: 12px;
 }
 
-.features-navigation .step-links a.current:hover {
-    color: #838586;
+.features-navigation .step-links a.current {
+    font-weight: bold;
+    color: #022e52;
 }
 
 .entry-navigation-np ul {
@@ -165,8 +167,12 @@
     color: #022e52;
 }
 
+.entry-navigation-np .step-links a.current {
+    font-weight: bold;
+    color: #022e52;
+}
+
 .entry-navigation-np .step-links a.current:hover {
-    color: #838586;
     cursor: default;
 }
 

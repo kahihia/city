@@ -2,6 +2,7 @@
 {% load endless %}
 {% load cropping %}
 {% load event_tags %}
+{% load common_tags %}
 
 <div class="entry-wrapper">
     <header>
@@ -23,41 +24,45 @@
         {%endfor%}
     {% endfor %}
 
-    <div class="entry-navigation-np">
-        <p>
-            <ul>
-                {% get_pages %}
+    {% if eventsFilter.qs.count > 0 %}
+        <div class="entry-navigation-np">
+            <p>
+                <ul>
+                    {% get_pages %}
 
-                <span class="step-links">
-                    {% if pages.current.is_first %}
-                        <span class="prev">
-                            prev
-                        </span>
-                    {% else %}
-                        <a href="{{ pages.previous.url }}" class="prev">
-                            prev
-                        </a>
-                    {% endif %}
+                    <span class="step-links">
+                        {% if pages.current.is_first %}
+                            <span class="prev">
+                                prev
+                            </span>
+                        {% else %}
+                            <a href="{{ pages.previous.url }}" class="prev">
+                                prev
+                            </a>
+                        {% endif %}
 
-                    {% for page in pages %}
-                        <a href="{{ page.url }}"
-                            class="page{% if page.is_current %} current{%endif%}">
-                            {{ page.number }}
-                        </a>
-                    {% endfor %}
+                        {% for page in pages %}
+                            {% if page|args:10|call:'is_in_range' %}
+                                <a href="{{ page.url }}"
+                                    class="page{% if page.is_current %} current{%endif%}">
+                                    {{ page.number }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
 
-                    {% if pages.current.is_last %}
-                        <span class="next">
-                            next
-                        </span>
-                    {% else %}
-                        <a href="{{ pages.next.url }}" class="next">
-                            next
-                        </a>
-                    {% endif %}
-                </span>
-            </ul>
-        </p>
-    </div>
+                        {% if pages.current.is_last %}
+                            <span class="next">
+                                next
+                            </span>
+                        {% else %}
+                            <a href="{{ pages.next.url }}" class="next">
+                                next
+                            </a>
+                        {% endif %}
+                    </span>
+                </ul>
+            </p>
+        </div>
+    {% endif %}
     
 </div>

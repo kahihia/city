@@ -118,7 +118,7 @@ def browse(request):
             location_from_user_choice.location_id,
         )
 
-    eventsFilter = EventFilter(params, queryset=events)
+    eventsFilter = EventFilter(params, queryset=events, account=request.account)
 
     if 'search' in params:
         tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \

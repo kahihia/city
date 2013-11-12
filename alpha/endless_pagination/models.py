@@ -39,6 +39,7 @@ class EndlessPage(utils.UnicodeMixin):
             querystring_key, label=None, default_number=1, override_path=None):
         self._request = request
         self.number = number
+        self.current_number = current_number
         self.label = utils.text(number) if label is None else label
         self.querystring_key = querystring_key
 
@@ -71,6 +72,9 @@ class EndlessPage(utils.UnicodeMixin):
         return utils.get_querystring_for_page(
             self._request, self.number, self.querystring_key,
             default_number=1, per_page=count)
+
+    def is_in_range(self, range):
+        return (self.number - 1) // range == (self.current_number - 1) // range
 
 
 class PageList(utils.UnicodeMixin):

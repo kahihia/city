@@ -164,14 +164,11 @@
 
         <script type="text/javascript">
             function onBlur(el) {
-                if (el.value == '') {
-                    el.value = el.defaultValue;
-                }
+                var elem = $(el);
+                elem.attr("placeholder", elem.data("placeholder"));
             }
             function onFocus(el) {
-                if (el.value == el.defaultValue) {
-                    el.value = '';
-                }
+                $(el).attr("placeholder", "");
             }
         </script>
         {% include 'django_facebook/_facebook_js.html' %}

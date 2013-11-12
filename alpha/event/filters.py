@@ -153,7 +153,6 @@ class FunctionFilter(Filter):
                 event__featuredevent__active=True
             ).order_by('-event__featuredevent__start_time', 'start_time')
 
-
     def reminder_filter(self, qs):
         return qs.filter(id__in=self.account.reminder_single_events_in_future().values("id"))
 

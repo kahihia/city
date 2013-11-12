@@ -1,6 +1,7 @@
 {% load endless %}
 {% load cropping %}
 {% load featured_event %}
+{% load common_tags %}
 
 {% if featured_events %}
 <div class="featured-area">    
@@ -28,10 +29,12 @@
                 {% endif %}
 
                 {% for page in pages %}
-                    <a href="{{ page.url }}" 
-                        {% if page.is_current %}class="current"{%endif%}>
-                        {{ page.number }}
-                    </a>
+                    {% if page|args:5|call:'is_in_range' %}
+                        <a href="{{ page.url }}"
+                            {% if page.is_current %}class="current"{%endif%}>
+                            {{ page.number }}
+                        </a>
+                    {% endif %}
                 {% endfor %}
 
                 {% if pages.current.is_last %}

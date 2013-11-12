@@ -68,6 +68,8 @@
                 $(".auth-required").on("click", function(e){
                     $(that.dialogContainer).dialog('open');
                     e.stopPropagation();
+
+                    return false;
                 });
             }
 
