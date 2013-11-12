@@ -54,6 +54,7 @@
 
 .left-menu .switchers {
     padding: 6px;
+    background: #c6c6c6;
 }
 
 .left-menu .switchers a {
@@ -129,6 +130,16 @@
     font-weight: bold;
 }
 
+.all-tags-container {
+    background: #022e52;
+    position: relative;
+}
+
+.all-tags-container.fixed {
+    min-height: 602px;
+    padding-bottom: 52px;
+}
+
 .all-tags-container li.category.more {
     display: none;
 }
@@ -140,15 +151,23 @@
 .more-less-buttons {
     background: #022e52;
     padding: 20px 0;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
 }
 
 .more-button, .less-button {
+    display: block;
     color: #c6c6c6;
     text-align: center;
     font-size: 11px;
     text-transform: uppercase;
     font-weight: bold;
     cursor: pointer;
+}
+
+.more-button:hover, .less-button:hover {
+    color: #c6c6c6;
 }
 
 .all-tags-container.more .more-button {

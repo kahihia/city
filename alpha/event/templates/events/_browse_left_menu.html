@@ -1,4 +1,6 @@
 {% load query_filter %}
+{% load endless %}
+
 <div class="left-menu">
     <div class="switchers">
         <a href="{% events_filter_url request eventsFilter function="reminder" exclude="all" %}" class="ajax auth-required">
@@ -50,7 +52,12 @@
             </a>
         </li>
     </ul>
-    <div class="all-tags-container">
+
+    {% paginate 21 tags using 'tag_group' %}
+    {% get_pages %}
+
+
+    <div class="all-tags-container{% if not pages.current.is_last %} fixed{% endif %}">
         <div class="all-tags">
             <a href="{% events_filter_url request eventsFilter function="tags" exclude="tag|datetime" %}" >All Tags</a>
         </div>
@@ -65,21 +72,19 @@
 
         <ul class="categories tags">
             {% for tag in tags %}
-                <li class="category{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}{% if forloop.counter > 21 %} more{% endif %}" >
+                <li class="category{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}">
                     <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"  {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}>
                         {{tag.tag__name}}
                     </a>
                 </li>
             {%endfor%}
         </ul>
-        {% if tags|length > 21 %}
+
+        {% if not pages.current.is_last %}
             <div class="more-less-buttons">
-                <div class="more-button">
+                <a href="{{ pages.next.url }}" class="more-button">
                     more
-                </div>
-                <div class="less-button">
-                    less
-                </div>
+                </a>
             </div>
         {% endif %}
     </div>

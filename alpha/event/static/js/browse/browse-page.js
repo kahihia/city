@@ -10,7 +10,7 @@
         });
 
         this.initEventActions();
-        this.initMoreLessButtons();
+        //this.initMoreLessButtons(); commented because of buttons logic changing
     };
 
     BrowsePage.prototype = {
