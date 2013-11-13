@@ -71,10 +71,10 @@ body ul.searchtags li.tagit-choice {
 
     padding-left: 10px;
     padding-right: 30px;
-    height: 18px;
-    max-height: 18px;
-    min-height: 18px;
-    line-height: 18px;
+    height: 14px;
+    max-height: 14px;
+    min-height: 14px;
+    line-height: 14px;
     border: 1px solid #ededed;
     vertical-align: top;
     background: #e3e3e3;
@@ -100,7 +100,7 @@ ul.searchtags li a.tagit-close {
     position: absolute;
     text-align: center;
     cursor: pointer;
-    top: 2px;
+    top: 0;
     right: 5px;
     width: 12px;
     height: 12px;
