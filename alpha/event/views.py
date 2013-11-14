@@ -136,6 +136,7 @@ def browse(request):
 
 
     return render_to_response('events/browse_events.html', {
+                                'page_type': 'index',
                                 'featured_events': featured_events,
                                 'events': events,
                                 'eventsFilter': eventsFilter,
