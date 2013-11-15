@@ -69,6 +69,10 @@ html.preview, body.preview {
     float:left;
 }
 
+.logo a {
+    display: block;
+}
+
 .header {
     width:auto;
 }
@@ -88,6 +92,7 @@ html.preview, body.preview {
 
 .post-events-for-free {
     margin-top: 5px;
+    height: 35px;
 }
 
 .post-events-for-free a,
