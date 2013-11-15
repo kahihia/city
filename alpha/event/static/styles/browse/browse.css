@@ -142,9 +142,10 @@
 .all-tags-container {
     background: #022e52;
     position: relative;
+    min-height: 738px;
 }
 
-.all-tags-container.fixed {
+.all-tags-container.more {
     min-height: 684px;
     padding-bottom: 54px;
 }
@@ -166,7 +167,7 @@
 }
 
 .more-button, .less-button {
-    display: block;
+    display: none;
     color: #c6c6c6;
     text-align: center;
     font-size: 11px;
@@ -180,7 +181,7 @@
 }
 
 .all-tags-container.more .more-button {
-    display: none;
+    display: block;
 }
 
 .less-button {

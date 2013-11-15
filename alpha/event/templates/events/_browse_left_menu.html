@@ -58,7 +58,7 @@
     {% get_pages %}
 
 
-    <div class="all-tags-container{% if not pages.current.is_last %} fixed{% endif %}">
+    <div class="all-tags-container{% if not pages.current.is_last %} more{% endif %}">
         <div class="all-tags">
             <a href="{% events_filter_url request eventsFilter function="tags" exclude="tag|datetime" %}" >All Tags</a>
         </div>
