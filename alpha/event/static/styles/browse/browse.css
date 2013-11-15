@@ -90,7 +90,7 @@
 
 .left-menu ul.categories {
     margin: 0;    
-    padding: 14px 10px 18px;
+    padding: 14px 10px 16px;
     border-top: 1px solid #506b80;
     background: #022e52;
 }
@@ -110,7 +110,7 @@
 }
 
 .left-menu ul.categories.tags {
-    padding-top: 7px;
+    padding-top: 6px;
 }
 
 .left-menu ul.categories.tags li {
@@ -145,7 +145,7 @@
 }
 
 .all-tags-container.fixed {
-    min-height: 687px;
+    min-height: 684px;
     padding-bottom: 54px;
 }
 
