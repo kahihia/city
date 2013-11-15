@@ -1,5 +1,6 @@
 {% load query_filter %}
 {% load endless %}
+{% load common_tags %}
 
 <div class="left-menu">
     <div class="switchers">
@@ -46,14 +47,14 @@
                 Free
             </a>
         </li>
-        <li>
+        <li class="last">
             <a href="{% events_filter_url request eventsFilter function="family"  exclude="tag" %}">
                 Family
             </a>
         </li>
     </ul>
 
-    {% paginate 21 tags using 'tag_group' %}
+    {% paginate 30 tags using 'tag_group' %}
     {% get_pages %}
 
 
@@ -73,8 +74,9 @@
         <ul class="categories tags">
             {% for tag in tags %}
                 <li class="category{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}">
-                    <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"  {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}>
-                        {{tag.tag__name}}
+                    <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"  {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}
+                       title="{{ tag.tag__name }}">
+                        {{ tag.tag__name|shorten_string:20 }}
                     </a>
                 </li>
             {%endfor%}

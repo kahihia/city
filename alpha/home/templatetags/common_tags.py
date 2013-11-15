@@ -14,6 +14,14 @@ def html_urlize(value):
     return pattern.sub(r'\1<a href="\2">\2</a>', value)
 
 
+@register.filter
+def shorten_string(value, length):
+    if len(value) > length:
+        return '%s...' % value[:length]
+
+    return value
+
+
 @register.simple_tag(takes_context=True)
 def like_button(context, url):
     return '<iframe src="https://www.facebook.com/plugins/like.php?locale=en_US&amp;href=%s&amp;width=93' \
