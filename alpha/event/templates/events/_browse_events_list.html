@@ -5,7 +5,7 @@
 {% load common_tags %}
 
 <div class="entry-wrapper">
-    <header>
+    <header class="total">
         Total search numbers found ({{eventsFilter.qs.count}})
     </header>
     {% paginate 9 eventsFilter.qs as events %}
@@ -18,7 +18,8 @@
             </span>
         </header>
         {% for event in event_group.list %}
-            <div class="entry-info home-page" data-no-turbolink>
+            <div class="entry-info home-page{% if not forloop.first %} another{% endif %}"
+                 data-no-turbolink>
                 {% short_single_event event %}
             </div>
         {%endfor%}
