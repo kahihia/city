@@ -2,7 +2,8 @@
     display: none;
     position: absolute;
     top: 120px;
-    width: 100%;    
+    width: 100%;
+    z-index: 6;
 }
 
 .search-pad-popup-content {
