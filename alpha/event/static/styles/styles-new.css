@@ -50,7 +50,7 @@
 .event-wrapper .event-photo {
     display: inline-block;
     padding: 10px;
-    border: 1px solid #d3d3d3;
+    border: 1px solid #c6c6c6;
     vertical-align: top;
 }
 
@@ -116,7 +116,8 @@
 
 .event-wrapper .event-details-block {
     position:relative;
-    height: 285px;
+    height: 310px;
+    width: 100%;
 }
 
 .event-wrapper .event-details {
@@ -167,7 +168,7 @@
 
 .content-wrapper .event-details .event-price {
     color: #0260bb;        
-    font-weight: normal;
+    font-weight: bold;
     width: 190px;
     height: 40px;
     line-height: 40px;
@@ -177,7 +178,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 13px;
-    font-weight: bold;
 }
 
 .content-wrapper .event-details .title-wrapper .action-buy-tickets {
@@ -190,7 +190,7 @@
     vertical-align: middle;
     color: #0260bb;
     right: 0;
-    top: 0;
+    top: 4px;
     border: 1px solid #bedefe;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -198,15 +198,15 @@
     font-weight: bold;
 
     box-shadow: 2px 2px 6px #eee;
+    font-size: 14px;
 }
 
 .content-wrapper .event-details .title-wrapper .action-buy-tickets:hover {
     box-shadow: 2px 2px 6px #eaeaea;
-
 }
 
 .content-wrapper .event-details-bottom .event-actions {
-    width: 100%;
+    width: 341px;
     border-top: 1px solid #02345c;
     border-bottom: 1px solid #02345c;
     padding-top: 11px;
@@ -231,10 +231,6 @@
     text-transform: uppercase;        
     font-size: 13px;
     color: #fff;
-}
-
-.content-wrapper .event-details-bottom .bx-wrapper {
-    height: 37px;
 }
 
 .content-wrapper .event-details-bottom .event-actions .action-view-site {
@@ -282,138 +278,6 @@
     width: 684px;
 }
 
-.secondary-content {
-    float:right;
-    width: 310px;
-    margin-bottom: 10px;
-}
-
-.secondary-content-header-wrapper {
-    position: relative;
-    height: 0;
-}
-
-.secondary-content header{
-    position: absolute;
-    width: 100%;
-    bottom: -30px;
-    vertical-align: middle;
-    text-align: center;
-    color: #022e52;
-    font-size: 1.2em;
-    font-weight: bold;    
-}
-
-.secondary-content .content {
-    width: 308px;
-    margin-top: 35px;
-}
-
-.secondary-content-table {
-    width: 100%;
-    text-align: left;  
-    color: #454545;
-}
-
-.secondary-content-table th {
-    font-weight: bold;
-    font-size: 1.2em;
-}
-
-.secondary-content-table th.action,
-.secondary-content-table td.action {
-    padding-left: 0;
-    text-align: center;
-}
-
-.secondary-content-table .secondary-content-table-date {
-    width: 70px;
-}
-
-.secondary-content-table tr:nth-child(even) {background: #f4f4f4}
-.secondary-content-table tr:nth-child(odd) {background: #fff}
-
-.secondary-content-table th,
-.secondary-content-table td {
-    padding-left: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    font-size: 1.0em;
-    border-bottom: 1px solid #ccc;
-}
-
-.secondary-content-table th a,
-.secondary-content-table td a {
-    color: #5dacfd;
-    text-decoration: none;    
-    display: inline-block;
-}
-
-.secondary-content-table th a:hover,
-.secondary-content-table td a:hover {
-    color: #022e52;
-}
-
-.secondary-content-table-pagination {
-    color: #454545;
-    height: 47px;
-    line-height: 47px;
-    vertical-align: middle;
-    text-align: center;
-    background: #fff;
-    font-size: 1.2em;
-}
-
-.secondary-content-table-pagination .pagintation-wrapper{
-    vertical-align: middle;
-}
-
-.secondary-content-table-pagination span.prev,
-.secondary-content-table-pagination a.prev,
-.secondary-content-table-pagination span.next,
-.secondary-content-table-pagination a.next {
-    display: inline-block;
-    width: 26px;
-    height: 18px;    
-    margin:0 10px;
-    vertical-align: middle;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-}
-
-.secondary-content-table-pagination span.prev:hover,
-.secondary-content-table-pagination span.next:hover {
-    box-shadow: 0px 0px 5px #777;
-}
-
-.secondary-content-table-pagination a.prev:hover,
-.secondary-content-table-pagination a.next:hover {
-    box-shadow: 0px 0px 5px #3ff;
-}
-
-.secondary-content-table-pagination .page-info {
-    height: 18px;    
-    line-height: 18px;
-    vertical-align: middle;
-}
-
-.secondary-content-table-pagination span.prev {
-    background: url("/static/images/accounts/prev.png") no-repeat;
-}
-
-.secondary-content-table-pagination a.prev {
-    background: url("/static/images/accounts/prev-active.png") no-repeat;
-}
-
-.secondary-content-table-pagination span.next {
-    background: url("/static/images/accounts/next.png") no-repeat;
-}
-
-.secondary-content-table-pagination a.next {
-    background: url("/static/images/accounts/next-active.png") no-repeat;
-}
-
 a {
     color: #0067cc;
     text-decoration: none;
@@ -425,18 +289,20 @@ a:hover{
 }
 
 .primary-content p {
-    color: #000000;
+    color: #030303;
 }
 
 .primary-content .description {
     margin-left: 3px;
-    color: #000;
+    color: #030303;
     font-size: 14px;
-    margin-top: 18px;
+    margin-top: 4px;
+    border: 1px solid #c6c6c6;
+    padding: 18px 13px;
 }
 
 .primary-content .description * {
-    color: #000;
+    color: #030303;
     font-size: 14px;
 }
 
@@ -453,4 +319,3 @@ ul.errorlist li {
     list-style:none;
     color: red;
 }
-

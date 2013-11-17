@@ -19,15 +19,24 @@
     background-color: rgba(0, 0, 0, 0.5);
     bottom: 5px;
     left: 5px;
-    width: 249px;
+    width: 252px;
     color: #fff;
-    padding: 3px;
+    padding-left: 3px;
+    font-weight: bold;
+    height: 20px;
+    vertical-align: middle;
+    line-height: 20px;
 }
 
 .image-viewer .image-viewer-controls .prev,
 .image-viewer .image-viewer-controls .next {
     float: right;
-    margin-right: 5px;
-    margin-top: 3px;
+    margin-top: 2px;
     cursor: pointer;
+    width: 25px;
+    text-align: center;
+    border-left: 1px solid #fff;
+    height: 13px;
+    vertical-align: middle;
+    padding-top: 3px;
 }

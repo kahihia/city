@@ -1,0 +1,74 @@
+.secondary-content {
+    float: left;
+    width: 310px;
+    margin-left: 10px;
+    margin-top: 36px;
+}
+
+.secondary-content .similar-events-wrapper {
+    background: #022e52;
+    color: #fff;
+    padding: 5px;
+}
+
+.secondary-content .similar-events-wrapper header{ 
+	font-size: 16px;
+	text-transform: uppercase;
+	font-weight: bold;
+	margin-left: 15px;
+	margin-top: 10px;
+}
+
+.secondary-content .similar-events-wrapper header div {
+	font-size: 12px;
+	font-style: italic;
+	font-weight: normal;
+	text-transform: none;
+}
+
+.secondary-content .similar-events-wrapper ul {	
+	position: relative;
+	margin: 0;
+	padding: 0;	
+	height: 208px;	
+}
+
+.secondary-content .similar-events {
+	overflow: hidden;
+	margin-top: 10px;
+}
+
+.secondary-content .similar-events-wrapper ul li {
+	list-style: none;
+	display: inline-block;
+	margin-top: 4px;
+}
+
+.secondary-content .similar-events-wrapper ul li a {
+	display: block;
+	border: 3px solid #fff;
+}
+
+.similar-events-viewer-controls{
+    background-color: #b2bfc9;
+    width: 297px;
+    color: #022e52;
+    padding-left: 3px;
+    font-weight: bold;
+    height: 26px;
+    vertical-align: middle;
+    line-height: 26px;
+}
+
+.similar-events-viewer-controls .prev,
+.similar-events-viewer-controls .next {
+    float: right;
+    margin-top: 2px;
+    cursor: pointer;
+    width: 25px;
+    text-align: center;
+    border-left: 1px solid #022e52;
+    height: 16px;
+    vertical-align: middle;
+    padding-top: 6px;
+}

@@ -52,6 +52,10 @@
     margin-right: 18px;
 }
 
+.search-pad-menu .left-menu {
+    background: #fdfcfc;
+}
+
 .left-menu .switchers {
     padding: 7px 6px;
     background: #c6c6c6;
@@ -95,6 +99,10 @@
     background: #022e52;
 }
 
+.search-pad-menu .left-menu ul.categories {
+    margin-bottom: 8px;
+}
+
 .left-menu ul.categories li {
     list-style: none;
     padding-left: 9px;    
@@ -124,20 +132,32 @@
 
 .left-menu ul.categories li a:hover,
 .left-menu ul.categories li a.selected {
-    color: #619cd7;
+    color: #0260bb;
 }
 
-.left-menu .all-tags a {
+.left-menu .all-tags a,
+.left-menu .all-events a,
+.top10-tags header {
     display: block;
     vertical-align: middle;
     text-align: center;
-    background: #fff;
+    background: #c6c6c6;    
     color: #022e52;
     height: 23px;
     line-height: 23px;
-    text-transform: uppercase;
+    
     font-weight: bold;
 }
+
+.left-menu .all-tags a {
+    background: #fff;
+    text-transform: uppercase;
+}
+
+.left-menu .all-events a {
+    text-transform: uppercase;
+    margin-bottom: 8px;
+} 
 
 .all-tags-container {
     background: #022e52;
@@ -206,6 +226,10 @@
     padding-right: 18px;
 }
 
+.search-pad-content.events-container .searchtags-wrapper {
+    background: none;
+}
+
 .events-container .searchtags-wrapper ul.searchtags {
     min-height: 20px;
     margin: 0;
@@ -215,6 +239,10 @@
     -webkit-border-radius:6px;
     border-radius:6px;
     vertical-align: middle;
+}
+
+.search-pad-content.events-container .searchtags-wrapper ul.searchtags {
+    background: none;
 }
 
 .searchtags-wrapper .searchtags-placeholder {

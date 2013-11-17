@@ -1,6 +1,17 @@
 .search-pad-popup {
     display: none;
-    width: 1024px;
+    position: absolute;
+    top: 120px;
+    width: 100%;    
+}
+
+.search-pad-popup-content {
+    width: 990px;
+    padding: 10px;
+    min-height: 612px;
+    border: 4px solid #c6c6c6;
+    background: #fdfcfc;
+    margin: 0 auto;
 }
 
 .search-pad-menu, .search-pad-content, .search-pad-advertising {

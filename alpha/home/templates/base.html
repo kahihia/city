@@ -153,11 +153,7 @@
             </div>
         </div>
 
-        <div class="search-pad-popup">
-            <div class="loader">
-                <img src="/static/images/ajax-loader.gif" />
-            </div>
-        </div>
+        {% include '_search_pad_popup.html' %}        
 
         {% load event_tags %}
         {% auth_required_popup %}

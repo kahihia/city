@@ -21,7 +21,6 @@
 .event-details-block .event-details {
     display: inline-block;
     vertical-align: top;
-    margin-top: 15px;
     padding-right: 3px;    
     white-space: nowrap;
 }
@@ -55,9 +54,7 @@
 }
 
 .event-details-block .event-details .event-price {
-    background: url("/static/images/ticket_icon.png") 5px center no-repeat;
-    color: #ff6601;
-    padding-left: 30px;
+    color: #0260bb;
 }
 
 .event-details-block .event-details .event-price.short {
@@ -68,7 +65,6 @@
 
 .event-details-block .event-details .event-date-wrapper {
     color: #0230c5;
-    margin-left: 30px;
 }
 
 .event-details-block .event-details .event-description {
@@ -236,40 +232,87 @@
     display: block;
 }
 
-.event-days {
-    margin-left: 5px;
+.events-occurrences {
+    width: 341px;
+    margin-top: 10px;
+    margin-left: 15px;
+}
+
+.events-occurrences .header {
+    position: relative;
+    background: #b2bfc9;
+    border-top: 1px solid #c1cbd3;
+    border-left: 1px solid #c1cbd3;
+    border-right: 1px solid #c1cbd3;
+    height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.events-occurrences .header .days-viewer-controls {
+    position: absolute;
+    height: 20px;
+    right: 0;
+    top: 0;
+}
+
+.events-occurrences .header .days-viewer-controls div {
+    color: #022e52;
+    float: right;
+    width: 20px;
+    text-align: middle;
+    margin-top: 2px;
+    height: 14px;
+    border-left: 2px solid #022e52;
+    background: #b2bfc9;
+
+    text-align: center;
+    padding-top: 2px;
+    cursor: pointer;
+
+}
+
+.events-occurrences .show-times {
+    color: #022e52;
+    border-bottom: 1px solid #c6c6c6;
+    border-left: 1px solid #c6c6c6;
+    border-right: 1px solid #c6c6c6;
+    padding: 5px 0;
+
+    overflow: auto;
+    max-height: 55px;
+}
+
+.events-occurrences .show-times table {
+    margin: 0 auto;
+}
+
+.events-occurrences .event-days {
+    position: relative;
+    width: 100000px;
+    margin: 0;
+    padding: 0;    
+}
+
+.events-occurrences .event-days li {
+    list-style: none;
+    float: left;
+    font-weight: bold;
 }
 
 .event-day-switch {
     display: inline-block;
-    width: 55px;
-    height: 22px;
-    line-height: 22px;
+    width: 97px;
     text-align: center;
+    height: 20px;
+    line-height: 20px;
     vertical-align: middle;
-    border: 1px solid #c4c4c4;
-    background: #fff;
-    color: #000;
+    color: #022e52;
     margin-right: 0px;
     cursor: pointer;
 }
 .event-day-switch.active {
-    background: #f4f4f4;
-}
-
-.show-times {
-    margin-top: 5px;
-    margin-left: 3px;
-    font-size:12px;
-    color:#022e52;
-}
-
-.show-times .show-times-wrapper {
-    width: 100%;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    padding: 5px;
-    margin-top: 3px;
+    background: #8dadc6;
 }
 
 .show-times .show-time-day {
@@ -296,7 +339,7 @@
 }
 
 .attachments a {
-    color: #225b96;
+    color: #fff;
     text-decoration: underline;
 }
 
@@ -308,7 +351,7 @@
 }
 
 .tags a { 
-    color: #02294a;
+    color: #fff;
 }
 
 .report-and-claim {
