@@ -854,3 +854,7 @@
 .account-help-container ul li a {
     color: #fff;
 }
+
+.account-featured-table .entry-info .entry-details-wrapper {
+    width: 120px;
+}
