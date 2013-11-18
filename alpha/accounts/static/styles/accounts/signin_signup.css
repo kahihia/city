@@ -189,7 +189,7 @@
     cursor: pointer;
     width: 15px;
     height: 15px;
-    background: url("/static/images/widgets/dropdown.png") no-repeat;
+    background: url("/static/images/widgets/dropdown-small.png") no-repeat;
     display: inline-block;
     margin-top: 5px;  
 }
@@ -224,4 +224,18 @@ a.notices-count {
 
 a.notices-count:hover {
     text-decoration: underline;
+}
+
+.center-align-wrapper {
+    text-align: center;
+    width: 980px;
+}
+
+.account-form-wrapper {
+    width: 330px;
+    margin: 100px auto;
+    padding: 60px;
+    background: #fff;
+    text-align: left;
+
 }

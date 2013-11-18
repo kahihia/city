@@ -5,52 +5,40 @@
 {% block title %}{% trans "Signin" %}{% endblock %}
 
 {% block content %}
-    <h1>
-        Sign In
-    </h1>
-    <div class="content account-options-wrapper">
-        <div class="main-content account-options">
+    <div class="center-align-wrapper">
+        <div class="account-form-wrapper">
             <form action="" method="post">
-                {% csrf_token %}            
+                {% csrf_token %}
                 {{ form.non_field_errors }}
-                <div class="options options-userena">
-                    <table>                                
-                        {% for field in form %}
-                            <tr>
-                                <td colspan=2 >
-                                    {{ field.errors }}
-                                </td>
-                            </tr>
-                            <tr>
-                                {% if field.name == 'remember_me' %}
-                                    <td colspan=2 class="first">
-                                        {{ field.label }}                            
-                                        <div class="checkbox">
-                                            {{ field }}
-                                            <label for="id_{{ field.name }}"></label>
-                                        </div>
-                                    </td>                            
-                                {% else %}
-                                    <td class="first">
-                                        {{ field.label_tag }}
-                                    </td>
-                                    <td>
-                                        {{ field }}
-                                    </td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                    </table>                    
-                    <p class="forgot-password">
-                        <a href="{% url 'userena_password_reset' %}" title="{% trans 'Forgot your password?' %}">
-                            {% trans "Forgot your password?" %}
-                        </a>
-                    </p>
-                    {% if next %}
-                        <input type="hidden" name="next" value="{{ next }}" />
+
+                {% for field in form %}                    
+                    {% if field.name == 'remember_me' %}
+                    {% else %}
+                        <div>
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
                     {% endif %}
-                </div>
-                <input type="submit" class="submit standart button" value="Sign In" />
+
+                {% endfor %}
+
+                <p class="forgot-password">
+                    <a href="{% url 'userena_password_reset' %}" title="{% trans 'Forgot your password?' %}">
+                        {% trans "Forgot your password?" %}
+                    </a>
+                    {{ form.remember_me.label }}
+                    <div class="checkbox">
+                        {{ form.remember_me }}
+                        <label for="id_{{ form.remember_me.name }}"></label>
+                    </div>
+                </p>
+                {{ form.remember_me.errors }}
+
+                {% if next %}
+                    <input type="hidden" name="next" value="{{ next }}" />
+                {% endif %}
+
+                <input type="submit" class="submit standart button" value="Log In" />
             </form>
         </div>
     </div>

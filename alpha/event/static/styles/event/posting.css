@@ -52,7 +52,6 @@
     line-height: 26px;
     vertical-align: middle;
     margin-bottom: 1px;
-
 }
 
 .event-posting-form .event-posting-price .free-checkbox {
@@ -90,7 +89,7 @@
 }
 
 .event-posting-form .dropdown:after {
-    top: 2px;
+    top: 3px;
 }
 
 .event-posting-form .event-posting-description .richeditor {

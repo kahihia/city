@@ -58,6 +58,7 @@
 
 .venue-accounts-list {
     margin-top: 40px;
+    width: 345px;
 }
 
 .venue-accounts-list header {
@@ -70,12 +71,13 @@
 .venue-accounts-list ul {
     margin: 0;
     padding: 0;
-    margin-left: 20px;
+    margin-left: 10px;
+
 }
 
 .venue-accounts-list ul li {
     list-style: none;
-    min-width: 140px;
+    min-width: 100px;
     height: 20px;
     display: inline-block;
     margin-right: 20px;
@@ -84,50 +86,15 @@
 .venue-accounts-list ul li .mngp {
     float: left;
     color: #5dacfd;
+    width: 130px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .venue-accounts-list ul li .remove-button {
+    margin-left: 5px;
     float: right;
-}
-
-.account-settings {
-    width: 205px;
-    border: 1px solid #d3d3d3;
-    margin-top: 17px;
-}
-
-.account-settings header {
-    font-size:1.2em;
-    color: #022e52;
-    padding-left: 33px;
-    background: url("/static/images/accounts/account-settings.png") 4px center no-repeat #eee;
-    height: 25px;
-    line-height: 25px;    
-    vertical-align: middle;
-}
-
-.account-settings ul {
-    margin: 8px;
-    margin-top: 0;
-    background-color: #f6f6f6;
-    padding: 10px 24px;    
-    font-size:1em;
-}
-
-.account-settings ul li {
-    list-style: none;
-    margin-top: 7px;
-
-}
-
-.account-settings ul li a {
-    color: #454545;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.account-settings ul li a:hover{
-    color: #5dacfd;    
 }
 
 .options {
