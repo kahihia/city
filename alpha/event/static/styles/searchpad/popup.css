@@ -3,7 +3,7 @@
     position: absolute;
     top: 120px;
     width: 100%;
-    z-index: 6;
+    z-index: 12;
 }
 
 .search-pad-popup-content {
