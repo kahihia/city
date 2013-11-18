@@ -28,7 +28,7 @@
                 </a>
             </td>
             <td>
-                <a href="javascript:void;"  class="jump jump-popup-opener">
+                <a href="javascript:void(0);"  class="jump jump-popup-opener">
                     Jump to date
                 </a>
             </td>
@@ -120,10 +120,8 @@
                 </div>
             </div>
             <div class="jump-to-date-wrapper">
-                <a 
-                    class="jump-to-date-button ajax" href="{% events_filter_url request eventsFilter exclude="datetime" %}" 
-                    data-base-url-query="{% events_filter_url request eventsFilter exclude="datetime" %}"
-                >
+                <a class="jump-to-date-wrapper__button button ajax" href="{% events_filter_url request eventsFilter exclude="datetime" %}"
+                   data-base-url-query="{% events_filter_url request eventsFilter exclude="datetime" %}">
                     Jump to Date
                 </a>
             </div>            
