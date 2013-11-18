@@ -1,19 +1,20 @@
 {% if venue_accounts %}
-    <h2 class="block-header"> 
+<div class="venue-accounts-list">
+    <header>
         My Venues
-    </h2>
-    <table class="venue-accounts-table">
+    </header>
+    <ul>
         {% for venue_account in venue_accounts %}
-        <tr>
-            <td>
+            <li>
                 <a class="mngp" href="{% url 'private_venue_account' slug=venue_account.slug %}">      
                     {{ venue_account.venue.name }}
                 </a>
-            </td>        
-            <td class="remove-td">
-                <a class="remove-button confirm" href="{% url 'unlink_venue_account_from_user_profile' venue_account_id=venue_account.id %}"></a>
-            </td>
-        </tr>
+                <a class="remove-button confirm" href="{% url 'unlink_venue_account_from_user_profile' venue_account_id=venue_account.id %}">
+                    <i class="icon-remove"></i>
+                </a>
+            </li>            
         {% endfor %}
-    </table>
+    </ul>       
+
+</div>
 {% endif %}

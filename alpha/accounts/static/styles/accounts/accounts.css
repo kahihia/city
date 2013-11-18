@@ -1,19 +1,11 @@
-.primary-content .content.account-profile {
-    width: 658px;
-    padding-top: 13px;
-    padding-left: 10px;
-    padding-bottom: 10px;
-    padding-right: 3px;
-
-    border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-
-    border-right: 2px solid #e7e7e7;
-    border-bottom: 2px solid #e7e7e7;
+.account-profile .primary-wrapper {
+    background: #fff;
+    padding: 30px;
+    padding-top: 40px;
 }
 
-.account-left {
-    float: left;
+.account-profile .account-details {
+    margin-left: 40px;
 }
 
 .account-avatar,
@@ -37,33 +29,22 @@
     vertical-align: middle;
 }
 
-.account-details {
-    float: left;
-    margin-left:23px;
-    width: 415px;
-    font-size: 1.2em;
-}
-
-.account-details hr {
-    border: none;
-    border-top: 1px solid #ddd;    
-}
-
 .account-details .block-header,
 .about-us .block-header {
-    color: #06c;
+    font-size: 16px;
+    color: #022e52;
     font-weight: bold;    
     width:100%;
-    font-size:1em;
 }
 
 .about-us .block-header {
-    font-size: 1.3em;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .account-details span {
-    color: #454545;    
-    font-size: 0.9em;
+    color: #022e52;
+    font-size: 12px;
     font-weight: normal;
 }
 
@@ -75,10 +56,38 @@
     text-decoration: underline;
 }
 
-.account-details .view-site {
+.venue-accounts-list {
+    margin-top: 40px;
+}
+
+.venue-accounts-list header {
+    font-size: 16px;
+    font-weight: bold;
+    color: #7b7b7b;
+    margin-bottom: 20px;
+}
+
+.venue-accounts-list ul {
+    margin: 0;
+    padding: 0;
+    margin-left: 20px;
+}
+
+.venue-accounts-list ul li {
+    list-style: none;
+    min-width: 140px;
     height: 20px;
-    background: url("/static/images/view-site.png") left center no-repeat;
-    padding-left:25px;
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.venue-accounts-list ul li .mngp {
+    float: left;
+    color: #5dacfd;
+}
+
+.venue-accounts-list ul li .remove-button {
+    float: right;
 }
 
 .account-settings {
@@ -485,27 +494,21 @@
     margin-right: 15px;
 }
 
-.account-entry-wrapper {
-    width: 650px;
-}
-
-.account-primary-content {
-    width: 684px;
+.account-primary-content {    
+    float: left;
 }
 
 .account-entry-wrapper .entry-info {
-    width: 635px;
     padding-right: 7px;
 }
 .account-entry-wrapper .event-edit-actions {
+    position: absolute;
+    right: 8px;
+    top: 17px;
     padding: 0 5px;
     border: 1px solid #e3e3e3;
     background: #fff;
-    float: right;
-    margin-top: 10px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
+
 }
 
 .account-entry-wrapper .event-edit-actions div,
@@ -610,7 +613,7 @@
 
  .detailed-view div {
     float: left;
-    width: 300px;
+    width: 245px;
     margin: 25px 15px;
  }
 
@@ -823,4 +826,31 @@
 
 .venue-title a:hover {
     text-decoration: underline;
+}
+
+.account-help-container {
+    width: 216px;
+    margin-left: 12px;
+    padding: 45px;
+    float: right;
+    background: #022e52;
+    color: #fff;
+}
+
+.account-help-container ul {
+    margin: 0;
+    padding: 0;
+}
+
+.account-help-container ul li {
+    padding-left: 15px;
+    border-bottom: 1px solid #fff;
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    list-style: none;
+}
+
+.account-help-container ul li a {
+    color: #fff;
 }

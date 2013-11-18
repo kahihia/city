@@ -1,3 +1,7 @@
+table td {
+    vertical-align: top;
+}
+
 .content-wrapper {
     margin-top: 18px;
     color: #454545;    

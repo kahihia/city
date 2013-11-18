@@ -1,8 +1,8 @@
 {% load endless %}
+{% load common_tags %}
 
-{% if campaigns|length %}
-    {% paginate 5 campaigns using "ads_page" %}
-
+{% paginate 1 campaigns using "ads_page" %}
+<div class="account-entry-wrapper entry-wrapper">
     {% for campaign in campaigns %}
         <div class="detailed-view" >
             <div class="left">
@@ -134,36 +134,50 @@
                 </td>
             </tr>
             {% endfor %}
-        </table>
-    {% endfor %}
-
-    {% if pages|length > 1 %}
-        <div class="profile-table-pagination">
-            <span class="pagintation-wrapper">
-                {% get_pages %}
-                {% if pages.current.is_first %}
-                    <span class="prev"></span>            
-                {% else %}
-                    <a class="prev" href="{{ pages.previous.url }}"></a>
-                {% endif %}
-                <span class="page-info">
-                    {{ pages.current }} of {{ pages|length }}
-                </span>
-
-                {% if pages.current.is_last %}
-                    <span class="next"></span>                    
-                {% else %}
-                    <a class="next" href="{{ pages.next.url }}"></a>
-                {% endif %}
-            </span>        
-        </div>
-    {% endif %}
-{% else %}
-    <div class="account-entry-wrapper entry-wrapper">
+        </table>        
+    {% empty %}
         <p>You have no ads.</p>
         <p>You can <a href="{% url 'advertising_setup' %}">create</a> new advertising campaign</p>
-    </div>
-{% endif %}
 
+    {% endfor %}
+    {% if pages|length > 1 %}
+        <div class="entry-navigation-np">
+            <p>
+                <ul>
+                    {% get_pages %}
 
+                    <span class="step-links">
+                        {% if pages.current.is_first %}
+                            <span class="prev">
+                                prev
+                            </span>
+                        {% else %}
+                            <a href="{{ pages.previous.url }}" class="prev">
+                                prev
+                            </a>
+                        {% endif %}
 
+                        {% for page in pages %}
+                            {% if page|args:10|call:'is_in_range' %}
+                                <a href="{{ page.url }}"
+                                    class="page{% if page.is_current %} current{%endif%}">
+                                    {{ page.number }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if pages.current.is_last %}
+                            <span class="next">
+                                next
+                            </span>
+                        {% else %}
+                            <a href="{{ pages.next.url }}" class="next">
+                                next
+                            </a>
+                        {% endif %}
+                    </span>
+                </ul>
+            </p>
+        </div>
+    {% endif %}
+</div>
