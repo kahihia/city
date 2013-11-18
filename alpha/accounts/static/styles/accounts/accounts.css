@@ -825,3 +825,78 @@
 .account-featured-table .entry-info .entry-details-wrapper {
     width: 120px;
 }
+
+.account-form-wrapper {
+    background: #ffffff;
+    border-radius: 2px;
+    margin: 86px 0 168px;
+    padding: 57px 70px 62px 75px;
+}
+
+.user-identification, .user-password {
+    position: relative;
+    margin-bottom: 6px;
+}
+
+.user-identification:after, .user-password:after {
+    content: " ";
+    background: url("/static/images/login-icons-sprite.png") no-repeat;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 10px;
+    left: 11px;
+    z-index: 10;
+}
+
+.user-identification:after {
+    background-position: left top;
+}
+
+.user-password:after {
+    background-position: -23px 0;
+}
+
+.user-identification input, .user-password input {
+    height: 36px !important;
+    width: 241px;
+    line-height: 36px !important;
+    padding: 0 10px 0 80px !important;
+    border: 1px solid #c7c6c6 !important;
+    position: relative;
+    font-size: 13px;
+}
+
+.user-identification input.empty, .user-password input.empty {
+    text-transform: uppercase;
+}
+
+.forgot-password, .remember_me {
+    display: inline-block;
+}
+
+.forgot-password a, .remember_me {
+    font-size: 13px;
+}
+
+.remember_me {
+    text-align: right;
+    margin-left: 23px;
+    color: #b6b5b5;
+}
+
+.remember_me .checkbox {
+    margin: 0;
+}
+
+.forgot-password a {
+    color: #022e52;
+}
+
+.log-in-button {
+    text-transform: uppercase;
+    width: 333px;
+    height: 39px !important;
+    font-size: 18px;
+    margin-top: 25px;
+}

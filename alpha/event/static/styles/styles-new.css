@@ -283,3 +283,12 @@ ul.errorlist li {
     left: 25px;
     z-index: 5;
 }
+
+.stretch-wrapper {
+    width: 1007px;
+}
+
+.center-align-wrapper {
+    width: 482px;
+    margin: 0 auto;
+}
