@@ -4,7 +4,8 @@
 
 
 .advertising-right-container {
-    float: right;
+    float: left;
+    margin-left: 10px;
 }
 
 .home .advertising-right-container {
@@ -13,10 +14,10 @@
 }
 
 .advertising-right {
-    padding: 5px;
+    padding: 4px;
     background: #ffffff;
     border: 1px solid #c5c5c5;
-    margin-bottom: 6px;
+    margin-top: 6px;
     text-align: center;
 }
 

@@ -13,6 +13,7 @@
         this.claimEvent = new ClaimEvent();
         this.daysSwitcher = new EventDaysSwitcher();
         this.imageViewer = new ImageViewer();
+        this.similarEvents = new SimilarEvents();
     };
 
     EventPage.prototype = {

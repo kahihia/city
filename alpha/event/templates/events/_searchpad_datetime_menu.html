@@ -3,27 +3,23 @@
 <div class="schedule-bar">    
     <table class="schedule-bar-menu" cellpadding="0" cellspacing="0">
         <tr>
-            <td{% if period == "today" %} class="selected"{% endif %}>
-                <a href="{% events_filter_url request eventsFilter period="today" exclude="datetime" %}"
-                   class="jump ajax">
+            <td {% if period == "today" %} class="selected"{% endif %}>
+                <a href="{% events_filter_url request eventsFilter period="today" exclude="datetime" %}" class="jump ajax">
                     Today
                 </a>
             </td>
-            <td{% if period == "tomorrow" %} class="selected"{% endif %}>
-                <a href="{% events_filter_url request eventsFilter period="tomorrow"  exclude="datetime" %}"
-                   class="jump ajax">
+            <td {% if period == "tomorrow" %} class="selected"{% endif %}>
+                <a href="{% events_filter_url request eventsFilter period="tomorrow"  exclude="datetime" %}" class="jump ajax">
                     Tomorrow
                 </a>
             </td>
-            <td{% if period == "this-weekend" %} class="selected"{% endif %}>
-                <a href="{% events_filter_url request eventsFilter period="this-weekend"  exclude="datetime" %}"
-                   class="jump ajax">
+            <td {% if period == "this-weekend" %} class="selected"{% endif %}>
+                <a href="{% events_filter_url request eventsFilter period="this-weekend"  exclude="datetime" %}" class="jump ajax">
                     This weekend
                 </a>
             </td>
-            <td{% if period == "next-week" %} class="selected"{% endif %}>
-                <a href="{% events_filter_url request eventsFilter period="next-week"  exclude="datetime" %}"
-                   class="jump ajax">
+            <td {% if period == "next-week" %} class="selected"{% endif %}>
+                <a href="{% events_filter_url request eventsFilter period="next-week"  exclude="datetime" %}" class="jump ajax">
                     Next week
                 </a>
             </td>
@@ -126,7 +122,5 @@
                 </a>
             </div>            
         </div>
-
-
     </div>
 </div> 

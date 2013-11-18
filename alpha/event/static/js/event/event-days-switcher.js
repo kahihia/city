@@ -3,6 +3,19 @@
     'use strict';
 
     var EventDaysSwitcher = function(){
+        var that = this;
+
+        this.viewer = $(".events-occurrences");
+        this.content = $(".event-days", this.viewer);
+        this.next = $(".next", this.viewer);
+        this.prev = $(".prev", this.viewer);
+        this.days = $("li", this.content).length;
+
+        this.currentDay = +$(".event-day-switch.active").data("counter");
+
+        this.prev.on("click", this.scrollPrevPage.bind(this));
+        this.next.on("click", this.scrollNextPage.bind(this));
+
         $(".event-day-switch").on("click", function(){
             if($(this).hasClass("active")) return;
 
@@ -14,29 +27,35 @@
             $(".event-day-switch[data-day='"+day+"']").addClass("active");
             $(".show-time-day[data-day='"+day+"']").addClass("active");
             $(".show-day-description[data-day='"+day+"']").addClass("active");
+
+            that.currentDay = +$(".event-day-switch.active").data("counter");
+            that.scrollToActiveDay();
         });
 
-        if($(".event-day-switch").length>5){
-            var slider = $('.bxslider').bxSlider({
-                infiniteLoop: false,
-                hideControlOnEnd: true,
-                minSlides: 5,
-                maxSlides: 5,
-                slideWidth: 62,
-                slideMargin: 0,
-                pager: false
-            });
-            $(".event-day-switch").each(function(index){
-                if($(this).hasClass("active")){
-                    slider.goToSlide(parseInt((index+1)/5));    
-                }                
-            });
-            
-        }        
+        this.scrollToActiveDay();
     };
 
     EventDaysSwitcher.prototype = {
-        
+        _scroll: function(){
+            $(this.content).animate({
+                "left": -97*(this.currentDay-2) + "px"
+            });
+        },
+        scrollToDay: function(day){
+            if(day>1 && day<=(this.days-2)){
+                this.currentDay = day;
+                this._scroll();
+            }            
+        },
+        scrollNextPage: function(){
+            this.scrollToDay(this.currentDay+1);
+        },
+        scrollPrevPage: function(){
+            this.scrollToDay(this.currentDay-1);
+        },
+        scrollToActiveDay: function(){
+            this.scrollToDay(this.currentDay);
+        }
     };
 
     window.EventDaysSwitcher = EventDaysSwitcher;

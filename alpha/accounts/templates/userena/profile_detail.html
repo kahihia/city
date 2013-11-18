@@ -54,102 +54,105 @@
     {% include 'notices/_list.html' with notices=profile.notices %}
     <div class="account-profile account-primary-content">
         <div class="primary-wrapper">
-            <div class="account-left">
-                <div class="account-avatar">
-                    <img class="mugshot" src="{{ profile.get_mugshot_url }}" alt="{% trans "
-                    Your mugshot " %}" />
+            <table celpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <div class="account-avatar">
+                            <img class="mugshot" src="{{ profile.get_mugshot_url }}" alt="{% trans "
+                            Your mugshot " %}" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="account-details">
+                            <header class="block-header">
+                                {{ profile.user.username }}
+                            </header>
+                            <span>
+                                Members since {{ profile.user.date_joined|date:"F d, Y" }}
+                            </span>
+                            
+                            {% venue_accounts %}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="tabs-container">
+                <ul class="tabs" data-page-id="profile-detail">
+                    <li data-tab-id="account-events" {% if active_tab == "account-events" %}class="current"{% endif %}>
+                        <span>{{ profile.user.username }} Events</span>
+                    </li><li data-tab-id="account-featured-events" {% if active_tab == "account-featured-events" %}class="current"{% endif %}>
+                        <span>Featured Events</span>
+                    </li><li data-tab-id="account-archived-events" {% if active_tab == "account-archived-events" %}class="current"{% endif %}>
+                        <span>Archived Events</span>
+                    </li><li data-tab-id="reminder" {% if active_tab == "reminder" %}class="current"{% endif %}>
+                        <span>Reminder</span>
+                    </li><li data-tab-id="in-the-loop" {% if active_tab == "in-the-loop" %}class="current"{% endif %}>
+                        <span>In the Loop</span>
+                    </li><li data-tab-id="advertising-stats" {% if active_tab == "advertising-stats" %}class="current"{% endif %}>
+                        <span>Advertising Stats</span>
+                    </li><li data-tab-id="notices" {% if active_tab == "notices" %}class="current"{% endif %}>
+                        <span>Notices</span>
+                    </li>
+                </ul>
+                <div class="box{% if active_tab == "account-events" %} visible{% endif %}">
+                    {% include 'accounts/_account_events_table.html' with events=profile.future_events %}
                 </div>
-                <div class="account-settings">
-                    <header>
-                        My settings
-                    </header>
-                    <ul>
-                        {% if is_admin %}
-                            <li>
-                                <a href="{% url 'admin:index' %}">Admin area</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'cfadmin_home' %}">Management interface</a>
-                            </li>
-                        {% endif %}
-                        <li>
-                            <a href="{% url 'userena_profile_edit' profile.user.username %}">Edit my Account</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'reminder_settings' %}">Edit Reminder Settings</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'in_the_loop_settings' %}">Edit In the Loop tags</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'account_orders' %}">View my order history</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'advertising_setup' %}">Create New Ad</a>
-                        </li>
-                    </ul>
+                <div class="box{% if active_tab == "account-featured-events" %} visible{% endif %}">
+                    {% include 'accounts/_account_featured_events_table.html' with events=profile.featured_events %}
                 </div>
-                <a class="new-venue-button" href="{% url 'create_venue_account' %}">
-                    <img src="/static/images/accounts/new-venue-bg.jpg">
-                    New Venue
-                </a>
+                <div class="box{% if active_tab == "account-archived-events" %} visible{% endif %}">
+                    {% include 'accounts/_account_archived_events_table.html' with events=profile.archived_events %}
+                </div>
+                <div class="box{% if active_tab == "reminder" %} visible{% endif %}">
+                    {% include 'accounts/_reminder_events_table.html' %}
+                </div>
+                <div class="box{% if active_tab == "in-the-loop" %} visible{% endif %}">
+                    {% include 'accounts/_in_the_loop_events_table.html' %}
+                </div>
+                <div class="box{% if active_tab == "advertising-stats" %} visible{% endif %} advertising-stats">
+                    {% include 'advertising/stats/list.html' with campaigns=profile.shared_campaigns %}
+                </div>
+                <div class="box{% if active_tab == "notices" %} visible{% endif %} notices">
+                    {% include 'notices/_list_history.html' with notices=profile.notices_history %}
+                </div>
             </div>
-            <div class="account-details">
-                <header class="block-header">
-                    {% if profile.user.get_full_name %}
-                        {{ profile.user.get_full_name }} <span class="nickname">({{ profile.user.username }})</span>
-                    {% else %}
-                        <span class="nickname">{{ profile.user.username }}</span>
-                    {% endif %}
-                </header>
-                <hr />
-                <span>
-                    Members since {{ profile.user.date_joined|date:"F d, Y" }}
-                </span> 
-                {% if profile.bonus_budget.amount > 0 %}   
-                <br>            
-                <span>
-                    Bonus budget - {{ profile.bonus_budget }}                    
-                </span>
-                {% endif %}
-                
-                {% venue_accounts %}
-            </div>
-            <div class="clr"></div>
-        </div>
-    </div>
+        </div>        
+    </div>    
 
-    <div class="tabs-container">
-        <ul class="tabs" data-page-id="profile-detail">
-            <li data-tab-id="account-events" {% if active_tab == "account-events" %}class="current"{% endif %}><span>{{ profile.user.username }} Events</span></li>
-            <li data-tab-id="account-featured-events" {% if active_tab == "account-featured-events" %}class="current"{% endif %}><span>Featured Events</span></li>
-            <li data-tab-id="account-archived-events" {% if active_tab == "account-archived-events" %}class="current"{% endif %}><span>Archived Events</span></li>
-            <li data-tab-id="reminder" {% if active_tab == "reminder" %}class="current"{% endif %}><span>Reminder</span></li>
-            <li data-tab-id="in-the-loop" {% if active_tab == "in-the-loop" %}class="current"{% endif %}><span>In the Loop</span></li>
-            <li data-tab-id="advertising-stats" {% if active_tab == "advertising-stats" %}class="current"{% endif %}><span>Advertising Stats</span></li>
-            <li data-tab-id="notices" {% if active_tab == "notices" %}class="current"{% endif %}><span>!</span></li>
+    <div class="account-help-container">
+        <a class="new-venue-button" href="{% url 'create_venue_account' %}">
+            <img src="/static/images/accounts/new-venue-bg.jpg">
+            New Venue
+        </a>
+        <header class="my-settings">
+            My Settings
+        </header>
+        <ul>
+            {% if is_admin %}
+                <li>
+                    <a href="{% url 'admin:index' %}">Admin area</a>
+                </li>
+                <li>
+                    <a href="{% url 'cfadmin_home' %}">Management interface</a>
+                </li>
+            {% endif %}
+            <li>
+                <a href="{% url 'userena_profile_edit' profile.user.username %}">Edit my Account</a>
+            </li>
+            <li>
+                <a href="{% url 'reminder_settings' %}">Edit Reminder Settings</a>
+            </li>
+            <li>
+                <a href="{% url 'in_the_loop_settings' %}">Edit In the Loop tags</a>
+            </li>
+            <li>
+                <a href="{% url 'account_orders' %}">View my order history</a>
+            </li>
+            <li>
+                <a href="{% url 'advertising_setup' %}">Create New Ad</a>
+            </li>
         </ul>
-        <div class="box{% if active_tab == "account-events" %} visible{% endif %}">
-            {% include 'accounts/_account_events_table.html' with events=profile.future_events %}
-        </div>
-        <div class="box{% if active_tab == "account-featured-events" %} visible{% endif %}">
-            {% include 'accounts/_account_featured_events_table.html' with events=profile.featured_events %}
-        </div>
-        <div class="box{% if active_tab == "account-archived-events" %} visible{% endif %}">
-            {% include 'accounts/_account_archived_events_table.html' with events=profile.archived_events %}
-        </div>
-        <div class="box{% if active_tab == "reminder" %} visible{% endif %}">
-            {% include 'accounts/_reminder_events_table.html' %}
-        </div>
-        <div class="box{% if active_tab == "in-the-loop" %} visible{% endif %}">
-            {% include 'accounts/_in_the_loop_events_table.html' %}
-        </div>
-        <div class="box{% if active_tab == "advertising-stats" %} visible{% endif %} advertising-stats">
-            {% include 'advertising/stats/list.html' with campaigns=profile.shared_campaigns %}
-        </div>
-        <div class="box{% if active_tab == "notices" %} visible{% endif %} notices">
-            {% include 'notices/_list_history.html' with notices=profile.notices_history %}
-        </div>
+        
     </div>
 
 {% endblock %}

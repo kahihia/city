@@ -1,33 +1,34 @@
 {% load advertising_tags %}
 
-<!-- Search Pad popup-->
-<!--div class="search-pad-popup"-->
-    <div class="search-pad-content-wrapper">    
-        <div class="search-pad-menu">
-            {% include 'events/_searchpad_left_menu.html' %}
-        </div>
-        <div class="search-pad-content">
-            {% include 'events/_searchpad_popup_datetime_menu.html' %}
 
-            <ul class="searchTags tagit ui-widget ui-widget-content ui-corner-all">
+<div class="search-pad-popup-content">
+    <div class="search-pad-menu">
+        {% include 'events/_searchpad_left_menu.html' %}
+    </div>
+    <div class="search-pad-content events-container content-wrapper">
+        {% include 'events/_searchpad_popup_datetime_menu.html' %}
+
+        <div class="searchtags-wrapper">
+            {% if not eventsFilter.search_tags %}
+                <span class="searchtags-placeholder">
+                    Select Tags to Refine your Search
+                </span>
+            {% endif %}
+            <ul class="searchtags browse">
                 {% for tag in eventsFilter.search_tags %}
-                    <li data-remove-url="{{ tag.remove_url }}" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable">
-                        <span class="tagit-label">{{ tag.name }}</span>
-                        <a class="tagit-close">
-                            <span class="text-icon">×</span>
-                            <span class="ui-icon ui-icon-close"></span>
-                        </a>
+                    <li data-remove-url="{{ tag.remove_url }}">
+                        {{ tag.name }}
                     </li>
                 {% endfor %}
             </ul>
-            {% include 'events/_search_pad_event_details.html' %}
         </div>
-        <div class="clr">
-        </div>
+        {% include 'events/_search_pad_event_details.html' %}
     </div>
-    <div class="search-pad-advertising">
-        <div class="advertising-container">                
-            {% advertising_group "300x600" %}
-        </div>
+    <div class="clr">
     </div>
-<!--/div-->
+</div>
+<div class="search-pad-advertising">
+    <div class="advertising-container">
+        {% advertising_group "300x600" %}
+    </div>
+</div>

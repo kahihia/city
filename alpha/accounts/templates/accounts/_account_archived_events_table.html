@@ -2,46 +2,65 @@
 {% load endless %}
 {% load cropping %}
 {% load event_tags %}
+{% load common_tags %}
 
 {% paginate 6 events %}
 <div class="account-entry-wrapper entry-wrapper">
-{% for event in events %}    
-    <div class="entry-info with-delete-action">
-        {% short_single_event event %}
+    {% for event in events %}
+        <div class="entry-info with-delete-action">
+            {% short_single_event event %}
 
-        <div class="event-edit-actions">            
-            <a href="{% url 'event_copy' event.authentication_key %}">
-                Copy
-            </a>
+            <div class="event-edit-actions">
+                <a href="{% url 'event_copy' event.authentication_key %}">
+                    Copy
+                </a>
+            </div>
+
+            <div class="clr"></div>
+        </div>    
+    {% empty %}
+        <p>
+            Archive is empty
+        </p>
+    {%endfor%}
+    {% if pages|length > 1 %}
+        <div class="entry-navigation-np">
+            <p>
+                <ul>
+                    {% get_pages %}
+
+                    <span class="step-links">
+                        {% if pages.current.is_first %}
+                            <span class="prev">
+                                prev
+                            </span>
+                        {% else %}
+                            <a href="{{ pages.previous.url }}" class="prev">
+                                prev
+                            </a>
+                        {% endif %}
+
+                        {% for page in pages %}
+                            {% if page|args:10|call:'is_in_range' %}
+                                <a href="{{ page.url }}"
+                                    class="page{% if page.is_current %} current{%endif%}">
+                                    {{ page.number }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if pages.current.is_last %}
+                            <span class="next">
+                                next
+                            </span>
+                        {% else %}
+                            <a href="{{ pages.next.url }}" class="next">
+                                next
+                            </a>
+                        {% endif %}
+                    </span>
+                </ul>
+            </p>
         </div>
-
-        <div class="clr"></div>
-    </div>
-{% empty %}
-    <p>
-        Archive is empty
-    </p>
-{%endfor%}
-</div>
-
-<div class="entry-navigation-np">
-    <p>
-        <ul>
-            {% get_pages %} 
-
-            <span class="step-links">
-                {% if not pages.current.is_first %}                    
-                    <a href="{{ pages.previous.url }}">
-                        <img src="{{STATIC_URL}}images/entry-prev.png">
-                    </a>
-                {% endif %}
-
-                {% if not pages.current.is_last %}                
-                    <a href="{{ pages.next.url }}">
-                        <img src="{{STATIC_URL}}images/entry-next.png">
-                    </a>
-                {% endif %}
-            </span>
-        </ul>
-    </p>
+    {% endif %}
 </div>

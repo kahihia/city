@@ -109,6 +109,16 @@
     padding: 2px 0;
 }
 
+.entry-wrapper .entry-info .entry-details-wrapper {
+    width: 330px;
+}
+
+.entry-wrapper .entry-info .entry-details-wrapper .title,
+.entry-wrapper .entry-info .entry-details-wrapper .entry-date,
+.entry-wrapper .entry-info .entry-details-wrapper .entry-description {
+    width: 320px;
+}
+
 .entry-wrapper .entry-info.home-page .entry-details-wrapper{
     width: 330px;   
 }
@@ -119,30 +129,31 @@
 }    
 
 .entry-wrapper .entry-info.with-all-actions .entry-details-wrapper{
-    width: 280px;   
+    width: 185px;
+    overflow: hidden;
 }
 .entry-wrapper .entry-info.with-all-actions .entry-details-wrapper .title,
 .entry-wrapper .entry-info.with-all-actions .entry-details-wrapper .entry-date,
 .entry-wrapper .entry-info.with-all-actions .entry-details-wrapper .entry-description {
-    width: 260px;
+    width: 175px;
 }
 
 .entry-wrapper .entry-info.without-make-feature-action .entry-details-wrapper {
-    width: 400px;
+    width: 320px;
 }
 .entry-wrapper .entry-info.without-make-feature-action .entry-details-wrapper .title,
 .entry-wrapper .entry-info.without-make-feature-action .entry-details-wrapper .entry-date,
 .entry-wrapper .entry-info.without-make-feature-action .entry-details-wrapper .entry-description {
-    width: 380px;
+    width: 310px;
 }
 
 .entry-wrapper .entry-info.with-delete-action .entry-details-wrapper {
-    width: 480px;
+    width: 420px;
 }
 .entry-wrapper .entry-info.with-delete-action .entry-details-wrapper .title,
 .entry-wrapper .entry-info.with-delete-action .entry-details-wrapper .entry-date,
 .entry-wrapper .entry-info.with-delete-action .entry-details-wrapper .entry-description {
-    width: 460px;
+    width: 410px;
 }
 
 .entry-wrapper .entry-info .auctions-details-wrapper .title,
@@ -199,17 +210,13 @@
     font-weight: bold;
 }
 
-.account-featured-table .entry-info {
-    width: 280px !important;
-}
-
 .account-featured-table .entry-info .entry-details-wrapper .title {
     white-space: normal;
-    width: 195px;
+    width: 120px;
+    text-align: left;
 }
 
 .account-featured-table {
-    width: 100% !important;
     border-collapse: collapse;
 }
 

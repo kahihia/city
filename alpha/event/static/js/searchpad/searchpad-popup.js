@@ -1,5 +1,4 @@
 ;(function($, window, document, undefined) {
-
     'use strict';
 
     var SearchPadPopup = function(){
@@ -14,18 +13,28 @@
         this.loadSearchPadPage("/events/search");
 
         this.initAuthRequired();
+        $(document).on("click", this.closeIfNotPopup.bind(this));
         
     };
 
     SearchPadPopup.prototype = {
         open: function(){
-            $.fancybox($(this.popup), {
-                closeBtn: true,
-                hideOnOverlayClick: false,
-                width: 1024,
-                padding: 5
-            });
-
+            this.popup.show();
+        },
+        close: function(){
+            this.popup.hide();
+        },
+        closeIfNotPopup: function(e){
+            if(
+                $(e.target).hasClass("search-pad-popup-open-button") || $(e.target).parents(".search-pad-popup-open-button").length>0 ||
+                $(e.target).hasClass("jump-popup") || $(e.target).parents(".jump-popup").length>0 ||
+                
+                $(e.target).hasClass("search-pad-popup-content") || $(e.target).parents(".search-pad-popup-content").length>0 || $(e.target).parents("#ui-datepicker-div").length>0 || $(e.target).parents(".ui-datepicker-header").length>0
+            ){
+                
+            } else {
+                this.close();
+            }
         },
         ajaxifyLinks: function(){
             var links = $("a.ajax", this.popup),
@@ -77,7 +86,7 @@
         },
         initSearchTags: function(){
             var that=this;
-            $(".search-pad-content .searchTags").tagit({
+            $(".search-pad-content .searchtags").tagit({
                 afterTagRemoved: function(e, ui){
                     that.loadSearchPadPage(
                         "/events/search/" + $(ui.tag).data("remove-url")
