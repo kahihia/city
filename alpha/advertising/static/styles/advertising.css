@@ -17,8 +17,12 @@
     padding: 4px;
     background: #ffffff;
     border: 1px solid #c5c5c5;
-    margin-top: 6px;
+    margin-top: 9px;
     text-align: center;
+}
+
+.advertising-right.first {
+    margin-top: 0;
 }
 
 .advertising-right a {
