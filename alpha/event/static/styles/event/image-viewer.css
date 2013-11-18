@@ -40,3 +40,23 @@
     vertical-align: middle;
     padding-top: 3px;
 }
+
+.searchpad-event-wrapper .image-viewer {
+    width: 153px;
+    font-size: 8px;
+}
+
+.searchpad-event-wrapper .image-viewer .image-viewer-controls {
+    width: 146px;
+    height: 13px;
+    line-height: 13px;
+    left: 2px;
+    bottom: 2px;
+}
+
+.searchpad-event-wrapper .image-viewer .image-viewer-controls .prev,
+.searchpad-event-wrapper .image-viewer .image-viewer-controls .next {    
+    width: 18px;    
+    height: 8px;    
+    padding-top: 1px;
+}

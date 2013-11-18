@@ -86,7 +86,7 @@
         },
         initSearchTags: function(){
             var that=this;
-            $(".search-pad-content .searchTags").tagit({
+            $(".search-pad-content .searchtags").tagit({
                 afterTagRemoved: function(e, ui){
                     that.loadSearchPadPage(
                         "/events/search/" + $(ui.tag).data("remove-url")

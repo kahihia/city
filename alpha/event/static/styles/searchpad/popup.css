@@ -36,7 +36,7 @@
     position: absolute;
     bottom: 0;
     left: 100px;
-    background: #ffffff;
+    color: #949697;
 }
 
 .search-pad-popup .loader {
@@ -75,8 +75,14 @@
     z-index:8031 !important;
 }
 
-.search-pad-popup .event-details-block {
-    margin-top: 10px;
+.search-pad-popup .searchpad-event-details {
+    margin-top: 15px;
+    margin-left: 20px;
+}
+
+.search-pad-popup .searchpad-event-details header a {
+    color: #022e52;    
+    font-size: 18px;
 }
 
 .search-pad-popup .searchpad-event-description{
@@ -85,15 +91,16 @@
     padding-right: 5px;
 }
 
-.search-pad-popup .event-details-block .event-details {
-    margin-left: 20px;
+.search-pad-popup .searchpad-event-details .event-details {
+    margin-left: 10px;
+    width: 265px;
 }
 
-.search-pad-popup .event-details-block .event-img {
-    margin: 0px;    
-}
-
-.search-pad-popup .event-details-block .event-details .event-date-wrapper,
-.search-pad-popup .event-details-block .event-details .event-description {
+.search-pad-popup .searchpad-event-details .event-details .event-date-wrapper,
+.search-pad-popup .searchpad-event-details .event-details .event-description {
     margin-left: 0;
+}
+
+.search-pad-popup .content-wrapper {
+    margin-top: 0;
 }
