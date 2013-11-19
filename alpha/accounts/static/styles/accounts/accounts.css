@@ -833,7 +833,7 @@
     padding: 57px 70px 62px 75px;
 }
 
-.user-identification, .user-password {
+.userena-input {
     position: relative;
     margin-bottom: 6px;
 }
@@ -857,7 +857,7 @@
     background-position: -23px 0;
 }
 
-.user-identification input, .user-password input {
+.userena-input input {
     height: 36px !important;
     width: 241px;
     line-height: 36px !important;
@@ -867,7 +867,12 @@
     font-size: 13px;
 }
 
-.user-identification input.empty, .user-password input.empty {
+.userena-input.no-icon input {
+    padding-left: 20px !important;
+    width: 301px;
+}
+
+.userena-input input.empty {
     text-transform: uppercase;
 }
 
@@ -893,7 +898,7 @@
     color: #022e52;
 }
 
-.log-in-button {
+.userena-button {
     text-transform: uppercase;
     width: 333px;
     height: 39px !important;

@@ -5,17 +5,15 @@
         var self = this;
 
         self.init = function() {
-            var usernameSelector = ".user-identification input";
-            var passwordSelector = ".user-password input";
+            var inputSelector = ".userena-input input";
 
-            var selectors = [usernameSelector, passwordSelector].join(",");
-            $(selectors).each(function() {
+            $(inputSelector).each(function() {
                 var obj = $(this);
                 self.setInputEmpty(obj);
             });
 
-            $("body").on("focus", selectors, self.onInputFocus);
-            $("body").on("blur", selectors, self.onInputBlur);
+            $("body").on("focus", inputSelector, self.onInputFocus);
+            $("body").on("blur", inputSelector, self.onInputBlur);
         }
 
         self.onInputFocus = function() {

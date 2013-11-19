@@ -16,12 +16,12 @@
                     {% csrf_token %}
                     {{ form.non_field_errors }}
 
-                    <div class="user-identification" data-placeholder="{{ form.identification.label }}">
+                    <div class="user-identification userena-input" data-placeholder="{{ form.identification.label }}">
 		                {{ form.identification }}
                         {{ form.identification.errors }}
                     </div>
 
-                    <div class="user-password" data-placeholder="{{ form.password.label }}">
+                    <div class="user-password userena-input" data-placeholder="{{ form.password.label }}">
                         {{ form.password }}
                         {{ form.password.errors }}
                     </div>
@@ -44,12 +44,9 @@
                         <input type="hidden" name="next" value="{{ next }}" />
                     {% endif %}
 
-                    <input type="submit" class="submit standart button log-in-button" value="Log In" />
+                    <input type="submit" class="submit standart button userena-button" value="Log In" />
                 </form>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        $("doc")
-    </script>
 {% endblock %}
