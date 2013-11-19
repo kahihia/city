@@ -4,33 +4,36 @@
 {% block title %}{% trans "Signup" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "Signup" %}</h1>
-<div class="content account-options-wrapper">
-    <div class="main-content account-options">
-        <form action="" method="post">
-            {% csrf_token %}            
-            {{ form.non_field_errors }}
-            <div class="options options-userena">
-                <table>                                
-                    {% for field in form %}
-                        <tr>
-                            <td colspan=2 >
-                                {{ field.errors }}
-                            </td>
-                        </tr>
-                        <tr>                            
-                            <td class="first">
-                                {{ field.label_tag }}
-                            </td>
-                            <td>
-                                {{ field }}
-                            </td>                            
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>          
-            <input type="submit" class="submit standart button" value="{% trans "Signup"%}" />
-        </form>
+    <div class="center-align-wrapper">
+        <div class="account-form-wrapper">
+            <form action="" method="post">
+                {% csrf_token %}
+                <h1>{% trans "Signup" %}</h1>
+
+                {{ form.non_field_errors }}
+
+                <div class="user-input-wrapper">
+                    <div class="user-icon"></div>
+                    <input class="required" id="id_username" maxlength="30" name="username" type="text" placeholder="USERNAME">
+                </div>
+                {{ form.username.errors }}
+                
+                <input class="required" id="id_email" maxlength="75" name="email" type="text" placeholder="EMAIL">
+                {{ form.email.errors }}
+
+                <div class="password-input-wrapper">
+                    <div class="pass-icon"></div>
+                    <input class="required" id="id_password1" name="password1" type="password" placeholder="PASSWORD">
+                </div>
+                {{ form.password1.errors }}
+                <div class="password-input-wrapper">
+                    <div class="pass-icon"></div>
+                    <input class="required" id="id_password2" name="password2" type="password" placeholder="REPEAT PASSWORD">
+                </div>
+                {{ form.password1.errors }}
+                
+                <input type="submit" class="submit standart button" value="{% trans "Signup"%}" />
+            </form>
+        </div>
     </div>
-</div>
 {% endblock %}

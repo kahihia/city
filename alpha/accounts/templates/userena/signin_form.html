@@ -10,29 +10,32 @@
             <form action="" method="post">
                 {% csrf_token %}
                 {{ form.non_field_errors }}
+                
+                <div class="user-input-wrapper">
+                    <div class="user-icon"></div>
+                    <input class="required" id="id_identification" maxlength="75" name="identification" type="text" placeholder="USERNAME">
+                    {{ from.identification.errors }}
+                </div>
 
-                {% for field in form %}                    
-                    {% if field.name == 'remember_me' %}
-                    {% else %}
-                        <div>
-                            {{ field }}
-                            {{ field.errors }}
-                        </div>
-                    {% endif %}
+                <div class="password-input-wrapper">
+                    <div class="pass-icon"></div>
+                    <input class="required" id="id_password" maxlength="75" name="password" type="password" placeholder="PASSWORD">
+                    {{ from.identification.errors }}
+                </div>
 
-                {% endfor %}
-
-                <p class="forgot-password">
+                <div class="forgot-password">
                     <a href="{% url 'userena_password_reset' %}" title="{% trans 'Forgot your password?' %}">
                         {% trans "Forgot your password?" %}
                     </a>
+                </div>
+                <div class="remember-me">
                     {{ form.remember_me.label }}
                     <div class="checkbox">
                         {{ form.remember_me }}
                         <label for="id_{{ form.remember_me.name }}"></label>
                     </div>
-                </p>
-                {{ form.remember_me.errors }}
+                </div>
+                <div class="clear"></div>
 
                 {% if next %}
                     <input type="hidden" name="next" value="{{ next }}" />
