@@ -154,6 +154,12 @@
                         }
                     ], {
                         afterLoad: function() {
+                            var venueField = $(self.fancyboxSelector + " iframe").contents().find("#id_place");
+                            var eventLocationName = self.activeItem.data("event-location");
+                            if(!venueField.val() && eventLocationName) {
+                                venueField.attr("placeholder", eventLocationName);
+                            }
+
                             $(self.fancyboxSelector + " iframe").contents()
                                                                 .find(".submit").click(self.onSubmitButtonClick);
                         },

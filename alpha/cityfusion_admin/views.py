@@ -18,7 +18,7 @@ from event.forms import SetupFeaturedForm, CreateEventForm
 from event.services import facebook_services
 from notices import services as notice_services
 from cities.models import City, Country
-from django_facebook.decorators import facebook_required_lazy
+from django_facebook.decorators import facebook_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Q, F
 
@@ -94,7 +94,7 @@ def import_facebook_events(request):
 
 
 @staff_member_required
-@facebook_required_lazy
+@facebook_required
 def load_facebook_events(request):
     if request.is_ajax():
         try:
