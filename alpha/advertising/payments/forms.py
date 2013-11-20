@@ -49,17 +49,3 @@ class PaypalSetupForm(AdvertisingSetupForm):
             raise forms.ValidationError('Ensure bonus is lower than or equal to %s' % self.account.bonus_budget)
 
         return cleaned_data
-
-
-    def save(self, commit=True):
-        campaign = super(PaypalSetupForm, self).save(commit=False)
-
-        cleaned_data = self.clean()
-
-        campaign.budget = cleaned_data["bonus"]
-
-        if commit:
-            campaign.save()
-
-        return campaign
-
