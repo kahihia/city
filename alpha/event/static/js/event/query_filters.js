@@ -17,7 +17,11 @@
         },
         getURL: function(){
             return window.location.pathname + "?" + $.param(this.params, true);
-        }        
+        },
+        clear: function(){
+            this.params = {};
+            return this;
+        }
     };
 
     $(document).on("ready page:load", function(){

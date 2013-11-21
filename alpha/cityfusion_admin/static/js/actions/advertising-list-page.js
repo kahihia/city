@@ -8,6 +8,10 @@
 
     AdvertisingListPage.prototype = {
         initSortable: function() {
+            $(".show-all").on("click", function(){
+                window.location = window.filters.clear().getURL();
+            });
+
             $(".sortable").on("click", function(){
                 window.location = window.filters.removeFilter("o").setFilter("o", $(this).data("order")).getURL();
             });
