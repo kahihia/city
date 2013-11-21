@@ -224,7 +224,7 @@ from advertising.utils import get_chosen_advertising_types, get_chosen_advertisi
 def admin_advertising(request):
     campaigns_filter = AdvertisingCampaignFilter(request.GET, queryset=AdvertisingCampaign.objects.order_by("-started"))
 
-    if "account" in request.GET:
+    if "account" in request.GET and request.GET["account"]:
         selected_account = Account.objects.get(user_id=request.GET["account"])
     else:
         selected_account = None

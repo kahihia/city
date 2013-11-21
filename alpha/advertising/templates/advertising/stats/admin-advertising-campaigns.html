@@ -34,7 +34,7 @@
             {{ campaigns_filter.form.name }}
         </td>
         <td>
-            <input type="text" name="account" class="user-input" data-ajax-url="{% url 'admin_user_autocomplete' %}" value="{{ campaigns_filter.form.account.value }}" data-user-name="{{ selected_account.user }}" />
+            <input type="text" name="account" class="user-input" data-ajax-url="{% url 'admin_user_autocomplete' %}" value="{{ selected_account.id }}" data-user-name="{{ selected_account.user }}" />
         </td>
         <td>
             Enough money?<br>
