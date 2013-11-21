@@ -218,10 +218,10 @@ def admin_advertising_stats(context, ads):
     }
 
 @register.inclusion_tag('advertising/stats/admin-advertising-campaigns.html', takes_context=True)
-def admin_advertising_campaigns(context, campaigns):
+def admin_advertising_campaigns(context, campaigns_filter):
     request = context["request"]
     return {
-        'campaigns': campaigns,
+        'campaigns_filter': campaigns_filter,
         'request': request
     }
 

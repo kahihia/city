@@ -1,30 +1,63 @@
 {% load endless %}
 {% load cf_pagination %}
 
-{% if campaigns|length %}
-    {% paginate 10 campaigns %}
-    <table class="profile-table" celpadding="0" cellspacing="0">
-        <tr>
-            <th class="action">Campaign Name</th>
-            <th class="action">Status/Active period</th>            
-            <th class="action">
-                <div class="col image">&nbsp;</div>
-                <div class="stats">
-                    <div class="col">Impressions</div>
-                    <div class="col">Clicks</div>
-                    {% if settings.ADVERTISING_TYPE_CPC_ON %}<div class="col">CPC</div>{% endif %}
-                    <div class="col">CPM</div>
-                </div>
-            </th>
-            <th class="action">Amount Spent</th>
-            <th class="action">Amount Remaining</th>
-            <th class="action">Regions</th>
-            <th class="action">Actions</th>
-        </tr>
-        {% for campaign in campaigns %}
+
+{% paginate 10 campaigns_filter.qs as campaigns %}
+<table class="profile-table" celpadding="0" cellspacing="0">
+    <tr>
+        <th class="action">
+            Campaign Name
+            <div class="sort-wrapper">
+                <a class="sortable icon-sort-by-alphabet" data-order="name" href="javascript:void"></a>
+                <a class="sortable icon-sort-by-alphabet-alt" data-order="-name" href="javascript:void"></a>
+            </div>
+        </th>
+        <th class="action">Owner</th>
+        <th class="action">Status/Active period</th>
+        <th class="action">
+            <div class="col image">&nbsp;</div>
+            <div class="stats">
+                <div class="col">Views</div>
+                <div class="col">Clicks</div>
+                {% if settings.ADVERTISING_TYPE_CPC_ON %}<div class="col">CPC</div>{% endif %}
+                <div class="col">CPM</div>
+            </div>
+        </th>
+        <th class="action">Amount Spent</th>
+        <th class="action">Amount Remaining</th>
+        <th class="action">Regions</th>
+        <th class="action">Actions</th>
+    </tr>
+    <tr>
+        <form action="" method="get">
+        <td>
+            {{ campaigns_filter.form.name }}
+        </td>
+        <td>
+            {{ campaigns_filter.form.account }}
+        </td>
+        <td>
+            Enough money?<br>
+            {{ campaigns_filter.form.enough_money }}
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+            {{ campaigns_filter.form.o }}
+            <input type="submit" value="search" class="button">
+
+        </td>
+        </form>
+    </tr>
+    {% for campaign in campaigns %}
         <tr>
             <td class="action">
                 {{ campaign.name }}
+            </td>
+            <td class="action">
+                {{ campaign.account.user }}
             </td>
             <td class="action">
                 {% if campaign.is_active %}
@@ -106,14 +139,10 @@
                 </a>
             </td>
         </tr>
-        {% endfor %}
-    </table>
-    {% cf_pagination %}
-
-{% else %}
-    <div class="empty">
-        <p>You have no ads.</p>
-        <p>You can <a href="{% url 'admin_advertising_setup' %}">create</a> new advertising campaign</p>
-    </div>    
-{% endif %}
-
+    {% empty %}
+    <tr>
+        <td colspan="8">No ads was found</td>
+    </tr>
+    {% endfor %}
+</table>
+{% cf_pagination %}
