@@ -14,7 +14,6 @@ from gmapi.forms.widgets import LocationWidget
 from ckeditor.fields import RichTextFormField
 import dateutil.parser as dateparser
 from cities.models import Region
-from djmoney.forms.fields import MoneyField
 from moneyed import Money, CAD
 
 

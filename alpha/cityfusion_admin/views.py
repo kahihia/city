@@ -224,8 +224,14 @@ from advertising.utils import get_chosen_advertising_types, get_chosen_advertisi
 def admin_advertising(request):
     campaigns_filter = AdvertisingCampaignFilter(request.GET, queryset=AdvertisingCampaign.objects.order_by("-started"))
 
+    if "account" in request.GET:
+        selected_account = Account.objects.get(user_id=request.GET["account"])
+    else:
+        selected_account = None
+
     return render_to_response('cf-admin/admin-advertising-list.html', {
-            "campaigns_filter": campaigns_filter
+            "campaigns_filter": campaigns_filter,
+            "selected_account": selected_account
         }, context_instance=RequestContext(request))
 
 

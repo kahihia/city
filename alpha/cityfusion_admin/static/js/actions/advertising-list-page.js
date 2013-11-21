@@ -3,6 +3,7 @@
 
     var AdvertisingListPage = function(){
         this.initSortable();
+        this.initUserInputs();
     }
 
     AdvertisingListPage.prototype = {
@@ -14,7 +15,39 @@
             setTimeout(function(){
                 $(".sortable[data-order='"+window.filters.params.o+"'").addClass("active");
             }, 100);
-        }       
+        },
+        initUserInputs: function() {
+            $(".user-input").each(function(index, input){
+                $(input).select2({
+                    placeholder: "User name",
+                    minimumInputLength: 2,
+                    width: 150,
+                    ajax: {
+                        url: $(input).data("ajax-url"),
+                        dataType: "json",
+                        data: function (term, page) {
+                            return { "search": term };
+                        },
+                        results: function (data) {
+                            return {results: data};
+                        }
+                    },
+                    formatResult: function(data) {
+                        return "<span>" + data.name + "</span>";
+                    },
+                    formatSelection: function(data) {
+                        return "<span>" + data.name + "</span>";
+                    }
+                });
+
+                $(input).select2("data", {
+                    "id": $(input).val(),
+                    "name": $(input).data("user-name")
+                });
+
+                
+            });
+        },
     }        
 
     $(document).ready(function(){

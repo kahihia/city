@@ -220,9 +220,11 @@ def admin_advertising_stats(context, ads):
 @register.inclusion_tag('advertising/stats/admin-advertising-campaigns.html', takes_context=True)
 def admin_advertising_campaigns(context, campaigns_filter):
     request = context["request"]
+    selected_account = context["selected_account"]
     return {
         'campaigns_filter': campaigns_filter,
-        'request': request
+        'request': request,
+        'selected_account': selected_account
     }
 
 @register.inclusion_tag('advertising/stats/advertising-campaign-stats.html', takes_context=True)
