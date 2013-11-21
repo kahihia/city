@@ -136,7 +136,10 @@ class FreeAdvertisingManager(models.Manager):
 
 class PendingAdvertisingManager(models.Manager):
     def get_query_set(self):
-        return super(PendingAdvertisingManager, self).get_query_set().filter(review_status="PENDING")        
+        return super(PendingAdvertisingManager, self).get_query_set().filter(
+            review_status="PENDING",
+            campaign__enough_money=True
+        )
 
 
 class Advertising(models.Model):

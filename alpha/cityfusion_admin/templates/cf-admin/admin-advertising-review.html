@@ -30,6 +30,8 @@
                 <table class="profile-table" celpadding="0" cellspacing="0">
                     <tr>
                         <th>Campaign</th>
+                        <th>Budget</th>
+                        <th>User</th>
                         <th>Ad type(click to preview)</th>
                         <th>Accept</th>
                         <th>Deny</th>
@@ -39,6 +41,12 @@
                     <tr>
                         <td>
                             {{ ad.campaign.name }}
+                        </td>
+                        <td>
+                            {{ ad.campaign.account.user }}
+                        </td>
+                        <td>
+                            {{ ad.campaign.budget }}
                         </td>
                         <td>
                             <a href="/media/{{ ad.image }}" class="advertising-image" target="_blank">{{ ad.ad_type.name }} {{ ad.ad_type.width }}x{{ ad.ad_type.height }}</a>
