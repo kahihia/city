@@ -27,23 +27,6 @@ body .hintbox {
     margin-bottom: 20px;
 }
 
-#id_name,
-#id_website {
-    width: 190px;
-    margin-left: 20px;
-    margin-right: 10px;
-}
-
-#id_active_to,
-#id_active_from {
-    width: 100px;
-    margin: 0;
-}
-
-#id_active_from {
-    margin-left: 20px;
-}
-
 .campaign-owner .dropdown {
     width: 190px;
     margin-left: 20px;
@@ -58,8 +41,7 @@ body .hintbox {
 }
 
 .venue-account-owner-dropdown-list {
-    width: 190px;
-    width: 210px;
+    width: 405px;
     border-left: 1px solid #ababab;
     border-right: 1px solid #ababab;
     border-bottom: 1px solid #ababab;
@@ -67,7 +49,6 @@ body .hintbox {
 
 .venue-account-owner-dropdown-list .dropdown-child {
     padding: 5px;
-
 }
 
 .advertising-types {
@@ -76,13 +57,8 @@ body .hintbox {
 }
 
 .advertising-types table {
-    border: 1px solid #d3d3d3;
-    background: #ddd;
-    width: 100%;
-}
-
-.advertising-types table .ad-type-col {
-    background: #acacac;
+    border: 1px solid #c7c6c6;
+    width: 406px;
 }
 
 .advertising-types table .empty-tr td {
@@ -90,12 +66,21 @@ body .hintbox {
 }
 
 .advertising-types th {
-    color: #000;
+    color: #8c8a8a;
     vertical-align: middle;
-    border-bottom: 1px solid #9f9f9f;
     height: 40px;
+    text-align: left;
+    font-size: 12px;
+    padding-left: 20px;
+}
+
+.advertising-types th.ad-type-col {
     text-align: center;
-    padding: 0 10px;
+    padding: 0 20px 0 0;
+}
+
+.advertising-types th span {
+    font-size: 10px;
 }
 
 .advertising-types th .balloon {
@@ -113,10 +98,31 @@ body .hintbox {
 .advertising-types td.ad-type-description-col {
     text-align: left;
     padding-left: 20px;
+    color: #022e52;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.advertising-types td.ad-type-col {
+    padding: 1px 20px 1px 0;
+}
+
+.advertising-types .ad-type-col-wrapper {
+    background: #d9dad9;
+    border: 1px solid #c7c6c6;
+    border-radius: 2px;
+    padding: 2px 0;
+    color: #8c8a8a;
 }
 
 .advertising-types td.ad-type-description-col .checkbox label {
     margin-right: 10px;
+}
+
+.advertising-form__advertising-options .types-title,
+.advertising-form__advertising-options .regions-title{
+    color: #022e52;
+    font-weight: bold;
 }
 
 .advertising-uploads {
@@ -129,6 +135,15 @@ body .hintbox {
 
 .advertising-uploads tr.chosen {
     display: table-row;
+}
+
+.advertising-uploads__cell {
+    vertical-align: middle;
+    padding-left: 20px;
+}
+
+.advertising-uploads__cell_padding_more {
+    padding-left: 40px;
 }
 
 .teritory-node {
@@ -241,4 +256,247 @@ body .hintbox {
 .pay-now-footer {
     margin-left: 265px;    
     margin-bottom: 30px;
+}
+
+.advertising-form {
+    width: 1007px;
+    padding-bottom: 20px;
+}
+
+.advertising-form__details, .advertising-form__budget {
+    float: left;
+}
+
+.advertising-form__details {
+    width: 595px;
+    background: #ffffff;
+    border: 1px solid #B9B8B8;
+    margin-left: 30px;
+}
+
+.advertising-form__details-title {
+    text-transform: uppercase;
+    height: 35px;
+    line-height: 35px;
+    background: #8c8a8a;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    padding-left: 30px;
+}
+
+.advertising-form__details-content {
+    padding: 35px 0 21px 105px;
+}
+
+.advertising-form__budget {
+    width: 311px;
+    margin-left: 18px;
+    background: #022e52;
+    position: relative;
+    padding-bottom: 116px;
+}
+
+.advertising-form__buttons {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    text-align: center;
+    padding: 15px 0 70px 0;
+}
+
+.advertising-form__submit {
+    text-transform: uppercase;
+    display: inline-block;
+    color: #022e52;
+    font-size: 13px;
+    font-weight: bold;
+    background: #a3a1a1;
+    padding: 0 40px;
+    height: 31px;
+    line-height: 31px;
+    cursor: pointer;
+}
+
+.advertising-form__submit:hover {
+    background: #808080;
+}
+
+.payments__title {
+    text-transform: uppercase;
+    height: 35px;
+    line-height: 35px;
+    background: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    color: #696666;
+    text-align: center;
+}
+
+.payments__content {
+    padding: 52px 0 0 25px;
+}
+
+.payments__taxes {
+    border-collapse: collapse;
+}
+
+.payments__price-field {
+    width: 53px;
+    height: 28px;
+    line-height: 28px;
+    text-align: right;
+    font-size: 16px;
+    color: #022e52 !important;
+}
+
+.payments__cell {
+    vertical-align: middle;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 0 4px 10px 0;
+}
+
+.payments__total .payments__cell {
+    border-top: 2px solid #ffffff;
+    padding-top: 10px;
+}
+
+.payments__cell_font_middle {
+    font-size: 17px;
+}
+
+.payments__cell_font_big {
+    font-size: 17px;
+    text-transform: uppercase;
+}
+
+.payments__cell_align_center {
+    text-align: center;
+}
+
+.payments__cell_align_right {
+    text-align: right;
+}
+
+.payments__currency-label {
+    float: right;
+}
+
+.payments__systems {
+    margin-top: 44px;
+}
+
+.payments__systems-item {
+    width: 180px;
+    margin: 0 auto 25px auto !important;
+    display: block !important;
+    padding-right: 25px;
+}
+
+input[type="radio"] + label.payments__check-label {
+    background: url("/static/images/widgets/blue-radio-bg.png") -13px center no-repeat;
+    height: 13px;
+    width: 13px;
+}
+
+input[type="radio"]:checked + label.payments__check-label {
+    background: url("/static/images/widgets/blue-radio-bg.png") 0 center no-repeat;
+}
+
+.payments__item-label {
+    height: auto !important;
+    margin-left: 16px;
+}
+
+.advertising-form__field-title {
+    color: #022e52;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.advertising-form__text-field,
+.advertising-form__list-field {
+    padding-bottom: 8px;
+}
+
+.advertising-form__text-field input {
+    border: 1px solid #c7c6c6 !important;
+    width: 394px;
+    font-size: 13px;
+}
+
+.advertising-form__list-field .dropdown {
+    border: 1px solid #c7c6c6;
+    height: 26px;
+    line-height: 26px;
+    width: 384px;
+}
+
+.advertising-form__list-field .dropdown:after {
+    top: 3px;
+}
+
+.advertising-form__text-field_type_interval input {
+    width: 182px;
+}
+
+.advertising-uploads__file-field {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    font-size: 12px;
+    height: 22px;
+    line-height: 22px;
+    width: 224px;
+}
+
+.advertising-uploads__file-field .button,
+.advertising-uploads__file-field > mark{
+    display: block;
+    cursor: pointer;
+}
+
+.advertising-uploads__file-field .button{
+    float: left;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: auto;
+    height: 22px;
+    text-align: center;
+    padding: 0 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+.advertising-uploads__file-field > mark{
+    background: transparent;
+}
+
+.advertising-uploads__file-field input[type=file]{
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 20px;
+    height: 22px;
+    z-index: 1;
+}
+
+.advertising-territories {
+    border: 1px solid #c7c6c6;
+    width: 368px;
+    margin-top: 5px;
+    padding-top: 15px !important;
+    padding-bottom: 13px !important;
+}
+
+.advertising-territories label {
+    color: #022e52;
+}
+
+.advertising-territories input[type="checkbox"] + label {
+    margin-right: 10px;
 }

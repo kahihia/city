@@ -60,7 +60,6 @@
 }
 .login-entry-info ul li a
 {
-    color:#454545;
     text-decoration:none;
 }
 
@@ -112,14 +111,15 @@
 
 .sign-up-and-facebook .login-entry-info ul li a,
 .sign-up-and-facebook .login-entry-info ul li span {
-    display: inline-block;
     position: relative;
-    top: -2px;
-    height: 29px;
-    line-height: 29px;
-    color: #999999;
+    height: 24px;
+    line-height: 24px;
     vertical-align: top;
     font-size: 12px;
+}
+
+.login-entry__link {
+    color: #999999;
 }
 
 .sign-up-and-facebook .login-entry-info ul li a:hover {
@@ -139,13 +139,39 @@
     position: relative;
 }
 
-.user-profile a span{
+.user-profile a span {
     width: 125px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-top: 2px;
     margin-left: 5px;
+}
+
+.user-profile__mugshot {
+    width: 20px;
+    height: 20px;
+    margin: 2px 0 0 2px;
+}
+
+.user-profile__link, .choose-user-profile-button {
+    display: block;
+    float: left;
+}
+
+.user-profile__link {
+    border: 1px solid #cccccc;
+    border-right: 0;
+    white-space: nowrap;
+    border-radius: 4px 0 0 4px;
+    padding-right: 10px;
+    color: #022e52 !important;
+    font-weight: bold;
+}
+
+.user-profile__link:hover {
+    text-decoration: none !important;
+    font-weight: bold !important;
 }
 
 .login-entry-info {
@@ -155,30 +181,38 @@
 .login-entry-info .choose-user-profile-popup {
     display: none;
     position: absolute;
-    top: 40px;
-    left: -20px;
+    top: 34px;
+    left: 0;
     background: #fff;
-    width: 300px;
+    width: 198px;
     z-index:20;
-    border: 1px solid #e3e3e3;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
 }
 
 .login-entry-info .choose-user-profile-popup li {
     display: block;
     float: none;
-    height: 35px;
-    line-height: 35px;
+    height: 22px;
+    line-height: 22px;
     vertical-align: middle;
-    padding: 0 10px;
+    padding: 0 10px 0 1px;
 }
 
 .sign-up-and-facebook .login-entry-info .choose-user-profile-popup li a {
-    top: 3px;
-    display: block;    
+    top: -1px;
+    display: block;
+    color: #022e52;
+    font-weight: bold;
+}
+
+.sign-up-and-facebook .login-entry-info .choose-user-profile-popup li a:hover {
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .login-entry-info .choose-user-profile-popup li.active {
-    background-color: #c5f9f9;
+    background-color: #f5f5f5;
 }
 
 .login-entry-info .choose-user-profile-popup li img {
@@ -187,11 +221,30 @@
 
 .user-profile .choose-user-profile-button {
     cursor: pointer;
-    width: 15px;
-    height: 15px;
-    background: url("/static/images/widgets/dropdown-small.png") no-repeat;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #cccccc;
+    position: relative;
+    line-height: 24px;
+    border-radius: 0 4px 4px 0;
+}
+
+.user-profile__button_state_pressed {
+    background: #ebebeb;
+    border-color: #adadad;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.125) inset;
+}
+
+.user-profile .caret {
     display: inline-block;
-    margin-top: 5px;  
+    height: 0 !important;
+    margin: 11px 0 0 8px;
+    vertical-align: middle;
+    width: 0;
+    border-top: 4px solid #000;
+    border-right: 4px solid transparent;
+    border-bottom: 0 dotted;
+    border-left: 4px solid transparent;
 }
 
 .notices-block {

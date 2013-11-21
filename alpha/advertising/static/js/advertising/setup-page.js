@@ -1,13 +1,15 @@
 ;(function($, window, document, undefined) {
     'use strict';
 
-    function AdvertisingSetupPage(){
+    function AdvertisingSetupPage() {
         this.initVenueAccountWidget();
         this.initActiveToWidget();
         this.initAdTypeSelection();
         this.initRegionSelection();
+        this.initUploads();
         this.initTotalPriceCalculation();
         this.initSwitchPaymemtModes();
+        this.alignColumns();
     }
 
     AdvertisingSetupPage.prototype = {
@@ -25,7 +27,7 @@
             var that=this;
 
             // Init rows
-            $(".advertising-types .checkbox input").each(function(){
+            $(".advertising-types input[type=hidden]").each(function(){
                 var ad_type_id = $(this).data("ad-type"),
                     checked = $(this).prop("checked");
 
@@ -84,11 +86,50 @@
                 }                
             });
         },
+        initUploads: function() {
+            var fileInputSelector = ".advertising-uploads__file-field input";
+            var haveFileApi = ( window.File && window.FileReader
+                                && window.FileList && window.Blob ) ? true : false;
+
+            $("body").on("change", fileInputSelector, function() {
+                var fileName;
+                var lbl = $(this).siblings("mark");
+                var btn = $(this).siblings(".button");
+
+                if( haveFileApi && this.files[ 0 ] )
+                    fileName = this.files[ 0 ].name;
+                else
+                    fileName = $(this).val().replace( "C:\\fakepath\\", "" );
+
+                if( ! fileName.length )
+                    return;
+
+                if( lbl.is( ":visible" ) ){
+                    lbl.text( fileName );
+                    btn.text( "Choose File" );
+                }else
+                    btn.text( fileName );
+            });
+
+
+            $(fileInputSelector).change();
+        },
         initTotalPriceCalculation: function(){
             this.totalPriceCalculation = new TotalPriceCalculation();
         },
         initSwitchPaymemtModes: function(){
             
+        },
+        alignColumns: function() {
+            var leftColumn = $(".advertising-form__details");
+            var rightColumn = $(".advertising-form__budget");
+
+            var leftHeight = leftColumn.outerHeight();
+            var rightHeight = rightColumn.outerHeight();
+
+            if(leftHeight > rightHeight) {
+                rightColumn.height(leftHeight - rightHeight + rightColumn.height());
+            }
         }
     };
 
@@ -110,6 +151,8 @@
                 showAnimation: function(d) { this.fadeIn(d); }
             });
         });
+
+        $(".venue-account-owner-dropdown").qap_dropdown();
     });
 
 })(jQuery, window, document);

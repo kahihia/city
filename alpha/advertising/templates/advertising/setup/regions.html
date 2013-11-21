@@ -1,4 +1,4 @@
-Select province/territory to show your ad (Choices)
+<span class="regions-title">Select province/territory to show your ad</span>
 <div class="advertising-territories options">
     <div class="teritory-node">
         <div class="checkbox">
@@ -10,7 +10,7 @@ Select province/territory to show your ad (Choices)
     {% for region in form.fields.regions.queryset %}
     <div class="teritory-node region">
         <div class="checkbox">
-            <input {% for current_region in form.regions.value %}{% if region.pk = current_region|add:0 %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_regions_{{ forloop.counter0 }}" value="{{ region.id }}" name="regions" />
+            <input {% for current_region in form.regions.value %}{% if region.pk == current_region|add:0 %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_regions_{{ forloop.counter0 }}" value="{{ region.id }}" name="regions" />
             <label for="id_regions_{{ forloop.counter0 }}"></label>
             <label for="id_regions_{{ forloop.counter0 }}">
                 {{ region.name }}

@@ -6,7 +6,8 @@
         this.button = $(".choose-user-profile-button");
         this.popup = $(".choose-user-profile-popup");
 
-        this.button.on("click", function(){
+        this.button.on("click", function() {
+            that.button.addClass("user-profile__button_state_pressed");
             that.popup.show();
         });
 
@@ -21,6 +22,7 @@
             if($(e.target).hasClass("login-entry-info") || $(e.target).parents(".login-entry-info").length>0){
                 
             } else {
+                this.button.removeClass("user-profile__button_state_pressed");
                 this.closePopup();
             }
         }

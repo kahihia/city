@@ -10,15 +10,138 @@
     <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
 
     <script src="{{STATIC_URL}}js/jquery.balloon.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>    
+    <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/create_event/venue_account_owner.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/tabs.js"></script>
     <script src="{{STATIC_URL}}js/advertising/total-price-calculation.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/date-range.js" type="text/javascript"></script>    
+    <script src="{{STATIC_URL}}js/date-range.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/advertising/setup-page.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block page %}
+    <div class="advertising-form">
+        <form  enctype="multipart/form-data" method="post" name="advertising-setup">
+            <div class="advertising-form__details">
+                <div class="advertising-form__details-title">
+                    Advertising - setup
+                </div>
+                <div class="advertising-form__details-content">
+                    <header class="advertising-form__field-title">
+                        Name of Campaign
+                    </header>
+                    <div class="advertising-form__text-field">
+                        {{ form.name }}
+                    </div>
+
+                    <header class="advertising-form__field-title">
+                        Campaign owner
+                    </header>
+                    <div class="advertising-form__list-field">
+                        {{ form.venue_account }}
+                    </div>
+
+                    <header class="advertising-form__field-title">
+                        Campaign website URL
+                    </header>
+                    <div class="advertising-form__text-field">
+                        {{ form.website }}
+                    </div>
+
+                    <header class="advertising-form__field-title">
+                        Will be active
+                    </header>
+                    <div class="advertising-form__text-field advertising-form__text-field_type_interval">
+                        {{ form.active_from }} — {{ form.active_to }}
+                    </div>
+
+                    <div class="advertising-form__advertising-options">
+                        {% setup_advertising_types %}
+                        {% setup_advertising_upload %}
+                        {% setup_advertising_regions %}
+                        <!--
+                        <div class="advertising-uploads">
+                            <table>
+                                <tbody>
+
+                                <tr data-ad-type="5" style="display: table-row;">
+                                    <td class="advertising-uploads__cell advertising-uploads__cell_padding_more">
+                                        Upload Leader Board(728 x 90)
+                                    </td>
+                                    <td class="advertising-uploads__cell">
+                                        <label class="advertising-form__file-field">
+                                            <span class="button">Choose File</span>
+                                            <mark></mark>
+                                            <input type="file" name="advertising_image.5">
+                                        </label>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+
+                                <tr data-ad-type="6" style="display: table-row;">
+                                    <td class="advertising-uploads__cell advertising-uploads__cell_padding_more">
+                                        Upload Email Button(120 x 60)
+                                    </td>
+                                    <td class="advertising-uploads__cell">
+                                        <label class="advertising-form__file-field">
+                                            <span class="button">Choose File</span>
+                                            <mark></mark>
+                                            <input type="file" name="advertising_image.6">
+                                        </label>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <script type="text/javascript">
+                                $(function() {
+                                    var fileInputSelector = ".advertising-form__file-field input";
+                                    var haveFileApi = ( window.File && window.FileReader
+                                                        && window.FileList && window.Blob ) ? true : false;
+
+                                    $("body").on("change", fileInputSelector, function() {
+                                        var fileName;
+                                        var lbl = $(this).siblings("mark");
+                                        var btn = $(this).siblings(".button");
+
+                                        if( haveFileApi && this.files[ 0 ] )
+                                            fileName = this.files[ 0 ].name;
+                                        else
+                                            fileName = $(this).val().replace( "C:\\fakepath\\", '' );
+
+                                        if( ! fileName.length )
+                                            return;
+
+                                        if( lbl.is( ":visible" ) ){
+                                            lbl.text( fileName );
+                                            btn.text( "Choose File" );
+                                        }else
+                                            btn.text( fileName );
+                                    });
+
+
+                                    $(fileInputSelector).change();
+                                });
+                            </script>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+            <div class="advertising-form__budget">
+                {% setup_advertising_payments %}
+                <div class="advertising-form__buttons">
+                    <span class="advertising-form__submit">Save</span>
+                </div>
+            </div>
+            <div class="clr"></div>
+        </form>
+    </div>
+    <!--
     <div class="primary-content advertising-setup">
         <h1>
             Advertising - Setup
@@ -84,11 +207,13 @@
                         Will be active
                         {{ form.active_from }} - {{ form.active_to }}
                     </div>
-                    
-                    {% setup_advertising_types %}
-                    {% setup_advertising_upload %}
-                    {% setup_advertising_regions %}
-                    {% setup_advertising_payments %}
+
+                    {% comment %}
+                        {% setup_advertising_types %}
+                        {% setup_advertising_upload %}
+                        {% setup_advertising_regions %}
+                        {% setup_advertising_payments %}
+                    {% endcomment %}
                     <div class="pay-now-footer">
                         <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
                     </div>
@@ -96,6 +221,7 @@
             </div>                
         </div>
     </div>
+    -->
 {% endblock %}
 
 {% block advertising %} {% endblock %}

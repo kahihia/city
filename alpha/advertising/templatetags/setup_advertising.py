@@ -1,9 +1,12 @@
 from django import template
+from django.conf import settings
+
 register = template.Library()
 
 
 @register.inclusion_tag('advertising/setup/types.html', takes_context=True)
 def setup_advertising_types(context):
+    context['settings'] = settings
     return context
 
 @register.inclusion_tag('advertising/setup/upload.html', takes_context=True)

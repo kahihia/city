@@ -1,5 +1,6 @@
 {% load cropping %}
 {% load notices_tags %}
+{% load common_tags %}
 <div class="sign-up-and-facebook">
     <!--start login-->
     <div class="login-entry-info">
@@ -8,18 +9,22 @@
                 <li class="user-profile">
                     {% if not current_venue_account %}
                         {% notices_block user %}
-                        <a href="{% url 'userena_profile_detail' user.username %}">
-                            <img src="{{ request.account.get_mugshot_url }}" alt="Your mugshot" widrh="29" height="29" />
+                        <a href="{% url 'userena_profile_detail' user.username %}" class="user-profile__link">
+                            <img src="{{ request.account.get_mugshot_url }}"
+                                 class="user-profile__mugshot"
+                                 alt="Your mugshot" />
                             <span>
                                 {{ user.username }}
                             </span>
                         </a>
                     {% else %}
-                        <a href="{% url 'private_venue_account' slug=current_venue_account.slug %}">
+                        <a href="{% url 'private_venue_account' slug=current_venue_account.slug %}"
+                           class="user-profile__link">
                             {% if current_venue_account.picture %}
-                                <img src="{% cropped_thumbnail current_venue_account "cropping" width=29 %}" widrh="29" height="29" />
+                                <img src="{% cropped_thumbnail current_venue_account "cropping" width=20 %}"
+                                     class="user-profile__mugshot" />
                             {% else %}
-                                <img src="{{STATIC_URL}}images/default-event.jpg" height="29px" weight="29px">
+                                <img src="{{STATIC_URL}}images/default-event.jpg" class="user-profile__mugshot">
                             {% endif %}
                             <span>
                                 {{ current_venue_account.venue.name }} opa-opa-opa pa
@@ -27,17 +32,18 @@
                         </a>
                     {% endif %}
                     <div class="choose-user-profile-button">
+                        <span class="caret"></span>
                     </div>
                 </li>                
                 <li>
-                    <a href="{% url 'userena_signout' %}">Sign out</a>
+                    <a class="login-entry__link" href="{% url 'userena_signout' %}">Sign out</a>
                 </li>
             {% else %}
                 <li>
-                    <a href="{% url 'userena_signin' %}">Login</a><span>&nbsp; | &nbsp;</span>
+                    <a class="login-entry__link" href="{% url 'userena_signin' %}">Login</a><span>&nbsp; | &nbsp;</span>
                 </li>
                 <li>
-                    <a href="{% url 'userena_signup' %}">Sign up</a>
+                    <a class="login-entry__link" href="{% url 'userena_signup' %}">Sign up</a>
                 </li>
                 <li>
                     <form action="{% url 'facebook_connect' %}?facebook_login=1" method="post">
@@ -55,19 +61,24 @@
         <ul class="choose-user-profile-popup">
             <li class="{% if not current_venue_account %} active{% endif %}">
                 <a href="{% url 'account_set_context' "root" %}">
-                    <img src="{{ profile.get_mugshot_url }}" alt="Your mugshot" widrh="29" height="29" />
-                    <span>{{ user.username }}</span>
+                    <img src="{{ profile.get_mugshot_url }}" alt="Your mugshot" class="user-profile__mugshot" />
+                    <span title="{{ user.username }}">
+                        {{ user.username|shorten_string:20 }}
+                    </span>
                 </a>
             </li>
             {% for venue_account in profile.venueaccount_set.all %}
                 <li class="{% ifequal venue_account.id current_venue_account.id %} active{% endifequal %}">
                     <a href="{% url 'account_set_context' venue_account.slug %}">
                         {% if venue_account.picture %}
-                            <img src="{% cropped_thumbnail venue_account "cropping" width=29 %}" widrh="29" height="29" />
+                            <img src="{% cropped_thumbnail venue_account "cropping" width=20 %}"
+                                 class="user-profile__mugshot" />
                         {% else %}
-                            <img src="{{STATIC_URL}}images/default-event.jpg" height="29px" weight="29px">
+                            <img src="{{STATIC_URL}}images/default-event.jpg" class="user-profile__mugshot">
                         {% endif %}
-                        <span>{{ venue_account.venue.name }}</span>
+                        <span title="{{ venue_account.venue.name }}">
+                            {{ venue_account.venue.name|shorten_string:20 }}
+                        </span>
                     </a>
                 </li>
             {% empty %}

@@ -3,9 +3,15 @@
     <table>
     {% for advertising_type in advertising_types %}
         <tr data-ad-type="{{ advertising_type.id }}" {% if advertising_type.id in chosen_advertising_types %}class="chosen"{% endif %}>
-            <td>Upload {{advertising_type}}</td>
-            <td>
-                <input type="file" name="advertising_image.{{advertising_type.id}}">
+            <td class="advertising-uploads__cell advertising-uploads__cell_padding_more">
+                Upload {{advertising_type}}
+            </td>
+            <td class="advertising-uploads__cell">
+                <label class="advertising-uploads__file-field">
+                    <span class="button">Choose File</span>
+                    <mark></mark>
+                    <input type="file" name="advertising_image.{{advertising_type.id}}">
+                </label>
             </td>
             <td>
                 {% if advertising_type.id in advertising_images %}

@@ -624,7 +624,7 @@
 .teritory-node {
     display: block;
     float: left;
-    min-width: 200px;
+    min-width: 176px;
 }
 
 .cities-node {
@@ -798,7 +798,7 @@
 .account-help-container {
     width: 216px;
     margin-left: 12px;
-    padding: 45px;
+    padding: 45px 20px;
     float: right;
     background: #022e52;
     color: #fff;
