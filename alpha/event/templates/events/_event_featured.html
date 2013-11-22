@@ -13,14 +13,18 @@
         </div>
     </div>
     <h2>Featured Events</h2>
-    {% if featured_events.count > 6 %}
-        <div class="features-navigation">
-            <div class="featured-events-viewer-controls">
-                <span class="page-no">1</span> of <span id="featured-events-total">{{ featured_events.count }}</span>
-                <div class="prev"><i class="icon-chevron-left"></i></div>
-                <div class="next"><i class="icon-chevron-right"></i></div>
-            </div>
-        </div>
-    {% endif %}
+
+    <div class="features-navigation">
+        <ul>
+            <span class="step-links">
+                <a class="prev" href="javascript: void;">
+                    prev
+                </a>
+                <a class="next"  href="javascript: void;">
+                    next
+                </a>
+            </span>
+        </ul>
+    </div>
 </div>
 {% endif %}
