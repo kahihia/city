@@ -3,6 +3,7 @@
 
     var BrowsePage = function(){
         this.initJumpToDate();
+        this.initFeaturedEventsViewer();
         $(".browse.searchtags").tagit({
             afterTagRemoved: function(e, ui){
                 window.location = $(ui.tag).data("remove-url");
@@ -47,6 +48,9 @@
             $(".less-button").on("click", function(){
                 $(".all-tags-container").removeClass('more');
             });
+        },
+        initFeaturedEventsViewer: function(){
+            this.featuredEventsViewer = new FeaturedEventsViewer();
         }
     };
 

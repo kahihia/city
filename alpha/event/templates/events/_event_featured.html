@@ -4,51 +4,23 @@
 {% load common_tags %}
 
 {% if featured_events %}
-<div class="featured-area">    
+<div class="featured-area">
     <div class="features-wrapper" data-no-turbolink>
-        {% paginate 6 featured_events using "featured_page" %}
-        {% if featured_events %}
-            {% featured_events_container featured_events %}
-        {% endif %}
-        <div class="clr"></div>
+        <div class="featured-events-viewer">
+            <div class="featured-events-viewer-content">
+                {% featured_events_container featured_events %}
+            </div>
+        </div>
     </div>
     <h2>Featured Events</h2>
-
-    <div class="features-navigation">
-        {% get_pages %}
-        <ul>
-            <span class="step-links">
-                {% if pages.current.is_first %}
-                    <a class="prev" href="{{ pages.first.url }}">
-                        prev
-                    </a>
-                {% else %}
-                    <a class="prev" href="{{ pages.previous.url }}">
-                        prev
-                    </a>
-                {% endif %}
-
-                {% for page in pages %}
-                    {% if page|args:5|call:'is_in_range' %}
-                        <a href="{{ page.url }}"
-                            {% if page.is_current %}class="current"{%endif%}>
-                            {{ page.number }}
-                        </a>
-                    {% endif %}
-                {% endfor %}
-
-                {% if pages.current.is_last %}
-                    <a class="next" href="{{ pages.last.url }}">
-                        next
-                    </a>
-                    
-                {% else %}
-                    <a class="next" href="{{ pages.next.url }}">
-                        next
-                    </a>
-                {% endif %}
-            </span>
-        </ul>
-    </div>
+    {% if featured_events.count > 6 %}
+        <div class="features-navigation">
+            <div class="featured-events-viewer-controls">
+                <span class="page-no">1</span> of <span id="featured-events-total">{{ featured_events.count }}</span>
+                <div class="prev"><i class="icon-chevron-left"></i></div>
+                <div class="next"><i class="icon-chevron-right"></i></div>
+            </div>
+        </div>
+    {% endif %}
 </div>
 {% endif %}
