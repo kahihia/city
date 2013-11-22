@@ -54,14 +54,14 @@
     float: left;
 }
 
-.profile-table .stats {
-    float: right;
-    width: 180px;
+.profile-table .ads-list-table tr {
+    background: none;
 }
 
-.profile-table .stat {
-    float: left;
+.profile-table .ads-list-table td,
+.profile-table .ads-list-table th {
     width: 25%;
+    border-bottom: none;
 }
 
 .profile-table .ad-desc {
@@ -235,14 +235,10 @@ a.add-button {
 }
 
 .sort-wrapper {
-    position: absolute;
-    right: 0;
-    top: 8px;
+    display: inline-block;
 }
 
-
 .sortable {
-    display: block;
     margin: 2px;
 }
 

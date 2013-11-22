@@ -14,15 +14,16 @@
         </th>
         <th class="action">Owner</th>
         <th class="action">Status/Active period</th>
-        <th class="action">
-            <div class="col image">&nbsp;</div>
-            <div class="stats">
-                <div class="col">Views</div>
-                <div class="col">Clicks</div>
-                {% if settings.ADVERTISING_TYPE_CPC_ON %}<div class="col">CPC</div>{% endif %}
-                <div class="col">CPM</div>
-            </div>
-        </th>
+        <th class="action">            
+            <table class="ads-list-table" cellpadding="0" cellspacing="0">
+                <th><!--Image--></th>
+                <th class="action">Views</th>
+                <th class="action">Clicks</th>
+                {% if settings.ADVERTISING_TYPE_CPC_ON %}<th class="action">CPC</th>{% endif %}
+                <th class="action">CPM</th>
+            </table>
+        </th>        
+        <th class="action">Budget</th>
         <th class="action">Amount Spent</th>
         <th class="action">Amount Remaining</th>
         <th class="action">Regions</th>
@@ -46,6 +47,7 @@
         <td></td>
         <td></td>
         <td></td>
+        <td></td>        
         <td>
             {{ campaigns_filter.form.o }}
             <div class="button show-all">
@@ -95,24 +97,26 @@
                 {% endif %}
             </td>
             <td class="action">
-                {% for ad in campaign.advertising_set.all %}
-                    <div class="advertising-items">
-                        <div class="image">
-                            <a href="/media/{{ ad.image }}" class="advertising-image" target="_blank">
-                                <img class="ads-thumb" width="30" src="/media/{{ ad.image }}" alt="" />
-                            </a>
-                        </div>
-                        <div class="stats">
-                            <div>
-                                <div class="stat">{{ ad.views }}</div>
-                                <div class="stat">{{ ad.clicks }}</div>
-                                {% if settings.ADVERTISING_TYPE_CPC_ON %}<div class="stat">{{ ad.cpc_price }}</div>{% endif %}
-                                <div class="stat">{{ ad.cpm_price }}</div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+                <table class="ads-list-table" cellpadding="0" cellspacing="0">
+                    {% for ad in campaign.advertising_set.all %}
+                        <tr>
+                            <td class="action">
+                                <div class="image">
+                                    <a href="/media/{{ ad.image }}" class="advertising-image" target="_blank">
+                                        <img class="ads-thumb" width="30" src="/media/{{ ad.image }}" alt="" />
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="action">{{ ad.views }}</td>
+                            <td class="action">{{ ad.clicks }}</td>
+                            {% if settings.ADVERTISING_TYPE_CPC_ON %}<td>{{ ad.cpc_price }}</td>{% endif %}
+                            <td class="action">{{ ad.cpm_price }}</td>
+                        </tr>                        
+                    {% endfor %}
+                </table>
+                
             </td>
+            <td>{{ campaign.budget }}</td>
             <td>{{ campaign.ammount_spent }}</td>
             <td>
                 {% if campaign.enough_money %}
@@ -145,7 +149,7 @@
         </tr>
     {% empty %}
     <tr>
-        <td colspan="8">No ads was found</td>
+        <td colspan="9">No ads was found</td>
     </tr>
     {% endfor %}
 </table>
