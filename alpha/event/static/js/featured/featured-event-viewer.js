@@ -22,8 +22,13 @@
 
     FeaturedEventsViewer.prototype = {
         _scroll: function(){
+            var leftPosition = -1002*(this.currentPage-1);
+            if(this.currentPage==this.pages) {
+                leftPosition += (6 - $(".features", this.viewer).length % 6) * 167;
+            }
+
             $(this.content).animate({
-                "left": -1002*(this.currentPage-1) + "px"
+                "left": leftPosition + "px"
             });
             this.pageNo.html(this.currentPage);
             $(".features-navigation .page.current").removeClass("current");
