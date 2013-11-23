@@ -69,6 +69,7 @@
             this.alignColumns();
         },
         initRegionSelection: function(){
+            var self = this;
             if($("#id_all_of_canada").prop("checked")){
                 $(".advertising-territories .region").hide();
             }
@@ -80,7 +81,7 @@
                     $(".advertising-territories .region").show();
                 }
 
-                this.alignColumns();
+                self.alignColumns();
             });
         },
         initUploads: function() {
@@ -124,9 +125,12 @@
             var leftHeight = leftColumn.outerHeight();
             var rightHeight = rightColumn.outerHeight();
 
-            if(leftHeight > rightHeight || this._resized) {
+            if(!this._initialRightHeight) {
+                this._initialRightHeight = rightHeight;
+            }
+
+            if(leftHeight > this._initialRightHeight) {
                 rightColumn.height(leftHeight - rightHeight + rightColumn.height());
-                this._resized = true;
             }
         },
         initSubmitButton: function() {
