@@ -333,35 +333,7 @@
     </div>
 
     <div class="secondary-content">
-        <div class="similar-events-wrapper">
-            <header>
-                Similar Events
-                <div>
-                    at {{ event.venue.name }}
-                </div>
-            </header>
-            <div class="similar-events">
-                <ul class="similar-events-ul">
-                    {% for venue_event in events_from_venue %}
-                        <li>
-                            <a href="{% event_link venue_event %}">
-                                <img src="{% cropped_thumbnail venue_event.image "cropping" height=92 %}" alt="{{venue_event.name}}">
-                            </a>
-                        </li>
-                    {% empty %}
-                        No upcoming events
-                    {% endfor %}
-                </ul>
-            </div>
-
-            {% if events_from_venue.count > 6 %}
-                <div class="similar-events-viewer-controls">
-                    <div class="next"><i class="icon-chevron-right"></i></div>
-                    <div class="prev"><i class="icon-chevron-left"></i></div>
-                    <span class="page-no">1</span> of <span id="similar-events-total">{{ events_from_venue.count }}</span>
-                </div>
-            {% endif %}
-        </div>
+        {% include 'events/detail_page/similar_events.html' %}
     </div>    
     
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
