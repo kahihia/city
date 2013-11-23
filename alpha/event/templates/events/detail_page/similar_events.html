@@ -17,10 +17,7 @@
                             <img height="92" width="92" src="{% cropped_thumbnail venue_event.image "cropping" height=92 %}" alt="{{venue_event.name}}">
                         {% else %}
                             <img height="92" width="92" src="{{STATIC_URL}}/images/default-event-92x92.jpg" alt="{{venue_event.name}}">
-
-                        {% endif %}
-
-                        
+                        {% endif %}                        
                     </a>
                 </li>
             {% empty %}

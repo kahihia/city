@@ -37,15 +37,22 @@
 
     EventDaysSwitcher.prototype = {
         _scroll: function(){
-            $(this.content).animate({
-                "left": -97*(this.currentDay-2) + "px"
+            var leftPosition = -97*(this.currentDay-2);
+            if(this.currentDay==1) {
+                leftPosition -= 97;
+            }
+            if(this.currentDay==this.days) {
+                leftPosition += 97;
+            }
+            $(this.content).animate({                
+                "left": leftPosition + "px"
             });
         },
         scrollToDay: function(day){
-            if(day>1 && day<=(this.days-2)){
+            if(day>0 && day<=this.days){
                 this.currentDay = day;
                 this._scroll();
-            }            
+            }
         },
         scrollNextPage: function(){
             this.scrollToDay(this.currentDay+1);
