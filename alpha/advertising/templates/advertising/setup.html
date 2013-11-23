@@ -21,11 +21,49 @@
 {% block page %}
     <div class="advertising-form">
         <form  enctype="multipart/form-data" method="post" name="advertising-setup">
+            {% csrf_token %}
             <div class="advertising-form__details">
                 <div class="advertising-form__details-title">
                     Advertising - setup
                 </div>
                 <div class="advertising-form__details-content">
+                    {%if form.errors %}
+                        <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                            <ul style="list-style-type: none;">
+                                <li id="all-info">
+                                    {% for error in form.non_field_errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li id="all-info">
+                                    {% for error in form.name.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li id="all-info">
+                                    {% for error in form.website.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li id="all-info">
+                                    {% for error in form.active_to.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li id="all-info">
+                                    {% for error in form.bonus_budget.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li id="all-info">
+                                    {% for error in form.order_budget.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                        </div>
+
+                    {% endif %}
                     <header class="advertising-form__field-title">
                         Name of Campaign
                     </header>
@@ -58,77 +96,6 @@
                         {% setup_advertising_types %}
                         {% setup_advertising_upload %}
                         {% setup_advertising_regions %}
-                        <!--
-                        <div class="advertising-uploads">
-                            <table>
-                                <tbody>
-
-                                <tr data-ad-type="5" style="display: table-row;">
-                                    <td class="advertising-uploads__cell advertising-uploads__cell_padding_more">
-                                        Upload Leader Board(728 x 90)
-                                    </td>
-                                    <td class="advertising-uploads__cell">
-                                        <label class="advertising-form__file-field">
-                                            <span class="button">Choose File</span>
-                                            <mark></mark>
-                                            <input type="file" name="advertising_image.5">
-                                        </label>
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                </tr>
-
-                                <tr data-ad-type="6" style="display: table-row;">
-                                    <td class="advertising-uploads__cell advertising-uploads__cell_padding_more">
-                                        Upload Email Button(120 x 60)
-                                    </td>
-                                    <td class="advertising-uploads__cell">
-                                        <label class="advertising-form__file-field">
-                                            <span class="button">Choose File</span>
-                                            <mark></mark>
-                                            <input type="file" name="advertising_image.6">
-                                        </label>
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                </tr>
-
-                                </tbody>
-                            </table>
-                            <script type="text/javascript">
-                                $(function() {
-                                    var fileInputSelector = ".advertising-form__file-field input";
-                                    var haveFileApi = ( window.File && window.FileReader
-                                                        && window.FileList && window.Blob ) ? true : false;
-
-                                    $("body").on("change", fileInputSelector, function() {
-                                        var fileName;
-                                        var lbl = $(this).siblings("mark");
-                                        var btn = $(this).siblings(".button");
-
-                                        if( haveFileApi && this.files[ 0 ] )
-                                            fileName = this.files[ 0 ].name;
-                                        else
-                                            fileName = $(this).val().replace( "C:\\fakepath\\", '' );
-
-                                        if( ! fileName.length )
-                                            return;
-
-                                        if( lbl.is( ":visible" ) ){
-                                            lbl.text( fileName );
-                                            btn.text( "Choose File" );
-                                        }else
-                                            btn.text( fileName );
-                                    });
-
-
-                                    $(fileInputSelector).change();
-                                });
-                            </script>
-                        </div>
-                        -->
                     </div>
                 </div>
             </div>
@@ -141,87 +108,6 @@
             <div class="clr"></div>
         </form>
     </div>
-    <!--
-    <div class="primary-content advertising-setup">
-        <h1>
-            Advertising - Setup
-        </h1>
-        <div class="content account-options-wrapper">
-            <div class="main-content account-options">
-                {%if form.errors %}
-                    <div class="errors" style="border:1px solid RED;border-radius:4px;">
-                        <ul style="list-style-type: none;">
-                            <li id="all-info">
-                                {% for error in form.non_field_errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                            <li id="all-info">
-                                {% for error in form.name.errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                            <li id="all-info">
-                                {% for error in form.website.errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                            <li id="all-info">
-                                {% for error in form.active_to.errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                            <li id="all-info">
-                                {% for error in form.bonus_budget.errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                            <li id="all-info">
-                                {% for error in form.order_budget.errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                        </ul>
-                    </div>
-                    
-                {% endif %}
-                <form  enctype="multipart/form-data" method="post" name="advertising-setup" >
-                    {% csrf_token %}
-                    <div class="campaign-name">
-                        Name of Campaign
-                        {{ form.name }}
-                        Enter the name of your campaign.
-                    </div>
-
-                    <div class="campaign-owner venue-account-owner">
-                        Campaign owner
-                        {{ form.venue_account }}
-                    </div>
-
-                    <div class="campaign-name">
-                        Campaign website URL
-                        {{ form.website }}
-                    </div>
-
-                    <div class="campaign-active-to">
-                        Will be active
-                        {{ form.active_from }} - {{ form.active_to }}
-                    </div>
-
-                    {% comment %}
-                        {% setup_advertising_types %}
-                        {% setup_advertising_upload %}
-                        {% setup_advertising_regions %}
-                        {% setup_advertising_payments %}
-                    {% endcomment %}
-                    <div class="pay-now-footer">
-                        <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
-                    </div>
-                </form>
-            </div>                
-        </div>
-    </div>
-    -->
 {% endblock %}
 
 {% block advertising %} {% endblock %}

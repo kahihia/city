@@ -9,6 +9,7 @@
         this.initUploads();
         this.initTotalPriceCalculation();
         this.initSwitchPaymemtModes();
+        this.initSubmitButton();
         this.alignColumns();
     }
 
@@ -29,40 +30,32 @@
             // Init rows
             $(".advertising-types input[type=hidden]").each(function(){
                 var ad_type_id = $(this).data("ad-type"),
-                    checked = $(this).prop("checked");
+                    selected = $(this).data("selected") == "1";
 
                 that.showOrHideUploadRow(
                     ad_type_id,
-                    $("#id_advertising_type_" + ad_type_id).prop('checked')
+                    selected
                 );
             });
 
-            $(".advertising-types .radio input").on("click", function(){
+            $(".advertising-types .checkbox input").on("click", function() {
+                var checked = $(this).prop("checked");
                 var ad_type_id = $(this).data("ad-type");
-                $("#id_advertising_type_"+ad_type_id).prop('checked', true);
 
-                that.showOrHideUploadRow(
-                    ad_type_id,
-                    $("#id_advertising_type_"+ad_type_id).prop('checked')
-                );
-            });
-
-            $(".advertising-types .checkbox input").on("click", function(){
-                var ad_type_id = $(this).data("ad-type"),
-                    checked = $(this).prop("checked");
+                $(".advertising-types .checkbox input[data-ad-type=" + ad_type_id + "]")
+                    .not(this)
+                    .prop("checked", false);
 
                 if(checked){
-                    if(!$("#advertising_type_"+ad_type_id+"_cpm").attr('checked') && !$("#advertising_type_"+ad_type_id+"_cpc").attr('checked')){
-                        $("#advertising_type_"+ad_type_id+"_cpm").attr('checked', true);
-                    }
-                } else {
-                    $("#advertising_type_"+ad_type_id+"_cpm").attr('checked', false);
-                    $("#advertising_type_"+ad_type_id+"_cmc").attr('checked', false);
+                    $("#id_advertising_type_"+ad_type_id).attr("data-selected", 1);
+                }
+                else {
+                    $("#id_advertising_type_"+ad_type_id).removeAttr("data-selected");
                 }
 
                 that.showOrHideUploadRow(
                     ad_type_id,
-                    $("#id_advertising_type_"+ad_type_id).prop('checked')
+                    checked
                 );
             });
         },
@@ -104,7 +97,7 @@
                 if( ! fileName.length )
                     return;
 
-                if( lbl.is( ":visible" ) ){
+                if( lbl.is( ":visible" ) ) {
                     lbl.text( fileName );
                     btn.text( "Choose File" );
                 }else
@@ -130,6 +123,12 @@
             if(leftHeight > rightHeight) {
                 rightColumn.height(leftHeight - rightHeight + rightColumn.height());
             }
+        },
+        initSubmitButton: function() {
+            $("body").on("click", ".advertising-form__submit", function() {
+                $("[data-type=advertising-type]").not("[data-selected='1']").remove();
+                $(this).closest("form").submit();
+            });
         }
     };
 

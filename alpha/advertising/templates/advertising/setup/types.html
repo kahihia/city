@@ -28,17 +28,9 @@
                        id="id_advertising_type_{{ advertising_type.id }}"
                        value="{{ advertising_type.id }}"
                        name="advertising_types"
+                       data-type="advertising-type"
                        data-ad-type="{{ advertising_type.id }}"
                        {% if advertising_type.id in chosen_advertising_types %}data-selected="1"{% endif %} />
-                <!--
-                <input type="checkbox"
-                       style="display: none;"
-                       id="id_advertising_type_{{ advertising_type.id }}"
-                       value="{{ advertising_type.id }}"
-                       name="advertising_types"
-                       data-ad-type="{{ advertising_type.id }}"
-                       {% if advertising_type.id in chosen_advertising_types %}checked="checked"{% endif %}>
-                -->
                 <label for="id_advertising_type_{{ advertising_type.id }}">{{ advertising_type }}</label>
             </td>
             <td class="ad-type-col">
