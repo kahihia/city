@@ -42,7 +42,7 @@ def redirect(request):
 
 
 def search_pad(request):
-    search_params = ["search", "tag", "period", "start_date", "end_date", "start_time", "end_time"]
+    search_params = ["search", "tag", "period", "start_date", "end_date", "start_time", "end_time", "function"]
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
