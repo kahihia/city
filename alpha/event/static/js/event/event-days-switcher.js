@@ -29,6 +29,13 @@
             $(".show-day-description[data-day='"+day+"']").addClass("active");
 
             that.currentDay = +$(".event-day-switch.active").data("counter");
+
+            if($(".show-day-description.active").length>0)  {
+                $(".description").show();
+            } else {
+                $(".description").hide();
+            }
+
             that.scrollToActiveDay();
         });
 

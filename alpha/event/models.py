@@ -422,6 +422,7 @@ class SingleEvent(models.Model):
         description = self.description
         if not description:
             description = self.event.description
+
         return description
 
     def __getattr__(self, key):
@@ -457,6 +458,19 @@ class SingleEvent(models.Model):
     def sorted_occurrences(self):
         occurrences = self.event.single_events.filter(is_occurrence=True)
         return sorted(occurrences, key=lambda occurrence: occurrence.start_time)
+
+    @property
+    def sorted_occurences_for_description(self):
+        keys = []
+        occurrences = []    
+        for occurrence in self.sorted_occurrences:
+            key = occurrence.start_time.strftime("%m/%d/%Y")
+
+            if not key in keys:
+                keys.append(key)
+                occurrences.append(occurrence)
+
+        return occurrences
 
 
     @property
