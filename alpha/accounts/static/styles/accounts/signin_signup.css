@@ -132,11 +132,11 @@
 }
 
 .user-profile {
-    width: 185px;
-    /*overflow: hidden;*/
+    width: 192px;
     text-overflow: ellipsis;
-    padding-right: 20px;
+    padding-right: 13px;
     position: relative;
+    height: 28px;
 }
 
 .user-profile a span {

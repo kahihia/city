@@ -132,6 +132,21 @@
 }
 
 .features-navigation .step-links a.current {
-    font-weight: bold;
     color: #022e52;
+}
+
+.featured-events-viewer {
+    width: 1002px;
+    overflow: hidden;
+    position: relative;
+}
+
+.featured-events-viewer-content {
+    position: relative;
+    left: 0;
+    width: 100000px;
+}
+
+.featured-events-viewer-controls div {
+    display: inline-block;
 }

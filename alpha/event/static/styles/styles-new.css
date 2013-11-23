@@ -61,13 +61,13 @@ table td {
 }
 
 a {
-    color: #0067cc;
+    color: #022e52;
     text-decoration: none;
     cursor: pointer;
 }
 
 a:hover{
-    color: #0066cc;
+    color: #022e52;
 }
 
 .primary-content p {

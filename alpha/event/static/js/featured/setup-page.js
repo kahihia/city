@@ -113,7 +113,7 @@
         calculateTotalPrice: function(){
             var that = this,
                 cost = +this.days_to_display.val() * + this.dayCost.val(),
-                costWithoutBonus = cost - parseFloat(this.bonus.val()),
+                costWithoutBonus = cost - parseFloat(this.bonus.val()||0),
                 totalPrice = costWithoutBonus;
 
             this.checkBonus(costWithoutBonus);
