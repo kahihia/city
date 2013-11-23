@@ -4,6 +4,7 @@ from pdfutils.reports import Report
 
 from models import Account, VenueAccount
 from event.models import Event, SingleEvent, FeaturedEvent, Venue, EventTransferring
+from notices.models import Notice
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -635,6 +636,20 @@ def accept_transferring(request, transferring_id):
             transferring.events.remove(event)
 
         transferring.delete()
+
+        notice_id = request.POST.get('notice_id', 0)
+        try:
+            notice = Notice.objects.get(pk=notice_id)
+        except Notice.DoesNotExist:
+            notice = None
+
+        if notice:
+            notice_data = json.loads(notice.log)
+            notice_data['state'] = 'Accepted'
+            notice.log = json.dumps(notice_data)
+            notice.read = True
+            notice.save()
+
         success = True
 
     return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
@@ -649,10 +664,23 @@ def reject_transferring(request, transferring_id):
         transferring = None
 
     if transferring and transferring.target:
-        for event in transferring.events:
+        for event in transferring.events.all():
             transferring.events.remove(event)
 
         transferring.delete()
+        notice_id = request.POST.get('notice_id', 0)
+        try:
+            notice = Notice.objects.get(pk=notice_id)
+        except Notice.DoesNotExist:
+            notice = None
+
+        if notice:
+            notice_data = json.loads(notice.log)
+            notice_data['state'] = 'Rejected'
+            notice.log = json.dumps(notice_data)
+            notice.read = True
+            notice.save()
+
         success = True
 
     return HttpResponse(json.dumps({'success': success}), mimetype='application/json')

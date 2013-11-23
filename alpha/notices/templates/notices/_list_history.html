@@ -1,0 +1,39 @@
+{% load endless %}
+{% load notices_tags %}
+
+{% if notices|length %}
+    {% paginate 5 notices %}
+
+    {% for notice in notices %}
+        {% notice_item notice True %}
+    {% endfor %}
+
+    {% if pages|length > 1 %}
+        <div class="profile-table-pagination">
+            <span class="pagintation-wrapper">
+                {% get_pages %}
+                {% if pages.current.is_first %}
+                    <span class="prev"></span>            
+                {% else %}
+                    <a class="prev" href="{{ pages.previous.url }}"></a>
+                {% endif %}
+                <span class="page-info">
+                    {{ pages.current }} of {{ pages|length }}
+                </span>
+
+                {% if pages.current.is_last %}
+                    <span class="next"></span>                    
+                {% else %}
+                    <a class="next" href="{{ pages.next.url }}"></a>
+                {% endif %}
+            </span>        
+        </div>
+    {% endif %}
+{% else %}
+    <div class="empty">
+        <p>You have no notices.</p>
+    </div>    
+{% endif %}
+<div data-type="hidden_elements" style="display:none;">
+    <input type="hidden" value="{% url 'read_notice' %}" data-id="read_notice_url" />
+</div>

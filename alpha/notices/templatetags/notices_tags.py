@@ -9,11 +9,14 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
-def notice_item(context, notice):
+def notice_item(context, notice, history=False):
     params = json.loads(notice.log)
     params['notice_id'] = notice.id
     params['csrf_token'] = context['csrf_token']
-    return render_to_string('notices/types/%s.html' % notice.type, params)
+    params['read'] = notice.read
+
+    template_name = notice.type + '_history' if history else notice.type
+    return render_to_string('notices/types/%s.html' % template_name, params)
 
 
 @register.simple_tag(takes_context=True)

@@ -254,7 +254,7 @@ def create_from_facebook(request):
 @login_required
 @facebook_required
 def post_to_facebook_ajax(request):
-    success, error, facebook_event_id = False, '', 0
+    success, error, facebook_event_ids = False, '', {}
 
     event_id = request.POST.get('event_id')
     facebook_owner_type = request.POST.get('owner_type')
@@ -263,23 +263,22 @@ def post_to_facebook_ajax(request):
     except Event.DoesNotExist as e:
         event, error = None, e.message
 
-    if event and not event.facebook_event:
+    if event:
         try:
             if facebook_owner_type == 'user':
                 facebook_owner_id = facebook_services.get_facebook_user_id(request)
             else:
                 facebook_owner_id = request.POST.get('page_id')
 
-            facebook_event_id = facebook_services.create_facebook_event(event, request,
-                                                                        facebook_owner_id, facebook_owner_type)
-            facebook_services.attach_facebook_event(int(facebook_event_id), event)
+            facebook_event_ids = facebook_services.create_facebook_event(event, request,
+                                                                         facebook_owner_id, facebook_owner_type)
             success = True
         except Exception as e:
             error = e.message
     else:
-        error = 'Event has already been posted to FB'
+        error = 'Event does not exists'
 
-    params = {'success': success, 'error': error, 'facebook_event_id': facebook_event_id}
+    params = {'success': success, 'error': error, 'facebook_event_ids': facebook_event_ids}
 
     if error and event:
         params['event_link'] = reverse('event_edit', kwargs={'authentication_key': event.authentication_key})

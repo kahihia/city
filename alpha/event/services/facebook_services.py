@@ -17,7 +17,7 @@ from django_facebook.api import get_persistent_graph
 from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 
-from event.models import Event, FacebookEvent
+from event.models import Event, FacebookEvent, SingleEvent
 from ..settings import FACEBOOK_PAGE_ID, EVENTFUL_ID, CONCERTIN_ID
 
 
@@ -147,26 +147,88 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
     if dates.start_time >= dates.end_time:
         dates.end_time += datetime.timedelta(days=1)
 
-    params = {
+    common_params = {
         'name': event.name,
-        'start_time': dates.start_time.strftime('%Y-%m-%dT%H:%M:%S-0600'),
-        'end_time': dates.end_time.strftime('%Y-%m-%dT%H:%M:%S-0600'),
-        'description': description,
+        'description': unicode(description).encode('utf-8'),
         'location': location
     }
 
     if facebook_owner_type == 'page' and event.tickets:
-        params['ticket_uri'] = event.tickets
+        common_params['ticket_uri'] = event.tickets
 
-    facebook_event_id = graph.set('%s/events' % facebook_owner_id, **params)['id']
+    if event.is_multiday():
+        single_events = list(SingleEvent.homepage_events.filter(event=event))
+    else:
+        single_events = list(SingleEvent.future_events.filter(event=event))
 
+    batch, attached_images, posted_single_events = [], {}, []
+    event_url = '%s/events' % facebook_owner_id
     event_images = list(event.sorted_images)
+    have_images = False
     if len(event_images) > 0:
         event_image = os.path.abspath(os.path.join(settings.MEDIA_ROOT, event_images[0].picture.path))
-        graph_url = '%s%s/picture?access_token=%s' % (graph.api_url, facebook_event_id, graph.access_token)
-        _send_multipart_image_data(graph_url, event_image)
+        have_images = True
 
-    return facebook_event_id
+    for single_event in single_events:
+        if not single_event.facebook_event:
+            posted_single_events.append(single_event)
+            params = common_params.copy()
+            params.update({
+                'start_time': single_event.start_time.strftime('%Y-%m-%dT%H:%M:%S-0600'),
+                'end_time': single_event.end_time.strftime('%Y-%m-%dT%H:%M:%S-0600'),
+            })
+
+            operation_name = 'create-event-%s' % single_event.id
+
+            batch.append({
+                'method': 'POST',
+                'relative_url': event_url,
+                'body': urllib.urlencode(params),
+                'name': operation_name,
+                'omit_response_on_success': False
+            })
+
+            if have_images:
+                picture_url = '{result=%s:$.id}/picture' % operation_name
+                image_name = 'source%s' % single_event.id
+
+                batch.append({
+                    'method': 'POST',
+                    'relative_url': picture_url,
+                    'attached_files': image_name
+                })
+
+                attached_images[image_name] = open(event_image)
+
+    if not len(posted_single_events):
+        raise Exception('Error: no events for posting')
+
+    values = {
+        'access_token': graph.access_token,
+        'batch': json.dumps(batch)
+    }
+
+    if have_images:
+        values.update(attached_images)
+
+    response = _send_multipart_data(graph.api_url, values)
+    facebook_event_ids = []
+    for item in response:
+        data = json.loads(item['body'])
+        if type(data) == dict and 'id' in data:
+            facebook_event_ids.append(data['id'])
+
+    result = {}
+    for i in range(0, len(posted_single_events)):
+        attach_facebook_event(int(facebook_event_ids[i]), posted_single_events[i])
+        result[posted_single_events[i].id] = facebook_event_ids[i]
+
+    if event.is_multiday():
+        single_event = SingleEvent.objects.filter(event=event, is_occurrence=False)[0]
+        single_event.facebook_event = posted_single_events[0].facebook_event
+        single_event.save()
+
+    return result
 
 
 def attach_facebook_event(facebook_event_id, related_event):
@@ -348,19 +410,18 @@ def _get_images_json(image_source):
     return json.dumps(images_data)
 
 
-def _send_multipart_image_data(url, image):
-    """ Generate and send multipart image data
+def _send_multipart_data(url, values):
+    """ Generate and send multipart data
 
     @type url: str
-    @type image: str
-    @param image: full path to an image file
-    @rtype: str
+    @type values: dict
+    @rtype: list
     """
     register_openers()
-    values = {'source': open(image)}
     data, headers = multipart_encode(values)
     headers['User-agent'] = 'Open Facebook Python'
     request = urllib2.Request(url, data, headers)
     request.unverifiable = True
     response = urllib2.urlopen(request)
-    return response.read()
+
+    return json.loads(response.read())
