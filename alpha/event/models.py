@@ -55,7 +55,7 @@ def picture_file_path(instance=None, filename=None):
                   AutoField, it might not yet have a value for its
                   primary key field.
 
-    filename 	  The filename that was originally given to the
+    filename      The filename that was originally given to the
                   file. This may or may not be taken into account
                   when determining the final destination path.
 
@@ -387,8 +387,8 @@ class SingleEvent(models.Model):
     description = models.TextField(null=True, blank=True)
     is_occurrence = models.BooleanField(default=False)
     
-	viewed = models.IntegerField(default=0)
-	facebook_event = models.ForeignKey('FacebookEvent', blank=True, null=True)
+    viewed = models.IntegerField(default=0)
+    facebook_event = models.ForeignKey('FacebookEvent', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.end_time < self.start_time:
