@@ -41,6 +41,7 @@
                                value="CPM"
                                name="advertising_payment_type.{{ advertising_type.id }}"
                                data-ad-type="{{ advertising_type.id }}"
+                               autocomplete="off"
                                {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CPM" %}checked="checked"{% endifequal %}>
                         <label for="advertising_type_{{ advertising_type.id }}_cpm"></label>
                     </div>
@@ -56,6 +57,7 @@
                                    value="CPC"
                                    name="advertising_payment_type.{{ advertising_type.id }}"
                                    data-ad-type="{{ advertising_type.id }}"
+                                   autocomplete="off"
                                    {% ifequal chosen_advertising_payment_types|keyvalue:advertising_type.id "CPC" %}checked="checked"{% endifequal %}>
                             <label for="advertising_type_{{ advertising_type.id }}_cpc"></label>
                         </div>

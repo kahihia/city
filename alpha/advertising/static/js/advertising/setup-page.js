@@ -65,6 +65,8 @@
             } else {
                 $(".advertising-uploads [data-ad-type=" + ad_type_id + "]").hide();
             }
+
+            this.alignColumns();
         },
         initRegionSelection: function(){
             if($("#id_all_of_canada").prop("checked")){
@@ -76,7 +78,9 @@
                     $(".advertising-territories .region").hide();
                 } else {
                     $(".advertising-territories .region").show();
-                }                
+                }
+
+                this.alignColumns();
             });
         },
         initUploads: function() {
@@ -120,8 +124,9 @@
             var leftHeight = leftColumn.outerHeight();
             var rightHeight = rightColumn.outerHeight();
 
-            if(leftHeight > rightHeight) {
+            if(leftHeight > rightHeight || this._resized) {
                 rightColumn.height(leftHeight - rightHeight + rightColumn.height());
+                this._resized = true;
             }
         },
         initSubmitButton: function() {
