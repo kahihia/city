@@ -168,8 +168,6 @@ class Event(models.Model):
 
     audited = models.BooleanField(default=False)
 
-    viewed_times = models.IntegerField(default=0, blank=True, null=True)
-
     # facebook_event = models.ForeignKey('FacebookEvent', blank=True, null=True)
 
     event_type = models.CharField(max_length=10, choices=EVENT_TYPES, default="SINGLE")
@@ -366,27 +364,6 @@ class ArchivedEventDayManager(models.Manager):
             .annotate(Count("id"))
 
 
-# TODO: remove model after migration 0050 will be processed on production server
-class SingleEventOccurrence(models.Model):
-    """
-    When user create event he can choose one of event types.
-    1. Single Event. User can choose different days. All this days will saved as SingleEvent instance
-    2. Multiple Day Event. User can choose different time for every day. We create one SingleEvent that will start on start time of first day and will finish on finish time of last day.
-    Time for each day will be saved in SingleEventOccurance instance.
-    3. Multiple Time Event. User can choose one day and few times for it. Day will be saved as SingleEvent instance. Each time will be saved as SingleEventOccurance instance.
-    """
-    start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
-    end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
-    description = models.TextField(null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        if self.end_time < self.start_time:
-            self.end_time = dateparser.parse(self.end_time) + datetime.timedelta(days=1)
-
-        super(SingleEventOccurrence, self).save(*args, **kwargs)
-        return self
-
-
 class SingleEvent(models.Model):
     """
         Single event is event that occur only once.
@@ -411,6 +388,8 @@ class SingleEvent(models.Model):
     end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
     description = models.TextField(null=True, blank=True)
     is_occurrence = models.BooleanField(default=False)
+
+    viewed = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
         if self.end_time < self.start_time:
@@ -497,8 +476,6 @@ class SingleEvent(models.Model):
                     multiday_events.append(single_event.event_id)
 
         return single_events.exclude(id__in=hidden_single_events)
-
-
 
 
 class FacebookEvent(models.Model):

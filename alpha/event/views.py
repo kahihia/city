@@ -176,10 +176,7 @@ def view(request, slug, date=None):
         return HttpResponseRedirect(reverse('event_browse'))
 
 
-    if not event.viewed_times:
-        Event.events.filter(id=event.event_identifier).update(viewed_times=1)
-    else:
-        Event.events.filter(id=event.event_identifier).update(viewed_times=F('viewed_times')+1)
+    SingleEvent.events.filter(id=event.id).update(viewed_times=1)
 
     venue = event.venue
 
