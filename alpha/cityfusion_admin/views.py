@@ -22,6 +22,8 @@ from django_facebook.decorators import facebook_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Q, F
 
+from advertising.filters import AdvertisingCampaignFilter
+
 
 @require_POST
 def report_event(request):
@@ -220,9 +222,16 @@ from advertising.utils import get_chosen_advertising_types, get_chosen_advertisi
 
 @staff_member_required
 def admin_advertising(request):
-    campaigns = AdvertisingCampaign.objects.order_by("started")
+    campaigns_filter = AdvertisingCampaignFilter(request.GET, queryset=AdvertisingCampaign.objects.order_by("-started"))
+
+    if "account" in request.GET and request.GET["account"]:
+        selected_account = Account.objects.get(user_id=request.GET["account"])
+    else:
+        selected_account = None
+
     return render_to_response('cf-admin/admin-advertising-list.html', {
-            "campaigns": campaigns
+            "campaigns_filter": campaigns_filter,
+            "selected_account": selected_account
         }, context_instance=RequestContext(request))
 
 

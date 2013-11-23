@@ -34,9 +34,11 @@ class AdvertisingType(models.Model):
 
 class AdminAdvertisingCampaignManager(models.Manager):
     def get_query_set(self):
-        return super(AdminAdvertisingCampaignManager, self).get_query_set()
+        return super(AdminAdvertisingCampaignManager, self).get_query_set().filter(
+            Q(budget__gt=0) | Q(free=True)
+        )
 
-class AdvertisinCampaignWithUnsusedMoney(models.Manager)        :
+class AdvertisinCampaignWithUnsusedMoney(models.Manager):
     def get_query_set(self):
         return super(AdvertisinCampaignWithUnsusedMoney, self).get_query_set().filter(
             active_to__lt=datetime.datetime.now(),
@@ -136,7 +138,10 @@ class FreeAdvertisingManager(models.Manager):
 
 class PendingAdvertisingManager(models.Manager):
     def get_query_set(self):
-        return super(PendingAdvertisingManager, self).get_query_set().filter(review_status="PENDING")        
+        return super(PendingAdvertisingManager, self).get_query_set().filter(
+            review_status="PENDING",
+            campaign__enough_money=True
+        )
 
 
 class Advertising(models.Model):

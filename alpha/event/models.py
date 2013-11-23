@@ -163,14 +163,14 @@ class Event(models.Model):
     website = models.URLField(blank=True, null=True, default='')
     tickets = models.CharField('tickets', max_length=250, blank=True, null=True)
 
-    post_to_facebook = models.BooleanField(default=False, blank=True)
-    comment_for_facebook = models.CharField(max_length=255, blank=True, null=True)
+    # post_to_facebook = models.BooleanField(default=False, blank=True)
+    # comment_for_facebook = models.CharField(max_length=255, blank=True, null=True)
 
     audited = models.BooleanField(default=False)
 
     viewed_times = models.IntegerField(default=0, blank=True, null=True)
 
-    facebook_event = models.ForeignKey('FacebookEvent', blank=True, null=True)
+    # facebook_event = models.ForeignKey('FacebookEvent', blank=True, null=True)
 
     event_type = models.CharField(max_length=10, choices=EVENT_TYPES, default="SINGLE")
 
