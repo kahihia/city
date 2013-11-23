@@ -4,8 +4,7 @@
     {% paginate 15 ads %}
     <table class="profile-table ads-stats" celpadding="0" cellspacing="0">
         <tr>
-            <th class="action">Campaign Name</th>
-            <th class="action">Size of Ad</th>            
+            <th class="action">Size of Ad</th>
             <th class="action">Edit</th>
             <th class="action">Remove</th>
         </tr>
@@ -14,9 +13,6 @@
             <td class="action" data-stat-key="campaign">
                 {{ ad.campaign.name }}
             </td>
-            <td class="action" data-stat-key="campaign">
-                
-            </td>            
             <td class="action" data-stat-key="type" data-stat-value="{{ ad.ad_type }}">
                 <a href="/media/{{ ad.image }}">View {{ ad.ad_type.name }}</a><br>
                 {{ ad.ad_type.width }}x{{ ad.ad_type.height }}
@@ -49,7 +45,7 @@
                 </span>
 
                 {% if pages.current.is_last %}
-                    <span class="next"></span>                    
+                    <span class="next"></span>
                 {% else %}
                     <a class="next" href="{{ pages.next.url }}"></a>
                 {% endif %}

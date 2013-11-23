@@ -42,7 +42,7 @@ def redirect(request):
 
 
 def search_pad(request):
-    search_params = ["search", "tag", "period", "start_date", "end_date", "start_time", "end_time"]
+    search_params = ["search", "tag", "period", "start_date", "end_date", "start_time", "end_time", "function"]
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
@@ -89,7 +89,7 @@ def search_pad(request):
 
 
 def browse(request):
-    search_params = ["search", "tag", "period", "start_date", "end_date", "start_time", "end_time"]
+    search_params = ["search", "tag", "period", "start_date", "end_date", "start_time", "end_time", "function"]
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
@@ -181,10 +181,7 @@ def view(request, slug, date=None):
         return HttpResponseRedirect(reverse('event_browse'))
 
 
-    if not event.viewed_times:
-        Event.events.filter(id=event.event_identifier).update(viewed_times=1)
-    else:
-        Event.events.filter(id=event.event_identifier).update(viewed_times=F('viewed_times')+1)
+    SingleEvent.objects.filter(id=event.id).update(viewed=F("viewed")+1)
 
     venue = event.venue
 

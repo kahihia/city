@@ -33,7 +33,10 @@ class PaypalPaymentProcessor(BasePaymentProcessor):
             )
 
             Account.objects.filter(user_id=self.request.user.id).update(bonus_budget=F("bonus_budget")-bonus)
-            AdvertisingCampaign.objects.filter(id=self.campaign.id).update(budget=F("budget")+bonus)
+            AdvertisingCampaign.objects.filter(id=self.campaign.id).update(
+                budget=F("budget")+bonus,
+                enough_money=True
+            )
 
     def process_order(self):
         order_budget = Decimal(self.request.POST["budget"]) - Decimal(self.request.POST["bonus"])

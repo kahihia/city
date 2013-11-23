@@ -4,5 +4,6 @@
         <a href="{% url 'event_edit' event.authentication_key %}">Edit</a>
         <a href="{% url 'event_remove' event.authentication_key %}" class="danger-action">Remove</a>
         <a href="{% url 'admin_setup_featured' event.event_identifier %}">Make featured</a>
+        <span>Viewed: {{ event.viewed }}</span>
     </div>
 {% endif %}
