@@ -176,6 +176,8 @@ class Advertising(models.Model):
     def view(self):
         Advertising.objects.filter(id=self.id).update(views=F("views")+1)
 
+        import pdb; pdb.set_trace()
+
         if self.payment_type == "CPM":
             self.campaign.ammount_spent = self.campaign.ammount_spent + (self.cpm_price/1000)
             self.campaign.save()
