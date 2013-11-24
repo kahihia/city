@@ -422,8 +422,8 @@ def profile_detail(request, username, template_name=userena_settings.USERENA_PRO
 def orders(request):
     account = Account.objects.get(user_id=request.user.id)
 
-    advertising_orders = AdvertisingOrder.objects.filter(campaign__account_id=account.id)
-    featured_orders = FeaturedEventOrder.objects.filter(featured_event__owner_id=account.id)
+    advertising_orders = AdvertisingOrder.objects.filter(campaign__account_id=account.id, status="s")
+    featured_orders = FeaturedEventOrder.objects.filter(featured_event__owner_id=account.id, status="s")
 
     tabs_page = 'orders'
     active_tab = request.session.get(tabs_page, 'advertising')
