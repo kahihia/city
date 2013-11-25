@@ -504,7 +504,7 @@
     background: url("/static/images/prof_event_feature_icon.png") left center no-repeat;
 }
 
-.new-venue-button {
+.new-venue-button, .my-settings {
     display: block;
     background: url("/static/images/accounts/new-venue-bg-repeat-y.jpg") repeat-x;
     border: 1px solid #bebebe;
@@ -516,9 +516,22 @@
     color: #545454;
 }
 
+.my-settings {
+    margin-top: 14px;
+}
+
 .new-venue-button img {
     float: left;
     margin-right: 20px;
+}
+
+.my-settings img {
+    vertical-align: middle;
+    margin: 0 2px 0 5px;
+}
+
+.settings__list {
+    margin-top: 17px !important;
 }
 
 .new-venue-popup input {
@@ -810,16 +823,21 @@
 }
 
 .account-help-container ul li {
-    padding-left: 15px;
-    border-bottom: 1px solid #fff;
+    padding-left: 30px;
+    border-bottom: 2px solid #fff;
     height: 30px;
     line-height: 30px;
     vertical-align: middle;
     list-style: none;
 }
 
+.account-help-container ul li.last {
+    border: 0;
+}
+
 .account-help-container ul li a {
     color: #fff;
+    font-size: 14px;
 }
 
 .account-featured-table .entry-info .entry-details-wrapper {

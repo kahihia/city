@@ -132,9 +132,9 @@
 }
 
 .user-profile {
-    width: 192px;
+    width: 197px;
     text-overflow: ellipsis;
-    padding-right: 13px;
+    padding-right: 8px;
     position: relative;
     height: 28px;
 }
@@ -167,6 +167,7 @@
     padding-right: 10px;
     color: #022e52 !important;
     font-weight: bold;
+    width: 160px;
 }
 
 .user-profile__link:hover {
