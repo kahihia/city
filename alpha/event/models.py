@@ -168,7 +168,7 @@ class Event(models.Model):
 
     audited = models.BooleanField(default=False)
 
-    viewed_times = models.IntegerField(default=0, blank=True, null=True)
+    # viewed_times = models.IntegerField(default=0, blank=True, null=True)
 
     # facebook_event = models.ForeignKey('FacebookEvent', blank=True, null=True)
 
