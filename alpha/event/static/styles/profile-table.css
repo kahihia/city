@@ -26,11 +26,16 @@
 
 .profile-table th,
 .profile-table td {
-    padding-left: 35px;
+    padding-left: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
     font-size: 1.1em;
     border-bottom: 1px solid #ccc;
+}
+
+.profile-table td input[type="text"],
+.profile-table td select {
+    width: 100px;
 }
 
 .profile-table th a,
@@ -49,14 +54,14 @@
     float: left;
 }
 
-.profile-table .stats {
-    float: right;
-    width: 270px;
+.profile-table .ads-list-table tr {
+    background: none;
 }
 
-.profile-table .stat {
-    float: left;
+.profile-table .ads-list-table td,
+.profile-table .ads-list-table th {
     width: 25%;
+    border-bottom: none;
 }
 
 .profile-table .ad-desc {
@@ -159,7 +164,7 @@ a.add-button {
 .advertising-items {
     clear: both;
     padding: 9px 0;
-    width: 300px;
+    width: 210px;
 }
 
 .user-input {
@@ -220,4 +225,26 @@ a.add-button {
 .per-page-links a.current {
     font-weight: bold;
     text-decoration: none;
+}
+
+.profile-table td,
+.profile-table th{
+    position: relative;
+}
+
+.sort-wrapper {
+    display: inline-block;
+}
+
+.sortable {
+    margin: 2px;
+}
+
+.sortable.active {
+    color: #000;
+    cursor: default;    
+}
+
+.profile-table #id_o {
+    display: none;
 }

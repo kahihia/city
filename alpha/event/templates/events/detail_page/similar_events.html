@@ -1,0 +1,36 @@
+{% load event_tags %}
+{% load cropping %}
+
+<div class="similar-events-wrapper">
+    <header>
+        Similar Events
+        <div>
+            at {{ event.venue.name }}
+        </div>
+    </header>
+    <div class="similar-events">
+        <ul class="similar-events-ul">
+            {% for venue_event in events_from_venue %}
+                <li>
+                    <a href="{% event_link venue_event %}">
+                        {% if venue_event.image %}
+                            <img height="92" width="92" src="{% cropped_thumbnail venue_event.image "cropping" height=92 %}" alt="{{venue_event.name}}">
+                        {% else %}
+                            <img height="92" width="92" src="{{STATIC_URL}}/images/default-event-92x92.jpg" alt="{{venue_event.name}}">
+                        {% endif %}                        
+                    </a>
+                </li>
+            {% empty %}
+                No upcoming events
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% if events_from_venue.count > 6 %}
+        <div class="similar-events-viewer-controls">
+            <div class="next"><i class="icon-chevron-right"></i></div>
+            <div class="prev"><i class="icon-chevron-left"></i></div>
+            <span class="page-no">1</span> of <span id="similar-events-total">{{ events_from_venue.count }}</span>
+        </div>
+    {% endif %}
+</div>

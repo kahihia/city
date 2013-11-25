@@ -28,7 +28,7 @@ class SetupFeaturedForm(forms.ModelForm):
     start_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
     end_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
 
-    # bonus = MoneyField(required=False) temporarily removed
+    bonus = MoneyField(required=False)
 
     class Meta:
         model = FeaturedEvent
@@ -151,7 +151,7 @@ class EditEventForm(forms.ModelForm):
     images = forms.CharField(
         widget=EventImagesWidget(),
         required=False
-    )    
+    )
 
     website = forms.URLField(required=False)
     tickets = forms.CharField(required=False)
@@ -176,7 +176,7 @@ class EditEventForm(forms.ModelForm):
         self.fields['place'].label = _(u'Location')
         self.fields['place'].widget.attrs['tabindex'] = 2
 
-        # Suggest venue popup       
+        # Suggest venue popup
 
         self.fields['city'].error_messages['required'] = 'Your event cannot miss a city'
         self.fields['city'].label = _(u'City')

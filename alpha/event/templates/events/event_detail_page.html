@@ -275,21 +275,19 @@
                 </table>                
                 <div class="description">
                     {% if event.event_type == "MULTIDAY" %}
-                        {% for occurrence in event.sorted_occurrences %}
-                        <div class="show-day-description {% if forloop.first and occurrence.start_time > now %} active{% endif %}{% if occurrence.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrence.start_time }}">
-                            {% if occurrence.description %}
-                                {{ occurrence.description|html_urlize|safe }}
-                            {% else %}
-                                {{ event.event_description|html_urlize|safe }}
-                            {% endif %}                            
-                        </div>
+                        {% for occurrence in event.sorted_occurences_for_description %}
+                            {% if occurrence.event_description %}
+                                <div class="show-day-description {% if forloop.first and occurrence.start_time > now %} active{% endif %}{% if occurrence.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrence.start_time }}">
+                                    {{ occurrence.event_description|html_urlize|safe }}
+                                </div>
+                            {% endif %}                        
                         {% endfor %}
                     {% else %}
                         {% if event.event_description %}
                             {{ event.event_description|html_urlize|safe }}
                         {% endif %}
                     {% endif %}
-                </div>                
+                </div>
             </div>
             {% if event.eventattachment_set.count > 0 %}
                 <div class="attachments">
@@ -333,35 +331,7 @@
     </div>
 
     <div class="secondary-content">
-        <div class="similar-events-wrapper">
-            <header>
-                Similar Events
-                <div>
-                    at {{ event.venue.name }}
-                </div>
-            </header>
-            <div class="similar-events">
-                <ul class="similar-events-ul">
-                    {% for venue_event in events_from_venue %}
-                        <li>
-                            <a href="{% event_link venue_event %}">
-                                <img src="{% cropped_thumbnail venue_event.image "cropping" height=92 %}" alt="{{venue_event.name}}">
-                            </a>
-                        </li>
-                    {% empty %}
-                        No upcoming events
-                    {% endfor %}
-                </ul>
-            </div>
-
-            {% if events_from_venue.count > 6 %}
-                <div class="similar-events-viewer-controls">
-                    <div class="next"><i class="icon-chevron-right"></i></div>
-                    <div class="prev"><i class="icon-chevron-left"></i></div>
-                    <span class="page-no">1</span> of <span id="similar-events-total">{{ events_from_venue.count }}</span>
-                </div>
-            {% endif %}
-        </div>
+        {% include 'events/detail_page/similar_events.html' %}
     </div>    
     
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>

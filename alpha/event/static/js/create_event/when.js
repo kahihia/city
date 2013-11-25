@@ -630,7 +630,7 @@
                 that = this;
 
             occurrences && occurrences.forEach(function(occurrence){
-                if(occurrence.startTime!=startTime && occurrence.endTime!=endTime) {
+                if(occurrence.startTime!=startTime || occurrence.endTime!=endTime) {
                     var timesWidget = that.addMoreTime();
                     timesWidget.setValue(occurrence);
                 }

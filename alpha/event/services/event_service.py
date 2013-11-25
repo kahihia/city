@@ -101,10 +101,6 @@ def prepare_initial_location(event):
     return (event.venue.location.x, event.venue.location.y)
 
 
-def prepare_initial_picture_src(event):
-    return "/media/%s" % event.picture
-
-
 def prepare_initial_attachments(event):
     attachments = event.eventattachment_set.values_list("attachment", flat=True)
     attachments = map(lambda attachment: "/media/%s" % attachment, attachments)

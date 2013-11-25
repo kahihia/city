@@ -122,6 +122,7 @@ def advertising_group(context, dimensions, css_class="advertising-right"):
             .order_by('?')[:nums]
 
         for ad in list(ads):
+            ad.view()
             ads_to_return.append(ad)
 
     Advertising.objects.filter(id__in=[ad.id for ad in ads_to_return]).update(views=F("views")+1)
@@ -218,11 +219,13 @@ def admin_advertising_stats(context, ads):
     }
 
 @register.inclusion_tag('advertising/stats/admin-advertising-campaigns.html', takes_context=True)
-def admin_advertising_campaigns(context, campaigns):
+def admin_advertising_campaigns(context, campaigns_filter):
     request = context["request"]
+    selected_account = context["selected_account"]
     return {
-        'campaigns': campaigns,
-        'request': request
+        'campaigns_filter': campaigns_filter,
+        'request': request,
+        'selected_account': selected_account
     }
 
 @register.inclusion_tag('advertising/stats/advertising-campaign-stats.html', takes_context=True)

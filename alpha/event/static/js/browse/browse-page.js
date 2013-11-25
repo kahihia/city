@@ -33,7 +33,7 @@
                     {
                         text: "OK",
                         click: function() {
-                            $( this ).dialog( "close" );
+                            $(this).dialog("close");
                         }
                     }
                 ]

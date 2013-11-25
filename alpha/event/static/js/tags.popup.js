@@ -59,11 +59,12 @@
         setFree: function(){
             var tags = $("#as-values-id_tags__tagautosuggest").val().split(",");
             tags = _.filter(tags, function(tag){ return tag; });
-            if(tags.indexOf("Free")!==-1){
-                $("#id_price_free").prop('checked', true);
-            } else {
+            if(tags.indexOf("Free")==-1 && tags.indexOf(" Free")==-1){
                 $("#id_price_free").prop('checked', false);
+            } else {
+                $("#id_price_free").prop('checked', true);                
             }
+
             setTimeout(function(){
                 $("#id_price_free").trigger("changeFromTags");
             },10);

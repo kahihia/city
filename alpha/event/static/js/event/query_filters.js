@@ -16,8 +16,12 @@
             return this;
         },
         getURL: function(){
-            return "/events?" + $.param(this.params, true);
-        }        
+            return window.location.pathname + "?" + $.param(this.params, true);
+        },
+        clear: function(){
+            this.params = {};
+            return this;
+        }
     };
 
     $(document).on("ready page:load", function(){
