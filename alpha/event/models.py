@@ -597,7 +597,8 @@ class AdminFeaturedManager(models.Manager):
             .filter(
                 event__single_events__end_time__gte=datetime.datetime.now(),
                 start_time__lte=datetime.datetime.now(),
-                end_time__gte=datetime.datetime.now()
+                end_time__gte=datetime.datetime.now(),
+                active=True
             ).annotate(Count("id"))
 
 
