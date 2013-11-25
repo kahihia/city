@@ -122,6 +122,7 @@ def advertising_group(context, dimensions, css_class="advertising-right"):
             .order_by('?')[:nums]
 
         for ad in list(ads):
+            ad.view()
             ads_to_return.append(ad)
 
     Advertising.objects.filter(id__in=[ad.id for ad in ads_to_return]).update(views=F("views")+1)

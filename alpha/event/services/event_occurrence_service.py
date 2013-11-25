@@ -17,6 +17,7 @@ def update_single_events(data, event):
     occurrences_json = json.loads(data["occurrences_json"])
 
     event.description = description_json['default']
+    event.save()
 
     multiday_start_time = None
     multiday_end_time = None
@@ -133,13 +134,20 @@ def prepare_initial_when_and_description_for_single_events(event, occurrences):
 
 
 def prepare_initial_when_and_description(event):
-    single_events = SingleEvent.objects.filter(event=event).order_by("start_time")
+    if event.event_type=="MULTIDAY":
+        single_events = SingleEvent.objects.filter(event=event, is_occurrence=True).order_by("start_time")
+    else:
+        single_events = SingleEvent.objects.filter(event=event, is_occurrence=False).order_by("start_time")
     
     return prepare_initial_when_and_description_for_single_events(event, single_events)
 
 
 def prepare_initial_occurrences(event):
-    single_events = SingleEvent.objects.filter(event=event).order_by("start_time")
+    if event.event_type=="MULTIDAY":
+        single_events = SingleEvent.objects.filter(event=event, is_occurrence=True).order_by("start_time")
+    else:
+        single_events = SingleEvent.objects.filter(event=event, is_occurrence=False).order_by("start_time")
+
     occurrences_json = {}
 
     for single_event in single_events:
