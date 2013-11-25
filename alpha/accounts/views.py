@@ -477,6 +477,10 @@ class OrderAdvertisingPdf(Report):
     def get(self, request, **kwargs):
         return self.render()
 
+    def filename(self):
+        return "advertising-order-%s.pdf" % self.kwargs['order_id']
+
+
 
 class OrderFeaturedPdf(Report):
     title = 'Invoice'
@@ -498,6 +502,9 @@ class OrderFeaturedPdf(Report):
 
     def get(self, request, **kwargs):
         return self.render()
+
+    def filename(self):
+        return "featured-order-%s.pdf" % self.kwargs['order_id']        
 
 
 @secure_required

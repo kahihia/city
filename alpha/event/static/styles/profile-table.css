@@ -20,9 +20,7 @@
 .profile-table tr:nth-child(even) {background: #f4f4f4}
 .profile-table tr:nth-child(odd) {background: #fff}
 
-.profile-table tr.selected { background: #c5f9f9; }
-
-
+.profile-table tr.ad-line:nth-child(even) { background: #c5f9f9; }
 
 .profile-table th,
 .profile-table td {

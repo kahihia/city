@@ -55,7 +55,7 @@ def picture_file_path(instance=None, filename=None):
                   AutoField, it might not yet have a value for its
                   primary key field.
 
-    filename      The filename that was originally given to the
+    filename 	  The filename that was originally given to the
                   file. This may or may not be taken into account
                   when determining the final destination path.
 
@@ -246,7 +246,7 @@ class Event(models.Model):
         return self.description
 
     def is_fb_posted(self):
-        return self.facebook_event
+        return self.post_to_facebook and self.facebook_event
 
     @property
     def first_occurrence(self):
@@ -360,6 +360,27 @@ class ArchivedEventDayManager(models.Manager):
             .select_related('event')\
             .extra(order_by=['-start_time'])\
             .annotate(Count("id"))
+
+
+# TODO: remove model after migration 0050 will be processed on production server
+class SingleEventOccurrence(models.Model):
+    """
+    When user create event he can choose one of event types.
+    1. Single Event. User can choose different days. All this days will saved as SingleEvent instance
+    2. Multiple Day Event. User can choose different time for every day. We create one SingleEvent that will start on start time of first day and will finish on finish time of last day.
+    Time for each day will be saved in SingleEventOccurance instance.
+    3. Multiple Time Event. User can choose one day and few times for it. Day will be saved as SingleEvent instance. Each time will be saved as SingleEventOccurance instance.
+    """
+    start_time = models.DateTimeField('starting time', auto_now=False, auto_now_add=False)
+    end_time = models.DateTimeField('ending time (optional)', auto_now=False, auto_now_add=False)
+    description = models.TextField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.end_time < self.start_time:
+            self.end_time = dateparser.parse(self.end_time) + datetime.timedelta(days=1)
+
+        super(SingleEventOccurrence, self).save(*args, **kwargs)
+        return self
 
 
 class SingleEvent(models.Model):
@@ -567,6 +588,17 @@ class FutureFeaturedEventManager(models.Manager):
             .annotate(Count("id"))
 
 
+class AdminFeaturedManager(models.Manager):
+    def get_query_set(self):        
+        return super(AdminFeaturedManager, self).get_query_set()\
+            .filter(
+                event__single_events__end_time__gte=datetime.datetime.now(),
+                start_time__lte=datetime.datetime.now(),
+                end_time__gte=datetime.datetime.now(),
+                active=True
+            ).annotate(Count("id"))
+
+
 class FeaturedEvent(models.Model):
     event = models.ForeignKey(Event, blank=False, null=False)
     owner = models.ForeignKey("accounts.Account", blank=True, null=True)
@@ -585,6 +617,7 @@ class FeaturedEvent(models.Model):
 
     objects = money_manager(models.Manager())
     future = FutureFeaturedEventManager()
+    admin = AdminFeaturedManager()
 
     def save(self, *args, **kwargs):
         self.end_time = self.end_time.replace(hour=23, minute=59, second=59, microsecond=0)
