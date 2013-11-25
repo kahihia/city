@@ -119,15 +119,16 @@
         </div>        
     </div>    
 
-    <div class="account-help-container">
+    <div class="settings account-help-container">
         <a class="new-venue-button" href="{% url 'create_venue_account' %}">
             <img src="/static/images/accounts/new-venue-bg.jpg">
             New Venue
         </a>
         <header class="my-settings">
+            <img src="/static/images/accounts/settings-bg.png">
             My Settings
         </header>
-        <ul>
+        <ul class="settings__list">
             {% if is_admin %}
                 <li>
                     <a href="{% url 'admin:index' %}">Admin area</a>
@@ -148,7 +149,7 @@
             <li>
                 <a href="{% url 'account_orders' %}">View my order history</a>
             </li>
-            <li>
+            <li class="last">
                 <a href="{% url 'advertising_setup' %}">Create New Ad</a>
             </li>
         </ul>

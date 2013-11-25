@@ -13,8 +13,8 @@
                             <img src="{{ request.account.get_mugshot_url }}"
                                  class="user-profile__mugshot"
                                  alt="Your mugshot" />
-                            <span>
-                                {{ user.username }}
+                            <span title="{{ user.username }}">
+                                {{ user.username|shorten_string:18 }}
                             </span>
                         </a>
                     {% else %}
@@ -26,8 +26,8 @@
                             {% else %}
                                 <img src="{{STATIC_URL}}images/default-event.jpg" class="user-profile__mugshot">
                             {% endif %}
-                            <span>
-                                {{ current_venue_account.venue.name }} opa-opa-opa pa
+                            <span title="{{ current_venue_account.venue.name }}">
+                                {{ current_venue_account.venue.name|shorten_string:18 }}
                             </span>
                         </a>
                     {% endif %}
