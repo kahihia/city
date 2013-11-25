@@ -249,7 +249,6 @@ class Migration(DataMigration):
             'tickets': ('django.db.models.fields.CharField', [], {'max_length': '250', 'null': 'True', 'blank': 'True'}),
             'venue': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['event.Venue']", 'null': 'True', 'blank': 'True'}),
             'venue_account_owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.VenueAccount']", 'null': 'True', 'blank': 'True'}),
-            'viewed_times': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),
             'website': ('django.db.models.fields.URLField', [], {'default': "''", 'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
         u'event.eventattachment': {
