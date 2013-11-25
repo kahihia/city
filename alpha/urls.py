@@ -18,6 +18,7 @@ urlpatterns = patterns(
     url(r'^facebook-for-turbolinks.js$', 'home.views.facebook_for_turbolinks_js'),
     url(r'^$', 'event.views.browse', name='home'),
     url(r'^events/', include('event.urls')),
+    url(r'^venues/', include('venues.urls')),
     url(r'^account-actions/', include('accounts.urls')),
     url(r'^cf-admin/', include('cityfusion_admin.urls')),
     url(r'^feedback/', include('feedback.urls')),

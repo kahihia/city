@@ -1,6 +1,6 @@
 import datetime
-from django.db.models import Count
 from cities.models import City
+from django.db.models import Count
 
 
 def find_nearest_city(location, cities=None):
@@ -34,3 +34,6 @@ def get_times_from_request(request):
     start_time = request.GET.get("start_time", 13)
     end_time = request.GET.get("end_time", 20)
     return start_time, end_time
+
+
+

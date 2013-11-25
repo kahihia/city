@@ -9,7 +9,7 @@
 <div class="menu-wrapper" data-no-turbolink>
     <ul class="main-menu">
         <li>
-            <a href="{% url 'event_browse' %}">
+            <a href="{% url 'event_browse' %}" {% if request.path == '/events/' %} class="active"{%endif%}>
                 Home
                 <span class="hover-effect"></span>
             </a>
@@ -21,8 +21,14 @@
             </a>
         </li>
         <li>
-            <a href="{% url 'event_create' %}">
+            <a href="{% url 'event_create' %}" {% if request.path == '/events/create/' %} class="active"{%endif%}>
                 Post Events
+                <span class="hover-effect"></span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'venues' %}" {% if request.path == '/venues/' %} class="active"{%endif%}>
+                Venues
                 <span class="hover-effect"></span>
             </a>
         </li>

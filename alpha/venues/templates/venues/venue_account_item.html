@@ -1,0 +1,27 @@
+{% load location %}
+{% load cropping %}
+
+<a href="{% url "public_venue_account" venue_account.slug %}">
+    <div class="picture">
+        {% if venue_account.picture %}
+            <img src="{% cropped_thumbnail venue_account "cropping" width=132 %}" height="132px" weight="132px">
+        {% else %}
+            <img src="/static/images/default-event.jpg" height="132px" weight="132px">
+        {% endif %}
+    </div>
+    <div class="map-preview">
+        <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ venue_account.venue.location.y }},{{ venue_account.venue.location.x }}&zoom=13&size=132x132&maptype=roadmap&markers=color:blue%7C{{ venue_account.venue.location.y }},{{ venue_account.venue.location.x }}&sensor=false">
+    </div>
+    <div class="details">
+        <header>
+            {{ venue_account.venue.name }}
+        </header>
+
+        <div class="address">
+            {% if venue_account.venue.street %}
+                {% if venue_account.venue.street_number %}{{ venue_account.venue.street_number }} {% endif %}{{ venue_account.venue.street }}
+            {% endif %}
+            {{ venue_account.venue.city.name_std }}, {{ venue_account.venue.city.region.name_std|region_shortcut }}
+        </div>
+    </div>
+</a>

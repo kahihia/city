@@ -1,0 +1,58 @@
+.venues-wrapper {
+    display: inline-block;
+    padding: 20px 25px;
+    width: 637px;
+    background: #fff;
+    float: left;
+
+}
+
+.venues-wrapper div.venue-item:nth-of-type(even) {
+    background: #fdfcfc;
+}
+
+.venues-wrapper div.venue-item:nth-of-type(odd) {
+    background: #ecebeb;    
+}
+
+.venue-item {
+    vertical-align: top;
+    padding: 0;    
+    width: 100%;
+    height: 160px;
+}
+
+.venue-item a {
+    display: block;    
+    padding: 12px;
+}
+
+.venue-item .picture,
+.venue-item .map-preview,
+.venue-item .details {
+    float: left;
+}
+
+.venue-item .picture,
+.venue-item .map-preview {
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #878787;
+    border-bottom: 1px solid #878787;
+}
+
+.venue-item .map-preview {
+    margin-left: 5px;
+}
+
+.venue-item .details {
+    position: relative;
+    margin-left: 30px;
+    margin-top: 30px;
+    color: #000;
+    font-size: 12px;
+}
+
+.venue-item .details header {
+    font-weight: bold;
+}

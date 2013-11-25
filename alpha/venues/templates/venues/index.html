@@ -1,0 +1,104 @@
+{% extends 'base-with-advertising.html' %} 
+{% load date_formatting %}
+{% load cropping %}
+{% load advertising_tags %}
+{% load endless %}
+{% load venues %}
+{% load common_tags %}
+
+{% block head %}
+
+    <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/browse/featured_events.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/venues/venues.css" rel="stylesheet" type="text/css" />
+
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
+    <script src="{{STATIC_URL}}js/featured/featured-event-viewer.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/venues/venues-page.js" type="text/javascript"></script>
+
+{% endblock %}
+
+
+{% block title %} 
+    &gt; Venues
+{% endblock %}
+
+{% block advertising %}
+    <div>
+        <div class="advertising-right-container">
+            {% advertising_group "300x250|300x600|300x100" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block featured %}
+    {% include 'events/_event_featured.html' %}
+{% endblock %}
+
+{% block page %}
+    <div id="fb-root"></div>
+
+    {% if messages %}
+        <div class="msg">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}><h3>{{ message }}</h3></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+
+    <div class="venues-wrapper">
+        {% paginate 5 venue_accounts %}
+
+        {% for venue_account in venue_accounts %}
+            <div class="venue-item">
+                {% venue_account_item venue_account %}
+            </div>
+        {% empty %}
+            Venues are missing
+        {% endfor %}
+
+        {% if venue_accounts.count > 0 %}
+            <div class="entry-navigation-np">
+                <p>
+                    <ul>
+                        {% get_pages %}
+
+                        <span class="step-links">
+                            {% if pages.current.is_first %}
+                                <span class="prev">
+                                    prev
+                                </span>
+                            {% else %}
+                                <a href="{{ pages.previous.url }}" class="prev">
+                                    prev
+                                </a>
+                            {% endif %}
+
+                            {% for page in pages %}
+                                {% if page|args:10|call:'is_in_range' %}
+                                    <a href="{{ page.url }}"
+                                        class="page{% if page.is_current %} current{%endif%}">
+                                        {{ page.number }}
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if pages.current.is_last %}
+                                <span class="next">
+                                    next
+                                </span>
+                            {% else %}
+                                <a href="{{ pages.next.url }}" class="next">
+                                    next
+                                </a>
+                            {% endif %}
+                        </span>
+                    </ul>
+                </p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

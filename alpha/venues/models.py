@@ -1,0 +1,1 @@
+# We will used venue model from evnt, to not write migrations

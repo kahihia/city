@@ -20,8 +20,9 @@ from django_facebook.decorators import facebook_required
 from cities.models import City, Country, Region
 from event.filters import EventFilter
 from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
-from event.services import facebook_services, location_service, event_service
+from event.services import facebook_services, location_service, event_service, featured_service
 from event.forms import CreateEventForm, EditEventForm, SetupFeaturedForm
+
 from ajaxuploader.views import AjaxFileUploader
 from accounts.decorators import native_region_required
 from accounts.models import VenueAccount
@@ -93,15 +94,7 @@ def browse(request):
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
 
-    region = location_service.LocationForFeaturedEvent(request).canadian_region
-    featured_event_query = Q(featuredevent__all_of_canada=True)
-    if region:
-        featured_event_query = featured_event_query | Q(featuredevent__regions__id=region.id)
-
-    featured_events = Event.featured_events\
-        .filter(featured_event_query)\
-        .order_by('?')\
-        .annotate(Count("id"))
+    featured_events = featured_service.featured_events_for_region(request)
 
     params = request.GET.copy()
 

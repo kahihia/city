@@ -1,5 +1,3 @@
-import datetime
-
 from cities.models import City, Region, Country
 from event.models import CountryBorder
 from event.utils import find_nearest_city

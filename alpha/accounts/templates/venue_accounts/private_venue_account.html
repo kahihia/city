@@ -211,7 +211,7 @@
                 {% include 'venue_accounts/_venue_archived_events_table.html' %}
             </div>
             <div class="box{% if active_tab == "venue-advertising-stats" %} visible{% endif %} advertising-stats">
-                {% include 'advertising/stats/list.html' with ads_items=venue_account.campaigns %}
+                {% include 'advertising/stats/list.html' with campaigns=venue_account.campaigns %}
             </div>
         </div>
     </div>
