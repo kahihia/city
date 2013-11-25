@@ -591,6 +591,16 @@ class FutureFeaturedEventManager(models.Manager):
             .annotate(Count("id"))
 
 
+class AdminFeaturedManager(models.Manager):
+    def get_query_set(self):        
+        return super(AdminFeaturedManager, self).get_query_set()\
+            .filter(
+                event__single_events__end_time__gte=datetime.datetime.now(),
+                start_time__lte=datetime.datetime.now(),
+                end_time__gte=datetime.datetime.now()
+            ).annotate(Count("id"))
+
+
 class FeaturedEvent(models.Model):
     event = models.ForeignKey(Event, blank=False, null=False)
     owner = models.ForeignKey("accounts.Account", blank=True, null=True)
@@ -609,6 +619,7 @@ class FeaturedEvent(models.Model):
 
     objects = money_manager(models.Manager())
     future = FutureFeaturedEventManager()
+    admin = AdminFeaturedManager()
 
     def save(self, *args, **kwargs):
         self.end_time = self.end_time.replace(hour=23, minute=59, second=59, microsecond=0)

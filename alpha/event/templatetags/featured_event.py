@@ -16,7 +16,7 @@ register = template.Library()
 
 @register.inclusion_tag('featured/featured_events.html', takes_context=True)
 def featured_events_container(context, events, in_email=False):
-    FeaturedEvent.objects.filter(id__in=[event.id for event in events]).update(views=F('views')+1)
+    FeaturedEvent.objects.filter(event_id__in=[event.id for event in events]).update(views=F('views')+1)
 
     return {
         'events': events,
@@ -26,7 +26,7 @@ def featured_events_container(context, events, in_email=False):
 
 @register.inclusion_tag('featured/featured_event.html', takes_context=True)
 def featured_event(context, event, in_email=False):
-    FeaturedEvent.objects.filter(id=event.id).update(views=F('views')+1)
+    FeaturedEvent.objects.filter(event_id=event.id).update(views=F('views')+1)
 
     return {
         'event': event,
