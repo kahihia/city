@@ -6,7 +6,6 @@
     <tr>
         <th>Campaign</th>
         <th>Budget</th>
-        <th>Status</th>
         <th>Actions</th>
     </tr>
     {% for order in advertising_orders %}
@@ -16,9 +15,6 @@
         </td>
         <td>
             {{ order.budget }}
-        </td>
-        <td>
-            {{ order.status }}
         </td>
         <td>
             <a href="{% url "account_order_advertising_pdf" order.id %}">
