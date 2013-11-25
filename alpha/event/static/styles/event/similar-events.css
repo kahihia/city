@@ -33,6 +33,16 @@
 	height: 208px;	
 }
 
+.secondary-content .similar-events-wrapper ul.one-line {
+    height: 100px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.secondary-content .similar-events-wrapper .empty {
+    margin-left: 15px;
+}
+
 .secondary-content .similar-events {
 	overflow: hidden;
 	margin-top: 10px;

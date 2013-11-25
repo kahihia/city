@@ -144,9 +144,11 @@
                                                     {% endif %}
                                                 </div>
                                                 <div class="event-venue">
-                                                    <span class="accented">{{ event.venue.name }}</span><br />
+                                                    <span>{{ event.venue.name }}</span>
                                                     {% if event.venue.street %}
-                                                        {% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}
+                                                        <span>
+                                                            {% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}
+                                                        </span>
                                                     {% endif %}
                                                     <div class="event-venue-name">
                                                         {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
@@ -156,7 +158,7 @@
                                             {% if event.venue %}
                                             <td>
                                                 <div class="venue_map_preview">
-                                                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.venue.location.y }},{{ event.venue.location.x }}&zoom=13&size=100x80&maptype=roadmap&markers=color:blue%7C{{ event.venue.location.y }},{{ event.venue.location.x }}&sensor=false">
+                                                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.venue.location.y }},{{ event.venue.location.x }}&zoom=13&size=127x90&maptype=roadmap&markers=color:blue%7C{{ event.venue.location.y }},{{ event.venue.location.x }}&sensor=false">
                                                 </div>
                                                 <div id="venue_map" class="map"></div>
                                             </td>
@@ -272,22 +274,25 @@
                             </div>
                         </td>
                     </tr>
-                </table>                
-                <div class="description">
-                    {% if event.event_type == "MULTIDAY" %}
+                </table>
+
+                {% if event.event_type == "MULTIDAY" %}
+                    <div class="description">
                         {% for occurrence in event.sorted_occurences_for_description %}
                             {% if occurrence.event_description %}
                                 <div class="show-day-description {% if forloop.first and occurrence.start_time > now %} active{% endif %}{% if occurrence.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrence.start_time }}">
                                     {{ occurrence.event_description|html_urlize|safe }}
                                 </div>
-                            {% endif %}                        
+                            {% endif %}
                         {% endfor %}
-                    {% else %}
-                        {% if event.event_description %}
+                    </div>
+                {% else %}
+                    {% if event.event_description %}
+                        <div class="description">
                             {{ event.event_description|html_urlize|safe }}
-                        {% endif %}
+                        </div>
                     {% endif %}
-                </div>
+                {% endif %}
             </div>
             {% if event.eventattachment_set.count > 0 %}
                 <div class="attachments">

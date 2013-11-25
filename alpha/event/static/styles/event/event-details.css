@@ -85,9 +85,14 @@
 }
 
 .event-wrapper .event-photo footer {
+    display: block;
     margin-top: 10px;
     font-size:1.0em;
-    color: #000;    
+    color: #000;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 260px;
+    text-overflow: ellipsis;
 }
 
 .event-wrapper .event-photo footer a {
@@ -163,13 +168,22 @@
 .searchpad-event-wrapper .event-details .event-venue,
 .event-wrapper .event-details .event-venue {
     margin-top: 11px;
+    margin-left: 10px;
     color: #022e52;
     font-weight: bold;
 }
 
+.event-wrapper .event-details .event-venue span {
+    width: 195px;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+}
+
 .searchpad-event-wrapper .event-details .event-venue-name,
 .event-wrapper .event-details .event-venue-name {
-    width: 225px;
+    width: 195px;
     white-space: normal;
 }
 
@@ -369,11 +383,12 @@
 }
 
 .event-wrapper .event-details .title-wrapper {
-    padding-bottom: 5px;
+    
 }
 
 .event-wrapper .event-details .event-date-wrapper {
-    color: #0230c5;
+    color: #0260bb;
+    margin-left: 10px;
 }
 
 .event-wrapper .event-details .event-description {
@@ -616,23 +631,24 @@
     display: block;
 }
 
-.attachments {
+.event-details-primary-content .attachments,
+.event-details-primary-content .tags {
     display: block;
-    background: url("/static/images/event/attachment-icon.png") 20px 6px no-repeat #9c9b9b;
     padding: 7px;
     padding-left: 45px;
+}
+
+.attachments {    
+    background: url("/static/images/event/attachment-icon.png") 20px 6px no-repeat #7f7e7e;    
+}
+
+.tags {
+    background: url("/static/images/event/tag-icon.png") 20px 6px no-repeat #0260bb;    
 }
 
 .attachments a {
     color: #fff;
     text-decoration: underline;
-}
-
-.tags {
-    display: block;
-    background: url("/static/images/tag_icon.png") 20px 6px no-repeat #c6c6c6;
-    padding: 7px;
-    padding-left: 45px;    
 }
 
 .tags a { 

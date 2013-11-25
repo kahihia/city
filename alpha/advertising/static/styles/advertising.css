@@ -17,11 +17,11 @@
     padding: 4px;
     background: #ffffff;
     border: 1px solid #c5c5c5;
-    margin-top: 9px;
+    margin-top: 16px;
     text-align: center;
 }
 
-.advertising-right.first {
+.home .advertising-right.first {
     margin-top: 0;
 }
 
