@@ -177,7 +177,7 @@ class Advertising(models.Model):
         Advertising.objects.filter(id=self.id).update(views=F("views")+1)
 
         if self.payment_type == "CPM":
-            self.campaign.ammount_spent = self.campaign.ammount_spent + (self.cpm_price/1000)
+            self.campaign.ammount_spent = self.campaign.ammount_spent + Money((self.cpm_price.amount/1000), CAD)
             self.campaign.save()
 
     def image_thumb(self):
