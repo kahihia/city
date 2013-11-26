@@ -673,9 +673,9 @@ class FeaturedEventOrder(models.Model):
 
     @property
     def bonus(self):
-        if self.bonusfeaturedeventtransaction:
+        try:
             return self.bonusfeaturedeventtransaction.budget
-        else: 
+        except: 
             return None
 
     @property

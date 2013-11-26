@@ -212,9 +212,9 @@ class AdvertisingOrder(models.Model):
 
     @property
     def bonus(self):
-        if self.bonusadvertisingtransaction:
+        try:
             return self.bonusadvertisingtransaction.budget
-        else: 
+        except:
             return None
 
     @property
