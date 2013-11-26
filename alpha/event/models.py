@@ -678,6 +678,13 @@ class FeaturedEventOrder(models.Model):
         else: 
             return None
 
+    @property
+    def total_cost(self):
+        if self.bonus:
+            return self.cost + self.bonus
+        else:
+            return self.cost
+
 
 class BonusFeaturedEventTransaction(models.Model):
     budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
