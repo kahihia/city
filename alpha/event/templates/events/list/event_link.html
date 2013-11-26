@@ -1,5 +1,5 @@
 {% if event.event_type == "MULTIDAY" %}
-	{% url 'event_view' event.slug %}
+	{% url 'event_view' event.slug %}{% if event.is_occurrence %}#day={{ event.start_time|date:"Y-m-d" }}{% endif %}
 {% elif event.start_time %}
 	{% url 'event_view' event.slug event.start_time|date:"Y-m-d" %}
 {% else %}

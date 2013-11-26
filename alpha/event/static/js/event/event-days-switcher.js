@@ -3,15 +3,20 @@
     'use strict';
 
     var EventDaysSwitcher = function(){
-        var that = this;
+        var that = this,
+            day;
+
+        try {
+            day = location.hash.match(/[?&]*day=([^&]*)?/)[1]    
+        } catch(e) {
+            day = null;
+        }
 
         this.viewer = $(".events-occurrences");
         this.content = $(".event-days", this.viewer);
         this.next = $(".next", this.viewer);
         this.prev = $(".prev", this.viewer);
-        this.days = $("li", this.content).length;
-
-        this.currentDay = +$(".event-day-switch.active").data("counter");
+        this.days = $("li", this.content).length;        
 
         this.prev.on("click", this.scrollPrevPage.bind(this));
         this.next.on("click", this.scrollNextPage.bind(this));
@@ -38,6 +43,13 @@
 
             that.scrollToActiveDay();
         });
+
+        if(day) {
+            this.currentDay = +$(".event-day-switch[data-day="+day+"]").data("counter");
+            $(".event-day-switch[data-day="+day+"]").trigger("click");
+        } else {
+            this.currentDay = +$(".event-day-switch.active").data("counter");
+        }
 
         this.scrollToActiveDay();
     };
