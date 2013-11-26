@@ -26,10 +26,10 @@
                 </li>
             </ul>
             <div class="box {% if active_tab == "advertising-orders" %}visible{% endif %} advertising">
-                {% include 'accounts/_order_advertising_table.html' %}
+                {% include 'accounts/_order_advertising_table.html' with advertising_orders=advertising_orders_filter.qs %}
             </div>
             <div class="box {% if active_tab == "featured-orders" %}visible{% endif %} featured">
-                {% include 'accounts/_order_featured_table.html' %}
+                {% include 'accounts/_order_featured_table.html' with featured_orders=featured_orders_filter.qs %}
             </div>
         </div>
     </div>

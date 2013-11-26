@@ -645,12 +645,12 @@ def admin_share_stats(request, campaign_id):
         }, context_instance=RequestContext(request))
 
 
+from cityfusion_admin.filters import AdvertisingOrderFilter, FeaturedEventOrderFilter
+
 @staff_member_required
 def admin_orders(request):
-    campaigns_filter = AdvertisingCampaignFilter(request.GET, queryset=AdvertisingCampaign.objects.order_by("-started"))
-
-    advertising_orders = AdvertisingOrder.objects.filter(status="s")
-    featured_orders = FeaturedEventOrder.objects.filter(status="s")
+    advertising_orders_filter = AdvertisingOrderFilter(request.GET, queryset=AdvertisingOrder.objects.filter(status="s"))
+    featured_orders_filter = FeaturedEventOrderFilter(request.GET, queryset=FeaturedEventOrder.objects.filter(status="s"))
 
     if "account" in request.GET and request.GET["account"]:
         selected_account = Account.objects.get(user_id=request.GET["account"])
@@ -661,10 +661,11 @@ def admin_orders(request):
     active_tab = request.session.get(tabs_page, 'advertising-orders')
 
     return render_to_response('cf-admin/admin-orders.html', {
-            "advertising_orders": advertising_orders,
-            "featured_orders": featured_orders,
+            "advertising_orders_filter": advertising_orders_filter,
+            "featured_orders_filter": featured_orders_filter,
             "selected_account": selected_account,
             'tabs_page': tabs_page,
-            'active_tab': active_tab
+            'active_tab': active_tab,
+            'admin': True
         }, context_instance=RequestContext(request))    
 
