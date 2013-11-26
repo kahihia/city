@@ -96,10 +96,13 @@ urlpatterns = patterns('',
         name='admin_advertising_change_status'
     ),
 
+    # Orders
+    url(r'^admin-orders/$',
+        views.admin_orders,
+        name='admin_orders'
+    ),    
 
-    
-
-    # Features
+    # Featured Events
     url(r'^admin-featured/$',
         views.admin_featured,
         name='admin_featured'

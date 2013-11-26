@@ -261,6 +261,21 @@ ul#box-nav li.selected {
     margin-bottom: 10px;
 }
 
+.tabs-container .tabs-container {
+    margin: 0;
+    padding: 10px;
+    width: 95%;
+}
+
+.tabs-container .tabs-container .box {
+
+}
+
+.tabs-container .tabs-container .profile-table,
+.tabs-container .tabs-container .profile-table-pagination {
+    
+}
+
 .tabs-container ul.tabs {
   margin: 0;
   padding: 0;
@@ -277,7 +292,7 @@ ul#box-nav li.selected {
     text-align: center;
     vertical-align: center;
     font-weight: bold;
-    padding: 0 18px;
+    padding: 0 15px;
     background: #fff;
     border: 1px solid #dcdcdc;
     border-bottom: none;

@@ -14,7 +14,7 @@
     <link href="{{STATIC_URL}}styles/autoSuggest.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
 
-    <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>    
+    <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/accounts/reminder-options.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/tabs.js"></script>
 
@@ -27,7 +27,7 @@
         <h1>
             <a href="{% url 'userena_profile_detail' account.user.username %}">
                 {{ account.user.username }} orders
-            </a>            
+            </a>
         </h1>
 
         <div class="tabs-container">
@@ -36,11 +36,11 @@
                 <li data-tab-id="featured" {% if active_tab == "featured" %}class="current"{% endif %}><span>Featured</span></li>
             </ul>
             <div class="box{% if active_tab == "advertising" %} visible{% endif %}">
-                {% include 'accounts/_order_advertising_table.html' %}                            
+                {% include 'accounts/_order_advertising_table.html' %}
             </div>
             <div class="box{% if active_tab == "featured" %} visible{% endif %}">
                 {% include 'accounts/_order_featured_table.html' %}
-            </div>            
+            </div>
         </div>
     </div>
 {% endblock %}

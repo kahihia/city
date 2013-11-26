@@ -1,0 +1,36 @@
+{% extends 'cf-admin/base.html' %}
+{% load event_tags %}
+{% load admin_menu %}
+{% load advertising_tags %}
+
+{% block head %}
+    <link href="{{STATIC_URL}}styles/profile-table.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="{{STATIC_URL}}styles/select2.css" rel="stylesheet" type="text/css" />
+
+    <script src="{{STATIC_URL}}js/select2.min.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/tabs.js" type="text/javascript" ></script>
+    <script src="{{STATIC_URL}}js/actions/admin-orders-page.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block page %}
+    <div class="tabs-container">
+        {% cf_admin_menu "orders" %}
+        <div class="box visible tabs-container">
+            <ul class="tabs" data-page-id="admin-orders">
+                <li data-tab-id="advertising-orders" {% if active_tab == "advertising-orders" %}class="current"{% endif %}>
+                    <span>Advertising Orders</span>
+                </li>
+                <li data-tab-id="featured-orders" {% if active_tab == "featured-orders" %}class="current"{% endif %}>
+                    <span>Featured Event Orders</span>
+                </li>
+            </ul>
+            <div class="box {% if active_tab == "advertising-orders" %}visible{% endif %} advertising">
+                {% include 'accounts/_order_advertising_table.html' %}
+            </div>
+            <div class="box {% if active_tab == "featured-orders" %}visible{% endif %} featured">
+                {% include 'accounts/_order_featured_table.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

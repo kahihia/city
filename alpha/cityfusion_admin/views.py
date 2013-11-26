@@ -13,7 +13,7 @@ from django.template import RequestContext
 
 from accounts.models import Account, BonusCampaign
 from advertising.models import ShareAdvertisingCampaign
-from event.models import Event, FeaturedEvent, FacebookEvent, EventTransferring
+from event.models import Event, FeaturedEvent, FacebookEvent, EventTransferring, FeaturedEventOrder
 from event.forms import SetupFeaturedForm, CreateEventForm
 from event.services import facebook_services
 from notices import services as notice_services
@@ -23,6 +23,9 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Q, F
 
 from advertising.filters import AdvertisingCampaignFilter
+
+from advertising.models import AdvertisingOrder
+
 
 
 @require_POST
@@ -640,4 +643,28 @@ def admin_share_stats(request, campaign_id):
             'campaign': campaign,
             'shared_with': Account.objects.filter(shareadvertisingcampaign__campaign_id=campaign_id)
         }, context_instance=RequestContext(request))
+
+
+@staff_member_required
+def admin_orders(request):
+    campaigns_filter = AdvertisingCampaignFilter(request.GET, queryset=AdvertisingCampaign.objects.order_by("-started"))
+
+    advertising_orders = AdvertisingOrder.objects.filter(status="s")
+    featured_orders = FeaturedEventOrder.objects.filter(status="s")
+
+    if "account" in request.GET and request.GET["account"]:
+        selected_account = Account.objects.get(user_id=request.GET["account"])
+    else:
+        selected_account = None
+
+    tabs_page = 'admin-orders'
+    active_tab = request.session.get(tabs_page, 'advertising-orders')
+
+    return render_to_response('cf-admin/admin-orders.html', {
+            "advertising_orders": advertising_orders,
+            "featured_orders": featured_orders,
+            "selected_account": selected_account,
+            'tabs_page': tabs_page,
+            'active_tab': active_tab
+        }, context_instance=RequestContext(request))    
 

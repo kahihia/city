@@ -82,7 +82,7 @@ CF_ADMIN_MENU = {
     },
     "admin_advertising": {
         "urlname": "admin_advertising",
-        "linktext": "Advertising"
+        "linktext": "Ads"
     },
     "admin_featured": {
         "urlname": "admin_featured",
@@ -99,5 +99,9 @@ CF_ADMIN_MENU = {
     "bonus_campaigns": {
         "urlname": "bonus_campaigns",
         "linktext": "Bonus campaigns"
+    },
+    "orders": {
+        "urlname": "admin_orders",
+        "linktext": "Orders"
     }
 }
