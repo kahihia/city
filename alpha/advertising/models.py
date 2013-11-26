@@ -210,6 +210,13 @@ class AdvertisingOrder(models.Model):
     def cost_value(self):
         return self.budget
 
+    @property
+    def bonus(self):
+        if self.bonusadvertisingtransaction:
+            return self.bonusadvertisingtransaction.budget
+        else: 
+            return None
+
 class BonusAdvertisingTransaction(models.Model):
     budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
     campaign = models.ForeignKey(AdvertisingCampaign)

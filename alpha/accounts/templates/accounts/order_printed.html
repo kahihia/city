@@ -61,10 +61,10 @@
                         <td>{{ order }}</td>
                         <td class="price">{{ order.cost_value }}</td>
                     </tr>
-                    {% if order.bonus and order.bonus.budget.ammount %}
+                    {% if order.bonus %}
                         <tr>
                             <td>Bonus</td>
-                            <td class="price">{{ order.bonus.budget }}</td>
+                            <td class="price">{{ order.bonus }}</td>
                         </tr>
                     {% endif %}
                     {% for tax in order.taxes.all %}

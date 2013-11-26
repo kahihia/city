@@ -18,8 +18,8 @@
             {{ order.budget }}
         </td>
         <td>
-            {% if order.bonus and order.bonus.budget.ammount %}
-                {{ order.bonus.budget }}
+            {% if order.bonus %}
+                {{ order.bonus }}
             {% else %}
                 -
             {% endif %}

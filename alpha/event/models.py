@@ -671,6 +671,13 @@ class FeaturedEventOrder(models.Model):
     def cost_value(self):
         return self.cost
 
+    @property
+    def bonus(self):
+        if self.bonusfeaturedeventtransaction:
+            return self.bonusfeaturedeventtransaction.budget
+        else: 
+            return None
+
 
 class BonusFeaturedEventTransaction(models.Model):
     budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
@@ -682,6 +689,8 @@ class BonusFeaturedEventTransaction(models.Model):
 class EventTransferring(models.Model):
     target = models.ForeignKey(User, blank=False, null=False)
     events = models.ManyToManyField(Event)
+
+
 
 
 FeaturedEventPayment = build_featured_event_payment_model(FeaturedEventOrder, unique=True)
