@@ -6,6 +6,7 @@
     <tr>
         <th>Event name</th>
         <th>Cost</th>
+        <th>Bonus</th>
         <th>Period</th>
         <th>Actions</th>
     </tr>
@@ -16,6 +17,13 @@
         </td>
         <td>
             {{ order.cost }}
+        </td>
+        <td>
+            {% if order.bonus and order.bonus.budget.ammount %}
+                {{ order.bonus.budget }}
+            {% else %}
+                -
+            {% endif %}
         </td>
         <td>
             {{ order.featured_event.start_time|date:"F d, Y" }}

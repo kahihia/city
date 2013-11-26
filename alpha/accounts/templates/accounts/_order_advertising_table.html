@@ -6,6 +6,7 @@
     <tr>
         <th>Campaign</th>
         <th>Budget</th>
+        <th>Bonus</th>
         <th>Actions</th>
     </tr>
     {% for order in advertising_orders %}
@@ -15,6 +16,13 @@
         </td>
         <td>
             {{ order.budget }}
+        </td>
+        <td>
+            {% if order.bonus and order.bonus.budget.ammount %}
+                {{ order.bonus.budget }}
+            {% else %}
+                -
+            {% endif %}
         </td>
         <td>
             <a href="{% url "account_order_advertising_pdf" order.id %}">

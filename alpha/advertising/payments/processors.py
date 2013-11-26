@@ -29,7 +29,8 @@ class PaypalPaymentProcessor(BasePaymentProcessor):
         if bonus:
             BonusAdvertisingTransaction.objects.create(
                 campaign=self.campaign,
-                budget=bonus
+                budget=bonus,
+                order=self.order
             )
 
             Account.objects.filter(user_id=self.request.user.id).update(bonus_budget=F("bonus_budget")-bonus)
@@ -61,15 +62,29 @@ class PaypalPaymentProcessor(BasePaymentProcessor):
                 account_tax_cost.save()
                 order.taxes.add(account_tax_cost)
 
-            self.order = order
+            self.redirect_to_paypal = True
+
+        else:
+            order = AdvertisingOrder(
+                budget=order_budget,
+                total_price=order_budget,
+                campaign=self.campaign,
+                account=self.account,
+                status="s"
+            )
+
+            order.save()
+
+        self.order = order
 
     def process(self):
-        self.order = None
-        self.process_bonus()
+        self.redirect_to_paypal = False
         self.process_order()
+        self.process_bonus()
+        
 
     def redirect_to_next_step(self):
-        if self.order:
+        if self.redirect_to_paypal:
             return HttpResponseRedirect(reverse('advertising_payment', args=(str(self.order.id), )))     
         else:
             return HttpResponseRedirect(reverse('advertising_deposit_funds_for_campaign', args=(self.campaign.id, )))
