@@ -180,7 +180,7 @@
                                             {% if event.event_type == "MULTIDAY" %}
                                                 {% for key, occurrences in event.sorted_occurrences_days.items %}
                                                 <li>
-                                                    <div class="event-day-switch{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if occurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time }}" data-counter="{{ forloop.counter }}">
+                                                    <div class="event-day-switch{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if occurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time|date:"Y-m-d" }}" data-counter="{{ forloop.counter }}">
                                                          {{ occurrences.0.start_time|date:"D, M d" }}
                                                     </div>
                                                 </li>
@@ -217,7 +217,7 @@
                                         {% endif %}
                                         {% if event.event_type == "MULTIDAY" %}
                                             {% for key, occurrences in event.sorted_occurrences_days.items %}
-                                            <div class="show-time-day{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if occurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time }}">
+                                            <div class="show-time-day{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if occurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time|date:"Y-m-d" }}">
                                                 <div class="show-times-wrapper">
                                                     <table>
                                                         {% for occurrence in occurrences %}
@@ -280,7 +280,7 @@
                     <div class="description">
                         {% for occurrence in event.sorted_occurences_for_description %}
                             {% if occurrence.event_description %}
-                                <div class="show-day-description {% if forloop.first and occurrence.start_time > now %} active{% endif %}{% if occurrence.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrence.start_time }}">
+                                <div class="show-day-description {% if forloop.first and occurrence.start_time > now %} active{% endif %}{% if occurrence.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrence.start_time|date:"Y-m-d" }}">
                                     {{ occurrence.event_description|html_urlize|safe }}
                                 </div>
                             {% endif %}

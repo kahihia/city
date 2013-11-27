@@ -331,7 +331,8 @@ class BaseFutureEventDayManager(models.Manager):
 class FutureEventDayManager(BaseFutureEventDayManager):
     def get_query_set(self):
         return super(FutureEventDayManager, self).get_query_set()\
-            .filter(is_occurrence=False)
+            .filter(is_occurrence=False)\
+            .annotate(Count("id"))
 
 
 class HomePageEventDayManager(BaseFutureEventDayManager):
