@@ -9,9 +9,6 @@
             <img src="/static/images/default-event.jpg" height="132px" weight="132px">
         {% endif %}
     </div>
-    <div class="map-preview">
-        <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ venue_account.venue.location.y }},{{ venue_account.venue.location.x }}&zoom=13&size=132x132&maptype=roadmap&markers=color:blue%7C{{ venue_account.venue.location.y }},{{ venue_account.venue.location.x }}&sensor=false">
-    </div>
     <div class="details">
         <header>
             {{ venue_account.venue.name }}

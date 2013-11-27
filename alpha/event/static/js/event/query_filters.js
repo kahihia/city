@@ -2,8 +2,16 @@
 
     'use strict';
 
-    var QueryFilters = function(){
-        this.params = $.url(window.location.href).data.param.query;
+    var QueryFilters = function(){        
+        var params = $.url(window.location.href).data.param.query;
+
+        this.params = {};
+
+        for(var key in params) {
+            if(key && params[key]) {
+                this.params[key] = params[key];
+            }
+        }
     };
 
     QueryFilters.prototype = {

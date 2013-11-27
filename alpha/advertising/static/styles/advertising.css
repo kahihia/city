@@ -21,6 +21,10 @@
     text-align: center;
 }
 
+.advertising-right.first {
+    margin-top: 0;
+}
+
 .home .advertising-right.first {
     margin-top: 0;
 }

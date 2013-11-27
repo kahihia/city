@@ -1,30 +1,62 @@
 .venues-wrapper {
-    display: inline-block;
-    padding: 20px 25px;
-    width: 637px;
+    display: inline-block;    
+    width: 687px;    
     background: #fff;
     float: left;
+    position: relative;
+    min-height: 999px
+}
 
+.venues-wrapper .entry-navigation-np {
+    position: absolute;
+    bottom: 35px;
+    width: 100%;
+}
+
+.venues-wrapper header.venue-types {
+    background: #c6c6c6;
+    height: 50px;
+    margin-bottom: 25px;
+}
+
+.venues-wrapper header.venue-types span.title {
+    text-transform: uppercase;
+    color: #022e52;
+    margin-left: 25px;
+    height: 50px;
+    line-height: 50px;
+    vertical-align: middle;
+    font-weight: bold;
 }
 
 .venues-wrapper div.venue-item:nth-of-type(even) {
-    background: #fdfcfc;
+    background: #f1f0f0;
 }
 
 .venues-wrapper div.venue-item:nth-of-type(odd) {
-    background: #ecebeb;    
+    background: #fff;    
+}
+
+.venues-list {    
+    padding: 20px 25px;
+    min-height: 909px;
+}
+
+.no-item {
+    color: #022e52;
+    margin-left: 25px;
 }
 
 .venue-item {
     vertical-align: top;
     padding: 0;    
     width: 100%;
-    height: 160px;
+    height: 146px;
 }
 
 .venue-item a {
     display: block;    
-    padding: 12px;
+    padding: 5px;
 }
 
 .venue-item .picture,
@@ -33,12 +65,22 @@
     float: left;
 }
 
+.venue-item .picture {
+    margin-left: 100px;
+}
+
 .venue-item .picture,
 .venue-item .map-preview {
     border-top: 1px solid #000;
     border-left: 1px solid #000;
     border-right: 1px solid #878787;
     border-bottom: 1px solid #878787;
+}
+
+.venue-item .picture img {
+    border-right: 1px solid #787878;
+    border-bottom: 1px solid #787878;
+
 }
 
 .venue-item .map-preview {
@@ -55,4 +97,31 @@
 
 .venue-item .details header {
     font-weight: bold;
+    margin-bottom: 15px;
 }
+
+.venue-type-dropdown {
+    width: 525px;
+    margin-left: 15px;
+    height: 24px;
+    line-height: 24px;    
+}
+
+.venue-type-dropdown .dropdown-label {
+    padding-left: 20px;
+}
+
+.venue-type-dropdown:after {
+    top: 2px;
+}
+
+.venue-type-dropdown-list {
+    width: 545px;
+}
+
+.venue-type-dropdown-list .dropdown-child {
+    padding-left: 25px;
+    height: 24px;
+    line-height: 24px;
+}
+

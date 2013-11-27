@@ -48,8 +48,21 @@
         </div>
     {% endif %}
 
-
     <div class="venues-wrapper">
+        <header class="venue-types">
+            <span class="title">Venue type</span>
+            <div class="venue-type-dropdown dropdown" data-dropdown-class="venue-type-dropdown-list">
+                <select>
+                    <option value="all">All</option>
+                    {% for venue_type in venue_types %}
+                        <option value="{{ venue_type.id }}" {% if current_venue_type == venue_type.id %} selected {% endif %}>
+                            {{ venue_type.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </header>
+
         {% paginate 5 venue_accounts %}
 
         {% for venue_account in venue_accounts %}
@@ -57,8 +70,11 @@
                 {% venue_account_item venue_account %}
             </div>
         {% empty %}
-            Venues are missing
+            <div class="no-item">
+                No venues was found
+            </div>
         {% endfor %}
+
 
         {% if venue_accounts.count > 0 %}
             <div class="entry-navigation-np">
