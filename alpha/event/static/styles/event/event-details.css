@@ -351,6 +351,10 @@
     color: #0168cd;
 }
 
+.content-wrapper .event-details-primary-content h1 a {
+    padding-left: 15px;
+}
+
 
 /*  Old code */
 .event-details-primary-content {
@@ -389,6 +393,7 @@
 .event-wrapper .event-details .event-date-wrapper {
     color: #0260bb;
     margin-left: 10px;
+    margin-top: 0;
 }
 
 .event-wrapper .event-details .event-description {
@@ -612,7 +617,8 @@
     cursor: pointer;
 }
 .event-day-switch.active {
-    background: #8dadc6;
+    background: #022e52;
+    color: #ffffff;
 }
 
 .show-times .show-time-day {
@@ -634,24 +640,36 @@
 .event-details-primary-content .attachments,
 .event-details-primary-content .tags {
     display: block;
-    padding: 7px;
+    padding: 3px;
     padding-left: 45px;
+    line-height: 15px;
 }
 
 .attachments {    
-    background: url("/static/images/event/attachment-icon.png") 20px 6px no-repeat #7f7e7e;    
+    background: url("/static/images/event/attachment-icon.png") 19px 2px no-repeat #7f7e7e;
 }
 
 .tags {
-    background: url("/static/images/event/tag-icon.png") 20px 6px no-repeat #0260bb;    
+    background: url("/static/images/event/tag-icon.png") 15px 5px no-repeat #022e52;
+    color: #ffffff;
 }
 
 .attachments a {
     color: #fff;
     text-decoration: underline;
+    font-size: 12px;
+}
+
+.attachments a:hover {
+    color: #fff;
 }
 
 .tags a { 
+    color: #fff;
+    font-size: 11px;
+}
+
+.tags a:hover {
     color: #fff;
 }
 

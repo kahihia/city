@@ -1,22 +1,20 @@
 .secondary-content {
     float: left;
     width: 310px;
-    margin-left: 10px;
-    margin-top: 36px;
+    margin: 26px 0 0 10px;
 }
 
 .secondary-content .similar-events-wrapper {
     background: #022e52;
     color: #fff;
-    padding: 5px;
+    padding: 4px 4px 4px 0;
 }
 
 .secondary-content .similar-events-wrapper header{ 
 	font-size: 16px;
 	text-transform: uppercase;
 	font-weight: bold;
-	margin-left: 15px;
-	margin-top: 10px;
+    margin: 6px 0 0 15px;
 }
 
 .secondary-content .similar-events-wrapper header div {
@@ -24,6 +22,7 @@
 	font-style: italic;
 	font-weight: normal;
 	text-transform: none;
+    color: #b2bfc9;
 }
 
 .secondary-content .similar-events-wrapper ul {	
@@ -46,12 +45,14 @@
 .secondary-content .similar-events {
 	overflow: hidden;
 	margin-top: 10px;
+    height: 208px;
 }
 
 .secondary-content .similar-events-wrapper ul li {
 	list-style: none;
-	display: inline-block;
-	margin-top: 4px;
+	display: block;
+    float: left;
+    margin: 4px 0 0 4px;
 }
 
 .secondary-content .similar-events-wrapper ul li a {
@@ -61,13 +62,14 @@
 
 .similar-events-viewer-controls{
     background-color: #b2bfc9;
-    width: 290px;
+    width: 292px;
     color: #022e52;
     padding-left: 10px;
     font-weight: bold;
     height: 26px;
     vertical-align: middle;
     line-height: 26px;
+    margin-left: 4px;
 }
 
 .similar-events-viewer-controls .prev,

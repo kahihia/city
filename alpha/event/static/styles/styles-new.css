@@ -3,7 +3,7 @@ table td {
 }
 
 .content-wrapper {
-    margin-top: 18px;
+    margin-top: 11px;
     color: #454545;    
 }
 
@@ -12,11 +12,11 @@ table td {
 }
 
 .content-wrapper h1 {
-    min-height: 35px;
+    min-height: 26px;
     vertical-align: middle;
     margin:0;
     font-size:20px;
-    color:#022e52;
+    color: #022e52;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: normal;
@@ -78,7 +78,7 @@ a:hover{
     margin-left: 3px;
     color: #030303;
     font-size: 14px;
-    margin-top: 4px;
+    margin-top: 1px;
     border: 1px solid #c6c6c6;
     padding: 18px 13px;
 }
