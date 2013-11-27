@@ -157,6 +157,14 @@ urlpatterns = patterns('',
         name='change_event_owner_ajax'
     ),
 
+    url('^change-venue-owner$',
+        views.change_venue_owner_search,
+        name="change_venue_owner_search"
+    ),
+    url(r'^change-venue-owner/(?P<venue_account_id>\d+)$',
+        views.change_venue_owner,
+        name='change_venue_owner'
+    ),
     url(r'^mass-event-transfer$',
         views.event_mass_transfer,
         name='mass_event_transfer'),

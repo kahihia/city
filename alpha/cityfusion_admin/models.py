@@ -68,9 +68,9 @@ CF_ADMIN_MENU = {
         "urlname": "cfadmin_home",
         "linktext": "Home"
     },
-    "event_owner": {
+    "transfer_to_owner": {
         "urlname": "change_event_owner_search",
-        "linktext": "Event owner"
+        "linktext": "Transfer"
     },
     "report_event": {
         "urlname": "report_event_list",

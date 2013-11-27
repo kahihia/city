@@ -48,8 +48,6 @@
                     "id": $(input).val(),
                     "name": $(input).data("user-name")
                 });
-
-                
             });
         },
     }        

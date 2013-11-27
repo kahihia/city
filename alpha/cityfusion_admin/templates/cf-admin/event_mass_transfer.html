@@ -13,14 +13,17 @@
 
 {% block page %}
     <div class="tabs-container">
-        {% cf_admin_menu 'event_owner' %}
+        {% cf_admin_menu 'transfer_to_owner' %}
         <div class="box visible options">
             <ul class="tabs">
                 <li>
-                    <a href="{% url 'change_event_owner_search' %}"><span>Change owner</span></a>
+                    <a href="{% url 'change_event_owner_search' %}"><span>Event owner</span></a>
                 </li>
                 <li class="current">
                     <span>Mass event transferring</span>
+                </li>
+                <li class="current">
+                     <a href="{% url 'change_venue_owner_search' %}"><span>Venue owner</span></a>
                 </li>
             </ul>
             <div class="box visible options">
