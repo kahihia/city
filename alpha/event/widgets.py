@@ -19,20 +19,6 @@ class WhenWidget(forms.TextInput):
         #html += self.when_json.render("when_json", "", {"id":'id_when_json'})
         return mark_safe(html)
 
-    class Media(object):
-        css = {
-            'all': (
-                u'%sstyles/datepicker.css' % STATIC_PREFIX,
-                u'%sstyles/when.css' % STATIC_PREFIX,
-            )
-        }
-        js = (
-            u'%sjs/jquery-ui.multidatespicker.js' % STATIC_PREFIX,
-            u'%sjs/jquery.ui.timepicker.js' % STATIC_PREFIX,
-            u'%sjs/jquery.mtz.monthpicker.js' % STATIC_PREFIX,
-            u'%sjs/create_event/when.js' % STATIC_PREFIX,
-        )
-
 
 class GeoCompleteWidget(forms.TextInput):
     def __init__(self, *args, **kw):

@@ -66,18 +66,20 @@
             this.venueAccountOwner = new VenueAccountOwnerWidget();
         },
         initWhenWidget: function(){
+            var when_json = $("#id_when_json").val();
             $(document).on("mousemove", '[data-event="click"] a', function(e) {
                 if(!('event' in window)) {
                     window.eventObj = e;
                 }
             });
-            $("#id_when").when();
+
+            this.when = new When(
+                document.getElementById("id_when")
+            );
             
-            if($("#id_when_json").val()) {
-                $("#id_when").data("ui-when").setValue(
-                    JSON.parse(
-                        $("#id_when_json").val()
-                    )
+            if(when_json) {
+                this.when.setValue(
+                    JSON.parse(when_json)
                 );
             };
         }

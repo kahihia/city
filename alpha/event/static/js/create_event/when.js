@@ -1,4 +1,4 @@
-(function($) {
+;(function($, window, document, undefined) {
     var format = $.datepicker._defaults.dateFormat;
     // For IE8 and earlier version.
     if(!Date.now) {
@@ -33,7 +33,6 @@
         });
 
         this.load();
-
         setInterval(this.refreshWidget.bind(this), 100);
     }
 
@@ -760,7 +759,6 @@
                             startTime: '',
                             endTime: ''
                         })
-
                     }
                 }               
             });
@@ -854,4 +852,4 @@
         }
     });
 
-})(jQuery);
+})(jQuery, window, document);

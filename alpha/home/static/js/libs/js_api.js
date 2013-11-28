@@ -31,3 +31,20 @@ if(typeof String.prototype.trim !== 'function') {
     return this.replace(/^\s+|\s+$/g, ''); 
   }
 }
+
+// For IE8 and earlier version.
+if(!Date.now) {
+    Date.now = function() {
+        return new Date().valueOf();
+    }
+}
+if(!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function(obj, start) {
+        for(var i = (start || 0), j = this.length; i < j; i++) {
+            if(this[i] === obj) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
