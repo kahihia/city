@@ -99,13 +99,15 @@
 
             e.stopPropagation();
         },
-        openPopup: function(e){
+        openPopup: function(e) {
             this.popup.show();
             this.openButton.addClass("active");
+            this.openButton.parent().addClass("selected");
         },
         closePopup: function(e){
             this.popup.hide();
             this.openButton.removeClass("active");
+            this.openButton.parent().removeClass("selected");
         },
         closeIfNotPopup: function(e){
             if(

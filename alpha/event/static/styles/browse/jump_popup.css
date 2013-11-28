@@ -3,11 +3,9 @@
     display: none;
     z-index: 10;
     height: 145px;
-    width: 425px;
-    padding: 15px;
-    margin-left: 11px;
-    background: #fff;
-    border: 1px solid #cfcfcf;
+    width: 478px;
+    padding: 18px 0 15px;
+    background: #022e52;
 
     -webkit-border-bottom-right-radius: 5px;
     -webkit-border-bottom-left-radius: 5px;
@@ -21,7 +19,31 @@
 .jump-popup .time-row {
     margin-top: 15px;
 }
-    
+
+.jump-popup__date-row {
+    padding-bottom: 1px;
+}
+
+.jump-popup__date-cell, .jump-popup__time-cell {
+    float: left;
+    margin-left: 30px;
+}
+
+.jump-popup__legend {
+    color: #ffffff;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.jump-popup__legend-wrapper {
+    height: 21px;
+    line-height: 21px;
+    padding-bottom: 1px;
+}
+
+.jump-popup__checkbox {
+    margin-left: -20px;
+}
 
 .jump-popup .date-row {
     margin-top: 10px;
@@ -35,18 +57,9 @@
     margin-left: 0;
 }
 
-.jump-popup .end-time-checkbox-wrapper {
-    margin-left: 7px;
-    margin-right: 5px;
-}
-
-.jump-popup .end-date {
-    margin-left: 30px;    
-}
-
 .jump-popup .inline {
     display: inline-block;
-    width: 180px;
+    width: 196px;
     text-align: left;
 }
 
@@ -59,31 +72,39 @@
 }
 
 .jump-popup .time.dropdown {
-    width: 40px;
+    width: 92px;
 }
 
 .jump-popup .meridian.dropdown {
-    width: 25px;
+    width: 53px;
+    margin-left: 2px;
 }
 
 .jump-popup .date.dropdown {
-    width: 150px;
+    width: 174px;
 }
 
 .jump-popup .dropdown {
     display: block;
-    height: 26px;
-    line-height: 26px;
+    height: 21px;
+    line-height: 21px;
     border: 1px solid #c7c6c6;
+    border-radius: 3px;
 }
 
 .jump-popup .dropdown:after {
     top: 2px;
+    background: url("/static/images/widgets/dropdown-medium.png") no-repeat;
+    width: 19px;
+    height: 18px;
 }
 
-body .jump-popup .date.dropdown input {
+body .jump-popup .dropdown, body .jump-popup .dropdown input {
     font-size: 13px;
-    line-height: 26px;
+    line-height: 21px;
+    height: 21px;
+    text-align: center;
+    color: #000000;
 }
 
 .jump-popup .start-time span, .jump-popup .end-time span {
@@ -105,13 +126,62 @@ body .jump-popup .date.dropdown input {
 
 .jump-to-date-wrapper__button {
     display: inline-block;
-    margin-top: 15px;
+    margin-top: 20px;
+}
+
+.jump-to-date-wrapper__button:hover {
+    background: #808080 !important;
 }
 
 .dropdown-content.time {
-    width: 54px;
+    width: 112px;
+    text-align: center;
 }
 
 .dropdown-content.meridian {
-    width: 44px;
+    width: 73px;
+    text-align: center;
+}
+
+/* Jump to date calendar */
+
+.ui-widget-header {
+    background: none repeat scroll 0 0 #022E52;
+    border: 1px solid #022E52;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.ui-widget-header .ui-icon {
+    background-image: url("../images/ui-icons_72a7cf_256x240.png");
+}
+
+.ui-icon-circle-triangle-w {
+    background-position: -80px -192px;
+}
+
+.ui-widget-content {
+    background: none repeat scroll 0 0 #EAEAEA;
+    border: 1px solid #DDDDDD;
+    color: #362B36;
+}
+
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: medium none;
+    color: #222222;
+    font-weight: bold;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    border: medium none;
+    color: #FFA500;
+}
+
+
+.ui-widget-content .ui-state-default.ui-state-active {
+    background: none repeat scroll 0 0 #3465A4;
+    border: medium none;
+    color: #FFFFFF;
 }

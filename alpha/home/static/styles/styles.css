@@ -366,13 +366,12 @@ table.schedule-bar-menu {
 
 table.schedule-bar-menu td {
     list-style: none;
-    display: inline-block;
     text-transform: uppercase;
     height: 19px;
     line-height: 20px;
     vertical-align: middle;
-    padding-left: 13px;
-    padding-right: 13px;
+    width: 95px;
+    text-align: center;
 }
 
 table.schedule-bar-menu td a {
