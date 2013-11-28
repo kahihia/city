@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    $('ul.tabs').each(function() {
-        $(this).find('li').each(function(i) {
+    $('ul.tabs, table.tabs').each(function() {
+        $(this).find('[data-tab-id]').each(function(i) {
             $(this).click(function(){
                 var page, tab;
                 $(this).addClass('current').siblings().removeClass('current')

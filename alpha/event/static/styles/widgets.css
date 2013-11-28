@@ -266,8 +266,8 @@ ul#box-nav li.selected {
     margin-bottom: 10px;
 }
 
-.tabs-container ul.tabs {
-    display: block;
+.tabs-container ul.tabs,
+.tabs-container table.tabs {
     width: 100%;
     margin: 0;
     padding: 0;
@@ -283,15 +283,16 @@ ul#box-nav li.selected {
     border-top-right-radius: 5px;
 }
 
-.tabs-container ul.tabs li {
-    display: inline-block;
-    list-style: none;
+
+
+.tabs-container ul.tabs li,
+.tabs-container table.tabs td {
     cursor: pointer;    
     text-align: center;
     vertical-align: middle;
 
     font-weight: bold;
-    padding: 5px 5px;
+    padding: 5px 10px;
     border-bottom: none;
 
     -webkit-border-top-left-radius: 5px;
@@ -302,22 +303,35 @@ ul#box-nav li.selected {
     border-top-right-radius: 5px;
 }
 
-.tabs-container.no-borders ul.tabs li {
+.tabs-container ul.tabs li {
+    display: inline-block;
+    list-style: none;
+}
+
+
+
+.tabs-container.no-borders ul.tabs li,
+.tabs-container.no-borders table.tabs td {
     border-bottom: 1px solid #dcdcdc;
 }
 
 .tabs-container ul.tabs li.current, 
-.tabs-container ul.tabs li:hover {
+.tabs-container ul.tabs li:hover,
+.tabs-container table.tabs td.current,
+.tabs-container table.tabs td:hover {
     background: #022e52;
     color: #fff;
 }
 
-.tabs-container ul.tabs li span {
+.tabs-container ul.tabs li span,
+.tabs-container table.tabs td span {
     color: #022e52;  
 }
 
 .tabs-container ul.tabs li.current span, 
-.tabs-container ul.tabs li:hover span {
+.tabs-container ul.tabs li:hover span,
+.tabs-container table.tabs td.current span,
+.tabs-container table.tabs td:hover span {
     color: #fff;
 }
 

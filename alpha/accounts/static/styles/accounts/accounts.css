@@ -66,6 +66,7 @@
     font-weight: bold;
     color: #7b7b7b;
     margin-bottom: 20px;
+    text-transform: uppercase;
 }
 
 .venue-accounts-list ul {
@@ -76,25 +77,48 @@
 }
 
 .venue-accounts-list ul li {
-    list-style: none;
-    min-width: 100px;
-    height: 20px;
-    display: inline-block;
-    margin-right: 20px;
+    list-style: none;    
+    height: 22px;
+    margin-right: 22px;    
+    margin-bottom: 7px;
 }
 
 .venue-accounts-list ul li .mngp {
     float: left;
-    color: #5dacfd;
-    width: 130px;
+    color: #022e52;
+    height: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    padding-left: 6px;
+    font-weight: bold;
+    width: 160px;
     overflow: hidden;
+    background: #478dd3;
     white-space: nowrap;
     text-overflow: ellipsis;
+    border-top: 1px solid #b0ceec;
+    border-bottom: 1px solid #b0ceec;
+    border-right: 1px solid #6da4dc;
 }
 
 .venue-accounts-list ul li .remove-button {
-    margin-left: 5px;
-    float: right;
+    float: left;
+
+    color: #89add1;
+    font-size: 14px;
+    width: 20px;
+    height: 17px;
+    background: #5a97d4;
+    text-align: center;
+    display: inline-block;
+    padding-top: 3px;
+    border-top: 1px solid #8bb6e2;
+    border-bottom: 1px solid #8bb6e2;
+    border-left: 1px solid #669fd8;
+}
+
+.venue-accounts-list ul li .remove-button:hover {
+    color: #022e52;
 }
 
 .options {
@@ -463,6 +487,7 @@
 
 .account-primary-content {    
     float: left;
+    width: 685px;
 }
 
 .account-entry-wrapper .entry-info {
@@ -512,7 +537,6 @@
     vertical-align: middle;
     height: 34px;
     line-height: 34px;
-    margin-top: 12px;
     color: #545454;
 }
 
@@ -811,7 +835,7 @@
 .account-help-container {
     width: 216px;
     margin-left: 12px;
-    padding: 45px 20px;
+    padding: 45px;
     float: right;
     background: #022e52;
     color: #fff;
@@ -841,7 +865,7 @@
 }
 
 .account-featured-table .entry-info .entry-details-wrapper {
-    width: 120px;
+    width: 115px;
 }
 
 .account-form-wrapper {
