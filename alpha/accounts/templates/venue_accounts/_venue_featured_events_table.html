@@ -2,9 +2,10 @@
 {% load endless %}
 {% load cropping %}
 {% load event_tags %}
+{% load cf_pagination %}
 
 
-{% paginate 6 venue_featured_events %}
+{% paginate 6 venue_featured_events using "featured_events_page" %}
 <div class="account-entry-wrapper entry-wrapper">
     <table class="account-featured-table account-entry-wrapper entry-wrapper">
         <tr>
@@ -64,26 +65,6 @@
             </p>
         {%endfor%}
     </table>
+    {% cf_pagination %}
 </div>
 
-<div class="entry-navigation-np">
-    <p>
-        <ul>
-            {% get_pages %} 
-
-            <span class="step-links">
-                {% if not pages.current.is_first %}                    
-                    <a href="{{ pages.previous.url }}">
-                        <img src="{{STATIC_URL}}images/entry-prev.png">
-                    </a>
-                {% endif %}
-
-                {% if not pages.current.is_last %}                
-                    <a href="{{ pages.next.url }}">
-                        <img src="{{STATIC_URL}}images/entry-next.png">
-                    </a>
-                {% endif %}                
-            </span>
-        </ul>
-    </p>
-</div>

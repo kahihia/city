@@ -4,9 +4,13 @@ from accounts.models import VenueAccount
 def user_context(request):
     venue_account_id = request.session.get('venue_account_id', False)
     if venue_account_id:
-        current_venue_account = VenueAccount.objects.get(id=venue_account_id)
+        try:
+            current_venue_account = VenueAccount.objects.get(id=venue_account_id)
+        except:
+            current_venue_account = None
+
     else:
-        current_venue_account = None    
+        current_venue_account = None
 
     return {
         "current_venue_account": current_venue_account,

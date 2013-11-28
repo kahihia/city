@@ -2,46 +2,27 @@
 {% load endless %}
 {% load cropping %}
 {% load event_tags %}
+{% load cf_pagination %}
 
-{% paginate 6 venue_archived_events %}
+{% paginate 6 venue_archived_events using "archived_events_page" %}
 <div class="account-entry-wrapper entry-wrapper">
-{% for event in venue_archived_events %}    
-    <div class="entry-info with-delete-action">
-        {% short_single_event event %}
+    {% for event in venue_archived_events %}
+        <div class="entry-info with-delete-action">
+            {% short_single_event event %}
 
-        <div class="event-edit-actions">            
-            <a href="{% url 'event_copy' event.authentication_key %}">
-                Copy
-            </a>
+            <div class="event-edit-actions">
+                <a href="{% url 'event_copy' event.authentication_key %}">
+                    Copy
+                </a>
+            </div>
+
+            <div class="clr"></div>
         </div>
-
-        <div class="clr"></div>
-    </div>
-{% empty %}
-    <p>
-        Archive is empty
-    </p>
-{%endfor%}
+    {% empty %}
+        <p>
+            Archive is empty
+        </p>
+    {%endfor%}
+    {% cf_pagination %}
 </div>
 
-<div class="entry-navigation-np">
-    <p>
-        <ul>
-            {% get_pages %} 
-
-            <span class="step-links">
-                {% if not pages.current.is_first %}                    
-                    <a href="{{ pages.previous.url }}">
-                        <img src="{{STATIC_URL}}images/entry-prev.png">
-                    </a>
-                {% endif %}
-
-                {% if not pages.current.is_last %}                
-                    <a href="{{ pages.next.url }}">
-                        <img src="{{STATIC_URL}}images/entry-next.png">
-                    </a>
-                {% endif %}
-            </span>
-        </ul>
-    </p>
-</div>

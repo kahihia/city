@@ -20,6 +20,8 @@ table td {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: normal;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .content-wrapper h1 a {

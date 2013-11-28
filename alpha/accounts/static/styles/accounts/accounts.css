@@ -1,7 +1,17 @@
 .account-profile .primary-wrapper {
+    position: relative;
     background: #fff;
     padding: 30px;
     padding-top: 40px;
+}
+
+.show-on-map {
+    position: absolute;
+    cursor: pointer;
+    top: 8px;
+    right: 8px;
+    color: #1184f8;
+    text-decoration: underline;
 }
 
 .account-profile .account-details {
@@ -29,17 +39,24 @@
     vertical-align: middle;
 }
 
-.account-details .block-header,
-.about-us .block-header {
-    font-size: 16px;
-    color: #022e52;
-    font-weight: bold;    
-    width:100%;
+.about {
+    margin-bottom: 30px;
 }
 
-.about-us .block-header {
-    font-size: 16px;
+.account-details .block-header,
+.about .block-header {
+    font-size: 14px;
+    color: #7b7b7b;
+    font-weight: bold;    
+    width:100%;
+    margin-top: 20px;
+}
+
+.about .block-header {
+    font-size: 14px;
     font-weight: bold;
+    margin-top: 25px;
+    margin-bottom: 20px;
 }
 
 .account-details span {
@@ -369,16 +386,49 @@
 }
 
 /* Venue account */
+.settings .button {
+    text-align: center;
+    vertical-align: middle;
+    display: inline-block;
+    height: 34px;
+    line-height: 34px;
+
+    border: 1px solid #bebebe;
+    font-weight: normal;
+    
+    font-size: 16px;
+    
+    color: #545454;    
+    background: #eee;
+    width: 216px;
+    padding: 0;
+    margin-bottom: 6px;
+}
+
+.settings .button.special {
+    color: #022e52;
+    background: #478dd3;
+    border: 1px solid #10416b;
+}
+
+.settings .button.special span {
+    text-transform: uppercase;
+}
+
+
+
+.settings .button:hover {
+    color: #022e52;
+} 
+
 
 .edit-event-account-button {
-    margin-top: 12px;
+    
     width: 85px;
     height: 34px;
     line-height: 34px;
     color: #0066cc;
-    text-align: center;
-    vertical-align: middle;
-    display: inline-block;
+    
 }
 
 .public-or-private .button {
@@ -390,10 +440,22 @@
 
 .public-or-private .radio {
     display: inline-block;
-    width: 75px;
+    width: 95px;
     height: 34px;
     line-height: 34px;
-    vertical-align: middle
+    vertical-align: middle;
+    color: #fff;
+    padding-left: 10px;
+}
+
+.public-or-private .radio label {
+    display: inline-block;
+    height: 19px;
+    line-height: 16px;
+    vertical-align: middle;
+    cursor: pointer;
+    color: #fff;
+    font-size: 16px;
 }
 
 .public-or-private input[type=radio] + label,
@@ -410,6 +472,17 @@
 
 .contact-info-table {
     margin-top: 10px;
+    margin-left: 25px;
+    color: #022e52;
+}
+
+.contact-info-table tr td {
+    height: 20px;
+}
+
+.contact-info-table tr td:first-child {
+    width: 100px;
+    text-transform: uppercase;
 }
 
 .edit-contact-info-table td.top {
@@ -451,8 +524,8 @@
 }
 
 #venue_account_map {
-    width: 300px;
-    height: 200px;
+    width: 600px;
+    height: 600px;
 }
 
 .edit-contact-info-table .location_map {
