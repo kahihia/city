@@ -134,101 +134,12 @@
                 <div class="clr"></div>
             </div>
             <div class="jump-to-date-wrapper">
-                <a class="jump-to-date-wrapper__button button ajax" href="{% events_filter_url request eventsFilter exclude="datetime" %}"
+                <a class="jump-to-date-wrapper__button jump-to-date-button button ajax"
+                   href="{% events_filter_url request eventsFilter exclude="datetime" %}"
                    data-base-url-query="{% events_filter_url request eventsFilter exclude="datetime" %}">
                     Jump to Date
                 </a>
             </div>
-            <!--
-            <div class="date-row">
-                <div class="checkbox">
-                    <input id="dateJumpToDateCheckbox" type="checkbox" class="date-checkbox" checked>
-                    <label for="dateJumpToDateCheckbox">  </label>
-                </div>                
-                <div class="start-date inline">
-                    Select Start Date
-                    <div class="date dropdown">
-                        <input type="text" 
-                            value="{% if start_date %}{{ start_date|date:"SHORT_DATE_FORMAT"}}{% else %}{% now "SHORT_DATE_FORMAT" %}{% endif %}">
-                    </div>
-                </div>
-                <div class="end-date inline">
-                    Select End Date
-                    <div class="date dropdown">
-                        <input type="text" value="{% if end_date %}{{ end_date|date:"SHORT_DATE_FORMAT"}}{% else %}{% now "SHORT_DATE_FORMAT" %}{% endif %}">
-                    </div>
-                </div>
-            </div>
-            <div class="time-row">
-                <div class="checkbox">
-                    <input id="startTimeJumpToDateCheckbox" type="checkbox" class="start-time-checkbox">
-                    <label for="startTimeJumpToDateCheckbox"> </label>
-                </div>
-                
-                <div class="start-time inline" disabled="disabled">
-                    <span>Start Time</span>
-                    <div class="timepicker">
-                        <div class="time dropdown" data-dropdown-class="time" data-value="{{ start_time|hour12 }}" disabled="disabled">
-                            <select>
-                                <option value="01:00">01:00</option>
-                                <option value="02:00">02:00</option>
-                                <option value="03:00">03:00</option>
-                                <option value="04:00">04:00</option>
-                                <option value="05:00">05:00</option>
-                                <option value="06:00">06:00</option>
-                                <option value="07:00">07:00</option>
-                                <option value="08:00">08:00</option>
-                                <option value="09:00">09:00</option>
-                                <option value="10:00">10:00</option>
-                                <option value="11:00">11:00</option>
-                            </select>
-                        </div>
-                        <div class="meridian dropdown" data-dropdown-class="meridian" data-value="{{ start_time|meredian }}" disabled="disabled">
-                            <select>
-                                <option value="a.m.">a.m.</option>
-                                <option value="p.m.">p.m.</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="checkbox end-time-checkbox-wrapper">
-                    <input id="endTimeJumpToDateCheckbox" type="checkbox" class="end-time-checkbox">
-                    <label for="endTimeJumpToDateCheckbox"></label>
-                </div>
-                <div class="end-time inline" disabled="disabled">                  
-                    <span>End Time</span>
-                    <div class="timepicker ">
-                        <div class="time dropdown" data-dropdown-class="time" data-value="{{ end_time|hour12 }}" disabled="disabled">
-                            <select>
-                                <option value="01:00">01:00</option>
-                                <option value="02:00">02:00</option>
-                                <option value="03:00">03:00</option>
-                                <option value="04:00">04:00</option>
-                                <option value="05:00">05:00</option>
-                                <option value="06:00">06:00</option>
-                                <option value="07:00">07:00</option>
-                                <option value="08:00">08:00</option>
-                                <option value="09:00">09:00</option>
-                                <option value="10:00">10:00</option>
-                                <option value="11:00">11:00</option>
-                            </select>
-                        </div>
-                        <div class="meridian dropdown" data-dropdown-class="meridian" data-value="{{ end_time|meredian }}" disabled="disabled">
-                            <select>
-                                <option value="a.m.">a.m.</option>
-                                <option value="p.m.">p.m.</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="jump-to-date-wrapper">
-                <a class="jump-to-date-wrapper__button button ajax" href="{% events_filter_url request eventsFilter exclude="datetime" %}"
-                   data-base-url-query="{% events_filter_url request eventsFilter exclude="datetime" %}">
-                    Jump to Date
-                </a>
-            </div>
-            -->
         </div>
     </div>
 </div> 

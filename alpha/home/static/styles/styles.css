@@ -364,6 +364,10 @@ table.schedule-bar-menu {
     color: #022e52;
 }
 
+.search-pad-content.events-container table.schedule-bar-menu {
+    background: none;
+}
+
 table.schedule-bar-menu td {
     list-style: none;
     text-transform: uppercase;
