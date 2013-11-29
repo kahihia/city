@@ -19,6 +19,10 @@
     float: left;
 }
 
+.search-pad-advertising {
+    margin-left: 10px;
+}
+
 .search-pad-popup .main-navigation-nav-wrapper ul.categories li {
     margin-bottom: 2px;
 }
@@ -29,14 +33,17 @@
 
 .search-pad-content {
     position: relative;
-    height: 583px;
+    width: 478px;
 }
 
 .search-pad-content .entry-navigation-np {
-    position: absolute;
     bottom: 0;
     left: 100px;
     color: #949697;
+}
+
+.search-pad-content .entry-navigation-np {
+    padding: 37px 0 10px;
 }
 
 .search-pad-popup .loader {
@@ -80,12 +87,26 @@
     margin-left: 20px;
 }
 
-.search-pad-popup .searchpad-event-details header a {
-    color: #022e52;    
-    font-size: 18px;
+.search-pad-popup .searchpad-event-details header {
+    padding-bottom: 6px;
 }
 
-.search-pad-popup .searchpad-event-description{
+.search-pad-popup .searchpad-event-details header a {
+    color: #022e52;    
+    font-size: 20px;
+}
+
+.searchpad-event-wrapper .description {
+    margin-top: 7px;
+}
+
+.searchpad-event-wrapper .show-day-description {
+    border: 1px solid #c6c6c6;
+    padding: 3px 13px;
+    color: #000000;
+}
+
+.search-pad-popup .searchpad-event-description {
     height: 190px;
     overflow: auto;
     padding-right: 5px;

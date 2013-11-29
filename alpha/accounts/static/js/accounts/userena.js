@@ -14,6 +14,11 @@
 
             $("body").on("focus", inputSelector, self.onInputFocus);
             $("body").on("blur", inputSelector, self.onInputBlur);
+
+            var firstInput = $(inputSelector).first();
+            if(firstInput.parent().data("set-focus") === 1) {
+                firstInput.focus();
+            }
         }
 
         self.onInputFocus = function() {

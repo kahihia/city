@@ -16,7 +16,9 @@
                     {% csrf_token %}
                     {{ form.non_field_errors }}
 
-                    <div class="user-identification userena-input" data-placeholder="{{ form.identification.label }}">
+                    <div class="user-identification userena-input"
+                         data-placeholder="{{ form.identification.label }}"
+                         data-set-focus="1">
 		                {{ form.identification }}
                         {{ form.identification.errors }}
                     </div>
