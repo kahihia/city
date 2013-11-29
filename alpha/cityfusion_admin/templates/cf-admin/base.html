@@ -7,7 +7,9 @@
     <link href="{{STATIC_URL}}styles/styles.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/styles-new.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/pagination.css" rel="stylesheet" type="text/css" />
     <link type="text/css" href="{{STATIC_URL}}date/css/redmond/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+    <link href="{{STATIC_URL}}styles/cf-admin.css" rel="stylesheet" type="text/css" />
 
     <link rel="stylesheet" href="{{ STATIC_URL }}font-awesome/css/font-awesome.min.css">
     <!--[if IE 7]>
@@ -32,26 +34,20 @@
     <script type="text/javascript" src="{{STATIC_URL}}js/messages.js"></script>
     
     <script type="text/javascript" src="{{STATIC_URL}}js/searchpad/ajax-popup.js" ></script>
-    <style>
-        .tabs-container {
-            width: 100%;
-        }
-    </style>
     {% block head %}{% endblock %}    
 </head>
 <body>
-{% block body_start %}{% endblock body_start %}
-{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}    
-<div class="wrapper">
-    <div class="page-container">
-        <div class="header"  data-no-turbolink>
-            <div class="primary-header">
+    {% block body_start %}{% endblock body_start %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div class="wrapper">
+        <div class="primary-header" data-no-turbolink>
+            <div class="content">
                 <div class="logo">
                     <a href="/">
                         <img src="{{STATIC_URL}}images/logo.png" />
@@ -62,25 +58,22 @@
                     {% include '_signin_signup.html' %}
                     <div class="post-events-for-free">
                         <a href="{% url 'event_create' %}">
-                            <img src="{{STATIC_URL}}images/post-events-for-free.png" />
+                            Post events for <span>free</span>
                         </a>
                     </div>
                 </div>
+
                 <div class="clr"></div>
-                <br>
-                <h2>
-                    Cityfusion admin functions
-                </h2>
             </div>
-        </div>       
-        
-        <div class="content-wrapper">
-            {% block page %}{% endblock %}
-            <div class="clr"></div>
+        </div>
+        <div class="page-container {{ page_type }}">
+            <div class="content-wrapper">
+                <h1>
+                    Cityfusion Admin
+                </h1>
+                {% block page %}{% endblock %}
+            </div>
         </div>
     </div>
-</div>
 </body>
-
-
 </html>

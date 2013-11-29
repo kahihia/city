@@ -13,17 +13,19 @@
     <div class="tabs-container">
         {% cf_admin_menu "admin_advertising" %}
         <div class="box visible options">
-            <ul class="tabs">
-                <li>
-                    <a href="{% url 'admin_advertising' %}"><span>Advertising list</span></a>
-                </li>
-                <li>
-                    <a href="{% url 'admin_advertising_setup' %}"><span>Create new campaign</span></a>
-                </li>
-                <li>
-                    <a href="{% url 'admin_advertising_review' %}"><span>Review ads</span></a>
-                </li>
-            </ul>
+            <table class="tabs" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <a href="{% url 'admin_advertising' %}"><span>Advertising list</span></a>
+                    </td>
+                    <td>
+                        <a href="{% url 'admin_advertising_setup' %}"><span>Create new campaign</span></a>
+                    </td>
+                    <td>
+                        <a href="{% url 'admin_advertising_review' %}"><span>Review ads</span></a>
+                    </td>
+                </tr>                
+            </table>
             <div class="box visible options">
                 <h1>Share advertising campaign with</h1>
                 <form method="post" name="share-campaign-stats" action="{% url 'admin_share_stats' campaign.id %}">

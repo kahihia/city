@@ -15,14 +15,16 @@
     <div class="tabs-container">
         {% cf_admin_menu 'event_owner' %}
         <div class="box visible options">
-            <ul class="tabs">
-                <li>
-                    <a href="{% url 'change_event_owner_search' %}"><span>Change owner</span></a>
-                </li>
-                <li class="current">
-                    <span>Mass event transferring</span>
-                </li>
-            </ul>
+            <table class="tabs" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <a href="{% url 'change_event_owner_search' %}"><span>Change owner</span></a>
+                    </td>
+                    <td class="current">
+                        <span>Mass event transferring</span>
+                    </td>
+                </tr>
+            </table>
             <div class="box visible options">
                 <h1>
                     Transfer events
