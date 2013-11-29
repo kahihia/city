@@ -65,273 +65,270 @@
 {% endblock messages %}
 {% block page %}
     <div id="fb-root"></div>
-    <div class="primary-content event-details-primary-content">
-        <h1>
-            <a href="{% event_link event %}">{{event.name}}</a>
-        </h1>
-        <div class="primary-content event-details-primary-content">
-            <div class="event-wrapper">
-                {% manage_event_actions %}
-                <table>
-                    <tr>
-                        <td>
-                            <div class="event-photo{% if event.event_type == "MULTIDAY" %}{% if not event.venue_account_owner or not event.venue_account_owner.public %} multiday{% endif %}{% endif %}">
-                                {% if event.sorted_images.count > 1 %}
-                                    <div class="image-viewer">
-                                        <div class="image-viewer-content">
-                                        {% for image in event.sorted_images %}
-                                            <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
-                                                <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}">
-                                                <div class="detail-view"></div>
-                                            </a>
-                                        {% endfor %}
-                                        </div>
 
-                                        <div class="image-viewer-controls">
-                                            <div class="next" data-ga-label="Photo Scroll Link"><i class="icon-chevron-right"></i></div>
-                                            <div class="prev"><i class="icon-chevron-left"></i></div>
-                                            <span class="page-no">1</span> of <span id="images-total">{{ event.sorted_images.count }}</span>
-                                        </div>
-                                    </div>
-                                {% elif event.sorted_images.count > 0 %}
+    <h1>
+        <a href="{% event_link event %}">{{event.name}}</a>
+    </h1>
+    <div class="primary-content event-details-primary-content">
+        <div class="event-wrapper">
+            {% manage_event_actions %}
+            <table>
+                <tr>
+                    <td>
+                        <div class="event-photo{% if event.event_type == "MULTIDAY" %}{% if not event.venue_account_owner or not event.venue_account_owner.public %} multiday{% endif %}{% endif %}">
+                            {% if event.sorted_images.count > 1 %}
+                                <div class="image-viewer">
+                                    <div class="image-viewer-content">
                                     {% for image in event.sorted_images %}
                                         <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
                                             <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}">
                                             <div class="detail-view"></div>
                                         </a>
                                     {% endfor %}
-
-                                {% else %}
-                                    <div class="center-cropped default" style="background-image: url('{{STATIC_URL}}images/default-event.jpg');"></div>
-                                {% endif %}
-                                {% if event.venue_account_owner and event.venue_account_owner.public %}
-                                <footer>
-                                    Submitted by 
-                                    <a href="{% url 'public_venue_account' event.venue_account_owner.slug %}">
-                                        {{ event.venue_account_owner.venue.name }}
-                                    </a>
-                                </footer>
-                                {% endif %}
-                            </div>
-                        </td>
-                        <td class="event-details-td">
-                            <div class="event-details-block">
-                                <div class="event-details">
-                                    <div class="title-wrapper">
-                                        <div class="event-price">
-                                            {% if event.price and event.price != "$" %}
-                                                {{event.price}}
-                                            {% else %}
-                                                Price not set
-                                            {% endif %}
-                                        </div>
-                                        {% if event.tickets %}
-                                            <a href="javascript:void()"  class="action-buy-tickets accented">
-                                                Buy tickets
-                                            </a>
-                                            {% buy_tickets_popup event %}
-                                        {% endif %}
                                     </div>
-                                    <table class="event-date-and-venue">
-                                        <tr>
-                                            <td>
-                                                <div class="event-date-wrapper">
-                                                    {% if event.event_type == "SINGLE" %}
-                                                        {{event.start_time|date:"l, N d"}}
-                                                    {% endif %}
-                                                    {% if event.event_type == "MULTIDAY" %}
-                                                        {{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.end_time|date:"D, N d"}}
-                                                    {% endif %}
-                                                </div>
-                                                <div class="event-venue">
-                                                    <span>{{ event.venue.name }}</span>
-                                                    {% if event.venue.street %}
-                                                        <span>
-                                                            {% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}
-                                                        </span>
-                                                    {% endif %}
-                                                    <div class="event-venue-name">
-                                                        {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            {% if event.venue %}
-                                            <td>
-                                                <div class="venue_map_preview">
-                                                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.venue.location.y }},{{ event.venue.location.x }}&zoom=13&size=127x90&maptype=roadmap&markers=color:blue%7C{{ event.venue.location.y }},{{ event.venue.location.x }}&sensor=false">
-                                                </div>
-                                                <div id="venue_map" class="map"></div>
-                                            </td>
-                                            {% endif %}
-                                        </tr>
-                                    </table>
+
+                                    <div class="image-viewer-controls">
+                                        <div class="next" data-ga-label="Photo Scroll Link"><i class="icon-chevron-right"></i></div>
+                                        <div class="prev"><i class="icon-chevron-left"></i></div>
+                                        <span class="page-no">1</span> of <span id="images-total">{{ event.sorted_images.count }}</span>
+                                    </div>
                                 </div>
-                                <div class="events-occurrences">
-                                    <div class="header">
-                                        <ul class="event-days">
-                                            {% if event.event_type == "SINGLE" %}
-                                                <li>
-                                                    <div class="event-day-switch active" >
-                                                         {{ event.start_time|date:"D, M d" }}
-                                                    </div>
-                                                </li>
+                            {% elif event.sorted_images.count > 0 %}
+                                {% for image in event.sorted_images %}
+                                    <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
+                                        <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}">
+                                        <div class="detail-view"></div>
+                                    </a>
+                                {% endfor %}
 
-                                            {% endif %}
-                                            {% if event.event_type == "MULTIDAY" %}
-                                                {% for key, occurrences in event.sorted_occurrences_days.items %}
-                                                <li>
-                                                    <div class="event-day-switch{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if occurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time|date:"Y-m-d" }}" data-counter="{{ forloop.counter }}">
-                                                         {{ occurrences.0.start_time|date:"D, M d" }}
-                                                    </div>
-                                                </li>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </ul>
-                                        {% if event.event_type == "MULTIDAY" %}
-                                            {% if event.sorted_occurrences_days.items.count > 3 %}
-                                                <div class="days-viewer-controls">
-                                                    <div class="next"><i class="icon-chevron-right"></i></div>
-                                                    <div class="prev"><i class="icon-chevron-left"></i></div>
-                                                </div>
-                                            {% endif %}
+                            {% else %}
+                                <div class="center-cropped default" style="background-image: url('{{STATIC_URL}}images/default-event.jpg');"></div>
+                            {% endif %}
+                            {% if event.venue_account_owner and event.venue_account_owner.public %}
+                            <footer>
+                                Submitted by 
+                                <a href="{% url 'public_venue_account' event.venue_account_owner.slug %}">
+                                    {{ event.venue_account_owner.venue.name }}
+                                </a>
+                            </footer>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td class="event-details-td">
+                        <div class="event-details-block">
+                            <div class="event-details">
+                                <div class="title-wrapper">
+                                    <div class="event-price">
+                                        {% if event.price and event.price != "$" %}
+                                            {{event.price}}
+                                        {% else %}
+                                            Price not set
                                         {% endif %}
                                     </div>
-                                    
-                                    <div class="clear"></div>
-
-                                    <div class="show-times">
+                                    {% if event.tickets %}
+                                        <a href="javascript:void()"  class="action-buy-tickets accented">
+                                            Buy tickets
+                                        </a>
+                                        {% buy_tickets_popup event %}
+                                    {% endif %}
+                                </div>
+                                <table class="event-date-and-venue">
+                                    <tr>
+                                        <td>
+                                            <div class="event-date-wrapper">
+                                                {% if event.event_type == "SINGLE" %}
+                                                    {{event.start_time|date:"l, N d"}}
+                                                {% endif %}
+                                                {% if event.event_type == "MULTIDAY" %}
+                                                    {{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.end_time|date:"D, N d"}}
+                                                {% endif %}
+                                            </div>
+                                            <div class="event-venue">
+                                                <span>{{ event.venue.name }}</span>
+                                                {% if event.venue.street %}
+                                                    <span>
+                                                        {% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}
+                                                    </span>
+                                                {% endif %}
+                                                <div class="event-venue-name">
+                                                    {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        {% if event.venue %}
+                                        <td>
+                                            <div class="venue_map_preview">
+                                                <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.venue.location.y }},{{ event.venue.location.x }}&zoom=13&size=127x90&maptype=roadmap&markers=color:blue%7C{{ event.venue.location.y }},{{ event.venue.location.x }}&sensor=false">
+                                            </div>
+                                            <div id="venue_map" class="map"></div>
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="events-occurrences">
+                                <div class="header">
+                                    <ul class="event-days">
                                         {% if event.event_type == "SINGLE" %}
+                                            <li>
+                                                <div class="event-day-switch active" >
+                                                     {{ event.start_time|date:"D, M d" }}
+                                                </div>
+                                            </li>
+
+                                        {% endif %}
+                                        {% if event.event_type == "MULTIDAY" %}
+                                            {% for key, occurrences in event.sorted_occurrences_days.items %}
+                                            <li>
+                                                <div class="event-day-switch{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if occurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time|date:"Y-m-d" }}" data-counter="{{ forloop.counter }}">
+                                                     {{ occurrences.0.start_time|date:"D, M d" }}
+                                                </div>
+                                            </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                    {% if event.event_type == "MULTIDAY" %}
+                                        {% if event.sorted_occurrences_days.items.count > 3 %}
+                                            <div class="days-viewer-controls">
+                                                <div class="next"><i class="icon-chevron-right"></i></div>
+                                                <div class="prev"><i class="icon-chevron-left"></i></div>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="clear"></div>
+
+                                <div class="show-times">
+                                    {% if event.event_type == "SINGLE" %}
+                                        <div class="show-times-wrapper">
+                                            <table>
+                                                {% for occurrence in event.same_date_events %}
+                                                    <tr>
+                                                        <td>{{occurrence.start_time|just_time|lower}}</td> 
+                                                        <td>-</td> 
+                                                        <td>{{occurrence.end_time|just_time|lower}}</td>
+                                                    </tr>
+                                                {% endfor %}
+
+                                            </table>
+                                            
+                                        </div>
+                                    {% endif %}
+                                    {% if event.event_type == "MULTIDAY" %}
+                                        {% for key, occurrences in event.sorted_occurrences_days.items %}
+                                        <div class="show-time-day{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if occurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time|date:"Y-m-d" }}">
                                             <div class="show-times-wrapper">
                                                 <table>
-                                                    {% for occurrence in event.same_date_events %}
+                                                    {% for occurrence in occurrences %}
                                                         <tr>
                                                             <td>{{occurrence.start_time|just_time|lower}}</td> 
                                                             <td>-</td> 
                                                             <td>{{occurrence.end_time|just_time|lower}}</td>
                                                         </tr>
                                                     {% endfor %}
-
                                                 </table>
-                                                
                                             </div>
-                                        {% endif %}
-                                        {% if event.event_type == "MULTIDAY" %}
-                                            {% for key, occurrences in event.sorted_occurrences_days.items %}
-                                            <div class="show-time-day{% if forloop.first and occurrences.0.start_time > now %} active{% endif %}{% if occurrences.0.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrences.0.start_time|date:"Y-m-d" }}">
-                                                <div class="show-times-wrapper">
-                                                    <table>
-                                                        {% for occurrence in occurrences %}
-                                                            <tr>
-                                                                <td>{{occurrence.start_time|just_time|lower}}</td> 
-                                                                <td>-</td> 
-                                                                <td>{{occurrence.end_time|just_time|lower}}</td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="event-details-bottom">
-                                    <div class="event-actions">
-                                        <div class="relative-wrapper">
-                                            <a href="javascript:void(0);" class="action-remind-me" data-single-event-id="{{ event.id }}">Remind Me</a>
-                                            {% remind_me_popup event %}
                                         </div>
-                                        <div class="relative-wrapper">
-                                            <a href="javascript:void()" class="action-in-the-loop">In the Loop</a>
-                                            {% in_the_loop_popup event %}
-                                        </div>
-                                        <div class="relative-wrapper">
-                                            <a href="{{ event.website }}" class="action-view-site" target="_blank">
-                                                View Site
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="social-buttons">
-                                        <!-- AddThis Button BEGIN -->
-                                        <div class="addthis_toolbox addthis_default_style addthis_16x16_style">
-                                        <a class="addthis_button_facebook"></a>
-                                        <a class="addthis_button_twitter"></a>
-                                        <a class="addthis_button_pinterest_share"></a>
-                                        <a class="addthis_button_google_plusone_share"></a>
-                                        <a class="addthis_button_linkedin"></a>
-                                        <a class="addthis_button_myspace"></a>
-                                        <a class="addthis_button_blogger"></a>
-                                        <a class="addthis_button_email"></a>
-
-
-                                        <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
-                                        </div>
-                                        <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
-                                        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-527be736493dac67"></script>
-                                        <!-- AddThis Button END -->
-                                    </div>                                    
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
-                        </td>
-                    </tr>
-                </table>
-
-                {% if event.event_type == "MULTIDAY" %}
-                    <div class="description">
-                        {% for occurrence in event.sorted_occurences_for_description %}
-                            {% if occurrence.event_description %}
-                                <div class="show-day-description {% if forloop.first and occurrence.start_time > now %} active{% endif %}{% if occurrence.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrence.start_time|date:"Y-m-d" }}">
-                                    {{ occurrence.event_description|html_urlize|safe }}
+                            <div class="event-details-bottom">
+                                <div class="event-actions">
+                                    <div class="relative-wrapper">
+                                        <a href="javascript:void(0);" class="action-remind-me" data-single-event-id="{{ event.id }}">Remind Me</a>
+                                        {% remind_me_popup event %}
+                                    </div>
+                                    <div class="relative-wrapper">
+                                        <a href="javascript:void()" class="action-in-the-loop">In the Loop</a>
+                                        {% in_the_loop_popup event %}
+                                    </div>
+                                    <div class="relative-wrapper">
+                                        <a href="{{ event.website }}" class="action-view-site" target="_blank">
+                                            View Site
+                                        </a>
+                                    </div>
                                 </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {% if event.event_description %}
-                        <div class="description">
-                            {{ event.event_description|html_urlize|safe }}
+
+                                <div class="social-buttons">
+                                    <!-- AddThis Button BEGIN -->
+                                    <div class="addthis_toolbox addthis_default_style addthis_16x16_style">
+                                    <a class="addthis_button_facebook"></a>
+                                    <a class="addthis_button_twitter"></a>
+                                    <a class="addthis_button_pinterest_share"></a>
+                                    <a class="addthis_button_google_plusone_share"></a>
+                                    <a class="addthis_button_linkedin"></a>
+                                    <a class="addthis_button_myspace"></a>
+                                    <a class="addthis_button_blogger"></a>
+                                    <a class="addthis_button_email"></a>
+
+
+                                    <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
+                                    </div>
+                                    <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+                                    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-527be736493dac67"></script>
+                                    <!-- AddThis Button END -->
+                                </div>                                    
+                            </div>
                         </div>
-                    {% endif %}
-                {% endif %}
-            </div>
-            {% if event.eventattachment_set.count > 0 %}
-                <div class="attachments">
-                    {% for attachment in event.eventattachment_set.all %}
-                        <div>
-                            <a target="_blank" href="/media/{{ attachment.attachment }}">{{ attachment.filename }}</a>
-                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            {% if event.event_type == "MULTIDAY" %}
+                <div class="description">
+                    {% for occurrence in event.sorted_occurences_for_description %}
+                        {% if occurrence.event_description %}
+                            <div class="show-day-description {% if forloop.first and occurrence.start_time > now %} active{% endif %}{% if occurrence.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrence.start_time|date:"Y-m-d" }}">
+                                {{ occurrence.event_description|html_urlize|safe }}
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
+            {% else %}
+                {% if event.event_description %}
+                    <div class="description">
+                        {{ event.event_description|html_urlize|safe }}
+                    </div>
+                {% endif %}
             {% endif %}
-
-            <div class="tags">
-                {% for tag in event.tags.all %}
-                    <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">
-                        {{ tag }}</a>{% if not forloop.last %}, {% endif %}
+        </div>
+        {% if event.eventattachment_set.count > 0 %}
+            <div class="attachments">
+                {% for attachment in event.eventattachment_set.all %}
+                    <div>
+                        <a target="_blank" href="/media/{{ attachment.attachment }}">{{ attachment.filename }}</a>
+                    </div>
                 {% endfor %}
             </div>
+        {% endif %}
 
-            {% load admin_event_actions %}
-            <div class="report-and-claim">
-                <a href="javascript: void" class="report-event-button">
-                    Report Event
-                </a>
-                |
-                {% report_event_popup event %}
-                <a href="javascript: void" class="claim-event-button">
-                    Claim Event
-                </a>
-                {% claim_event_popup event %}
-            </div>
+        <div class="tags">
+            {% for tag in event.tags.all %}
+                <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">
+                    {{ tag }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
         </div>
 
-        <div class="primary-content event-details-primary-content">
-            <header class="event-conversation-header">
-                Join the conversation about "{{ event.name }}"
-            </header>
-            <div class="event-conversation">
-                <div class="fb-comments" data-href="http://{{ request.META.HTTP_HOST }}{% event_link event %}" data-width="630" data-num-posts="5"></div>
-            </div>
+        {% load admin_event_actions %}
+        <div class="report-and-claim">
+            <a href="javascript: void" class="report-event-button">
+                Report Event
+            </a>
+            |
+            {% report_event_popup event %}
+            <a href="javascript: void" class="claim-event-button">
+                Claim Event
+            </a>
+            {% claim_event_popup event %}
+        </div>
+
+        <header class="event-conversation-header">
+            Join the conversation about "{{ event.name }}"
+        </header>
+        <div class="event-conversation">
+            <div class="fb-comments" data-href="http://{{ request.META.HTTP_HOST }}{% event_link event %}" data-width="630" data-num-posts="5"></div>
         </div>
     </div>
 

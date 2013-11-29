@@ -611,6 +611,7 @@ a {
     background: url(/static/images/question-mini.png) no-repeat;
     height: 13px;
     width: 13px;
+    display: inline-block;
 }
 .buttonq.mini:hover{
     background: url(/static/images/question_hover-mini.png) no-repeat;
@@ -636,6 +637,10 @@ a {
 
 .box .form-block {
     padding-left: 8px;
+}
+
+.error {
+    color: red;
 }
 
 .load-more {

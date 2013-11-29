@@ -21,166 +21,160 @@
 {% endblock %}
 
 {% block page %}
-    <div class="primary-content">
-        <h1>
-            In the Loop Options
-        </h1>
-        <div class="content account-options-wrapper">                    
-            <div class="main-content account-options">
-                {%if form.errors %}
-                    <div class="errors" style="border:1px solid RED;border-radius:4px;">
-                        <ul style="list-style-type: none;">
-                            <li id="all-info">
-                                {% for error in form.non_field_errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                        </ul>
-                    </div>
-                    
-                {% endif %}
-                <form method="post" name="in-the-loop-options" >
-                    {% csrf_token %}
-                    <div class="options-block">
-                        <h3>
-                            My tags
-                            <a href="javascript:void;"  class="balloon">
-                                <div class="buttonq mini"></div>
-                            </a>
-                            <div class="balloon-content" style="display:none">
-                                <h3>
-                                    Help - Enter your
-                                    <i>[tags]:</i>
-                                </h3>
-                                <p>
-                                    Select tags that best describe your event. Insert your event by using the “tab” button or a comma
-                                </p>
-                            </div>
-                        </h3>
-                        <div class="saved-tags options">
-                            {{ form.in_the_loop_tags }}
+    <h1>
+        In the Loop Options
+    </h1>
+    <div class="primary-content account-primary-content">                    
+        <div class="primary-wrapper">
+            <form method="post" name="in-the-loop-options" >
+                {% csrf_token %}
+                <div class="options-block">
+                    <h3>
+                        My tags
+                        <a href="javascript:void;"  class="balloon">
+                            <div class="buttonq mini"></div>
+                        </a>
+                        <div class="balloon-content" style="display:none">
+                            <h3>
+                                Help - Enter your
+                                <i>[tags]:</i>
+                            </h3>
+                            <p>
+                                Select tags that best describe your event. Insert your event by using the “tab” button or a comma
+                            </p>
                         </div>
+                    </h3>
+                    <div class="saved-tags options">
+                        {{ form.in_the_loop_tags }}
                     </div>
+                </div>
 
-                    <div class="options-block locations-block">
-                        <h3>
-                            Locations
-                            <a href="javascript:void;"  class="balloon">
-                                <div class="buttonq mini"></div>
-                            </a>
-                            <div class="balloon-content" style="display:none">
-                                <h3>
-                                    Help - Enter your
-                                    <i>[locations]:</i>
-                                </h3>
-                                <p>
-                                    Receive a notification when your saved tags are used in the following provinces/territories.<br>
-                                    Or insert an exact location.
-                                </p>
-                            </div>
-                        </h3>                        
-                        <div class="in-the-loop-types options options-white">
-                            <p class="options-description">
+                <div class="options-block locations-block">
+                    <h3>
+                        Locations
+                        <a href="javascript:void;"  class="balloon">
+                            <div class="buttonq mini"></div>
+                        </a>
+                        <div class="balloon-content" style="display:none">
+                            <h3>
+                                Help - Enter your
+                                <i>[locations]:</i>
+                            </h3>
+                            <p>
                                 Receive a notification when your saved tags are used in the following provinces/territories.<br>
                                 Or insert an exact location.
                             </p>
-                    
-                            <div class="teritory-node">
-                                <div class="checkbox">
-                                    <input {% if form.all_of_canada.value %}checked="checked"{% endif %} type="checkbox" id="id_all_of_canada" value="true" name="all_of_canada" />
-                                    <label for="id_all_of_canada"></label>
-                                    <label for="id_all_of_canada">All of Canada</label>
-                                </div>
-                            </div>
-                            {% for region in form.fields.regions.queryset %}
-                            <div class="teritory-node region">
-                                <div class="checkbox">
-                                    <input {% for current_region in form.regions.value %}{% if region.pk = current_region|add:0 %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_regions_{{ forloop.counter0 }}" value="{{ region.id }}" name="regions" />
-                                    <label for="id_regions_{{ forloop.counter0 }}"></label>
-                                    <label for="id_regions_{{ forloop.counter0 }}">
-                                        {{ region.name }}
-                                    </label>
-                                </div>
-                            </div>
-                            {% endfor %}
-                            <div class="clr"></div>                    
                         </div>
-                    </div>
-                    <div class="cities-node options">
-                        <div class="cities-node-prefix">
-                            City or Cities
-                        </div>                        
-                        <div class="saved-cities">
-                            {{ form.cities }}
+                    </h3>                        
+                    <div class="in-the-loop-types options options-white">
+                        <p class="options-description">
+                            Receive a notification when your saved tags are used in the following provinces/territories.<br>
+                            Or insert an exact location.
+                        </p>
+                
+                        <div class="teritory-node">
+                            <div class="checkbox">
+                                <input {% if form.all_of_canada.value %}checked="checked"{% endif %} type="checkbox" id="id_all_of_canada" value="true" name="all_of_canada" />
+                                <label for="id_all_of_canada"></label>
+                                <label for="id_all_of_canada">All of Canada</label>
+                            </div>
                         </div>
+                        {% for region in form.fields.regions.queryset %}
+                        <div class="teritory-node region">
+                            <div class="checkbox">
+                                <input {% for current_region in form.regions.value %}{% if region.pk = current_region|add:0 %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_regions_{{ forloop.counter0 }}" value="{{ region.id }}" name="regions" />
+                                <label for="id_regions_{{ forloop.counter0 }}"></label>
+                                <label for="id_regions_{{ forloop.counter0 }}">
+                                    {{ region.name }}
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="clr"></div>                    
                     </div>
+                </div>
+                <div class="cities-node options">
+                    <div class="cities-node-prefix">
+                        City or Cities
+                    </div>                        
+                    <div class="saved-cities">
+                        {{ form.cities }}
+                    </div>
+                </div>
 
-                    <div class="options-block">
-                        <h3>
-                            Notifications
-                            <a href="javascript:void;"  class="balloon">
-                                <div class="buttonq mini"></div>
-                            </a>
-                            <div class="balloon-content" style="display:none">
-                                <h3>
-                                    Help - Enter your
-                                    <i>[tags]:</i>
-                                </h3>
-                                <p>
-                                    Select tags that best describe your event. Insert your event by using the “tab” button or a comma
-                                </p>
-                            </div>
-                        </h3>
-                        <div class="in-the-loop-types options options-white">
-                            <p class="options-description">
-                                When one of your saved tags is used in an event, you will be notified. Please select the ways you would like to be notified from the list below.
+                <div class="options-block">
+                    <h3>
+                        Notifications
+                        <a href="javascript:void;"  class="balloon">
+                            <div class="buttonq mini"></div>
+                        </a>
+                        <div class="balloon-content" style="display:none">
+                            <h3>
+                                Help - Enter your
+                                <i>[tags]:</i>
+                            </h3>
+                            <p>
+                                Select tags that best describe your event. Insert your event by using the “tab” button or a comma
                             </p>
-                            <table>
-                                <tr>
-                                    <td class="first">
-                                        <div class="checkbox">
-                                            {{ form.in_the_loop_with_website }}
-                                            {{ form.in_the_loop_with_website.label_tag }}
-                                        </div>
-                                        <label class="label" for="id_in_the_loop_with_website">Website:</label>
-                                    </td>
-                                    <td>
-                                        I will check for my updates on the website
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="first">
-                                        <div class="checkbox">
-                                            {{ form.in_the_loop_with_email }}
-                                            {{ form.in_the_loop_with_email.label_tag }}
-                                        </div>
-                                        <label class="label" for="id_in_the_loop_with_email">Email:</label>
-                                    </td>
-                                    <td>
-                                        {{ form.in_the_loop_email }}
-                                        Send to this address
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="first">
-                                        <div class="checkbox">
-                                            {{ form.in_the_loop_with_sms }}
-                                            {{ form.in_the_loop_with_sms.label_tag }}
-                                        </div>
-                                        <label class="label" for="id_in_the_loop_with_sms">SMS:</label>
-                                    </td>
-                                    <td>
-                                        {{ form.in_the_loop_phonenumber }}
-                                        Send to this number
-                                    </td>
-                                </tr>
-                            </table>
                         </div>
+                    </h3>
+                    <div class="in-the-loop-types options options-white">
+                        <p class="options-description">
+                            When one of your saved tags is used in an event, you will be notified. Please select the ways you would like to be notified from the list below.
+                        </p>
+                        <table>
+                            <tr>
+                                <td class="first">
+                                    <div class="checkbox">
+                                        {{ form.in_the_loop_with_website }}
+                                        {{ form.in_the_loop_with_website.label_tag }}
+                                    </div>
+                                    <label class="label" for="id_in_the_loop_with_website">Website:</label>
+                                </td>
+                                <td>
+                                    I will check for my updates on the website
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="first">
+                                    <div class="checkbox">
+                                        {{ form.in_the_loop_with_email }}
+                                        {{ form.in_the_loop_with_email.label_tag }}
+                                    </div>
+                                    <label class="label" for="id_in_the_loop_with_email">Email:</label>
+                                </td>
+                                <td>
+                                    {{ form.in_the_loop_email }}
+                                    Send to this address
+                                    {% for error in form.errors.in_the_loop_email %}
+                                        <div class="error">{{ error }}</div>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="first">
+                                    <div class="checkbox">
+                                        {{ form.in_the_loop_with_sms }}
+                                        {{ form.in_the_loop_with_sms.label_tag }}
+                                    </div>
+                                    <label class="label" for="id_in_the_loop_with_sms">SMS:</label>
+                                </td>
+                                <td>
+                                    {{ form.in_the_loop_phonenumber }}
+                                    Send to this number
+                                    {% for error in form.errors.in_the_loop_phonenumber %}
+                                        <div class="error">{{ error }}</div>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        </table>
                     </div>
+                </div>
 
-                    <input type="submit" name="submitoptions" class="button submit standart" value="Save" />
-                </form>
-            </div>                
+                <input type="submit" name="submitoptions" class="button reminder-button" value="Save" />
+            </form>
         </div>
     </div>
+
+    {% include 'accounts/_account_settings_menu.html' %}
 {% endblock %}

@@ -12,84 +12,83 @@
 
 {% block content_title %}<h2>{% blocktrans with profile.user.username as username %}Account &raquo; {{ username }}{% endblocktrans %}</h2>{% endblock %}
 
-{% block content %}
+{% block page %}
+    <h1>
+        Edit account
+    </h1>
 
-<form action="" enctype="multipart/form-data" method="post">
-    <div class="tabs-container">
-        <ul class="tabs right-tabs">
-            <li class="first"><a href="{% url 'userena_profile_detail' user.username %}"><span>{% trans 'View profile' %}</span></a></li>
-            <li class="current"><a href="{% url 'userena_profile_edit' user.username %}">{% trans "Edit profile" %}</a></li>
-            <li><a href="{% url 'userena_password_change' user.username %}">{% trans "Change password" %}</a></li>
-            <li class="last"><a href="{% url 'userena_email_change' user.username %}">{% trans "Change email" %}</a></li>
-        </ul>
+    <div class="primary-content account-primary-content">
+        <div class="primary-wrapper">
+            <form action="" enctype="multipart/form-data" method="post">
+                {% csrf_token %}
 
-        {% csrf_token %}
-        <div class="box account-form visible">
-            {% if why_message %}
-                <div class="why-message">
-                    {% if why_message == "native_region_required" %}
-                        You need to specify your foreign region to have ability to setup new ads
-                    {% endif %}
-                </div>
-            {% endif %}
-            <table class="edit-profile-table">
-                <tr>
-                    <td>
-                        <label for="id_first_name">First name:</label>
-                    </td>
-                    <td>
-                        {{form.first_name}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="id_last_name">Last name:</label>
-                    </td>
-                    <td>
-                        {{form.last_name}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="id_mugshot">Mugshot:</label> 
-                
-                    </td>
-                    <td>
-                        <input type="file" name="mugshot" id="id_mugshot"> 
-                        <span class="helptext">A personal image displayed in your profile.</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="id_date_of_birth">Date of birth:</label>
-                    </td>
-                    <td>
-                        {{form.date_of_birth}}
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">                        
-                        <fieldset>
-                            {{ form.tax_origin_confirmed }}
-                            <legend>Tax origin{% if not profile.tax_origin_confirmed %}(<span class="warn">not yet filled</span>){% endif %}:</legend>
-                            <div class="checkbox">
-                                {{form.not_from_canada}}
-                                <label for="id_not_from_canada"></label>
-                            </div>
-                            <label for="id_not_from_canada">I am not from Canada</label>
-                            <br>
-                            <div class="native-region-tr">
-                                <label for="id_native_region">Province or Territory:</label>
-                                <div class="native-region-combobox">
-                                    {{form.native_region}}
-                                </div>                                
-                            </div>
-                        </fieldset>
-                    </td>
-                </tr>                
-            </table>            
-            <input type="submit" class="submit standart button" value="{% trans "Save profile" %}" />
-        </div>        
-    </div>    
-</form>
+                {% if why_message %}
+                    <div class="why-message">
+                        {% if why_message == "native_region_required" %}
+                            You need to specify your foreign region to have ability to setup new ads
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <table class="edit-profile-table">
+                    <tr>
+                        <td>
+                            <label for="id_first_name">First name:</label>
+                        </td>
+                        <td>
+                            {{form.first_name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="id_last_name">Last name:</label>
+                        </td>
+                        <td>
+                            {{form.last_name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="id_mugshot">Mugshot:</label> 
+                    
+                        </td>
+                        <td>
+                            <input type="file" name="mugshot" id="id_mugshot"> 
+                            <span class="helptext">A personal image displayed in your profile.</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="id_date_of_birth">Date of birth:</label>
+                        </td>
+                        <td>
+                            {{form.date_of_birth}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <fieldset>
+                                {{ form.tax_origin_confirmed }}
+                                <legend>Tax origin{% if not profile.tax_origin_confirmed %}(<span class="warn">not yet filled</span>){% endif %}:</legend>
+                                <div class="checkbox">
+                                    {{form.not_from_canada}}
+                                    <label for="id_not_from_canada"></label>
+                                </div>
+                                <label for="id_not_from_canada">I am not from Canada</label>
+                                <br>
+                                <div class="native-region-tr">
+                                    <label for="id_native_region">Province or Territory:</label>
+                                    <div class="native-region-combobox">
+                                        {{form.native_region}}
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </td>
+                    </tr>
+                </table>
+                <input type="submit" class="button reminder-button" value="{% trans "Save profile" %}" />
+            </form>
+        </div>
+    </div>
+
+    {% include 'accounts/_account_settings_menu.html' %}
 {% endblock %}
