@@ -97,13 +97,11 @@
 }
 
 .searchpad-event-wrapper .description {
-    margin-top: 7px;
-}
-
-.searchpad-event-wrapper .show-day-description {
     border: 1px solid #c6c6c6;
     padding: 3px 13px;
     color: #000000;
+    margin-top: 7px;
+    overflow-x: hidden;
 }
 
 .search-pad-popup .searchpad-event-description {

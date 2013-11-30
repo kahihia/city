@@ -29,9 +29,10 @@
                 $(e.target).hasClass("search-pad-popup-open-button") || $(e.target).parents(".search-pad-popup-open-button").length>0 ||
                 $(e.target).hasClass("jump-popup") || $(e.target).parents(".jump-popup").length>0 ||
                 
-                $(e.target).hasClass("search-pad-popup-content") || $(e.target).parents(".search-pad-popup-content").length>0 || $(e.target).parents("#ui-datepicker-div").length>0 || $(e.target).parents(".ui-datepicker-header").length>0
+                $(e.target).hasClass("search-pad-popup-content") || $(e.target).parents(".search-pad-popup-content").length>0 || $(e.target).parents("#ui-datepicker-div").length>0 || $(e.target).parents(".ui-datepicker-header").length>0 ||
+                $(e.target).closest(".ui-dialog.ui-widget").length !== 0
             ){
-                
+
             } else {
                 this.close();
             }
@@ -71,7 +72,7 @@
                 FB.XFBML.parse()  
             }
 
-            this.eventActions = new window.EventActions($(".event-details", this.popup));
+            this.eventActions = new window.EventActions($(".event-details-block", this.popup));
 
             if($(".auth-required-popup").length>0){
                 $(".auth-required").on("click", function(e){

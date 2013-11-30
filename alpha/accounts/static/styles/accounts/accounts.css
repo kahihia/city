@@ -992,10 +992,6 @@
     width: 301px;
 }
 
-.userena-input input.empty {
-    text-transform: uppercase;
-}
-
 .forgot-password, .remember_me {
     display: inline-block;
 }

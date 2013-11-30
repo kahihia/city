@@ -22,7 +22,6 @@
         }
 
         self.onInputFocus = function() {
-            $(this).attr("placeholder", "");
             $(this).removeClass("empty");
         };
 
