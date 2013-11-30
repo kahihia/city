@@ -29,6 +29,7 @@
         });
 
         $(".start-date .date input", this.scope).datepicker({
+            minDate: new Date(),
             onSelect: function (date) {
                 var date2 = $('.start-date .date input').datepicker('getDate');
                 date2.setDate(date2.getDate());
@@ -39,6 +40,7 @@
         });
 
         $(".end-date .date input", this.scope).datepicker({
+            minDate: new Date(),
             onClose: function () {
                 var dt1 = $('.start-date .date input').datepicker('getDate');
                 var dt2 = $('.end-date .date input').datepicker('getDate');

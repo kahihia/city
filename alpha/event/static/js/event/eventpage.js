@@ -18,7 +18,7 @@
 
     EventPage.prototype = {
         initEventActions: function(){
-            this.eventActions = new window.EventActions($(".event-details"));
+            this.eventActions = new window.EventActions($(".event-details-block"));
         },
         showMap: function(){
             var point = new google.maps.LatLng(window.venue_latitude, window.venue_longtitude),

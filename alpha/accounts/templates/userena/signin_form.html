@@ -17,13 +17,13 @@
                     {{ form.non_field_errors }}
 
                     <div class="user-identification userena-input"
-                         data-placeholder="{{ form.identification.label }}"
+                         data-placeholder="{{ form.identification.label.upper }}"
                          data-set-focus="1">
 		                {{ form.identification }}
                         {{ form.identification.errors }}
                     </div>
 
-                    <div class="user-password userena-input" data-placeholder="{{ form.password.label }}">
+                    <div class="user-password userena-input" data-placeholder="{{ form.password.label.upper }}">
                         {{ form.password }}
                         {{ form.password.errors }}
                     </div>
