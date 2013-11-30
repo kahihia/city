@@ -5,18 +5,53 @@
 
 <table class="profile-table" celpadding="0" cellspacing="0">
     <tr>
-        <th>Event name</th>
+        <th>
+            Event name
+        </th>
+        {% if admin %}<th>User</th>{% endif %}
         <th>Cost</th>
+        <th>Bonus</th>
         <th>Period</th>
         <th>Actions</th>
     </tr>
+    {% if admin %}
+        <tr>
+            <form action="" method="get">
+            <td>
+                {{ featured_orders_filter.form.featured_event }}
+            </td>
+            <td>
+                <input type="text" name="account" class="user-input" data-ajax-url="{% url 'admin_user_autocomplete' %}" value="{{ selected_account.id }}" data-user-name="{{ selected_account.user }}" />
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <div class="button show-all">
+                    Show all
+                </div>
+                <input type="submit" value="Search" class="button">
+            </td>
+            </form>
+        </tr>
+    {% endif %}
     {% for order in featured_orders %}
     <tr>
         <td>
             {{ order.featured_event.event.name }}
         </td>
+        {% if admin %}
+            <td>{{ order.account.user }}</td>
+        {% endif %}
         <td>
-            {{ order.cost }}
+            {{ order.total_cost }}
+        </td>
+        <td>
+            {% if order.bonus %}
+                {{ order.bonus }}
+            {% else %}
+                -
+            {% endif %}
         </td>
         <td>
             {{ order.featured_event.start_time|date:"F d, Y" }}

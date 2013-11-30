@@ -29,8 +29,7 @@
             <table class="profile-table" celpadding="0" cellspacing="0">
                 <tr>
                     <th>Event</th>
-                    <th>Status</th>
-                    <th>Views</th>
+                    <th>Impressions</th>
                     <th>Clicks</th>
                     <th>Owned by</th>
                     <th>From-To</th>
@@ -43,13 +42,6 @@
                 <tr>
                     <td>
                         {% featured_event featured_event.event_day %}
-                    </td>
-                    <td>
-                        {% if featured_event.active %}
-                            On(<a href="{% url "admin_deactivate_featured" featured_event.id %}">Deactivate</a>)
-                        {% else %}
-                            Off(<a href="{% url "admin_activate_featured" featured_event.id %}">Activate</a>)
-                        {% endif %}
                     </td>
                     <td>{{ featured_event.views }}</td>
                     <td>{{ featured_event.clicks }}</td>

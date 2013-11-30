@@ -251,8 +251,6 @@ input[type=submit]:hover {
     border-top-right-radius: 5px;
 }
 
-
-
 .tabs-container ul.tabs li,
 .tabs-container table.tabs td {
     cursor: pointer;    

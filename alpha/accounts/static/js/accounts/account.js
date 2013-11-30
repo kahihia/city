@@ -30,7 +30,6 @@
             self.executeBusy = false;
 
             $("body").on("click", self.executeButtonSelector, self.onExecuteButtonClick);
-            $("body").on("change", self.eventCheckerSelector, self.onEventCheckboxChange);
             $("body").on("change", self.actionSelector, self.onActionSelectChange);
             $("body").on("click", self.fbOwnerTypeSelector, self.onFBOwnerTypeRadioClick);
             $("body").on("click", self.fbPostOkSelector, self.onPostFBOkClick);
@@ -75,13 +74,6 @@
             }
         };
 
-        self.onEventCheckboxChange = function() {
-            var eventId = $(this).data("event-id");
-            $(self.eventCheckerSelector + "[data-event-id=" + eventId + "]")
-                .not(this)
-                .removeAttr("checked");
-        };
-
         self.onFBOwnerTypeRadioClick = function() {
             var fbOwnerType = $(this).val();
             if(fbOwnerType === "page") {
@@ -100,7 +92,6 @@
                 var checkedEvents = $(self.eventCheckerSelector + ":checked");
                 if(checkedEvents.length !== 0) {
                     self.miniIndicator.show().insertAfter($(self.executeButtonSelector));
-                    self.eventsToProcessCount = checkedEvents.length;
 
                     var ids = [];
                     $.each(checkedEvents, function() {
@@ -110,6 +101,7 @@
                         }
                     });
 
+                    self.eventsToProcessCount = ids.length;
                     self.executeFBPosting(ids);
                 }
                 else {
@@ -123,7 +115,7 @@
             var checked = parseInt($(this).attr("data-checked"));
             if(!checked) {
                 $(this).attr("data-checked", 1);
-                $(self.eventCheckerSelector).prop("checked", true);
+                $(self.eventCheckerSelector).not(self.eventCheckTpl).prop("checked", true);
             }
             else {
                 $(this).attr("data-checked", 0);

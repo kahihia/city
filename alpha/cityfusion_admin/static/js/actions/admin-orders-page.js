@@ -1,12 +1,12 @@
 ;(function($, window, document, undefined) {
     'use strict';
 
-    var AdvertisingListPage = function(){
+    var AdminOrdersPage = function(){
         this.initSortable();
         this.initUserInputs();
     }
 
-    AdvertisingListPage.prototype = {
+    AdminOrdersPage.prototype = {
         initSortable: function() {
             $(".show-all").on("click", function(){
                 window.location = window.filters.clear().getURL();
@@ -53,7 +53,7 @@
     }        
 
     $(document).ready(function(){
-        new AdvertisingListPage();
+        new AdminOrdersPage();
     });
 
 })(jQuery, window, document);

@@ -3,6 +3,6 @@
 <body>
     <h1>Not enouch money to run campaign "{{ campaign.name }}"</h1>
 
-    <h2>You can <a href = "http://{{ site }}{% url 'advertising_deposit_funds_for_campaign' campaign.id %}">fund money</a></h2>
+    <h2>You can <a href="{{ site }}{% url 'advertising_deposit_funds_for_campaign' campaign.id %}">fund money</a></h2>
 </body>
 </html>

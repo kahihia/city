@@ -4,10 +4,10 @@ $(document).ready(function() {
             $(this).click(function(){
                 var page, tab;
                 $(this).addClass('current').siblings().removeClass('current')
-                    .parents('div.tabs-container').find('div.box').eq(i).fadeIn(150).siblings('div.box').hide();
+                    .closest('div.tabs-container').find('div.box').eq(i).fadeIn(150).siblings('div.box').hide();
 
 
-                page = $(this).parents(".tabs").data("page-id");
+                page = $(this).closest(".tabs").data("page-id");
                 tab = $(this).data("tab-id");
 
                 $.ajax({

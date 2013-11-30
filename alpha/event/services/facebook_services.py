@@ -9,6 +9,8 @@ from HTMLParser import HTMLParser
 from django.db.models import Max, Min
 from django.utils import timezone
 from django.utils.html import strip_tags
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from django.conf import settings
 
 from PIL import Image
@@ -154,7 +156,12 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
     }
 
     if facebook_owner_type == 'page' and event.tickets:
-        common_params['ticket_uri'] = event.tickets
+        validate = URLValidator()
+        try:
+            validate(event.tickets)
+            common_params['ticket_uri'] = event.tickets
+        except ValidationError:
+            pass
 
     if event.is_multiday():
         single_events = list(SingleEvent.homepage_events.filter(event=event))

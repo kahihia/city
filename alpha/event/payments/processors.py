@@ -27,7 +27,8 @@ class PaypalPaymentProcessor(BasePaymentProcessor):
         if bonus:
             BonusFeaturedEventTransaction.objects.create(
                 featured_event=self.featured_event,
-                budget=bonus
+                budget=bonus,
+                order=self.order
             )
 
             Account.objects.filter(user_id=self.request.user.id).update(bonus_budget=F("bonus_budget")-bonus)
@@ -58,20 +59,30 @@ class PaypalPaymentProcessor(BasePaymentProcessor):
                 account_tax_cost.save()
                 order.taxes.add(account_tax_cost)
 
-            self.order = order
+            self.redirect_to_paypal = True
 
         else:
+            order = FeaturedEventOrder(
+                cost=cost,
+                total_price=cost,
+                featured_event=self.featured_event,
+                account=self.account,
+                status="s"
+            )
+            order.save()
             FeaturedEvent.objects.filter(id=self.featured_event.id).update(active=True)
+
+        self.order = order
 
 
     def process_setup(self):
-        self.order = None
-        self.process_bonus()
+        self.redirect_to_paypal = False
         self.process_order()
+        self.process_bonus()
 
 
     def redirect_to_next_step(self):
-        if self.order:
+        if self.redirect_to_paypal:
             return HttpResponseRedirect(reverse('setup_featured_payment', args=(str(self.order.id),)))
         else:
             return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': self.request.user.username}))
