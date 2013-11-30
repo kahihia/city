@@ -8,12 +8,21 @@
     <link href="{{STATIC_URL}}ajaxuploader/css/fileuploader.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}image_cropping/css/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/place_autocomplete.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/venues/edit-venue.css" rel="stylesheet" type="text/css" />
+
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
+    
+    <script src="{{STATIC_URL}}selectable/js/jquery.dj.selectable.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/location/jquery.geocomplete.js"></script>
 
     <script type="text/javascript">
         var crsf_token = "{{ csrf_token }}";
-    </script>    
-    {{ form.media.js }}
+    </script>
+
+    <script src="{{STATIC_URL}}js/location/suggest_cityfusion_venue.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/accounts/venue-edit-page.js" type="text/javascript" ></script>
+    {{ form.media.js }}
 {% endblock %}
 
 
@@ -23,207 +32,108 @@
 {% endblock %}
 
 
-{% block page %}
-    <div class="primary-content">
+{% block page %}    
+<form method="post">
+    <div class="venue-account-details">
         <h1>
-            {{ venue_account.venue.name }} contacts
-        </h1>
-        <div class="content account-profile">
-            <div class="main-content account-profile">
-                <div class="account-details">                                        
-                    {{ form.errors }}
-                    {%if form.errors %}
-                        <div class="errors" style="border:1px solid RED;border-radius:4px;">
-                            <ul style="list-style-type: none;">
-                                <li id="all-info">
-                                    {% for error in form.non_field_errors %}
-                                        <span class="error">{{ error }}</span>
-                                    {% endfor %}
-                                </li>
-                                <li id="all-info">
-                                    {% for error in form.phone.errors %}
-                                        <span class="error">{{ error }}</span>
-                                    {% endfor %}
-                                </li>
-                                <li id="all-info">
-                                    {% for error in form.fax.errors %}
-                                        <span class="error">{{ error }}</span>
-                                    {% endfor %}
-                                </li>
-                                <li id="all-info">
-                                    {% for error in form.email.errors %}
-                                        <span class="error">{{ error }}</span>
-                                    {% endfor %}
-                                </li>
-                                <li id="all-info">
-                                    {% for error in form.site.errors %}
-                                        <span class="error">{{ error }}</span>
-                                    {% endfor %}
-                                </li>
-                                <li id="all-info">
-                                    {% for error in form.facebook.errors %}
-                                        <span class="error">{{ error }}</span>
-                                    {% endfor %}
-                                </li>
-                                <li id="all-info">
-                                    {% for error in form.twitter.errors %}
-                                        <span class="error">{{ error }}</span>
-                                    {% endfor %}
-                                </li>
-                                <li id="all-info">
-                                    {% for error in form.myspace.errors %}
-                                        <span class="error">{{ error }}</span>
-                                    {% endfor %}
-                                </li>
-                                <li id="all-info">
-                                    {% for error in form.picture_src.errors %}
-                                        <span class="error">{{ error }}</span>
-                                    {% endfor %}
-                                </li>
-                                <li id="all-info">
-                                    {% for error in form.types.errors %}
-                                        <span class="error">{{ error }}</span>
-                                    {% endfor %}
-                                </li>
-                                <li id="all-info">
-                                    {% for error in form.about.errors %}
-                                        <span class="error">{{ error }}</span>
-                                    {% endfor %}
-                                </li>
-                            </ul>
-                        </div>
-                    {% endif %}
-                    <form method="post" name="reminder-options" >
-                        {% csrf_token %}
-                        <table class="edit-contact-info-table options options-white">
-                            <tr>
-                                <td>
-                                    <img src="{{ STATIC_URL }}/images/phone-profile_icon.png"/>
-                                </td>
-                                <td>
-                                    Phone:
-                                </td>
-                                <td>
-                                    {{ form.phone }}
-                                </td>
-                            </tr>                        
-                            <tr>
-                                <td>
-                                    <img src="{{ STATIC_URL }}/images/fax_profile_icon.png"/>
-                                </td>
-                                <td>
-                                    Fax:
-                                </td>
-                                <td>
-                                    {{ form.fax }}
-                                </td>
-                            </tr>                        
-                            <tr>
-                                <td>
-                                    <img src="{{ STATIC_URL }}/images/email_profile_icon.png"/>
-                                </td>
-                                <td>
-                                    Email:
-                                </td>
-                                <td>
-                                    {{ form.email }}                                
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="{{ STATIC_URL }}/images/website_profile_icon.png"/>
-                                </td>
-                                <td>
-                                    Website:
-                                </td>
-                                <td>
-                                    {{ form.site }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="{{ STATIC_URL }}/images/fb_profile_icon.png"/>
-                                </td>
-                                <td>
-                                    Facebook:
-                                </td>
-                                <td>
-                                    {{ form.facebook }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="{{ STATIC_URL }}/images/twitter.png"/>                                
-                                </td>
-                                <td>
-                                    Twitter:
-                                </td>
-                                <td>
-                                    {{ form.twitter }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="{{ STATIC_URL }}/images/myspace_profile_icon.png"/>
-                                </td>
-                                <td>
-                                    Myspace:
-                                </td>
-                                <td>
-                                    {{ form.myspace }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                </td>
-                                <td class="top">
-                                    About us:
-                                </td>
-                                <td>
-                                    {{ form.about }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                </td>
-                                <td class="top">
-                                    Venue type:
-                                </td>
-                                <td>
-                                    {% for pk, choice in form.fields.types.widget.choices %}
-                                        <div class="checkbox block">
-                                            <input {% for venue_type in venue_account.types.all %}{% if venue_type.pk == pk %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_types_{{ forloop.counter0 }}" value="{{ pk }}" name="types" />
-                                            <label for="id_types_{{ forloop.counter0 }}"></label>
-                                            <label for="id_types_{{ forloop.counter0 }}">{{ choice }}</label>
-                                        </div>
-                                    {% endfor %} 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>                                
-                                </td>
-                                <td class="top">
-                                    Picture:
-                                </td>
-                                <td>
-                                    {{ form.picture_src }}
-                                    <div class='full-screen-popup' data-thumb-width="180" data-thumb-height="180">
-                                        {{ form.cropping }}
-                                        <div class='save-button'>Save image</div>
-                                    </div>
-                                    <div class="picture-thumb">
-                                        <img src="" class="preview">
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
-                    </form>
+            Create new venue account
+        </h1>        
+        <div class="venue-account-details-form">
+            {% csrf_token %}
+            <div class="field">
+                <header>Picture</header>
+                <div class="picture-thumb">
+                    <img src="" class="preview">
                 </div>
+                {{ form.picture_src }}
+                <div class='full-screen-popup' data-thumb-width="180" data-thumb-height="180">
+                    {{ form.cropping }}
+                    <div class='save-button'>Save image</div>
+                    <div class='cancel-button'>Cancel</div>
+                </div>
+                {% for error in form.picture_src.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
 
-                <div class="clr"></div>               
+            <div class="field">
+                <img src="{{ STATIC_URL }}/images/phone-profile_icon.png"/>
+                <header>Phone</header>
+                {{ form.phone }}
+                {% for error in form.phone.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="field">
+                <img src="{{ STATIC_URL }}/images/fax_profile_icon.png"/>
+                <header>Fax</header>
+                {{ form.fax }}
+                {% for error in form.fax.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="field">
+                <img src="{{ STATIC_URL }}/images/email_profile_icon.png"/>
+                <header>Email</header>
+                {{ form.email }}
+                {% for error in form.email.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
             </div>            
+            <div class="field">
+                <img src="{{ STATIC_URL }}/images/website_profile_icon.png"/>
+                <header>Website</header>
+                {{ form.site }}
+                {% for error in form.site.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="field">
+                <img src="{{ STATIC_URL }}/images/fb_profile_icon.png"/>
+                <header>Facebook</header>
+                {{ form.facebook }}
+                {% for error in form.facebook.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="field">
+                <img src="{{ STATIC_URL }}/images/twitter.png"/>
+                <header>Twitter</header>
+                {{ form.twitter }}
+                {% for error in form.twitter.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="field">
+                <img src="{{ STATIC_URL }}/images/myspace_profile_icon.png"/>
+                <header>Myspace</header>
+                {{ form.phone }}
+                {% for error in form.myspace.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="field about-us-field">
+                <header>About Us</header>
+                {{ form.about }}
+            </div>
         </div>
     </div>
+
+    <div class="venue-account-types">
+        <h1>
+            Venue Type
+        </h1>
+        <div class="venue-account-types-content">
+            {% for pk, choice in form.fields.types.widget.choices %}
+                <div class="checkbox block">
+                    <input {% for venue_type in venue_account.types.all %}{% if venue_type.pk == pk %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_types_{{ forloop.counter0 }}" value="{{ pk }}" name="types" />
+                    <label for="id_types_{{ forloop.counter0 }}"></label>
+                    <label for="id_types_{{ forloop.counter0 }}">{{ choice }}</label>
+                </div>
+            {% endfor %}
+        </div>
+        <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
+    </div>    
+</form>
 {% endblock %}

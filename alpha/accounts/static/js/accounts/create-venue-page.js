@@ -146,10 +146,11 @@
         },
         initCKEditor: function(){
             CKEDITOR.instances.id_about.on("instanceReady", function(){
-
                 CKEDITOR.instances.id_about.on('paste', function(e){
                     e.data.html = e.data.dataValue.replace(/\s*width="[^"]*"/g, '');
                 });
+
+                CKEDITOR.instances.id_about.resize(340, 200);
             });
         },
         onCityfusionVenueChoose: function(venue){
@@ -172,4 +173,4 @@
         window.createVenuePage = new CreateVenuePage();
     });
 
-})(jQuery, window, document);    
+})(jQuery, window, document);

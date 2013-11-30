@@ -202,8 +202,9 @@
             );
         },
         showPreview: function(coords, widgetSize) {
-            var rx = 180 / coords.w;
-            var ry = 180 / coords.h;
+            var width = $(".picture-thumb").width();
+            var rx = width / coords.w;
+            var ry = width / coords.h;
 
             $('.picture-thumb .preview')[0].src = $(this.cropping_image)[0].src;
             $('.picture-thumb .preview').css({

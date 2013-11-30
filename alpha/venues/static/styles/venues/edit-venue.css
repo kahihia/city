@@ -1,0 +1,295 @@
+.venue-account-details {
+    float: left;
+    width: 595px;
+    margin-left: 30px;
+    border: 1px solid #b9b8b8;
+    background: #fff;
+    min-height: 896px;
+}
+
+.venue-account-details h1 {    
+    height: 35px;
+    line-height: 35px;
+    background: #8c8a8a;
+    color: #fff;
+    text-transform: uppercase;
+    padding-left: 20px;
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.venue-account-details .venue-account-details-form {
+    margin: 25px 125px;
+}
+
+.venue-account-types {
+    position: relative;
+    float: left;
+    width: 314px;
+    margin-left: 18px;
+    border: 1px solid #f0f0f0;
+    background: #022e52;
+    color: #fff;
+    padding-bottom: 25px;
+    min-height: 872px;
+}
+
+.venue-account-types .button {
+    position: absolute;
+    left: 100px;
+    bottom: 70px;
+    text-transform: uppercase;
+    display: inline-block;
+    color: #022e52;
+    font-size: 13px;
+    font-weight: bold;
+    background: #a3a1a1;
+    padding: 0 40px;
+    height: 31px;
+    line-height: 31px;
+    cursor: pointer;
+    border: none;
+}
+
+.venue-account-types .button:hover {
+    background: #808080;    
+}
+
+.venue-account-types-content {
+    padding: 30px 55px;
+}
+
+.venue-account-types-content .block {
+    margin-bottom: 15px;    
+}
+
+.venue-account-types-content div.block label:nth-of-type(1){
+    height: 21px
+    line-height: 21px;
+}
+
+.venue-account-types-content div.block label:nth-of-type(2) {
+    height: auto;
+    line-height: 18px;
+    width: 155px;
+    margin-top: 0px;
+    margin-left: 10px;    
+    vertical-align: top;
+}
+
+.venue-account-types h1 {
+    height: 35px;
+    line-height: 35px;
+    background: #fff;
+    color: #696666;
+    text-transform: uppercase;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.venue-account-details .field {
+    position: relative;
+    clear: both;
+}
+
+.picture-thumb {
+    display: block;
+    float: left;
+    margin:0;
+    overflow: hidden;
+}
+
+#file-uploader {
+    float: left;
+    margin-left: 14px;
+}
+
+#file-uploader .qq-upload-button {
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    background: #8f8f8f;
+    text-shadow: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    height: 20px;
+    line-height: 20px;
+    text-transform: uppercase;
+    font-size: 12px;
+    width: 120px;
+}
+
+#file-uploader .qq-upload-button:hover {
+   border: none;
+    color: #fff;
+    background: #022e52;
+    text-shadow: none;
+    box-shadow: none;
+    -webkit-box-shadow: none; 
+}
+
+.venue-account-details .field header {
+    color: #022e52;
+    padding-left: 2px;
+    margin-top: 5px;
+}
+
+.venue-account-details .field input {
+    width: 330px;
+    padding: 2px 5px;
+    height: 13px;
+    line-height: 13px;
+    font-size: 12px;
+}
+
+.about-us-field {
+    width: 340px;
+    margin-top: 35px;
+}
+
+.about-us-field p {
+    margin-top: 0;
+}
+
+.venue-account-details .field img {
+    position: absolute;
+    left: -20px;
+}
+
+.field .picture-thumb img {
+    position: initial;
+}
+
+.venue-account-details .venue-field img {
+    top: -5px;
+}
+
+.venue-account-details .street-no-field {
+    width: 90px;
+    display: inline-block;
+}
+
+.venue-account-details .street-no-field input {
+    width: 80px;
+}
+
+.venue-account-details .city-field {
+    display: inline-block;
+    margin-left: 13px;
+    width: 232px;
+}
+
+.venue-account-details .city-field input {
+    width: 227px;
+}
+
+.show-map {
+    color: #1184f8;
+    position: absolute;
+    right: 1px;
+    top: 0;
+}
+
+.venue-field img {
+    left: -30px;
+    top: 0px;
+}
+
+.location_map {
+    display: none;
+}
+
+.full-screen-popup {    
+    position:relative;
+    width:800px;
+    height:500px;    
+    display:none;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding:20px;    
+    padding-bottom:50px;
+}
+
+.jcrop-holder {
+    border:1px solid #ccc;
+}
+
+.full-screen-popup .save-button {
+    font-size: 1.3em;
+    padding: 5px 10px;
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+    background: #EFEFEF;
+    border: 1px solid #E6E6E6;    
+    cursor: pointer;
+}
+
+.full-screen-popup .cancel-button {
+    font-size: 1.3em;
+    padding: 5px 10px;
+    position: absolute;
+    right: 130px;
+    bottom: 5px;
+    background: #EFEFEF;
+    border: 1px solid #E6E6E6;    
+    cursor: pointer;
+}
+
+.jcrop-holder {
+    margin:0 auto;
+    vertical-align:middle;    
+}
+
+.size-warning>div>div{
+    border:1px solid red;
+}
+
+#file-uploader {
+    float: left;
+}
+
+.picture-thumb{
+    float: left;
+    width:90px;
+    height:90px;
+    border-top: 1px solid #c4c5c5;
+    border-left: 1px solid #c4c5c5;
+    border-right: 1px solid #a2a3a4;
+    border-bottom: 1px solid #a2a3a4;
+    overflow:hidden;    
+    cursor: pointer;
+}
+
+.picture-thumb.result{
+    display:block;
+}
+
+.qq-upload-indicator-block {
+    display: inline-block;
+    padding-left: 5px;
+}
+
+.qq-upload-indicator-block.inv {
+    display: none;
+}
+
+.qq-upload-indicator-block img {
+    vertical-align: middle;
+}
+
+.qq-uploading-cancel {
+    margin-left: 5px;
+    color: #454545;
+    text-decoration: underline;
+}
+
+.qq-uploading-cancel:hover {
+    color: #454545;
+    text-decoration: none;
+}
