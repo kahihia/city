@@ -23,10 +23,13 @@
                 <tr>
                     <td>
                         <div class="printed-company-info">
-                            Cityfusion Enterprises Inc.<br/>
-                            322 Gustin Crescent<br/>
-                            Saskatoon SK<br/>
-                            S7K6J8
+                            Cityfusion Ent. Inc.<br/>
+                            322 Gustin Cres<br/>
+                            Saskatoon, SK<br/>
+                            S7K6J8<br/>
+                            <br/>
+                            fuse@cityfusion.ca<br/>
+                            GST# 851846089RT0001
                         </div>
                     </td>
                     <td class="printed-column-right">
@@ -43,10 +46,6 @@
                 <div class="printed-billed">
                     <h2>Account billed:</h2>
                     {{ user.first_name }} {{ user.last_name }} ({{ user.email }})
-                    <!--<br/>
-                    521 8th Street East<br/>
-                    Saskatoon S7H 0P9<br/>
-                    Canada-->
                 </div>
             </div>
             <div class="printed-items">
@@ -62,7 +61,12 @@
                         <td>{{ order }}</td>
                         <td class="price">{{ order.cost_value }}</td>
                     </tr>
-
+                    {% if order.bonus %}
+                        <tr>
+                            <td>Bonus</td>
+                            <td class="price">{{ order.bonus }}</td>
+                        </tr>
+                    {% endif %}
                     {% for tax in order.taxes.all %}
                     <tr>
                         <td>{{ tax.tax_name }}</td>

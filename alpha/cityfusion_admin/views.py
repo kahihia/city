@@ -11,9 +11,9 @@ from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
 
-from accounts.models import Account, BonusCampaign
+from accounts.models import Account, BonusCampaign, VenueAccount
 from advertising.models import ShareAdvertisingCampaign
-from event.models import Event, FeaturedEvent, FacebookEvent, EventTransferring
+from event.models import Event, FeaturedEvent, FacebookEvent, EventTransferring, FeaturedEventOrder
 from event.forms import SetupFeaturedForm, CreateEventForm
 from event.services import facebook_services
 from notices import services as notice_services
@@ -23,6 +23,9 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Q, F
 
 from advertising.filters import AdvertisingCampaignFilter
+
+from advertising.models import AdvertisingOrder
+
 
 
 @require_POST
@@ -524,6 +527,8 @@ def change_event_owner_search(request):
     search = request.REQUEST.get("search", "")
     if search:
         events = Event.future_events.filter(name__icontains=search)
+    else:
+        events = Event.future_events.all()
 
     return render_to_response('cf-admin/event_owner_search.html', {
         'events': events,
@@ -544,6 +549,34 @@ def change_event_owner(request, slug):
         reverse('change_event_owner_search') + "?search=%s" % request.POST.get("search", "")
     )
 
+
+@staff_member_required
+def change_venue_owner_search(request):
+    search = request.REQUEST.get("search", "")
+    if search:
+        venue_accounts = VenueAccount.objects.filter(Q(venue__name__icontains=search) | Q(venue__street__icontains=search))
+    else:
+        venue_accounts = VenueAccount.objects.all()
+
+    return render_to_response('cf-admin/change_venue_owner.html', {
+        'venue_accounts': venue_accounts,
+        'search': search
+    }, context_instance=RequestContext(request))
+
+
+@require_POST
+@staff_member_required
+def change_venue_owner(request, venue_account_id):
+    owner_id = request.POST.get("owner_id", None)
+    if owner_id:
+        venue_account = VenueAccount.objects.get(id=venue_account_id)
+        venue_account.account = Account.objects.get(user_id=owner_id)
+        venue_account.save()
+        Event.events.filter(venue_account_owner_id=venue_account_id).update(owner=owner_id)
+
+    return HttpResponseRedirect(
+        reverse('change_venue_owner_search') + "?search=%s" % request.POST.get("search", "")
+    )
 
 @staff_member_required
 def event_mass_transfer(request):
@@ -640,4 +673,29 @@ def admin_share_stats(request, campaign_id):
             'campaign': campaign,
             'shared_with': Account.objects.filter(shareadvertisingcampaign__campaign_id=campaign_id)
         }, context_instance=RequestContext(request))
+
+
+from cityfusion_admin.filters import AdvertisingOrderFilter, FeaturedEventOrderFilter
+
+@staff_member_required
+def admin_orders(request):
+    advertising_orders_filter = AdvertisingOrderFilter(request.GET, queryset=AdvertisingOrder.objects.filter(status="s"))
+    featured_orders_filter = FeaturedEventOrderFilter(request.GET, queryset=FeaturedEventOrder.objects.filter(status="s"))
+
+    if "account" in request.GET and request.GET["account"]:
+        selected_account = Account.objects.get(user_id=request.GET["account"])
+    else:
+        selected_account = None
+
+    tabs_page = 'admin-orders'
+    active_tab = request.session.get(tabs_page, 'advertising-orders')
+
+    return render_to_response('cf-admin/admin-orders.html', {
+            "advertising_orders_filter": advertising_orders_filter,
+            "featured_orders_filter": featured_orders_filter,
+            "selected_account": selected_account,
+            'tabs_page': tabs_page,
+            'active_tab': active_tab,
+            'admin': True
+        }, context_instance=RequestContext(request))    
 

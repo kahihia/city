@@ -648,12 +648,6 @@ class FeaturedEvent(models.Model):
         return ", ".join(self.regions.all().values_list("name", flat=True))
 
 
-class BonusFeaturedEventTransaction(models.Model):
-    budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
-    featured_event = models.ForeignKey(FeaturedEvent)
-    processed_at = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now)            
-
-
 class FeaturedEventOrder(models.Model):
     cost = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
     total_price = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD') # with taxes
@@ -677,10 +671,33 @@ class FeaturedEventOrder(models.Model):
     def cost_value(self):
         return self.cost
 
+    @property
+    def bonus(self):
+        try:
+            return self.bonusfeaturedeventtransaction.budget
+        except: 
+            return None
+
+    @property
+    def total_cost(self):
+        if self.bonus:
+            return self.cost + self.bonus
+        else:
+            return self.cost
+
+
+class BonusFeaturedEventTransaction(models.Model):
+    budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
+    featured_event = models.ForeignKey(FeaturedEvent)
+    processed_at = models.DateTimeField(auto_now_add=True, default=datetime.datetime.now)
+    order = models.OneToOneField(FeaturedEventOrder, null=True)
+
 
 class EventTransferring(models.Model):
     target = models.ForeignKey(User, blank=False, null=False)
     events = models.ManyToManyField(Event)
+
+
 
 
 FeaturedEventPayment = build_featured_event_payment_model(FeaturedEventOrder, unique=True)
