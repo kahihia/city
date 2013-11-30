@@ -82,7 +82,7 @@ def feature_event_as_image(context, event):
             thumbnailer = get_thumbnailer(event.picture)
             thumbnail_options = {
                 'size': size,
-                'box': event.cropping,
+                'box': event.image.cropping,
                 'crop': True,
                 'detail': True,
                 'upscale': False

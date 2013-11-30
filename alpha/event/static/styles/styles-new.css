@@ -432,6 +432,7 @@ a:hover{
     color: #454545;
     font-size: 14px;
     margin-top: 18px;
+    overflow-x: hidden;
 }
 
 .primary-content .description * {
