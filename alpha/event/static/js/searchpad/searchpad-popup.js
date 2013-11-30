@@ -30,7 +30,7 @@
                 $(e.target).hasClass("jump-popup") || $(e.target).parents(".jump-popup").length>0 ||
                 
                 $(e.target).hasClass("search-pad-popup-content") || $(e.target).parents(".search-pad-popup-content").length>0 || $(e.target).parents("#ui-datepicker-div").length>0 || $(e.target).parents(".ui-datepicker-header").length>0 ||
-                $(e.target).hasClass("ui-dialog-titlebar-close")
+                $(e.target).closest(".ui-dialog.ui-widget").length !== 0
             ){
 
             } else {
@@ -72,7 +72,7 @@
                 FB.XFBML.parse()  
             }
 
-            this.eventActions = new window.EventActions($(".event-details", this.popup));
+            this.eventActions = new window.EventActions($(".event-details-block", this.popup));
 
             if($(".auth-required-popup").length>0){
                 $(".auth-required").on("click", function(e){
@@ -122,8 +122,8 @@
                 toolbox.append("<a id='addthis_counter' class='addthis_counter addthis_bubble_style'></a>");
 
                 addThisCell.append(toolbox);
-                window.addthis.toolbox(".search-pad-content #addthis_toolbox");
-                window.addthis.counter(".search-pad-content #addthis_counter");
+                window.addthis.toolbox("#addthis_toolbox");
+                window.addthis.counter("#addthis_counter");
             }
         }
     };
