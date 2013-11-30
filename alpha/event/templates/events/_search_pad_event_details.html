@@ -154,9 +154,9 @@
                         </div>
                     </td>
                 </tr>
-            </table>                
-            <div class="description">
-                {% if event.event_type == "MULTIDAY" %}
+            </table>            
+            {% if event.event_type == "MULTIDAY" %}
+                <div class="description">
                     {% for occurrence in event.sorted_occurrences %}
                     <div class="show-day-description {% if forloop.first and occurrence.start_time > now %} active{% endif %}{% if occurrence.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrence.start_time }}">
                         {% if occurrence.description %}
@@ -166,12 +166,14 @@
                         {% endif %}
                     </div>
                     {% endfor %}
-                {% else %}
-                    {% if event.event_description %}
+                </div>
+            {% else %}
+                {% if event.event_description %}
+                    <div class="description">
                         {{ event.event_description|html_urlize|safe }}
-                    {% endif %}
+                    </div>
                 {% endif %}
-            </div>                
+            {% endif %}
         </div>
     </div>
 {% empty %}
