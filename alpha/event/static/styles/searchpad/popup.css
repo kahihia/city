@@ -40,6 +40,9 @@
     bottom: 0;
     left: 100px;
     color: #949697;
+    position: absolute;
+    text-align: center;
+    width: 100%;
 }
 
 .search-pad-content .entry-navigation-np {
@@ -102,6 +105,7 @@
     color: #000000;
     margin-top: 7px;
     overflow-x: hidden;
+    max-height: 175px;
 }
 
 .search-pad-popup .searchpad-event-description {
@@ -122,4 +126,5 @@
 
 .search-pad-popup .content-wrapper {
     margin-top: 0;
+    min-height: 612px;
 }

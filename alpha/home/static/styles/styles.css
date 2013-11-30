@@ -85,6 +85,7 @@ html.preview, body.preview {
 }
 
 .primary-header .content {
+    position: relative;
     width: 1007px;
     margin: 0 auto;
     text-align: left;
@@ -92,6 +93,9 @@ html.preview, body.preview {
 
 .post-events-for-free {
     height: 35px;
+    position: absolute;
+    bottom: -10px;
+    right: 10px;
 }
 
 .post-events-for-free a,
