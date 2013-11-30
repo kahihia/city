@@ -229,24 +229,6 @@
                                                     {% endfor %}
                                                 </table>
                                             </div>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="event-details-bottom">
-                                    <div class="event-actions">
-                                        <div class="relative-wrapper">
-                                            <a href="javascript:void(0);" class="action-remind-me" data-single-event-id="{{ event.id }}">Remind Me</a>
-                                            {% remind_me_popup event %}
-                                        </div>
-                                        <div class="relative-wrapper">
-                                            <a href="javascript:void(0);" class="action-in-the-loop">In the Loop</a>
-                                            {% in_the_loop_popup event %}
-                                        </div>
-                                        <div class="relative-wrapper">
-                                            <a href="{{ event.website }}" class="action-view-site" target="_blank">
-                                                View Site
-                                            </a>
                                         </div>
                                         {% endfor %}
                                     {% endif %}
@@ -259,7 +241,7 @@
                                         {% remind_me_popup event %}
                                     </div>
                                     <div class="relative-wrapper">
-                                        <a href="javascript:void()" class="action-in-the-loop">In the Loop</a>
+                                        <a href="javascript:void(0);" class="action-in-the-loop">In the Loop</a>
                                         {% in_the_loop_popup event %}
                                     </div>
                                     <div class="relative-wrapper">
