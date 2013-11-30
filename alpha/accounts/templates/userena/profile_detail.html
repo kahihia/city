@@ -47,7 +47,7 @@
     <script type="text/javascript" src="/facebook-for-turbolinks.js"></script>
 {% endblock %}
 
-{% block content %}
+{% block page %}
     <h1>
         My account
     </h1>
@@ -127,40 +127,6 @@
         </div>        
     </div>    
 
-    <div class="settings account-help-container">
-        <a class="new-venue-button" href="{% url 'create_venue_account' %}">
-            <img src="/static/images/accounts/new-venue-bg.jpg">
-            New Venue
-        </a>
-        <header class="my-settings">
-            <img src="/static/images/accounts/settings-bg.png">
-            My Settings
-        </header>
-        <ul class="settings__list">
-            {% if is_admin %}
-                <li>
-                    <a href="{% url 'admin:index' %}">Admin area</a>
-                </li>
-                <li>
-                    <a href="{% url 'cfadmin_home' %}">Management interface</a>
-                </li>
-            {% endif %}
-            <li>
-                <a href="{% url 'userena_profile_edit' profile.user.username %}">Edit my Account</a>
-            </li>
-            <li>
-                <a href="{% url 'reminder_settings' %}">Edit Reminder Settings</a>
-            </li>
-            <li>
-                <a href="{% url 'in_the_loop_settings' %}">Edit In the Loop tags</a>
-            </li>
-            <li>
-                <a href="{% url 'account_orders' %}">View my order history</a>
-            </li>
-            <li class="last">
-                <a href="{% url 'advertising_setup' %}">Create New Ad</a>
-            </li>
-        </ul>        
-    </div>
+    {% include 'accounts/_account_settings_menu.html' %}
 
 {% endblock %}

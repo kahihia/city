@@ -1,0 +1,29 @@
+.box {
+    background: #fff;
+    padding: 15px;
+    border: 1px solid #022e52
+}
+
+.advertising-stats {
+    padding: 0;
+    border: 1px solid #000;
+}
+
+.box .entry-wrapper {
+    background: #fdfcfc;
+    border: 1px solid #c6c6c6;
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.tabs-container table.tabs.cf-admin-menu {
+    background: #fff;
+}
+
+body .box .button {
+    height: 16px;
+    line-height: 16px;
+    margin-bottom: 3px;
+    border: 0;
+}

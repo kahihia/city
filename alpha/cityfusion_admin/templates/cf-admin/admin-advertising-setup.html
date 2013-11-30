@@ -19,17 +19,19 @@
     <div class="tabs-container">
         {% cf_admin_menu "admin_advertising" %}
         <div class="box visible options">
-            <ul class="tabs">
-                <li>
-                    <a href="{% url 'admin_advertising' %}"><span>Advertising list</span></a>
-                </li>
-                <li class="current">
-                    <span>Create new campaign</span>
-                </li>
-                <li>
-                    <a href="{% url 'admin_advertising_review' %}"><span>Review ads</span></a>
-                </li>
-            </ul>
+            <table class="tabs" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <a href="{% url 'admin_advertising' %}"><span>Advertising list</span></a>
+                    </td>
+                    <td class="current">
+                        <span>Create new campaign</span>
+                    </td>
+                    <td>
+                        <a href="{% url 'admin_advertising_review' %}"><span>Review ads</span></a>
+                    </td>
+                </tr>                
+            </table>
             <div class="box visible advertising-setup">
                 <div class="main-content account-options">
                     {%if form.errors %}

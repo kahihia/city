@@ -23,24 +23,30 @@
 {% endblock %}
 
 {% block page %}
-    <div class="primary-content">
-        <h1>
-            <a href="{% url 'userena_profile_detail' account.user.username %}">
-                {{ account.user.username }} orders
-            </a>            
-        </h1>
-
-        <div class="tabs-container">
-            <ul class="tabs" data-page-id="{{ tabs_page }}">
-                <li data-tab-id="advertising" {% if active_tab == "advertising" %}class="current"{% endif %}><span>Advertising</span></li>
-                <li data-tab-id="featured" {% if active_tab == "featured" %}class="current"{% endif %}><span>Featured</span></li>
-            </ul>
-            <div class="box{% if active_tab == "advertising" %} visible{% endif %}">
-                {% include 'accounts/_order_advertising_table.html' %}                            
+    <h1>
+        {{ account.user.username }} orders
+    </h1>
+    <div class="primary-content account-primary-content">
+        <div class="primary-wrapper">
+            <div class="tabs-container">
+                <table class="tabs" data-page-id="{{ tabs_page }}" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td data-tab-id="advertising" {% if active_tab == "advertising" %}class="current"{% endif %}>
+                            <span>Advertising</span>
+                        </td>
+                        <td data-tab-id="featured" {% if active_tab == "featured" %}class="current"{% endif %}>
+                            <span>Featured</span>
+                        </td>
+                    </tr>
+                </table>
+                <div class="box{% if active_tab == "advertising" %} visible{% endif %}">
+                    {% include 'accounts/_order_advertising_table.html' %}
+                </div>
+                <div class="box{% if active_tab == "featured" %} visible{% endif %}">
+                    {% include 'accounts/_order_featured_table.html' %}
+                </div>
             </div>
-            <div class="box{% if active_tab == "featured" %} visible{% endif %}">
-                {% include 'accounts/_order_featured_table.html' %}
-            </div>            
         </div>
     </div>
+    {% include 'accounts/_account_settings_menu.html' %}
 {% endblock %}
