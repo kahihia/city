@@ -82,6 +82,7 @@ html.preview, body.preview {
     height: 78px;
     background: #022e52;
     border-bottom: 1px solid #5c768c;
+    width: 1007px;
 }
 
 .primary-header .content {
@@ -487,6 +488,7 @@ table.schedule-bar-menu td.selected a {
 
 .footer-site-links
 {
+    width: 1007px;
     width:auto;
     padding: 9px 10px 3px 10px;
     background:#022E52;
