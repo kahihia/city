@@ -78,8 +78,7 @@ html.preview, body.preview {
 }
 
 .primary-header {
-    width:auto;
-    height: 78px;
+    width:auto;    
     background: #022e52;
     border-bottom: 1px solid #5c768c;
     width: 100%;
@@ -90,12 +89,13 @@ html.preview, body.preview {
     width: 1007px;
     margin: 0 auto;
     text-align: left;
+    height: 78px;
 }
 
 .post-events-for-free {
     height: 35px;
     position: absolute;
-    bottom: -3px;
+    bottom: 5px;
     right: 14px;
 }
 
