@@ -159,8 +159,6 @@
                 showAnimation: function(d) { this.fadeIn(d); }
             });
         });
-
-        $(".venue-account-owner-dropdown").qap_dropdown();
     });
 
 })(jQuery, window, document);
