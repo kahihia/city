@@ -1,6 +1,9 @@
 .event-conversation .fb-comments{
     margin-top: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 12px;    
+}
+
+.event-conversation .fb_iframe_widget {
     margin-left: 30px;
 }
 

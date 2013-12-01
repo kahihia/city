@@ -1,3 +1,7 @@
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
 @charset "utf-8";
 /* CSS Document */
 
@@ -78,10 +82,10 @@ html.preview, body.preview {
 }
 
 .primary-header {
-    width:auto;
-    height: 78px;
+    width:auto;    
     background: #022e52;
     border-bottom: 1px solid #5c768c;
+    min-width: 1024px;
 }
 
 .primary-header .content {
@@ -89,12 +93,13 @@ html.preview, body.preview {
     width: 1007px;
     margin: 0 auto;
     text-align: left;
+    height: 78px;
 }
 
 .post-events-for-free {
     height: 35px;
     position: absolute;
-    bottom: -3px;
+    bottom: 5px;
     right: 14px;
 }
 
@@ -119,6 +124,7 @@ html.preview, body.preview {
 .menu-header {
     background: #ecece9;
     border-bottom: 2px solid #b8b8b8;
+    min-width: 1024px
 }
 
 .menu-header .content {
@@ -487,6 +493,7 @@ table.schedule-bar-menu td.selected a {
 
 .footer-site-links
 {
+    min-width: 1024px;
     width:auto;
     padding: 9px 10px 3px 10px;
     background:#022E52;

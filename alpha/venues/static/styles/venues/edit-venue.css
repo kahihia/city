@@ -162,8 +162,8 @@
 }
 
 .field .picture-thumb img {
-    position: initial;
-}
+    left: 0;
+} 
 
 .venue-account-details .venue-field img {
     top: -5px;
@@ -255,6 +255,7 @@
 }
 
 .picture-thumb{
+    position: relative;
     float: left;
     width:90px;
     height:90px;
