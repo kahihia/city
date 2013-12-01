@@ -1025,3 +1025,39 @@
 .reminder-button {
     margin-top:10px;
 }
+
+.bonus-budget {
+    width: 280px;
+    border: 1px solid #a2a1a1;
+    margin-left: 12px;
+    padding: 12px;
+    padding-bottom: 7px;
+    margin-bottom: 12px;
+    float: right;
+    background: #c1c0c0;
+    color: #505050;
+    text-align: center;
+    font-size: 18px;
+}
+
+.bonus-budget header {
+
+}
+
+.bonus-budget .amount {
+    width: 276px;
+    border: 1px solid #a2a1a1;
+    color: #fd0303;
+    background: #fff;
+    text-align: center;
+    vertical-align: middle;
+    height: 46px;
+    line-height: 46px;
+    letter-spacing: 3px
+
+}
+
+.bonus-budget .amount span {
+    color: #022e52;
+    margin-right: 15px;
+}

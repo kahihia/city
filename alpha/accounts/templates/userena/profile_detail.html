@@ -125,7 +125,19 @@
                 </div>
             </div>
         </div>        
-    </div>    
+    </div>
+
+    {% if profile.bonus_budget %}
+        <div class="bonus-budget">
+            <header>
+                Bonus Money
+            </header>
+            <div class="amount">
+                <span>$</span>
+                {{ profile.bonus_budget.amount }}
+            </div>
+        </div>
+    {% endif %}
 
     {% include 'accounts/_account_settings_menu.html' %}
 
