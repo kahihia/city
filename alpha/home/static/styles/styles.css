@@ -480,15 +480,14 @@ table.schedule-bar-menu td.selected a {
 .footer-container
 {
     width:1004px;
-    margin:0px auto;
+    margin: 0px auto;
     text-align:left;
+    margin-bottom: 10px;
 }
 
 .footer-ads-wrapper
 {
-    width:auto;
-    padding-top:10px;
-    padding-bottom:10px;
+    width:auto;    
     text-align: center;
 }
 
