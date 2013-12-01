@@ -19,6 +19,96 @@
 {% endblock %}
 
 {% block page %}
+    <div class="featured-form">
+        <form method="post" name="featured-events-setup">
+            {% csrf_token %}
+            <div class="featured-form__details">
+                <div class="featured-form__details-title">
+                    Featured Events $2.00/Day
+                </div>
+                <div class="featured-form__details-content">
+                    {%if form.errors %}
+                        <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                            <ul style="list-style-type: none;">
+                                <li id="all-info">
+                                    {% for error in form.non_field_errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <header class="featured-form__field-title">
+                        Start Date
+                    </header>
+                    <div class="featured-form__date-field">
+                        {{ form.start_time }}
+                    </div>
+
+                    <header class="featured-form__field-title">
+                        End Date
+                    </header>
+                    <div class="featured-form__date-field">
+                        {{ form.end_time }}
+                    </div>
+
+
+                    <header class="featured-form__field-title">
+                        Days to display
+                    </header>
+                    <div class="featured-form__text-field">
+                        <input id="days_to_display" type="text" name="days_to_display" value="15">
+                    </div>
+
+                    <div class="featured-form__featured-options">
+                        <span class="featured-form__regions-title">
+                            Select province/territory to show your featured event (choices)
+                        </span>
+                        <div class="featured-form__regions choose-province-block">
+                            <div class="teritory-node">
+                                <div class="checkbox">
+                                    <input {% if form.all_of_canada.value %}checked="checked"{% endif %} type="checkbox" id="id_all_of_canada" value="true" name="all_of_canada" />
+                                    <label for="id_all_of_canada"></label>
+                                    <label for="id_all_of_canada">All of Canada</label>
+                                </div>
+                            </div>
+                            {% for region in form.fields.regions.queryset %}
+                                <div class="teritory-node region">
+                                    <div class="checkbox">
+                                        <input {% for current_region in form.regions.value %}{% if region.pk = current_region|add:0 %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_regions_{{ forloop.counter0 }}" value="{{ region.id }}" name="regions" />
+                                        <label for="id_regions_{{ forloop.counter0 }}"></label>
+                                        <label for="id_regions_{{ forloop.counter0 }}">
+                                            {{ region.name }}
+                                        </label>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="clr"></div>
+                        </div>
+                    </div>
+
+                    <div class="tabs-container featured-form__tabs">
+                        <ul class="tabs" data-page-id="featured-event-setup">
+                            <li data-tab-id="venue-featured-stats" class="current">
+                                <span>Featured Stats</span>
+                            </li>
+                        </ul>
+                        <div class="box visible">
+                            {% include 'venue_accounts/_venue_featured_stats_table.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="featured-form__budget">
+                {% include 'featured/setup_payments.html' %}
+                <div class="featured-form__buttons">
+                    <input class="featured-form__submit" type="submit" value="Save" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--
     <div class="primary-content">
         <h1>
             Featured Events
@@ -98,7 +188,6 @@
                             <input id="days_to_display" type="text" name="days_to_display" value="15">
                         </td>
                         <td colspan="4" class="long">
-                            <!-- TODO: change text -->
                             Enter the amount of day event will be featured
                         </td>
                     </tr>
@@ -151,4 +240,5 @@
             </div>
         </div>
     </div>
+    -->
 {% endblock %}

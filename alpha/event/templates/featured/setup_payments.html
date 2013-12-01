@@ -1,101 +1,95 @@
-<div class="pay-now-header">
-    Pay Now With
+<div class="payments__title">
+    Pay now
 </div>
-<div class="pay-now-widget">
+<div class="payments__content">
     <input type="hidden" value="2" id="id_day_cost">
-    <div class="info active">
-        <table class="taxes">            
-            <tr {% if account.bonus_budget.amount <= 0 %}style="display: none;"{% endif %}>
-                <td>
-                    <div>
-                        Apply Bonus? (up to {{ account.bonus_budget }})
-                    </div>
-                </td>
-                <td>
-                    <input type="text" id="id_bonus" name="bonus" value="{{ form.bonus.value.0 }}">
-                    <input type="hidden" name="bonus_currency" value="CAD">
-                </td>
-                <td></td>
-            </tr>
-            <tr class="total-price-row" {% if account.bonus_budget.amount <= 0 %}style="display: none;"{% endif %}>
-                <td>
-                    Due:
-                </td>
-                <td>
-                    C$<span class="total-price-output">
-                        0
-                    </span>
-                </td>
-            </tr>
-            {% if account_taxes %}
-                {% for tax in account_taxes %}
-                    <tr class="tax-row">
-                        <td>
-                            <input type="hidden" value="{{ tax.tax }}" class="tax-input">
-                            {{ tax.name }} ({{ tax.pretty_tax }}%):
-                        </td>
-                        <td>
-                            C$<span class="tax-price">
-                                0
-                            </span>
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-            <tr class="total-price-row">
-                <td>
-                    Total Due:
-                </td>
-                <td>
-                    C$<span class="total-price-with-taxes-output">
-                        0
-                    </span>
-                </td>
-            </tr>
-        </table>
-    </div>    
-    <div class="choose-payment-system">
-        <table>
-            <tr>
-                <td>
-                    <div class="checkbox paypal">
-                        <input id="payment_paypal_id" type="radio" name="payment_system" value="paypal" checked="checked" >
-                        <label for="payment_paypal_id"></label>
-                        <label for="payment_paypal_id">
-                            <img src="{{ STATIC_URL }}/images/featured/paypal.png"/>
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <div class="checkbox disabled">
-                        <input id="payment_visa_id" type="radio" name="payment_system" value="visa" disabled>
-                        <label for="payment_visa_id"></label>
-                        <label for="payment_visa_id">
-                            <img src="{{ STATIC_URL }}/images/featured/visa.png"/>
-                        </label>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="checkbox disabled">
-                        <input id="payment_email_money_id" type="radio" name="payment_system" value="email_money_transfer" disabled>
-                        <label for="payment_email_money_id"></label>
-                        <label for="payment_email_money_id">
-                            <img src="{{ STATIC_URL }}/images/featured/email_money_transfer.png"/>
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <div class="checkbox disabled">
-                        <input id="payment_master_card_id" type="radio" name="payment_system" value="master_card" disabled>
-                        <label for="payment_master_card_id"></label>
-                        <label for="payment_master_card_id">
-                            <img src="{{ STATIC_URL }}/images/featured/master_card.png"/>
-                        </label>
-                    </div>
-                </td>
-            </tr>
-        </table>
+    <table class="payments__taxes">
+        <tr {% if account.bonus_budget.amount <= 0 %}style="display: none;"{% endif %}>
+            <td class="payments__cell">
+                <div>
+                    Apply Bonus? (up to {{ account.bonus_budget }})
+                </div>
+            </td>
+            <td class="payments__cell">
+                <input type="text"
+                       id="id_bonus"
+                       class="payments__price-field"
+                       name="bonus"
+                       value="{{ form.bonus.value.0 }}">
+                <input type="hidden" name="bonus_currency" value="CAD">
+            </td>
+            <td></td>
+        </tr>
+        {% if account_taxes %}
+            {% for tax in account_taxes %}
+                <tr class="tax-row">
+                    <td class="payments__cell payments__cell_align_center payments__cell_font_middle">
+                        <input type="hidden" value="{{ tax.tax }}" class="tax-input">
+                        {{ tax.name }} ({{ tax.pretty_tax }}%)
+                        <span class="payments__currency-label">C$</span>
+                    </td>
+                    <td class="payments__cell payments__cell_align_right payments__cell_font_middle">
+                        <span class="tax-price">
+                            0
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        <tr class="total-price-row payments__total" {% if account.bonus_budget.amount <= 0 %}style="display: none;"{% endif %}>
+            <td class="payments__cell payments__cell_align_center payments__cell_font_big">
+                Due
+                <span class="payments__currency-label">C$</span>
+            </td>
+            <td class="payments__cell payments__cell_align_right payments__cell_font_big">
+                <span class="total-price-output">
+                    0
+                </span>
+            </td>
+        </tr>
+        <tr class="total-price-row">
+            <td class="payments__cell payments__cell_align_center payments__cell_font_big">
+                Total Due
+                <span class="payments__currency-label">C$</span>
+            </td>
+            <td class="payments__cell payments__cell_align_right payments__cell_font_big">
+                <span class="total-price-with-taxes-output">
+                    0
+                </span>
+            </td>
+        </tr>
+    </table>
+    <div class="payments__systems">
+        <div class="payments__systems-item checkbox paypal">
+            <input id="payment_paypal_id" type="radio" name="payment_system" value="paypal" checked="checked" >
+            <label class="payments__check-label" for="payment_paypal_id"></label>
+            <label class="payments__item-label" for="payment_paypal_id">
+                <img src="{{ STATIC_URL }}/images/featured/paypal.png" height="84" />
+            </label>
+        </div>
+
+        <div class="payments__systems-item checkbox disabled">
+            <input id="payment_visa_id" type="radio" name="payment_system" value="visa" disabled>
+            <label class="payments__check-label" for="payment_visa_id"></label>
+            <label class="payments__item-label" for="payment_visa_id">
+                <img src="{{ STATIC_URL }}/images/featured/visa.png" height="84" />
+            </label>
+        </div>
+
+        <div class="payments__systems-item checkbox disabled">
+            <input id="payment_email_money_id" type="radio" name="payment_system" value="email_money_transfer" disabled>
+            <label class="payments__check-label" for="payment_email_money_id"></label>
+            <label class="payments__item-label" for="payment_email_money_id">
+                <img src="{{ STATIC_URL }}/images/featured/email_money_transfer.png" height="84" />
+            </label>
+        </div>
+
+        <div class="payments__systems-item checkbox disabled">
+            <input id="payment_master_card_id" type="radio" name="payment_system" value="master_card" disabled>
+            <label class="payments__check-label" for="payment_master_card_id"></label>
+            <label class="payments__item-label" for="payment_master_card_id">
+                <img src="{{ STATIC_URL }}/images/featured/master_card.png" height="84" />
+            </label>
+        </div>
     </div>
 </div>

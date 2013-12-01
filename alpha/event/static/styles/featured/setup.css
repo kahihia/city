@@ -202,3 +202,193 @@
 .tabs-container.with-margin  ul.tabs {
     margin-left: 20px;
 }
+
+.featured-form {
+    width: 1007px;
+    padding-bottom: 20px;
+}
+
+.featured-form__details, .featured-form__budget {
+    float: left;
+}
+
+.featured-form__budget {
+    width: 311px;
+    margin-left: 18px;
+    background: #022e52;
+    position: relative;
+    padding-bottom: 116px;
+}
+
+.featured-form__details {
+    width: 595px;
+    background: #ffffff;
+    border: 1px solid #B9B8B8;
+    margin-left: 30px;
+}
+
+.featured-form__details-title {
+    text-transform: uppercase;
+    height: 35px;
+    line-height: 35px;
+    background: #8c8a8a;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    padding-left: 30px;
+}
+
+.featured-form__details-content {
+    padding: 35px 0 21px 105px;
+}
+
+.featured-form__field-title {
+    color: #022e52;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.featured-form__text-field, .featured-form__date-field {
+    padding-bottom: 8px;
+}
+
+.featured-form__text-field input, .featured-form__date-field input {
+    border: 1px solid #c7c6c6 !important;
+    width: 394px;
+    font-size: 13px;
+}
+
+.featured-form__regions-title {
+    color: #022E52;
+    font-weight: bold;
+}
+
+.featured-form__regions {
+    color: #454545;
+    padding: 15px 18px 13px;
+    position: relative;
+    border: 1px solid #C7C6C6;
+    margin-top: 5px;
+    width: 368px;
+}
+
+.featured-form__tabs {
+    width: 406px;
+}
+
+.payments__title {
+    text-transform: uppercase;
+    height: 35px;
+    line-height: 35px;
+    background: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    color: #696666;
+    text-align: center;
+}
+
+.payments__content {
+    padding: 52px 0 0 25px;
+}
+
+.payments__taxes {
+    border-collapse: collapse;
+}
+
+.payments__cell {
+    vertical-align: middle;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 0 4px 10px 0;
+}
+
+.payments__price-field {
+    width: 53px;
+    height: 28px;
+    line-height: 28px;
+    text-align: right;
+    font-size: 16px;
+    color: #022e52 !important;
+}
+
+.payments__total .payments__cell {
+    border-top: 2px solid #ffffff;
+    padding-top: 10px;
+}
+
+.payments__cell_font_middle {
+    font-size: 17px;
+}
+
+.payments__cell_font_big {
+    font-size: 17px;
+    text-transform: uppercase;
+}
+
+.payments__cell_align_center {
+    text-align: center;
+}
+
+.payments__cell_align_right {
+    text-align: right;
+}
+
+.payments__currency-label {
+    float: right;
+}
+
+.payments__systems {
+    margin-top: 44px;
+}
+
+.payments__systems-item {
+    width: 180px;
+    margin: 0 auto 25px auto !important;
+    display: block !important;
+    padding-right: 25px;
+}
+
+input[type="radio"] + label.payments__check-label {
+    background: url("/static/images/widgets/blue-radio-bg.png") -13px center no-repeat;
+    height: 13px;
+    width: 13px;
+}
+
+input[type="radio"]:checked + label.payments__check-label {
+    background: url("/static/images/widgets/blue-radio-bg.png") 0 center no-repeat;
+}
+
+.payments__item-label {
+    height: auto !important;
+    margin-left: 16px;
+}
+
+.featured-form__buttons {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    text-align: center;
+    padding: 15px 0 70px 0;
+}
+
+.featured-form__submit {
+    text-transform: uppercase;
+    display: inline-block;
+    color: #022e52 !important;
+    font-size: 13px;
+    font-weight: bold;
+    background: #a3a1a1 !important;
+    padding: 0 40px;
+    height: 31px;
+    line-height: 31px;
+    cursor: pointer;
+}
+
+.featured-form__submit:hover {
+    background: #808080 !important;
+}
+
+.featured-form__details-content .errors {
+    margin-bottom: 15px;
+    width: 403px;
+}
