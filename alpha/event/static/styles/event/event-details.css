@@ -181,6 +181,14 @@
     text-overflow: ellipsis;
 }
 
+.searchpad-event-wrapper .event-details .event-venue span {
+    width: 140px;;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+}
+
 .searchpad-event-wrapper .event-details .event-venue-name,
 .event-wrapper .event-details .event-venue-name {
     width: 195px;
@@ -188,7 +196,7 @@
 }
 
 .searchpad-event-wrapper .event-details .event-venue-name {
-    width: 134px;
+    width: 140px;
 }
 
 .searchpad-event-wrapper .event-details .title-wrapper,
