@@ -32,8 +32,12 @@
 }
 
 .searchpad-event-wrapper .event-photo footer {
-    font-size: 10px;    
+    font-size: 10px;
     margin-top: 15px;
+    width: 154px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .searchpad-event-wrapper .event-photo {
@@ -165,10 +169,13 @@
     font-weight: bold;
 }
 
+.searchpad-event-wrapper .event-details .event-time-wrapper {
+    color: #0260bb;
+}
+
 .searchpad-event-wrapper .event-details .event-venue,
 .event-wrapper .event-details .event-venue {
     margin-top: 11px;
-    margin-left: 10px;
     color: #022e52;
     font-weight: bold;
 }
@@ -182,7 +189,7 @@
 }
 
 .searchpad-event-wrapper .event-details .event-venue span {
-    width: 140px;;
+    width: 260px;
     white-space: nowrap;
     overflow: hidden;
     display: block;
