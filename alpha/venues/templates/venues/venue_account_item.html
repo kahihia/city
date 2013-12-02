@@ -20,5 +20,8 @@
             {% endif %}
             {{ venue_account.venue.city.name_std }}, {{ venue_account.venue.city.region.name_std|region_shortcut }}
         </div>
+        {% if venue_account.phone %}
+            <div class="phone">{{ venue_account.phone }}</div>
+        {% endif %}        
     </div>
 </a>
