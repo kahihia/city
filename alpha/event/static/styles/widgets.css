@@ -642,6 +642,12 @@ body .event-actions-popup .possible-in-the-loop-tags {
     width: 390px;
 }
 
+body .event-actions-popup .possible-in-the-loop-tags div.checkbox label:nth-of-type(2) {
+    height: auto;
+    line-height: 16px;
+    width: 80px;
+}
+
 
 
 body .event-actions-popup table.possible-in-the-loop-tags td {
