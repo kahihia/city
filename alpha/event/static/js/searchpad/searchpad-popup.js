@@ -20,6 +20,7 @@
     SearchPadPopup.prototype = {
         open: function(){
             this.popup.show();
+            this.initDescriptionMoreButton();
         },
         close: function(){
             this.popup.hide();
@@ -84,6 +85,7 @@
             }
 
             this.initAddThis();
+            this.initDescriptionMoreButton();
         },
         initSearchTags: function(){
             var that=this;
@@ -124,6 +126,18 @@
                 addThisCell.append(toolbox);
                 window.addthis.toolbox("#addthis_toolbox");
                 window.addthis.counter("#addthis_counter");
+            }
+        },
+        initDescriptionMoreButton: function(){
+            var description = $(".description", this.popup)
+            if(!$("read-more", description).length && description.get(0) && description.get(0).scrollHeight > (description.height() + 10)) {
+                description.append(
+                    dom("a", {
+                        "innerHTML": "read more",
+                        "class": "read-more",
+                        "href": $(".searchpad-event-details header a", this.popup).attr("href")
+                    })
+                );
             }
         }
     };
