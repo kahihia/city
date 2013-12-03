@@ -14,7 +14,7 @@ from django.template import RequestContext
 from accounts.models import Account, BonusCampaign, VenueAccount
 from advertising.models import ShareAdvertisingCampaign
 from event.models import Event, FeaturedEvent, FacebookEvent, EventTransferring, FeaturedEventOrder
-from event.forms import SetupFeaturedForm, CreateEventForm
+from event.forms import SetupFeaturedByAdminForm, CreateEventForm
 from event.services import facebook_services
 from notices import services as notice_services
 from cities.models import City, Country
@@ -401,13 +401,13 @@ def admin_setup_featured(request, event_id):
         owned_by_admin=True
     )
 
-    form = SetupFeaturedForm(
+    form = SetupFeaturedByAdminForm(
         account=account,
         instance=featured_event
     )
 
     if request.method == 'POST':
-        form = SetupFeaturedForm(account=account, instance=featured_event, data=request.POST)
+        form = SetupFeaturedByAdminForm(account=account, instance=featured_event, data=request.POST)
 
         if form.is_valid():
             featured_event = form.save()
@@ -445,13 +445,13 @@ def admin_deactivate_featured(request, featured_event_id):
 @staff_member_required
 def admin_edit_featured(request, featured_event_id):
     featured_event = FeaturedEvent.objects.get(id=featured_event_id)
-    form = SetupFeaturedForm(
+    form = SetupFeaturedByAdminForm(
         account=request.account,
         instance=featured_event
     )
     
     if request.method == 'POST':
-        form = SetupFeaturedForm(account=request.account, instance=featured_event, data=request.POST)
+        form = SetupFeaturedByAdminForm(account=request.account, instance=featured_event, data=request.POST)
 
         if form.is_valid():
             featured_event = form.save()

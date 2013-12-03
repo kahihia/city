@@ -111,18 +111,6 @@
     max-height: 175px;        
 }
 
-/*.searchpad-event-wrapper .description:after {
-    display: block;
-    content: "...";
-    position: absolute;    
-    bottom: 0px;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.9);
-    font-size: 36px;    
-    color: #022e52;
-    text-align: center;
-}*/
-
 .search-pad-popup .searchpad-event-description {
     height: 190px;
     overflow: auto;
