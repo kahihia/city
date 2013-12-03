@@ -55,7 +55,6 @@ html.preview, body.preview {
     margin: 11px auto 0 auto;
     text-align:left;
     background: #e3e3e3;
-    padding-bottom: 10px;
 }
 
 .page-container.index {
@@ -485,9 +484,14 @@ table.schedule-bar-menu td.selected a {
     margin-bottom: 10px;
 }
 
+.footer-container.top {
+    padding-top:9px;
+    padding-bottom:9px;
+}
+
 .footer-ads-wrapper
 {
-    width:auto;    
+    width:auto;
     text-align: center;
 }
 
