@@ -168,7 +168,6 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
     else:
         single_events = list(SingleEvent.future_events.filter(event=event))
 
-    batch, attached_images, posted_single_events = [], {}, []
     event_url = '%s/events' % facebook_owner_id
     event_images = list(event.sorted_images)
     have_images = False
@@ -176,54 +175,69 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
         event_image = os.path.abspath(os.path.join(settings.MEDIA_ROOT, event_images[0].picture.path))
         have_images = True
 
+    event_groups, event_group = [], []
+    index = 0
     for single_event in single_events:
-        if not single_event.facebook_event:
-            posted_single_events.append(single_event)
-            params = common_params.copy()
-            params.update({
-                'start_time': single_event.start_time.strftime('%Y-%m-%dT%H:%M:%S-0600'),
-                'end_time': single_event.end_time.strftime('%Y-%m-%dT%H:%M:%S-0600'),
-            })
+        event_group.append(single_event)
+        index += 1
+        if index == 10:
+            event_groups.append(event_group)
+            index, event_group = 0, []
 
-            operation_name = 'create-event-%s' % single_event.id
+    if index != 0:
+        event_groups.append(event_group)
 
-            batch.append({
-                'method': 'POST',
-                'relative_url': event_url,
-                'body': urllib.urlencode(params),
-                'name': operation_name,
-                'omit_response_on_success': False
-            })
+    facebook_event_ids, posted_single_events = [], []
+    for event_group in event_groups:
+        batch, attached_images = [], {}
+        for single_event in event_group:
+            if not single_event.facebook_event:
+                posted_single_events.append(single_event)
+                params = common_params.copy()
+                params.update({
+                    'start_time': single_event.start_time.strftime('%Y-%m-%dT%H:%M:%S-0600'),
+                    'end_time': single_event.end_time.strftime('%Y-%m-%dT%H:%M:%S-0600'),
+                })
 
-            if have_images:
-                picture_url = '{result=%s:$.id}/picture' % operation_name
-                image_name = 'source%s' % single_event.id
+                operation_name = 'create-event-%s' % single_event.id
 
                 batch.append({
                     'method': 'POST',
-                    'relative_url': picture_url,
-                    'attached_files': image_name
+                    'relative_url': event_url,
+                    'body': urllib.urlencode(params),
+                    'name': operation_name,
+                    'omit_response_on_success': False
                 })
 
-                attached_images[image_name] = open(event_image)
+                if have_images:
+                    picture_url = '{result=%s:$.id}/picture' % operation_name
+                    image_name = 'source%s' % single_event.id
 
-    if not len(posted_single_events):
+                    batch.append({
+                        'method': 'POST',
+                        'relative_url': picture_url,
+                        'attached_files': image_name
+                    })
+
+                    attached_images[image_name] = open(event_image)
+
+        if posted_single_events:
+            values = {
+                'access_token': graph.access_token,
+                'batch': json.dumps(batch)
+            }
+
+            if have_images:
+                values.update(attached_images)
+
+            response = _send_multipart_data(graph.api_url, values)
+            for item in response:
+                data = json.loads(item['body'])
+                if type(data) == dict and 'id' in data:
+                    facebook_event_ids.append(data['id'])
+
+    if not posted_single_events:
         raise Exception('Error: no events for posting')
-
-    values = {
-        'access_token': graph.access_token,
-        'batch': json.dumps(batch)
-    }
-
-    if have_images:
-        values.update(attached_images)
-
-    response = _send_multipart_data(graph.api_url, values)
-    facebook_event_ids = []
-    for item in response:
-        data = json.loads(item['body'])
-        if type(data) == dict and 'id' in data:
-            facebook_event_ids.append(data['id'])
 
     result = {}
     for i in range(0, len(posted_single_events)):
