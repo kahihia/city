@@ -310,10 +310,6 @@ class InTheLoopSchedule(models.Model):
     objects = models.Manager()
     new_events = NewInTheLoopEventManager()
 
-    def process(self):
-        self.processed = True
-        self.save()
-
     @staticmethod
     def unprocessed_for_account(account):
         tags = account.in_the_loop_tags.values_list("name", flat=True)
@@ -333,6 +329,15 @@ class InTheLoopSchedule(models.Model):
             Q(id__in=event_ids),
             location_query
         ).annotate(repeat_count=Count('id'))
+
+
+    def process(self):
+        InTheLoopSchedule.objects.filter(id=self.id).update(processed=True)
+
+    @staticmethod
+    def process_events(events):
+        InTheLoopSchedule.objects.filter(id__in=events).update(processed=True)
+
         
 
     def __unicode__(self):
