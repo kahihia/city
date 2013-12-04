@@ -60,7 +60,7 @@ class ExpiredAdvertisingCampaign(models.Manager):
     def get_query_set(self):
         now = datetime.datetime.now()
         return super(ExpiredAdvertisingCampaign, self).get_query_set().filter(
-            Q(enough_money=False) | Q(active_to__lte=now) | Q(active_from__gte=now)
+            (Q(free=False) & Q(enough_money=False)) | Q(active_to__lte=now) | Q(active_from__gte=now)
         )
 
 
