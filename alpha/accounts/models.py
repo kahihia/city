@@ -337,7 +337,6 @@ class InTheLoopSchedule(models.Model):
     @staticmethod
     def process_events(events):
         InTheLoopSchedule.objects.filter(id__in=events).update(processed=True)
-
         
 
     def __unicode__(self):

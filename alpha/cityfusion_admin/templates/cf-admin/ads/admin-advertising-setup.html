@@ -25,18 +25,18 @@
                         <a href="{% url 'admin_advertising' %}"><span>Advertising list</span></a>
                     </td>
                     <td>
-                        <a href="{% url 'admin_advertising_setup' %}"><span>Create new campaign</span></a>
+                        <a href="{% url 'admin_expired_advertising' %}"><span>Expired Ads</span></a>
+                    </td>
+                    <td class="current">
+                        <span>Create new campaign</span>
                     </td>
                     <td>
                         <a href="{% url 'admin_advertising_review' %}"><span>Review ads</span></a>
                     </td>
                 </tr>                
-            </table>            
+            </table>
             <div class="box visible advertising-setup">
                 <div class="main-content account-options">
-                    <h1>
-                        Edit {{ campaign.name }} campaign
-                    </h1>
                     {%if form.errors %}
                         <div class="errors" style="border:1px solid RED;border-radius:4px;">
                             <ul style="list-style-type: none;">
@@ -85,8 +85,6 @@
                             Will be active
                             {{ form.active_from }} - {{ form.active_to }}
                         </div>
-
-
 
                         {% setup_advertising_types %}
                         {% setup_advertising_upload %}
