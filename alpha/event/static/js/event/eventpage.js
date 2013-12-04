@@ -3,7 +3,7 @@
 
     var EventPage = function(){
         this.initEventActions();
-        $("a#photoFancy").fancybox({
+        $(".event-details-primary-content a#photoFancy").fancybox({
             'hideOnContentClick': true
         });
 

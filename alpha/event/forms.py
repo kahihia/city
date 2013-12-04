@@ -2,7 +2,6 @@ import json
 import string
 
 from django import forms
-from django.forms.widgets import RadioSelect
 from event.models import Event, FeaturedEvent
 from event.widgets import WhenWidget, GeoCompleteWidget, ChooseUserContextWidget, AttachmentsWidget, EventImagesWidget
 from django.utils.translation import ugettext_lazy as _
@@ -16,6 +15,44 @@ import dateutil.parser as dateparser
 from cities.models import Region
 from djmoney.forms.fields import MoneyField
 from moneyed import Money, CAD
+
+
+class SetupFeaturedByAdminForm(forms.ModelForm):
+    regions = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        queryset=Region.objects.filter(country__code="CA"),
+        required=False
+    )
+
+    start_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
+    end_time = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'))
+
+    class Meta:
+        model = FeaturedEvent
+        fields = (
+            'start_time',
+            'end_time',
+            'all_of_canada',
+            'regions'           
+        )
+
+    def __init__(self, account, *args, **kwargs):
+        super(SetupFeaturedByAdminForm, self).__init__(*args, **kwargs)
+
+        self.account = account
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+
+        all_of_canada = cleaned_data['all_of_canada']
+
+        regions = cleaned_data['regions']
+
+        if not all_of_canada and not regions:
+            raise forms.ValidationError('You should choose at least one region')
+        return cleaned_data
+
+
 
 
 class SetupFeaturedForm(forms.ModelForm):
