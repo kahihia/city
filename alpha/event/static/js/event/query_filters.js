@@ -23,8 +23,12 @@
             delete this.params[key];
             return this;
         },
-        getURL: function(){
-            return window.location.pathname + "?" + $.param(this.params, true);
+        getURL: function(root){
+            if(!root) {
+                root = window.location.pathname;
+            }
+                        
+            return root + "?" + $.param(this.params, true);
         },
         clear: function(){
             this.params = {};
