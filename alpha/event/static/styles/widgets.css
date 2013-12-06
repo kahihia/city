@@ -751,3 +751,95 @@ body .event-actions-popup .in-the-loop-popup-content {
 .warn {
     color: #cc3b3b;
 }
+
+.hover-container {
+    position: relative;
+}
+
+.hover-container .hover-effect {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    z-index: 50;
+    text-align: center;
+    font-size: 12px;
+    padding: 5px 10px;
+    display: block;    
+    width: 230px;
+    
+    text-align: center;
+
+}
+
+.hover-container:hover .hover-effect {
+    transition: 1s;
+    -webkit-transition: 1s; /* Safari */
+
+}
+
+.hover-container .hover-effect.effect1 {
+    left: 0px;
+    top: -1000px;
+}
+
+.hover-container:hover .hover-effect.effect1 {
+    top: 100px;
+}
+
+.hover-container .hover-effect.effect1 {
+    left: 0px;
+    top: -1000px;
+}
+
+.hover-container:hover .hover-effect.effect2 {
+    top: 100px;
+}
+
+.hover-container .hover-effect.effect2 {
+    left: 0px;
+    top: -1000px;
+}
+
+.hover-container:hover .hover-effect.effect2 {
+    top: 100px;
+    left: -70px;
+}
+
+.hover-container .hover-effect.effect3 {
+    right: 0px;
+    top: -1000px;
+}
+
+.hover-container:hover .hover-effect.effect3 {
+    top: 100px;
+    right: -0px;
+}
+
+.hover-container .hover-effect.effect4 {
+    left: 0px;
+    bottom: -1000px;
+}
+
+.hover-container:hover .hover-effect.effect4 {
+    bottom: 100px;
+}
+
+.hover-container .hover-effect.effect5 {
+    left: 0px;
+    bottom: -1000px;
+}
+
+.hover-container:hover .hover-effect.effect5 {
+    bottom: 100px;
+    left: -70px;
+}
+
+.hover-container .hover-effect.effect6 {
+    right: 0px;
+    bottom: -1000px;
+}
+
+.hover-container:hover .hover-effect.effect6 {
+    bottom: 100px;
+    right: 0px;
+}

@@ -65,7 +65,6 @@
 {% endblock messages %}
 {% block page %}
     <div id="fb-root"></div>
-
     <h1>
         <a href="{% event_link event %}">{{event.name}}</a>
     </h1>
@@ -111,7 +110,7 @@
                                     {{ event.venue_account_owner.venue.name }}
                                 </a>
                             </footer>
-                            {% endif %}
+                            {% endif %}                            
                         </div>
                     </td>
                     <td class="event-details-td">
