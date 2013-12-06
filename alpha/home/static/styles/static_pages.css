@@ -82,3 +82,61 @@
 p.non-top {
     margin-top: 0;
 }
+
+/* Advertising --begin-- */
+
+.advertising-item {
+    width: 313px;
+    float: left;
+    background: #ffffff;
+    border: 1px solid #d1d1d1;
+    padding: 11px;
+}
+
+.advertising-item_margin_yes {
+    margin-left: 10px;
+}
+
+.advertising-item__inner {
+    border: 1px solid #767778;
+    padding: 0 18px 76px 22px;
+    position: relative;
+    height: 518px;
+}
+
+.advertising-item__title {
+    color: #022e52;
+    font-size: 17px;
+    margin: 16px 0 18px;
+}
+
+.advertising-item__description {
+    color: #030303;
+    font-size: 12px;
+    padding-top: 18px;
+    text-align: justify;
+}
+
+.advertising-item__buttons {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 76px;
+    text-align: right;
+    padding-right: 18px;
+}
+
+.advertising-item__button {
+    width: 118px;
+    height: 26px;
+    line-height: 26px;
+    background: #0260bb;
+    display: inline-block;
+    text-align: center;
+    text-transform: uppercase;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Advertising --end-- */
