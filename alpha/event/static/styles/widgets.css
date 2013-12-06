@@ -758,7 +758,7 @@ body .event-actions-popup .in-the-loop-popup-content {
 
 .hover-container .hover-effect {
     position: absolute;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.);
     color: #fff;
     z-index: 50;
     text-align: center;
@@ -778,25 +778,27 @@ body .event-actions-popup .in-the-loop-popup-content {
 }
 
 .hover-container .hover-effect.effect1 {
-    left: 0px;
+    left: -400px;
     top: -1000px;
 }
 
 .hover-container:hover .hover-effect.effect1 {
+    left: 0px;
     top: 100px;
 }
 
 .hover-container .hover-effect.effect1 {
-    left: 0px;
+    left: -400px;
     top: -1000px;
 }
 
 .hover-container:hover .hover-effect.effect2 {
+    left: 0px;
     top: 100px;
 }
 
 .hover-container .hover-effect.effect2 {
-    left: 0px;
+    left: -400px;
     top: -1000px;
 }
 
@@ -806,26 +808,27 @@ body .event-actions-popup .in-the-loop-popup-content {
 }
 
 .hover-container .hover-effect.effect3 {
-    right: 0px;
+    right: -400px;
     top: -1000px;
 }
 
 .hover-container:hover .hover-effect.effect3 {
     top: 100px;
-    right: -0px;
+    right: 0px;
 }
 
 .hover-container .hover-effect.effect4 {
-    left: 0px;
+    left: -400px;
     bottom: -1000px;
 }
 
 .hover-container:hover .hover-effect.effect4 {
+    left: 0px;
     bottom: 100px;
 }
 
 .hover-container .hover-effect.effect5 {
-    left: 0px;
+    left: -400px;
     bottom: -1000px;
 }
 
@@ -835,7 +838,7 @@ body .event-actions-popup .in-the-loop-popup-content {
 }
 
 .hover-container .hover-effect.effect6 {
-    right: 0px;
+    right: -400px;
     bottom: -1000px;
 }
 
