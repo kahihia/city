@@ -210,12 +210,14 @@ def copy_occurring_bonus(sender, instance, created, **kwargs):
 
 def add_single_events_to_schedule(account, events):
     for event_day in events:
+        notification_time = None
+
         if account.reminder_active_type == "DAYS" and account.reminder_days_before_event:
             notification_time = event_day.start_time - timedelta(days=int(account.reminder_days_before_event))
         if account.reminder_active_type == "HOURS" and account.reminder_hours_before_event:
             notification_time = event_day.start_time - timedelta(hours=int(account.reminder_hours_before_event))
 
-        if notification_time > datetime.datetime.now():
+        if notification_time and notification_time > datetime.datetime.now():
             reminding = AccountReminding(
                 account=account,
                 single_event=event_day,
