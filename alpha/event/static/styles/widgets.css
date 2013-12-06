@@ -758,7 +758,7 @@ body .event-actions-popup .in-the-loop-popup-content {
 
 .hover-container .hover-effect {
     position: absolute;
-    background: rgba(0, 0, 0, 0.);
+    background: rgba(0, 0, 0, 0.8);
     color: #fff;
     z-index: 50;
     text-align: center;
