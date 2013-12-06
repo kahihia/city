@@ -240,7 +240,6 @@ input[type=submit]:hover {
     margin: 0;
     padding: 0;
     font-weight: bold;
-    background: #dedede;
     border-bottom: 3px solid #022e52;
 
     -webkit-border-top-left-radius: 5px;
@@ -279,8 +278,6 @@ input[type=submit]:hover {
     display: inline-block;
     list-style: none;
 }
-
-
 
 .tabs-container.no-borders ul.tabs li,
 .tabs-container.no-borders table.tabs td {

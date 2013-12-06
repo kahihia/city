@@ -25,7 +25,7 @@ def open(request, advertising_id):
 
 @login_required
 @native_region_required(why_message="native_region_required")
-def setup(request):
+def setup(request):    
     account = Account.objects.get(user_id=request.user.id)
     campaign = AdvertisingCampaign(account=account, venue_account=request.current_venue_account)
 
@@ -71,35 +71,6 @@ def setup(request):
         "chosen_advertising_types": chosen_advertising_types,
         "chosen_advertising_payment_types": chosen_advertising_payment_types,
         "chosen_advertising_images": chosen_advertising_images,
-        "account": account
-    }, context_instance=RequestContext(request))
-
-
-@login_required
-@native_region_required(why_message="native_region_required")
-def deposit_funds_for_campaign(request, campaign_id):
-    account = Account.objects.get(user_id=request.user.id)    
-    campaign = AdvertisingCampaign.objects.get(id=campaign_id)
-
-    if campaign.account.user != request.user:
-        resp = render_to_response('403.html', context_instance=RequestContext(request))
-        resp.status_code = 403
-        return resp
-
-    form = PaypalFundForm(account=account, initial = { 
-        "bonus": (0, CAD),
-        "budget": (0, CAD)
-    })
-
-    if request.method == 'POST':
-        form = PaypalFundForm(account=account, data=request.POST)
-
-        if form.is_valid():
-            return process_payment_for_campaign(account, campaign, request)
-
-    return render_to_response('advertising/campaign/deposit_funds.html', {
-        "campaign": campaign,
-        "form": form,
         "account": account
     }, context_instance=RequestContext(request))
 
@@ -167,6 +138,35 @@ def edit_campaign(request, campaign_id):
         "chosen_advertising_types": chosen_advertising_types,
         "chosen_advertising_payment_types": chosen_advertising_payment_types,
         "chosen_advertising_images": chosen_advertising_images
+    }, context_instance=RequestContext(request))
+
+
+@login_required
+@native_region_required(why_message="native_region_required")
+def deposit_funds_for_campaign(request, campaign_id):
+    account = Account.objects.get(user_id=request.user.id)    
+    campaign = AdvertisingCampaign.objects.get(id=campaign_id)
+
+    if campaign.account.user != request.user:
+        resp = render_to_response('403.html', context_instance=RequestContext(request))
+        resp.status_code = 403
+        return resp
+
+    form = PaypalFundForm(account=account, initial = { 
+        "bonus": (0, CAD),
+        "budget": (0, CAD)
+    })
+
+    if request.method == 'POST':
+        form = PaypalFundForm(account=account, data=request.POST)
+
+        if form.is_valid():
+            return process_payment_for_campaign(account, campaign, request)
+
+    return render_to_response('advertising/campaign/deposit_funds.html', {
+        "campaign": campaign,
+        "form": form,
+        "account": account
     }, context_instance=RequestContext(request))
 
 

@@ -5,6 +5,9 @@
         <tr data-ad-type="{{ advertising_type.id }}" {% if advertising_type.id in chosen_advertising_types %}class="chosen"{% endif %}>
             <td class="advertising-uploads__cell advertising-uploads__cell_padding_more">
                 Upload {{advertising_type}}
+                {% if advertising_type.id in advertising_images %}
+                    <a href="/media/{{ advertising_images|keyvalue:advertising_type.id }}" class="icon-eye-open fancybox" target="_blank"></a>
+                {% endif %}
             </td>
             <td class="advertising-uploads__cell">
                 <label class="advertising-uploads__file-field">
@@ -12,14 +15,6 @@
                     <mark></mark>
                     <input type="file" name="advertising_image.{{advertising_type.id}}">
                 </label>
-            </td>
-            <td>
-                {% if advertising_type.id in advertising_images %}
-                    <a href="/media/{{ advertising_images|keyvalue:advertising_type.id }}" class="advertising-image" target="_blank">
-                        <!-- Advertising preview -->
-                        view actual ad
-                    </a>
-                {% endif %}
             </td>
         </tr>
     {% endfor %}

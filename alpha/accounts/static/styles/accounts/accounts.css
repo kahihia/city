@@ -74,7 +74,7 @@
 }
 
 .venue-accounts-list {
-    margin-top: 40px;
+    margin-top: 20px;
     width: 400px;
 }
 
@@ -82,7 +82,7 @@
     font-size: 16px;
     font-weight: bold;
     color: #7b7b7b;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     text-transform: uppercase;
 }
 
