@@ -24,6 +24,7 @@ class VenueAccountForm(forms.ModelForm):
     )
 
     phone = CAPhoneNumberField(required=False)
+    fax = CAPhoneNumberField(required=False)
     about = RichTextFormField(required=False)
 
     tags = TagField(widget=VenueTagAutoSuggest())
