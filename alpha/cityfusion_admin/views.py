@@ -225,14 +225,29 @@ from advertising.utils import get_chosen_advertising_types, get_chosen_advertisi
 
 @staff_member_required
 def admin_advertising(request):
-    campaigns_filter = AdvertisingCampaignFilter(request.GET, queryset=AdvertisingCampaign.objects.order_by("-started"))
+    campaigns_filter = AdvertisingCampaignFilter(request.GET, queryset=AdvertisingCampaign.active.order_by("-started"))
 
     if "account" in request.GET and request.GET["account"]:
         selected_account = Account.objects.get(user_id=request.GET["account"])
     else:
         selected_account = None
 
-    return render_to_response('cf-admin/admin-advertising-list.html', {
+    return render_to_response('cf-admin/ads/admin-advertising-list.html', {
+            "campaigns_filter": campaigns_filter,
+            "selected_account": selected_account
+        }, context_instance=RequestContext(request))
+
+
+@staff_member_required
+def admin_expired_advertising(request):
+    campaigns_filter = AdvertisingCampaignFilter(request.GET, queryset=AdvertisingCampaign.expired.order_by("-started"))
+
+    if "account" in request.GET and request.GET["account"]:
+        selected_account = Account.objects.get(user_id=request.GET["account"])
+    else:
+        selected_account = None
+
+    return render_to_response('cf-admin/ads/admin-expired-advertising-list.html', {
             "campaigns_filter": campaigns_filter,
             "selected_account": selected_account
         }, context_instance=RequestContext(request))
@@ -275,7 +290,7 @@ def admin_advertising_setup(request):
     chosen_advertising_payment_types = get_chosen_advertising_payment_types(campaign, request)
     chosen_advertising_images = get_chosen_advertising_images(campaign, request)
 
-    return render_to_response('cf-admin/admin-advertising-setup.html', {
+    return render_to_response('cf-admin/ads/admin-advertising-setup.html', {
         "form": form,
         "advertising_types": advertising_types,
         "chosen_advertising_types": chosen_advertising_types,
@@ -335,7 +350,7 @@ def admin_advertising_edit_campaign(request, campaign_id):
     chosen_advertising_payment_types = get_chosen_advertising_payment_types(campaign, request)
     chosen_advertising_images = get_chosen_advertising_images(campaign, request)        
 
-    return render_to_response('cf-admin/admin-advertising-edit.html', {
+    return render_to_response('cf-admin/ads/admin-advertising-edit.html', {
         "campaign": campaign,
         "form": form,
         "advertising_types": advertising_types,
@@ -365,7 +380,7 @@ def admin_advertising_remove_ad(request, ad_id):
 def admin_advertising_review(request):
     ads = Advertising.pending.all()
 
-    return render_to_response('cf-admin/admin-advertising-review.html', {
+    return render_to_response('cf-admin/ads/admin-advertising-review.html', {
             "ads": ads
         }, context_instance=RequestContext(request))
 

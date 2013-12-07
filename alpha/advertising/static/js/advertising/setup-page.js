@@ -28,35 +28,20 @@
             var that=this;
 
             // Init rows
-            $(".advertising-types input[type=hidden]").each(function(){
+            $(".advertising-types input[type=checkbox]").each(function(){
                 var ad_type_id = $(this).data("ad-type"),
-                    selected = $(this).data("selected") == "1";
+                    checked = $(this).attr("checked");
 
-                that.showOrHideUploadRow(
-                    ad_type_id,
-                    selected
-                );
+                that.showOrHideUploadRow(ad_type_id, checked);
             });
 
-            $(".advertising-types .checkbox input").on("click", function() {
-                var checked = $(this).prop("checked");
-                var ad_type_id = $(this).data("ad-type");
+            $(".advertising-types .ad-type-col .checkbox input").on("click", function() {
+                var ad_type_id = $(this).data("ad-type"),
+                    checked = $(this).attr('checked')?true:false;
 
-                $(".advertising-types .checkbox input[data-ad-type=" + ad_type_id + "]")
-                    .not(this)
-                    .prop("checked", false);
+                $("#id_advertising_type_"+ad_type_id).attr('checked', checked);
 
-                if(checked){
-                    $("#id_advertising_type_"+ad_type_id).attr("data-selected", 1);
-                }
-                else {
-                    $("#id_advertising_type_"+ad_type_id).removeAttr("data-selected");
-                }
-
-                that.showOrHideUploadRow(
-                    ad_type_id,
-                    checked
-                );
+                that.showOrHideUploadRow(ad_type_id, checked);
             });
         },
         showOrHideUploadRow: function(ad_type_id, checked){
@@ -70,12 +55,12 @@
         },
         initRegionSelection: function(){
             var self = this;
-            if($("#id_all_of_canada").prop("checked")){
+            if($("#id_all_of_canada").attr("checked")){
                 $(".advertising-territories .region").hide();
             }
 
             $("#id_all_of_canada").on("change", function(){
-                if($(this).prop("checked")){
+                if($(this).attr("checked")){
                     $(".advertising-territories .region").hide();
                 } else {
                     $(".advertising-territories .region").show();
@@ -111,6 +96,8 @@
 
 
             $(fileInputSelector).change();
+
+            $(".fancybox").fancybox();
         },
         initTotalPriceCalculation: function(){
             this.totalPriceCalculation = new TotalPriceCalculation();
@@ -134,8 +121,7 @@
             }
         },
         initSubmitButton: function() {
-            $("body").on("click", ".advertising-form__submit", function() {
-                $("[data-type=advertising-type]").not("[data-selected='1']").remove();
+            $("body").on("click", ".advertising-form__submit", function(){
                 $(this).closest("form").submit();
             });
         }

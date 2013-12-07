@@ -45,11 +45,11 @@
 
 .account-details .block-header,
 .about .block-header {
-    font-size: 14px;
-    color: #7b7b7b;
+    font-size: 18px;
+    color: #022e52;
     font-weight: bold;    
     width:100%;
-    margin-top: 20px;
+    text-transform: capitalize;
 }
 
 .about .block-header {
@@ -74,64 +74,59 @@
 }
 
 .venue-accounts-list {
-    margin-top: 40px;
-    width: 345px;
+    margin-top: 20px;
+    width: 400px;
 }
 
 .venue-accounts-list header {
     font-size: 16px;
     font-weight: bold;
     color: #7b7b7b;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     text-transform: uppercase;
 }
 
 .venue-accounts-list ul {
     margin: 0;
     padding: 0;
-    margin-left: 10px;
 
 }
 
 .venue-accounts-list ul li {
-    list-style: none;    
-    height: 22px;
-    margin-right: 22px;    
+    display: inline-block;
+    list-style: none;
+    width: 110px;
+    margin-right: 20px;
     margin-bottom: 7px;
+    color: #7b7b7b;
+    text-align: center;
+}
+.venue-accounts-list ul li a {
+    color: #7b7b7b;
+    font-size: 9px;
 }
 
 .venue-accounts-list ul li .mngp {
     float: left;
-    color: #022e52;
+    color: #fff;
     height: 20px;
     line-height: 20px;
-    vertical-align: middle;
-    padding-left: 6px;
+    vertical-align: middle;    
     font-weight: bold;
-    width: 160px;
+    width: 100%;
+    text-align: center;
+    padding: 3px;
     overflow: hidden;
-    background: #478dd3;
+    background: #0260bb;
     white-space: nowrap;
     text-overflow: ellipsis;
-    border-top: 1px solid #b0ceec;
-    border-bottom: 1px solid #b0ceec;
-    border-right: 1px solid #6da4dc;
+    box-shadow: 0 0 3px #000;
+    font-size: 12px;
+    
 }
 
 .venue-accounts-list ul li .remove-button {
-    float: left;
-
-    color: #89add1;
-    font-size: 14px;
-    width: 20px;
-    height: 17px;
-    background: #5a97d4;
-    text-align: center;
-    display: inline-block;
-    padding-top: 3px;
-    border-top: 1px solid #8bb6e2;
-    border-bottom: 1px solid #8bb6e2;
-    border-left: 1px solid #669fd8;
+    
 }
 
 .venue-accounts-list ul li .remove-button:hover {

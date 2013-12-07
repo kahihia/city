@@ -210,12 +210,14 @@ def copy_occurring_bonus(sender, instance, created, **kwargs):
 
 def add_single_events_to_schedule(account, events):
     for event_day in events:
-        if account.reminder_active_type == "DAYS":
+        notification_time = None
+
+        if account.reminder_active_type == "DAYS" and account.reminder_days_before_event:
             notification_time = event_day.start_time - timedelta(days=int(account.reminder_days_before_event))
-        if account.reminder_active_type == "HOURS":
+        if account.reminder_active_type == "HOURS" and account.reminder_hours_before_event:
             notification_time = event_day.start_time - timedelta(hours=int(account.reminder_hours_before_event))
 
-        if notification_time > datetime.datetime.now():
+        if notification_time and notification_time > datetime.datetime.now():
             reminding = AccountReminding(
                 account=account,
                 single_event=event_day,
@@ -310,10 +312,6 @@ class InTheLoopSchedule(models.Model):
     objects = models.Manager()
     new_events = NewInTheLoopEventManager()
 
-    def process(self):
-        self.processed = True
-        self.save()
-
     @staticmethod
     def unprocessed_for_account(account):
         tags = account.in_the_loop_tags.values_list("name", flat=True)
@@ -333,6 +331,14 @@ class InTheLoopSchedule(models.Model):
             Q(id__in=event_ids),
             location_query
         ).annotate(repeat_count=Count('id'))
+
+
+    def process(self):
+        InTheLoopSchedule.objects.filter(id=self.id).update(processed=True)
+
+    @staticmethod
+    def process_events(events):
+        InTheLoopSchedule.objects.filter(id__in=events).update(processed=True)
         
 
     def __unicode__(self):

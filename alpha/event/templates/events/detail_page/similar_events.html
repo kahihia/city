@@ -12,14 +12,22 @@
         {% if events_from_venue.count > 0 %}
             <ul class="similar-events-ul {% if events_from_venue.count < 4 %}one-line{% endif %}">
                 {% for venue_event in events_from_venue %}
-                    <li>
+                    <li class="hover-container">
                         <a href="{% event_link venue_event %}">
                             {% if venue_event.image %}
                                 <img height="92" width="92" src="{% cropped_thumbnail venue_event.image "cropping" height=92 %}" alt="{{venue_event.name}}">
                             {% else %}
                                 <img height="92" width="92" src="{{STATIC_URL}}/images/default-event-92x92.jpg" alt="{{venue_event.name}}">
-                            {% endif %}                        
+                            {% endif %}
                         </a>
+                        <div class="hover-effect {% cycle 'effect1' 'effect2' 'effect3' 'effect4' 'effect5' 'effect6' %}">
+                            {% if venue_event.event_type == "SINGLE" %}
+                                {{ venue_event.start_time|date:"l, N d" }}
+                            {% endif %}
+                            {% if venue_event.event_type == "MULTIDAY" %}
+                                {{ venue_event.first_occurrence.start_time|date:"D, N d" }} - {{ venue_event.last_occurrence.end_time|date:"D, N d" }}
+                            {% endif %} - {{ venue_event.name }}
+                        </div>
                     </li>
                 {% endfor %}
             </ul>

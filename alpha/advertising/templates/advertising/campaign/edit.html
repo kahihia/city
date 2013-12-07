@@ -15,129 +15,128 @@
     <link href="{{STATIC_URL}}styles/advertising-setup.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
 
     <script src="{{STATIC_URL}}js/jquery.balloon.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>    
     <script src="{{STATIC_URL}}js/create_event/venue_account_owner.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/advertising/total-price-calculation.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/date-range.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}fancybox/jquery.fancybox.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/advertising/setup-page.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block page %}
-    <div class="primary-content advertising-setup">
-        <h1>
-            {{ campaign.name }}({{ campaign.website }})
-        </h1>
-
+    <div class="advertising-form">
         <div class="tabs-container">
-            <ul class="tabs right-tabs">
-                <li class="current"><a href="{% url 'advertising_edit_campaign' campaign.id %}"><span>Edit</span></a></li>
-                <li><a href="{% url 'advertising_deposit_funds_for_campaign' campaign.id %}">Deposit Funds</a></li>
-                <li><a href="{% url 'advertising_remove_campaign' campaign.id %}" class="danger-action" data-confirm-message="Are you sure? All ads and statistics will be lost">Remove</a></li>
-            </ul>
-        </div>
-        <div class="content box visible">
-            <div class="main-content account-options">
-                {%if form.errors %}
-                    <div class="errors" style="border:1px solid RED;border-radius:4px;">
-                        <ul style="list-style-type: none;">
-                            <li id="all-info">
-                                {% for error in form.non_field_errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                            <li id="all-info">
-                                {% for error in form.name.errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                            <li id="all-info">
-                                {% for error in form.active_to.errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                            <li id="all-info">
-                                {% for error in form.website.errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                        </ul>
-                    </div>
-                    
-                {% endif %}
-                <form  enctype="multipart/form-data" method="post" name="advertising-campaign-edit" >
-                    {% csrf_token %}
-                    <div class="campaign-name">
+            <table class="tabs right-tabs" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="current">
+                        <a href="{% url 'advertising_edit_campaign' campaign.id %}">
+                            <span>Edit</span></a>
+                    </td>
+                    <td>
+                        <a href="{% url 'advertising_deposit_funds_for_campaign' campaign.id %}">
+                            <span>Deposit Funds</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'advertising_remove_campaign' campaign.id %}" class="danger-action" data-confirm-message="Are you sure? All ads and statistics will be lost">
+                            <span>Remove</span>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>        
+        <div class="advertising-form__details">
+            <form  enctype="multipart/form-data" method="post" name="advertising-campaign-edit">
+                {% csrf_token %}
+                <div class="advertising-form__details-title">
+                    Edit Advertising - {{ campaign.name }}({{ campaign.website }})
+                </div>
+                <div class="advertising-form__details-content">
+                    {%if form.errors %}
+                        <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                            <ul style="list-style-type: none;">
+                                <li id="all-info">
+                                    {% for error in form.non_field_errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li id="all-info">
+                                    {% for error in form.name.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li id="all-info">
+                                    {% for error in form.active_to.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                                <li id="all-info">
+                                    {% for error in form.website.errors %}
+                                        <span class="error">{{ error }}</span>
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <header class="advertising-form__field-title">
                         Name of Campaign
+                    </header>
+                    <div class="advertising-form__text-field">
                         {{ form.name }}
-                        Enter the name of your campaign.
                     </div>
 
-                    <div class="campaign-owner venue-account-owner">
+                    <header class="advertising-form__field-title">
                         Campaign owner
+                    </header>
+                    <div class="advertising-form__list-field">
                         {{ form.venue_account }}
                     </div>
 
-                    <div class="campaign-name">
+                    <header class="advertising-form__field-title">
                         Campaign website URL
+                    </header>
+                    <div class="advertising-form__text-field">
                         {{ form.website }}
                     </div>
 
-                    <div class="campaign-active-to">
+                    <header class="advertising-form__field-title">
                         Will be active
-                        {{ form.active_from }} - {{ form.active_to }}
-                    </div>
- 
-                    {% setup_advertising_types %}
-
-                    <div class="advertising-uploads">
-                        <table>
-                        {% for advertising_type in advertising_types %}
-                            <tr data-ad-type="{{ advertising_type.id }}" {% if advertising_type.id in chosen_advertising_types %}class="chosen"{% endif %}>
-                                <td>Upload {{advertising_type}}</td>
-                                <td>
-                                    <input type="file" name="advertising_image.{{advertising_type.id}}">
-                                </td>
-                                <td>
-                                    {% if advertising_type.id in advertising_images %}
-                                        <a href="/media/{{ advertising_images|keyvalue:advertising_type.id }}" class="advertising-image" target="_blank">
-                                            <!-- Advertising preview -->
-                                            view actual ad
-                                        </a>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </table>
-                    </div>
-                    
-                    Select province/territory to show your ad (Choices)
-                    
-                    <div class="advertising-territories options">
-                        <div class="teritory-node">
-                            <div class="checkbox">
-                                <input {% if form.all_of_canada.value %}checked="checked"{% endif %} type="checkbox" id="id_all_of_canada" value="true" name="all_of_canada" />
-                                <label for="id_all_of_canada"></label>
-                                <label for="id_all_of_canada">All of Canada</label>
-                            </div>
-                        </div>
-                        {% for region in form.fields.regions.queryset %}
-                        <div class="teritory-node region">
-                            <div class="checkbox">
-                                <input {% for current_region in form.regions.value %}{% if region.pk = current_region|add:0 %}checked="checked"{% endif %}{% endfor %} type="checkbox" id="id_regions_{{ forloop.counter0 }}" value="{{ region.id }}" name="regions" />
-                                <label for="id_regions_{{ forloop.counter0 }}"></label>
-                                <label for="id_regions_{{ forloop.counter0 }}">
-                                    {{ region.name }}
-                                </label>
-                            </div>
-                        </div>
-                        {% endfor %}
-                        <div class="clr"></div>
+                    </header>
+                    <div class="advertising-form__text-field advertising-form__text-field_type_interval">
+                        {{ form.active_from }} — {{ form.active_to }}
                     </div>
 
-                    <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
-                </form>
-            </div>
+                    <div class="advertising-form__advertising-options">
+                        {% setup_advertising_types %}
+                        <div class="advertising-uploads">
+                            <table>
+                            {% for advertising_type in advertising_types %}
+                                <tr data-ad-type="{{ advertising_type.id }}" {% if advertising_type.id in chosen_advertising_types %}class="chosen"{% endif %}>
+                                    <td class="advertising-uploads__cell advertising-uploads__cell_padding_more">
+                                        Upload {{ advertising_type }}
+                                        {% if advertising_type.id in advertising_images %}
+                                            <a href="/media/{{ advertising_images|keyvalue:advertising_type.id }}" class="icon-eye-open fancybox" target="_blank"></a>
+                                        {% endif %}
+                                    </td>
+                                    <td class="advertising-uploads__cell">
+                                        <label class="advertising-uploads__file-field">
+                                            <span class="button">Choose File</span>
+                                            <mark></mark>
+                                            <input type="file" name="advertising_image.{{advertising_type.id}}">
+                                        </label>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </table>
+                        </div>
+                        {% setup_advertising_regions %}
+                    </div>
+                    <input type="submit" value="Save">
+                </div>
+            </form>
         </div>
     </div>
 {% endblock %}

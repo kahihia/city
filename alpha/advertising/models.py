@@ -38,11 +38,29 @@ class AdminAdvertisingCampaignManager(models.Manager):
             Q(budget__gt=0) | Q(free=True)
         )
 
-class AdvertisinCampaignWithUnsusedMoney(models.Manager):
+class AdvertisingCampaignWithUnsusedMoney(models.Manager):
     def get_query_set(self):
-        return super(AdvertisinCampaignWithUnsusedMoney, self).get_query_set().filter(
+        return super(AdvertisingCampaignWithUnsusedMoney, self).get_query_set().filter(
             active_to__lt=datetime.datetime.now(),
             enough_money=True
+        )
+
+
+class ActiveAdvertisingCampaign(models.Manager):
+    def get_query_set(self):
+        now = datetime.datetime.now()
+        return super(ActiveAdvertisingCampaign, self).get_query_set().filter(
+            ((Q(enough_money=True)) | Q(free=True)) & 
+            (Q(active_to__isnull=True) | Q(active_to__gte=now)) &
+            (Q(active_from__isnull=True) | Q(active_from__lte=now))
+        )
+
+
+class ExpiredAdvertisingCampaign(models.Manager):
+    def get_query_set(self):
+        now = datetime.datetime.now()
+        return super(ExpiredAdvertisingCampaign, self).get_query_set().filter(
+            (Q(free=False) & Q(enough_money=False)) | Q(active_to__lte=now) | Q(active_from__gte=now)
         )
 
 
@@ -70,7 +88,10 @@ class AdvertisingCampaign(models.Model):
 
     objects = money_manager(models.Manager())
     admin = AdminAdvertisingCampaignManager()
-    with_unused_money = AdvertisinCampaignWithUnsusedMoney()
+    with_unused_money = AdvertisingCampaignWithUnsusedMoney()
+
+    active = ActiveAdvertisingCampaign()
+    expired = ExpiredAdvertisingCampaign()
 
     def save(self, *args, **kwargs):
         if self.enough_money and self.ammount_spent >= self.budget and self.budget>Money(0, CAD):

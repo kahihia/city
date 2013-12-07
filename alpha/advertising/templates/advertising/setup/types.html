@@ -24,14 +24,14 @@
         {% for advertising_type in advertising_types %}
         <tr>
             <td class="ad-type-description-col">
-                <input type="hidden"
+                <input type="checkbox"
                        id="id_advertising_type_{{ advertising_type.id }}"
                        value="{{ advertising_type.id }}"
                        name="advertising_types"
                        data-type="advertising-type"
                        data-ad-type="{{ advertising_type.id }}"
-                       {% if advertising_type.id in chosen_advertising_types %}data-selected="1"{% endif %} />
-                <label for="id_advertising_type_{{ advertising_type.id }}">{{ advertising_type }}</label>
+                       {% if advertising_type.id in chosen_advertising_types %}checked="checked"{% endif %} />
+                <span for="id_advertising_type_{{ advertising_type.id }}">{{ advertising_type }}</span>
             </td>
             <td class="ad-type-col">
                 <div class="ad-type-col-wrapper">

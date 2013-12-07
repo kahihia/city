@@ -368,8 +368,8 @@ class SearchFilter(Filter):
 
     def filter(self, qs, search_string):
         # Use limits for ids query for optimization
-        events_with_tags = SingleEvent.future_events.filter( 
-            event__tagged_items__tag__name__icontains=search_string 
+        events_with_tags_or_venue_name = SingleEvent.future_events.filter( 
+            Q(event__tagged_items__tag__name__icontains=search_string) | Q(event__venue__name__icontains=search_string)
         ).annotate(
             repeat_count=Count('id') 
         ).values_list("id", flat=True)
@@ -379,8 +379,8 @@ class SearchFilter(Filter):
             OR (setweight(to_tsvector('pg_catalog.english', coalesce("event_singleevent"."description", '')), 'D')) @@ plainto_tsquery('pg_catalog.english', %s)
         """
 
-        if events_with_tags:
-            ids_string = ",".join([str(id) for id in events_with_tags])
+        if events_with_tags_or_venue_name:
+            ids_string = ",".join([str(id) for id in events_with_tags_or_venue_name])
             where = """"event_singleevent"."id" IN ("""+ids_string+""") OR """ +where
 
         return qs.filter(

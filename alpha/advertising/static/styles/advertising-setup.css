@@ -288,6 +288,10 @@ body .hintbox {
     padding: 35px 0 21px 105px;
 }
 
+.advertising-form__details-content .errors {
+    width: 400px;    
+}
+
 .advertising-form__budget {
     width: 311px;
     margin-left: 18px;
@@ -304,7 +308,8 @@ body .hintbox {
     padding: 15px 0 70px 0;
 }
 
-.advertising-form__submit {
+.advertising-form__submit,
+.advertising-form__buttons input[type=submit] {
     text-transform: uppercase;
     display: inline-block;
     color: #022e52;
@@ -317,7 +322,8 @@ body .hintbox {
     cursor: pointer;
 }
 
-.advertising-form__submit:hover {
+.advertising-form__submit:hover,
+.advertising-form__buttons input[type=submit]:hover {
     background: #808080;
 }
 
@@ -490,6 +496,7 @@ input[type="radio"]:checked + label.payments__check-label {
     margin-top: 5px;
     padding-top: 15px !important;
     padding-bottom: 13px !important;
+    margin-bottom: 15px;
 }
 
 .advertising-territories label {

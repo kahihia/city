@@ -24,89 +24,100 @@
 {% endblock %}
 
 {% block page %}
-    <div class="primary-content advertising-setup advertising-deposit-funds">
-        <h1>
-            {{ campaign.name }}({{ campaign.website }})
-        </h1>
-
+    <div class="advertising-form">
         <div class="tabs-container">
-            <ul class="tabs right-tabs">
-                <li><a href="{% url 'advertising_edit_campaign' campaign.id %}"><span>Edit</span></a></li>
-                <li class="current"><a href="{% url 'advertising_deposit_funds_for_campaign' campaign.id %}">Deposit Funds</a></li>
-                <li><a href="{% url 'advertising_remove_campaign' campaign.id %}" class="danger-action" data-confirm-message="Are you sure? All ads and statistics will be lost">Remove</a></li>                
-            </ul>
+            <table class="tabs right-tabs" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <a href="{% url 'advertising_edit_campaign' campaign.id %}">
+                            <span>Edit</span></a>
+                    </td>
+                    <td class="current">
+                        <a href="{% url 'advertising_deposit_funds_for_campaign' campaign.id %}">
+                            <span>Deposit Funds</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'advertising_remove_campaign' campaign.id %}" class="danger-action" data-confirm-message="Are you sure? All ads and statistics will be lost">
+                            <span>Remove</span>
+                        </a>
+                    </td>
+                </tr>
+            </table>
         </div>
-        <div class="content box visible ">
-            <div class="main-content account-options">
-                {%if form.errors %}
-                    <div class="errors" style="border:1px solid RED;border-radius:4px;">
-                        <ul style="list-style-type: none;">
-                            <li id="all-info">
-                                {% for error in form.non_field_errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                            <li id="all-info">
-                                {% for error in form.order_budget.errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                            <li id="all-info">
-                                {% for error in form.bonus_budget.errors %}
-                                    <span class="error">{{ error }}</span>
-                                {% endfor %}
-                            </li>
-                        </ul>
-                    </div>
-                {% endif %}
-                <form  enctype="multipart/form-data" method="post" name="advertising-campaign-deposit-funds" >
-                    {% csrf_token %}                    
-                    <div class="actual-budget">
-                        <p>
-                            Current budget - {{ campaign.budget }}. Your already spent {{ campaign.ammount_spent }}
-                        </p>                        
-                    </div>
-
-                    {% setup_advertising_payments %}
-
-                    <div class="pay-now-footer">
-                        <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
-                    </div>
-
-                    <div class="order-history">
-                        <table class="profile-table" cellpadding="0" cellspacing="0">
-                            <tr>
-                                <th colspan="4">Orders history</th>
-                            </tr>
-                            <tr>
-                                <th>Order id</th>
-                                <th>Budget</th>
-                                <th>Created at</th>
-                                <th>Status</th>
-                            </tr>
-                            {% for order in campaign.advertisingorder_set.all %}
-                            <tr>
-                                <td>#order-{{ order.id }}</td>
-                                <td>{{ order.budget }}</td>
-                                <td>{{ order.created }}</td>
-                                <td>{% if order.status %}{{ order.get_status_display }}{% else %}not paid{% endif %}</td>
-                            </tr>
+        <div class="advertising-form__details">
+            {%if form.errors %}
+                <div class="errors" style="border:1px solid RED;border-radius:4px;">
+                    <ul style="list-style-type: none;">
+                        <li id="all-info">
+                            {% for error in form.non_field_errors %}
+                                <span class="error">{{ error }}</span>
                             {% endfor %}
-                            <tr>
-                                <td colspan="4">Bonuses</td>
-                            </tr>
-                            {% for bonus in campaign.bonusadvertisingtransaction_set.all %}
-                            <tr>
-                                <td>#bonus-{{ bonus.id }}</td>
-                                <td>{{ bonus.budget }}</td>
-                                <td>{{ bonus.processed_at }}</td>
-                                <td>bonus</td>
-                            </tr>
+                        </li>
+                        <li id="all-info">
+                            {% for error in form.order_budget.errors %}
+                                <span class="error">{{ error }}</span>
                             {% endfor %}
-                        </table>
-                    </div>
-                </form>
-            </div>                
+                        </li>
+                        <li id="all-info">
+                            {% for error in form.bonus_budget.errors %}
+                                <span class="error">{{ error }}</span>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                </div>
+            {% endif %}
+
+            <div class="advertising-form__details-title">
+                Deposit Advertising - {{ campaign.name }}({{ campaign.website }})
+            </div>
+            <div class="order-history">
+                <table class="profile-table" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th colspan="4">
+                            Current budget - {{ campaign.budget }}. <br>
+                            Your already spent {{ campaign.ammount_spent }}                            
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="4">Orders history</th>
+                    </tr>
+                    <tr>
+                        <th>Order id</th>
+                        <th>Budget</th>
+                        <th>Created at</th>
+                        <th>Status</th>
+                    </tr>
+                    {% for order in campaign.advertisingorder_set.all %}
+                    <tr>
+                        <td>#order-{{ order.id }}</td>
+                        <td>{{ order.budget }}</td>
+                        <td>{{ order.created }}</td>
+                        <td>{% if order.status %}{{ order.get_status_display }}{% else %}not paid{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="4">Bonuses</td>
+                    </tr>
+                    {% for bonus in campaign.bonusadvertisingtransaction_set.all %}
+                    <tr>
+                        <td>#bonus-{{ bonus.id }}</td>
+                        <td>{{ bonus.budget }}</td>
+                        <td>{{ bonus.processed_at }}</td>
+                        <td>bonus</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="advertising-form__budget">
+            <form  enctype="multipart/form-data" method="post" name="advertising-campaign-deposit-funds">                
+                {% csrf_token %}
+                {% setup_advertising_payments %}
+                <div class="advertising-form__buttons">
+                    <input type="submit" value="Pay">
+                </div>
+            </form>
         </div>
     </div>
 {% endblock %}

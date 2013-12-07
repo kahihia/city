@@ -71,6 +71,11 @@ urlpatterns = patterns('',
         views.admin_advertising,
         name='admin_advertising'
     ),
+    # Advertising
+    url(r'^admin-expired-advertising/$',
+        views.admin_expired_advertising,
+        name='admin_expired_advertising'
+    ),
     url(r'^admin-advertising/setup/$',
         views.admin_advertising_setup,
         name='admin_advertising_setup'
