@@ -161,7 +161,7 @@
                             }
 
                             $(self.fancyboxSelector + " iframe").contents()
-                                                                .find(".submit").click(self.onSubmitButtonClick);
+                                                                .find("[data-id=event_submit]").click(self.onSubmitButtonClick);
                         },
                         afterClose: function() {
                             buttons.removeAttr("disabled");
