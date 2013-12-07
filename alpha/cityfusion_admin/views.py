@@ -366,7 +366,7 @@ def admin_advertising_remove_campaign(request, campaign_id):
     campaign = AdvertisingCampaign.objects.get(id=campaign_id)
     campaign.delete()
 
-    return HttpResponseRedirect(reverse('admin_advertising'))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('admin_advertising')))
 
 
 @staff_member_required
