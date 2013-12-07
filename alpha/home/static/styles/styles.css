@@ -58,7 +58,7 @@ html.preview, body.preview {
 }
 
 .page-container.index {
-    margin-top: 18px;
+    margin-top: 10px;
     min-height: 1200px;
 }
 
@@ -484,8 +484,8 @@ table.schedule-bar-menu td.selected a {
 }
 
 .footer-container.top {
-    padding-top:9px;
-    padding-bottom:9px;
+    padding-top:5px;
+    padding-bottom:5px;
 }
 
 .footer-ads-wrapper
