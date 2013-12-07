@@ -27,7 +27,7 @@ class VenueAccountForm(forms.ModelForm):
     fax = CAPhoneNumberField(required=False)
     about = RichTextFormField(required=False)
 
-    tags = TagField(widget=VenueTagAutoSuggest())
+    tags = TagField(widget=VenueTagAutoSuggest(), required=False)
 
     class Meta:
         model = VenueAccount
