@@ -10,6 +10,7 @@
     <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/place_autocomplete.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}styles/venues/edit-venue.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/autoSuggest.css" rel="stylesheet" type="text/css" />
 
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
     
@@ -154,6 +155,21 @@
             <div class="field about-us-field">                
                 <header>About Us</header>
                 {{ form.about }}
+            </div>
+            <div class="field tags-field">
+                <header>
+                    Tags 
+                    <span class="tags-counter-container">
+                        (Max 10 Tags)
+                        <span class="tags-counter">
+                            0
+                        </span> of 10 
+                    </span>
+                </header>
+                {{ form.tags }}
+                {% for error in form.tags.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
             </div>
         </div>
     </div>
