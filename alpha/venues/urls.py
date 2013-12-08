@@ -5,12 +5,19 @@ urlpatterns = patterns('',
     url(r'^$',
         views.venues,
         name='venues'
-    ),    
+    ),
+    url(r'^venue-tags/$',
+        views.venue_tags,
+        name="venue_tags"
+    ),
+    url(r'^venue-account-tags/(?P<venue_account_id>\d+)$',
+        views.venue_account_tags,
+        name="venue_account_tags"
+    ),
     url(r'^private/(?P<slug>[-\w]+)/$',
         views.private_venue_account,
         name='private_venue_account'
     ),
-
     url(r'^edit/(?P<slug>[-\w]+)/$',
         views.edit_venue_account,
         name='edit_venue_account'
@@ -34,5 +41,5 @@ urlpatterns = patterns('',
     url(r'^(?P<slug>[-\w]+)/$',
         views.public_venue_account,
         name='public_venue_account'
-    ),
+    )
 )

@@ -1,3 +1,4 @@
+from django.utils import simplejson as json
 from django.conf import settings
 from accounts.models import VenueAccount, VenueType, Account
 from event.models import SingleEvent, FeaturedEvent, Venue
@@ -14,8 +15,13 @@ from django.contrib.gis.geos import Point
 from cities.models import City, Country
 from django.db.models import Q
 from event.utils import find_nearest_city
+from django.db.models.loading import get_model
+from django.contrib.contenttypes.models import ContentType
 
+MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
 
+TAG_MODEL = getattr(settings, 'TAGGIT_AUTOSUGGEST_MODEL', ('taggit', 'Tag'))
+TAG_MODEL = get_model(*TAG_MODEL)
 
 def venues(request):
     current_venue_type = int(request.GET.get("venue_type", 0))
@@ -231,3 +237,34 @@ def unlink_venue_account_from_user_profile(request, venue_account_id):
     return HttpResponseRedirect(
         reverse('userena_profile_detail', args=(request.user.username, ))
     )
+
+
+def venue_tags(request):
+    """
+    Returns a list of JSON objects with a `name` and a `value` property that
+    all start like your query string `q` (not case sensitive).
+    """
+    query = request.GET.get('q', '')
+    limit = request.GET.get('limit', MAX_SUGGESTIONS)
+    try:
+        request.GET.get('limit', MAX_SUGGESTIONS)
+        limit = min(int(limit), MAX_SUGGESTIONS)  # max or less
+    except ValueError:
+        limit = MAX_SUGGESTIONS
+
+    tag_name_qs = TAG_MODEL.objects.filter(
+        name__icontains=query,
+        taggit_taggeditem_items__content_type=ContentType.objects.get_for_model(VenueAccount)
+    ).values_list('name', flat=True).distinct()
+
+    data = [{'name': n, 'value': n} for n in tag_name_qs[:limit]]
+
+    return HttpResponse(json.dumps(data), mimetype='application/json')
+
+
+def venue_account_tags(request, venue_account_id):
+    venue_account = VenueAccount.objects.get(id=venue_account_id)
+
+    return HttpResponse(json.dumps({
+        "tags" : [tag.name for tag in venue_account.tags.all()]
+    }), mimetype='application/json')

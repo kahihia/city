@@ -1,13 +1,13 @@
 (function($) {
     $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            
-                // Send the token to same-origin, relative URLs only.
-                // Send the token only if the method warrants CSRF protection
-                // Using the CSRFToken value acquired earlier
-                xhr.setRequestHeader("X-CSRFToken", crsf_token);
+        beforeSend: function(xhr, settings) {            
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", crsf_token);
         }
     });
+
     $.widget("ui.tagspopup", {
         _create: function() {
             var that = this, closing=false;
@@ -221,6 +221,32 @@
                 $(".tags-counter-container").addClass("overflow");
             } else {
                 $(".tags-counter-container").removeClass("overflow");
+            }
+        },
+        clear: function(){
+            var that = this,
+                tags = _.filter($("#as-values-id_tags__tagautosuggest").val().split(","), function(tag){ 
+                return tag.trim(); 
+            });
+
+            tags.forEach(function(tag){
+                that.removeTag(tag);
+            });
+        },
+        useDefaultTags: function(defaultTags, clear){
+            var that = this,
+                tags = _.filter($("#as-values-id_tags__tagautosuggest").val().split(","), function(tag){ 
+                return tag.trim(); 
+            });
+
+            if(clear){
+                this.clear();
+            }            
+
+            if(tags.length==0) {
+                defaultTags.forEach(function(tag){
+                    that.addTag(tag);
+                });
             }
         }
     });
