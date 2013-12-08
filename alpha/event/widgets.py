@@ -222,7 +222,7 @@ class ChooseUserContextWidget(forms.Widget):
             html += "<option"
             if choice["id"] == value:
                 html += " selected='selected'"
-            html += " value='%s|%d|%s'>%s</option>" % (choice["type"], choice["id"], choice["fullname"], choice["text"])
+            html += " value=\"%s|%d|%s\">%s</option>" % (choice["type"], choice["id"], choice["fullname"], choice["text"])
 
         html += """</select></div>"""
 
