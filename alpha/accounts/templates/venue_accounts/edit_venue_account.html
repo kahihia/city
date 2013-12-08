@@ -60,7 +60,6 @@
             </div>
 
             <div class="field">
-                <img src="{{ STATIC_URL }}/images/phone-profile_icon.png"/>
                 <header>Phone</header>
                 {{ form.phone }}
                 {% for error in form.phone.errors %}
@@ -68,7 +67,6 @@
                 {% endfor %}
             </div>
             <div class="field">
-                <img src="{{ STATIC_URL }}/images/fax_profile_icon.png"/>
                 <header>Fax</header>
                 {{ form.fax }}
                 {% for error in form.fax.errors %}
@@ -76,7 +74,6 @@
                 {% endfor %}
             </div>
             <div class="field">
-                <img src="{{ STATIC_URL }}/images/email_profile_icon.png"/>
                 <header>Email</header>
                 {{ form.email }}
                 {% for error in form.email.errors %}
@@ -84,7 +81,6 @@
                 {% endfor %}
             </div>            
             <div class="field">
-                <img src="{{ STATIC_URL }}/images/website_profile_icon.png"/>
                 <header>Website</header>
                 {{ form.site }}
                 {% for error in form.site.errors %}
@@ -92,7 +88,6 @@
                 {% endfor %}
             </div>
             <div class="field">
-                <img src="{{ STATIC_URL }}/images/fb_profile_icon.png"/>
                 <header>Facebook</header>
                 {{ form.facebook }}
                 {% for error in form.facebook.errors %}
@@ -100,18 +95,9 @@
                 {% endfor %}
             </div>
             <div class="field">
-                <img src="{{ STATIC_URL }}/images/twitter.png"/>
                 <header>Twitter</header>
                 {{ form.twitter }}
                 {% for error in form.twitter.errors %}
-                    <div class="error">{{ error }}</div>
-                {% endfor %}
-            </div>
-            <div class="field">
-                <img src="{{ STATIC_URL }}/images/myspace_profile_icon.png"/>
-                <header>Myspace</header>
-                {{ form.phone }}
-                {% for error in form.myspace.errors %}
                     <div class="error">{{ error }}</div>
                 {% endfor %}
             </div>
