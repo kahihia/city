@@ -388,6 +388,8 @@ class VenueAccount(models.Model):
     public = models.BooleanField(default=True)
     types = models.ManyToManyField(VenueType)
 
+    tags = TaggableManager()
+
     def __unicode__(self):
         return self.venue.__unicode__()
 

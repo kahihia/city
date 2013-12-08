@@ -8,6 +8,9 @@ from event.lookups import CityLookup
 from ckeditor.fields import RichTextFormField
 from localflavor.ca.forms import CAPhoneNumberField
 
+from widgets import VenueTagAutoSuggest
+from taggit.forms import TagField
+
 class VenueAccountForm(forms.ModelForm):
     picture_src = forms.CharField(
         widget=AjaxCropWidget(),
@@ -21,7 +24,10 @@ class VenueAccountForm(forms.ModelForm):
     )
 
     phone = CAPhoneNumberField(required=False)
+    fax = CAPhoneNumberField(required=False)
     about = RichTextFormField(required=False)
+
+    tags = TagField(widget=VenueTagAutoSuggest(), required=False)
 
     class Meta:
         model = VenueAccount
@@ -36,8 +42,15 @@ class VenueAccountForm(forms.ModelForm):
             'twitter',
             'about',
             'cropping',
-            'types'
+            'types',
+            'tags'
         )
+
+    def clean_tags(self):
+        tags = self.cleaned_data['tags']
+        if len(tags) > 10:
+            raise forms.ValidationError("I'm sorry, but 10 tags is the maximum amount per event.")
+        return tags
 
 
 class NewVenueAccountForm(VenueAccountForm):

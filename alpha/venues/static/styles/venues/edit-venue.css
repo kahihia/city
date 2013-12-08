@@ -4,7 +4,7 @@
     margin-left: 30px;
     border: 1px solid #b9b8b8;
     background: #fff;
-    min-height: 896px;
+    min-height: 930px;
 }
 
 .venue-account-details h1 {    
@@ -33,7 +33,7 @@
     background: #022e52;
     color: #fff;
     padding-bottom: 25px;
-    min-height: 872px;
+    min-height: 905px;
 }
 
 .venue-account-types .button {
@@ -149,7 +149,7 @@
 
 .about-us-field {
     width: 340px;
-    margin-top: 35px;
+    margin-top: 15px;
 }
 
 .about-us-field p {
@@ -293,4 +293,36 @@
 .qq-uploading-cancel:hover {
     color: #454545;
     text-decoration: none;
+}
+
+.tags-field ul.as-selections {
+    width: 335px;
+}
+
+.tags-field ul.as-selections li.as-selection-item {
+    padding: 0px 7px 0px 10px;
+}
+
+.tags-field ul.as-selections li.as-original input {
+    height: 13px;
+    line-height: 13px;
+}
+
+.tags-field ul.as-selections li.as-selection-item a.as-close {
+    margin-top: 0;
+}
+
+.tags-field .tags-counter-container {
+    color: #8c8a8a;
+    text-transform: none;
+    font-weight: normal;
+    margin-left: 15px;
+}
+
+.tags-field .tags-counter-container .tags-counter {
+    margin-left: 10px;
+}
+
+.tags-field .tags-counter-container.overflow {
+    color: red;
 }

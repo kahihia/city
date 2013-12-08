@@ -490,10 +490,6 @@
     padding-top: 0;
 }
 
-.contact-info-table td:nth-of-type(2){
-    width:75px;
-}
-
 .edit-contact-info-table {
     width: 500px;
     padding: 0;
