@@ -1,6 +1,8 @@
+import json
 import selectable.forms as selectable
 from django import forms
-from accounts.models import VenueAccount, VenueType
+from django.core import validators
+from accounts.models import VenueAccount, VenueType, VenueAccountSocialLink
 from event.widgets import AjaxCropWidget, GeoCompleteWidget
 from event.forms import JSONCharField
 from gmapi.forms.widgets import LocationWidget
@@ -29,6 +31,11 @@ class VenueAccountForm(forms.ModelForm):
 
     tags = TagField(widget=VenueTagAutoSuggest(), required=False)
 
+    social_links = forms.CharField(
+        required=False,
+        widget=forms.widgets.HiddenInput()
+    )
+
     class Meta:
         model = VenueAccount
 
@@ -51,6 +58,35 @@ class VenueAccountForm(forms.ModelForm):
         if len(tags) > 10:
             raise forms.ValidationError("I'm sorry, but 10 tags is the maximum amount per event.")
         return tags
+
+    def clean_social_links(self):
+        social_links = json.loads(self.cleaned_data["social_links"])["social_links"]
+
+        for social_link in social_links:
+            if not social_link["title"]:
+                raise forms.ValidationError("Title is required")
+            if not social_link["url"]:
+                raise forms.ValidationError("Url is required")
+
+            validators.URLValidator(message="Enter a valid URL.")(social_link["url"])
+
+        return social_links
+
+    def save(self, *args, **kwargs):        
+        venue_account = super(VenueAccountForm, self).save(*args, **kwargs)
+        venue_account.venueaccountsociallink_set.all().delete()
+
+        social_links = self.cleaned_data["social_links"]
+
+        for social_link in social_links:
+            VenueAccountSocialLink.objects.create(
+                title=social_link["title"],
+                link=social_link["url"],
+                venue_account=venue_account
+            )
+
+
+    
 
 
 class NewVenueAccountForm(VenueAccountForm):

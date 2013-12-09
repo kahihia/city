@@ -17,6 +17,7 @@ from django.db.models import Q
 from event.utils import find_nearest_city
 from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
+from venues.services import social_links_services
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
 
@@ -107,6 +108,7 @@ def edit_venue_account(request, slug):
         instance=venue_account,
         initial={
             "picture_src": "/media/%s" % venue_account.picture,
+            "social_links": social_links_services.prepare_social_links(venue_account)
         }
     )
 

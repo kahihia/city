@@ -1,0 +1,89 @@
+{% load cropping %}
+
+<table celpadding="0" cellspacing="0">
+    <tr>
+        <td>
+            <div class="venue-account-avatar">
+                {% if venue_account.picture %}
+                    <img src="{% cropped_thumbnail venue_account "cropping" width=200 %}" height="200px" weight="200px">
+                {% else %}
+                    <img src="{{STATIC_URL}}images/default-event.jpg" height="200px" weight="200px">
+                {% endif %}
+            </div>
+        </td>
+        <td>
+            <div class="account-details">
+                <span class="show-on-map map">
+                    <img src="/static/images/map.png">
+                    Show on map
+                </span>
+                <div id="venue_account_map" style="display: none;"></div>
+
+                <header class="block-header">
+                    Contact Information
+                </header>
+                <table class="contact-info-table">
+                    {% if venue_account.phone %}
+                        <tr>
+                            <td>Phone</td>
+                            <td>{{ venue_account.phone }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if venue_account.fax %}
+                        <tr>
+                            <td>Fax</td>
+                            <td>{{ venue_account.fax }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if venue_account.email %}
+                        <tr>
+                            <td>Email</td>
+                            <td>
+                                <a hred="mailto:{{ venue_account.email }}">
+                                    {{ venue_account.email }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% if venue_account.site %}
+                        <tr>
+                            <td>Website</td>
+                            <td>
+                                <a href="{{ venue_account.site }}"  target="_blank">
+                                    {{ venue_account.site }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </table>
+                <div class="social-links">
+                    {% if venue_account.facebook %}
+                        <a href="{{ venue_account.facebook }}" target="_blank" class="social-link">Facebook</a>
+                    {% endif %}
+                    {% if venue_account.twitter %}
+                        <a href="{{ venue_account.twitter }}" target="_blank" class="social-link">Twitter</a>
+                    {% endif %}
+                    {% for social_link in venue_account.social_links %}
+                        <a href="{{ social_link.link }}" target="_blank" class="social-link">{{ social_link.title }}</a>
+                    {% endfor %}
+                </div>
+                {% if venue_account.tags.count > 0 %}
+                    <div class="venue-tags">
+                        {% for tag in venue_account.tags.all %}
+                            {{ tag }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+</table>
+
+{% if venue_account.about %}
+    <div class="about">
+        <header class="block-header">
+            About Us
+        </header>
+        {{ venue_account.about|safe }}
+    </div>
+{% endif %}

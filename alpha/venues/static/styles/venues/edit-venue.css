@@ -326,3 +326,42 @@
 .tags-field .tags-counter-container.overflow {
     color: red;
 }
+
+.social-links-field {
+    margin-top: 10px;
+}
+
+.social-links-field .add-more-social-link {
+    font-size: 12px;
+    cursor: pointer;
+    color: #2a88d5;
+    text-decoration: underline;
+    float: right;
+    margin-right: 3px;
+}
+
+.social-links-field .social-link {
+    height: 30px;
+}
+
+.social-links-field .social-link .social-link-title {
+    width: 100px;
+    float: left;
+}
+
+.social-links-field .social-link .social-link-url {
+    margin-left: 5px;
+    width: 200px;
+    float: left;
+}
+
+.social-links-field .social-link .icon-remove {
+    float: left;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-top: 3px;
+}
+
+.social-links-field .social-link .icon-remove:hover {
+    color: red;
+}
