@@ -563,20 +563,9 @@
 }
 .account-entry-wrapper .event-edit-actions {
     position: absolute;
-    right: 8px;
+    right: 6px;
     top: 17px;
-    padding: 0 5px;
-    border: 1px solid #e3e3e3;
-    background: #fff;
-}
-
-.account-entry-wrapper .event-edit-actions div,
-.account-entry-wrapper .event-edit-actions a {
-    display: inline-block;
-    margin: 15px 5px;
-    color: #06c;
-    text-decoration: none;
-    cursor: pointer;
+    width: 150px;
 }
 
 .account-entry-wrapper .event-edit-actions div:hover,
@@ -594,6 +583,67 @@
 
 .account-entry-wrapper .event-edit-actions .make-featured-action {
     background: url("/static/images/prof_event_feature_icon.png") left center no-repeat;
+}
+
+.event-edit-actions__item {
+    display: block;
+    float: left;
+    background: #7b7b7b;
+    width: 45px;
+    height: 17px;
+    line-height: 17px;
+    text-align: center;
+    font-size: 11px;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    margin: 0 1px 4px 0;
+    border-radius: 2px;
+}
+
+.event-edit-actions__item_pos_last {
+    margin-right: 0;
+}
+
+.event-edit-actions__item:hover {
+    color: #ffffff;
+}
+
+.event-edit-actions__item_size_wide {
+    width: 145px;
+}
+
+.events-displayed-title {
+    color: #7b7b7b;
+    font-size: 12px;
+}
+
+.per-page-dropdown {
+    width: 41px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+.per-page-dropdown:after {
+    top: 2px;
+    right: 1px;
+    background: url("/static/images/widgets/dropdown-small.png") no-repeat;
+    width: 15px;
+    height: 14px;
+}
+
+.per-page-dropdown .dropdown-label {
+    margin: 0 !important;
+}
+
+.per-page-dropdown-options {
+    width: 61px;
+}
+
+.per-page-dropdown-options .dropdown-child {
+    text-align: center;
 }
 
 .new-venue-button, .my-settings {
@@ -887,7 +937,7 @@
 .venue-title {
     color: #ffffff;
     position: absolute;
-    right: 8px;
+    right: 9px;
     top: 2px;
     background: #022E52;
     padding: 0 2px;

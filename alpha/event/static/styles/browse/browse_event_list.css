@@ -95,6 +95,69 @@
     width: 520px;
 }
 
+.account-events-list {
+    position: relative;
+    padding-top: 66px;
+}
+
+.events-actions-row {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #c1c0c0;
+    padding: 11px 16px 18px;
+    width: 590px;
+}
+
+.select-buttons {
+    background: #ffffff;
+    height: 18px;
+}
+
+.select-buttons__item {
+    color: #9a9a9a;
+    font-size: 11px;
+}
+
+.events-actions-row__action-dropdown {
+    width: 260px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.events-actions-row__action-dropdown:after, .events-actions-row__venue-dropdown:after {
+    top: 2px;
+    right: 1px;
+    background: url("/static/images/widgets/dropdown-small.png") no-repeat;
+    width: 15px;
+    height: 14px;
+}
+
+.events-actions-row__action-dropdown-options {
+    width: 280px;
+    text-align: center;
+}
+
+.events-actions-row__venue-dropdown {
+    width: 80px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.events-actions-row__execute {
+    height: 18px !important;
+    line-height: 18px !important;
+    text-transform: uppercase;
+    padding: 0 47px !important;
+    background: #505050 !important;
+    font-size: 12px;
+    margin-right: 5px !important;
+}
+
 .entry-wrapper .entry-info .checkbox-field,
 .entry-wrapper .entry-info .facebook-event-link {
     position: absolute;

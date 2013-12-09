@@ -97,6 +97,7 @@
                     $(this).attr('selected', 'selected');
 
                     that.select.val($(this).attr('value'));
+                    that.select.change();
                     that.label.html($(this).html());
 
                     that.checkEmptiness();

@@ -250,22 +250,34 @@ input[type=submit]:hover {
     border-top-right-radius: 5px;
 }
 
-.tabs-container ul.tabs li,
-.tabs-container table.tabs td {
-    cursor: pointer;    
-    text-align: center;
-    vertical-align: middle;
-
-    font-weight: bold;
-    padding: 5px 10px;
-    border-bottom: none;
-
+.tabs-head {
+    background: #dedede;
     -webkit-border-top-left-radius: 5px;
     -webkit-border-top-right-radius: 5px;
     -moz-border-radius-topleft: 5px;
     -moz-border-radius-topright: 5px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+}
+
+.tabs-container ul.tabs li,
+.tabs-container table.tabs td {
+    cursor: pointer;    
+    text-align: center;
+    vertical-align: middle;
+
+    font-weight: normal;
+    padding: 5px 10px;
+    border-bottom: none;
+}
+
+.tabs-container table.tabs td {
+    height: 35px;
+}
+
+.tabs-container table.tabs td.current,
+.tabs-container table.tabs td:hover {
+    border-radius: 5px 5px 0 0;
 }
 
 .tabs-container .tabs a,
@@ -294,7 +306,8 @@ input[type=submit]:hover {
 
 .tabs-container ul.tabs li span,
 .tabs-container table.tabs td span {
-    color: #022e52;  
+    color: #022e52;
+    font-size: 14px;
 }
 
 .tabs-container ul.tabs li.current span, 

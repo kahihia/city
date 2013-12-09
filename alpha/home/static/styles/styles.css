@@ -617,12 +617,12 @@ a {
 }
 .buttonq{
     background: url(/static/images/question.png) no-repeat;
-    height: 25px;
+    height: 22px;
     width: 25px;
 }
 .buttonq:hover{
     background: url(/static/images/question_hover.png) no-repeat;
-    height: 25px;
+    height: 22px;
 }
 
 .buttonq.mini{
