@@ -3,7 +3,12 @@
         <a href="{% url 'event_copy' event.authentication_key %}">Copy</a>
         <a href="{% url 'event_edit' event.authentication_key %}">Edit</a>
         <a href="{% url 'event_remove' event.authentication_key %}" class="danger-action">Remove</a>
-        <a href="{% url 'event_setup_featured' event.authentication_key %}">Make featured</a>
+        {% if request.user.is_staff %}
+        	<a href="{% url 'admin_setup_featured' event.event_identifier %}">Make featured</a>
+        {% else %}
+        	<a href="{% url 'event_setup_featured' event.authentication_key %}">Make featured</a>
+        {% endif %}
+        
         <span>Viewed: {{ event.viewed }}</span>
     </div>
 {% endif %}
