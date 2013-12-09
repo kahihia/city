@@ -420,6 +420,19 @@ class VenueAccount(models.Model):
     def campaigns(self):
         return AdvertisingCampaign.objects.filter(venue_account__id=self.id)
 
+    def social_links(self):
+        return self.venueaccountsociallink_set.all()
+
+
+class VenueAccountSocialLink(models.Model):
+    venue_account = models.ForeignKey(VenueAccount)
+    title = models.CharField(max_length=255)
+    link = models.URLField()
+
+    def __unicode__(self):
+        return "%s - %s" % (self.title, self.link)
+
+
 
 class AccountTax(models.Model):
     name = models.CharField(max_length=255)

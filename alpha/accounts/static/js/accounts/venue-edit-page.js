@@ -4,6 +4,7 @@
     function VenueEditPage(){
         this.initCKEditor();
         this.watchTagsCount();
+        this.initSocialLinks();
     }
 
     VenueEditPage.prototype = {
@@ -31,6 +32,9 @@
             } else {
                 $(".tags-counter-container").removeClass("overflow");
             }
+        },
+        initSocialLinks: function(){
+            this.socialLinksWidget = new SocialLinks();
         }
     };
 

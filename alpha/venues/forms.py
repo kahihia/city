@@ -29,6 +29,11 @@ class VenueAccountForm(forms.ModelForm):
 
     tags = TagField(widget=VenueTagAutoSuggest(), required=False)
 
+    social_links = forms.CharField(
+        required=True,
+        widget=forms.widgets.HiddenInput()
+    )
+
     class Meta:
         model = VenueAccount
 

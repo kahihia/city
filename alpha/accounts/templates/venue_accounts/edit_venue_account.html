@@ -22,6 +22,7 @@
     </script>
 
     <script src="{{STATIC_URL}}js/location/suggest_cityfusion_venue.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/venues/social-links.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/accounts/venue-edit-page.js" type="text/javascript" ></script>
     
     {{ form.map }}
@@ -101,7 +102,11 @@
                     <div class="error">{{ error }}</div>
                 {% endfor %}
             </div>
-
+            <div class="field social-links-field">                
+                <div class="social-links-container"></div>
+                <input type="hidden" name="social_links" id="id_social_links">
+                <span class="add-more-social-link">add more</span>
+            </div>
             <div class="field about-us-field">
                 <header>About Us</header>
                 {{ form.about }}
