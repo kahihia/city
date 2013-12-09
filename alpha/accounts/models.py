@@ -371,6 +371,11 @@ class VenueType(models.Model):
         return self.name
 
 
+class PublicVenueManager(models.Manager):
+    def get_query_set(self):
+        return super(PublicVenueManager, self).get_query_set().filter(public=True)
+
+
 class VenueAccount(models.Model):
     venue = models.ForeignKey(Venue)
     phone = models.CharField(max_length=15, blank=True, null=True)
@@ -389,6 +394,9 @@ class VenueAccount(models.Model):
     types = models.ManyToManyField(VenueType)
 
     tags = TaggableManager()
+
+    public_venues = PublicVenueManager()
+    objects = models.Manager()
 
     def __unicode__(self):
         return self.venue.__unicode__()

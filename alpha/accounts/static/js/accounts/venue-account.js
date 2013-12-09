@@ -9,7 +9,7 @@
         var that = this;
         $("#venue_account_make_public").on("click", function(){
             $.ajax({
-                url: "/account-actions/set-venue-privacy/" + venue_account_id + "/public",
+                url: "/venues/set-venue-privacy/" + venue_account_id + "/public",
                 success: function(data) {
                     window.ajaxPopup(data, 'success');
                 }
@@ -18,7 +18,7 @@
 
         $("#venue_account_make_private").on("click", function(){
             $.ajax({
-                url: "/account-actions/set-venue-privacy/" + venue_account_id + "/private",
+                url: "/venues/set-venue-privacy/" + venue_account_id + "/private",
                 success: function(data) {
                     window.ajaxPopup(data, 'success');
                 }
