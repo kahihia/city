@@ -60,6 +60,9 @@ class VenueAccountForm(forms.ModelForm):
         return tags
 
     def clean_social_links(self):
+        if not self.cleaned_data["social_links"]:
+            return []
+
         social_links = json.loads(self.cleaned_data["social_links"])["social_links"]
 
         for social_link in social_links:
