@@ -86,9 +86,6 @@ class VenueAccountForm(forms.ModelForm):
             )
 
 
-    
-
-
 class NewVenueAccountForm(VenueAccountForm):
     place = JSONCharField(
         widget=GeoCompleteWidget(),

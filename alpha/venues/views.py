@@ -32,9 +32,9 @@ def venues(request):
     venue_types = VenueType.active_types.all()
 
     if current_venue_type:
-        venue_accounts = VenueAccount.objects.filter(types__id=int(current_venue_type))
+        venue_accounts = VenueAccount.objects.filter(types__id=int(current_venue_type)).order_by("venue__name")
     else:
-        venue_accounts = VenueAccount.objects.all() # TODO: filter by region
+        venue_accounts = VenueAccount.objects.all().order_by("venue__name") # TODO: filter by region
 
     return render_to_response('venues/index.html', {
         'featured_events': featured_events,
