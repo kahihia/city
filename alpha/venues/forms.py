@@ -88,6 +88,8 @@ class VenueAccountForm(forms.ModelForm):
                 venue_account=venue_account
             )
 
+        return venue_account
+
 
 class NewVenueAccountForm(VenueAccountForm):
     place = JSONCharField(
