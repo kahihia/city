@@ -102,10 +102,13 @@
                     <div class="error">{{ error }}</div>
                 {% endfor %}
             </div>
-            <div class="field social-links-field">                
+            <div class="field social-links-field">
                 <div class="social-links-container"></div>
-                <input type="hidden" name="social_links" id="id_social_links">
+                {{ form.social_links }}
                 <span class="add-more-social-link">add more</span>
+                {% for error in form.social_links.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
             </div>
             <div class="field about-us-field">
                 <header>About Us</header>

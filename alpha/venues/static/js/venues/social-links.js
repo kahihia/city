@@ -19,7 +19,9 @@
             $(this.linkTitle).val(this.title);
             $(this.linkUrl).val(this.url);
 
-            $(this.removeButton).on("click", this.destroy.bind(this))
+            $(this.removeButton).on("click", this.destroy.bind(this));
+            $(this.linkTitle).on("keyup", this.saveSocialLinks.bind(this));
+            $(this.linkUrl).on("keyup", this.saveSocialLinks.bind(this));
         },
         destroy: function(){
             this.socialLinks.removeSocialLink(this);
@@ -30,6 +32,9 @@
                 title: $(this.linkTitle).val(),
                 url: $(this.linkUrl).val()
             }
+        },
+        saveSocialLinks: function(){
+            this.socialLinks.saveValue();
         }
     }
 
@@ -52,20 +57,21 @@
             var newSocialLink = new SocialLink(this, title, url);
             this.links.push(newSocialLink);
             this.linksContainer.append(newSocialLink.widget);            
+            this.saveValue();
         },
         removeSocialLink: function(link){
             this.links.splice(this.links.indexOf(link), 1);
             this.saveValue();
         },
         loadLinks: function(){
-            var that=this, value, links;
+            var value, links;
 
             value = $(this.input).val();
             if(value) {
-                links = JSON.parse(value).links;
+                links = JSON.parse(value).social_links;
 
                 links.forEach(function(link){                    
-                    this.addSocialLink(that, link.title, link.url);
+                    this.addSocialLink(link.title, link.url);
                 }, this);
             }
         },
@@ -75,7 +81,7 @@
             });
 
             $(this.input).val(JSON.stringify({
-                links: links
+                social_links: links
             }));
         }
     }

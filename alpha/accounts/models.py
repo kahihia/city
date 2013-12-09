@@ -420,6 +420,7 @@ class VenueAccount(models.Model):
     def campaigns(self):
         return AdvertisingCampaign.objects.filter(venue_account__id=self.id)
 
+    @property
     def social_links(self):
         return self.venueaccountsociallink_set.all()
 
