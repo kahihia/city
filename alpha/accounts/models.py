@@ -393,6 +393,8 @@ class VenueAccount(models.Model):
     public = models.BooleanField(default=True)
     types = models.ManyToManyField(VenueType)
 
+    viewed = models.IntegerField(default=0)
+
     tags = TaggableManager()
 
     public_venues = PublicVenueManager()
@@ -427,6 +429,9 @@ class VenueAccount(models.Model):
 
     def campaigns(self):
         return AdvertisingCampaign.objects.filter(venue_account__id=self.id)
+
+    def view(self):
+        VenueAccount.objects.filter(id=self.id).update(viewed=F("viewed")+1)
 
     @property
     def social_links(self):

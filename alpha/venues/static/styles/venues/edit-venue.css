@@ -342,11 +342,11 @@
 
 .social-links-field .social-link {
     position: relative;
-    height: 50px;
+    height: 45px;
 }
 
 .social-links-field .social-link .social-link-title-widget {
-    height: 25px;
+    height: 20px;
 }
 
 .social-links-field .social-link .social-link-title-widget .edit-mode,
@@ -387,7 +387,7 @@
     position: relative;
     color: #022e52;
     top: 2px;
-    padding-left: 4px;
+    padding-left: 2px;
     cursor: pointer;
 }
 

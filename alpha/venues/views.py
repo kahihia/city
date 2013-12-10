@@ -47,6 +47,8 @@ def venues(request):
 def public_venue_account(request, slug):
     venue_account = VenueAccount.objects.get(slug=slug)
 
+    venue_account.view()
+
     venue_events = SingleEvent.future_events.filter(event__venue_account_owner=venue_account)
     venue_featured_events = SingleEvent.featured_events.filter(event__venue_account_owner=venue_account)
 

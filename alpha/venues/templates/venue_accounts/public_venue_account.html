@@ -35,6 +35,7 @@
     </h1>
     <div class="account-profile account-primary-content">
         <div class="primary-wrapper">
+            {% include "actions/venue_actions.html" %}
             {% include "venue_accounts/_venue_details.html" %}
 
             {% if venue_account.tags.count > 0 %}
