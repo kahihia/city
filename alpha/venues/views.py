@@ -226,7 +226,7 @@ def set_venue_privacy(request, venue_account_id, privacy):
     venue_account.save()
 
     return HttpResponse(
-        "You make %s venue %s" % (venue_account.venue.name, privacy)
+        "You have made %s venue %s." % (venue_account.venue.name, privacy)
     )
 
 
