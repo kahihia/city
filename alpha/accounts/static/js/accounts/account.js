@@ -5,7 +5,7 @@
         var self = this;
 
         self.init = function() {
-            self.clearGraphUrl = $("[data-type=hidden_elements] [data-id=clear_graph_url]").val();
+            self.refreshGraphUrl = $("[data-type=hidden_elements] [data-id=refresh_graph_url]").val();
             self.postToFBUrl = $("[data-type=hidden_elements] [data-id=post_to_facebook_url]").val();
             self.bindToVenueUrl = $("[data-type=hidden_elements] [data-id=bind_to_venue_url]").val();
 
@@ -314,17 +314,30 @@
                 return;
             }
 
-            FB.login(function(response) {
-                if (response.authResponse) {
-                    $.post(self.clearGraphUrl, {
-                        "csrfmiddlewaretoken": self.csrfToken
-                    }, function(data) {
-                       if(data.success) {
-                           successCallback();
-                       }
-                    }, 'json');
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    var accessToken = response.authResponse.accessToken;
+                    self.refreshTokenBackend(accessToken, successCallback);
+                } else {
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            var accessToken = response.authResponse.accessToken;
+                            self.refreshTokenBackend(accessToken, successCallback);
+                        }
+                    }, {scope: 'create_event'});
                 }
-            }, {scope: 'create_event'});
+            });
+        };
+
+        self.refreshTokenBackend = function(accessToken, successCallback) {
+            $.post(self.refreshGraphUrl, {
+                "csrfmiddlewaretoken": self.csrfToken,
+                "access_token": accessToken
+            }, function(data) {
+               if(data.success) {
+                   successCallback();
+               }
+            }, 'json');
         };
 
         self.makeCheckBoxesForFBPosting = function() {

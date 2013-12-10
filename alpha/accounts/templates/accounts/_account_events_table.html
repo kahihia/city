@@ -159,7 +159,7 @@
     </div>
 {% endif %}
 <div data-type="hidden_elements" style="display:none;">
-    <input type="hidden" value="{% url 'clear_facebook_graph' %}" data-id="clear_graph_url" />
+    <input type="hidden" value="{% url 'refresh_facebook_graph' %}" data-id="refresh_graph_url" />
     <input type="hidden" value="{% url 'event_post_to_facebook_ajax' %}" data-id="post_to_facebook_url" />
     <input type="hidden" value="{% url 'event_bind_to_venue' %}" data-id="bind_to_venue_url" />
     {% csrf_token %}
