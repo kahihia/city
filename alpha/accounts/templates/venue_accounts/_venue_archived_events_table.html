@@ -11,7 +11,8 @@
             {% short_single_event event %}
 
             <div class="event-edit-actions">
-                <a href="{% url 'event_copy' event.authentication_key %}">
+                <a class="event-edit-actions__item"
+                   href="{% url 'event_copy' event.authentication_key %}">
                     Copy
                 </a>
             </div>

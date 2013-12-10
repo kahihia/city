@@ -12,17 +12,21 @@
 
             {% if private %}
                 <div class="event-edit-actions">
-                    <a href="{% url 'event_edit' event.authentication_key %}">
+                    <a class="event-edit-actions__item"
+                       href="{% url 'event_edit' event.authentication_key %}">
                         Edit
                     </a>
-                    <a href="{% url 'event_copy' event.authentication_key %}">
+                    <a class="event-edit-actions__item"
+                       href="{% url 'event_copy' event.authentication_key %}">
                         Copy
                     </a>
-                    <a href="{% url 'event_remove' event.authentication_key %}" class="danger-action">
+                    <a class="event-edit-actions__item event-edit-actions__item_pos_last"
+                       href="{% url 'event_remove' event.authentication_key %}" class="danger-action">
                         Delete
                     </a>
                     {% if not event.is_featured %}
-                        <a href="{% url 'event_setup_featured' event.authentication_key %}">
+                        <a class="event-edit-actions__item event-edit-actions__item_size_wide event-edit-actions__item_pos_last"
+                           href="{% url 'event_setup_featured' event.authentication_key %}">
                             Make Featured Event
                         </a>
                     {% endif %}
