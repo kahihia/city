@@ -341,22 +341,65 @@
 }
 
 .social-links-field .social-link {
-    height: 30px;
+    position: relative;
+    height: 50px;
 }
+
+.social-links-field .social-link .social-link-title-widget {
+    height: 25px;
+}
+
+.social-links-field .social-link .social-link-title-widget .edit-mode,
+.social-links-field .social-link .social-link-title-widget .view-mode {
+    display: none;
+    width: 150px;
+}
+
+.social-links-field .social-link .social-link-title-widget.edit .edit-mode {
+    display: block;
+}
+
+.social-links-field .social-link .social-link-title-widget.view .view-mode {
+    display: block;
+}
+
+.social-links-field .social-link .social-link-title-widget i {
+    cursor: pointer;
+    margin-left: 5px;
+    display: none;
+}
+
+.social-links-field .social-link .social-link-title-widget:hover i {
+    color: #022e52;
+    display: inline-block;
+}
+
+.social-links-field .social-link .social-link-title-widget i.icon-edit {
+    position: relative;
+    top: 3px;
+}
+
+.social-links-field .social-link .social-link-title-widget input {
+    width: 120px;
+}
+
+.social-links-field .social-link .social-link-title-widget span {
+    position: relative;
+    color: #022e52;
+    top: 2px;
+    padding-left: 4px;
+    cursor: pointer;
+}
+
 
 .social-links-field .social-link .social-link-title {
-    width: 100px;
-    float: left;
-}
-
-.social-links-field .social-link .social-link-url {
-    margin-left: 5px;
-    width: 200px;
-    float: left;
+    width: 100px;    
 }
 
 .social-links-field .social-link .icon-remove {
-    float: left;
+    position: absolute;
+    right: 0;
+    top: 0;
     cursor: pointer;
     margin-left: 5px;
     margin-top: 3px;

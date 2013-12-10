@@ -109,6 +109,28 @@ class NewVenueAccountForm(VenueAccountForm):
     city_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
     about = RichTextFormField(required=False)
 
+    picture_src = forms.CharField(
+        widget=AjaxCropWidget(),
+        required=False
+    )
+
+    types = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        queryset=VenueType.active_types.all(),
+        required=False
+    )
+
+    phone = CAPhoneNumberField(required=False)
+    fax = CAPhoneNumberField(required=False)
+    about = RichTextFormField(required=False)
+
+    tags = TagField(widget=VenueTagAutoSuggest(), required=False)
+
+    social_links = forms.CharField(
+        required=False,
+        widget=forms.widgets.HiddenInput()
+    )
+
     def clean(self):
         cleaned_data = self.cleaned_data
 

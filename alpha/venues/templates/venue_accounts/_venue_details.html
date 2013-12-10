@@ -66,14 +66,7 @@
                     {% for social_link in venue_account.social_links %}
                         <a href="{{ social_link.link }}" target="_blank" class="social-link">{{ social_link.title }}</a>
                     {% endfor %}
-                </div>
-                {% if venue_account.tags.count > 0 %}
-                    <div class="venue-tags">
-                        {% for tag in venue_account.tags.all %}
-                            {{ tag }}{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                </div>               
             </div>
         </td>
     </tr>

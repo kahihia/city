@@ -1083,3 +1083,14 @@
     background: url("/static/images/event/tag-icon.png") 5px 2px no-repeat;
     padding-left: 30px;
 }
+
+.account-profile .tags {
+    position: relative;
+    margin-top: 20px;
+    left: -30px;
+    width: 100%;
+    line-height: 15px;
+    padding: 3px;
+    padding-left: 45px;
+    padding-right: 15px;
+}

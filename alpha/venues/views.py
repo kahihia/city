@@ -96,41 +96,6 @@ def private_venue_account(request, slug):
 
 
 @login_required
-def edit_venue_account(request, slug):
-    venue_account = VenueAccount.objects.get(slug=slug)
-
-    if venue_account.account.user != request.user:
-        resp = render_to_response('403.html', context_instance=RequestContext(request))
-        resp.status_code = 403
-        return resp
-
-    form = VenueAccountForm(
-        instance=venue_account,
-        initial={
-            "picture_src": "/media/%s" % venue_account.picture,
-            "social_links": social_links_services.prepare_social_links(venue_account)
-        }
-    )
-
-    if request.method == 'POST':
-        if request.POST["picture_src"]:
-            venue_account.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
-
-        form = VenueAccountForm(instance=venue_account, data=request.POST)
-
-        if form.is_valid():
-            form.save()
-            types = form.cleaned_data['types']
-            venue_account.types = types
-            return HttpResponseRedirect(reverse('private_venue_account', args=(venue_account.slug, )))
-
-    return render_to_response('venue_accounts/edit_venue_account.html', {
-            'venue_account': venue_account,
-            'form': form
-        }, context_instance=RequestContext(request))
-
-
-@login_required
 def save_venue(request):
     venue_identifier = request.POST["venue_identifier"]
     if venue_identifier:
@@ -187,6 +152,9 @@ def create_venue_account(request):
                 form = NewVenueAccountForm(instance=venue_account, data=request.POST)
                 venue_account = form.save()
 
+                if request.POST["picture_src"]:
+                    venue_account.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
+
                 types = form.cleaned_data['types']
                 venue_account.types = types
                 venue_account.save()
@@ -197,6 +165,41 @@ def create_venue_account(request):
             'venue_account': venue_account,
             'form': form
         }, context_instance=RequestContext(request))
+
+
+@login_required
+def edit_venue_account(request, slug):
+    venue_account = VenueAccount.objects.get(slug=slug)
+
+    if venue_account.account.user != request.user:
+        resp = render_to_response('403.html', context_instance=RequestContext(request))
+        resp.status_code = 403
+        return resp
+
+    form = VenueAccountForm(
+        instance=venue_account,
+        initial={
+            "picture_src": "/media/%s" % venue_account.picture,
+            "social_links": social_links_services.prepare_social_links(venue_account)
+        }
+    )
+
+    if request.method == 'POST':
+        if request.POST["picture_src"]:
+            venue_account.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
+
+        form = VenueAccountForm(instance=venue_account, data=request.POST)
+
+        if form.is_valid():
+            form.save()
+            types = form.cleaned_data['types']
+            venue_account.types = types
+            return HttpResponseRedirect(reverse('private_venue_account', args=(venue_account.slug, )))
+
+    return render_to_response('venue_accounts/edit_venue_account.html', {
+            'venue_account': venue_account,
+            'form': form
+        }, context_instance=RequestContext(request))    
 
 
 def venue_account_already_in_use(request, venue_account_id):

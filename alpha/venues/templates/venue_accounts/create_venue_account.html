@@ -22,6 +22,7 @@
     </script>
 
     <script src="{{STATIC_URL}}js/location/suggest_cityfusion_venue.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/venues/social-links.js" type="text/javascript"></script>
     <script src="{{STATIC_URL}}js/accounts/create-venue-page.js" type="text/javascript" ></script>
     {{ form.media.js }}
 {% endblock %}
@@ -133,6 +134,14 @@
                 <header>Twitter</header>
                 {{ form.twitter }}
                 {% for error in form.twitter.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="field social-links-field">
+                <div class="social-links-container"></div>
+                {{ form.social_links }}
+                <span class="add-more-social-link">add more</span>
+                {% for error in form.social_links.errors %}
                     <div class="error">{{ error }}</div>
                 {% endfor %}
             </div>

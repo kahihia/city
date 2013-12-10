@@ -37,6 +37,14 @@
         <div class="primary-wrapper">
             {% include "venue_accounts/_venue_details.html" %}
 
+            {% if venue_account.tags.count > 0 %}
+                <div class="tags">
+                    {% for tag in venue_account.tags.all %}
+                        {{ tag }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <div class="tabs-container">
                 <table class="tabs" data-page-id="public-venue-account" cellpadding="0" cellspacing="0">
                     <tr>
@@ -55,6 +63,6 @@
                     {% include 'venue_accounts/_venue_featured_events_table.html' %}
                 </div>
             </div>
-        </div>        
+        </div>
     </div>
 {% endblock %}

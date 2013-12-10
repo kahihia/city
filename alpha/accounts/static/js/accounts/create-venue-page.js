@@ -9,6 +9,9 @@
         if(typeof(SuggestCityfusionVenue) !== "undefined") {
             this.suggestCityfusionVenue = new SuggestCityfusionVenue(this, this.onCityfusionVenueChoose.bind(this));
         }
+
+        this.watchTagsCount();
+        this.initSocialLinks();
     }
 
     CreateVenuePage.prototype = {
@@ -166,6 +169,25 @@
             $("#id_city_0").val(venue.city_name);
             $("#id_city_1").val([venue.city_id, venue.lat, venue.lng].join(","));
             $("#id_city_identifier").val(venue.city_id);
+        },
+        watchTagsCount: function(){
+            setInterval(this.calculateTagsCount.bind(this), 50);
+        },
+        calculateTagsCount: function(){
+            var count = _.filter($("#as-values-id_tags__tagautosuggest").val().split(","), function(tag){ 
+                return tag.trim(); 
+            }).length;
+
+            $(".tags-counter").text(count);
+
+            if(count>10) {
+                $(".tags-counter-container").addClass("overflow");
+            } else {
+                $(".tags-counter-container").removeClass("overflow");
+            }
+        },
+        initSocialLinks: function(){
+            this.socialLinksWidget = new SocialLinks();
         }
     };
 
