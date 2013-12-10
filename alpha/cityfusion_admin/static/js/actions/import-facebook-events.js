@@ -150,7 +150,11 @@
                     $.fancybox.open([
                         {
                             type: 'iframe',
-                            href : self.createUrl + "?" + self.prepareUrlParams(eventData)
+                            href : self.createUrl + "?" + self.prepareUrlParams(eventData),
+                            closeClick  : false,
+                            helpers     : {
+                                overlay : {closeClick: false}
+                            }
                         }
                     ], {
                         afterLoad: function() {
