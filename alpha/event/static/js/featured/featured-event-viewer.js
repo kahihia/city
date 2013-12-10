@@ -35,7 +35,7 @@
             $(".features-navigation [data-page="+this.currentPage+"]").addClass("current");
         },
         scrollToPage: function(page){
-            if(page>0 && page<=this.pages){
+            if(page!=this.currentPage && page>0 && page<=this.pages){
                 this.currentPage = page;
                 this._scroll();
             }            
