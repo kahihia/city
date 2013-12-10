@@ -36,7 +36,6 @@ REMINDER_TYPES = (
     ("WEEKDAY", "On week day")
 )
 
-
 DAYS_OF_WEEK = (
     ('0', 'Monday'),
     ('1', 'Tuesday'),

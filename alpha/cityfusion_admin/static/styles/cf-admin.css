@@ -27,3 +27,13 @@ body .box .button {
     margin-bottom: 3px;
     border: 0;
 }
+
+body .entry-wrapper .entry-info.home-page .entry-details-wrapper{
+    width: 285px;   
+}
+
+body .entry-wrapper .entry-info.home-page .entry-details-wrapper .title,
+body .entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-date,
+body .entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-description {
+    width: 285px;
+} 
