@@ -6,12 +6,17 @@
 }
 
 .show-on-map {
-    position: absolute;
-    cursor: pointer;
-    top: 8px;
-    right: 8px;
+    position: relative;
+    cursor: pointer;    
     color: #1184f8;
     text-decoration: underline;
+    margin-bottom: 10px;
+}
+
+.show-on-map img {
+    position: absolute;
+    left: -25px;
+    top: -4px;
 }
 
 .account-profile .account-details {
@@ -45,9 +50,9 @@
 
 .account-details .block-header,
 .about .block-header {
-    font-size: 18px;
-    color: #022e52;
-    font-weight: bold;    
+    font-size: 14px;
+    color: #7b7b7b;
+    font-weight: bold;
     width:100%;
     text-transform: capitalize;
 }
@@ -60,7 +65,8 @@
 }
 
 .account-details span {
-    color: #022e52;
+    display: block;
+    color: #1184f8;
     font-size: 12px;
     font-weight: normal;
 }
@@ -401,29 +407,29 @@
 }
 
 .settings .button.special {
-    color: #022e52;
-    background: #478dd3;
-    border: 1px solid #10416b;
+    color: #ffffff;
+    background: #0260bb;
+    border: 1px solid #0260bb;
+}
+
+.settings .button.special:hover {
+    color: #1184f8;
 }
 
 .settings .button.special span {
     text-transform: uppercase;
 }
 
-
-
 .settings .button:hover {
     color: #022e52;
 } 
 
 
-.edit-event-account-button {
-    
+.edit-event-account-button {    
     width: 85px;
     height: 34px;
     line-height: 34px;
-    color: #0066cc;
-    
+    color: #0066cc;    
 }
 
 .public-or-private .button {
@@ -1051,4 +1057,29 @@
 .bonus-budget .amount span {
     color: #022e52;
     margin-right: 15px;
+}
+
+.social-links {
+    margin-top: 5px;
+    margin-left: 25px;    
+}
+
+.social-links .social-link {
+    display: inline-block;
+    background: #0260bb;
+    color: #ffffff;
+    min-width: 85px;
+    padding: 3px;
+    text-align: center;
+    height: 18px;
+    line-height: 18px;
+    vertical-align: middle;
+    margin-right: 5px;
+    margin-top: 7px;
+}
+
+.venue-tags {
+    margin-top: 10px;
+    background: url("/static/images/event/tag-icon.png") 5px 2px no-repeat;
+    padding-left: 30px;
 }
