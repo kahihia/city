@@ -17,7 +17,7 @@
 }
 
 .jump-popup_size_narrow {
-    width: 478px;
+    width: 448px;
 }
 
 .jump-popup .time-row {
@@ -35,7 +35,7 @@
 
 .jump-popup_size_narrow .jump-popup__date-cell,
 .jump-popup_size_narrow .jump-popup__time-cell {
-    margin-left: 30px;
+    margin-left: 25px;
 }
 
 .jump-popup__legend {

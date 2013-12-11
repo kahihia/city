@@ -364,6 +364,10 @@ html.preview, body.preview {
     position: relative;
 }
 
+.schedule-bar_type_popup {
+    padding: 0 15px;
+}
+
 table.schedule-bar-menu {
     width: 100%;
     height: 20px;
@@ -378,7 +382,7 @@ table.schedule-bar-menu {
     background: none;
 }
 
-table.schedule-bar-menu td {
+.schedule-bar__item {
     list-style: none;
     text-transform: uppercase;
     height: 19px;
@@ -386,6 +390,10 @@ table.schedule-bar-menu td {
     vertical-align: middle;
     width: 95px;
     text-align: center;
+}
+
+.schedule-bar_type_popup .schedule-bar__item {
+    width: 89px;
 }
 
 table.schedule-bar-menu td a {

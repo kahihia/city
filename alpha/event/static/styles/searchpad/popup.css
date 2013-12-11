@@ -22,6 +22,10 @@
     float: left;
 }
 
+.search-pad-menu .categories_pos_bottom {
+    height: 230px;
+}
+
 .search-pad-advertising {
     margin-left: 10px;
 }
@@ -89,7 +93,7 @@
 
 .search-pad-popup .searchpad-event-details {
     margin-top: 15px;
-    margin-left: 20px;
+    padding: 0 15px;
 }
 
 .search-pad-popup .searchpad-event-details header {

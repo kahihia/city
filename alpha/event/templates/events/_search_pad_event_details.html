@@ -20,7 +20,7 @@
                                 <div class="image-viewer">
                                     <div class="image-viewer-content">
                                     {% for image in event.sorted_images %}
-                                        <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
+                                        <a href="{% event_link event %}">
                                             <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=154 %}">
                                             <div class="detail-view"></div>
                                         </a>
@@ -35,7 +35,7 @@
                                 </div>
                             {% elif event.sorted_images.count > 0 %}
                                 {% for image in event.sorted_images %}
-                                    <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
+                                    <a href="{% event_link event %}">
                                         <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=154 %}">
                                         <div class="detail-view"></div>
                                     </a>

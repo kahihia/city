@@ -5,6 +5,7 @@
         var that=this;
         this.openButton = $(".search-pad-popup-open-button");
         this.popup = $(".search-pad-popup");
+        this.outerWrapper = $(".outer-wrapper");
 
         this.openButton.on("click", function(){
             that.open();
@@ -19,6 +20,7 @@
 
     SearchPadPopup.prototype = {
         open: function(){
+            this.popup.height(this.outerWrapper.height());
             this.popup.show();
             this.initDescriptionMoreButton();
         },
