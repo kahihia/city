@@ -3,7 +3,7 @@
     display: none;
     z-index: 10;
     height: 145px;
-    width: 478px;
+    width: 495px;
     padding: 18px 0 15px;
     background: #022e52;
 
@@ -16,6 +16,10 @@
 
 }
 
+.jump-popup_size_narrow {
+    width: 478px;
+}
+
 .jump-popup .time-row {
     margin-top: 15px;
 }
@@ -26,6 +30,11 @@
 
 .jump-popup__date-cell, .jump-popup__time-cell {
     float: left;
+    margin-left: 35px;
+}
+
+.jump-popup_size_narrow .jump-popup__date-cell,
+.jump-popup_size_narrow .jump-popup__time-cell {
     margin-left: 30px;
 }
 

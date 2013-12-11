@@ -58,7 +58,7 @@ html.preview, body.preview {
 }
 
 .page-container.index {
-    margin-top: 18px;
+    margin-top: 10px;
     min-height: 1200px;
 }
 
@@ -484,8 +484,8 @@ table.schedule-bar-menu td.selected a {
 }
 
 .footer-container.top {
-    padding-top:9px;
-    padding-bottom:9px;
+    padding-top:5px;
+    padding-bottom:5px;
 }
 
 .footer-ads-wrapper
@@ -617,12 +617,12 @@ a {
 }
 .buttonq{
     background: url(/static/images/question.png) no-repeat;
-    height: 25px;
+    height: 22px;
     width: 25px;
 }
 .buttonq:hover{
     background: url(/static/images/question_hover.png) no-repeat;
-    height: 25px;
+    height: 22px;
 }
 
 .buttonq.mini{
@@ -762,4 +762,9 @@ a {
 
 .popup-form-wrapper {
     background: #ffffff;
+}
+
+.popup-form-wrapper__inner {
+    width: 595px;
+    margin: 0 auto;
 }

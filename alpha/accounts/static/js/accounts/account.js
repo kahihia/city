@@ -5,7 +5,7 @@
         var self = this;
 
         self.init = function() {
-            self.clearGraphUrl = $("[data-type=hidden_elements] [data-id=clear_graph_url]").val();
+            self.refreshGraphUrl = $("[data-type=hidden_elements] [data-id=refresh_graph_url]").val();
             self.postToFBUrl = $("[data-type=hidden_elements] [data-id=post_to_facebook_url]").val();
             self.bindToVenueUrl = $("[data-type=hidden_elements] [data-id=bind_to_venue_url]").val();
 
@@ -18,6 +18,7 @@
             self.facebookLinkSelector = "[data-type=facebook_event_link]";
             self.executeButtonSelector = "[data-id=execute_button]";
             self.actionSelector = "[data-id=action_select]";
+            self.perPageSelector = "[data-id=per_page_select]";
             self.eventContainer = $("[data-id=event_container]");
             self.venueSelect = $("[data-id=venue_select]");
             self.miniIndicator = $("[data-id=mini_indicator]");
@@ -31,6 +32,7 @@
 
             $("body").on("click", self.executeButtonSelector, self.onExecuteButtonClick);
             $("body").on("change", self.actionSelector, self.onActionSelectChange);
+            $("body").on("change", self.perPageSelector, self.onPerPageSelectChange);
             $("body").on("click", self.fbOwnerTypeSelector, self.onFBOwnerTypeRadioClick);
             $("body").on("click", self.fbPostOkSelector, self.onPostFBOkClick);
             $("body").on("click", self.selectAllSelector, self.onSelectAllButtonClick);
@@ -38,6 +40,10 @@
             self.reset();
             self.makeCheckBoxesForFBPosting();
             self.initBalloons();
+
+            $(".events-actions-row__action-dropdown").qap_dropdown();
+            $(".events-actions-row__venue-dropdown").qap_dropdown();
+            $(".per-page-dropdown").qap_dropdown();
         }
 
         self.onExecuteButtonClick = function() {
@@ -72,6 +78,11 @@
             else if(value === "bind_selected_to_venue") {
                 self.makeCheckBoxesForEventTransferring();
             }
+        };
+
+        self.onPerPageSelectChange = function() {
+            var href = $(this).val();
+            document.location.href = href;
         };
 
         self.onFBOwnerTypeRadioClick = function() {
@@ -303,17 +314,30 @@
                 return;
             }
 
-            FB.login(function(response) {
-                if (response.authResponse) {
-                    $.post(self.clearGraphUrl, {
-                        "csrfmiddlewaretoken": self.csrfToken
-                    }, function(data) {
-                       if(data.success) {
-                           successCallback();
-                       }
-                    }, 'json');
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    var accessToken = response.authResponse.accessToken;
+                    self.refreshTokenBackend(accessToken, successCallback);
+                } else {
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            var accessToken = response.authResponse.accessToken;
+                            self.refreshTokenBackend(accessToken, successCallback);
+                        }
+                    }, {scope: 'create_event'});
                 }
-            }, {scope: 'create_event'});
+            });
+        };
+
+        self.refreshTokenBackend = function(accessToken, successCallback) {
+            $.post(self.refreshGraphUrl, {
+                "csrfmiddlewaretoken": self.csrfToken,
+                "access_token": accessToken
+            }, function(data) {
+               if(data.success) {
+                   successCallback();
+               }
+            }, 'json');
         };
 
         self.makeCheckBoxesForFBPosting = function() {

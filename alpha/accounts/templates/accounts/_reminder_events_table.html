@@ -9,7 +9,7 @@
         <div class="entry-info with-delete-action">
             {% short_single_event event %}
             <div class="event-edit-actions">
-                <a href="{% url 'remove_remind_me' event.id %}" class="danger-action">
+                <a href="{% url 'remove_remind_me' event.id %}" class="event-edit-actions__item">
                     Delete
                 </a>
             </div>

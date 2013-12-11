@@ -232,3 +232,13 @@
     color: #fff;
     margin: 0;
 }
+
+.event-posting-form__text-field input {
+    outline: 0;
+    color: #454545;
+    background: #fff;
+    border: 1px solid #ababab;
+    padding: 0 5px;
+    height: 26px;
+    line-height: 26px;
+}
