@@ -763,3 +763,7 @@ a {
 .popup-form-wrapper {
     background: #ffffff;
 }
+
+.popup-form-wrapper__inner {
+    width: 595px;
+}

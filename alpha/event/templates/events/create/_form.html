@@ -24,7 +24,7 @@
         <header>
             Event Name
         </header>
-        <div class="event-posting-field">
+        <div class="event-posting-field event-posting-form__text-field">
             {{form.name}}
             {% for error in form.name.errors %}
                 <div class="error">{{ error }}</div>
@@ -45,7 +45,9 @@
             Venue
         </header>
         <div class="event-posting-field">
-            <div class="location">{{ form.place }}</div>
+            <div class="location event-posting-form__text-field">
+                {{ form.place }}
+            </div>
             <div class="show-map"></div>
             {{ form.venue_identifier }}
             <div class="suggest">
@@ -90,7 +92,7 @@
         <header>
             When
         </header>
-        <div class="event-posting-field">
+        <div class="event-posting-field event-posting-form__text-field">
             {{form.when}}
             {{form.when_json}}
             {{form.event_type}}
@@ -118,7 +120,7 @@
                     <label for="id_price_free" class="price-free-label">Free</label>
                 </div>
             </div>
-            <div class="price-input">
+            <div class="price-input event-posting-form__text-field">
                 {{ form.price }}
             </div>            
             {% for error in form.price.errors %}
