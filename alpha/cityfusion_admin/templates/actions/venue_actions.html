@@ -1,4 +1,4 @@
-{% if request.user == venue_account.account.user %}
+{% if request.user.is_staff or request.user == venue_account.account.user %}
     <div class="cfadmin-actions">        
         <span>Viewed: {{ venue_account.viewed }}</span>
     </div>

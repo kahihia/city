@@ -15,7 +15,7 @@
             if($("#id_not_from_canada").is(':checked')) {
                 $(".native-region-tr").hide();
             } else {
-                $(".native-region-tr").show();                
+                $(".native-region-tr").show();
             }
         }       
     };
@@ -24,4 +24,4 @@
         window.accountEditPage = new AccountEditPage();
     });
 
-})(jQuery, window, document);    
+})(jQuery, window, document);
