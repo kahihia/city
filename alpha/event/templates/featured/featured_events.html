@@ -17,9 +17,9 @@
             <a href="{% featured_event_link event %}">
                 <div class="featured-img-wrapper">
                     {% if event.picture %}
-                        <img src="{% cropped_thumbnail event.image "cropping" width=154 %}" height="153px" width="154px">
+                        <img src="{% cropped_thumbnail event.image "cropping" width=154 %}" height="154" width="154">
                     {% else %}
-                        <img src="/static/images/default-event.jpg" height="153px" width="154px">
+                        <img src="/static/images/default-event.jpg" height="154" width="154">
                     {% endif %}
                 </div>
                 <div class="featured-img-details">

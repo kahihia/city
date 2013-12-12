@@ -80,7 +80,7 @@
                                     <div class="image-viewer-content">
                                     {% for image in event.sorted_images %}
                                         <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
-                                            <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}">
+                                            <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}" width="265" height="265">
                                             <div class="detail-view"></div>
                                         </a>
                                     {% endfor %}
@@ -95,7 +95,7 @@
                             {% elif event.sorted_images.count > 0 %}
                                 {% for image in event.sorted_images %}
                                     <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
-                                        <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}">
+                                        <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}" width="265" height="265">
                                         <div class="detail-view"></div>
                                     </a>
                                 {% endfor %}
