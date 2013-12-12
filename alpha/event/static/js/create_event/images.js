@@ -237,7 +237,7 @@
             if(value) {
                 images = JSON.parse(value).images;
 
-                images.forEach(function(image){                    
+                images.forEach(function(image){
                     var filepath = image.filepath,
                         cropping = _.map(image.cropping.split(","), function(val){
                             return parseInt(val);
@@ -258,11 +258,6 @@
         }
     }
 
-    $(document).on("ready page:load", function(){
-        new CroppedImages(
-            document.getElementById("id_images")
-        );
-    });
+    window.CroppedImages = CroppedImages;
 
 })(jQuery, window, document);
-    

@@ -183,7 +183,7 @@ html.preview, body.preview {
     float: left;
     height: 25px;
     padding-top: 3px;
-    margin-left: 3px;
+    padding-left: 3px;
 }
 
 .location-wrapper .location-selection-wrapper,
