@@ -346,6 +346,7 @@ class FeaturedEventDayManager(models.Manager):
     def get_query_set(self):        
         return super(FeaturedEventDayManager, self).get_query_set()\
             .filter(
+                is_occurrence=False,
                 end_time__gte=datetime.datetime.now(),
                 event__featuredevent__start_time__lte=datetime.datetime.now(),
                 event__featuredevent__end_time__gte=datetime.datetime.now(),
