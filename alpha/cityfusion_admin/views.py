@@ -394,7 +394,7 @@ def admin_advertising_change_status(request, ad_id, status):
 
 @staff_member_required
 def admin_featured(request):
-    featured_events = FeaturedEvent.admin.all()
+    featured_events = FeaturedEvent.admin.order_by('-end_time').all()
 
     return render_to_response('cf-admin/admin-featured-events.html', {
             "featured_events": featured_events
