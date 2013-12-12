@@ -267,8 +267,7 @@ def post_to_facebook_ajax(request):
             else:
                 facebook_owner_id = request.POST.get('page_id')
 
-            facebook_event_ids = facebook_services.create_facebook_event(event, request,
-                                                                         facebook_owner_id, facebook_owner_type)
+            facebook_event_ids = facebook_services.create_facebook_event(event, request, facebook_owner_id, facebook_owner_type)
             success = True
         except Exception as e:
             error = e.message
@@ -327,14 +326,14 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
     if request.method == 'POST':
         form = EditEventForm(account=account, instance=event, data=request.POST)
         if form.is_valid():
-            # try:
-            event_service.save_event(account.user, request.POST, form)
-            return HttpResponseRedirect(
-                reverse('event_view', kwargs={'slug': event.slug})
-            )
+            try:
+                event_service.save_event(account.user, request.POST, form)
+                return HttpResponseRedirect(
+                    reverse('event_view', kwargs={'slug': event.slug})
+                )
 
-            # except:
-            #     form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
+            except:
+                form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
     else:
         form = EditEventForm(
             account=account,
