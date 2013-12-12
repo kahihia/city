@@ -21,7 +21,7 @@
                                     <div class="image-viewer-content">
                                     {% for image in event.sorted_images %}
                                         <a href="{% event_link event %}">
-                                            <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=154 %}">
+                                            <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=154 %}"  height="154" width="154">
                                             <div class="detail-view"></div>
                                         </a>
                                     {% endfor %}
@@ -36,13 +36,13 @@
                             {% elif event.sorted_images.count > 0 %}
                                 {% for image in event.sorted_images %}
                                     <a href="{% event_link event %}">
-                                        <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=154 %}">
+                                        <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=154 %}" height="154" width="154">
                                         <div class="detail-view"></div>
                                     </a>
                                 {% endfor %}
 
                             {% else %}
-                                <img src="{{STATIC_URL}}images/default-event.jpg" height="154px" weight="154px">
+                                <img src="{{STATIC_URL}}images/default-event.jpg" height="154" weight="154">
                             {% endif %}
                             {% if event.venue_account_owner and event.venue_account_owner.public %}
                             <footer>
