@@ -23,7 +23,7 @@
     FeaturedEventsViewer.prototype = {
         _scroll: function(){
             var leftPosition = -1002*(this.currentPage-1);
-            if(this.currentPage==this.pages) {
+            if(this.currentPage==this.pages && $(".features", this.viewer).length % 6) {
                 leftPosition += (6 - $(".features", this.viewer).length % 6) * 167;
             }
 
