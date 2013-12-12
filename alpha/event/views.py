@@ -146,15 +146,14 @@ def view_featured(request, slug, date=None):
     try:
         event = Event.future_events.get(slug=slug)
     except ObjectDoesNotExist:
-        return HttpResponseRedirect(reverse('event_browse'))   
-        
-    event.featuredevent_set.all()[0].click()
+        return HttpResponseRedirect(reverse('event_browse'))
+
+    FeaturedEvent.click_featured_events(event.featuredevent_set.all())
 
     if date:
-        return HttpResponseRedirect(reverse('event_view', args=(slug, date))) 
+        return HttpResponseRedirect(reverse('event_view', args=(slug, date)))
     else:
-        return HttpResponseRedirect(reverse('event_view', args=(slug, ))) 
-
+        return HttpResponseRedirect(reverse('event_view', args=(slug, )))
 
 
 def view(request, slug, date=None):

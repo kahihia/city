@@ -8,7 +8,9 @@
             </a>
         </td>
         <td width="10" align="left">
-            <div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}/images/emails/blank.gif" width="10" height="10" alt="" /></div>
+            <div style="line-height:0;">
+                <img src="{{site}}{{STATIC_URL}}/images/emails/blank.gif" width="10" height="10" alt="" />
+            </div>
         </td>
     {% else %}
         <div class="features">
@@ -23,7 +25,7 @@
                 <div class="featured-img-details">
                     <div class="featured-img-details-wrapper">
                         <div class="featured-title">
-                            <a href="{% featured_event_link event %}">{{event.name}}</a>
+                            {{event.name}}
                         </div>
                         <div class="featured-date">
                             {{ event.start_time|date:"b d, Y | fA"|title }}-{{event.end_time|date:"fA"|title}}
@@ -32,9 +34,7 @@
                             {{ event.venue.name }}
                         </div>
                         <div class="featured-details-link">
-                            <a href="{% featured_event_link event %}">
-                                event details
-                            </a>
+                            event details
                         </div>
                     </div>
                 </div>
