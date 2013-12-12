@@ -161,7 +161,6 @@ class EditEventForm(forms.ModelForm):
         widget=forms.widgets.HiddenInput()
     )
 
-
     # SINGLE
     # MULTIDAY
     event_type = forms.CharField(required=True, widget=forms.widgets.HiddenInput())
