@@ -9,6 +9,8 @@
         this.initDescriptionField();
         this.initPriceField();
         this.initWhenWidget();
+        this.initImagesWidget();
+        this.initAttachmentsWidget();
     }
 
     CreateEventPage.prototype = {
@@ -82,6 +84,16 @@
                     JSON.parse(when_json)
                 );
             };
+        },
+        initImagesWidget: function(){
+            new CroppedImages(
+                document.getElementById("id_images")
+            );
+        },
+        initAttachmentsWidget: function(){
+            new Attachments(
+                document.getElementById("id_attachments")
+            );
         }
     };
 
