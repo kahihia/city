@@ -72,9 +72,11 @@
         this.cropping = cropping;
 
         this.element = dom("div", {"class": "attachment"}, [
-            dom("span", {"innerHTML": filename}),
+            dom("span", {"innerHTML": filename}),            
             this.removeButton = dom("i", {"class": "icon-remove"}),
             this.editButton = dom("i", {"class": "icon-pencil"}),
+            this.downButton = dom("i", {"class": "icon-arrow-down"}),
+            this.upButton = dom("i", {"class": "icon-arrow-up"}),
             dom("div", {"class": "picture-thumb result"}, [
                 this.preview = dom("img", {
                     "src": filepath,
@@ -89,17 +91,14 @@
             that.showPreview();
         }, 500);
 
-        $(this.removeButton).on("click", function(){
-            that.remove();
-        });
+        $(this.removeButton).on("click", this.remove.bind(this));
 
-        $(this.editButton).on("click", function(){
-            that.edit();
-        });
+        $(this.editButton).on("click", this.edit.bind(this));
 
-        $(this.preview).on("click", function(){
-            that.edit();
-        });
+        $(this.preview).on("click", this.edit.bind(this));
+
+        $(this.downButton).on("click", this.down.bind(this));
+        $(this.upButton).on("click", this.up.bind(this));
     }
 
     CroppingImageWidget.prototype = {        
@@ -109,13 +108,23 @@
         edit: function(){
             this.openPopup();
         },
+        up: function(){
+            this.imagesWidget.upCroppedImage(this);
+        },
+        down: function(){
+            this.imagesWidget.downCroppedImage(this);
+        },
+        getOrder: function(){
+            return this.imagesWidget.images.indexOf(this) + 1;
+        },
         setSelected: function(selected){
             this.selected = selected;
         },
         getValue: function(){
             return {
                 filepath: this.filepath,
-                cropping: [this.selected.x, this.selected.y, this.selected.x2, this.selected.y2].join(",")
+                cropping: [this.selected.x, this.selected.y, this.selected.x2, this.selected.y2].join(","),
+                order: this.getOrder()
             };
         },
         initPopup: function(){
@@ -229,6 +238,32 @@
             $(widget.element).remove();
 
             this.saveValue();
+        },
+        upCroppedImage: function(widget){
+            var index = this.images.indexOf(widget), prevWidget;
+
+            if(index > 0) {
+                prevWidget = this.images[index-1];
+                this.images[index] = prevWidget;
+                this.images[index-1] = widget;
+
+                $(widget.element).prev().insertAfter(widget.element)
+
+                this.saveValue();
+            }
+        },
+        downCroppedImage: function(widget){
+            var index = this.images.indexOf(widget), nextWidget;
+
+            if(index < this.images.length-1) {
+                nextWidget = this.images[index+1];
+                this.images[index] = nextWidget;
+                this.images[index+1] = widget;
+
+                $(widget.element).next().insertBefore(widget.element)
+
+                this.saveValue();
+            }
         },
         loadImages: function(){
             var value, images;
