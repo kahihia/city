@@ -419,7 +419,7 @@ def refresh_facebook_graph(request):
     access_token = request.POST.get('access_token', None)
     graph = get_facebook_graph(request, access_token=access_token)
     if graph is not None and graph.access_token:
-        request.session['graph'] = graph
+        request.session['graph_dict'] = graph.__getstate__()
         success = True
 
     return HttpResponse(json.dumps({'success': success}), mimetype='application/json')

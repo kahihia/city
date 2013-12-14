@@ -524,6 +524,14 @@ fieldset legend{
     margin-left: 5px;
 }
 
+.attachment-list div.attachment:first-child .icon-arrow-up {
+    display: none;
+}
+
+.attachment-list div.attachment:last-child .icon-arrow-down {
+    display: none;
+}
+
 .attachment-list .attachment i:hover {
     color: #06C;
 }

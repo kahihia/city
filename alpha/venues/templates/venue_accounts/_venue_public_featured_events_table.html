@@ -1,0 +1,44 @@
+{% load date_formatting %}
+{% load endless %}
+{% load cropping %}
+{% load event_tags %}
+{% load cf_pagination %}
+
+
+{% paginate 6 venue_featured_events using "featured_events_page" %}
+<div class="account-entry-wrapper entry-wrapper">
+    {% for event in venue_featured_events %}    
+        <div class="entry-info {% if private %}{% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}{% endif %}">
+            {% short_single_event event %}
+
+            {% if private %}
+                <div class="event-edit-actions">
+                    <a class="event-edit-actions__item"
+                       href="{% url 'event_edit' event.authentication_key %}">
+                        Edit
+                    </a>
+                    <a class="event-edit-actions__item"
+                       href="{% url 'event_copy' event.authentication_key %}">
+                        Copy
+                    </a>
+                    <a class="event-edit-actions__item event-edit-actions__item_pos_last"
+                       href="{% url 'event_remove' event.authentication_key %}" class="danger-action">
+                        Delete
+                    </a>
+                    {% if not event.is_featured %}
+                        <a class="event-edit-actions__item event-edit-actions__item_size_wide event-edit-actions__item_pos_last"
+                           href="{% url 'event_setup_featured' event.authentication_key %}">
+                            Make Featured Event
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+            <div class="clr"></div>
+        </div>
+    {% empty %}
+        <p>
+            no active events
+        </p>
+    {%endfor%}
+    {% cf_pagination %}
+</div>

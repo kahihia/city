@@ -53,8 +53,6 @@ class SetupFeaturedByAdminForm(forms.ModelForm):
         return cleaned_data
 
 
-
-
 class SetupFeaturedForm(forms.ModelForm):
     regions = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
@@ -160,7 +158,6 @@ class EditEventForm(forms.ModelForm):
         required=False,
         widget=forms.widgets.HiddenInput()
     )
-
 
     # SINGLE
     # MULTIDAY

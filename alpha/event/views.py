@@ -25,7 +25,7 @@ from event.forms import CreateEventForm, EditEventForm, SetupFeaturedForm
 
 from ajaxuploader.views import AjaxFileUploader
 from accounts.decorators import native_region_required
-from accounts.models import VenueAccount
+from accounts.models import Account, VenueAccount
 from event.payments.processors import process_setup_featured
 from moneyed import CAD
 
@@ -146,15 +146,14 @@ def view_featured(request, slug, date=None):
     try:
         event = Event.future_events.get(slug=slug)
     except ObjectDoesNotExist:
-        return HttpResponseRedirect(reverse('event_browse'))   
-        
-    event.featuredevent_set.all()[0].click()
+        return HttpResponseRedirect(reverse('event_browse'))
+
+    FeaturedEvent.click_featured_events(event.featuredevent_set.all())
 
     if date:
-        return HttpResponseRedirect(reverse('event_view', args=(slug, date))) 
+        return HttpResponseRedirect(reverse('event_view', args=(slug, date)))
     else:
-        return HttpResponseRedirect(reverse('event_view', args=(slug, ))) 
-
+        return HttpResponseRedirect(reverse('event_view', args=(slug, )))
 
 
 def view(request, slug, date=None):
@@ -268,8 +267,7 @@ def post_to_facebook_ajax(request):
             else:
                 facebook_owner_id = request.POST.get('page_id')
 
-            facebook_event_ids = facebook_services.create_facebook_event(event, request,
-                                                                         facebook_owner_id, facebook_owner_type)
+            facebook_event_ids = facebook_services.create_facebook_event(event, request, facebook_owner_id, facebook_owner_type)
             success = True
         except Exception as e:
             error = e.message
@@ -323,29 +321,30 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_create'))
 
-    if request.method == 'POST':
-        form = EditEventForm(account=request.account, instance=event, data=request.POST)
-        if form.is_valid():
-            # try:
-            event_service.save_event(request.user, request.POST, form)
-            return HttpResponseRedirect(
-                reverse('event_view', kwargs={'slug': event.slug})
-            )
+    account = Account.objects.get(user_id=event.owner_id)
 
-            # except:
-            #     form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
+    if request.method == 'POST':
+        form = EditEventForm(account=account, instance=event, data=request.POST)
+        if form.is_valid():
+            try:
+                event_service.save_event(account.user, request.POST, form)
+                return HttpResponseRedirect(
+                    reverse('event_view', kwargs={'slug': event.slug})
+                )
+
+            except:
+                form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
     else:
         form = EditEventForm(
-            account=request.account,
+            account=account,
             instance=event,
             initial=event_service.prepare_initial_event_data_for_edit(event)
         )
 
     return render_to_response(template_name, {
-                                'form': form,
-                                'event': event                            
-                            },
-                            context_instance=RequestContext(request))
+            'form': form,
+            'event': event
+        }, context_instance=RequestContext(request))
 
 
 @login_required

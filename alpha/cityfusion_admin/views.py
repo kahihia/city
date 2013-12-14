@@ -27,7 +27,6 @@ from advertising.filters import AdvertisingCampaignFilter
 from advertising.models import AdvertisingOrder
 
 
-
 @require_POST
 def report_event(request):
     report = ReportEvent(

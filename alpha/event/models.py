@@ -346,6 +346,7 @@ class FeaturedEventDayManager(models.Manager):
     def get_query_set(self):        
         return super(FeaturedEventDayManager, self).get_query_set()\
             .filter(
+                is_occurrence=False,
                 end_time__gte=datetime.datetime.now(),
                 event__featuredevent__start_time__lte=datetime.datetime.now(),
                 event__featuredevent__end_time__gte=datetime.datetime.now(),
@@ -641,13 +642,11 @@ class FeaturedEvent(models.Model):
         super(FeaturedEvent, self).save(*args, **kwargs)
         return self
 
-
     def __unicode__(self):
         return self.event.name
 
     def click(self):
         FeaturedEvent.objects.filter(id=self.id).update(clicks=F("clicks")+1)
-
 
     def view(self):
         FeaturedEvent.objects.filter(id=self.id).update(views=F("views")+1)
@@ -662,6 +661,10 @@ class FeaturedEvent(models.Model):
 
     def regions_representation(self):
         return ", ".join(self.regions.all().values_list("name", flat=True))
+
+    @staticmethod
+    def click_featured_events(featured_events):
+        FeaturedEvent.objects.filter(id__in=featured_events).update(clicks=F("clicks")+1)
 
 
 class FeaturedEventOrder(models.Model):

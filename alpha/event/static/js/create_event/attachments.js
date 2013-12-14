@@ -145,10 +145,6 @@
         }
     }
     
-    $(document).on("ready page:load", function(){
-        new Attachments(
-            document.getElementById("id_attachments")
-        );
-    });
-
+    window.Attachments = Attachments;
+    
 })(jQuery, window, document);
