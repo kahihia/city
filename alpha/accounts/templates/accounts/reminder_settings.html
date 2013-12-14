@@ -1,6 +1,7 @@
 {% extends 'base.html' %} 
 {% load i18n %} 
-{% load url from future %} 
+{% load url from future %}
+{% load common_tags %}
 
 {% block title %}
     {% blocktrans with profile.user.username as username %}
@@ -79,11 +80,16 @@
                         Please select the amount of time to remind you about your event(s)
                     </header>
                     <table>
-                        <tr {% if form.reminder_active_type.value == "DAYS" %}class="active"{% endif %}>                                
+                        <tr {% if account|args:'DAYS'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}class="active"{% endif %}>
                             <td class="first">
-                                <div class="radio">                                        
-                                    <input {% if form.reminder_active_type.value == "DAYS" %}checked="checked"{% endif %} type="radio" id="id_reminder_active_type_0" value="DAYS" name="reminder_active_type">
-                                    <label for="id_reminder_active_type_0"></label>
+                                <div class="checkbox">
+                                    <input type="checkbox"
+                                           {% if account|args:'DAYS'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}checked{% endif %}
+                                           id="id_reminder_type_state_days"
+                                           value="1"
+                                           name="reminder_type_state_days"
+                                           data-type="reminder_type_option" />
+                                    <label for="id_reminder_type_state_days"></label>
                                 </div>
                             </td>
                             <td class="second">
@@ -93,11 +99,16 @@
                                 Day(s) before the event begins
                             </td>
                         </tr>
-                        <tr {% if form.reminder_active_type.value == "HOURS" %}class="active"{% endif %}>
+                        <tr {% if account|args:'HOURS'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}class="active"{% endif %}>
                             <td class="first">
-                                <div class="radio">                                        
-                                    <input {% if form.reminder_active_type.value == "HOURS" %}checked="checked"{% endif %} type="radio" id="id_reminder_active_type_1" value="HOURS" name="reminder_active_type">
-                                    <label for="id_reminder_active_type_1"></label>
+                                <div class="checkbox">
+                                    <input type="checkbox"
+                                           {% if account|args:'HOURS'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}checked{% endif %}
+                                           id="id_reminder_type_state_hours"
+                                           value="1"
+                                           name="reminder_type_state_hours"
+                                           data-type="reminder_type_option" />
+                                    <label for="id_reminder_type_state_hours"></label>
                                 </div>
                             </td>
                             <td class="second">
@@ -107,11 +118,16 @@
                                 Hour(s) before the event begins
                             </td>
                         </tr>
-                        <tr {% if form.reminder_active_type.value == "WEEKDAY" %}class="active"{% endif %}>
+                        <tr {% if account|args:'WEEKDAY'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}class="active"{% endif %}>
                             <td class="first">
-                                <div class="radio">                                        
-                                    <input {% if form.reminder_active_type.value == "WEEKDAY" %}checked="checked"{% endif %} type="radio" id="id_reminder_active_type_2" value="WEEKDAY" name="reminder_active_type">
-                                    <label for="id_reminder_active_type_2"></label>
+                                <div class="checkbox">
+                                    <input type="checkbox"
+                                           {% if account|args:'WEEKDAY'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}checked{% endif %}
+                                           id="id_reminder_type_state_weekday"
+                                           value="1"
+                                           name="reminder_type_state_weekday"
+                                           data-type="reminder_type_option" />
+                                    <label for="id_reminder_type_state_weekday"></label>
                                 </div>
                             </td>
                             <td class="second">

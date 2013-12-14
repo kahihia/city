@@ -1,43 +1,35 @@
-# Create your views here.
+import re
 
-from pdfutils.reports import Report
-from django_facebook.api import get_facebook_graph
-
-from models import Account, VenueAccount
-from event.models import Event, SingleEvent, EventTransferring
-from notices.models import Notice
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.contrib import messages
 from django.utils.translation import ugettext as _
-
-from accounts.forms import ReminderSettingsForm, InTheLoopSettingsForm
-
 from django.conf import settings
-
 from django.utils import simplejson as json
 from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
-
-from utils import remind_account_about_events, inform_account_about_events_with_tags
 from django.contrib.auth.decorators import login_required
-from accounts.decorators import ajax_login_required
 
+from pdfutils.reports import Report
+from django_facebook.api import get_facebook_graph
+from guardian.decorators import permission_required_or_403
+
+from event.models import Event, SingleEvent, EventTransferring
+from notices.models import Notice
+from models import Account, VenueAccount
+from accounts.forms import ReminderSettingsForm, InTheLoopSettingsForm
+from accounts.decorators import ajax_login_required
+from utils import remind_account_about_events, inform_account_about_events_with_tags
 from userena import settings as userena_settings
 from userena.utils import get_profile_model, get_user_model
 from userena.views import ExtraContextTemplateView
-
-
 from cities.models import City
 from advertising.models import AdvertisingOrder
 from event.models import FeaturedEventOrder
 from accounts.forms import AccountForm
 from userena.decorators import secure_required
-from guardian.decorators import permission_required_or_403
-
-import re
 
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
@@ -90,7 +82,8 @@ def reminder_settings(request):
             return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))
 
     return render_to_response('accounts/reminder_settings.html', {
-        "form": form
+        'form': form,
+        'account': account
     }, context_instance=RequestContext(request))
 
 @login_required

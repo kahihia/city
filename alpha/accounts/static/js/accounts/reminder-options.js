@@ -4,9 +4,13 @@
     function ReminderOptionsPage(){
         $(".dropdown").qap_dropdown();
 
-        $("input[name=reminder_active_type]").on("click", function(){
-            $(".reminder-time-options .active").removeClass("active");
-            $(this).parents("tr").addClass("active");
+        $("[data-type=reminder_type_option]").on("click", function(){
+            if($(this).prop('checked')) {
+                $(this).parents("tr").addClass("active");
+            }
+            else {
+                $(this).parents("tr").removeClass("active");
+            }
         });
     }
 

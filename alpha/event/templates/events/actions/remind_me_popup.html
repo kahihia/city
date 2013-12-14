@@ -1,3 +1,4 @@
+{% load common_tags %}
 {% if account %}
     <div class="remind-me-popup event-actions-popup" data-no-turbolink>
         <div class="in-the-loop-popup-content">
@@ -12,14 +13,20 @@
                         A reminder will be sent to your phone text 
                     {% endif %}
                 {% endif %}
-                {% if account.reminder_active_type == 'DAYS' %}
-                    {{ account.reminder_days_before_event }} days before this event begins.
+                {% if account|args:'DAYS'|call:'check_reminder_type_state' %}
+                    <p>
+                        {{ account.reminder_days_before_event }} days before this event begins.
+                    </p>
                 {% endif %}
-                {% if account.reminder_active_type == 'HOURS' %}
-                    {{ account.reminder_hours_before_event }} hours before this event begins.
+                {% if account|args:'HOURS'|call:'check_reminder_type_state' %}
+                    <p>
+                        {{ account.reminder_hours_before_event }} hours before this event begins.
+                    </p>
                 {% endif %}
-                {% if account.reminder_active_type == 'WEEKDAY' %}
-                    every {{ account.reminder_weekday|lower }} before this event begins.
+                {% if account|args:'WEEKDAY'|call:'check_reminder_type_state' %}
+                    <p>
+                        every {{ account.reminder_weekday|lower }} before this event begins.
+                    </p>
                 {% endif %}
                 To change your reminder options, <a href="{% url 'reminder_settings' %}">click here</a>
             </div>
