@@ -52,7 +52,7 @@
             this.loadTagsForCity($("#id_geo_city").val());
         } else {
             $.post("/events/city_tags", {}, function(data){
-                tags = _.map(data.tags, function(tag){ return tag.name; });
+                var tags = _.map(data.tags, function(tag){ return tag.name; });
                 that.refreshTags(tags);
             });
         }
@@ -106,7 +106,7 @@
 
             if(data.venue_id){
                 $.post("/events/city_tags", data, function(data){
-                    tags = _.map(data.tags, function(tag){ return tag.name; });
+                    var tags = _.map(data.tags, function(tag){ return tag.name; });
                     that.refreshTags(tags);
                 });
             }
@@ -119,7 +119,7 @@
                 data.geo_city = city;
 
                 $.post("/events/city_tags", data, function(data){
-                    tags = _.map(data.tags, function(tag){ return tag.name; });
+                    var tags = _.map(data.tags, function(tag){ return tag.name; });
                     that.refreshTags(tags);
                 });
             }
@@ -131,7 +131,7 @@
 
             if(data.city_identifier) {
                 $.post("/events/city_tags", data, function(data){
-                    tags = _.map(data.tags, function(tag){ return tag.name; });
+                    var tags = _.map(data.tags, function(tag){ return tag.name; });
                     that.refreshTags(tags);
                 });
             }
