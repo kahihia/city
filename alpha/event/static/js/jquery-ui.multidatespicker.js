@@ -427,16 +427,19 @@
                                 methods.addDates.call(this, date, type);
                             } else { // removes dates
                                 methods.removeDates.call(this, date, type);
-                                setTimeout(function(){
-                                    $(".ui-state-active").removeClass("ui-state-active");
-                                    $(".ui-datepicker-current-day").removeClass("ui-datepicker-current-day");
-                                }, 10);
                             } 
                                 
                             if(this.multiDatesPicker.originalOnToggle){
                                 this.multiDatesPicker.originalOnToggle.call(this, date);
                             }
                         }
+
+                        // Dirty hack
+                        setTimeout(function(){
+                            $(".ui-state-active").removeClass("ui-state-active");
+                            $(".ui-datepicker-current-day").removeClass("ui-datepicker-current-day");
+                        }, 10);
+
                         this.multiDatesPicker.startDate = date;
                         break;
                 }
@@ -475,7 +478,7 @@
                                 //default: $.error('Option ' + option + ' does not exist for setMode on jQuery.multiDatesPicker');
                             }
                         if(mandatory > 0) $.error('Some mandatory options not specified!');
-                    break;                  
+                    break;
                 }
                 
                 /*

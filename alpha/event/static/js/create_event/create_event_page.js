@@ -4,13 +4,14 @@
     function CreateEventPage(){
         this.doNotSubmitOnEnter();
         this.initBalloons();
+        this.initTagsWidget();
         this.initVenueAccountOwner();
         this.initVenueAutocomplete();
         this.initDescriptionField();
         this.initPriceField();
         this.initWhenWidget();
         this.initImagesWidget();
-        this.initAttachmentsWidget();
+        this.initAttachmentsWidget();        
     }
 
     CreateEventPage.prototype = {
@@ -65,7 +66,7 @@
             this.price = new PriceWidget(priceInput);
         },
         initVenueAccountOwner: function(){
-            this.venueAccountOwner = new VenueAccountOwnerWidget();
+            this.venueAccountOwner = new VenueAccountOwnerWidget(this.tagsWidget);
         },
         initWhenWidget: function(){
             var when_json = $("#id_when_json").val();
@@ -94,6 +95,9 @@
             new Attachments(
                 document.getElementById("id_attachments")
             );
+        },
+        initTagsWidget: function(){
+            this.tagsWidget = new TagsWidget();
         }
     };
 
