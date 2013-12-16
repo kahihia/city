@@ -403,7 +403,7 @@ def setup_featured(request, authentication_key):
         event=event,
         owner=account,
         start_time=datetime.date.today(),
-        end_time=datetime.date.today() + datetime.timedelta(days=15)
+        end_time=event.last_occurrence.end_time
     )
 
     payments_module = request.POST.get("payments_module", "paypal")
