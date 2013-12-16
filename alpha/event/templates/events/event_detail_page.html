@@ -99,7 +99,6 @@
                                         <div class="detail-view"></div>
                                     </a>
                                 {% endfor %}
-
                             {% else %}
                                 <div class="center-cropped default" style="background-image: url('{{STATIC_URL}}images/default-event.jpg');"></div>
                             {% endif %}
@@ -110,7 +109,7 @@
                                     {{ event.venue_account_owner.venue.name }}
                                 </a>
                             </footer>
-                            {% endif %}                            
+                            {% endif %}
                         </div>
                     </td>
                     <td class="event-details-td">
@@ -306,7 +305,8 @@
         <div class="tags">
             {% for tag in event.tags.all %}
                 <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">
-                    {{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                    {{ tag }}
+                </a>{% if not forloop.last %}, {% endif %}
             {% endfor %}
         </div>
 
