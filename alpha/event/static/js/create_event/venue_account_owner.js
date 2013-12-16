@@ -1,8 +1,10 @@
 ;(function($, window, document, undefined) {
     'use strict';
 
-    function VenueAccountOwnerWidget(){
+    function VenueAccountOwnerWidget(tagsWidget){
         var that = this;
+
+        this.tagsWidget = tagsWidget;
 
         if($(".venue-account-owner-dropdown select option").length<=1){
             $(".event-owner-tr, .venue-account-owner").hide();
@@ -14,11 +16,8 @@
                 that.onSelect(true)
             });
 
-            if(window.location.pathname.indexOf("events/create")!=-1) {
-                // only on create
-                setTimeout(function(){
-                    that.onSelect(false);
-                }, 200);    
+            if(window.location.pathname.indexOf("events/create")!=-1) {                
+                that.onSelect(false);
             }
         }
     }
@@ -40,22 +39,20 @@
 
                 $.post("/venues/venue-account-tags/" + user_context_id, {}, function(data){
                     var tags = data.tags;
-                    that.useDefaultVenueTags(tags, clear);
+                    that.loadTagsForVenueAccount(tags, clear);
                 });
             } else {
                 $("#id_place").val("");
                 $("#id_linking_venue_mode").val("");
             }
 
-            if($("#id_tags__tagautosuggest").length !== 0) {
-                $("#id_tags__tagautosuggest")[0].tagspopup.loadTagsForCityByVenueAccount();
-            }
+            that.tagsWidget.loadTagsForCityByVenueAccount();
         },
         getUserContextType: function(){
             return this.select.val().split("|")[0];
         },
-        useDefaultVenueTags: function(tags, clear){
-            $("#id_tags__tagautosuggest")[0].tagspopup.useDefaultTags(tags, clear);
+        loadTagsForVenueAccount: function(tags, clear){
+            this.tagsWidget.loadTagsForVenueAccount(tags, clear);
         },
         getVenueAccountId: function(){
             if(this.getUserContextType()=="venue_account") {
