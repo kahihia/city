@@ -69,7 +69,7 @@
         },
         initWhenWidget: function(){
             var when_json = $("#id_when_json").val();
-            $(document).on("mousemove", '[data-event="click"] a', function(e) {
+            $(document).on("mousemove", '[data-event="click"] a, .my-time-picker .remove', function(e) {
                 if(!('event' in window)) {
                     window.eventObj = e;
                 }
