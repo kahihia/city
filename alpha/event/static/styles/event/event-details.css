@@ -574,6 +574,11 @@
     height: 20px;
     right: 0;
     top: 0;
+    display: none;
+}
+
+.events-occurrences .header .days-viewer-controls.active {
+    display: block;
 }
 
 .events-occurrences .header .days-viewer-controls div {

@@ -39,7 +39,7 @@ class PaypalPaymentProcessor(BasePaymentProcessor):
         bonus = Money(Decimal(self.request.POST["bonus"]), CAD)
         cost = cost - bonus
 
-        if cost.amount:
+        if cost.amount > 0:
             total_price = cost
 
             for tax in self.account.taxes():
