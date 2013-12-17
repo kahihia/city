@@ -7,7 +7,7 @@
 {% paginate 6 events using 'archived_events_page' %}
 <div class="account-entry-wrapper entry-wrapper">
     {% for event in events %}
-        <div class="entry-info with-delete-action">
+        <div class="entry-info with-actions">
             {% short_single_event event %}
 
             <div class="event-edit-actions">

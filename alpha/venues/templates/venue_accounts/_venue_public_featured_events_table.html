@@ -8,7 +8,7 @@
 {% paginate 6 venue_featured_events using "featured_events_page" %}
 <div class="account-entry-wrapper entry-wrapper">
     {% for event in venue_featured_events %}    
-        <div class="entry-info {% if private %}{% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}{% endif %}">
+        <div class="entry-info with-actions">
             {% short_single_event event %}
 
             {% if private %}
