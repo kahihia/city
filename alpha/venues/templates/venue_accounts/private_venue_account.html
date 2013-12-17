@@ -33,9 +33,7 @@
             {% if venue_account.tags.count > 0 %}
                 <div class="tags">
                     {% for tag in venue_account.tags.all %}
-                        <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">
-                            {{ tag }}
-                        </a>{% if not forloop.last %}, {% endif %}
+                        <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </div>
             {% endif %}
