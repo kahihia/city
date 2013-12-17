@@ -1,34 +1,24 @@
 import datetime
-from datetime import timedelta
+
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
-from userena.models import UserenaBaseProfile
 from django.contrib.gis.db import models
-from taggit_autosuggest.managers import TaggableManager
+from django.template.defaultfilters import slugify
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q, F, Count
 
-from event.models import Event, SingleEvent, FeaturedEvent, Venue
-from notices.models import Notice
-
+from cities.models import Region, City
+from userena.models import UserenaBaseProfile
 from django_facebook.models import FacebookProfileModel
 
-from django.db.models.signals import post_save, m2m_changed
-
-from image_cropping import ImageCropField, ImageRatioField
-
-from django.template.defaultfilters import slugify
-
-from django.core.exceptions import ObjectDoesNotExist
-
-from advertising.models import Advertising, AdvertisingCampaign
-from cities.models import Region, City
-from django.db.models import Q, Count
-from userena.managers import ASSIGNED_PERMISSIONS
-from guardian.shortcuts import assign
-
 from djmoney.models.fields import MoneyField
-from home.utils import deserialize_json_deep
 from djmoney.models.managers import money_manager
-from django.db.models import F
+from advertising.models import Advertising, AdvertisingCampaign
+from image_cropping import ImageCropField, ImageRatioField
+from taggit_autosuggest.managers import TaggableManager
+from home.utils import deserialize_json_deep
+from event.models import Event, SingleEvent, FeaturedEvent, Venue
+from notices.models import Notice
 
 REMINDER_TYPES = {
     'HOURS': {
@@ -42,6 +32,10 @@ REMINDER_TYPES = {
     'WEEKDAY': {
         'id': 4,
         'title': 'On week day'
+    },
+    'EACH_DAY': {
+        'id': 8,
+        'title': 'Each day, starting from'
     }
 }
 
@@ -94,6 +88,10 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     # remind on week day
     reminder_on_week_day = models.CharField(max_length=1, choices=DAYS_OF_WEEK, blank=True, null=True, default=0)
     reminder_on_week_day_at_time = models.TimeField(blank=True, null=True)
+
+    # remind each day, starting from
+    reminder_each_day_from = models.IntegerField(blank=True, null=True)
+    reminder_each_day_at_time = models.TimeField(blank=True, null=True)
 
     reminder_type_state = models.IntegerField(blank=True, null=False, default=REMINDER_TYPES['HOURS']['id'])
 
@@ -196,74 +194,6 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
             state = self.reminder_type_state
 
         return bool(state & REMINDER_TYPES[type]['id'])
-
-
-def create_facebook_profile(sender, instance, created, **kwargs):
-    if created:
-        user = instance
-        account = Account.objects.create(user=user)
-
-        for perm in ASSIGNED_PERMISSIONS['profile']:
-            assign(perm[0], user, account)
-
-        for perm in ASSIGNED_PERMISSIONS['user']:
-            assign(perm[0], user, user)
-
-
-def copy_occurring_bonus(sender, instance, created, **kwargs):
-    if created:
-        account = instance
-
-        for bonus_campaign in BonusCampaign.occurring_bonuses.all():
-            Account.objects.filter(id=account.id).update(
-                bonus_budget=F("bonus_budget")+bonus_campaign.budget.amount
-            )
-
-
-def add_single_events_to_schedule(account, events, reminder_type):
-    for event_day in events:
-        notification_time = None
-
-        if reminder_type == 'DAYS' and account.reminder_days_before_event:
-            notification_time = event_day.start_time - timedelta(days=int(account.reminder_days_before_event))
-
-        if reminder_type == 'HOURS' and account.reminder_hours_before_event:
-            notification_time = event_day.start_time - timedelta(hours=int(account.reminder_hours_before_event))
-
-        if notification_time and notification_time > datetime.datetime.now():
-            reminding = AccountReminding(
-                account=account,
-                single_event=event_day,
-                notification_time=notification_time,
-                notification_type=("%s_BEFORE_EVENT" % reminder_type)
-            )
-            reminding.save()
-
-
-def sync_schedule_after_reminder_single_events_was_modified(sender, **kwargs):    
-    if kwargs['action'] == 'post_add':
-        events = SingleEvent.future_events.filter(id__in=kwargs["pk_set"])
-
-        for reminder_type in REMINDER_TYPES:
-            if kwargs['instance'].check_reminder_type_state(reminder_type):
-                add_single_events_to_schedule(kwargs['instance'], events, reminder_type)
-
-    if kwargs['action'] == 'post_remove':
-        AccountReminding.objects.filter(single_event__id__in=kwargs["pk_set"]).delete()
-
-
-def sync_schedule_after_reminder_settings_was_changed(sender, instance, created, **kwargs):
-    AccountReminding.objects.filter(account_id=instance.id).delete()
-    for reminder_type in REMINDER_TYPES:
-        if instance.check_reminder_type_state(reminder_type):
-            add_single_events_to_schedule(instance, instance.reminder_single_events.all(), reminder_type)
-
-post_save.connect(create_facebook_profile, sender=User)
-post_save.connect(copy_occurring_bonus, sender=Account)
-post_save.connect(sync_schedule_after_reminder_settings_was_changed, sender=Account)
-
-m2m_changed.connect(sync_schedule_after_reminder_single_events_was_modified,
-                    sender=Account.reminder_single_events.through)
 
 
 class RemindingManager(models.Manager):
@@ -462,7 +392,6 @@ class VenueAccountSocialLink(models.Model):
 
     def __unicode__(self):
         return "%s - %s" % (self.title, self.link)
-
 
 
 class AccountTax(models.Model):

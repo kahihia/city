@@ -11,6 +11,7 @@ from userena.forms import EditProfileForm
 import selectable.forms as selectable
 from cities.models import Region
 from localflavor.ca.forms import CAPhoneNumberField
+import dateutil.parser as dateparser
 
 
 class ReminderSettingsForm(forms.ModelForm):
@@ -31,7 +32,9 @@ class ReminderSettingsForm(forms.ModelForm):
             'reminder_days_before_event',
             'reminder_hours_before_event',
             'reminder_type_state',
-            'reminder_on_week_day'
+            'reminder_on_week_day',
+            'reminder_each_day_from',
+            'reminder_each_day_at_time'
         )
 
     def __init__(self, *args, **kwargs):
@@ -44,12 +47,14 @@ class ReminderSettingsForm(forms.ModelForm):
                     reminder_type_state |= REMINDER_TYPES[reminder_type]['id']
 
             data['reminder_type_state'] = reminder_type_state
+            data['reminder_each_day_at_time'] = dateparser.parse(data['reminder_each_day_at_time']).strftime('%H:%M')
             kwargs['data'] = data
 
         super(ReminderSettingsForm, self).__init__(*args, **kwargs)
 
         self.fields['reminder_days_before_event'].widget.attrs['maxlength'] = 2
         self.fields['reminder_hours_before_event'].widget.attrs['maxlength'] = 2
+        self.fields['reminder_each_day_from'].widget.attrs['maxlength'] = 2
 
 
 class InTheLoopSettingsForm(forms.ModelForm):

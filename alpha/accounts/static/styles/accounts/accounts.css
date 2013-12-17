@@ -182,7 +182,7 @@
 .options table td.second {
     color: #454545;
     font-weight: bold;
-    width: 110px;
+    width: 150px;
 }
 
 #id_reminder_email, 
@@ -214,9 +214,14 @@
 }
 
 #id_reminder_days_before_event, 
-#id_reminder_hours_before_event {
+#id_reminder_hours_before_event,
+#id_reminder_each_day_from {
     width: 40px;
     padding-left: 25px;
+}
+
+#id_reminder_each_day_at_time {
+    width: 60px;
 }
 
 .week-day-reminder {

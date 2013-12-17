@@ -12,8 +12,10 @@
 {% block head %}
     <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />    
     <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/timepicker.css" rel="stylesheet" type="text/css" />
     <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>    
     <script src="{{STATIC_URL}}js/accounts/reminder-options.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/jquery.ui.timepicker.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block page %}
@@ -137,6 +139,29 @@
                             </td>
                             <td>
                                 Send me reminder on this day every week
+                            </td>
+                        </tr>
+                        <tr {% if account|args:'EACH_DAY'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}class="active"{% endif %}>
+                            <td class="first">
+                                <div class="checkbox">
+                                    <input type="checkbox"
+                                           {% if account|args:'EACH_DAY'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}checked{% endif %}
+                                           id="id_reminder_type_state_each_day"
+                                           value="1"
+                                           name="reminder_type_state_each_day"
+                                           data-type="reminder_type_option" />
+                                    <label for="id_reminder_type_state_each_day"></label>
+                                </div>
+                            </td>
+                            <td class="second">
+                                <input type="text"
+                                       value="{{ form.reminder_each_day_at_time.value|date:"h:i A"|lower }}"
+                                       name="reminder_each_day_at_time"
+                                       id="id_reminder_each_day_at_time" />
+                                {{ form.reminder_each_day_from }}
+                            </td>
+                            <td>
+                                Send me reminder at this time each day, starting from
                             </td>
                         </tr>
                     </table>

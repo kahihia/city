@@ -28,6 +28,12 @@
                         every {{ account.reminder_weekday|lower }} before this event begins.
                     </p>
                 {% endif %}
+                {% if account|args:'EACH_DAY'|call:'check_reminder_type_state' %}
+                    <p>
+                        at {{ account.reminder_each_day_at_time|date:"f A"|lower }} each day,
+                        starting from {{ account.reminder_each_day_from }} days before this event begins.
+                    </p>
+                {% endif %}
                 To change your reminder options, <a href="{% url 'reminder_settings' %}">click here</a>
             </div>
         </div>
