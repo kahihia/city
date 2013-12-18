@@ -142,7 +142,14 @@
                                                 {% endif %}
                                             </div>
                                             <div class="event-venue">
-                                                <span>{{ event.venue.name }}</span>
+                                                {% if event.venue.venue_account %}
+                                                    <a href="{% url "public_venue_account" event.venue.venue_account.slug %}">
+                                                        {{ event.venue.name }}
+                                                    </a>
+                                                {% else %}
+                                                    <span>{{ event.venue.name }}</span>
+                                                {% endif %}
+                                                
                                                 {% if event.venue.street %}
                                                     <span>
                                                         {% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}
