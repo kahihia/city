@@ -27,6 +27,15 @@
         }
 
         $("#id_reminder_each_day_at_time").timepicker(timepickerOptions);
+        $("body").on("focus", "[data-type=each_day_input]", function() {
+            $(this).attr("placeholder", "");
+        });
+
+        $("body").on("blur", "[data-type=each_day_input]", function() {
+            if(!$(this).val()) {
+                $(this).attr("placeholder", $(this).data("placeholder"));
+            }
+        });
     }
 
 

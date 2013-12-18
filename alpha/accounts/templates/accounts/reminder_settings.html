@@ -156,12 +156,22 @@
                             <td class="second">
                                 <input type="text"
                                        value="{{ form.reminder_each_day_at_time.value|date:"h:i A"|lower }}"
+                                       placeholder="Time"
                                        name="reminder_each_day_at_time"
-                                       id="id_reminder_each_day_at_time" />
-                                {{ form.reminder_each_day_from }}
+                                       id="id_reminder_each_day_at_time"
+                                       data-type="each_day_input"
+                                       data-placeholder="Time" />
+                                <input type="text"
+                                       value="{{ form.reminder_each_day_from.value }}"
+                                       placeholder="Days"
+                                       name="reminder_each_day_from"
+                                       maxlength="2"
+                                       id="id_reminder_each_day_from"
+                                       data-type="each_day_input"
+                                       data-placeholder="Days" />
                             </td>
                             <td>
-                                Send me reminder at this time each day, starting from
+                                Remind me daily X number of days before the event at this appointed time
                             </td>
                         </tr>
                     </table>
