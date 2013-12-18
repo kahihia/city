@@ -48,7 +48,7 @@
         <br/><br/>
     </div>
     {% for event in events %}
-        <div class="entry-info {% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}"
+        <div class="entry-info with-actions"
              data-type="event_item"
              data-event-id="{{ event.event.id }}"
              data-single-event-id="{{ event.id }}"
