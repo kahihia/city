@@ -162,7 +162,7 @@
                                        data-type="each_day_input"
                                        data-placeholder="Time" />
                                 <input type="text"
-                                       value="{{ form.reminder_each_day_from.value }}"
+                                       value="{{ form.reminder_each_day_from.value|none_convert }}"
                                        placeholder="Days"
                                        name="reminder_each_day_from"
                                        maxlength="2"
@@ -171,7 +171,7 @@
                                        data-placeholder="Days" />
                             </td>
                             <td>
-                                Remind me daily X number of days before the event at this appointed time
+                                Remind me Daily, X number of days before the event at this appointed time
                             </td>
                         </tr>
                     </table>
