@@ -46,8 +46,32 @@
             }
 
             onSelect && onSelect(year, month);
+        });        
+
+        $(this.monthValue).monthpicker().bind("monthpicker-change-year", function(e, year) {
+            that.disabledOrEnableMonths(year);
         });
+
+        this.disabledOrEnableMonths(date.getFullYear());
 	}
+
+    NewMonthPicker.prototype = {
+        disabledOrEnableMonths: function(year) {
+            //TODO: disable month in used
+            if((year || date.getFullYear()) == (new Date()).getFullYear()) {
+                var allMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                    disabledMonths;
+                disabledMonths = _.filter(allMonths, function(month) {
+                    return month < (new Date().getMonth() + 1);
+                });
+                $(this.monthValue).monthpicker('disableMonths', disabledMonths);
+
+            } else {
+                $(this.monthValue).monthpicker('disableMonths', []);
+            }
+        }
+
+    }
 
 	this.NewMonthPicker = NewMonthPicker;	
 
