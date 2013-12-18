@@ -14,8 +14,7 @@
     When.prototype = {
         initDeck: function() {
             var that = this,
-                date = new Date(),
-                disabledOrEnableMonths;
+                date = new Date();
 
             this.multiDayEvent = new MultiDayEvent(this);
 
@@ -34,26 +33,6 @@
 
             this.newMonthPicker = new NewMonthPicker(this.monthPicker, function(year, month){
                 that.addMonth(year, month);
-            });            
-
-            disabledOrEnableMonths = function(year) {
-                //TODO: disable month in used
-                if((year || date.getFullYear()) == (new Date()).getFullYear()) {
-                    var allMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                        disabledMonths;
-                    disabledMonths = _.filter(allMonths, function(month) {
-                        return month < (new Date().getMonth() + 1);
-                    });
-                    $(that.newMonthPicker.monthValue).monthpicker('disableMonths', disabledMonths);
-
-                } else {
-                    $(that.newMonthPicker.monthValue).monthpicker('disableMonths', []);
-                }
-            };
-            setTimeout(disabledOrEnableMonths, 100);
-
-            $(this.newMonthPicker.monthValue).monthpicker().bind("monthpicker-change-year", function(e, year) {
-                disabledOrEnableMonths(year);
             });
 
             this.addMonth(date.getFullYear(), date.getMonth() + 1);
