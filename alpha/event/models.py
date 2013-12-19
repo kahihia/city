@@ -540,6 +540,14 @@ class Venue(models.Model):
     def future_events(self):
         return Event.future_events.filter(venue__id=self.id)
 
+    @property
+    def venue_account(self):
+        try:
+            return self.venueaccount_set.all()[0]
+        except:
+            return None
+
+
     @staticmethod
     def with_active_events():
         ids = list(set(Event.future_events.values_list('venue__id', flat=True)))

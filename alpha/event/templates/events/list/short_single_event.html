@@ -30,10 +30,6 @@
         <div class="event-location">
             <div class="event-name-and-street">
                 {{ event.venue.name }}
-                {% if event.venue.street %}
-                    , {% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}
-                    {{ event.venue.street }}
-                {% endif %}
             </div>
             <div class="event-city-name">
                 {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
