@@ -34,7 +34,7 @@ urlpatterns = patterns('',
         views.set_venue_privacy,
         name='save_venue_privacy'
     ),
-    url(r'^unlink-venue-account/(?P<venue_account_id>[\d]+)/$',
+    url(r'^unlink-venue-account/$',
         views.unlink_venue_account_from_user_profile,
         name="unlink_venue_account_from_user_profile"
     ),

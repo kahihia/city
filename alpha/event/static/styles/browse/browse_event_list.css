@@ -370,4 +370,5 @@
     height: auto;
     opacity: 1;
     position: relative;
+    vertical-align: middle;
 }

@@ -2,6 +2,7 @@
 {% load i18n %} 
 {% load url from future %}
 {% load venue_accounts %}
+{% load common_tags %}
 
 {% block title %}
     {% blocktrans with profile.user.username as username %}
@@ -141,5 +142,39 @@
     {% endif %}
 
     {% include 'accounts/_account_settings_menu.html' %}
+    <div data-type="hidden_elements" style="display:none;">
+        <input type="hidden" value="{% url 'unlink_venue_account_from_user_profile' %}" data-id="unlink_venue_url" />
+        {% csrf_token %}
+        <div class="modal-choice-window modal-choice-window_size_wide" data-id="delete_confirmation_window">
+            <div class="row title">Delete this Venue and</div>
+            <div class="row">
+                <input type="radio" name="after_action" value="move_events" autocomplete="off" checked data-type="after_action">
+                Move all events to the user
+                <div class="dropdown available-owners-dropdown"
+                     data-dropdown-class="available-owners-dropdown-options">
+                </div>
+            </div>
+            <div class="row">
+                <input type="radio" name="after_action" value="remove_events" autocomplete="off" data-type="after_action">
+                Remove all events from the site
+            </div>
+            <div class="row btn">
+                <input type="button" value="Accept" data-id="delete_venue_accept" />
+                <input type="button" value="Cancel" data-id="delete_venue_cancel" />
+            </div>
+        </div>
+        <select data-id="available_owners" style="display:none;">
+            <option value="user_{{ profile.user.id }}" title="{{ profile.user.username }}">
+                {{ profile.user.username|shorten_string:27 }}
+            </option>
+            {% for venue_account in profile.venueaccount_set.all %}
+                <option value="venue_{{ venue_account.id }}"
+                        title="{{ venue_account.venue.name }}"
+                        data-venue-account-id="{{ venue_account.id }}">
+                    {{ venue_account.venue.name|shorten_string:27 }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
 
 {% endblock %}

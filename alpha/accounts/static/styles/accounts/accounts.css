@@ -1148,3 +1148,26 @@
     padding-left: 45px;
     padding-right: 15px;
 }
+
+.modal-choice-window_size_wide {
+    min-width: 350px;
+}
+
+.available-owners-dropdown {
+    height: 18px;
+    line-height: 18px;
+    margin-right: 5px;
+    width: 150px;
+}
+
+.available-owners-dropdown:after {
+    background: url("/static/images/widgets/dropdown-small.png");
+    height: 14px;
+    right: 1px;
+    top: 2px;
+    width: 15px;
+}
+
+.available-owners-dropdown-options {
+    width: 170px;
+}
