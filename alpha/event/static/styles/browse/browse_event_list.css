@@ -54,8 +54,7 @@
     margin-top: 13px;
 }
 
-.entry-wrapper .entry-info.with-all-actions,
-.entry-wrapper .entry-info.without-make-feature-action {
+.entry-wrapper .entry-info.with-actions {
     padding-left: 20px;
 }
 
@@ -95,6 +94,69 @@
     width: 520px;
 }
 
+.account-events-list {
+    position: relative;
+    padding-top: 66px;
+}
+
+.events-actions-row {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #c1c0c0;
+    padding: 11px 16px 18px;
+    width: 590px;
+}
+
+.select-buttons {
+    background: #ffffff;
+    height: 18px;
+}
+
+.select-buttons__item {
+    color: #9a9a9a;
+    font-size: 11px;
+}
+
+.events-actions-row__action-dropdown {
+    width: 260px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.events-actions-row__action-dropdown:after, .events-actions-row__venue-dropdown:after {
+    top: 2px;
+    right: 1px;
+    background: url("/static/images/widgets/dropdown-small.png") no-repeat;
+    width: 15px;
+    height: 14px;
+}
+
+.events-actions-row__action-dropdown-options {
+    width: 280px;
+    text-align: center;
+}
+
+.events-actions-row__venue-dropdown {
+    width: 80px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.events-actions-row__execute {
+    height: 18px !important;
+    line-height: 18px !important;
+    text-transform: uppercase;
+    padding: 0 47px !important;
+    background: #505050 !important;
+    font-size: 12px;
+    margin-right: 5px !important;
+}
+
 .entry-wrapper .entry-info .checkbox-field,
 .entry-wrapper .entry-info .facebook-event-link {
     position: absolute;
@@ -105,55 +167,76 @@
     width: auto;
 }
 
+.entry-wrapper .entry-info .event-location {
+    margin-top: 10px;
+    color: #333;
+    font-size: 12px;
+    font-weight: bold;
+    width: 365px;
+}
+
+.entry-wrapper .entry-info .event-location .event-name-and-street{
+    float: left;
+    width: 245px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.entry-wrapper .entry-info .event-location .event-city-name{
+    float: right;
+    text-align: right;
+    width: 120px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 .entry-date .date-line {
     padding: 2px 0;
 }
 
 .entry-wrapper .entry-info .entry-details-wrapper {
-    width: 330px;
+    width: 365px;
 }
 
-.entry-wrapper .entry-info .entry-details-wrapper .title,
-.entry-wrapper .entry-info .entry-details-wrapper .entry-date,
-.entry-wrapper .entry-info .entry-details-wrapper .entry-description {
-    width: 320px;
+.entry-wrapper .entry-info.home-page .entry-details-wrapper .title,
+.entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-date {
+    width: 355px;
 }
+
 
 .entry-wrapper .entry-info.home-page .entry-details-wrapper{
-    width: 330px;   
+    width: 365px;
 }
 .entry-wrapper .entry-info.home-page .entry-details-wrapper .title,
 .entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-date,
 .entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-description {
-    width: 320px;
-}    
+    width: 355px;
+}
 
-.entry-wrapper .entry-info.with-all-actions .entry-details-wrapper{
-    width: 185px;
+.entry-wrapper .entry-info.with-actions .entry-details-wrapper{
+    width: 300px;
     overflow: hidden;
 }
-.entry-wrapper .entry-info.with-all-actions .entry-details-wrapper .title,
-.entry-wrapper .entry-info.with-all-actions .entry-details-wrapper .entry-date,
-.entry-wrapper .entry-info.with-all-actions .entry-details-wrapper .entry-description {
-    width: 175px;
+
+.entry-wrapper .entry-info.with-actions .event-location {
+    width: 290px;    
 }
 
-.entry-wrapper .entry-info.without-make-feature-action .entry-details-wrapper {
-    width: 320px;
-}
-.entry-wrapper .entry-info.without-make-feature-action .entry-details-wrapper .title,
-.entry-wrapper .entry-info.without-make-feature-action .entry-details-wrapper .entry-date,
-.entry-wrapper .entry-info.without-make-feature-action .entry-details-wrapper .entry-description {
-    width: 310px;
+.entry-wrapper .entry-info.with-actions .event-location .event-name-and-street{
+    width: 180px;
 }
 
-.entry-wrapper .entry-info.with-delete-action .entry-details-wrapper {
-    width: 420px;
+.entry-wrapper .entry-info.with-actions .event-location .event-city-name {
+    width: 105px;
 }
-.entry-wrapper .entry-info.with-delete-action .entry-details-wrapper .title,
-.entry-wrapper .entry-info.with-delete-action .entry-details-wrapper .entry-date,
-.entry-wrapper .entry-info.with-delete-action .entry-details-wrapper .entry-description {
-    width: 410px;
+
+
+.entry-wrapper .entry-info.with-actions .entry-details-wrapper .title,
+.entry-wrapper .entry-info.with-actions .entry-details-wrapper .entry-date,
+.entry-wrapper .entry-info.with-actions .entry-details-wrapper .entry-description {
+    width: 290px;
 }
 
 .entry-wrapper .entry-info .auctions-details-wrapper .title,

@@ -23,7 +23,7 @@
             self.loadUrl = self.eventsBlock.data("load-url");
             self.createUrl = self.eventsBlock.data("create-url");
             self.rejectUrl = self.eventsBlock.data("reject-url");
-            self.clearGraphUrl = self.eventsBlock.data("graph-clear-url");
+            self.refreshGraphUrl = self.eventsBlock.data("graph-refresh-url");
 
             self.reset();
             self.initCityInput();
@@ -266,15 +266,27 @@
                 return;
             }
 
-            FB.login(function(response) {
-                if (response.authResponse) {
-                    $.post(self.clearGraphUrl, "", function(data) {
-                       if(data.success) {
-                           successCallback();
-                       }
-                    }, 'json');
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    var accessToken = response.authResponse.accessToken;
+                    self.refreshTokenBackend(accessToken, successCallback);
+                } else {
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            var accessToken = response.authResponse.accessToken;
+                            self.refreshTokenBackend(accessToken, successCallback);
+                        }
+                    });
                 }
             });
+        };
+
+        self.refreshTokenBackend = function(accessToken, successCallback) {
+            $.post(self.refreshGraphUrl, {"access_token": accessToken}, function(data) {
+               if(data.success) {
+                   successCallback();
+               }
+            }, 'json');
         };
 
         self.init();

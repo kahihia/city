@@ -1,6 +1,7 @@
 # Create your views here.
 
 from pdfutils.reports import Report
+from django_facebook.api import get_facebook_graph
 
 from models import Account, VenueAccount
 from event.models import Event, SingleEvent, EventTransferring
@@ -420,11 +421,15 @@ def redirect_to_active_user_context(request):
 
 
 @login_required
-def clear_facebook_cached_graph(request):
-    if 'graph' in request.session:
-        request.session.pop('graph')
+def refresh_facebook_graph(request):
+    request.facebook, success = None, False
+    access_token = request.POST.get('access_token', None)
+    graph = get_facebook_graph(request, access_token=access_token)
+    if graph is not None and graph.access_token:
+        request.session['graph_dict'] = graph.__getstate__()
+        success = True
 
-    return HttpResponse(json.dumps({'success': True}), mimetype='application/json')
+    return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
 
 
 @login_required

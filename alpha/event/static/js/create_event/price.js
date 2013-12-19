@@ -34,6 +34,14 @@
             }
         });
 
+        this.element.on("focus", function() {
+            if(!free.prop("checked")) {
+                if($(this).val().indexOf("$") === 0) {
+                    that.setSelectionRange(this, 1, 1);
+                }
+            }
+        });
+
         if($(that.element).val()=="Free"){
             $(that.element).prop('readonly', true);
         }
@@ -66,7 +74,21 @@
                 $('.tags-popup').css("opacity", 1);
             });
             $(".as-selections").removeClass("active");
-        }        
+        },
+        setSelectionRange: function(input, selectionStart, selectionEnd) {
+            if (input.setSelectionRange) {
+                setTimeout(function(){
+                    input.setSelectionRange(selectionStart, selectionEnd);
+                }, 0);
+            }
+            else if (input.createTextRange) {
+                var range = input.createTextRange();
+                range.collapse(true);
+                range.moveEnd('character', selectionEnd);
+                range.moveStart('character', selectionStart);
+                range.select();
+            }
+        }
     }
 
     window.PriceWidget = PriceWidget;

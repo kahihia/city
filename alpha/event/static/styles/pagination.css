@@ -53,3 +53,35 @@
 .entry-navigation-np .step-links a {
     text-decoration: none;
 }
+
+.pagination__list {
+    display: inline-block;
+    vertical-align: middle;
+    border-left: 1px solid #c8c4c4;
+}
+
+.pagination__item {
+    text-transform: uppercase;
+    display: block;
+    float: left;
+    text-align: center;
+    color: #838586;
+    font-size: 11px;
+    padding: 2px 5px;
+    line-height: 14px;
+    border: 1px solid #c8c4c4;
+    border-left: 0;
+}
+
+.pagination__item_pos_current {
+    font-weight: bold;
+    color: #022e52;
+}
+
+.pagination__item_type_filled {
+    background: #dddddd;
+}
+
+.pagination__item_type_page {
+    padding: 2px 8px;
+}

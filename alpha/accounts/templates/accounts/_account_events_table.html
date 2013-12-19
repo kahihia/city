@@ -4,33 +4,51 @@
 
 {% paginate per_page events using "account_events" %}
 
-<div class="account-entry-wrapper entry-wrapper" data-id="event_container">
-    <select autocomplete="off" data-id="action_select">
-        <option value="post_selected_to_fb">Post selected to FB</option>
-        <option value="bind_selected_to_venue">Bind selected to the venue</option>
-    </select>
-    <select style="display:none;" data-id="venue_select">
-        {% for venue_account in profile.venueaccount_set.all %}
-            <option value="{{ venue_account.id }}"
-                    data-venue-link="{% url 'public_venue_account' venue_account.slug %}">
-                {{ venue_account.venue.name }}
-            </option>
-        {% endfor %}
-    </select>
-    <input type="button" value="Execute" class="button standart submit nomargin" data-id="execute_button" />
-    <a href="javascript:void;" class="balloon">
-        <div class="buttonq"></div>
-    </a>
-    <div class="balloon-content" style="display:none;">
-        <p>
-            Due to limitations of Facebook, you may wish to adjust your event in Facebook. If Facebook fixes these issues we will incorporate them. eg: event location and Event photo.
-        </p>
+<div class="account-entry-wrapper entry-wrapper account-events-list" data-id="event_container">
+    <div class="events-actions-row">
+        <div class="dropdown events-actions-row__action-dropdown"
+             data-dropdown-class="events-actions-row__action-dropdown-options">
+            <select autocomplete="off" data-id="action_select">
+                <option value="post_selected_to_fb">Post selected to FB</option>
+                <option value="bind_selected_to_venue">Bind selected to the venue</option>
+            </select>
+        </div>
+        <div class="dropdown events-actions-row__venue-dropdown"
+             style="display:none;"
+             data-id="venue_select"
+             data-dropdown-class="events-actions-row__venue-dropdown-options">
+            <select>
+                {% for venue_account in profile.venueaccount_set.all %}
+                    <option value="{{ venue_account.id }}"
+                            data-venue-link="{% url 'public_venue_account' venue_account.slug %}">
+                        {{ venue_account.venue.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <input type="button"
+               value="Execute"
+               class="button standart submit nomargin events-actions-row__execute"
+               data-id="execute_button" />
+        <a href="javascript:void(0);" class="balloon">
+            <div class="buttonq"></div>
+        </a>
+        <div class="balloon-content" style="display:none;">
+            <p>
+                Due to limitations of Facebook, you may wish to adjust your event in Facebook. If Facebook fixes these issues we will incorporate them. eg: event location and Event photo.
+            </p>
+        </div>
     </div>
-    <div>
-        <a href="javascript:void(0);" data-id="select_all_button">Select / Deselect all</a><br/><br/>
+    <div class="select-buttons">
+        <a href="javascript:void(0);"
+           data-id="select_all_button"
+           class="select-buttons__item">
+            Select | Deselect all
+        </a>
+        <br/><br/>
     </div>
     {% for event in events %}
-        <div class="entry-info {% if not event.is_featured %}with-all-actions{% else %}without-make-feature-action{% endif %}"
+        <div class="entry-info with-actions"
              data-type="event_item"
              data-event-id="{{ event.event.id }}"
              data-single-event-id="{{ event.id }}"
@@ -48,17 +66,21 @@
             </div>
 
             <div class="event-edit-actions">
-                <a href="{% url 'event_edit' event.authentication_key %}">
+                <a class="event-edit-actions__item"
+                   href="{% url 'event_edit' event.authentication_key %}">
                     Edit
                 </a>
-                <a href="{% url 'event_copy' event.authentication_key %}">
+                <a class="event-edit-actions__item"
+                   href="{% url 'event_copy' event.authentication_key %}">
                     Copy
                 </a>
-                <a href="{% url 'event_remove' event.authentication_key %}" class="danger-action">
+                <a class="event-edit-actions__item event-edit-actions__item_pos_last"
+                   href="{% url 'event_remove' event.authentication_key %}">
                     Delete
                 </a>
                 {% if not event.is_featured %}
-                    <a href="{% url 'event_setup_featured' event.authentication_key %}">
+                    <a class="event-edit-actions__item event-edit-actions__item_size_wide event-edit-actions__item_pos_last"
+                       href="{% url 'event_setup_featured' event.authentication_key %}">
                         Make Featured Event
                     </a>
                 {% endif %}
@@ -74,33 +96,70 @@
         <span class="pagintation-wrapper">
             {% get_pages %}
 
-            Records per page:
-            <span class="per-page-links">
-                <a {% if per_page == 6 %}class="current"{% endif %} href="{{ pages.current|args:6|call:'per_page_url' }}">6</a>
-                <a {% if per_page == 20 %}class="current"{% endif %} href="{{ pages.current|args:20|call:'per_page_url' }}">20</a>
-                <a {% if per_page == 50 %}class="current"{% endif %} href="{{ pages.current|args:50|call:'per_page_url' }}">50</a>
-                <a {% if per_page == 100 %}class="current"{% endif %} href="{{ pages.current|args:100|call:'per_page_url' }}">100</a>
+            <span class="events-displayed-title">
+                Events Displayed
             </span>
+            <div class="dropdown per-page-dropdown"
+                 data-dropdown-class="per-page-dropdown-options">
+                <select data-id="per_page_select">
+                    <option {% if per_page == 6 %}selected{% endif %}
+                            value="{{ pages.current|args:6|call:'per_page_url' }}">
+                        6
+                    </option>
+                    <option {% if per_page == 20 %}selected{% endif %}
+                            value="{{ pages.current|args:20|call:'per_page_url' }}">
+                        20
+                    </option>
+                    <option {% if per_page == 50 %}selected{% endif %}
+                            value="{{ pages.current|args:50|call:'per_page_url' }}">
+                        50
+                    </option>
+                    <option {% if per_page == 100 %}selected{% endif %}
+                            value="{{ pages.current|args:100|call:'per_page_url' }}">
+                        100
+                    </option>
+                </select>
+            </div>
 
-            {% if pages.current.is_first %}
-                <span class="prev"></span>
-            {% else %}
-                <a class="prev" href="{{ pages.previous.url }}"></a>
-            {% endif %}
-            <span class="page-info">
-                {{ pages.current }} of {{ pages|length }}
+            <span class="pagination">
+                <span class="pagination__list">
+                    {% if pages.current.is_first %}
+                        <span class="pagination__item pagination__item_pos_prev pagination__item_type_filled">
+                            prev
+                        </span>
+                    {% else %}
+                        <a href="{{ pages.previous.url }}"
+                           class="pagination__item pagination__item_pos_prev pagination__item_type_filled">
+                            prev
+                        </a>
+                    {% endif %}
+
+                    {% for page in pages %}
+                        {% if page|args:10|call:'is_in_range' %}
+                            <a href="{{ page.url }}"
+                                class="pagination__item pagination__item_type_page{% if page.is_current %} pagination__item_pos_current{%endif%}">
+                                {{ page.number }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pages.current.is_last %}
+                        <span class="pagination__item pagination__item_pos_next pagination__item_type_filled">
+                            next
+                        </span>
+                    {% else %}
+                        <a href="{{ pages.next.url }}"
+                           class="pagination__item pagination__item_pos_next pagination__item_type_filled">
+                            next
+                        </a>
+                    {% endif %}
+                </span>
             </span>
-
-            {% if pages.current.is_last %}
-                <span class="next"></span>
-            {% else %}
-                <a class="next" href="{{ pages.next.url }}"></a>
-            {% endif %}
         </span>
     </div>
 {% endif %}
 <div data-type="hidden_elements" style="display:none;">
-    <input type="hidden" value="{% url 'clear_facebook_graph' %}" data-id="clear_graph_url" />
+    <input type="hidden" value="{% url 'refresh_facebook_graph' %}" data-id="refresh_graph_url" />
     <input type="hidden" value="{% url 'event_post_to_facebook_ajax' %}" data-id="post_to_facebook_url" />
     <input type="hidden" value="{% url 'event_bind_to_venue' %}" data-id="bind_to_venue_url" />
     {% csrf_token %}

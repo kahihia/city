@@ -58,7 +58,7 @@ html.preview, body.preview {
 }
 
 .page-container.index {
-    margin-top: 18px;
+    margin-top: 10px;
     min-height: 1200px;
 }
 
@@ -183,7 +183,7 @@ html.preview, body.preview {
     float: left;
     height: 25px;
     padding-top: 3px;
-    margin-left: 3px;
+    padding-left: 3px;
 }
 
 .location-wrapper .location-selection-wrapper,
@@ -364,6 +364,10 @@ html.preview, body.preview {
     position: relative;
 }
 
+.schedule-bar_type_popup {
+    padding: 0 15px;
+}
+
 table.schedule-bar-menu {
     width: 100%;
     height: 20px;
@@ -378,7 +382,7 @@ table.schedule-bar-menu {
     background: none;
 }
 
-table.schedule-bar-menu td {
+.schedule-bar__item {
     list-style: none;
     text-transform: uppercase;
     height: 19px;
@@ -386,6 +390,10 @@ table.schedule-bar-menu td {
     vertical-align: middle;
     width: 95px;
     text-align: center;
+}
+
+.schedule-bar_type_popup .schedule-bar__item {
+    width: 89px;
 }
 
 table.schedule-bar-menu td a {
@@ -484,8 +492,8 @@ table.schedule-bar-menu td.selected a {
 }
 
 .footer-container.top {
-    padding-top:9px;
-    padding-bottom:9px;
+    padding-top:5px;
+    padding-bottom:5px;
 }
 
 .footer-ads-wrapper
@@ -617,12 +625,12 @@ a {
 }
 .buttonq{
     background: url(/static/images/question.png) no-repeat;
-    height: 25px;
+    height: 22px;
     width: 25px;
 }
 .buttonq:hover{
     background: url(/static/images/question_hover.png) no-repeat;
-    height: 25px;
+    height: 22px;
 }
 
 .buttonq.mini{
@@ -762,4 +770,9 @@ a {
 
 .popup-form-wrapper {
     background: #ffffff;
+}
+
+.popup-form-wrapper__inner {
+    width: 595px;
+    margin: 0 auto;
 }

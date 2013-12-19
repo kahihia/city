@@ -27,7 +27,6 @@ from advertising.filters import AdvertisingCampaignFilter
 from advertising.models import AdvertisingOrder
 
 
-
 @require_POST
 def report_event(request):
     report = ReportEvent(
@@ -411,7 +410,7 @@ def admin_setup_featured(request, event_id):
         event=event,
         owner=account,
         start_time=datetime.date.today(),
-        end_time=datetime.date.today() + datetime.timedelta(days=15),
+        end_time=event.last_occurrence.end_time,
         active=True,
         owned_by_admin=True
     )

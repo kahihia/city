@@ -8,7 +8,8 @@
     background: rgba(0, 0, 0, 0.5);
 }
 
-.search-pad-popup-content {    
+.search-pad-popup-content {
+    position: relative;
     width: 990px;
     padding: 10px;
     min-height: 612px;
@@ -22,8 +23,13 @@
     float: left;
 }
 
+.search-pad-menu .categories_pos_bottom {
+    height: 230px;
+}
+
 .search-pad-advertising {
-    margin-left: 10px;
+    position: absolute;
+    right: 10px;
 }
 
 .search-pad-popup .main-navigation-nav-wrapper ul.categories li {
@@ -89,7 +95,7 @@
 
 .search-pad-popup .searchpad-event-details {
     margin-top: 15px;
-    margin-left: 20px;
+    padding: 0 15px;
 }
 
 .search-pad-popup .searchpad-event-details header {

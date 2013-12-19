@@ -7,7 +7,7 @@
             day;
 
         try {
-            day = location.hash.match(/[?&]*day=([^&]*)?/)[1]    
+            day = location.hash.match(/[?&]*day=([^&]*)?/)[1];
         } catch(e) {
             day = null;
         }
@@ -16,10 +16,15 @@
         this.content = $(".event-days", this.viewer);
         this.next = $(".next", this.viewer);
         this.prev = $(".prev", this.viewer);
-        this.days = $("li", this.content).length;        
+        this.days = $("li", this.content).length;
 
-        this.prev.on("click", this.scrollPrevPage.bind(this));
-        this.next.on("click", this.scrollNextPage.bind(this));
+        this.scrollingIsActive = (this.days > 3);
+
+        if(this.scrollingIsActive){
+            $(".days-viewer-controls").addClass("active");
+            this.prev.on("click", this.scrollPrevPage.bind(this));
+            this.next.on("click", this.scrollNextPage.bind(this));
+        }
 
         $(".event-day-switch").on("click", function(){
             if($(this).hasClass("active")) return;
@@ -41,7 +46,9 @@
                 $(".description").hide();
             }
 
-            that.scrollToActiveDay();
+            if(that.scrollingIsActive){
+                that.scrollToActiveDay();
+            }
         });
 
         if(day) {
@@ -51,7 +58,9 @@
             this.currentDay = +$(".event-day-switch.active").data("counter");
         }
 
-        this.scrollToActiveDay();
+        if(that.scrollingIsActive){
+            this.scrollToActiveDay();
+        }
     };
 
     EventDaysSwitcher.prototype = {
@@ -63,7 +72,7 @@
             if(this.currentDay==this.days) {
                 leftPosition += 97;
             }
-            $(this.content).animate({                
+            $(this.content).animate({
                 "left": leftPosition + "px"
             });
         },

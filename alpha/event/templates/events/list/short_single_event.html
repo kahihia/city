@@ -1,13 +1,14 @@
 {% load date_formatting %}
 {% load cropping %}
 {% load event_tags %}
+{% load location %}
 
 <a href="{% event_link event %}">
     <div class="entry-img-prev">
         {% if event.picture %}
-            <img src="{% cropped_thumbnail event.image "cropping" width=60 %}" height="60px" weight="60px" />
+            <img src="{% cropped_thumbnail event.image "cropping" width=60 %}" height="60" weight="60" />
         {% else %}
-            <img src="{{STATIC_URL}}images/default-event.jpg" height="60px" weight="60px" />
+            <img src="{{STATIC_URL}}images/default-event.jpg" height="60" weight="60" />
         {% endif %}
     </div>
     <div class="entry-details-wrapper">
@@ -26,8 +27,14 @@
                 <span class="event-time">{{event.first_occurrence.start_time|just_time|lower}} - {{event.first_occurrence.end_time|just_time|lower}}*</span>
             {% endif %}
         </div>
-        <div class="entry-description">
-            {{ event.venue.name }}, {% if event.venue.street %}{% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}, {% endif %}{{ event.venue.city.name_std }}
+        <div class="event-location">
+            <div class="event-name-and-street">
+                {{ event.venue.name }}
+            </div>
+            <div class="event-city-name">
+                {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
+            </div>
         </div>
+
     </div>
 </a>

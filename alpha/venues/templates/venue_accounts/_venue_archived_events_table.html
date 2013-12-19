@@ -7,11 +7,12 @@
 {% paginate 6 venue_archived_events using "archived_events_page" %}
 <div class="account-entry-wrapper entry-wrapper">
     {% for event in venue_archived_events %}
-        <div class="entry-info with-delete-action">
+        <div class="entry-info with-actions">
             {% short_single_event event %}
 
             <div class="event-edit-actions">
-                <a href="{% url 'event_copy' event.authentication_key %}">
+                <a class="event-edit-actions__item"
+                   href="{% url 'event_copy' event.authentication_key %}">
                     Copy
                 </a>
             </div>

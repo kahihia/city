@@ -4,26 +4,28 @@
     {% if in_email %}
         <td height="147" style="border: 5px solid #ffffff" valign="top">
             <a target="_blank" href="{{site}}{% featured_event_link event %}" style="text-decoration:none; border: none; display: block; line-height:0px;">
-                <img src="{{site}}/{% feature_event_as_image event %}" style="border-collapse:collapse; border: none;" />
+                <img src="{{site}}{{STATIC_URL}}/{% feature_event_as_image event %}" style="border-collapse:collapse; border: none;"  height="154" width="154"/>
             </a>
         </td>
         <td width="10" align="left">
-            <div style="line-height:0;"><img src="{{site}}{{STATIC_URL}}/images/emails/blank.gif" width="10" height="10" alt="" /></div>
+            <div style="line-height:0;">
+                <img src="{{site}}{{STATIC_URL}}/images/emails/blank.gif" width="10" height="10" alt="" />
+            </div>
         </td>
     {% else %}
         <div class="features">
             <a href="{% featured_event_link event %}">
                 <div class="featured-img-wrapper">
                     {% if event.picture %}
-                        <img src="{% cropped_thumbnail event.image "cropping" width=154 %}" height="153px" width="154px">
+                        <img src="{% cropped_thumbnail event.image "cropping" width=154 %}" height="154" width="154">
                     {% else %}
-                        <img src="/static/images/default-event.jpg" height="153px" width="154px">
+                        <img src="/static/images/default-event.jpg" height="154" width="154">
                     {% endif %}
                 </div>
                 <div class="featured-img-details">
                     <div class="featured-img-details-wrapper">
                         <div class="featured-title">
-                            <a href="{% featured_event_link event %}">{{event.name}}</a>
+                            {{event.name}}
                         </div>
                         <div class="featured-date">
                             {{ event.start_time|date:"b d, Y | fA"|title }}-{{event.end_time|date:"fA"|title}}
@@ -32,9 +34,7 @@
                             {{ event.venue.name }}
                         </div>
                         <div class="featured-details-link">
-                            <a href="{% featured_event_link event %}">
-                                event details
-                            </a>
+                            event details
                         </div>
                     </div>
                 </div>

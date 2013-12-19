@@ -87,12 +87,13 @@ a.add-button {
 
 .profile-table-pagination {
     color: #454545;
-    height: 47px;
-    line-height: 47px;
+    height: 36px;
+    line-height: 36px;
     vertical-align: middle;
     text-align: right;
     background: #f4f4f4;
     font-size: 1.2em;
+    padding-right: 10px;
 }
 
 .profile-table-pagination .pagintation-wrapper{

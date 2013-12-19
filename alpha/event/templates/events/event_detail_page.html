@@ -80,7 +80,7 @@
                                     <div class="image-viewer-content">
                                     {% for image in event.sorted_images %}
                                         <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
-                                            <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}">
+                                            <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}" width="265" height="265">
                                             <div class="detail-view"></div>
                                         </a>
                                     {% endfor %}
@@ -95,11 +95,10 @@
                             {% elif event.sorted_images.count > 0 %}
                                 {% for image in event.sorted_images %}
                                     <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
-                                        <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}">
+                                        <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}" width="265" height="265">
                                         <div class="detail-view"></div>
                                     </a>
                                 {% endfor %}
-
                             {% else %}
                                 <div class="center-cropped default" style="background-image: url('{{STATIC_URL}}images/default-event.jpg');"></div>
                             {% endif %}
@@ -110,7 +109,7 @@
                                     {{ event.venue_account_owner.venue.name }}
                                 </a>
                             </footer>
-                            {% endif %}                            
+                            {% endif %}
                         </div>
                     </td>
                     <td class="event-details-td">
@@ -143,7 +142,14 @@
                                                 {% endif %}
                                             </div>
                                             <div class="event-venue">
-                                                <span>{{ event.venue.name }}</span>
+                                                {% if event.venue.venue_account %}
+                                                    <a href="{% url "public_venue_account" event.venue.venue_account.slug %}">
+                                                        {{ event.venue.name }}
+                                                    </a>
+                                                {% else %}
+                                                    <span>{{ event.venue.name }}</span>
+                                                {% endif %}
+                                                
                                                 {% if event.venue.street %}
                                                     <span>
                                                         {% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}
@@ -253,19 +259,17 @@
                                 <div class="social-buttons">
                                     <!-- AddThis Button BEGIN -->
                                     <div class="addthis_toolbox addthis_default_style addthis_16x16_style">
-                                    <a class="addthis_button_facebook"></a>
-                                    <a class="addthis_button_twitter"></a>
-                                    <a class="addthis_button_pinterest_share"></a>
-                                    <a class="addthis_button_google_plusone_share"></a>
-                                    <a class="addthis_button_linkedin"></a>
-                                    <a class="addthis_button_myspace"></a>
-                                    <a class="addthis_button_blogger"></a>
-                                    <a class="addthis_button_email"></a>
-
-
-                                    <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
+                                        <a class="addthis_button_facebook"></a>
+                                        <a class="addthis_button_twitter"></a>
+                                        <a class="addthis_button_pinterest_share"></a>
+                                        <a class="addthis_button_google_plusone_share"></a>
+                                        <a class="addthis_button_linkedin"></a>
+                                        <a class="addthis_button_myspace"></a>
+                                        <a class="addthis_button_blogger"></a>
+                                        <a class="addthis_button_email"></a>
+                                        <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
                                     </div>
-                                    <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+
                                     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-527be736493dac67"></script>
                                     <!-- AddThis Button END -->
                                 </div>                                    
@@ -306,7 +310,8 @@
         <div class="tags">
             {% for tag in event.tags.all %}
                 <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">
-                    {{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                    {{ tag }}
+                </a>{% if not forloop.last %}, {% endif %}
             {% endfor %}
         </div>
 

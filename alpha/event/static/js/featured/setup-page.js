@@ -41,6 +41,8 @@
         this.initRegionsSelection();
         this.initSwitchPaymemtModes();
 
+        this.calculate_days_to_display();
+
     }
 
     FeaturedSetupPage.prototype = {

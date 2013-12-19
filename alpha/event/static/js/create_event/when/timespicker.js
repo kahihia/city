@@ -6,7 +6,7 @@
         this.parent = parent;
         this.element = dom("div", {"class": "my-additional-time-picker"}, [
             this.startTime = dom("input", {"class": "start-time"}),
-            this.endTime = dom("input", {"class": "end-time"}),        
+            this.endTime = dom("input", {"class": "end-time"}),
             this.removeButton = dom("div", {"class": "remove"})
         ]);        
             
@@ -76,9 +76,8 @@
                     timesWidget.setValue(occurrence);
                 }
             });
-
         },
-        show: function(){            
+        show: function(){
             $(this.myTimepicker.label).append(this.addMoreTimeButton);
             $(this.myTimepicker.label).append(this.popup);
             $(this.addMoreTimeButton).show();
@@ -112,7 +111,7 @@
         removeEventTimesWidget: function(widget){
             var index = this.times.indexOf(widget);
             if(widget.element.parentNode) {
-                widget.element.parentNode.removeChild(widget.element);    
+                widget.element.parentNode.removeChild(widget.element);
             }
 
             if(index!==-1){
@@ -176,7 +175,15 @@
 
         $(this.removeButton).on('click', function() {
             if(confirm("Do you realy want to remove day?")) {
-                var format_day = $.datepicker.formatDate($.datepicker._defaults.dateFormat, new Date(that.options.year, that.options.month - 1, that.options.day));
+                var format_day = $.datepicker.formatDate(
+                        $.datepicker._defaults.dateFormat, 
+                        new Date(
+                            that.options.year, 
+                            that.options.month - 1, 
+                            that.options.day
+                        )
+                    );
+
                 $(".days-picker", $(this).parents(".month-container")).multiDatesPicker('toggleDate', format_day);
             }
         });
@@ -201,7 +208,7 @@
             var isAutoFillOn = this.isAutoFill();
             if(this.isFirst()) {
                 if(isAutoFillOn) {
-                    this.copyToNext();                
+                    this.copyToNext();
                 }
             }
         },
@@ -240,7 +247,7 @@
                         first.setAutoFill(true);
                         first.setValue(this.getValue());
                         first.copyToNext();
-                    }                    
+                    }
                 }
             }
         },
@@ -261,7 +268,7 @@
                         first.setAutoFill(false);
                         first.clearValue();
                         first.clearNext();
-                    }                    
+                    }
                 }
             }
         },

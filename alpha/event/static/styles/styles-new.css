@@ -8,7 +8,7 @@ table td {
 }
 
 .home .content-wrapper {
-    margin-top: 18px;
+    margin-top: 10px;
     position: relative;
 }
 
@@ -108,7 +108,7 @@ ul.errorlist li {
     width: 182px;
     background: #c6c6c6;
     float: left;
-    margin-right: 18px;
+    margin-right: 10px;
 }
 
 .search-pad-menu .left-menu {
@@ -247,7 +247,7 @@ ul.errorlist li {
 }
 
 .events-container {
-    width: 478px;
+    width: 495px;
     float: left;
 }
 

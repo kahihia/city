@@ -41,7 +41,7 @@
             {% if venue_account.tags.count > 0 %}
                 <div class="tags">
                     {% for tag in venue_account.tags.all %}
-                        {{ tag }}{% if not forloop.last %}, {% endif %}
+                        <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </div>
             {% endif %}
@@ -54,14 +54,14 @@
                         </td>
                         <td data-tab-id="venue-featured-events" {% if active_tab == "venue-featured-events" %}class="current"{% endif %}>
                             <span>Featured Events</span>
-                        </td>                        
+                        </td>
                     </tr>
                 </table>
                 <div class="box{% if active_tab == "venue-events" %} visible{% endif %}">
                     {% include 'venue_accounts/_venue_events_table.html' %}
                 </div>
                 <div class="box{% if active_tab == "venue-featured-events" %} visible{% endif %}">
-                    {% include 'venue_accounts/_venue_featured_events_table.html' %}
+                    {% include 'venue_accounts/_venue_public_featured_events_table.html' %}
                 </div>
             </div>
         </div>

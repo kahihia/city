@@ -65,17 +65,14 @@ def save_event(user, data, form):
     if data["images"]:
         images = json.loads(data["images"])["images"]
 
-        order = 1
-
         for image in images:
-            image_src, cropping = image["filepath"], image["cropping"]
+            image_src, cropping, order = image["filepath"], image["cropping"], image["order"]
             EventImage.objects.get_or_create(
                 event=event,
                 picture=image_src.replace(settings.MEDIA_URL, ""),
                 cropping=cropping,
                 order=order
             )
-            order = order + 1
 
     return event
 
