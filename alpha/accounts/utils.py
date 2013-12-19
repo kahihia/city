@@ -52,32 +52,38 @@ def find_similar_events(events):
 
 
 def remind_account_about_events_with_email(account, single_events):
-    featured_events = Event.featured_events_for_region(account.native_region)[0:4]
+    if account.reminder_email:
+        featured_events = Event.featured_events_for_region(account.native_region)[0:4]
 
-    similar_events = find_similar_events(
-        Event.future_events.filter(id__in=single_events.values_list("event_id", flat=True))
-    )
+        similar_events = find_similar_events(
+            Event.future_events.filter(id__in=single_events.values_list("event_id", flat=True))
+        )
 
-    subject = "Upcoming events from cityfusion"
+        subject = "Upcoming events from cityfusion"
 
-    message = render_to_string('accounts/emails/reminder_email.html', {
-            "featured_events": featured_events,
-            "events": single_events,
-            "similar_events": similar_events,
-            "STATIC_URL": "/static/",
-            "advertising_region": account.advertising_region,
-            "site": "http://%s" % Site.objects.get_current().domain
-        })
+        message = render_to_string('accounts/emails/reminder_email.html', {
+                "featured_events": featured_events,
+                "events": single_events,
+                "similar_events": similar_events,
+                "STATIC_URL": "/static/",
+                "advertising_region": account.advertising_region,
+                "site": "http://%s" % Site.objects.get_current().domain
+            })
 
-    msg = EmailMessage(subject,
-               message,
-               "reminder@cityfusion.ca",
-               [account.reminder_email],
-               fail_silently=True)
-    msg.content_subtype = 'html'
-    msg.send()
+        try:
+            msg = EmailMessage(subject,
+                       message,
+                       "reminder@cityfusion.ca",
+                       [account.reminder_email])
+            msg.content_subtype = 'html'
+            msg.send()
+        except:
+            logger.error("Invalid email %s" % account.reminder_email)
 
-    return message
+        return message
+
+    else:
+        return ""
 
 
 def remind_account_about_events_with_sms(account, single_events):
@@ -108,26 +114,32 @@ def remind_account_about_deleted_events(account, single_events):
 
 
 def remind_account_about_deleted_events_with_email(account, single_events):
-    featured_events = Event.featured_events_for_region(account.native_region)[:4]
-    subject = 'Deleted events from cityfusion'
+    if account.reminder_email:
+        featured_events = Event.featured_events_for_region(account.native_region)[:4]
+        subject = 'Deleted events from cityfusion'
 
-    message = render_to_string('accounts/emails/reminder_deleted_event_email.html', {
-            "featured_events": featured_events,
-            "events": single_events,
-            "STATIC_URL": "/static/",
-            "advertising_region": account.advertising_region,
-            "site": "http://%s" % Site.objects.get_current().domain
-        })
-    print message
-    msg = EmailMessage(subject,
-               message,
-               "reminder@cityfusion.ca",
-               [account.reminder_email],
-               fail_silently=True)
-    msg.content_subtype = 'html'
-    msg.send()
+        message = render_to_string('accounts/emails/reminder_deleted_event_email.html', {
+                "featured_events": featured_events,
+                "events": single_events,
+                "STATIC_URL": "/static/",
+                "advertising_region": account.advertising_region,
+                "site": "http://%s" % Site.objects.get_current().domain
+            })
 
-    return message
+        try:
+            msg = EmailMessage(subject,
+                       message,
+                       "reminder@cityfusion.ca",
+                       [account.reminder_email])
+            msg.content_subtype = 'html'
+            msg.send()
+        except:
+            logger.error("Invalid email %s" % account.reminder_email)
+
+        return message
+
+    else:
+        return ""
 
 
 def remind_account_about_deleted_events_with_sms(account, single_events):
@@ -174,32 +186,37 @@ def inform_account_about_events_with_tags(account):
 
 
 def inform_account_about_events_with_tag_with_email(account, events, tags_in_venues):
-    featured_events = Event.featured_events_for_region(account.native_region)[:4]
+    if account.in_the_loop_email:
+        featured_events = Event.featured_events_for_region(account.native_region)[:4]
 
-    similar_events = find_similar_events(events)
+        similar_events = find_similar_events(events)
 
-    subject = "New Events in cityfusion"
+        subject = "New Events in cityfusion"
 
-    message = render_to_string('accounts/emails/in_the_loop_email.html', {
-            "featured_events": featured_events,
-            "events": events,
-            "similar_events": similar_events,
-            "STATIC_URL": "/static/",
-            "site": "http://%s" % Site.objects.get_current().domain,
-            "tags_in_venues": tags_in_venues,
-            "advertising_region": account.advertising_region,
-        })
+        message = render_to_string('accounts/emails/in_the_loop_email.html', {
+                "featured_events": featured_events,
+                "events": events,
+                "similar_events": similar_events,
+                "STATIC_URL": "/static/",
+                "site": "http://%s" % Site.objects.get_current().domain,
+                "tags_in_venues": tags_in_venues,
+                "advertising_region": account.advertising_region,
+            })
 
-    msg = EmailMessage(subject,
-        message,
-        "reminder@cityfusion.ca",
-        [account.in_the_loop_email])
+        try:
+            msg = EmailMessage(subject,
+                message,
+                "reminder@cityfusion.ca",
+                [account.in_the_loop_email])
 
-    msg.content_subtype = 'html'
+            msg.content_subtype = 'html'
+            msg.send()
+        except:
+            logger.error("Invalid email %s" % account.in_the_loop_email)
 
-    msg.send()
-
-    return message
+        return message
+    else:
+        return ""
 
 
 def inform_account_about_events_with_tag_with_sms(account, events, tags_in_venues):
