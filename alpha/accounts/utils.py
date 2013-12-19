@@ -74,8 +74,7 @@ def remind_account_about_events_with_email(account, single_events):
             msg = EmailMessage(subject,
                        message,
                        "reminder@cityfusion.ca",
-                       [account.reminder_email],
-                       fail_silently=True)
+                       [account.reminder_email])
             msg.content_subtype = 'html'
             msg.send()
         except:
@@ -131,8 +130,7 @@ def remind_account_about_deleted_events_with_email(account, single_events):
             msg = EmailMessage(subject,
                        message,
                        "reminder@cityfusion.ca",
-                       [account.reminder_email],
-                       fail_silently=True)
+                       [account.reminder_email])
             msg.content_subtype = 'html'
             msg.send()
         except:
