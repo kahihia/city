@@ -1,0 +1,16 @@
+<html>
+<head></head>
+    <body>
+        <h1>
+        	"<a href="http://{{ site }}{% url 'public_venue_account' venue_account.slug %}">{{ venue_account.venue.name }}</a>"
+            venue has been transferred to you by CityFusion administration.
+        </h1>
+
+        <h2>You can accept or reject transferring in your account:</h2>
+        <a href="http://{{ site }}{% url 'userena_profile_detail' user.username %}">
+        	http://{{ site }}{% url 'userena_profile_detail' user.username %}
+        </a>
+
+        <p>Have a great day.</p>
+    </body>
+</html>
