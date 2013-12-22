@@ -863,7 +863,7 @@
     font-size: 13px;
     border-radius: 4px;
     background-color: #dff0d8;
-    border-color: #d6e9c6;
+    border: 1px solid #4f7942;
     color: #468847;
     position: relative;
 }

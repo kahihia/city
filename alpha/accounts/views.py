@@ -12,24 +12,25 @@ from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
 
+from cities.models import City
 from pdfutils.reports import Report
 from django_facebook.api import get_facebook_graph
 from guardian.decorators import permission_required_or_403
-
-from event.models import Event, SingleEvent, EventTransferring
-from notices.models import Notice
-from models import Account, VenueAccount
-from accounts.forms import ReminderSettingsForm, InTheLoopSettingsForm
-from accounts.decorators import ajax_login_required
-from utils import remind_account_about_events, inform_account_about_events_with_tags
 from userena import settings as userena_settings
 from userena.utils import get_profile_model, get_user_model
 from userena.views import ExtraContextTemplateView
-from cities.models import City
-from advertising.models import AdvertisingOrder
-from event.models import FeaturedEventOrder
-from accounts.forms import AccountForm
 from userena.decorators import secure_required
+
+from accounts.forms import ReminderSettingsForm, InTheLoopSettingsForm
+from accounts.decorators import ajax_login_required
+from accounts.forms import AccountForm
+from advertising.models import AdvertisingOrder
+from event.models import Event, SingleEvent, EventTransferring
+from notices.models import Notice
+from .models import Account, VenueAccount
+from utils import remind_account_about_events, inform_account_about_events_with_tags
+from event.models import FeaturedEventOrder
+from venues.models import VenueAccountTransferring
 
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
@@ -473,6 +474,68 @@ def reject_transferring(request, transferring_id):
             transferring.events.remove(event)
 
         transferring.delete()
+        notice_id = request.POST.get('notice_id', 0)
+        try:
+            notice = Notice.objects.get(pk=notice_id)
+        except Notice.DoesNotExist:
+            notice = None
+
+        if notice:
+            notice_data = json.loads(notice.log)
+            notice_data['state'] = 'Rejected'
+            notice.log = json.dumps(notice_data)
+            notice.read = True
+            notice.save()
+
+        success = True
+
+    return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
+
+
+@login_required
+def accept_venue_transferring(request, venue_transferring_id):
+    success = False
+    try:
+        venue_transferring = VenueAccountTransferring.objects.get(pk=venue_transferring_id)
+    except VenueAccountTransferring.DoesNotExist:
+        venue_transferring = None
+
+    if venue_transferring and venue_transferring.target:
+        venue_account = venue_transferring.venue_account
+        venue_account.account = venue_transferring.target
+        venue_account.save()
+        Event.events.filter(venue_account_owner_id=venue_account.id).update(owner=venue_transferring.target.user.id)
+
+        venue_transferring.delete()
+
+        notice_id = request.POST.get('notice_id', 0)
+        try:
+            notice = Notice.objects.get(pk=notice_id)
+        except Notice.DoesNotExist:
+            notice = None
+
+        if notice:
+            notice_data = json.loads(notice.log)
+            notice_data['state'] = 'Accepted'
+            notice.log = json.dumps(notice_data)
+            notice.read = True
+            notice.save()
+
+        success = True
+
+    return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
+
+
+@login_required
+def reject_venue_transferring(request, venue_transferring_id):
+    success = False
+    try:
+        venue_transferring = VenueAccountTransferring.objects.get(pk=venue_transferring_id)
+    except VenueAccountTransferring.DoesNotExist:
+        venue_transferring = None
+
+    if venue_transferring and venue_transferring.target:
+        venue_transferring.delete()
         notice_id = request.POST.get('notice_id', 0)
         try:
             notice = Notice.objects.get(pk=notice_id)

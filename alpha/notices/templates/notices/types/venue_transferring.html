@@ -1,0 +1,13 @@
+<div class="notice-item" data-type="notice_item">
+    {% csrf_token %}
+    "<a href="{{ venue_link }}">{{ venue_name }}</a>"
+    venue has been transferred to you by CityFusion administration on the {{ date }}.
+    You can
+    <a class="b" href="{{ accept_link }}" data-type="transferring_accept_link" data-notice-id="{{ notice_id }}">
+        Accept
+    </a>
+    or
+    <a class="b" href="{{ reject_link }}" data-type="transferring_reject_link" data-notice-id="{{ notice_id }}">
+        Reject
+    </a> it.
+</div>
