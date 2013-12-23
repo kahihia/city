@@ -159,7 +159,10 @@ def view_featured(request, slug, date=None):
 def view(request, slug, date=None):
     try:
         if date:
-            event = SingleEvent.future_events.get(Q(event__slug=slug) & (Q(start_time__startswith=date) | Q(event__event_type="MULTIDAY")))
+            event = SingleEvent.future_events\
+                               .filter(Q(event__slug=slug)
+                                    & (Q(start_time__startswith=date) | Q(event__event_type="MULTIDAY")))\
+                               .all()[0]
         else:
             try:
                 event = SingleEvent.future_events.get(event__slug=slug, event__event_type="MULTIDAY", is_occurrence=False)
