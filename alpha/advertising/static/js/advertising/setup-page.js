@@ -114,6 +114,7 @@
 
             if(!this._initialRightHeight) {
                 this._initialRightHeight = rightHeight;
+                leftColumn.css({"min-height": rightHeight});
             }
 
             if(leftHeight > this._initialRightHeight) {
