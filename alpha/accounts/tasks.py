@@ -5,6 +5,7 @@ from home.utils import deserialize_json_deep
 from utils import remind_account_about_events, inform_account_about_events_with_tags, remind_account_about_deleted_events
 from models import AccountReminding, Account, InTheLoopSchedule
 from event.models import SingleEvent
+from accounts.models import REMINDER_TYPES
 
 
 @task
@@ -31,7 +32,9 @@ def remind_accounts_about_deleted_events():
 
 @task
 def remind_accounts_about_events_on_week_day():
-    for account in Account.objects.filter(reminder_active_type="WEEKDAY", reminder_on_week_day=str(datetime.now().weekday())):
+    accounts = Account.objects.extra(where=['reminder_type_state & %s != 0' % REMINDER_TYPES['WEEKDAY']['id']])\
+                      .filter(reminder_on_week_day=str(datetime.now().weekday()))
+    for account in accounts:
         single_events = account.reminder_single_events.filter(start_time__gte=datetime.now(), start_time__lte=(datetime.now() + timedelta(days=7)))
 
         if len(single_events) > 0:

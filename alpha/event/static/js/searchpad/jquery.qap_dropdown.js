@@ -38,6 +38,7 @@
         refresh: function(){
             this.empty();
             this.content.empty();
+            this.select = this.element.children('select');
             this.build();
         },
         buildBasicElements: function(){
@@ -136,9 +137,12 @@
     }
 
     $.fn.qap_dropdown = function () {
+        var objects = [];
         this.each(function () {
-            new Dropdown(this);
+            objects.push(new Dropdown(this));
         });
+
+        return objects;
     };
 
     $(document).on("ready page:load", function(){

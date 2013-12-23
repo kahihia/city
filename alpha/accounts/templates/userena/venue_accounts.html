@@ -9,7 +9,9 @@
                 <a class="mngp" href="{% url 'private_venue_account' slug=venue_account.slug %}">
                     {{ venue_account.venue.name }}
                 </a>
-                <a href="{% url 'unlink_venue_account_from_user_profile' venue_account_id=venue_account.id %}" class="danger-action" data-confirm-message="Are you sure you want to delete this venue?">
+                <a href="javascript:void(0);"
+                   data-type="delete_venue_button"
+                   data-venue-account-id="{{ venue_account.id }}">
                     Delete
                 </a> |
                 <a href="{% url 'account_set_context' context=venue_account.slug %}">

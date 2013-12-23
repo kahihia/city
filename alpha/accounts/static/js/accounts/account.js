@@ -428,8 +428,76 @@
         self.init();
     };
 
+    var VenueAccountService = function() {
+        var self = this;
+
+        self.init = function() {
+            self.unlinkVenueUrl = $("[data-type=hidden_elements] [data-id=unlink_venue_url]").val();
+            self.deleteVenueSelector = "[data-type=delete_venue_button]";
+            self.deleteVenueCancelSelector = "[data-id=delete_venue_cancel]";
+            self.deleteVenueAcceptSelector = "[data-id=delete_venue_accept]";
+            self.deleteConfirmationWindow = $("[data-id=delete_confirmation_window]");
+            self.ownersSelect = $("[data-id=available_owners]");
+            self.ownersSelectCurrentSelector = "[data-id=available_owners_current]";
+            self.afterActionSwitcherSelector = "[data-type=after_action]";
+            self.csrfToken = $("[data-type=hidden_elements] input[name=csrfmiddlewaretoken]").val();
+
+            $("body").on("click", self.deleteVenueSelector, self.onDeleteVenueButtonClick);
+            $("body").on("click", self.deleteVenueAcceptSelector, self.onDeleteVenueAcceptButtonClick);
+            $("body").on("click", self.deleteVenueCancelSelector, self.onDeleteVenueCancelButtonClick);
+
+            $(".available-owners-dropdown").html(self.ownersSelect.clone()
+                                           .attr("data-id", "available_owners_current"));
+            self.stylizedOwnersSelect = $(".available-owners-dropdown").qap_dropdown()[0];
+        };
+
+        self.onDeleteVenueButtonClick = function() {
+            self.deletedVenueAccountId = $(this).data("venue-account-id");
+            if($.fancybox) {
+                self.refreshOwnersSelect(self.deletedVenueAccountId);
+                $.fancybox(self.deleteConfirmationWindow, {
+                    scrolling: "visible"
+                });
+            }
+
+            return false;
+        };
+
+        self.onDeleteVenueAcceptButtonClick = function() {
+            $(this).prop("disabled", true);
+            var afterAction = $(self.afterActionSwitcherSelector + ":checked").val();
+            var owner = $(self.ownersSelectCurrentSelector).val();
+            $.post(self.unlinkVenueUrl, {
+                "csrfmiddlewaretoken": self.csrfToken,
+                "venue_account_id": self.deletedVenueAccountId,
+                "after_action": afterAction,
+                "owner": owner
+            }, function(data) {
+                if(data.success) {
+                    location.reload();
+                }
+            }, 'json');
+        };
+
+        self.onDeleteVenueCancelButtonClick = function() {
+            if($.fancybox) {
+                $.fancybox.close();
+            }
+        };
+
+        self.refreshOwnersSelect = function(venueAccountId) {
+            var currentOwnerSelect = self.ownersSelect.clone().attr("data-id", "available_owners_current");
+            currentOwnerSelect.find("option[data-venue-account-id=" + venueAccountId + "]").remove();
+            $(".available-owners-dropdown").html(currentOwnerSelect);
+            self.stylizedOwnersSelect.refresh();
+        };
+
+        self.init();
+    };
+
     $(document).on("ready page:load", function(){
         new AccountService();
+        new VenueAccountService();
     });
 
 })(jQuery, window, document);

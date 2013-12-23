@@ -3,21 +3,22 @@ from accounts.models import Account
 
 from widgets import InTheLoopTagAutoSuggest, CityAutoSuggest
 from taggit.forms import TagField
+from accounts.lookups import RegionLookup
 from accounts.models import REMINDER_TYPES
 
 from userena.forms import EditProfileForm
 
 import selectable.forms as selectable
-from accounts.lookups import RegionLookup
 from cities.models import Region
 from localflavor.ca.forms import CAPhoneNumberField
+import dateutil.parser as dateparser
 
 
 class ReminderSettingsForm(forms.ModelForm):
     reminder_with_website = forms.BooleanField(required=False, label="")
     reminder_with_email = forms.BooleanField(required=False, label="")
     reminder_with_sms = forms.BooleanField(required=False, label="")
-    reminder_active_type = forms.ChoiceField(widget=forms.RadioSelect, choices=REMINDER_TYPES)
+    reminder_type_state = forms.IntegerField(required=False)
     reminder_phonenumber = CAPhoneNumberField(required=False)
 
     class Meta:
@@ -30,15 +31,30 @@ class ReminderSettingsForm(forms.ModelForm):
             'reminder_phonenumber',
             'reminder_days_before_event',
             'reminder_hours_before_event',
+            'reminder_type_state',
             'reminder_on_week_day',
-            'reminder_active_type'
+            'reminder_each_day_from',
+            'reminder_each_day_at_time'
         )
 
     def __init__(self, *args, **kwargs):
+        if 'data' in kwargs:
+            data = kwargs['data'].copy()
+            reminder_type_state = 0
+            for reminder_type in REMINDER_TYPES:
+                key = 'reminder_type_state_%s' % reminder_type.lower()
+                if key in data:
+                    reminder_type_state |= REMINDER_TYPES[reminder_type]['id']
+
+            data['reminder_type_state'] = reminder_type_state
+            data['reminder_each_day_at_time'] = dateparser.parse(data['reminder_each_day_at_time']).strftime('%H:%M')
+            kwargs['data'] = data
+
         super(ReminderSettingsForm, self).__init__(*args, **kwargs)
 
         self.fields['reminder_days_before_event'].widget.attrs['maxlength'] = 2
         self.fields['reminder_hours_before_event'].widget.attrs['maxlength'] = 2
+        self.fields['reminder_each_day_from'].widget.attrs['maxlength'] = 2
 
 
 class InTheLoopSettingsForm(forms.ModelForm):

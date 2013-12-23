@@ -1,7 +1,7 @@
 from django.utils import simplejson as json
 from django.conf import settings
 from accounts.models import VenueAccount, VenueType, Account
-from event.models import SingleEvent, FeaturedEvent, Venue
+from event.models import Event, SingleEvent, FeaturedEvent, Venue
 from event.services.featured_service import featured_events_for_region
 from django.template import RequestContext
 
@@ -231,19 +231,38 @@ def set_venue_privacy(request, venue_account_id, privacy):
 
 
 @login_required
-def unlink_venue_account_from_user_profile(request, venue_account_id):
-    venue_account = VenueAccount.objects.get(id=venue_account_id)
-    
-    if venue_account.account.user != request.user:
-        resp = render_to_response('403.html', context_instance=RequestContext(request))
-        resp.status_code = 403
-        return resp
+def unlink_venue_account_from_user_profile(request):
+    success = False
+    if request.method == 'POST':
+        venue_account_id = request.POST.get('venue_account_id', 0)
+        after_action = request.POST.get('after_action', '')
+        owner = request.POST.get('owner', '')
 
-    venue_account.delete()
+        venue_account = VenueAccount.objects.get(id=venue_account_id)
 
-    return HttpResponseRedirect(
-        reverse('userena_profile_detail', args=(request.user.username, ))
-    )
+        if venue_account.account.user == request.user:
+            venue_events = Event.events.filter(venue_account_owner=venue_account)
+            if after_action == 'move_events':
+                owner_data = owner.split('_')
+                if owner_data[0] == 'user':
+                    for event in venue_events:
+                        event.venue_account_owner = None
+                        event.save(update_fields=['venue_account_owner'])
+                elif owner_data[0] == 'venue':
+                    venue_account_owner = VenueAccount.objects.get(id=owner_data[1])
+                    if venue_account_owner and venue_account_owner.account.user == request.user:
+                        for event in venue_events:
+                            event.venue_account_owner = venue_account_owner
+                            event.save(update_fields=['venue_account_owner'])
+
+            elif after_action == 'remove_events':
+                for event in venue_events:
+                    event.delete()
+
+            venue_account.delete()
+            success = True
+
+    return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
 
 
 def venue_tags(request):

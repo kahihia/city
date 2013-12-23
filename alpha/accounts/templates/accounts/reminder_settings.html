@@ -1,6 +1,7 @@
 {% extends 'base.html' %} 
 {% load i18n %} 
-{% load url from future %} 
+{% load url from future %}
+{% load common_tags %}
 
 {% block title %}
     {% blocktrans with profile.user.username as username %}
@@ -11,8 +12,10 @@
 {% block head %}
     <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />    
     <link href="{{STATIC_URL}}styles/accounts/accounts.css" rel="stylesheet" type="text/css" />
+    <link href="{{STATIC_URL}}styles/timepicker.css" rel="stylesheet" type="text/css" />
     <script src="{{STATIC_URL}}js/searchpad/jquery.qap_dropdown.js" type="text/javascript"></script>    
     <script src="{{STATIC_URL}}js/accounts/reminder-options.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/jquery.ui.timepicker.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block page %}
@@ -79,11 +82,16 @@
                         Please select the amount of time to remind you about your event(s)
                     </header>
                     <table>
-                        <tr {% if form.reminder_active_type.value == "DAYS" %}class="active"{% endif %}>                                
+                        <tr {% if account|args:'DAYS'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}class="active"{% endif %}>
                             <td class="first">
-                                <div class="radio">                                        
-                                    <input {% if form.reminder_active_type.value == "DAYS" %}checked="checked"{% endif %} type="radio" id="id_reminder_active_type_0" value="DAYS" name="reminder_active_type">
-                                    <label for="id_reminder_active_type_0"></label>
+                                <div class="checkbox">
+                                    <input type="checkbox"
+                                           {% if account|args:'DAYS'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}checked{% endif %}
+                                           id="id_reminder_type_state_days"
+                                           value="1"
+                                           name="reminder_type_state_days"
+                                           data-type="reminder_type_option" />
+                                    <label for="id_reminder_type_state_days"></label>
                                 </div>
                             </td>
                             <td class="second">
@@ -93,11 +101,16 @@
                                 Day(s) before the event begins
                             </td>
                         </tr>
-                        <tr {% if form.reminder_active_type.value == "HOURS" %}class="active"{% endif %}>
+                        <tr {% if account|args:'HOURS'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}class="active"{% endif %}>
                             <td class="first">
-                                <div class="radio">                                        
-                                    <input {% if form.reminder_active_type.value == "HOURS" %}checked="checked"{% endif %} type="radio" id="id_reminder_active_type_1" value="HOURS" name="reminder_active_type">
-                                    <label for="id_reminder_active_type_1"></label>
+                                <div class="checkbox">
+                                    <input type="checkbox"
+                                           {% if account|args:'HOURS'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}checked{% endif %}
+                                           id="id_reminder_type_state_hours"
+                                           value="1"
+                                           name="reminder_type_state_hours"
+                                           data-type="reminder_type_option" />
+                                    <label for="id_reminder_type_state_hours"></label>
                                 </div>
                             </td>
                             <td class="second">
@@ -107,11 +120,16 @@
                                 Hour(s) before the event begins
                             </td>
                         </tr>
-                        <tr {% if form.reminder_active_type.value == "WEEKDAY" %}class="active"{% endif %}>
+                        <tr {% if account|args:'WEEKDAY'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}class="active"{% endif %}>
                             <td class="first">
-                                <div class="radio">                                        
-                                    <input {% if form.reminder_active_type.value == "WEEKDAY" %}checked="checked"{% endif %} type="radio" id="id_reminder_active_type_2" value="WEEKDAY" name="reminder_active_type">
-                                    <label for="id_reminder_active_type_2"></label>
+                                <div class="checkbox">
+                                    <input type="checkbox"
+                                           {% if account|args:'WEEKDAY'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}checked{% endif %}
+                                           id="id_reminder_type_state_weekday"
+                                           value="1"
+                                           name="reminder_type_state_weekday"
+                                           data-type="reminder_type_option" />
+                                    <label for="id_reminder_type_state_weekday"></label>
                                 </div>
                             </td>
                             <td class="second">
@@ -121,6 +139,39 @@
                             </td>
                             <td>
                                 Send me reminder on this day every week
+                            </td>
+                        </tr>
+                        <tr {% if account|args:'EACH_DAY'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}class="active"{% endif %}>
+                            <td class="first">
+                                <div class="checkbox">
+                                    <input type="checkbox"
+                                           {% if account|args:'EACH_DAY'|args:form.reminder_type_state.value|call:'check_reminder_type_state' %}checked{% endif %}
+                                           id="id_reminder_type_state_each_day"
+                                           value="1"
+                                           name="reminder_type_state_each_day"
+                                           data-type="reminder_type_option" />
+                                    <label for="id_reminder_type_state_each_day"></label>
+                                </div>
+                            </td>
+                            <td class="second">
+                                <input type="text"
+                                       value="{{ form.reminder_each_day_at_time.value|date:"h:i A"|lower }}"
+                                       placeholder="Time"
+                                       name="reminder_each_day_at_time"
+                                       id="id_reminder_each_day_at_time"
+                                       data-type="each_day_input"
+                                       data-placeholder="Time" />
+                                <input type="text"
+                                       value="{{ form.reminder_each_day_from.value|none_convert }}"
+                                       placeholder="Days"
+                                       name="reminder_each_day_from"
+                                       maxlength="2"
+                                       id="id_reminder_each_day_from"
+                                       data-type="each_day_input"
+                                       data-placeholder="Days" />
+                            </td>
+                            <td>
+                                Remind me Daily, X number of days before the event at this appointed time
                             </td>
                         </tr>
                     </table>

@@ -15,6 +15,13 @@ def html_urlize(value):
 
 
 @register.filter
+def none_convert(value):
+    if value is None:
+        return ''
+    return value
+
+
+@register.filter
 def shorten_string(value, length):
     if len(value) > length:
         return '%s...' % value[:length]

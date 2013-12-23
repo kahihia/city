@@ -1,30 +1,31 @@
 import datetime
 import json
 from decimal import Decimal
+
 from django.contrib.auth.models import User
-from cityfusion_admin.models import ReportEvent, ClaimEvent
-from cityfusion_admin.forms import FreeTryForm, BonusCampaignForm
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.template import RequestContext
+from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Q, F
+
+from cities.models import City, Country
+from django_facebook.decorators import facebook_required
 
 from accounts.models import Account, BonusCampaign, VenueAccount
 from advertising.models import ShareAdvertisingCampaign
+from advertising.filters import AdvertisingCampaignFilter
+from advertising.models import AdvertisingOrder
+from cityfusion_admin.models import ReportEvent, ClaimEvent
+from cityfusion_admin.forms import FreeTryForm, BonusCampaignForm
 from event.models import Event, FeaturedEvent, FacebookEvent, EventTransferring, FeaturedEventOrder
 from event.forms import SetupFeaturedByAdminForm, CreateEventForm
 from event.services import facebook_services
 from notices import services as notice_services
-from cities.models import City, Country
-from django_facebook.decorators import facebook_required
-from django.contrib.admin.views.decorators import staff_member_required
-from django.db.models import Q, F
-
-from advertising.filters import AdvertisingCampaignFilter
-
-from advertising.models import AdvertisingOrder
+from venues.models import VenueAccountTransferring
 
 
 @require_POST
@@ -566,11 +567,22 @@ def change_event_owner(request, slug):
 
 @staff_member_required
 def change_venue_owner_search(request):
-    search = request.REQUEST.get("search", "")
+    search = request.REQUEST.get('search', '')
+    order = request.REQUEST.get('order', '')
+    transferred_venues = VenueAccountTransferring.objects\
+                                                 .all()\
+                                                 .values_list('venue_account_id', flat=True)
     if search:
         venue_accounts = VenueAccount.objects.filter(Q(venue__name__icontains=search) | Q(venue__street__icontains=search))
     else:
         venue_accounts = VenueAccount.objects.all()
+
+    venue_accounts = venue_accounts.exclude(id__in=transferred_venues)
+
+    if order and order == 'owner':
+        venue_accounts = venue_accounts.order_by('account__user__username')
+    else:
+        venue_accounts = venue_accounts.order_by('venue__name')
 
     return render_to_response('cf-admin/change_venue_owner.html', {
         'venue_accounts': venue_accounts,
@@ -581,12 +593,26 @@ def change_venue_owner_search(request):
 @require_POST
 @staff_member_required
 def change_venue_owner(request, venue_account_id):
-    owner_id = request.POST.get("owner_id", None)
+    owner_id = request.POST.get('owner_id', None)
     if owner_id:
+        target = Account.objects.get(user_id=owner_id)
         venue_account = VenueAccount.objects.get(id=venue_account_id)
-        venue_account.account = Account.objects.get(user_id=owner_id)
-        venue_account.save()
-        Event.events.filter(venue_account_owner_id=venue_account_id).update(owner=owner_id)
+        if target and venue_account:
+            venue_account_transferring = VenueAccountTransferring.objects.create(target=target,
+                                                                                 venue_account=venue_account)
+            notice_services.create_notice('venue_transferring', target.user, {
+                'subject': 'CityFusion: venue has been transferred to you.',
+                'user': target.user,
+                'venue_account': venue_account
+            }, {
+                'venue_name': venue_account.venue.name,
+                'venue_link': reverse('public_venue_account', kwargs={'slug': venue_account.slug}),
+                'date': datetime.datetime.now().strftime('%A, %b. %d, %I:%M %p'),
+                'accept_link': reverse('accept_venue_transferring', kwargs={
+                    'venue_transferring_id': venue_account_transferring.id}),
+                'reject_link': reverse('reject_venue_transferring', kwargs={
+                    'venue_transferring_id': venue_account_transferring.id})
+            })
 
     return HttpResponseRedirect(
         reverse('change_venue_owner_search') + "?search=%s" % request.POST.get("search", "")

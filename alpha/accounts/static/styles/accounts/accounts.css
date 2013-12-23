@@ -182,7 +182,7 @@
 .options table td.second {
     color: #454545;
     font-weight: bold;
-    width: 110px;
+    width: 150px;
 }
 
 #id_reminder_email, 
@@ -214,9 +214,14 @@
 }
 
 #id_reminder_days_before_event, 
-#id_reminder_hours_before_event {
+#id_reminder_hours_before_event,
+#id_reminder_each_day_from {
     width: 40px;
     padding-left: 25px;
+}
+
+#id_reminder_each_day_at_time {
+    width: 60px;
 }
 
 .week-day-reminder {
@@ -858,7 +863,7 @@
     font-size: 13px;
     border-radius: 4px;
     background-color: #dff0d8;
-    border-color: #d6e9c6;
+    border: 1px solid #4f7942;
     color: #468847;
     position: relative;
 }
@@ -1142,4 +1147,27 @@
     padding: 3px;
     padding-left: 45px;
     padding-right: 15px;
+}
+
+.modal-choice-window_size_wide {
+    min-width: 350px;
+}
+
+.available-owners-dropdown {
+    height: 18px;
+    line-height: 18px;
+    margin-right: 5px;
+    width: 150px;
+}
+
+.available-owners-dropdown:after {
+    background: url("/static/images/widgets/dropdown-small.png");
+    height: 14px;
+    right: 1px;
+    top: 2px;
+    width: 15px;
+}
+
+.available-owners-dropdown-options {
+    width: 170px;
 }
