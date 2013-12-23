@@ -491,15 +491,14 @@ table.schedule-bar-menu td.selected a {
     text-align:left;
 }
 
-.footer-container.top {
-    padding-top:5px;
-    padding-bottom:5px;
-}
-
 .footer-ads-wrapper
 {
     width:auto;
     text-align: center;
+}
+
+.footer-ads-container {
+    padding-bottom: 5px;
 }
 
 .footer-site-links
@@ -509,6 +508,7 @@ table.schedule-bar-menu td.selected a {
     padding: 9px 10px 3px 10px;
     background:#022E52;
     text-align:center;
+    margin-top: 10px;
 }
 
 .copyright
