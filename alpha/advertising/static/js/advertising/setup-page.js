@@ -43,6 +43,20 @@
 
                 that.showOrHideUploadRow(ad_type_id, checked);
             });
+
+            var previewBox = $(".advertising-form__ad-sizes-preview");
+
+            $(".ad-type-description-col span").hover(
+                function() {
+                    var adType = $(this).data("ad-type");
+                    previewBox.addClass(adType);
+                    previewBox.show();
+                }, function() {
+                    var adType = $(this).data("ad-type");
+                    previewBox.removeClass(adType);
+                    previewBox.hide();
+                }
+            );
         },
         showOrHideUploadRow: function(ad_type_id, checked){
             if(checked){
