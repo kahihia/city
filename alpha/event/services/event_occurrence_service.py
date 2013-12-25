@@ -52,8 +52,7 @@ def update_single_events(data, event):
                     if occurrences_day_key in description_json['days']:
                         description = description_json['days'][occurrences_day_key]
                     else:
-                        description = ""                        
-
+                        description = ""
 
                     single_event = SingleEvent(
                         event=event,
@@ -63,12 +62,13 @@ def update_single_events(data, event):
                         is_occurrence=(event.event_type=="MULTIDAY")
                     )
 
-                    ext_single_event = get_identic_single_event_from_list(single_event, single_events)
+                    ext_single_event = get_duplicate_single_event_from_list(single_event, single_events)
                     if not ext_single_event:
                         single_event.save()
                     else:
                         single_event = ext_single_event
-                        single_event.is_occurrence = (event.event_type=="MULTIDAY")
+                        single_event.description = description
+                        single_event.is_occurrence = (event.event_type == "MULTIDAY")
                         single_event.save()
                         single_events_to_save_ids.append(ext_single_event.id)
 
@@ -81,22 +81,23 @@ def update_single_events(data, event):
             is_occurrence=False
         )
 
-        ext_single_event = get_identic_single_event_from_list(single_event, single_events)
+        ext_single_event = get_duplicate_single_event_from_list(single_event, single_events)
         if not ext_single_event:
             single_event.save()
         else:
-            single_event = ext_single_event            
+            single_event = ext_single_event
+            single_event.description = description
+            single_event.save()
             single_events_to_save_ids.append(ext_single_event.id)
 
     single_events_to_delete_ids = list(set([item.id for item in single_events]).difference(single_events_to_save_ids))
     SingleEvent.objects.filter(id__in=single_events_to_delete_ids).delete()
 
 
-def get_identic_single_event_from_list(single_event, single_event_list):
+def get_duplicate_single_event_from_list(single_event, single_event_list):
     for item in single_event_list:
         if item.start_time == dateparser.parse(single_event.start_time) \
-            and item.end_time == dateparser.parse(single_event.end_time) \
-                and item.description == single_event.description:
+                and item.end_time == dateparser.parse(single_event.end_time):
             return item
 
     return False
