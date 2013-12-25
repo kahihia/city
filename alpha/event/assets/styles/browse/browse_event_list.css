@@ -1,0 +1,373 @@
+.entry-wrapper {
+    background: #fdfcfc;
+    border: 1px solid #c6c6c6;
+    padding-top: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.entry-wrapper header{
+    color: #000;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.entry-wrapper header.total {
+    height: 14px;
+}
+
+.entry-wrapper .time-group {
+    width: 100%;
+    border-bottom: 2px solid #619cd7;
+    margin-bottom: 0;
+}
+
+.entry-wrapper .time-group span {
+    display: block;
+    background: #619cd7;
+    width: 80px;
+    height: 11px;
+    line-height: 11px;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.entry-wrapper .button.standart {
+    width: auto;
+    margin: 0 0 15px 0;
+}
+
+.entry-wrapper .button.standart.nomargin {
+    margin: 0;
+}
+
+.entry-wrapper .entry-info{
+    position: relative;
+    height: 64px;
+    padding: 6px 5px 10px;
+}
+
+.entry-wrapper .entry-info.another {
+    margin-top: 13px;
+}
+
+.entry-wrapper .entry-info.with-actions {
+    padding-left: 20px;
+}
+
+.entry-wrapper div.entry-info:nth-of-type(even) {
+    background: #fdfcfc;    
+}
+
+.entry-wrapper div.entry-info:nth-of-type(odd) {
+    background: #ecebeb;    
+}
+
+.entry-wrapper .entry-info.extended {
+    height: 110px;
+}
+
+.entry-wrapper .entry-info .entry-img-prev {
+    display: inline-block;    
+}
+
+.entry-wrapper .entry-info .entry-img-prev img {
+    width: 60px;
+    height: 60px;
+}
+
+.entry-wrapper .entry-info .entry-details-wrapper,
+.entry-wrapper .entry-info .auctions-details-wrapper {
+    display: inline-block;    
+    vertical-align: top;
+}
+
+.entry-wrapper .entry-info .entry-details-wrapper .title,
+.entry-wrapper .entry-info .entry-details-wrapper .entry-date,
+.entry-wrapper .entry-info .entry-details-wrapper .entry-description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 520px;
+}
+
+.account-events-list {
+    position: relative;
+    padding-top: 66px;
+}
+
+.events-actions-row {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #c1c0c0;
+    padding: 11px 16px 18px;
+    width: 590px;
+}
+
+.select-buttons {
+    background: #ffffff;
+    height: 18px;
+}
+
+.select-buttons__item {
+    color: #9a9a9a;
+    font-size: 11px;
+}
+
+.events-actions-row__action-dropdown {
+    width: 260px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.events-actions-row__action-dropdown:after, .events-actions-row__venue-dropdown:after {
+    top: 2px;
+    right: 1px;
+    background: url("/static/images/widgets/dropdown-small.png") no-repeat;
+    width: 15px;
+    height: 14px;
+}
+
+.events-actions-row__action-dropdown-options {
+    width: 280px;
+    text-align: center;
+}
+
+.events-actions-row__venue-dropdown {
+    width: 80px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.events-actions-row__execute {
+    height: 18px !important;
+    line-height: 18px !important;
+    text-transform: uppercase;
+    padding: 0 47px !important;
+    background: #505050 !important;
+    font-size: 12px;
+    margin-right: 5px !important;
+}
+
+.entry-wrapper .entry-info .checkbox-field,
+.entry-wrapper .entry-info .facebook-event-link {
+    position: absolute;
+    left: 2px;
+    top: 33px;
+    opacity: 1;
+    height: auto;
+    width: auto;
+}
+
+.entry-wrapper .entry-info .event-location {
+    margin-top: 10px;
+    color: #333;
+    font-size: 12px;
+    font-weight: bold;
+    width: 365px;
+}
+
+.entry-wrapper .entry-info .event-location .event-name-and-street{
+    float: left;
+    width: 245px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.entry-wrapper .entry-info .event-location .event-city-name{
+    float: right;
+    text-align: right;
+    width: 120px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.entry-date .date-line {
+    padding: 2px 0;
+}
+
+.entry-wrapper .entry-info .entry-details-wrapper {
+    width: 365px;
+}
+
+.entry-wrapper .entry-info.home-page .entry-details-wrapper .title,
+.entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-date {
+    width: 355px;
+}
+
+
+.entry-wrapper .entry-info.home-page .entry-details-wrapper{
+    width: 365px;
+}
+.entry-wrapper .entry-info.home-page .entry-details-wrapper .title,
+.entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-date,
+.entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-description {
+    width: 355px;
+}
+
+.entry-wrapper .entry-info.with-actions .entry-details-wrapper{
+    width: 300px;
+    overflow: hidden;
+}
+
+.entry-wrapper .entry-info.with-actions .event-location {
+    width: 290px;    
+}
+
+.entry-wrapper .entry-info.with-actions .event-location .event-name-and-street{
+    width: 180px;
+}
+
+.entry-wrapper .entry-info.with-actions .event-location .event-city-name {
+    width: 105px;
+}
+
+
+.entry-wrapper .entry-info.with-actions .entry-details-wrapper .title,
+.entry-wrapper .entry-info.with-actions .entry-details-wrapper .entry-date,
+.entry-wrapper .entry-info.with-actions .entry-details-wrapper .entry-description {
+    width: 290px;
+}
+
+.entry-wrapper .entry-info .auctions-details-wrapper .title,
+.entry-wrapper .entry-info .auctions-details-wrapper .entry-date {
+    width:180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.entry-wrapper .entry-info .auctions-details-wrapper .auctions-additional {
+    width:200px;
+    color: #454545;
+}
+
+.entry-wrapper .entry-info .entry-details-wrapper .title,
+.entry-wrapper .entry-info .auctions-details-wrapper .title {
+    color: #000;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.entry-wrapper .entry-info .entry-details-wrapper .title a,
+.entry-wrapper .entry-info .auctions-details-wrapper .title a {
+    text-decoration: none;
+    color: #000;
+}
+
+.entry-wrapper .entry-info .entry-details-wrapper .title a:hover,
+.entry-wrapper .entry-info .auctions-details-wrapper .title a:hover {
+    text-decoration: underline;
+}
+
+.entry-wrapper .entry-info .entry-details-wrapper .entry-date,
+.entry-wrapper .entry-info .auctions-details-wrapper .entry-date {
+    font-weight: bold;
+    color: #2c8ed9;    
+}
+
+.entry-wrapper .entry-info .entry-details-wrapper .entry-date .event-date{
+    min-width: 125px;
+}
+
+.entry-wrapper .entry-info .entry-details-wrapper .entry-date .delimeter {
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.entry-wrapper .entry-info .entry-details-wrapper .entry-description {
+    color: #333;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.account-featured-table .entry-info .entry-details-wrapper .title {
+    white-space: normal;
+    width: 120px;
+    text-align: left;
+}
+
+.account-featured-table {
+    border-collapse: collapse;
+}
+
+.account-featured-table th,
+.account-featured-table td {
+    text-align: center;
+    border-bottom: 1px solid #CCCCCC;
+    padding: 10px;
+}
+
+.account-featured-table th {
+    background: linear-gradient(to bottom, #FAFAFA 0%, #EAEAEA 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+
+.account-featured-table td {
+    background: none repeat scroll 0 0 #F4F4F4;
+}
+
+.account-featured-table td.no-padding {
+    padding: 0;
+}
+
+.entry-info {
+    position: relative;
+}
+
+.entry-info .entry-img-prev{
+    background: #fff;
+    border: 1px solid #ddd;
+}
+
+.tickets-popup {
+    display: none;
+}
+
+.main-content-wrapper h1 {
+    text-align: left;
+}
+
+.auctions-actions .fb-like {
+    position: relative;
+    top:3px;
+}
+
+.modal-choice-window {
+    min-width: 200px;
+    width: auto;
+    padding: 5px;
+    overflow: visible;
+}
+
+.modal-choice-window .row {
+    line-height: 25px;
+    white-space: nowrap;
+}
+
+.modal-choice-window .title {
+    font-weight: bold;
+}
+
+.modal-choice-window .btn {
+    text-align: center;
+    padding-top: 10px;
+}
+
+.modal-choice-window input {
+    width: auto;
+    height: auto;
+    opacity: 1;
+    position: relative;
+}

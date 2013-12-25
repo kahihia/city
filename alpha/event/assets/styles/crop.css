@@ -1,0 +1,163 @@
+.full-screen-popup {    
+    position:relative;
+    width:800px;
+    height:500px;    
+    display:none;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding:20px;    
+    padding-bottom:50px;
+}
+
+.jcrop-holder {
+    border:1px solid #ccc;
+}
+
+.full-screen-popup.show {
+    display:block;
+}
+.full-screen-popup .save-button {
+    font-size: 1.3em;
+    padding: 5px 10px;
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+    background: #EFEFEF;
+    border: 1px solid #E6E6E6;    
+    cursor: pointer;
+}
+
+.full-screen-popup .cancel-button {
+    font-size: 1.3em;
+    padding: 5px 10px;
+    position: absolute;
+    right: 130px;
+    bottom: 5px;
+    background: #EFEFEF;
+    border: 1px solid #E6E6E6;    
+    cursor: pointer;
+}
+
+.jcrop-holder {
+    margin:0 auto;
+    vertical-align:middle;    
+}
+
+.size-warning>div>div{
+    border:1px solid red;
+
+}
+
+.picture-thumb{
+    width:180px;
+    height:180px;
+    border:1px solid #e3e3e3;
+    overflow:hidden;
+    margin-left:10px;
+    margin-top:10px;
+    cursor: pointer;
+    display:none;
+}
+
+.picture-thumb.result{
+    display:block;
+}
+
+.wheelchair-td ul {
+    display:inline-block;  
+    padding-left:0;  
+}
+
+.wheelchair-td li{
+    list-style: none;    
+    display:inline-block;
+
+}
+
+#id_price_free {
+    margin-left:10px;    
+}
+
+.price-td {
+    position:relative;
+}
+
+.price-td .checkbox {
+    position: relative;
+    display: inline-block;
+    height: 25px;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: whiteSmoke;
+    border: 1px solid #EEE;
+    margin-left: 10px;
+    padding-top: 4px;
+    padding-left: 6px;
+    width: 60px;
+    z-index:1;
+}
+
+.balloon+.balloon-content {
+    display:none;
+}
+
+.my-balloon {
+    width:250px;
+}
+
+.hintbox{ /*CSS for pop up hint box */
+    position: absolute;
+    background-color: #f7f7f7;
+    width: 230px; /*Default width of hint.*/ 
+    border:1px solid #d6d6d6;
+    font-size: 11px;
+    font-weight:normal;
+    line-height:14px;
+    z-index:100;
+    visibility: hidden;
+    color:#454545;
+}
+    
+.hintanchor{ /*CSS for link that shows hint onmouseover*/
+    font-weight: bold;
+    color: #000000;
+    margin: 3px 8px;
+}
+
+.hintbox h3{
+    background-color:#e3e3e3;
+    height:19px;
+    padding: 5px 0 0 10px;
+}
+
+.hintbox p{
+    padding: 5px 10px 10px 10px;
+}
+
+.qq-upload-indicator-block {
+    display: inline-block;
+    padding-left: 5px;
+}
+
+.qq-upload-indicator-block.inv {
+    display: none;
+}
+
+.qq-upload-indicator-block img {
+    vertical-align: middle;
+}
+
+.qq-uploading-cancel {
+    margin-left: 5px;
+    color: #454545;
+    text-decoration: underline;
+}
+
+.qq-uploading-cancel:hover {
+    color: #454545;
+    text-decoration: none;
+}

@@ -1,0 +1,157 @@
+.search-pad-popup {
+    display: none;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 12;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.search-pad-popup-content {
+    position: relative;
+    width: 990px;
+    padding: 10px;
+    min-height: 612px;
+    border: 4px solid #c6c6c6;
+    background: #fdfcfc;
+    margin: 0 auto;
+    margin-top: 120px;
+}
+
+.search-pad-menu, .search-pad-content, .search-pad-advertising {
+    float: left;
+}
+
+.search-pad-menu .categories_pos_bottom {
+    height: 230px;
+}
+
+.search-pad-advertising {
+    position: absolute;
+    right: 10px;
+}
+
+.search-pad-popup .main-navigation-nav-wrapper ul.categories li {
+    margin-bottom: 2px;
+}
+
+.search-pad-popup .main-navigation-nav-wrapper ul.categories li.subcat {
+    margin-top: 6px;
+}
+
+.search-pad-content {
+    position: relative;
+    width: 478px;
+}
+
+.search-pad-content .entry-navigation-np {
+    bottom: 0;
+    color: #949697;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
+.search-pad-content .entry-navigation-np {
+    padding: 0;
+}
+
+.search-pad-popup .loader {
+    vertical-align: middle;
+    text-align: center;
+    min-height: 620px;
+    width: 1024px;
+}
+
+.search-pad-popup .loader img {
+    vertical-align: middle;
+    margin-top: 230px;
+}
+
+.search-pad-popup .main-navigation-nav-wrapper {
+    padding: 0;
+}
+
+.search-pad-content-wrapper {
+    min-height: 588px;
+    height: 100%;
+    float: left;
+
+    margin-right: 10px;
+    padding-left: 15px;
+    padding-top: 20px;
+    padding-right: 5px;
+    border: 1px solid #e3e3e3;
+}
+
+.fancybox-skin {
+    background: #fff;
+}
+
+#ui-datepicker-div {
+    z-index:8031 !important;
+}
+
+.search-pad-popup .searchpad-event-details {
+    margin-top: 15px;
+    padding: 0 15px;
+}
+
+.search-pad-popup .searchpad-event-details header {
+    padding-bottom: 6px;
+}
+
+.search-pad-popup .searchpad-event-details header a {
+    color: #022e52;    
+    font-size: 20px;
+}
+
+.searchpad-event-wrapper .description {
+    position: relative;
+    border: 1px solid #c6c6c6;
+    padding: 3px 13px;
+    color: #000000;
+    margin-top: 7px;
+    overflow: hidden;
+    max-height: 175px;        
+}
+
+.searchpad-event-wrapper .description .read-more {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    text-align: left;
+    padding: 10px 13px;
+    padding-top: 50px;
+    background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 61%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(61%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 61%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 61%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 61%,rgba(255,255,255,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 61%,rgba(255,255,255,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
+
+.search-pad-popup .searchpad-event-description {
+    height: 190px;
+    overflow: auto;
+    padding-right: 5px;
+}
+
+.search-pad-popup .searchpad-event-details .event-details {
+    margin-left: 10px;
+    width: 265px;
+
+}
+
+.search-pad-popup .searchpad-event-details .event-details .event-date-wrapper,
+.search-pad-popup .searchpad-event-details .event-details .event-description {
+    margin-left: 0;
+}
+
+.search-pad-popup .content-wrapper {
+    margin-top: 0;
+    min-height: 612px;
+}

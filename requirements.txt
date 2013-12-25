@@ -29,5 +29,6 @@ django-configurations==0.3
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django_toolbar
 wadofstuff-django-serializers==1.1.0
 
-django-mptt
 poster==0.8.1
+
+cssmin

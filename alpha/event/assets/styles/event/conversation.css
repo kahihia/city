@@ -1,0 +1,21 @@
+.event-conversation .fb-comments{
+    margin-top: 12px;
+    margin-bottom: 12px;    
+}
+
+.event-conversation .fb_iframe_widget {
+    margin-left: 30px;
+}
+
+header.event-conversation-header {
+    font-size: 14px;
+    
+    background: #eaeaea;
+    color: #454545;
+    height: 35px;
+    line-height: 35px;
+    white-space: nowrap;
+    padding: 0 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

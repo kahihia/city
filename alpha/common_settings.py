@@ -175,9 +175,10 @@ INSTALLED_APPS = (
     'ckeditor',
     'cityfusion_admin',
     'notices',
-    'venues'
-    # 'mptt',
-    # 'elfinder'
+    'venues',
+    'gears',
+    'django_gears'
+    # 'sprockets'
     # 'debug_toolbar',
 )
 
@@ -378,3 +379,17 @@ SERIALIZATION_MODULES = {
 }
 
 ADVERTISING_TYPE_CPC_ON = False
+
+GEARS_ROOT = os.path.join(BASE_PATH, 'static')
+
+GEARS_DIRS = (
+    os.path.join(BASE_PATH, 'assets'),
+)
+
+GEARS_COMPRESSORS = {
+    'text/css': 'gears.compressors.CSSMinCompressor',
+    'application/javascript': 'gears_uglifyjs.UglifyJSCompressor'
+}
+
+GEARS_DEBUG = True
+

@@ -1,0 +1,142 @@
+.content.page {
+    min-height: 455px;
+}
+
+.inner-content {
+	padding: 20px 18px;
+    color: #000000;
+}
+
+.inner-content .indent-block {
+    padding-left: 16px;
+}
+
+.inner-content .indent-block .button {
+    display: inline-block;
+}
+
+.entries-list {
+	list-style: none;
+	padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.entries-list li {
+	background: url('images/entry-arrow.png') left 5px no-repeat;
+	padding-left: 16px;
+}
+
+.list-entry-title {
+	font-size: 14px;
+	color: #022e52;
+	font-weight: bold;
+    cursor: pointer;
+    line-height: 20px;
+}
+
+.list-entry-text {
+	padding: 13px 0 20px 0;
+    display: none;
+}
+
+.list-entry-text ul li {
+    list-style: disc;
+    padding: 2px 0;
+}
+
+.num-entries-list li .list-entry-text {
+    color: #000000;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.list-entry-text.first {
+    display: block;
+}
+
+.num-entries-list {
+    padding: 0;
+    margin: 0 0 20px 18px;
+}
+
+.num-entries-list > li {
+    color: #247cc3;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.button-grey {
+	display: inline-block;
+	height: 34px;
+	line-height: 34px;
+	background: url('images/button-gradient.png') left top repeat-x;
+	border-radius: 7px;
+	border: 1px solid #ebebeb;
+	cursor: pointer;
+	color: #454545;
+	font-weight: bold;
+	font-size: 14px;
+	padding: 0 20px;
+}
+
+p.non-top {
+    margin-top: 0;
+}
+
+/* Advertising --begin-- */
+
+.advertising-item {
+    width: 313px;
+    float: left;
+    background: #ffffff;
+    border: 1px solid #d1d1d1;
+    padding: 11px;
+}
+
+.advertising-item_margin_yes {
+    margin-left: 10px;
+}
+
+.advertising-item__inner {
+    border: 1px solid #767778;
+    padding: 0 18px 76px 22px;
+    position: relative;
+    height: 518px;
+}
+
+.advertising-item__title {
+    color: #022e52;
+    font-size: 17px;
+    margin: 16px 0 18px;
+}
+
+.advertising-item__description {
+    color: #030303;
+    font-size: 12px;
+    padding-top: 18px;
+    text-align: justify;
+}
+
+.advertising-item__buttons {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 76px;
+    text-align: right;
+    padding-right: 18px;
+}
+
+.advertising-item__button {
+    width: 118px;
+    height: 26px;
+    line-height: 26px;
+    background: #0260bb;
+    display: inline-block;
+    text-align: center;
+    text-transform: uppercase;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Advertising --end-- */

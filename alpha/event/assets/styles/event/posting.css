@@ -1,0 +1,242 @@
+.event-posting {
+    float: left;
+    width: 595px;
+    margin-left: 30px;
+    border: 1px solid #b9b8b8;
+    background: #fff;
+}
+
+.event-posting h1 {    
+    height: 35px;
+    line-height: 35px;
+    background: #8c8a8a;
+    color: #fff;
+    text-transform: uppercase;
+    padding-left: 20px;
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.event-posting-form {
+    margin: 25px 94px;
+}
+
+.event-posting-form header {
+    color: #022e52;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.event-posting-form .event-posting-field {
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.event-posting-form .event-posting-field input {
+    width: 395px;
+    border: 1px solid #c7c6c6;
+}
+
+.event-posting-form .event-posting-field .location {
+    width: 395px;
+}
+
+.event-posting-form .event-posting-price header{
+    float: left;
+    width: 70px;
+}
+
+.event-posting-form .event-posting-price {
+    height: 44px;
+    line-height: 26px;
+    vertical-align: middle;
+    margin-bottom: 1px;
+}
+
+.event-posting-form .event-posting-price .free-checkbox {
+    float: left;
+    text-align: center;
+    text-transform: uppercase;
+    color: #8c8a8a;
+    width: 168px;
+    height: 26px;
+    background: #ededed;
+    border: 1px solid #c7c6c6;
+    border-right: none;
+}
+
+.event-posting-form .event-posting-price .price-input {
+    float: left;
+}
+
+.event-posting-form .event-posting-price .price-input input {
+    margin: 0;
+    border: 1px solid #c7c6c6;
+    width: 156px;
+    text-align: right;
+}
+
+.event-posting-form .dropdown {
+    width: 385px;
+    height: 26px;
+    line-height: 26px;
+    border: 1px solid #c7c6c6;
+}
+
+.venue-account-owner-dropdown {
+    font-size: 13px;
+}
+
+.event-posting-form .dropdown:after {
+    top: 3px;
+}
+
+.event-posting-form .event-posting-description .richeditor {
+    margin-top: 7px;
+    
+}
+
+.event-posting-form .event-posting-description .label {    
+    float: left;
+    text-align: center;
+    text-transform: uppercase;
+    color: #8c8a8a;
+    width: 193px;
+    height: 26px;
+    line-height: 26px;
+    background: #ededed;
+    border: 1px solid #c7c6c6;
+    border-right: none;
+}
+
+.event-posting-form .event-posting-description .dropdown {
+    width: 191px;
+}
+
+.description-dropdown-list {
+    width: 211px;
+    border: 1px solid #b9b8b8;
+    border-top: 1px;
+}
+
+.description-dropdown-list .dropdown-child {
+    height: 15px;
+    padding: 10px;
+}
+
+.venue-account-owner-dropdown .dropdown-label {
+    color: #000;
+
+}
+
+.venue-account-owner-dropdown-list {
+    width: 405px;
+    border: 1px solid #b9b8b8;
+    border-top: 1px;
+}
+
+
+.venue-account-owner-dropdown-list .dropdown-child {
+    height: 15px;
+    padding: 10px;
+}
+
+.boolean-tags header {
+    float: left;
+    width: 200px;
+    height: 26px;
+    vertical-align: middle;
+}
+
+.boolean-tags header.single {
+    padding-top: 5px;
+}
+
+.boolean-tags {
+    height: 40px;
+    vertical-align: middle;
+}
+
+.boolean-tags .event-posting-field {
+    float: right;
+    text-align: center;
+    text-transform: uppercase;
+    color: #8c8a8a;
+    width: 140px;
+    height: 26px;
+    line-height: 24px;
+    background: #d9dad9;
+    border: 1px solid #c7c6c6;
+}
+
+.boolean-tags .event-posting-field ul {
+    margin: 0;
+    padding: 0;
+}
+
+.boolean-tags .event-posting-field li {
+    list-style: none;
+    display: inline-block;
+}
+
+.tags-counter-container {
+    color: #8c8a8a;
+    text-transform: none;
+    font-weight: normal;
+}
+
+.submit-wrapper {
+    width: 100%;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.event-posting-tips {
+    float: left;
+    width: 314px;
+    margin-left: 18px;
+    border: 1px solid #f0f0f0;
+    background: #022e52;
+    color: #fff;
+    padding-bottom: 25px;
+}
+
+.event-posting-tips h1 {    
+    height: 35px;
+    line-height: 35px;
+    background: #fff;
+    color: #696666;
+    text-transform: uppercase;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.event-posting-tips .tip {
+    padding: 25px;
+    padding-bottom: 0;
+
+}
+
+.event-posting-tips .tip header{
+    font-weight: bold;
+}
+
+.event-posting-tips .tip p {
+    color: #fff;
+    margin: 0;
+}
+
+.event-posting-form__text-field input {
+    outline: 0;
+    color: #454545;
+    background: #fff;
+    border: 1px solid #ababab;
+    padding: 0 5px;
+    height: 26px;
+    line-height: 26px;
+}

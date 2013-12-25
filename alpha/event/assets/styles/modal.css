@@ -1,0 +1,56 @@
+.modal-bg {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:2;
+    background:rgba(0,0,0,0.4);
+    display:none;    
+}
+
+.modal {
+    position:fixed;
+    top:25%;
+    left:25%;    
+    z-index:3;   
+    border:3px solid #ccc; 
+}
+
+@media all and (max-height: 650px) {
+    .modal {
+        position:absolute;
+        top:5%;
+        left:25%;    
+        z-index:3;   
+        border:3px solid #ccc; 
+    }  
+}
+
+.balloon {
+    float:right;    
+    position:relative;
+    top:-3px;
+}
+
+.popup-form-wrapper .balloon {
+    display: none;
+}
+
+.balloon.inline {
+    float: none;
+    display: inline-block;
+    vertical-align: middle;
+    top: 0;
+}
+
+.balloon.wheelchair {
+    float:none;
+    display:inline-block;
+    position:relative;
+    top:10px;
+}
+
+.popup-form-wrapper .event-form-errors {
+    display: none;
+}
