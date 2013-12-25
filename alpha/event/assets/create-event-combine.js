@@ -11,7 +11,7 @@
 //= require js/jquery.ui.timepicker
 //= require js/jquery.mtz.monthpicker
 
-    /* Start when widget */
+/* Start when widget */
 //= require js/create_event/when/multiday-event
 //= require js/create_event/when/new-month-picker
 //= require js/create_event/when/timespicker

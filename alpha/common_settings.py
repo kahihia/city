@@ -390,6 +390,3 @@ GEARS_COMPRESSORS = {
     'text/css': 'gears.compressors.CSSMinCompressor',
     'application/javascript': 'gears_uglifyjs.UglifyJSCompressor'
 }
-
-GEARS_DEBUG = True
-
