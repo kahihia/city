@@ -3,15 +3,15 @@ import djcelery
 djcelery.setup_loader()
 # Django settings for alpha project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['localhost', 'dev.cityfusion.ca', 'www.cityfusion.ca', 'cityfusion.ca']
 
 ADMINS = (
     ('jaromudr', 'jaromudr@gmail.com'),
-    ('tim', 'tim@cityfusion.ca'),
-    ('igor', 'info@silkcode.com'),
+    # ('tim', 'tim@cityfusion.ca'),
+    # ('igor', 'info@silkcode.com'),
 )
 
 MANAGERS = ADMINS

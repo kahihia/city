@@ -14,20 +14,6 @@ def dev():
     env.password = "123forfusion"
     env.branch = "master"
 
-def redesign():
-    env.hosts = ['root@dev.cityfusion.ca']
-    env.project_folder = '/root/cityfusion_redesign'
-    env.alpha_folder = '/root/cityfusion_redesign/alpha'
-    env.password = "123forfusion"
-    env.branch = "redesign"
-
-def free_try():
-    env.hosts = ['root@dev.cityfusion.ca']
-    env.project_folder = '/root/cityfusion_git'
-    env.alpha_folder = '/root/cityfusion_git/alpha'
-    env.password = "123forfusion"
-    env.branch = "free_try"
-
 def prod():
     env.hosts = ['root@cityfusion.ca']
     env.project_folder = '/root/cityfusion_git'
@@ -48,6 +34,7 @@ def upgrade():
         run("git pull origin %s" % env.branch)        
 
     with cd(env.alpha_folder):
+        run("python manage.py collecassets")
         run("python manage.py collectstatic --noinput")
         run("supervisorctl reload")
 
