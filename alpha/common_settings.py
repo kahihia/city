@@ -3,15 +3,15 @@ import djcelery
 djcelery.setup_loader()
 # Django settings for alpha project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['localhost', 'dev.cityfusion.ca', 'www.cityfusion.ca', 'cityfusion.ca']
 
 ADMINS = (
     ('jaromudr', 'jaromudr@gmail.com'),
-    ('tim', 'tim@cityfusion.ca'),
-    ('igor', 'info@silkcode.com'),
+    # ('tim', 'tim@cityfusion.ca'),
+    # ('igor', 'info@silkcode.com'),
 )
 
 MANAGERS = ADMINS
@@ -175,9 +175,10 @@ INSTALLED_APPS = (
     'ckeditor',
     'cityfusion_admin',
     'notices',
-    'venues'
-    # 'mptt',
-    # 'elfinder'
+    'venues',
+    'gears',
+    'django_gears'
+    # 'sprockets'
     # 'debug_toolbar',
 )
 
@@ -378,3 +379,23 @@ SERIALIZATION_MODULES = {
 }
 
 ADVERTISING_TYPE_CPC_ON = False
+
+GEARS_ROOT = os.path.join(BASE_PATH, 'static')
+
+GEARS_DIRS = (
+    os.path.join(BASE_PATH, 'assets'),
+)
+
+GEARS_COMPRESSORS = {
+    'text/css': 'gears.compressors.CSSMinCompressor',
+    'application/javascript': 'gears_uglifyjs.UglifyJSCompressor'
+}
+
+GEARS_DEBUG = True
+
+GEARS_PUBLIC_ASSETS = (
+    lambda path: True,
+    # lambda path: not any(path.endswith(ext) for ext in ('.css', '.js')),
+    # r'^.*combine\.css$',
+    # r'^.*combine\.js$',
+)
