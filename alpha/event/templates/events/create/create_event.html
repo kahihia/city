@@ -2,22 +2,16 @@
 {% load cropping %}
 {% load selectable_tags %}
 {% load advertising_tags %}
+{% load gears %}
 
 {% block head %}
-    <link href="{{STATIC_URL}}styles/event/posting.css" rel="stylesheet" type="text/css" />
     {% include_ui_theme 'ui-lightness' %}
-    <link href="{{STATIC_URL}}styles/datepicker.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/when.css" rel="stylesheet" type="text/css" />
-
-    <link href="{{STATIC_URL}}styles/place_autocomplete.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/autoSuggest.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/description.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/tagspopup.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/suggest.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/modal.css" rel="stylesheet" type="text/css" />
+    
     <link href="{{STATIC_URL}}ajaxuploader/css/fileuploader.css" rel="stylesheet" type="text/css" />
     <link href="{{STATIC_URL}}image_cropping/css/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/crop.css" rel="stylesheet" type="text/css" />
+
+    {% css_asset_tag 'create-event-combine.css' %}
+    
 
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
     
@@ -29,29 +23,9 @@
     </script>
 
     <script src="{{STATIC_URL}}selectable/js/jquery.dj.selectable.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/location/jquery.geocomplete.js"></script>
-    <script src="{{STATIC_URL}}js/location/suggest_map.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/location/suggest_cityfusion_venue.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/location/suggest_form.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/location/venue_autocomplete.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}ckeditor/ckeditor/ckeditor.js" type="text/javascript"></script>    
-    <script src="{{STATIC_URL}}js/create_event/description.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/create_event/price.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/create_event/boolean_tags.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/create_event/tags-widget.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}ckeditor/ckeditor/ckeditor.js" type="text/javascript"></script>
+    {% js_asset_tag 'create-event-combine.js' %}
 
-    <script src="{{STATIC_URL}}js/jquery-ui.multidatespicker.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/jquery.ui.timepicker.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/jquery.mtz.monthpicker.js" type="text/javascript"></script>
-
-    <!-- Start when widget -->
-    <script src="{{STATIC_URL}}js/create_event/when/multiday-event.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/create_event/when/new-month-picker.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/create_event/when/timespicker.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/create_event/when/dayspicker.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/create_event/when/when.js" type="text/javascript"></script>    
-
-    <script src="{{STATIC_URL}}js/create_event/create_event_page.js" type="text/javascript"></script>
 {% endblock %}
 
  {% block body_attributes %}class="old"{% endblock %}

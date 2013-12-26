@@ -1,9 +1,7 @@
+{% load gears %}
+
 {% block menuhead %}
-    <script src="{{STATIC_URL}}js/event/purl.js" type="text/javascript"></script>    
-    <script src="{{STATIC_URL}}js/event/query_filters.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/event/search_by_location.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/event/full_text_search.js" type="text/javascript"></script>
-    <script src="{{STATIC_URL}}js/event/search.js" type="text/javascript"></script>
+    {% js_asset_tag 'main-navigation-combine.js' %}    
 {% endblock %}
 
 <div class="menu-wrapper" data-no-turbolink>

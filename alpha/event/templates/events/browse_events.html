@@ -2,13 +2,11 @@
 {% load date_formatting %}
 {% load cropping %}
 {% load advertising_tags %}
+{% load gears %}
 
 {% block head %}
 
-    <link href="{{STATIC_URL}}styles/widgets.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/browse/browse.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/browse/browse_event_list.css" rel="stylesheet" type="text/css" />
-    <link href="{{STATIC_URL}}styles/browse/featured_events.css" rel="stylesheet" type="text/css" />
+    {% css_asset_tag 'browse-events-combine.css' %}
 
     <script type="text/javascript" src="{{STATIC_URL}}turbolinks/turbolinks.js"></script>
 
