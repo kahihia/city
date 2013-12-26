@@ -37,7 +37,7 @@ class HexdigestPathsProcessor(BaseProcessor):
     def rewrite_path(self, path):
         logical_path = os.path.normpath(os.path.join(self.current_dir, path))
         try:
-            asset = build_asset(self.environment, logical_path.replace("/static/", ""))
+            asset = build_asset(self.environment, logical_path)
         except FileNotFound:
             return path
         self.asset.dependencies.add(asset.absolute_path)
@@ -46,3 +46,14 @@ class HexdigestPathsProcessor(BaseProcessor):
             return relpath.encode('string-escape')
         elif is_py3:
             return relpath.encode('unicode-escape').decode()
+
+
+class HexdigestPathsCityfusionProcessor(HexdigestPathsProcessor):
+    def rewrite_path(self, path):
+        logical_path = os.path.normpath(os.path.join(self.current_dir, path))
+        try:
+            asset = build_asset(self.environment, logical_path.replace("/static/", ""))
+        except FileNotFound:
+            return path
+        self.asset.dependencies.add(asset.absolute_path)
+        return u"%s/%s" % ("/static/", asset.hexdigest_path)

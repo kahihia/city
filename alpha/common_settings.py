@@ -391,6 +391,10 @@ GEARS_COMPRESSORS = {
     'application/javascript': 'gears_uglifyjs.UglifyJSCompressor'
 }
 
+GEARS_POSTPROCESSORS = {
+    'text/css': 'gears.processors.HexdigestPathsCityfusionProcessor',
+}
+
 GEARS_DEBUG = True
 
 GEARS_PUBLIC_ASSETS = (
