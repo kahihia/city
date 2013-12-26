@@ -1,0 +1,53 @@
+#ui-timepicker-div {
+    z-index: 100000 !important;
+    margin-top: 3px;
+}
+
+.ui-timepicker-title{
+    text-align:center;
+}
+
+#ui-timepicker-div .ui-state-default{
+    background:none;
+    cursor:pointer;
+    position: relative;
+}
+
+#ui-timepicker-div .periods-table {
+    float:left;
+}
+#ui-timepicker-div .periods-table td {
+    padding-left:10px;
+}
+
+#ui-timepicker-div .periods {
+    cursor: pointer;
+    color: #222;
+    font-weight: bold;
+}
+#ui-timepicker-div .periods.active {
+    color: #1C94C4;
+}
+
+.ui-timepicker-minutes {
+    width: 60px;
+    text-align: center;
+}
+
+.ui-timepicker-minutes .ui-timepicker{
+    margin:0 auto;
+}
+
+.ui-timepicker-hours .ui-timepicker {
+    float: left;
+    padding-left: 10px;
+    padding-right: 5px;    
+}
+
+.ui-timepicker-hours .ui-timepicker-title{
+    margin-left:40px;
+}
+
+#ui-timepicker-div .ui-state-active {
+    color: #1C94C4;
+}
