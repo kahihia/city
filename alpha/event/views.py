@@ -2,7 +2,7 @@ import datetime
 import json
 import utils
 
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, resolve, Resolver404
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
@@ -14,20 +14,20 @@ from django.forms.util import ErrorList
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET
 
-from taggit.models import Tag, TaggedItem
-from django_facebook.decorators import facebook_required
-
 from cities.models import City, Country, Region
+from django_facebook.decorators import facebook_required
+from taggit.models import Tag, TaggedItem
+from moneyed import CAD
+
+from accounts.decorators import native_region_required
+from accounts.models import Account, VenueAccount
+from ajaxuploader.views import AjaxFileUploader
 from event.filters import EventFilter
 from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
 from event.services import facebook_services, location_service, event_service, featured_service
 from event.forms import CreateEventForm, EditEventForm, SetupFeaturedForm
-
-from ajaxuploader.views import AjaxFileUploader
-from accounts.decorators import native_region_required
-from accounts.models import Account, VenueAccount
 from event.payments.processors import process_setup_featured
-from moneyed import CAD
+
 
 def start(request):
     csrf_token = get_token(request)
@@ -392,6 +392,10 @@ def remove(request, authentication_key):
     event.delete()
 
     url = request.META.get('HTTP_REFERER', reverse('event_browse'))
+    try:
+        resolve(url)
+    except Resolver404:
+        url = reverse('event_browse')
 
     return HttpResponseRedirect(url)
 
