@@ -394,7 +394,8 @@ GEARS_COMPRESSORS = {
 GEARS_DEBUG = True
 
 GEARS_PUBLIC_ASSETS = (
-    lambda path: not any(path.endswith(ext) for ext in ('.css', '.js')),
-    r'^.*combine\.css$',
-    r'^.*combine\.js$'
+    lambda path: True,
+    # lambda path: not any(path.endswith(ext) for ext in ('.css', '.js')),
+    # r'^.*combine\.css$',
+    # r'^.*combine\.js$',
 )
