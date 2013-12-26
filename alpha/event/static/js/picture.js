@@ -75,7 +75,7 @@
                 element: this.element[0],
                 multiple: false,
                 allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
-                sizeLimit: 33554432,
+                sizeLimit: 2097152,
                 onComplete: function(id, fileName, responseJSON) {
                     $(that.indicatorBlockSelector).addClass("inv");
                     if(responseJSON.success) {
