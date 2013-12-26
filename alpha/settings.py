@@ -35,3 +35,6 @@ elif host_ip == '192.81.133.213':
             'email': 'ray@cityfusion.ca',
         }
     }
+
+    DEBUG = False
+    GEARS_DEBUG = False

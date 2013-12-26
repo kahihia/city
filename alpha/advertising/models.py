@@ -29,7 +29,7 @@ class AdvertisingType(models.Model):
     objects = money_manager(models.Manager())
 
     def __unicode__(self):
-        return "%s(%d x %d)" % (self.name, self.width, self.height)
+        return "%s (%d x %d)" % (self.name, self.width, self.height)
 
 
 class AdminAdvertisingCampaignManager(models.Manager):
