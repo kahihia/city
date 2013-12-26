@@ -29,6 +29,10 @@
                     Advertising - setup
                 </div>
                 <div class="advertising-form__details-content">
+                    <div class="advertising-form__ad-sizes-preview">
+                        <img src="{{ STATIC_URL }}images/ad_banner_sizes.png" alt="" />
+                        <div class="advertising-form__ad-sizes-pointer"></div>
+                    </div>
                     {%if form.errors %}
                         <div class="errors" style="border:1px solid RED;border-radius:4px;">
                             <ul style="list-style-type: none;">

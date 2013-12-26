@@ -154,11 +154,17 @@ class FunctionFilter(Filter):
             ).order_by('-event__featuredevent__start_time', 'start_time')
 
     def reminder_filter(self, qs):
-        return qs.filter(id__in=self.account.reminder_single_events_in_future().values("id"))
+        if self.account:
+            return qs.filter(id__in=self.account.reminder_single_events_in_future().values("id"))
+        else:
+            return qs
 
     def in_the_loop_filter(self, qs):
-        ids = self.account.in_the_loop_events().values_list("event_id", flat=True)
-        return qs.filter(event_id__in=ids)
+        if self.account:
+            ids = self.account.in_the_loop_events().values_list("event_id", flat=True)
+            return qs.filter(event_id__in=ids)
+        else:
+            return qs
 
     def all_filter(self, qs):
         return qs
