@@ -3,7 +3,7 @@ import djcelery
 djcelery.setup_loader()
 # Django settings for alpha project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['localhost', 'dev.cityfusion.ca', 'www.cityfusion.ca', 'cityfusion.ca']
@@ -391,7 +391,7 @@ GEARS_COMPRESSORS = {
     'application/javascript': 'gears_uglifyjs.UglifyJSCompressor'
 }
 
-GEARS_DEBUG = False
+GEARS_DEBUG = True
 
 GEARS_PUBLIC_ASSETS = (
     lambda path: not any(path.endswith(ext) for ext in ('.css', '.js')),
