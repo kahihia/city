@@ -390,3 +390,11 @@ GEARS_COMPRESSORS = {
     'text/css': 'gears.compressors.CSSMinCompressor',
     'application/javascript': 'gears_uglifyjs.UglifyJSCompressor'
 }
+
+GEARS_DEBUG = False
+
+GEARS_PUBLIC_ASSETS = (
+    lambda path: not any(path.endswith(ext) for ext in ('.css', '.js')),
+    r'^.*combine\.css$',
+    r'^.*combine\.js$'
+)

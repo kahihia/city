@@ -23,7 +23,7 @@ DEFAULT_PREPROCESSORS = {
 }
 
 DEFAULT_POSTPROCESSORS = {
-    # 'text/css': 'gears.processors.HexdigestPathsProcessor',
+    'text/css': 'gears.processors.HexdigestPathsProcessor',
 }
 
 GEARS_DEBUG = getattr(settings, 'GEARS_DEBUG', settings.DEBUG)

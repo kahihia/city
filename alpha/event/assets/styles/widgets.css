@@ -216,7 +216,7 @@ input[type=submit]:hover {
 #images-uploader .qq-upload-button:hover,
 #attachments-uploader .qq-upload-button:hover,
 #file-uploader .qq-upload-button:hover {
-  /*background-image: url("/images/ie9_button_hovered.svg");*/
+  /*background-image: url("/static/images/ie9_button_hovered.svg");*/
   background: -webkit-gradient(linear, center top, center bottom, color-stop(0.05, #f6f6f6), color-stop(1, #fff));
   background: -webkit-linear-gradient(center top, #f6f6f6 5%, #fff 100%);
   background: -moz-linear-gradient(center top, #f6f6f6 5%, #fff 100%);
