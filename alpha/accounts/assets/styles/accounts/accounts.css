@@ -584,15 +584,15 @@
 } 
 
 .account-entry-wrapper .event-edit-actions .edit-action {
-    background: url("../../images/prof_event_edit_icon.png") left center no-repeat;
+    background: url("/static/images/prof_event_edit_icon.png") left center no-repeat;
 }
 
 .account-entry-wrapper .event-edit-actions .delete-action {
-    background: url("../../images/prof_event_delete_icon.png") left center no-repeat;
+    background: url("/static/images/prof_event_delete_icon.png") left center no-repeat;
 }
 
 .account-entry-wrapper .event-edit-actions .make-featured-action {
-    background: url("../../images/prof_event_feature_icon.png") left center no-repeat;
+    background: url("/static/images/prof_event_feature_icon.png") left center no-repeat;
 }
 
 .event-edit-actions__item {
@@ -639,7 +639,7 @@
 .per-page-dropdown:after {
     top: 2px;
     right: 1px;
-    background: url("../../images/widgets/dropdown-small.png") no-repeat;
+    background: url("/static/images/widgets/dropdown-small.png") no-repeat;
     width: 15px;
     height: 14px;
 }
@@ -658,7 +658,7 @@
 
 .new-venue-button, .my-settings {
     display: block;
-    background: url("../../images/accounts/new-venue-bg-repeat-y.jpg") repeat-x;
+    background: url("/static/images/accounts/new-venue-bg-repeat-y.jpg") repeat-x;
     border: 1px solid #bebebe;
     font-size: 16px;
     vertical-align: middle;
@@ -842,7 +842,7 @@
     right: -10px;
     width: 22px;
     height: 20px;
-    background: url("../../images/widgets/dropdown.png") no-repeat;
+    background: url("/static/images/widgets/dropdown.png") no-repeat;
     border: none;
 
     padding: 0;
@@ -1011,7 +1011,7 @@
 
 .user-identification:after, .user-password:after {
     content: " ";
-    background: url("../../images/login-icons-sprite.png") no-repeat;
+    background: url("/static/images/login-icons-sprite.png") no-repeat;
     width: 20px;
     height: 20px;
     position: absolute;
@@ -1134,7 +1134,7 @@
 
 .venue-tags {
     margin-top: 10px;
-    background: url("../../images/event/tag-icon.png") 5px 2px no-repeat;
+    background: url("/static/images/event/tag-icon.png") 5px 2px no-repeat;
     padding-left: 30px;
 }
 
@@ -1161,7 +1161,7 @@
 }
 
 .available-owners-dropdown:after {
-    background: url("../../images/widgets/dropdown-small.png");
+    background: url("/static/images/widgets/dropdown-small.png");
     height: 14px;
     right: 1px;
     top: 2px;

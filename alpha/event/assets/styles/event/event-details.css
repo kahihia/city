@@ -77,7 +77,7 @@
     height: 70px;
     left: 90px;
     top: 100px;
-    background: url("../../images/event/loop.png") no-repeat;    
+    background: url("/static/images/event/loop.png") no-repeat;    
 }
 
 .event-wrapper .images-list {
@@ -355,7 +355,7 @@
     padding-left:25px;
     font-size:11px;
     color:#5dacfd;
-    background:url(../../images/tag_icon.png) left no-repeat;
+    background:url(/static/images/tag_icon.png) left no-repeat;
 }
 
 .event-wrapper .tags a {
@@ -666,11 +666,11 @@
 }
 
 .attachments {    
-    background: url("../../images/event/attachment-icon.png") 19px 2px no-repeat #7f7e7e;
+    background: url("/static/images/event/attachment-icon.png") 19px 2px no-repeat #7f7e7e;
 }
 
 .tags {
-    background: url("../../images/event/tag-icon.png") 15px 5px no-repeat #022e52;
+    background: url("/static/images/event/tag-icon.png") 15px 5px no-repeat #022e52;
     color: #ffffff;
 }
 

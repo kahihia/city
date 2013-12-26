@@ -64,7 +64,7 @@ textarea {
     top: 0;
     width: 24px;
     height: 24px;
-    background: url("../images/widgets/dropdown.png") no-repeat;
+    background: url("/static/images/widgets/dropdown.png") no-repeat;
 }
 
 .dropdown select {
@@ -136,14 +136,14 @@ input[type=radio] {
 
 input[type=checkbox] + label {
     position:relative;
-    background: url("../images/widgets/checkbox-bg.png") center center no-repeat;;
+    background: url("/static/images/widgets/checkbox-bg.png") center center no-repeat;;
     width: 16px;
 }
 
 input[type=checkbox]:checked + label:after {
     content: '';
     position: absolute;
-    background: url("../images/widgets/checked.png") center center no-repeat;
+    background: url("/static/images/widgets/checked.png") center center no-repeat;
     top: 5px;
     left: 3px;
     width: 11px;
@@ -156,10 +156,10 @@ input[type=radio] + label {
     vertical-align: middle;
     width: 21px;
     height: 21px;
-    background: url("../images/widgets/radio-bg.png") center center no-repeat;
+    background: url("/static/images/widgets/radio-bg.png") center center no-repeat;
 }
 input[type=radio]:checked + label {
-    background: url("../images/widgets/radio-bg-selected.png") center center no-repeat;
+    background: url("/static/images/widgets/radio-bg-selected.png") center center no-repeat;
 }
 
 body .button, 
@@ -189,7 +189,7 @@ input[type=submit]:hover {
     -webkit-box-shadow: inset 0 1px 0 0 #fff;
     -moz-box-shadow: inset 0 1px 0 0 #fff;
     box-shadow: inset 0 1px 0 0 #fff;
-    background-image: url("../images/widgets/ie9_button.svg");
+    background-image: url("/static/images/widgets/ie9_button.svg");
     background: -webkit-gradient(linear, center top, center bottom, color-stop(0.05, #fff), color-stop(1, #f6f6f6));
     background: -webkit-linear-gradient(center top, #fff 5%, #f6f6f6 100%);
     background: -moz-linear-gradient(center top, #fff 5%, #f6f6f6 100%);
@@ -216,7 +216,7 @@ input[type=submit]:hover {
 #images-uploader .qq-upload-button:hover,
 #attachments-uploader .qq-upload-button:hover,
 #file-uploader .qq-upload-button:hover {
-  /*background-image: url("../images/ie9_button_hovered.svg");*/
+  /*background-image: url("/static/images/ie9_button_hovered.svg");*/
   background: -webkit-gradient(linear, center top, center bottom, color-stop(0.05, #f6f6f6), color-stop(1, #fff));
   background: -webkit-linear-gradient(center top, #f6f6f6 5%, #fff 100%);
   background: -moz-linear-gradient(center top, #f6f6f6 5%, #fff 100%);
@@ -544,7 +544,7 @@ fieldset legend{
     display: inline-block;
     width: 16px;
     height: 16px;
-    background: url("../images/accounts/remove16x16.png") no-repeat;
+    background: url("/static/images/accounts/remove16x16.png") no-repeat;
     cursor: pointer;
     float: right;
 }
@@ -728,7 +728,7 @@ body .event-actions-popup .in-the-loop-popup-content {
     cursor: pointer;
     z-index: 8040 !important;
     background: none;
-    background-image: url('../fancybox/fancybox_sprite.png');
+    background-image: url('/static/fancybox/fancybox_sprite.png');
     background-position: 0 0;
     margin: 0;
     padding: 0;
@@ -747,7 +747,7 @@ body .event-actions-popup .in-the-loop-popup-content {
     height: 36px;
     cursor: pointer;
     z-index: 8040 !important;
-    background-image: url('../fancybox/fancybox_sprite.png') center center no-repeat;
+    background-image: url('/static/fancybox/fancybox_sprite.png') center center no-repeat;
     background-color: transparent;
     background-position: 0 0;
     border: none;

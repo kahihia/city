@@ -77,7 +77,7 @@ a.add-button {
     height: 16px;
     padding-left: 20px;
 
-    background: url("../images/accounts/add16x16.png") no-repeat;
+    background: url("/static/images/accounts/add16x16.png") no-repeat;
 }
 
 .profile-table th a:hover,
@@ -131,19 +131,19 @@ a.add-button {
 }
 
 .profile-table-pagination span.prev {
-    background: url("../images/accounts/prev.png") no-repeat;
+    background: url("/static/images/accounts/prev.png") no-repeat;
 }
 
 .profile-table-pagination a.prev {
-    background: url("../images/accounts/prev-active.png") no-repeat;
+    background: url("/static/images/accounts/prev-active.png") no-repeat;
 }
 
 .profile-table-pagination span.next {
-    background: url("../images/accounts/next.png") no-repeat;
+    background: url("/static/images/accounts/next.png") no-repeat;
 }
 
 .profile-table-pagination a.next {
-    background: url("../images/accounts/next-active.png") no-repeat;
+    background: url("/static/images/accounts/next-active.png") no-repeat;
 }
 
 .venue-accounts-table tr {

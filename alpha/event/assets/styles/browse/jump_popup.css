@@ -103,7 +103,7 @@
 
 .jump-popup .dropdown:after {
     top: 2px;
-    background: url("../../images/widgets/dropdown-medium.png") no-repeat;
+    background: url("/static/images/widgets/dropdown-medium.png") no-repeat;
     width: 19px;
     height: 18px;
 }

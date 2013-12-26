@@ -74,7 +74,7 @@
 {
     width: 284px;
     min-height:60px;
-    background:url(../../images/login-bg.png) no-repeat;
+    background:url(/static/images/login-bg.png) no-repeat;
     float:right;
 }
 
@@ -103,7 +103,7 @@
 
 .login_with_facebook {
     display: inline-block;
-    background: url("../../images/fb-sign-in-with-facebook.png") no-repeat;
+    background: url("/static/images/fb-sign-in-with-facebook.png") no-repeat;
     width: 151px;
     height: 22px;
     margin-left: 15px;
