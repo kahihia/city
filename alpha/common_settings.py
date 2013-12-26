@@ -391,7 +391,7 @@ GEARS_COMPRESSORS = {
     'application/javascript': 'gears_uglifyjs.UglifyJSCompressor'
 }
 
-GEARS_DEBUG = True
+GEARS_DEBUG = False
 
 GEARS_PUBLIC_ASSETS = (
     lambda path: True,
