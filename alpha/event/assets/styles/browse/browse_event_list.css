@@ -129,7 +129,7 @@
 .events-actions-row__action-dropdown:after, .events-actions-row__venue-dropdown:after {
     top: 2px;
     right: 1px;
-    background: url("/static/images/widgets/dropdown-small.png") no-repeat;
+    background: url("../../images/widgets/dropdown-small.png") no-repeat;
     width: 15px;
     height: 14px;
 }

@@ -3,7 +3,7 @@ import djcelery
 djcelery.setup_loader()
 # Django settings for alpha project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['localhost', 'dev.cityfusion.ca', 'www.cityfusion.ca', 'cityfusion.ca']

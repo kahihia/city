@@ -8,7 +8,7 @@
 
 .description-select-day-widget .toggle {
     margin:5px 0px;
-    background: url("/static/images/arrow-down.png") 90% center no-repeat;
+    background: url("../images/arrow-down.png") 90% center no-repeat;
     cursor:pointer;
 }
 
@@ -40,7 +40,7 @@
     text-align:left;
     margin-top:5px;
     border:1px solid #c3c3c3;    
-    background: #fff url("/static/images/arrow-down.png") 95% center no-repeat;
+    background: #fff url("../images/arrow-down.png") 95% center no-repeat;
     background-bottom:0;
     padding-left:3px;
     cursor: pointer;

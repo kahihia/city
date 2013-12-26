@@ -35,7 +35,6 @@ class HexdigestPathsProcessor(BaseProcessor):
             )
 
     def rewrite_path(self, path):
-        path = path.replace("/static/", "")
         logical_path = os.path.normpath(os.path.join(self.current_dir, path))
         try:
             asset = build_asset(self.environment, logical_path)

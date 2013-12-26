@@ -95,7 +95,7 @@
     margin-top:5px;
     display:inline-block;
     float:right;
-    background: url("/static/images/arrow-down.png") center center no-repeat;
+    background: url("../images/arrow-down.png") center center no-repeat;
     cursor: pointer;
 }
 
@@ -237,7 +237,7 @@
     height:16px;
     margin-left:21px;
     margin-top:5px;
-    background:url("/static/styles/images/remove-icon.png") center center no-repeat;
+    background:url("../styles/images/remove-icon.png") center center no-repeat;
     cursor: pointer;
 }
 
@@ -250,13 +250,13 @@
     float:right;
     width:16px;
     height:24px;
-    background:url("/static/styles/images/remove-icon-white.png") center center no-repeat;    
+    background:url("../styles/images/remove-icon-white.png") center center no-repeat;    
     cursor: pointer;
 
 }
 
 .my-time-picker .checkbox.autofill.checked{
-    background: #EAEAEA url("/static/images/checked.png") center center no-repeat;
+    background: #EAEAEA url("../images/checked.png") center center no-repeat;
 }
 
 .multi-select-mode-wrapper span{
@@ -393,5 +393,5 @@
 }
 
 .multiple-day-event .checkbox.white.checked{
-    background: #fff url("/static/images/checked.png") center center no-repeat;
+    background: #fff url("../images/checked.png") center center no-repeat;
 }

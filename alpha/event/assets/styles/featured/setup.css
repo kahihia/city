@@ -349,13 +349,13 @@
 }
 
 input[type="radio"] + label.payments__check-label {
-    background: url("/static/images/widgets/blue-radio-bg.png") -13px center no-repeat;
+    background: url("../../images/widgets/blue-radio-bg.png") -13px center no-repeat;
     height: 13px;
     width: 13px;
 }
 
 input[type="radio"]:checked + label.payments__check-label {
-    background: url("/static/images/widgets/blue-radio-bg.png") 0 center no-repeat;
+    background: url("../../images/widgets/blue-radio-bg.png") 0 center no-repeat;
 }
 
 .payments__item-label {

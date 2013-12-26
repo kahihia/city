@@ -45,7 +45,7 @@ table td {
 }
 
 .footer-site-map .action-facebook-like {
-    background: url("/static/images/like.png") 5px center no-repeat;
+    background: url("../images/like.png") 5px center no-repeat;
     vertical-align: middle;
 }
 

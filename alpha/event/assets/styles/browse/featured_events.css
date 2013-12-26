@@ -60,7 +60,7 @@
     left: 4px;
     bottom: 4px;
     width: 154px;
-    background: url(/static/images/featured-img-details-bg.png) repeat;
+    background: url(../../images/featured-img-details-bg.png) repeat;
 }
 
 .featured-img-details-wrapper {
