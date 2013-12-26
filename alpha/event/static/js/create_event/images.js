@@ -8,7 +8,7 @@
             multiple: false,
             element: document.getElementById("images-uploader"),
             allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
-            sizeLimit: 33554432,
+            sizeLimit: 2097152,
             onComplete: function(id, filename, responseJSON) {
                 if(responseJSON.success) {
                     callback(filename, responseJSON);
