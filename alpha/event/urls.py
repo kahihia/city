@@ -45,10 +45,6 @@ urlpatterns = patterns('',
         event.view_featured,
         name='event_view_featured'
     ),
-    url(r'^view/(?P<slug>[^/]+)/(?P<old_tags>[^/]+)/$',
-        event.view,
-        name='event_view_tags'
-    ),
     url(r'^create/tags/$', event.ason),
     url(r'^create/$',
         event.create,
@@ -104,26 +100,6 @@ urlpatterns = patterns('',
     # url(r'^audit-single-remove/(?P<id>\d+)', event.audit_single_event_remove),
     # url(r'^audit-single-edit/(?P<id>\d+)', event.audit_single_event_edit),
     # url(r'^audit-single-event-update/(?P<id>\d+)', event.audit_single_event_update),
-
-
-    url(r'^(?P<old_tags>[^/]+)/$',
-        event.browse,
-        name='event_browse_tags'
-    ),
-    url(r'^all/(?P<date>[-\w]+)/$',
-        event.browse,
-        name='event_browse_date'),
-    url(r'^(?P<old_tags>[^/]+)/(?P<date>[-\w]+)/$',
-        event.browse,
-        name='event_browse_tags_date'),
-
-    url(r'^(?P<old_tags>[^/]+)/(?P<num>\d+)/$',
-        event.browse,
-        name='event_browse_tags_num'),
-
-    url(r'^(?P<old_tags>[^/]+)/(?P<date>[-\w]+)/(?P<num>\d+)/$',
-        event.browse,
-        name='event_browse_tags_date_num'),
 
     url(r'^taggit_autosuggest/', include('taggit_autosuggest.urls')),
 )

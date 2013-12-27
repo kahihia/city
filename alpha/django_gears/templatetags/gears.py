@@ -41,12 +41,10 @@ class AssetTagNode(Node):
 
 
 class CSSAssetTagNode(AssetTagNode):
-
     template = u'<link rel="stylesheet" href="%s%%s">' % GEARS_URL
 
 
 class JSAssetTagNode(AssetTagNode):
-
     template = u'<script src="%s%%s"></script>' % GEARS_URL
 
 
@@ -58,3 +56,6 @@ def css_asset_tag(parser, token):
 @register.tag
 def js_asset_tag(parser, token):
     return JSAssetTagNode.handle_token(parser, token)
+
+
+
