@@ -99,7 +99,7 @@ class NewVenueAccountForm(VenueAccountForm):
 
     location = forms.Field(widget=LocationWidget(), required=False)
     venue_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
-    venue_name = forms.CharField(required=False)
+    venue_name = forms.CharField(required=False, max_length=50, min_length=3)
     street = forms.CharField(required=False)
     street_number = forms.CharField(required=False)
     city = forms.CharField(
