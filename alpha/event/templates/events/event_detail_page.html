@@ -11,13 +11,11 @@
 {% load gears %}
 
 {% block head %}
-    <link href="{{STATIC_URL}}styles/styles-new.css" rel="stylesheet" type="text/css" />
-
     <meta property="og:title" content="{{event.name}}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="http://{{ request.META.HTTP_HOST }}/events/view/{{event.slug}}/" />
     {% if event.picture %}
-        <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{% cropped_thumbnail event.image "cropping" height=200 %}" />    
+        <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{% cropped_thumbnail event.image "cropping" height=200 %}" />
     {% else %}
         <meta property="og:image" content="http://{{ request.META.HTTP_HOST }}{{STATIC_URL}}images/default-event.jpg" />
     {% endif %}
@@ -36,7 +34,7 @@
 
     {% js_asset_tag 'event-detail-page-combine.js' %}
 
-{% endblock %}    
+{% endblock %}
 
 {% block messages %}
     {% if messages %}

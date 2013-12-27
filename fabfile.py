@@ -34,7 +34,7 @@ def upgrade():
         run("git pull origin %s" % env.branch)        
 
     with cd(env.alpha_folder):
-        run("python manage.py collecassets")
+        run("python manage.py collectassets")
         run("python manage.py collectstatic --noinput")
         run("supervisorctl reload")
 
