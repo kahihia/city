@@ -210,6 +210,10 @@ LOGGING = {
         'cities': {
             'handlers': ['console'],
             'level': 'INFO',
+        },
+        'event.services.location_service': {
+            'handlers': ['mail_admins'],
+            'level': 'WARNING'
         }
     }
 }

@@ -62,6 +62,9 @@ def get_real_ip(request):
     if real_ip == "127.0.0.1":
         real_ip = "198.245.113.94"
 
+    if real_ip.startswith("10.2."):
+        logger.warning("Bad ip. Request = %s" % request.META)
+
     return real_ip
 
 
@@ -69,6 +72,7 @@ geoip = GeoIP()
 
 class LocationByIP(object):
     def __init__(self, request):
+        self.request = request
         self.ip = get_real_ip(request)
 
     @property
