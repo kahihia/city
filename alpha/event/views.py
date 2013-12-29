@@ -23,7 +23,8 @@ from accounts.decorators import native_region_required
 from accounts.models import Account, VenueAccount
 from ajaxuploader.views import AjaxFileUploader
 from event.filters import EventFilter
-from event.models import Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
+from event.models import (Event, Venue, SingleEvent, EventSlug,
+                          AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder)
 from event.services import facebook_services, location_service, event_service, featured_service
 from event.forms import CreateEventForm, EditEventForm, SetupFeaturedForm
 from event.payments.processors import process_setup_featured
@@ -158,16 +159,19 @@ def view_featured(request, slug, date=None):
 
 def view(request, slug, date=None):
     try:
+        event_ids = EventSlug.objects.filter(slug=slug).values_list('event_id', flat=True)
         if date:
             event = SingleEvent.future_events\
-                               .filter(Q(event__slug=slug)
+                               .filter(Q(event__id__in=event_ids)
                                     & (Q(start_time__startswith=date) | Q(event__event_type="MULTIDAY")))\
                                .all()[0]
         else:
             try:
-                event = SingleEvent.future_events.get(event__slug=slug, event__event_type="MULTIDAY", is_occurrence=False)
+                event = SingleEvent.future_events.get(event__id__in=event_ids,
+                                                      event__event_type="MULTIDAY",
+                                                      is_occurrence=False)
             except:
-                event = Event.future_events.get(slug=slug).next_day()
+                event = Event.future_events.get(id__in=event_ids).next_day()
 
         if not event:
             raise ObjectDoesNotExist

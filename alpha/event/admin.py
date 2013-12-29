@@ -17,7 +17,7 @@ approve_events.short_description = "Approve selected events"
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'venue', 'tags_representation')
-    fields = ('slug', 'owner', 'venue_account_owner', 'email',
+    fields = ('owner', 'venue_account_owner', 'email',
               'name', 'description', 'venue', 'price', 'website', 'tickets',
               'audited', 'tags',)
 

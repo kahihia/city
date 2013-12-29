@@ -6,14 +6,20 @@ from django.template.loader import render_to_string
 from django.core.mail.message import EmailMessage
 from django.core.serializers import serialize
 from django.contrib.gis.db import models
+from django.contrib.sites.models import Site
 
 from accounts.models import Account, AccountReminding
-from .models import Event, SingleEvent, AuditEvent, AuditPhrase, phrases_query
+from .models import Event, EventSlug, SingleEvent, AuditEvent, AuditPhrase, phrases_query, has_changed
 from .settings import DEFAULT_FROM_EMAIL, DELETED_EVENTS_REMINDING_INTERVAL
-from django.contrib.sites.models import Site
 
 
 def audit_event_catch(instance=None, created=False, **kwargs):
+    if created:
+        EventSlug.add_primary_slug(instance)
+
+    if instance.name_changed:
+        EventSlug.add_primary_slug(instance)
+
     if instance.audited:
         return
     bad_phrases = phrases_query()
@@ -65,19 +71,5 @@ def after_single_event_delete(instance=None, **kwargs):
 
     Account.reminder_single_events.through.objects.filter(singleevent_id=instance.id).delete()
 
-
 models.signals.post_save.connect(audit_event_catch, sender=Event)
 models.signals.pre_delete.connect(after_single_event_delete, sender=SingleEvent)
-
-# def audit_single_event(instance=None, created=False, **kwargs):
-#     bad_phrases = phrases_query()
-#     description_search_result = re.findall(bad_phrases, instance.description)
-#     if description_search_result:
-#         audit_event = AuditSingleEvent(
-#             event=instance,
-#             phrases=AuditPhrase.objects.filter(
-#                 name__in=description_search_result
-#             )
-#         )
-#     audit_event.save()
-# models.signals.post_save.connect(audit_single_event, sender=SingleEvent)
