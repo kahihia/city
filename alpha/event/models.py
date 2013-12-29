@@ -149,7 +149,6 @@ class Event(models.Model):
     modified = models.DateTimeField(auto_now=True, default=datetime.datetime.now())
 
     authentication_key = models.CharField(max_length=40)
-    slug = models.SlugField(unique=True, max_length=255)
     
     owner = models.ForeignKey(User, blank=True, null=True)
     venue_account_owner = models.ForeignKey('accounts.VenueAccount', blank=True, null=True, on_delete=models.SET_NULL)
@@ -172,11 +171,8 @@ class Event(models.Model):
     def save(self, *args, **kwargs):
         if self.pk is None:
             self.authentication_key = ''.join(random.choice(string.ascii_letters + '0123456789') for x in xrange(40))
-            self.slug = self.uniqueSlug()
 
-        if has_changed(self, 'name'):
-            self.slug = self.uniqueSlug()
-
+        self.name_changed = has_changed(self, 'name')
         super(Event, self).save(*args, **kwargs)
         return self
 
@@ -186,21 +182,6 @@ class Event(models.Model):
     def clean(self):
         if self.name and slugify(self.name) == '':
             raise ValidationError('Please enter a name for your event.')
-
-    def uniqueSlug(self):
-        """
-        Returns: A unique (to database) slug name
-        """
-        suffix = 0
-        potential = base = slugify(self.name)
-        while True:
-            if suffix:
-                potential = base + str(suffix)
-            try:
-                Event.events.get(slug=potential)
-            except ObjectDoesNotExist:
-                return potential
-            suffix = suffix + 1
 
     def is_featured(self):
         return self.featuredevent_set.filter(
@@ -282,6 +263,14 @@ class Event(models.Model):
             return None
 
     @property
+    def slug(self):
+        try:
+            event_slug = EventSlug.objects.get(event=self, is_primary=True)
+            return event_slug.slug
+        except EventSlug.DoesNotExist:
+            return ''
+
+    @property
     def picture(self):
         try:
             return self.sorted_images[0].picture
@@ -317,6 +306,41 @@ class EventImage(models.Model):
     cropping = ImageRatioField('picture', '180x180', size_warning=True, allow_fullsize=True)
 
 
+class EventSlug(models.Model):
+    event = models.ForeignKey(Event, blank=False, null=False)
+    slug = models.SlugField(unique=True, max_length=255)
+    is_primary = models.BooleanField(default=True)
+
+    @classmethod
+    def add_primary_slug(cls, event):
+        """ Add primary slug for an event.
+
+        @type event: Event
+        """
+        cls.objects.filter(event=event).update(is_primary=False)
+        event_slug = cls(event=event)
+        event_slug.slug = cls._get_unique_slug(event.name)
+        event_slug.save()
+
+    @classmethod
+    def _get_unique_slug(cls, name):
+        """ Returns: A unique (to database) slug name.
+
+        @type name: unicode
+        @rtype: unicode
+        """
+        suffix = 0
+        potential = base = slugify(name)
+        while True:
+            if suffix:
+                potential = base + str(suffix)
+            try:
+                cls.objects.get(slug=potential)
+            except ObjectDoesNotExist:
+                return potential
+            suffix += 1
+
+
 class BaseFutureEventDayManager(models.Manager):
     def get_query_set(self):
         now = datetime.datetime.now()
@@ -339,7 +363,6 @@ class HomePageEventDayManager(BaseFutureEventDayManager):
     def get_query_set(self):
         return super(HomePageEventDayManager, self).get_query_set()\
             .exclude(Q(is_occurrence=False) & Q(event__event_type="MULTIDAY"))
-
 
 
 class FeaturedEventDayManager(models.Manager):
@@ -723,8 +746,6 @@ class BonusFeaturedEventTransaction(models.Model):
 class EventTransferring(models.Model):
     target = models.ForeignKey(User, blank=False, null=False)
     events = models.ManyToManyField(Event)
-
-
 
 
 FeaturedEventPayment = build_featured_event_payment_model(FeaturedEventOrder, unique=True)

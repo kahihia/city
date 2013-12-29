@@ -20,7 +20,7 @@ from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 
 from event.models import Event, FacebookEvent, SingleEvent
-from ..settings import FACEBOOK_PAGE_ID, EVENTFUL_ID, CONCERTIN_ID
+from ..settings import EVENTFUL_ID, CONCERTIN_ID
 
 
 class FacebookImportService(object):
