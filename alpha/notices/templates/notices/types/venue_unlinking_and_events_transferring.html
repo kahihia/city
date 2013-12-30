@@ -1,0 +1,9 @@
+<div class="notice-item" data-type="notice_item">
+    {% csrf_token %}
+    <button type="button" class="close"
+            data-type="notice_close_button"
+            data-notice-id="{{ notice_id }}">×</button>
+    "<a href="{{ unlinked_venue_link }}">{{ unlinked_venue_name }}</a>"
+    venue was unlinked from your account and all its events were transferred
+    to the "<a href="{{ owner_link }}">{{ owner_name }}</a>" on the {{ date }}.
+</div>

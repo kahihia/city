@@ -17,7 +17,7 @@ from django.db.models import Q
 from event.utils import find_nearest_city
 from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
-from venues.services import social_links_services
+from .services import social_links_services, venue_service
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
 
@@ -239,27 +239,8 @@ def unlink_venue_account_from_user_profile(request):
         owner = request.POST.get('owner', '')
 
         venue_account = VenueAccount.objects.get(id=venue_account_id)
-
         if venue_account.account.user == request.user:
-            venue_events = Event.events.filter(venue_account_owner=venue_account)
-            if after_action == 'move_events':
-                owner_data = owner.split('_')
-                if owner_data[0] == 'user':
-                    for event in venue_events:
-                        event.venue_account_owner = None
-                        event.save(update_fields=['venue_account_owner'])
-                elif owner_data[0] == 'venue':
-                    venue_account_owner = VenueAccount.objects.get(id=owner_data[1])
-                    if venue_account_owner and venue_account_owner.account.user == request.user:
-                        for event in venue_events:
-                            event.venue_account_owner = venue_account_owner
-                            event.save(update_fields=['venue_account_owner'])
-
-            elif after_action == 'remove_events':
-                for event in venue_events:
-                    event.delete()
-
-            venue_account.delete()
+            venue_service.unlink_venue_account(venue_account, after_action, owner, request.user)
             success = True
 
     return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
