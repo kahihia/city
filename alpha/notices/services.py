@@ -14,7 +14,7 @@ def create_notice(notice_type, user, mail_data={}, notice_data={}):
 
     email = user.get_profile().reminder_email
 
-    if email:
+    if email and mail_data:
         current_site = Site.objects.get_current().domain
         mail_data['site'] = current_site
         message = render_to_string('mail/%s.txt' % notice_type, mail_data)
