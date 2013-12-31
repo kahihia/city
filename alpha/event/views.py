@@ -145,7 +145,7 @@ def browse(request):
 
 def view_featured(request, slug, date=None):
     try:
-        event = Event.future_events.get(slug=slug)
+        event = Event.future_events.get(eventslug__slug=slug)
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))
 
@@ -159,19 +159,20 @@ def view_featured(request, slug, date=None):
 
 def view(request, slug, date=None):
     try:
-        event_ids = EventSlug.objects.filter(slug=slug).values_list('event_id', flat=True)
         if date:
-            event = SingleEvent.future_events\
-                               .filter(Q(event__id__in=event_ids)
-                                    & (Q(start_time__startswith=date) | Q(event__event_type="MULTIDAY")))\
-                               .all()[0]
+            try:
+                event = SingleEvent.future_events.filter(
+                    Q(event__eventslug__slug=slug) & (Q(start_time__startswith=date) | Q(event__event_type="MULTIDAY"))
+                )[0]
+            except:
+                raise ObjectDoesNotExist
         else:
             try:
-                event = SingleEvent.future_events.get(event__id__in=event_ids,
+                event = SingleEvent.future_events.get(event__eventslug__slug,
                                                       event__event_type="MULTIDAY",
                                                       is_occurrence=False)
             except:
-                event = Event.future_events.get(id__in=event_ids).next_day()
+                event = Event.future_events.get(eventslug__slug=slug).next_day()
 
         if not event:
             raise ObjectDoesNotExist
