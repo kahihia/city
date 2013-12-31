@@ -8,6 +8,10 @@
         var that = this, request,
             currentSearchValue = $(".location-text-box input").val();
 
+        this.widget = $(".location-selection-wrapper");
+
+        this.searchListPopup = $(".search-lists");
+
         this.searchList = $(".search-lists ul");
         this.searchInput = $(".location-text-box input");
 
@@ -35,6 +39,11 @@
                 that.refreshLocationList(data);
             }
         });
+
+        this.searchInput.on("hover", this.showList.bind(this));
+        this.searchInput.on("keydown", this.inputKeyPressed.bind(this))
+        this.widget.on("mouseout", this.hideWithTimeout.bind(this));
+        $(document).on("click", this.hideIfNotPopup.bind(this));
     };
 
     SearchByLocation.prototype = {
@@ -54,7 +63,7 @@
         },
 
         refreshLocationList: function(data){
-            $("li a", this.searchList).remove();
+            $("li", this.searchList).remove();
 
             _.forEach(data.locations, function(location) {
                 this.searchList.append(this.appendLink(location));
@@ -72,6 +81,75 @@
 
             li = $("<li />").append(link);
             return li;
+        },
+        showList: function(){
+            this.searchInput.focus();
+            this.searchListPopup.show();
+            this.widget.addClass("active");
+        },
+        hideList: function(){
+            this.searchListPopup.hide();
+            this.widget.removeClass("active");
+        },
+        hideIfNotPopup: function(e){
+            if($(e.target).hasClass("location-selection-wrapper") || $(e.target).parents(".location-selection-wrapper").length>0){
+
+            } else {
+                this.hideList();
+            }
+        },
+        hideWithTimeout: function(){
+            var timeout = setTimeout(this.hideList.bind(this), 1000);
+
+            this.widget.on("mouseover", function(){
+                clearTimeout(timeout);
+            });
+        },
+        inputKeyPressed: function(e){
+            var keyCode = $.ui.keyCode;
+            switch (e.keyCode ) { 
+                case keyCode.DOWN:
+                   this.selectNextLink();
+                   break;
+                case keyCode.UP:
+                   this.selectPrevLink();
+                   break;
+ 
+                case keyCode.ENTER:
+                    this.triggerActiveLink();
+                    break;
+            }
+        },
+        selectNextLink: function(){
+            var selectedLink = $("a.selected", this.searchListPopup);
+            selectedLink.removeClass("selected");
+            if(selectedLink.length > 0) {
+                var nextLink = selectedLink.parent().next("li").find("a");
+                if(nextLink.length>0) {
+                    nextLink.addClass("selected");
+                } else {
+                    $("a:first", this.searchListPopup).addClass("selected");
+                }
+            } else {
+                $("a:first", this.searchListPopup).addClass("selected");
+            }
+        },
+        selectPrevLink: function(){
+            var selectedLink = $("a.selected", this.searchListPopup);
+            selectedLink.removeClass("selected");
+            if(selectedLink.length > 0) {
+                var prevLink = selectedLink.parent().prev("li").find("a");
+                if(prevLink.length>0) {
+                    prevLink.addClass("selected");
+                } else {
+                    $("a:last", this.searchListPopup).addClass("selected");
+                }
+            } else {
+                $("a:last", this.searchListPopup).addClass("selected");
+            }
+        },
+        triggerActiveLink: function(){
+            $("a.selected", this.searchListPopup).trigger("click");
         }
     };
 
