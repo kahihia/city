@@ -1,30 +1,44 @@
 <!-- Footer -->
 <table bgcolor="#022e52" width="100%" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">    
     <tr>
-        <td align="center" height="55">
-            <table width="670" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
+        <td align="center" height="35">
+            <table width="720" cellpadding="0" cellapscing="0" style="border-collapse:collapse;">
                 <tr>
                     <td align="left">
-                        <span style="color:#ffffff; font-size: 14px; font-family: sans-serif;">
-                            © 2012 Cityfusion
+                        <span style="color:#ffffff; font-size: 13px; font-family: sans-serif;">
+                            © 2014 Cityfusion
                         </span>
                     </td>
                     <td align="right" style="text-align: right;">
                         <span style="color:#ffffff; font-size: 14px; font-family: sans-serif; ">
-                            <a href="#" target="_blank" style="color:#ffffff; font-size: 14px; font-family: sans-serif; ; text-decoration:none; border:none;">
+                            <a href="{{site}}{% url 'staticpage' alias='faq' %}"
+                               target="_blank"
+                               style="color:#ffffff; font-size: 13px; font-family: sans-serif; ; text-decoration:none; border:none;">
+                                FAQ
+                            </a>
+                            &nbsp;|&nbsp;
+                            <a href="/feedback/"
+                               target="_blank"
+                               style="color:#ffffff; font-size: 13px; font-family: sans-serif; ; text-decoration:none; border:none;">
                                 Feedback
                             </a>
                             &nbsp;|&nbsp;
-                            <a href="#" target="_blank" style="color:#ffffff; font-size: 14px; font-family: sans-serif; ; text-decoration:none; border:none;">
+                            <a href="{{site}}{% url 'staticpage' alias='advertising' %}"
+                               target="_blank"
+                               style="color:#ffffff; font-size: 13px; font-family: sans-serif; ; text-decoration:none; border:none;">
                                 Advertising
                             </a>
                             &nbsp;|&nbsp;
-                            <a href="#" target="_blank" style="color:#ffffff; font-size: 14px; font-family: sans-serif; ; text-decoration:none; border:none;">
-                                Investment Opportunity
+                            <a href="{{site}}{% url 'staticpage' alias='privacy_policy' %}"
+                               target="_blank"
+                               style="color:#ffffff; font-size: 13px; font-family: sans-serif; ; text-decoration:none; border:none;">
+                                Privacy Policy
                             </a>
                             &nbsp;|&nbsp;
-                            <a href="#" target="_blank" style="color:#ffffff; font-size: 14px; font-family: sans-serif; ; text-decoration:none; border:none;">
-                                Contact
+                            <a href="{{site}}{% url 'staticpage' alias='terms_of_service' %}"
+                               target="_blank"
+                               style="color:#ffffff; font-size: 13px; font-family: sans-serif; ; text-decoration:none; border:none;">
+                                Terms of Service
                             </a>
                         </span>
                     </td>

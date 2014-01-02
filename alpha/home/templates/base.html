@@ -86,14 +86,16 @@
 
             <div class="footer-site-links" data-no-turbolink>
                 <div class="footer-container">
-                    <div class="copyright">&copy; 2013 Cityfusion</div>
+                    <div class="copyright">&copy; 2014 Cityfusion</div>
                     <div class="footer-site-map">
                         <ul>
                             <li><a href="{% url 'staticpage' alias='faq' %}">FAQ</a></li>
                             <li><a href="/feedback/">Feedback</a></li>
                             <li><a href="{% url 'staticpage' alias='advertising' %}">Advertising</a></li>
                             <li><a href="{% url 'staticpage' alias='privacy_policy' %}">Privacy Policy</a></li>
-                            <li class="last"><a href="{% url 'staticpage' alias='terms_of_service' %}">Terms of Service</a></li>
+                            <li class="last">
+                                <a href="{% url 'staticpage' alias='terms_of_service' %}">Terms of Service</a>
+                            </li>
                             <li class="last">
                                 {% like_button "http://"|add:request.META.HTTP_HOST %}
                             </li>
