@@ -1,10 +1,13 @@
 import datetime
+import json
 
 from django.core.urlresolvers import reverse
 
 from accounts.models import VenueAccount
 from event.models import Event
-from notices import services as notice_services
+from notices import services as notice_service
+from notices.models import Notice
+from ..models import VenueAccountTransferring
 
 
 def unlink_venue_account(venue_account, after_action, owner, user):
@@ -24,6 +27,93 @@ def unlink_venue_account(venue_account, after_action, owner, user):
         _delete_venue_events(venue_account, user)
 
     venue_account.delete()
+
+
+def accept_venue_transferring(venue_transferring_id, notice_id):
+    """ Accept a venue transferring.
+
+    @type venue_transferring_id: int
+    @type notice_id: int
+    @rtype: bool
+    """
+    result = False
+    try:
+        venue_transferring = VenueAccountTransferring.objects.get(pk=venue_transferring_id)
+    except VenueAccountTransferring.DoesNotExist:
+        venue_transferring = None
+
+    if venue_transferring and venue_transferring.target:
+        venue_account = venue_transferring.venue_account
+        venue_account.account = venue_transferring.target
+        venue_account.save()
+        Event.events.filter(venue_account_owner_id=venue_account.id).update(owner=venue_transferring.target.user.id)
+
+        venue_transferring.delete()
+        try:
+            notice = Notice.objects.get(pk=notice_id)
+        except Notice.DoesNotExist:
+            notice = None
+
+        if notice:
+            notice_data = json.loads(notice.log)
+            notice_data['state'] = 'Accepted'
+            notice.log = json.dumps(notice_data)
+            notice.read = True
+            notice.save()
+        result = True
+
+    return result
+
+
+def reject_venue_transferring(venue_transferring_id, notice_id):
+    """ Reject a venue transferring.
+
+    @type venue_transferring_id: int
+    @type notice_id: int
+    @rtype: bool
+    """
+    result = False
+    try:
+        venue_transferring = VenueAccountTransferring.objects.get(pk=venue_transferring_id)
+    except VenueAccountTransferring.DoesNotExist:
+        venue_transferring = None
+
+    if venue_transferring and venue_transferring.target:
+        venue_account = venue_transferring.venue_account
+        from_user = venue_transferring.venue_account.account.user
+        target = venue_transferring.target.user
+
+        venue_transferring.delete()
+        try:
+            notice = Notice.objects.get(pk=notice_id)
+        except Notice.DoesNotExist:
+            notice = None
+
+        if notice:
+            notice_data = json.loads(notice.log)
+            notice_data['state'] = 'Rejected'
+            notice.log = json.dumps(notice_data)
+            notice.read = True
+            notice.save()
+
+            target_name = target.username
+            target_link = reverse('userena_profile_detail', kwargs={'username': target.username})
+            notice_service.create_notice('venue_transferring_rejecting', from_user, {
+                'subject': 'Cityfusion: transferring of your venue has been rejected.',
+                'user': from_user,
+                'venue_account': venue_account,
+                'target_name': target_name,
+                'target_link': target_link,
+            }, {
+                'venue_name': venue_account.venue.name,
+                'venue_link': reverse('public_venue_account', kwargs={'slug': venue_account.slug}),
+                'target_name': target_name,
+                'target_link': target_link,
+                'date': datetime.datetime.now().strftime('%A, %b. %d, %I:%M %p'),
+            })
+
+        result = True
+    return result
 
 
 def _transfer_venue_events_to_owner(venue_account, owner, user):
@@ -51,7 +141,7 @@ def _transfer_venue_events_to_owner(venue_account, owner, user):
                 event.venue_account_owner = venue_account_owner
                 event.save(update_fields=['venue_account_owner'])
 
-    notice_services.create_notice(notice_type='venue_unlinking_and_events_transferring',
+    notice_service.create_notice(notice_type='venue_unlinking_and_events_transferring',
                                   user=user,
                                   notice_data={
                                       'unlinked_venue_name': venue_account.venue.name,
@@ -73,7 +163,7 @@ def _delete_venue_events(venue_account, user):
     for event in venue_events:
         event.delete()
 
-    notice_services.create_notice(notice_type='venue_unlinking_and_events_deleting',
+    notice_service.create_notice(notice_type='venue_unlinking_and_events_deleting',
                                   user=user,
                                   notice_data={
                                       'unlinked_venue_name': venue_account.venue.name,

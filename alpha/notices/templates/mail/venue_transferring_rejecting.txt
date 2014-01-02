@@ -1,0 +1,14 @@
+<html>
+<head></head>
+    <body>
+        <h1>
+        	Your venue "<a href="http://{{ site }}{% url 'public_venue_account' venue_account.slug %}">
+        	    {{ venue_account.venue.name }}
+        	</a>"
+            has been transferred to <a href="http://{{ site }}{{ target_link }}">{{ target_name }}</a>
+            by CityFusion administration, but has been rejected.
+        </h1>
+
+        <p>Have a great day.</p>
+    </body>
+</html>

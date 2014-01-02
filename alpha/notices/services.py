@@ -4,11 +4,18 @@ from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.core.mail.message import EmailMessage
 
-from .models import Notice
 from event.settings import DEFAULT_FROM_EMAIL
+from .models import Notice
 
 
 def create_notice(notice_type, user, mail_data={}, notice_data={}):
+    """ Create a new notice.
+
+    @type notice_type: unicode
+    @type user: django.contrib.auth.models.User
+    @type mail_data: dict
+    @type notice_data: dict
+    """
     log = json.dumps(notice_data)
     Notice.objects.create(type=notice_type, user=user, log=log)
 
