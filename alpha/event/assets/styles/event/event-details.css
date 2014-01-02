@@ -180,6 +180,7 @@
     font-weight: bold;
 }
 
+.event-wrapper .event-details .event-venue a,
 .event-wrapper .event-details .event-venue span {
     width: 195px;
     white-space: nowrap;
