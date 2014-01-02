@@ -1,4 +1,5 @@
 import re
+import json
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render_to_response, get_object_or_404
@@ -7,7 +8,6 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidde
 from django.contrib import messages
 from django.utils.translation import ugettext as _
 from django.conf import settings
-from django.utils import simplejson as json
 from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
@@ -30,7 +30,7 @@ from notices.models import Notice
 from .models import Account, VenueAccount
 from utils import remind_account_about_events, inform_account_about_events_with_tags
 from event.models import FeaturedEventOrder
-from venues.models import VenueAccountTransferring
+from venues.services import venue_service
 
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
@@ -494,61 +494,15 @@ def reject_transferring(request, transferring_id):
 
 @login_required
 def accept_venue_transferring(request, venue_transferring_id):
-    success = False
-    try:
-        venue_transferring = VenueAccountTransferring.objects.get(pk=venue_transferring_id)
-    except VenueAccountTransferring.DoesNotExist:
-        venue_transferring = None
-
-    if venue_transferring and venue_transferring.target:
-        venue_account = venue_transferring.venue_account
-        venue_account.account = venue_transferring.target
-        venue_account.save()
-        Event.events.filter(venue_account_owner_id=venue_account.id).update(owner=venue_transferring.target.user.id)
-
-        venue_transferring.delete()
-
-        notice_id = request.POST.get('notice_id', 0)
-        try:
-            notice = Notice.objects.get(pk=notice_id)
-        except Notice.DoesNotExist:
-            notice = None
-
-        if notice:
-            notice_data = json.loads(notice.log)
-            notice_data['state'] = 'Accepted'
-            notice.log = json.dumps(notice_data)
-            notice.read = True
-            notice.save()
-
-        success = True
+    notice_id = request.POST.get('notice_id', 0)
+    success = venue_service.accept_venue_transferring(venue_transferring_id, notice_id)
 
     return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
 
 
 @login_required
 def reject_venue_transferring(request, venue_transferring_id):
-    success = False
-    try:
-        venue_transferring = VenueAccountTransferring.objects.get(pk=venue_transferring_id)
-    except VenueAccountTransferring.DoesNotExist:
-        venue_transferring = None
-
-    if venue_transferring and venue_transferring.target:
-        venue_transferring.delete()
-        notice_id = request.POST.get('notice_id', 0)
-        try:
-            notice = Notice.objects.get(pk=notice_id)
-        except Notice.DoesNotExist:
-            notice = None
-
-        if notice:
-            notice_data = json.loads(notice.log)
-            notice_data['state'] = 'Rejected'
-            notice.log = json.dumps(notice_data)
-            notice.read = True
-            notice.save()
-
-        success = True
+    notice_id = request.POST.get('notice_id', 0)
+    success = venue_service.reject_venue_transferring(venue_transferring_id, notice_id)
 
     return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
