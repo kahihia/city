@@ -57,15 +57,19 @@
                 <table>
                     <tr>
                         <td>Venue name</td>
-                        <td class="content-input-text">{{form.venue_name}}</td>
+                        <td class="content-input-text" data-id="venue_name">
+                            {{form.venue_name}}
+                        </td>
                     </tr>
                     <tr>
                         <td>Street address</td>
-                        <td class="content-input-text">{{form.street}}</td>
+                        <td class="content-input-text" data-id="venue_street">
+                            {{form.street}}
+                        </td>
                     </tr>
                     <tr>
                         <td>City</td>
-                        <td class="content-input-text">
+                        <td class="content-input-text" data-id="venue_city">
                             {{form.city}}
                             {{form.city_identifier}}
                         </td>

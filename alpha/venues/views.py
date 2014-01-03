@@ -1,22 +1,23 @@
 from django.utils import simplejson as json
 from django.conf import settings
-from accounts.models import VenueAccount, VenueType, Account
-from event.models import Event, SingleEvent, FeaturedEvent, Venue
-from event.services.featured_service import featured_events_for_region
 from django.template import RequestContext
-
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
-
-from venues.forms import VenueAccountForm, NewVenueAccountForm
 from django.contrib.gis.geos import Point
-from cities.models import City, Country
 from django.db.models import Q
-from event.utils import find_nearest_city
 from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
+
+from cities.models import City, Country
+
+from accounts.models import VenueAccount, VenueType, Account
+from event.models import Event, SingleEvent, FeaturedEvent, Venue
+from event.services.featured_service import featured_events_for_region
+from event.services import venue_service as event_venue_service
+from event.utils import find_nearest_city
+from venues.forms import VenueAccountForm, NewVenueAccountForm
 from .services import social_links_services, venue_service
 
 MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
@@ -98,41 +99,6 @@ def private_venue_account(request, slug):
 
 
 @login_required
-def save_venue(request):
-    venue_identifier = request.POST["venue_identifier"]
-    if venue_identifier:
-        return Venue.objects.get(id=int(venue_identifier))
-
-    name = request.POST["venue_name"]
-    street = request.POST["street"]
-    location = Point((
-        float(request.POST["location_lng"]),
-        float(request.POST["location_lat"])
-    ))
-
-    if request.POST["city_identifier"]:
-        city = City.objects.get(id=int(request.POST["city_identifier"]))
-
-    else:
-        cities = City.objects.filter(
-            Q(name_std=request.POST["geo_city"].encode('utf8')) |
-            Q(name=request.POST["geo_city"])
-        )
-
-        if cities.count() > 1:
-            city = find_nearest_city(location, cities)
-        elif not cities.count():
-            city = City.objects.distance(location).order_by('distance')[0]
-        else:
-            city = cities[0]
-
-    country = Country.objects.get(name='Canada')
-    venue, created = Venue.objects.get_or_create(name=name, street=street, city=city, country=country, location=location)
-
-    return venue  
-
-
-@login_required
 def create_venue_account(request):
     account = Account.objects.get(user_id=request.user.id)
     form = NewVenueAccountForm()
@@ -140,10 +106,17 @@ def create_venue_account(request):
     venue_account = VenueAccount()
 
     if request.method == 'POST':
-        form = NewVenueAccountForm(data=request.POST)
+        data = request.POST
+        form = NewVenueAccountForm(data=data)
 
         if form.is_valid():
-            venue = save_venue(request)
+            mode = data.get("linking_venue_mode")
+            if mode == "SUGGEST":
+                venue = event_venue_service.get_venue_suggested_by_user(data)
+            if mode == "GOOGLE":
+                venue = event_venue_service.get_venue_from_google(data)
+            if mode == "EXIST":
+                venue = event_venue_service.get_venue_that_exist(data)
 
             try:
                 venue_account = VenueAccount.objects.get(venue=venue)
@@ -154,8 +127,8 @@ def create_venue_account(request):
                 form = NewVenueAccountForm(instance=venue_account, data=request.POST)
                 venue_account = form.save()
 
-                if request.POST["picture_src"]:
-                    venue_account.picture.name = request.POST["picture_src"].replace(settings.MEDIA_URL, "")
+                if data["picture_src"]:
+                    venue_account.picture.name = data["picture_src"].replace(settings.MEDIA_URL, "")
 
                 types = form.cleaned_data['types']
                 venue_account.types = types
