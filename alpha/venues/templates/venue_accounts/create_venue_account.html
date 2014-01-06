@@ -27,52 +27,66 @@
 
 
 {% block page %}    
-<form method="post">
+<form method="post" data-id="new_venue_form">
     <div class="venue-account-details">
         <h1>
             Create new venue account
         </h1>        
         <div class="venue-account-details-form">        
             {% csrf_token %}
-            <div class="field venue-field">
-                <header>
+
+            {{ form.linking_venue_mode }}
+
+            <div class="field venue-field entity-form__text-field">
+                <header class="entity-form__field-title">
                     Venue
                 </header>
                 {{ form.place }}
-                <a href="javascript:void;" class="show-map">show on map</a> 
-                <div>
-                    <div class="location_map">{{form.location}}</div>
+                <a href="javascript:void(0);" class="show-map"></a>
+                <div class="suggest">
+                    <div class="error">
+                        All fields is required
+                    </div>
+                    <table>
+                        <tr>
+                            <td>Venue name</td>
+                            <td class="content-input-text" data-id="venue_name">
+                                {{form.venue_name}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Street address</td>
+                            <td class="content-input-text" data-id="venue_street">
+                                {{form.street}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>City</td>
+                            <td class="content-input-text" data-id="venue_city">
+                                {{form.city}}
+                                {{form.city_identifier}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Location</td>
+                            <td>
+                                <div class="location_map">{{form.location}}</div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="cancel-button">Cancel</div>
+                    <div class="reset-button">Clear</div>
+                    <div class="submit-button">Submit</div>
                 </div>
                 {% for error in form.non_field_errors %}
                     <div class="error">{{ error }}</div>
                 {% endfor %}
             </div>
-            <div class="field">
-                <header>Venue Name</header>
-                {{ form.venue_name }}
-                {{ form.venue_identifier }}
-                {% for error in form.venue_name.errors %}
-                    <div class="error">{{ error }}</div>
-                {% endfor %}
-            </div>
-            <div class="field">
-                <header>Street</header>
-                {{ form.street }}
-            </div>
 
-            <div class="field street-no-field">
-                <header>Street No.</header>
-                {{ form.street_number }}
-            </div>
-
-            <div class="field city-field">
-                <header>City</header>
-                {{ form.city }}
-                {{ form.city_identifier }}
-            </div>
+            {{ form.venue_identifier }}
 
             <div class="field">
-                <header>Picture</header>
+                <header class="entity-form__field-title">Picture</header>
                 <div class="picture-thumb">
                     <img src="" class="preview">
                 </div>
@@ -87,43 +101,43 @@
                 {% endfor %}
             </div>
 
-            <div class="field">
-                <header>Phone</header>
+            <div class="field entity-form__text-field">
+                <header class="entity-form__field-title">Phone</header>
                 {{ form.phone }}
                 {% for error in form.phone.errors %}
                     <div class="error">{{ error }}</div>
                 {% endfor %}
             </div>
-            <div class="field">
-                <header>Fax</header>
+            <div class="field entity-form__text-field">
+                <header class="entity-form__field-title">Fax</header>
                 {{ form.fax }}
                 {% for error in form.fax.errors %}
                     <div class="error">{{ error }}</div>
                 {% endfor %}
             </div>
-            <div class="field">
-                <header>Email</header>
+            <div class="field entity-form__text-field">
+                <header class="entity-form__field-title">Email</header>
                 {{ form.email }}
                 {% for error in form.email.errors %}
                     <div class="error">{{ error }}</div>
                 {% endfor %}
             </div>            
-            <div class="field">
-                <header>Website</header>
+            <div class="field entity-form__text-field">
+                <header class="entity-form__field-title">Website</header>
                 {{ form.site }}
                 {% for error in form.site.errors %}
                     <div class="error">{{ error }}</div>
                 {% endfor %}
             </div>
-            <div class="field">
-                <header>Facebook</header>
+            <div class="field entity-form__text-field">
+                <header class="entity-form__field-title">Facebook</header>
                 {{ form.facebook }}
                 {% for error in form.facebook.errors %}
                     <div class="error">{{ error }}</div>
                 {% endfor %}
             </div>
-            <div class="field">
-                <header>Twitter</header>
+            <div class="field entity-form__text-field">
+                <header class="entity-form__field-title">Twitter</header>
                 {{ form.twitter }}
                 {% for error in form.twitter.errors %}
                     <div class="error">{{ error }}</div>
@@ -137,12 +151,12 @@
                     <div class="error">{{ error }}</div>
                 {% endfor %}
             </div>
-            <div class="field about-us-field">                
-                <header>About Us</header>
+            <div class="field about-us-field entity-form__text-field">
+                <header class="entity-form__field-title">About Us</header>
                 {{ form.about }}
             </div>
             <div class="field tags-field">
-                <header>
+                <header class="entity-form__field-title">
                     Tags 
                     <span class="tags-counter-container">
                         (Max 10 Tags)
@@ -172,7 +186,7 @@
                 </div>
             {% endfor %}
         </div>
-        <input type="submit" name="submitoptions" class="button standart submit" value="Save" />
+        <input type="submit" name="submitoptions" class="button standart submit" value="Save" data-id="submit_button" />
     </div>    
 </form>
 {% endblock %}

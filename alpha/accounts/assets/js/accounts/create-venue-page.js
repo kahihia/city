@@ -31,11 +31,13 @@
             });
 
 
+//            $("[data-id=submit_button]").on("click", that.onSubmitClick);
+
             $(locationNameField).on("autocompletechange", function(event, ui){
                 if ($(locationPointField).val()) {
                     var point = $(locationPointField).val().split(','), identifier;
-                    
-                    $("#id_city_identifier").val(point[0]);
+
+                    $(this).parent().find("[name=city_identifier]").val(point[0]);
                     
                     latlng = new google.maps.LatLng(parseFloat(point[2]), parseFloat(point[1]));
 
@@ -57,18 +59,18 @@
                     country: 'ca'
                 }
             }).bind("geocode:result", function(event, result) {
-                $("#id_venue_name").val($("#id_geo_venue").val());
-                $("#id_street").val($("#id_geo_street").val());
-                $("#id_street_number").val($("#id_geo_street_number").val());
-                $("#id_city_0").val($("#id_geo_city").val());
 
                 Cityfusion.userLocationLat = result.geometry.location.lat();
                 Cityfusion.userLocationLng = result.geometry.location.lng();
 
                 that.setLocation(Cityfusion.userLocationLat, Cityfusion.userLocationLng);
+                $("#id_linking_venue_mode").val("GOOGLE");
             });
 
+            $("#id_place").attr("data-autocomplete-binded", "1");
+
             this.initGoogleMap();
+            this.venueAutocomplete = new window.VenueAutocomplete();
         },
         initGoogleMap: function(){
             var point, options, marker, map,
@@ -164,11 +166,7 @@
             $("#id_venue_identifier").val(venue.id);
             this.setLocation(parseFloat(venue.lat), parseFloat(venue.lng));
 
-            $("#id_venue_name").val(venue.name);
-            $("#id_street").val(venue.street);
-            $("#id_city_0").val(venue.city_name);
-            $("#id_city_1").val([venue.city_id, venue.lat, venue.lng].join(","));
-            $("#id_city_identifier").val(venue.city_id);
+            $("#id_linking_venue_mode").val("EXIST");
         },
         watchTagsCount: function(){
             setInterval(this.calculateTagsCount.bind(this), 50);
@@ -188,6 +186,16 @@
         },
         initSocialLinks: function(){
             this.socialLinksWidget = new SocialLinks();
+        },
+        onSubmitClick: function() {
+            var formObj = $("[data-id=new_venue_form]").clone().removeAttr("data-id");
+            var deletedElements = {
+                "venue_name": "venue_name",
+                "venue_street": "street",
+                "venue_city": "city"
+            }
+
+            return false;
         }
     };
 

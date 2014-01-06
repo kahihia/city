@@ -295,3 +295,19 @@ ul.errorlist li {
     width: 482px;
     margin: 0 auto;
 }
+
+/* Form fields */
+.entity-form__text-field input {
+    border: 1px solid #c7c6c6 !important;
+    width: 394px !important;
+    font-size: 13px !important;
+    height: 26px !important;
+    padding: 0 5px !important;
+}
+
+.entity-form__field-title {
+    color: #022e52;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+/* Form fields */

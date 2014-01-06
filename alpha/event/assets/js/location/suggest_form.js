@@ -8,7 +8,8 @@
         this.initSuggestMap();
         this.embedSuggestVenueButtonIntoGoogleAutocomplete();
         
-        if(typeof(SuggestCityfusionVenue) !== "undefined") {
+        if(typeof(SuggestCityfusionVenue) !== "undefined"
+                && !$("#id_place").data("autocomplete-binded")) {
             this.suggestCityfusionVenue = new SuggestCityfusionVenue(this, this.onCityfusionVenueChoose.bind(this));
         }
     }
@@ -22,9 +23,9 @@
         },
         resetForm: function(){
             $(".suggest .error").hide();
-            $("#id_venue_name").val("");
-            $("#id_street").val("");
-            $("#id_city_0").val("");
+            $("[data-id=venue_name] [name=venue_name]").val("");
+            $("[data-id=venue_street] [name=street]").val("");
+            $("[data-id=venue_city] [name=city_0]").val("");
         },
         cancelForm: function(){
             this.resetForm();
@@ -32,9 +33,9 @@
         },
         saveForm: function(){
             var venue, street, city, suggest_values;
-            venue = $("#id_venue_name").val();
-            street = $("#id_street").val();
-            city = $("#id_city_0").val();
+            venue = $("[data-id=venue_name] [name=venue_name]").val();
+            street = $("[data-id=venue_street] [name=street]").val();
+            city = $("[data-id=venue_city] [name=city_0]").val();
 
             if(!venue || !city){
                 $(".suggest .error").show();
@@ -45,7 +46,8 @@
             $("#id_place").val(suggest_values.join(", "));
             $("#id_linking_venue_mode").val("SUGGEST");
 
-            if($("#id_tags__tagautosuggest").length !== 0) {
+            if($("#id_tags__tagautosuggest").length !== 0
+                    && $("#id_tags__tagautosuggest")[0].tagspopup) {
                 $("#id_tags__tagautosuggest")[0].tagspopup.loadTagsForCityByCity();
             }
 

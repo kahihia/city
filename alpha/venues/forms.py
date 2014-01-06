@@ -92,6 +92,13 @@ class VenueAccountForm(forms.ModelForm):
 
 
 class NewVenueAccountForm(VenueAccountForm):
+
+    # There will be three modes, how we will detect wich venue user choose
+    # SUGGEST - when user can not found venue in google autocomplete he can suggest new venue
+    # GOOGLE - user can choose venue with help of google autocomplete widget
+    # EXIST - user can choose also from venues that already exist on cityfusion
+    linking_venue_mode = forms.CharField(required=True, widget=forms.widgets.HiddenInput())
+
     place = JSONCharField(
         widget=GeoCompleteWidget(),
         required=False
@@ -136,10 +143,37 @@ class NewVenueAccountForm(VenueAccountForm):
 
         place = cleaned_data["place"]
 
-        if not cleaned_data["venue_identifier"] and\
-            (not place["venue"] or \
-            not place["latitude"] or \
-            not place["longtitude"]):
-            raise forms.ValidationError(u'You should choose venue from list')
+        if "linking_venue_mode" in cleaned_data:
+            linking_venue_mode = cleaned_data["linking_venue_mode"]
+        else:
+            linking_venue_mode = None
+
+        if not linking_venue_mode:
+            raise forms.ValidationError(u'Please specify venue')
+
+        if linking_venue_mode == "SUGGEST":
+            if not cleaned_data["venue_name"]:
+                raise forms.ValidationError(u'Please specify venue name')
+
+            if not cleaned_data["city_identifier"]:
+                self.city_required = True
+                raise forms.ValidationError(u'Pleace specify city')
+
+            if not cleaned_data["location"]:
+                raise forms.ValidationError(u'Please specify location on the map')
+
+
+        if linking_venue_mode == "GOOGLE":
+            place = cleaned_data["place"]
+
+            if not place["city"]:
+                raise forms.ValidationError(u'Please select at least a city or town name')
+            if not place["venue"] or \
+               not place["latitude"] or \
+               not place["longtitude"]:
+                raise forms.ValidationError(u'Location that you choose is invalid, please, choose another one')
+
+        if linking_venue_mode == "EXIST":
+            pass
 
         return cleaned_data

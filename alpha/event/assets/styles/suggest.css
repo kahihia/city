@@ -44,7 +44,7 @@
 .show-map {
     position: absolute;
     right: -40px;
-    top: 0;
+    top: 11px;
     width:24px;
     height:24px;
     background: url('/static/images/map.png') no-repeat;
