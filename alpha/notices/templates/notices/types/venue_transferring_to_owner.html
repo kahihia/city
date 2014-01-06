@@ -1,0 +1,10 @@
+<div class="notice-item" data-type="notice_item">
+    {% csrf_token %}
+    <button type="button" class="close"
+        data-type="notice_close_button"
+        data-notice-id="{{ notice_id }}">×</button>
+    Your venue "<a href="{{ venue_link }}">{{ venue_name }}</a>"
+    has been transferred to <a href="{{ target_link }}">{{ target_name }}</a>
+    by CityFusion administration on the {{ date }}.
+    You will be notified when the venue is accepted or rejected.
+</div>

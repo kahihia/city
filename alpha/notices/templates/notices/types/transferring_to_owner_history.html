@@ -1,0 +1,22 @@
+<div class="notice-item-history" data-type="notice_item">
+    {{ event_count }}
+    {% if event_count == 1 %}
+        event has
+    {% else %}
+        events have
+    {% endif %}
+    been transferred from you to <a href="{{ target_link }}">{{ target_name }}</a>
+    by CityFusion administration on the {{ date }}.
+    You will be notified when the events are accepted or rejected.
+    <br/><br/>
+    <div data-type="accordion">
+        <h3>Event list:</h3>
+        <div>
+            {% for name, link in event_links %}
+                <p>
+                    <a href="{{ link }}" target="_blank">{{ name }}</a>
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+</div>

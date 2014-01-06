@@ -23,9 +23,9 @@ from cityfusion_admin.models import ReportEvent, ClaimEvent
 from cityfusion_admin.forms import FreeTryForm, BonusCampaignForm
 from event.models import Event, FeaturedEvent, FacebookEvent, EventTransferring, FeaturedEventOrder
 from event.forms import SetupFeaturedByAdminForm, CreateEventForm
-from event.services import facebook_services
-from notices import services as notice_services
+from event.services import facebook_services, event_service
 from venues.models import VenueAccountTransferring
+from venues.services import venue_service
 
 
 @require_POST
@@ -595,24 +595,7 @@ def change_venue_owner_search(request):
 def change_venue_owner(request, venue_account_id):
     owner_id = request.POST.get('owner_id', None)
     if owner_id:
-        target = Account.objects.get(user_id=owner_id)
-        venue_account = VenueAccount.objects.get(id=venue_account_id)
-        if target and venue_account:
-            venue_account_transferring = VenueAccountTransferring.objects.create(target=target,
-                                                                                 venue_account=venue_account)
-            notice_services.create_notice('venue_transferring', target.user, {
-                'subject': 'CityFusion: venue has been transferred to you.',
-                'user': target.user,
-                'venue_account': venue_account
-            }, {
-                'venue_name': venue_account.venue.name,
-                'venue_link': reverse('public_venue_account', kwargs={'slug': venue_account.slug}),
-                'date': datetime.datetime.now().strftime('%A, %b. %d, %I:%M %p'),
-                'accept_link': reverse('accept_venue_transferring', kwargs={
-                    'venue_transferring_id': venue_account_transferring.id}),
-                'reject_link': reverse('reject_venue_transferring', kwargs={
-                    'venue_transferring_id': venue_account_transferring.id})
-            })
+        venue_service.change_venue_owner(venue_account_id, owner_id)
 
     return HttpResponseRedirect(
         reverse('change_venue_owner_search') + "?search=%s" % request.POST.get("search", "")
@@ -650,47 +633,11 @@ def change_event_owner_ajax(request):
     event_id = request.POST.get('event_id', None)
     owner_id = request.POST.get('owner_id', None)
     identifier = request.POST.get('identifier', '')
-    stored_identifier = request.session.get('transfer_identifier', '')
     is_last = bool(int(request.POST.get('is_last', 0)))
 
-    try:
-        if event_id and owner_id and identifier:
-            event = Event.events.get(pk=event_id)
-            target = User.objects.get(id=owner_id)
+    success = event_service.change_event_owner(event_id, owner_id, identifier, is_last, request.session)
 
-            if not stored_identifier or identifier != stored_identifier:
-                event_transferring = EventTransferring.objects.create(target=target)
-                request.session['transfer_identifier'] = identifier
-                request.session['transfer_id'] = event_transferring.id
-            else:
-                event_transferring = EventTransferring.objects.get(pk=int(request.session['transfer_id']))
-
-            event_transferring.events.add(event)
-            success = True
-    except Exception:
-        success = False
-    finally:
-        if is_last and target and event_transferring:
-            events = list(event_transferring.events.all())
-            event_links = []
-            for event in events:
-                date = event.next_day().start_time.strftime('%Y-%m-%d')
-                link = reverse('event_view', kwargs={'slug': event.slug, 'date': date})
-                event_links.append((event.name, link))
-
-            notice_services.create_notice('transferring', target, {
-                'subject': 'CityFusion: events have been transferred to you.',
-                'user': target,
-                'events': events
-            }, {
-                'event_count': len(events),
-                'event_links': event_links,
-                'date': datetime.datetime.now().strftime('%A, %b. %d, %I:%M %p'),
-                'accept_link': reverse('accept_transferring', kwargs={'transferring_id': event_transferring.id}),
-                'reject_link': reverse('reject_transferring', kwargs={'transferring_id': event_transferring.id})
-            })
-
-    return HttpResponse(json.dumps({'success': True}), mimetype='application/json')
+    return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
 
 
 @staff_member_required
