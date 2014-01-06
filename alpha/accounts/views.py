@@ -30,6 +30,7 @@ from notices.models import Notice
 from .models import Account, VenueAccount
 from utils import remind_account_about_events, inform_account_about_events_with_tags
 from event.models import FeaturedEventOrder
+from event.services import event_service
 from venues.services import venue_service
 
 
@@ -428,66 +429,16 @@ def refresh_facebook_graph(request):
 
 @login_required
 def accept_transferring(request, transferring_id):
-    success = False
-    try:
-        transferring = EventTransferring.objects.get(pk=transferring_id)
-    except EventTransferring.DoesNotExist:
-        transferring = None
-
-    if transferring and transferring.target:
-        for event in transferring.events.all():
-            event.owner = transferring.target
-            event.save()
-
-            transferring.events.remove(event)
-
-        transferring.delete()
-
-        notice_id = request.POST.get('notice_id', 0)
-        try:
-            notice = Notice.objects.get(pk=notice_id)
-        except Notice.DoesNotExist:
-            notice = None
-
-        if notice:
-            notice_data = json.loads(notice.log)
-            notice_data['state'] = 'Accepted'
-            notice.log = json.dumps(notice_data)
-            notice.read = True
-            notice.save()
-
-        success = True
+    notice_id = request.POST.get('notice_id', 0)
+    success = event_service.accept_events_transferring(transferring_id, notice_id)
 
     return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
 
 
 @login_required
 def reject_transferring(request, transferring_id):
-    success = False
-    try:
-        transferring = EventTransferring.objects.get(pk=transferring_id)
-    except EventTransferring.DoesNotExist:
-        transferring = None
-
-    if transferring and transferring.target:
-        for event in transferring.events.all():
-            transferring.events.remove(event)
-
-        transferring.delete()
-        notice_id = request.POST.get('notice_id', 0)
-        try:
-            notice = Notice.objects.get(pk=notice_id)
-        except Notice.DoesNotExist:
-            notice = None
-
-        if notice:
-            notice_data = json.loads(notice.log)
-            notice_data['state'] = 'Rejected'
-            notice.log = json.dumps(notice_data)
-            notice.read = True
-            notice.save()
-
-        success = True
+    notice_id = request.POST.get('notice_id', 0)
+    success = event_service.reject_events_transferring(transferring_id, notice_id)
 
     return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
 

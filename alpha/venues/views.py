@@ -46,25 +46,29 @@ def venues(request):
 
 
 def public_venue_account(request, slug):
-    venue_account = VenueAccount.objects.get(slug=slug)
+    try:
+        venue_account = VenueAccount.objects.get(slug=slug)
 
-    venue_account.view()
+        venue_account.view()
 
-    venue_events = SingleEvent.future_events.filter(event__venue_account_owner=venue_account)
-    venue_featured_events = SingleEvent.featured_events.filter(event__venue_account_owner=venue_account)
+        venue_events = SingleEvent.future_events.filter(event__venue_account_owner=venue_account)
+        venue_featured_events = SingleEvent.featured_events.filter(event__venue_account_owner=venue_account)
 
-    tabs_page = "public-venue-account"
+        tabs_page = "public-venue-account"
 
-    active_tab = request.session.get(tabs_page, "venue-events")
+        active_tab = request.session.get(tabs_page, "venue-events")
 
-    return render_to_response('venue_accounts/public_venue_account.html', {
-                'venue_account': venue_account,
-                'venue_events': venue_events,
-                'venue_featured_events': venue_featured_events,
-                'tabs_page': tabs_page,
-                'active_tab': active_tab,
-                'private': False
-        }, context_instance=RequestContext(request))
+        return render_to_response('venue_accounts/public_venue_account.html', {
+                    'venue_account': venue_account,
+                    'venue_events': venue_events,
+                    'venue_featured_events': venue_featured_events,
+                    'tabs_page': tabs_page,
+                    'active_tab': active_tab,
+                    'private': False
+            }, context_instance=RequestContext(request))
+    except VenueAccount.DoesNotExist:
+        return render_to_response('venue_accounts/venue_does_not_exists.html',
+                                  context_instance=RequestContext(request))
 
 
 @login_required
