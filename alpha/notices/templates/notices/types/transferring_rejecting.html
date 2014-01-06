@@ -1,0 +1,25 @@
+<div class="notice-item" data-type="notice_item">
+    {% csrf_token %}
+    <button type="button" class="close"
+        data-type="notice_close_button"
+        data-notice-id="{{ notice_id }}">×</button>
+    {{ event_count }}
+    {% if event_count == 1 %}
+        event has
+    {% else %}
+        events have
+    {% endif %}
+    been transferred from you to <a href="{{ target_link }}">{{ target_name }}</a>
+    by CityFusion administration but was rejected on the {{ date }}.
+    <br/><br/>
+    <div data-type="accordion">
+        <h3>Event list:</h3>
+        <div>
+            {% for name, link in event_links %}
+                <p>
+                    <a href="{{ link }}" target="_blank">{{ name }}</a>
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+</div>

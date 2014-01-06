@@ -3,7 +3,7 @@ import json
 
 from django.core.urlresolvers import reverse
 
-from accounts.models import VenueAccount
+from accounts.models import Account, VenueAccount
 from event.models import Event
 from notices import services as notice_service
 from notices.models import Notice
@@ -11,7 +11,7 @@ from ..models import VenueAccountTransferring
 
 
 def unlink_venue_account(venue_account, after_action, owner, user):
-    """ Unlink venue account and move events to another owner.
+    """ Unlink a venue account and move events to another owner.
 
     @type venue_account: accounts.models.VenueAccount
     @type after_action: unicode
@@ -29,6 +29,51 @@ def unlink_venue_account(venue_account, after_action, owner, user):
     venue_account.delete()
 
 
+def change_venue_owner(venue_account_id, owner_id):
+    """ Change owner of a venue with the given id.
+
+    @type venue_account_id: int
+    @type owner_id: int
+    @param owner_id: a new owner id
+    @rtype: bool
+    """
+    result = False
+    target = Account.objects.get(user_id=owner_id)
+    venue_account = VenueAccount.objects.get(id=venue_account_id)
+    if target and venue_account:
+        venue_account_transferring = VenueAccountTransferring.objects.create(target=target,
+                                                                             venue_account=venue_account)
+        target_name = target.user.username
+        target_link = reverse('userena_profile_detail', kwargs={'username': target.user.username})
+        notice_service.create_notice(notice_type='venue_transferring_to_owner',
+                                     user=venue_account.account.user,
+                                     notice_data={
+                                         'venue_name': venue_account.venue.name,
+                                         'venue_link': reverse('public_venue_account',
+                                                               kwargs={'slug': venue_account.slug}),
+                                         'target_name': target_name,
+                                         'target_link': target_link,
+                                         'date': datetime.datetime.now().strftime('%A, %b. %d, %I:%M %p'),
+                                     })
+
+        notice_service.create_notice('venue_transferring', target.user, {
+            'subject': 'CityFusion: venue has been transferred to you.',
+            'user': target.user,
+            'venue_account': venue_account
+        }, {
+            'venue_name': venue_account.venue.name,
+            'venue_link': reverse('public_venue_account', kwargs={'slug': venue_account.slug}),
+            'date': datetime.datetime.now().strftime('%A, %b. %d, %I:%M %p'),
+            'accept_link': reverse('accept_venue_transferring', kwargs={
+                'venue_transferring_id': venue_account_transferring.id}),
+            'reject_link': reverse('reject_venue_transferring', kwargs={
+                'venue_transferring_id': venue_account_transferring.id})
+        })
+
+        result = True
+    return result
+
+
 def accept_venue_transferring(venue_transferring_id, notice_id):
     """ Accept a venue transferring.
 
@@ -44,6 +89,9 @@ def accept_venue_transferring(venue_transferring_id, notice_id):
 
     if venue_transferring and venue_transferring.target:
         venue_account = venue_transferring.venue_account
+        from_user = venue_transferring.venue_account.account.user
+        target = venue_transferring.target.user
+
         venue_account.account = venue_transferring.target
         venue_account.save()
         Event.events.filter(venue_account_owner_id=venue_account.id).update(owner=venue_transferring.target.user.id)
@@ -60,8 +108,24 @@ def accept_venue_transferring(venue_transferring_id, notice_id):
             notice.log = json.dumps(notice_data)
             notice.read = True
             notice.save()
-        result = True
 
+            target_name = target.username
+            target_link = reverse('userena_profile_detail', kwargs={'username': target.username})
+            notice_service.create_notice('venue_transferring_accepting', from_user, {
+                'subject': 'Cityfusion: transferring of your venue has been accepted.',
+                'user': from_user,
+                'venue_account': venue_account,
+                'target_name': target_name,
+                'target_link': target_link,
+            }, {
+                'venue_name': venue_account.venue.name,
+                'venue_link': reverse('public_venue_account', kwargs={'slug': venue_account.slug}),
+                'target_name': target_name,
+                'target_link': target_link,
+                'date': datetime.datetime.now().strftime('%A, %b. %d, %I:%M %p'),
+            })
+
+        result = True
     return result
 
 

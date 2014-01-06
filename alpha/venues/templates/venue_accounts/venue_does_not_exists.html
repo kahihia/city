@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %} >| Event Created{% endblock %}
+{% block page %}
+    <section class="body noborder">
+        <h1>Venue does not exists</h1>
+        <p>
+            You can return
+            {% if user.is_authenticated %}
+                to
+                <a href="{% url 'userena_profile_detail' user.username %}">Your accout</a>
+                or
+            {% endif %}
+            to the <a href="{% url 'event_browse' %}">Home page</a>
+        </p>
+    </section>
+{% endblock %}
