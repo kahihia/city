@@ -50,7 +50,6 @@ class Migration(DataMigration):
             'location_type': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'}),
             'mugshot': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
             'native_region': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'native_for_accounts'", 'null': 'True', 'to': u"orm['cities.Region']"}),
-            'new_token_required': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'not_from_canada': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'privacy': ('django.db.models.fields.CharField', [], {'default': "'registered'", 'max_length': '15'}),
             'raw_data': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),

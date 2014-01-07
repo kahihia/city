@@ -38,7 +38,11 @@
                 {% if shared_with.count > 0 %}
                     Already shared with:
                     {% for account in shared_with %}
-                        <span class="shared-with">{{ account.user }}</span>
+                        <span class="shared-with">
+                            {{ account.user }}
+                            <a class="icon-remove" href="{% url 'admin_unshare_stats' campaign.id account.id %}"></a>
+                        </span>
+                        
                     {% endfor %}
                 {% endif %}
                 {% advertising_campaign_stats campaign %}
