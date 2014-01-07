@@ -36,7 +36,16 @@
         <div class="location-wrapper">
             <div class="location-label">Location</div>
             <div class="location-selection-wrapper">
-                <div class="location-text-box"><input type="text" name="location" class="location" value="" placeholder="{{ user_location.user_location_name }}" autocomplete="off"></div>
+                <div class="location-text-box">
+                    <input type="text"
+                           name="location"
+                           class="location"
+                           value="{{ user_location.user_location_name }}"
+                           data-placeholder="{{ user_location.user_location_name }}"
+                           autocomplete="off"
+                           onBlur="onBlur(this)"
+                           onFocus="onFocus(this)">
+                </div>
                 <div class="search-lists">
                     <ul>
                         <h3>Pick a Location</h3>
@@ -52,8 +61,7 @@
                     <input class="search"
                            type="text"
                            name="search"
-                           value=""
-                           placeholder="(e.g. jazz)"
+                           value="(e.g. jazz)"
                            data-placeholder="(e.g. jazz)"
                            onBlur="onBlur(this)"
                            onFocus="onFocus(this)">
