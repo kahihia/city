@@ -26,6 +26,7 @@ from event.forms import SetupFeaturedByAdminForm, CreateEventForm
 from event.services import facebook_services, event_service
 from venues.models import VenueAccountTransferring
 from venues.services import venue_service
+from cityfusion_admin.filters import AdvertisingOrderFilter, FeaturedEventOrderFilter
 
 
 @require_POST
@@ -662,7 +663,11 @@ def admin_share_stats(request, campaign_id):
         }, context_instance=RequestContext(request))
 
 
-from cityfusion_admin.filters import AdvertisingOrderFilter, FeaturedEventOrderFilter
+@staff_member_required
+def admin_unshare_stats(request, campaign_id, account_id):
+    ShareAdvertisingCampaign.objects.filter(campaign_id=campaign_id, account_id=account_id).delete()
+    return HttpResponseRedirect(reverse("admin_share_stats", kwargs={'campaign_id': campaign_id}))
+
 
 @staff_member_required
 def admin_orders(request):
