@@ -236,6 +236,7 @@ html.preview, body.preview {
     border: none;
     height: 14px;
     padding: 3px 5px;
+    color: #022e52;
 }
 
 .search-text-box input.search {

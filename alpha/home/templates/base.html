@@ -120,11 +120,20 @@
 
         <script type="text/javascript">
             function onBlur(el) {
-                var elem = $(el);
-                elem.attr("placeholder", elem.data("placeholder"));
+                var elem = $(el),
+                    placeholderText = elem.data("placeholder");
+
+                if(elem.val() === "") {
+                    elem.val(placeholderText);
+                }
             }
             function onFocus(el) {
-                $(el).attr("placeholder", "");
+                var elem = $(el),
+                    placeholderText = elem.data("placeholder");
+
+                if(elem.val() === placeholderText) {
+                    elem.val("");
+                }
             }
         </script>
         {% include 'django_facebook/_facebook_js.html' %}
