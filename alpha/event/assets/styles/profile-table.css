@@ -211,8 +211,11 @@ a.add-button {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
 
-    color: #5dacfd;
-    margin-right: 5px;
+    color: #5dacfd;    
+}
+
+.shared-with a:hover {
+    color: red;
 }
 
 .per-page-links a {

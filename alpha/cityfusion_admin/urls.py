@@ -177,5 +177,9 @@ urlpatterns = patterns('',
     url(r'^share-stats/(?P<campaign_id>\d+)$',
         views.admin_share_stats,
         name='admin_share_stats'
+    ),
+    url(r'^unshare-stats/(?P<campaign_id>\d+)/(?P<account_id>\d+)$',
+        views.admin_unshare_stats,
+        name='admin_unshare_stats'
     )
 )
