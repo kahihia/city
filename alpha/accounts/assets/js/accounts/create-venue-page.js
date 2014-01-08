@@ -26,7 +26,6 @@
             });
 
             $("#id_place").on("focus", function() {
-                $(this).val('');
                 $(".pac-container").addClass("show");
             });
 
