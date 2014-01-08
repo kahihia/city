@@ -29,9 +29,6 @@
                 $(".pac-container").addClass("show");
             });
 
-
-//            $("[data-id=submit_button]").on("click", that.onSubmitClick);
-
             $(locationNameField).on("autocompletechange", function(event, ui){
                 if ($(locationPointField).val()) {
                     var point = $(locationPointField).val().split(','), identifier;
@@ -63,6 +60,7 @@
                 Cityfusion.userLocationLng = result.geometry.location.lng();
 
                 that.setLocation(Cityfusion.userLocationLat, Cityfusion.userLocationLng);
+                that.venueAutocomplete.suggestForm.showSuggestMap();
                 $("#id_linking_venue_mode").val("GOOGLE");
             });
 
@@ -70,6 +68,10 @@
 
             this.initGoogleMap();
             this.venueAutocomplete = new window.VenueAutocomplete();
+
+            if($("#id_location_lng").val() == 0 && $("#id_location_lat").val() == 0) {
+                this.venueAutocomplete.suggestForm.hideSuggestMap();
+            }
         },
         initGoogleMap: function(){
             var point, options, marker, map,
@@ -146,6 +148,8 @@
                 Cityfusion.userLocationLng = lng;
                 Cityfusion.userLocationLat = lat;
 
+                window.userLocationLng = lng;
+                window.userLocationLat = lat;
             }
         },
         initCKEditor: function(){
@@ -164,6 +168,7 @@
 
             $("#id_venue_identifier").val(venue.id);
             this.setLocation(parseFloat(venue.lat), parseFloat(venue.lng));
+            this.venueAutocomplete.suggestForm.showSuggestMap();
 
             $("#id_linking_venue_mode").val("EXIST");
         },
@@ -185,16 +190,6 @@
         },
         initSocialLinks: function(){
             this.socialLinksWidget = new SocialLinks();
-        },
-        onSubmitClick: function() {
-            var formObj = $("[data-id=new_venue_form]").clone().removeAttr("data-id");
-            var deletedElements = {
-                "venue_name": "venue_name",
-                "venue_street": "street",
-                "venue_city": "city"
-            }
-
-            return false;
         }
     };
 

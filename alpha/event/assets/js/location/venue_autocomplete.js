@@ -27,7 +27,7 @@
         initGeocomplete: function(location_name_input, location_point_input, map_container){
             var latlng,
                 that = this;
-            $(location_name_input).on("autocompletechange", function(event, ui){
+            $(location_name_input).on("autocompleteselect", function(event, ui){
                 if ($(location_point_input).val()) {
                     var point = $(location_point_input).val().split(','), identifier;
 
@@ -44,6 +44,8 @@
                     that.suggestForm.suggestMap.setLocationFromMap(latlng);
                     $("#id_linking_venue_mode").val("GOOGLE");
                 }
+
+                that.suggestForm.showSuggestMap(true);
             });
 
             if(!$("#id_place").data("autocomplete-binded")) {
@@ -66,6 +68,8 @@
                     Cityfusion.userLocationLng = result.geometry.location.lng();
 
                     that.suggestForm.suggestMap.setLocation(Cityfusion.userLocationLat, Cityfusion.userLocationLng);
+
+                    that.suggestForm.showSuggestMap();
 
                     window.setTimeout(that.setVenueText.bind(that), 1);
                     $("#id_linking_venue_mode").val("GOOGLE");

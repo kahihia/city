@@ -106,12 +106,29 @@
             $("#id_venue_identifier").val(venue.id);
             this.suggestMap.setLocation(parseFloat(venue.lat), parseFloat(venue.lng));
 
+            this.showSuggestMap();
+
             if($("#id_tags__tagautosuggest").length !== 0) {
                 $("#id_tags__tagautosuggest")[0].tagspopup.loadTagsForCityByVenue();
             }
 
 
             $("#id_linking_venue_mode").val("EXIST");
+        },
+        hideSuggestMap: function() {
+            $("[data-id=suggest_map_container]").hide();
+        },
+        showSuggestMap: function(inPopup) {
+            $("[data-id=suggest_map_container]").show();
+            if(inPopup) {
+                google.maps.event.trigger(this.suggestMap.map, "resize");
+                this.suggestMap.setLocation(window.userLocationLat, window.userLocationLng);
+                this.suggestMap.infowindow.open(this.suggestMap.map, this.suggestMap.marker);
+
+                if($.fancybox) {
+                    $.fancybox.update();
+                }
+            }
         }
     };
 

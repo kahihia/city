@@ -52,6 +52,10 @@
     display: block;    
 }
 
+.event-posting-field .show-map {
+    top: 0;
+}
+
 .location_map {    
   padding:10px;
   border:1px solid #d8d8d8;

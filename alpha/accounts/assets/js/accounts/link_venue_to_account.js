@@ -69,6 +69,7 @@
 
 
             $(locationNameField).on("autocompletechange", function(event, ui){
+
                 if ($(locationPointField).val()) {
                     var point = $(locationPointField).val().split(','), identifier;
                     
