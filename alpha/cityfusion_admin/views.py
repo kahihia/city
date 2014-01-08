@@ -646,16 +646,16 @@ def admin_share_stats(request, campaign_id):
     campaign = AdvertisingCampaign.objects.get(id=campaign_id)
     
     if request.method == 'POST':
-        account_id = request.POST.get("account_id")
+        user_id = request.POST.get("user_id")
         
-        account = Account.objects.get(id=account_id)
+        account = Account.objects.get(user_id=user_id)
 
         ShareAdvertisingCampaign.objects.get_or_create(
             account=account,
             campaign=campaign
         )        
 
-        return HttpResponseRedirect(reverse('admin_advertising'))
+        return HttpResponseRedirect(reverse("admin_share_stats", kwargs={'campaign_id': campaign_id}))
 
     return render_to_response('cf-admin/admin-share-stats.html', {
             'campaign': campaign,
