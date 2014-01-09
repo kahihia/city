@@ -50,7 +50,7 @@
         initVenueAutocomplete: function(){
             this.venueAutocomplete = new window.VenueAutocomplete();
             if($("#id_location_lng").val() == 0 && $("#id_location_lat").val() == 0) {
-                this.venueAutocomplete.suggestForm.hideSuggestMap();
+                this.venueAutocomplete.suggestForm.initSuggestMapPosition();
             }
         },
         initDescriptionField: function(){

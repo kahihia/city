@@ -60,7 +60,6 @@
                 Cityfusion.userLocationLng = result.geometry.location.lng();
 
                 that.setLocation(Cityfusion.userLocationLat, Cityfusion.userLocationLng);
-                that.venueAutocomplete.suggestForm.showSuggestMap();
                 $("#id_linking_venue_mode").val("GOOGLE");
             });
 
@@ -70,7 +69,7 @@
             this.venueAutocomplete = new window.VenueAutocomplete();
 
             if($("#id_location_lng").val() == 0 && $("#id_location_lat").val() == 0) {
-                this.venueAutocomplete.suggestForm.hideSuggestMap();
+                this.venueAutocomplete.suggestForm.initSuggestMapPosition();
             }
         },
         initGoogleMap: function(){
@@ -168,7 +167,6 @@
 
             $("#id_venue_identifier").val(venue.id);
             this.setLocation(parseFloat(venue.lat), parseFloat(venue.lng));
-            this.venueAutocomplete.suggestForm.showSuggestMap();
 
             $("#id_linking_venue_mode").val("EXIST");
         },

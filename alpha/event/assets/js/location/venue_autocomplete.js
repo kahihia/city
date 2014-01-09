@@ -45,7 +45,6 @@
                     $("#id_linking_venue_mode").val("GOOGLE");
                 }
 
-                that.suggestForm.showSuggestMap(true);
             });
 
             if(!$("#id_place").data("autocomplete-binded")) {
@@ -68,8 +67,6 @@
                     Cityfusion.userLocationLng = result.geometry.location.lng();
 
                     that.suggestForm.suggestMap.setLocation(Cityfusion.userLocationLat, Cityfusion.userLocationLng);
-
-                    that.suggestForm.showSuggestMap();
 
                     window.setTimeout(that.setVenueText.bind(that), 1);
                     $("#id_linking_venue_mode").val("GOOGLE");
