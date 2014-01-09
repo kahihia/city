@@ -393,8 +393,7 @@ def copy(request, authentication_key, template_name='events/create/copy_event.ht
 
 @login_required
 def remove(request, authentication_key):
-    event = Event.events.get(authentication_key__exact=authentication_key)
-    event.delete()
+    event_service.remove_event(authentication_key)
 
     url = request.META.get('HTTP_REFERER', reverse('event_browse'))
     try:

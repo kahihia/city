@@ -21,8 +21,9 @@
                        href="{% url 'event_copy' event.authentication_key %}">
                         Copy
                     </a>
-                    <a class="event-edit-actions__item event-edit-actions__item_pos_last"
-                       href="{% url 'event_remove' event.authentication_key %}" class="danger-action">
+                    <a class="event-edit-actions__item event-edit-actions__item_pos_last event-delete-action"
+                       href="{% url 'event_remove' event.authentication_key %}" class="danger-action"
+                       data-is-featured="{% if event.has_featured %}1{% else %}0{% endif %}">
                         Delete
                     </a>
                     {% if not event.is_featured %}

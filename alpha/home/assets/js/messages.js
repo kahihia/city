@@ -15,6 +15,16 @@
             return confirm(message);
         });
 
+        $("a.event-delete-action").on("click", function() {
+            var isFeatured = parseInt($(this).data("is-featured")),
+                message = "Are you sure?";
+            if(isFeatured) {
+                message += "\r\nThis is the featured event and its remaining budget will be added to your bonus.";
+            }
+
+            return confirm(message);
+        });
+
         $("body").on("click", "button.close", function() {
             $(this).closest(".ajax-popup").fadeOut(400, function() {$(this).remove();});
         });

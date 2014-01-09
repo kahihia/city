@@ -10,6 +10,8 @@ from django.contrib.sites.models import Site
 from django.db import transaction
 from django.contrib.auth.models import User
 
+from moneyed import Money, CAD
+
 from event.settings import DEFAULT_FROM_EMAIL
 from event.services import venue_service, event_occurrence_service
 from event.models import Event, EventAttachment, EventImage, EventTransferring
@@ -158,6 +160,35 @@ def prepare_initial_event_data_for_copy(event):
         "tags": event.tags_representation,
         "description_json": json.dumps(description_json)
     }
+
+
+def remove_event(authentication_key):
+    """ Remove event with the given identifier.
+
+    @type authentication_key: unicode
+    @rtype: bool
+    """
+    try:
+        event = Event.events.get(authentication_key__exact=authentication_key)
+        date_now = datetime.datetime.now()
+        featured_events = list(event.featuredevent_set.filter(end_time__gte=date_now).all())
+
+        if featured_events:
+            bonus = Money(0, CAD)
+            for featured_event in featured_events:
+                if featured_event.start_time < date_now:
+                    bonus += (featured_event.end_time - date_now).days * Money(2, CAD)
+                else:
+                    bonus += (featured_event.end_time - featured_event.start_time).days * Money(2, CAD)
+
+            account = event.owner.get_profile()
+            account.bonus_budget += bonus
+            account.save(update_fields=['bonus_budget'])
+
+        event.delete()
+        return True
+    except Event.DoesNotExist:
+        return False
 
 
 def change_event_owner(event_id, owner_id, identifier, is_last, session):

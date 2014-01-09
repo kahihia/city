@@ -190,6 +190,9 @@ class Event(models.Model):
             active=True
         ).count() > 0
 
+    def has_featured(self):
+        return self.featuredevent_set.filter(end_time__gte=datetime.datetime.now()).count() > 0
+
     def is_multiday(self):
         return self.event_type == 'MULTIDAY'
 
