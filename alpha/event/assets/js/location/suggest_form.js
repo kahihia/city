@@ -114,8 +114,8 @@
             $("#id_linking_venue_mode").val("EXIST");
         },
         initSuggestMapPosition: function() {
-            window.userLocationLat = Cityfusion.userLocationLat;
-            window.userLocationLng = Cityfusion.userLocationLng;
+            window.userLocationLat = Cityfusion.userLocationLng;
+            window.userLocationLng = Cityfusion.userLocationLat; // ??? somehow vice versa
             this.suggestMap.setLocation(window.userLocationLat, window.userLocationLng);
         }
     };

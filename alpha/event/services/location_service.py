@@ -325,7 +325,7 @@ def user_location(request):
     return {
         "user_location_city": (from_user_choice.city or from_browser.city or by_IP.city),
         "user_location_region": (from_user_choice.canadian_region or from_account_settings.canadian_region or from_browser.canadian_region or by_IP.canadian_region),
-        "user_location_lat_lon": (from_browser.lat_lon or by_IP.lat_lon),
+        "user_location_lat_lon": by_IP.lat_lon,
         "is_canada": from_browser.is_canada,
 
         "user_location_type": from_user_choice.location_type,
