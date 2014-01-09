@@ -2,7 +2,10 @@
     <div class="cfadmin-actions">
         <a href="{% url 'event_copy' event.authentication_key %}">Copy</a>
         <a href="{% url 'event_edit' event.authentication_key %}">Edit</a>
-        <a href="{% url 'event_remove' event.authentication_key %}" class="danger-action">Remove</a>
+        <a href="{% url 'event_remove' event.authentication_key %}" class="event-delete-action"
+           data-is-featured="{% if event.has_featured %}1{% else %}0{% endif %}">
+            Remove
+        </a>
         {% if request.user.is_staff %}
             <a href="{% url 'admin_setup_featured' event.event_identifier %}">Make featured</a>
         {% else %}

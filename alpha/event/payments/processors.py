@@ -33,9 +33,8 @@ class PaypalPaymentProcessor(BasePaymentProcessor):
 
             Account.objects.filter(user_id=self.request.user.id).update(bonus_budget=F("bonus_budget")-bonus)
 
-
     def process_order(self):
-        cost = (self.featured_event.end_time - self.featured_event.start_time).days * Money(2, CAD)
+        cost = self._calculate_cost()
         bonus = Money(Decimal(self.request.POST["bonus"]), CAD)
         cost = cost - bonus
 
@@ -74,7 +73,6 @@ class PaypalPaymentProcessor(BasePaymentProcessor):
 
         self.order = order
 
-
     def process_setup(self):
         self.redirect_to_paypal = False
         self.process_order()
@@ -85,7 +83,15 @@ class PaypalPaymentProcessor(BasePaymentProcessor):
         if self.redirect_to_paypal:
             return HttpResponseRedirect(reverse('setup_featured_payment', args=(str(self.order.id),)))
         else:
-            return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': self.request.user.username}))
+            return HttpResponseRedirect(reverse('userena_profile_detail',
+                                                kwargs={'username': self.request.user.username}))
+
+    def _calculate_cost(self):
+        """ Calculate cost without a bonus.
+
+        @rtype: Money
+        """
+        return (self.featured_event.end_time - self.featured_event.start_time).days * Money(2, CAD)
 
 
 
