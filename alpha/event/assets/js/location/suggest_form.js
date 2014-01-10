@@ -114,9 +114,22 @@
             $("#id_linking_venue_mode").val("EXIST");
         },
         initSuggestMapPosition: function() {
-            window.userLocationLat = Cityfusion.userLocationLng;
-            window.userLocationLng = Cityfusion.userLocationLat; // ??? somehow vice versa
-            this.suggestMap.setLocation(window.userLocationLat, window.userLocationLng);
+            var geocoder = new google.maps.Geocoder(),
+                that = this;
+            geocoder.geocode({
+                "address": Cityfusion.userLocationCityName,
+                componentRestrictions: {
+                    country: 'ca'
+                }
+            }, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var location = results[0].geometry.location;
+                    window.userLocationLat = location.lat();
+                    window.userLocationLng = location.lng();
+
+                    that.suggestMap.setLocation(window.userLocationLat, window.userLocationLng);
+                }
+            });
         }
     };
 
