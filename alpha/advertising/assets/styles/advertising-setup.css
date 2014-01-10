@@ -288,73 +288,94 @@ body .hintbox {
     position: relative;
 }
 
-.advertising-form__ad-sizes-preview {
-    position: absolute;
+.ad-sizes-preview {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
     display: none;
-    left: 330px;
-    top: 200px;
+}
+
+.ad-sizes-preview__box {
+    position: absolute;
+    left: 50%;
+    top: 50%;
     z-index: 10;
-    width: 580px;
-    height: 545px;
     background: #ffffff;
     padding: 5px;
     box-shadow: 0 0 5px #000;
     border-radius: 5px;
 }
 
-.advertising-form__ad-sizes-pointer {
-    position: absolute;
-    background: #111111;
-    opacity: 0.5;
+.t_300_250 .ad-sizes-preview__box {
+    margin: -125px 0 0 -150px;
 }
 
-.t_300_250 .advertising-form__ad-sizes-pointer {
-    width: 146px;
-    height: 121px;
-    left: 437px;
-    top: 62px;
+.t_300_250 .ad-sizes-preview__sample {
+    background: url(/static/advertising/images/ad_300_250.jpg) left top no-repeat;
+    width: 300px;
+    height: 250px;
 }
 
-.t_300_100 .advertising-form__ad-sizes-pointer {
-    width: 146px;
-    height: 47px;
-    left: 7px;
-    top: 7px;
+.t_300_100 .ad-sizes-preview__box {
+    margin: -50px 0 0 -150px;
 }
 
-.t_300_600 .advertising-form__ad-sizes-pointer {
-    width: 146px;
-    height: 297px;
-    left: 7px;
-    top: 252px;
+.t_300_100 .ad-sizes-preview__sample {
+    background: url(/static/advertising/images/ad_300_100.jpg) left top no-repeat;
+    width: 300px;
+    height: 100px;
 }
 
-.t_728_90 .advertising-form__ad-sizes-pointer {
-    width: 361px;
-    height: 42px;
-    left: 223px;
-    top: 7px;
+.t_300_600 .ad-sizes-preview__box {
+    margin: -300px 0 0 -150px;
 }
 
-.t_120_60 .advertising-form__ad-sizes-pointer {
-    width: 57px;
-    height: 27px;
-    left: 372px;
-    top: 237px;
+.t_300_600 .ad-sizes-preview__sample {
+    background: url(/static/advertising/images/ad_300_600.jpg) left top no-repeat;
+    width: 300px;
+    height: 600px;
 }
 
-.t_468_60 .advertising-form__ad-sizes-pointer {
-    width: 231px;
-    height: 27px;
-    left: 7px;
-    top: 62px;
+.t_728_90 .ad-sizes-preview__box {
+    margin: -45px 0 0 -235px;
 }
 
-.t_120_600 .advertising-form__ad-sizes-pointer {
-    width: 57px;
-    height: 297px;
-    left: 247px;
-    top: 252px;
+.t_728_90 .ad-sizes-preview__sample {
+    background: url(/static/advertising/images/ad_728_90.jpg) left top no-repeat;
+    width: 728px;
+    height: 90px;
+}
+
+.t_120_60 .ad-sizes-preview__box {
+    margin: -30px 0 0 -60px;
+}
+
+.t_120_60 .ad-sizes-preview__sample {
+    background: url(/static/advertising/images/ad_120_60.jpg) left top no-repeat;
+    width: 120px;
+    height: 60px;
+}
+
+.t_468_60 .ad-sizes-preview__box {
+    margin: -30px 0 0 -234px;
+}
+
+.t_468_60 .ad-sizes-preview__sample {
+    background: url(/static/advertising/images/ad_468_60.jpg) left top no-repeat;
+    width: 468px;
+    height: 60px;
+}
+
+.t_120_600 .ad-sizes-preview__box {
+    margin: -300px 0 0 -60px;
+}
+
+.t_120_600 .ad-sizes-preview__sample {
+    background: url(/static/advertising/images/ad_120_600.jpg) left top no-repeat;
+    width: 120px;
+    height: 600px;
 }
 
 .advertising-form__details-content .errors {

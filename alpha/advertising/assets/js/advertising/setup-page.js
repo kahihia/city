@@ -44,7 +44,7 @@
                 that.showOrHideUploadRow(ad_type_id, checked);
             });
 
-            var previewBox = $(".advertising-form__ad-sizes-preview");
+            var previewBox = $(".ad-sizes-preview");
 
             $(".ad-type-description-col span").hover(
                 function() {
