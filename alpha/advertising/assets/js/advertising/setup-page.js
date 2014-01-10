@@ -50,11 +50,11 @@
                 function() {
                     var adType = $(this).data("ad-type");
                     previewBox.addClass(adType);
-                    previewBox.show();
+                    previewBox.css({"visibility": "visible"});
                 }, function() {
                     var adType = $(this).data("ad-type");
                     previewBox.removeClass(adType);
-                    previewBox.hide();
+                    previewBox.css({"visibility": "hidden"});
                 }
             );
         },
