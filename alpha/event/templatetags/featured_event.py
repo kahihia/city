@@ -72,7 +72,7 @@ def truncatesmart(value, limit=80):
 
 @register.simple_tag(takes_context=True)
 def feature_event_as_image(context, event):
-    script_version = "1.02"
+    script_version = "1.03"
 
     image_filename = "%s_feature_event_as_image_%s.png" % (event.slug, script_version)
 
@@ -90,7 +90,7 @@ def feature_event_as_image(context, event):
             thumb = thumbnailer.get_thumbnail(thumbnail_options)
             im = thumb.image
         else:
-            im = Image.open("event/static/images/default-event-147x147.jpg")
+            im = Image.open("event/assets/images/default-event-147x147.jpg")
         
         im = im.convert("RGBA")
 
@@ -105,8 +105,8 @@ def feature_event_as_image(context, event):
         venue_pos = (5, 121)
         event_details_pos = (5, 131)
 
-        arial = ImageFont.truetype("%s/alpha/event/static/fonts/Arial.ttf" % settings.BASE_PATH, 10)
-        arial_bold = ImageFont.truetype("%s/alpha/event/static/fonts/Arial_Bold.ttf" % settings.BASE_PATH, 10)
+        arial = ImageFont.truetype("%s/alpha/event/assets/fonts/Arial.ttf" % settings.BASE_PATH, 10)
+        arial_bold = ImageFont.truetype("%s/alpha/event/assets/fonts/Arial_Bold.ttf" % settings.BASE_PATH, 10)
 
         time_period = "%s - %s" % (filters.title(filters.date(event.start_time, "b d, Y | fA")), filters.title(filters.date(event.end_time, "fA")))
 
