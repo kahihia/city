@@ -25,9 +25,9 @@ from accounts.forms import ReminderSettingsForm, InTheLoopSettingsForm
 from accounts.decorators import ajax_login_required
 from accounts.forms import AccountForm
 from advertising.models import AdvertisingOrder
-from event.models import Event, SingleEvent, EventTransferring
-from notices.models import Notice
-from .models import Account, VenueAccount
+from event.models import Event, SingleEvent
+
+from accounts.models import Account, VenueAccount
 from utils import remind_account_about_events, inform_account_about_events_with_tags
 from event.models import FeaturedEventOrder
 from event.services import event_service
