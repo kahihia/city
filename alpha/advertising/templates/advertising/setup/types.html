@@ -23,7 +23,8 @@
 
         {% for advertising_type in advertising_types %}
         <tr>
-            <td class="ad-type-description-col">
+            <td class="ad-type-description-col"
+                data-ad-type="t_{{ advertising_type.width }}_{{ advertising_type.height }}">
                 <input type="checkbox"
                        id="id_advertising_type_{{ advertising_type.id }}"
                        value="{{ advertising_type.id }}"
@@ -31,8 +32,7 @@
                        data-type="advertising-type"
                        data-ad-type="{{ advertising_type.id }}"
                        {% if advertising_type.id in chosen_advertising_types %}checked="checked"{% endif %} />
-                <span for="id_advertising_type_{{ advertising_type.id }}"
-                      data-ad-type="t_{{ advertising_type.width }}_{{ advertising_type.height }}">
+                <span for="id_advertising_type_{{ advertising_type.id }}">
                     {{ advertising_type }}
                 </span>
             </td>

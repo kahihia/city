@@ -288,24 +288,16 @@ body .hintbox {
     position: relative;
 }
 
-.ad-sizes-preview {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    visibility: hidden;
-    z-index: 10;
-}
-
 .ad-sizes-preview__box {
-    position: absolute;
+    position: fixed;
     left: 50%;
     top: 50%;
     background: #ffffff;
     padding: 5px;
     box-shadow: 0 0 5px #000;
     border-radius: 5px;
+    z-index: 10;
+    visibility: hidden;
 }
 
 .ad-sizes-preview__sample {
@@ -315,7 +307,7 @@ body .hintbox {
     top: 0;
 }
 
-.t_300_250 .ad-sizes-preview__box {
+.ad-sizes-preview__box.t_300_250 {
     margin: -125px 0 0 -150px;
 }
 
@@ -326,7 +318,7 @@ body .hintbox {
     position: relative;
 }
 
-.t_300_100 .ad-sizes-preview__box {
+.ad-sizes-preview__box.t_300_100 {
     margin: -50px 0 0 -150px;
 }
 
@@ -337,7 +329,7 @@ body .hintbox {
     position: relative;
 }
 
-.t_300_600 .ad-sizes-preview__box {
+.ad-sizes-preview__box.t_300_600 {
     margin: -300px 0 0 -150px;
 }
 
@@ -348,7 +340,7 @@ body .hintbox {
     position: relative;
 }
 
-.t_728_90 .ad-sizes-preview__box {
+.ad-sizes-preview__box.t_728_90 {
     margin: -45px 0 0 -235px;
 }
 
@@ -359,7 +351,7 @@ body .hintbox {
     position: relative;
 }
 
-.t_120_60 .ad-sizes-preview__box {
+.ad-sizes-preview__box.t_120_60 {
     margin: -30px 0 0 -60px;
 }
 
@@ -370,7 +362,7 @@ body .hintbox {
     position: relative;
 }
 
-.t_468_60 .ad-sizes-preview__box {
+.ad-sizes-preview__box.t_468_60 {
     margin: -30px 0 0 -234px;
 }
 
@@ -381,7 +373,7 @@ body .hintbox {
     position: relative;
 }
 
-.t_120_600 .ad-sizes-preview__box {
+.ad-sizes-preview__box.t_120_600 {
     margin: -300px 0 0 -60px;
 }
 
