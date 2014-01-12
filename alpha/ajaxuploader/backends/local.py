@@ -1,5 +1,6 @@
 from io import FileIO, BufferedWriter
 import os
+from PIL import Image
 
 from django.conf import settings
 
@@ -55,3 +56,28 @@ class LocalUploadBackend(AbstractUploadBackend):
         else:
             return filename_no_extension + str(filename_suffix) + extension
 
+    def resize_for_display(self, filename, width, height):
+        upload_dir_path = os.path.join(settings.MEDIA_ROOT, self.UPLOAD_DIR) + "/"
+        original_path = upload_dir_path + filename
+        filename_no_extension, extension = os.path.splitext(filename)
+        need_ratio = float(width) / float(height)
+        im = Image.open(original_path)
+        real_width, real_height = [float(x) for x in im.size]
+        real_ratio = real_width / real_height
+
+        if real_width > width or real_height > height:
+            if real_ratio > need_ratio:
+                displayed_width = width
+                displayed_height = int(width / real_ratio)
+            else:
+                displayed_height = height
+                displayed_width = int(height * real_ratio)
+
+            resized_im = im.resize((displayed_width, displayed_height))
+            displayed_filename = '%s_displayed%s' % (filename_no_extension, extension)
+            resized_im.save(upload_dir_path + displayed_filename)
+            displayed_path = settings.MEDIA_URL + self.UPLOAD_DIR + "/" + displayed_filename
+        else:
+            displayed_path = settings.MEDIA_URL + self.UPLOAD_DIR + "/" + filename
+
+        return {'displayed_path': displayed_path, 'true_size': im.size}

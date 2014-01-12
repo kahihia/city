@@ -24,7 +24,9 @@
             params: {
                 'csrf_token': crsf_token,
                 'csrf_name': 'csrfmiddlewaretoken',
-                'csrf_xname': 'X-CSRFToken'
+                'csrf_xname': 'X-CSRFToken',
+                'max_displayed_width': 800,
+                'max_displayed_height': 500
             },
             template: '<div class="qq-uploader">' +
                 '<div class="qq-upload-button">Upload an Image</div>' +
@@ -56,7 +58,7 @@
         }
     }
 
-    function CroppingImageWidget(filename, filepath, cropping, imagesWidget){
+    function CroppingImageWidget(filename, filepath, cropping, imagesWidget, displayedFilepath, trueSize){
         var that = this;
         this.imagesWidget = imagesWidget;
         this.filepath = filepath;
@@ -68,6 +70,8 @@
             w: cropping[2]-cropping[0], 
             h: cropping[3]-cropping[1]
         };
+        this.displayedFilepath = displayedFilepath;
+        this.trueSize = trueSize;
 
         this.cropping = cropping;
 
@@ -79,7 +83,7 @@
             this.upButton = dom("i", {"class": "icon-arrow-up"}),
             dom("div", {"class": "picture-thumb result"}, [
                 this.preview = dom("img", {
-                    "src": filepath,
+                    "src": displayedFilepath,
                     "class": "preview"
                 })
             ])
@@ -135,7 +139,7 @@
             }, [
                 this.image = dom("img", {
                     "class": "cropping-image",
-                    "src": this.filepath
+                    "src": this.displayedFilepath
                 }),
                 this.saveButton = dom("div", {"class": "save-button", "innerHTML": "Save image"}),
                 this.cancelButton = dom("div", {"class": "cancel-button", "innerHTML": "Cancel"})
@@ -163,30 +167,46 @@
             });
         },
         showPreview: function(){
-            var rx, ry;            
+            var rx, ry,
+                width, height;
 
             rx = 180 / this.selected.w;
             ry = 180 / this.selected.h;
 
+            if(this.trueSize) {
+                width = this.trueSize[0];
+                height = this.trueSize[1];
+            }
+            else {
+                width = $(this.image).width();
+                height = $(this.image).height();
+            }
+
             $(this.preview).css({
-                width: Math.round(rx * $(this.image).width()) + 'px',
-                height: Math.round(ry * $(this.image).height()) + 'px',
+                width: Math.round(rx * width) + 'px',
+                height: Math.round(ry * height) + 'px',
                 marginLeft: '-' + Math.round(rx * this.selected.x) + 'px',
                 marginTop: '-' + Math.round(ry * this.selected.y) + 'px'  
             });
         },
         initJcrop: function(){
-            var that = this;
-            $(this.image).Jcrop({
-                aspectRatio: 1,
-                minSize: [50, 50],
-                boxWidth: 800,
-                boxHeight: 500,
-                element: this.image,
-                setSelect: this.cropping,
-                onSelect: this.onSelect.bind(this),
-                onChange: this.onSelect.bind(this)
-            }, function(){
+            var that = this,
+                options = {
+                    aspectRatio: 1,
+                    minSize: [50, 50],
+                    boxWidth: 800,
+                    boxHeight: 500,
+                    element: this.image,
+                    setSelect: this.cropping,
+                    onSelect: this.onSelect.bind(this),
+                    onChange: this.onSelect.bind(this)
+                }
+
+            if(that.trueSize) {
+                options.trueSize = that.trueSize;
+            }
+
+            $(this.image).Jcrop(options, function(){
                 that.jcrop = this;
             });
         },
@@ -214,7 +234,9 @@
             var widget = that.addCroppedImage(
                 filename,
                 responseJSON.path,
-                [0, 0, 180, 180]
+                [0, 0, 180, 180],
+                responseJSON.displayed_path,
+                responseJSON.true_size
             );
 
             widget.edit();
@@ -224,8 +246,8 @@
     }
 
     CroppedImages.prototype = {        
-        addCroppedImage: function(filename, filepath, cropping){
-            var widget = new CroppingImageWidget(filename, filepath, cropping, this);
+        addCroppedImage: function(filename, filepath, cropping, displayedFilepath, trueSize){
+            var widget = new CroppingImageWidget(filename, filepath,  cropping, this, displayedFilepath, trueSize);
             this.images.push(widget);
             $(this.element).append(widget.element);
 
@@ -278,7 +300,7 @@
                             return parseInt(val);
                         });
 
-                    this.addCroppedImage(filepath.replace(/^.*(\\|\/|\:)/, ''), filepath, cropping);
+                    this.addCroppedImage(filepath.replace(/^.*(\\|\/|\:)/, ''), filepath, cropping, filepath);
                 }, this);
             }
         },

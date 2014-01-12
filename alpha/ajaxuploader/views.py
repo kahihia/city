@@ -55,6 +55,12 @@ class AjaxFileUploader(object):
             # callback
             extra_context = backend.upload_complete(request, filename, *args, **kwargs)
 
+            # if need resized copy for display
+            displayed_width = int(request.GET.get('max_displayed_width', 0))
+            displayed_height = int(request.GET.get('max_displayed_height', 0))
+            if displayed_width and displayed_height:
+                extra_context.update(backend.resize_for_display(filename, displayed_width, displayed_height))
+
             # let Ajax Upload know whether we saved it or not
             ret_json = {'success': success, 'filename': filename}
             if extra_context is not None:
