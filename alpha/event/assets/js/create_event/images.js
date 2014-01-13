@@ -193,7 +193,7 @@
             var that = this,
                 options = {
                     aspectRatio: 1,
-                    minSize: [50, 50],
+                    minSize: [265, 265],
                     boxWidth: 800,
                     boxHeight: 500,
                     element: this.image,
