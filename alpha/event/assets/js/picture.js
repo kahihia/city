@@ -143,7 +143,7 @@
 
             var options = {
                 aspectRatio: 1,
-                minSize: [50, 50],
+                minSize: [200, 200],
                 boxWidth: 800,
                 boxHeight: 500,
                 setSelect: selected,
