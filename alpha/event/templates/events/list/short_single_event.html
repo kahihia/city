@@ -17,14 +17,20 @@
         </div>
         <div class="entry-date">
             {% if event.event_type == "SINGLE" %}
-                <span class="event-date">{{event.start_time|date:"l, N d"}}</span>
-                <span class="delimeter">|</span>
-                <span class="event-time">{{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}</span>
+                <div class="entry-date-day">
+                    <span class="event-date">{{event.start_time|date:"l, N d"}}</span>
+                </div>
+                <div class="entry-date-time">
+                    <span class="event-time">{{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}</span>
+                </div>
             {% endif %}
             {% if event.event_type == "MULTIDAY" %}
-                <span class="event-date">{{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.start_time|date:"D, N d"}}</span>
-                <span class="delimeter">|</span>
-                <span class="event-time">{{event.first_occurrence.start_time|just_time|lower}} - {{event.first_occurrence.end_time|just_time|lower}}*</span>
+                <div class="entry-date-day">
+                    <span class="event-date">{{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.start_time|date:"D, N d"}}</span>
+                </div>
+                <div class="entry-date-time">
+                    <span class="event-time">{{event.first_occurrence.start_time|just_time|lower}} - {{event.first_occurrence.end_time|just_time|lower}}*</span>
+                </div>
             {% endif %}
         </div>
         <div class="event-location">

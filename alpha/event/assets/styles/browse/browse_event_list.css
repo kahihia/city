@@ -196,13 +196,21 @@
     padding: 2px 0;
 }
 
+.entry-date .entry-date-day {
+    float: left;
+}
+
+.entry-date .entry-date-time {
+    float: right;
+}
+
 .entry-wrapper .entry-info .entry-details-wrapper {
     width: 365px;
 }
 
 .entry-wrapper .entry-info.home-page .entry-details-wrapper .title,
 .entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-date {
-    width: 355px;
+    width: 365px;
 }
 
 
@@ -212,7 +220,7 @@
 .entry-wrapper .entry-info.home-page .entry-details-wrapper .title,
 .entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-date,
 .entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-description {
-    width: 355px;
+    width: 365px;
 }
 
 .entry-wrapper .entry-info.with-actions .entry-details-wrapper{
