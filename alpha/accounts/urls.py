@@ -79,4 +79,8 @@ urlpatterns = patterns('',
     url(r'^reject-venue-transferring/(?P<venue_transferring_id>\d+)/$',
         accounts.reject_venue_transferring,
         name='reject_venue_transferring'),
+
+    url(r'^test-location-determining/$',
+        accounts.test_location_determining,
+        name='test_location_determining')
 )

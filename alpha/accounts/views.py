@@ -11,6 +11,7 @@ from django.conf import settings
 from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
+from django.core.mail.message import EmailMessage
 
 from cities.models import City
 from pdfutils.reports import Report
@@ -30,7 +31,7 @@ from event.models import Event, SingleEvent
 from accounts.models import Account, VenueAccount
 from utils import remind_account_about_events, inform_account_about_events_with_tags
 from event.models import FeaturedEventOrder
-from event.services import event_service
+from event.services import event_service, location_service
 from venues.services import venue_service
 
 
@@ -457,3 +458,32 @@ def reject_venue_transferring(request, venue_transferring_id):
     success = venue_service.reject_venue_transferring(venue_transferring_id, notice_id)
 
     return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
+
+
+def test_location_determining(request):
+    by_IP = location_service.LocationByIP(request)
+    lat_lng = by_IP.lat_lon
+    location_data = {
+        'region': by_IP.canadian_region.name,
+        'city': by_IP.city.name,
+        'location_lat': lat_lng[1],
+        'location_lng': lat_lng[0],
+        'ip': by_IP.ip
+    }
+
+    meta = request.META
+    message = json.dumps({
+        'location_data': location_data,
+        'meta_data': {x: meta[x] for x in meta if type(meta[x]) in [int, str, bool, unicode]}
+    })
+
+    subject = "Bad ip on Cityfusion."
+
+    msg = EmailMessage(subject,
+               message,
+               'info@cityfusion.ca',
+               ['chigrinets.alexandr@gmail.com'])
+    msg.content_subtype = 'html'
+    msg.send()
+
+    return HttpResponse(json.dumps(location_data), mimetype='application/json')
