@@ -464,8 +464,8 @@ def test_location_determining(request):
     by_IP = location_service.LocationByIP(request)
     lat_lng = by_IP.lat_lon
     location_data = {
-        'region': by_IP.canadian_region.name,
-        'city': by_IP.city.name,
+        'region': by_IP.canadian_region.name if by_IP.canadian_region is not None else '',
+        'city': by_IP.city.name if by_IP.city is not None else '',
         'location_lat': lat_lng[1],
         'location_lng': lat_lng[0],
         'ip': by_IP.ip
