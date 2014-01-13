@@ -36,3 +36,6 @@ class AbstractUploadBackend(object):
         except:
             # things went badly.
             return False
+
+    def resize_for_display(self, filename, width, height):
+        pass

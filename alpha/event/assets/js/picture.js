@@ -80,7 +80,11 @@
                     $(that.indicatorBlockSelector).addClass("inv");
                     if(responseJSON.success) {
                         $("#id_picture_src").val(responseJSON.path);
-                        that.changeImage(responseJSON.path);
+                        that.changeImage(
+                            responseJSON.path,
+                            responseJSON.displayed_path,
+                            responseJSON.true_size
+                        );
                         $(".modal-bg").show();
                         
                         $.fancybox($(that.popup), {
@@ -100,9 +104,11 @@
                     $(that.uploadingCancelSelector).attr("data-file-id", id);
                 },
                 params: {
-                    'csrf_token': crsf_token,
-                    'csrf_name': 'csrfmiddlewaretoken',
-                    'csrf_xname': 'X-CSRFToken'
+                    "csrf_token": crsf_token,
+                    "csrf_name": 'csrfmiddlewaretoken',
+                    "csrf_xname": 'X-CSRFToken',
+                    "max_displayed_width": 800,
+                    "max_displayed_height": 500
                 },
                 template: '<div class="qq-uploader">' +
                     '<div class="qq-upload-drop-area"><span>Drop files here to upload</span></div>' +
@@ -117,10 +123,9 @@
                  '</div>'
             });
 
-            if($("#id_picture_src").val()){
-                this.changeImage(
-                    $("#id_picture_src").val()
-                );
+            var pictureSrc = $("#id_picture_src").val();
+            if(pictureSrc){
+                this.changeImage(pictureSrc, pictureSrc);
             }
         },
         initJcrop: function() {
@@ -136,7 +141,7 @@
                 selected = [0, 0, $(this.popup).data("thumb-height"), $(this.popup).data("thumb-width")];
             }
 
-            $(this.cropping_image).Jcrop({
+            var options = {
                 aspectRatio: 1,
                 minSize: [50, 50],
                 boxWidth: 800,
@@ -155,7 +160,13 @@
                         that.showPreview(selected, that.jcrop.getWidgetSize());
                     }
                 }
-            }, function() {
+            }
+
+            if(this.trueSize) {
+                options.trueSize = this.trueSize;
+            }
+
+            $(this.cropping_image).Jcrop(options, function() {
                 that.jcrop = this;
                 that.showPreview({
                     x:selected[0],
@@ -166,7 +177,7 @@
             });
             
         },
-        changeImage: function(image_path) {
+        changeImage: function(image_path, displayedImagePath, trueSize) {
             var that = this;
             if(this.cropping_image) {
                 $(this.cropping_image).remove();
@@ -174,8 +185,12 @@
             }
 
             this.cropping_image = $("<img id='id_cropping-image'>");
-            this.cropping_image.attr('src', image_path);
+            this.cropping_image.attr('src', displayedImagePath);
             $(this.cropping).after(this.cropping_image);
+
+            this.image_path = image_path;
+            this.displayedImagePath = displayedImagePath;
+            this.trueSize = trueSize;
 
             that.initJcrop();
         },
@@ -205,11 +220,21 @@
             var width = $(".picture-thumb").width();
             var rx = width / coords.w;
             var ry = width / coords.h;
+            var trueWidth, trueHeight;
+
+            if(this.trueSize) {
+                trueWidth = this.trueSize[0];
+                trueHeight = this.trueSize[1];
+            }
+            else {
+                trueWidth = $(this.cropping_image).width();
+                trueHeight = $(this.cropping_image).height();
+            }
 
             $('.picture-thumb .preview')[0].src = $(this.cropping_image)[0].src;
             $('.picture-thumb .preview').css({
-                width: Math.round(rx * $(this.cropping_image).width()) + 'px',
-                height: Math.round(ry * $(this.cropping_image).height()) + 'px',
+                width: Math.round(rx * trueWidth) + 'px',
+                height: Math.round(ry * trueHeight) + 'px',
                 marginLeft: '-' + Math.round(rx * coords.x) + 'px',
                 marginTop: '-' + Math.round(ry * coords.y) + 'px'
             });
