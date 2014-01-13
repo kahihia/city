@@ -185,6 +185,7 @@ def view(request, slug, date=None):
 
     venue = event.venue
 
+    #events_from_venue = SingleEvent.venue_events(venue)
     events_from_venue = event.owner_venues_events()
     if date:
         events_from_venue = events_from_venue.exclude(id=event.id)

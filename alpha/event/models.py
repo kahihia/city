@@ -235,7 +235,10 @@ class Event(models.Model):
     def owner_venues_events(self):
         multiday_events = []
         hidden_single_events = []
-        venue_ids = self.owner.get_profile().venueaccount_set.all().values_list('venue__id', flat=True)
+        venue_ids = list(self.owner.get_profile().venueaccount_set.all().values_list('venue__id', flat=True))
+        if self.venue.id not in venue_ids:
+            venue_ids.append(self.venue.id)
+
         single_events = SingleEvent.future_events.filter(event__venue__id__in=venue_ids)\
                                                  .select_related("event__venue", "event__venue__city")
 
