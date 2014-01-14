@@ -38,6 +38,7 @@ nosetests.xml
 /static
 /media
 /alpha/media
+/alpha/geoip/*.dat
 /pids
 
 *.log
@@ -46,3 +47,5 @@ nosetests.xml
 .directory
 
 *.orig
+
+
