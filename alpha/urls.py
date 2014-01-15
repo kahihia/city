@@ -22,6 +22,9 @@ urlpatterns = patterns(
     url(r'^account-actions/', include('accounts.urls')),
     url(r'^cf-admin/', include('cityfusion_admin.urls')),
     url(r'^feedback/', include('feedback.urls')),
+    url(r'^rotation/open/(?P<advertising_id>\d+)/$',
+        'advertising.views.open',
+        name='advertising_open'),
     url(r'^advertise/$', 'home.views.redirect', name='advertise'),
     # url(r'^alpha/', include('alpha.foo.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:

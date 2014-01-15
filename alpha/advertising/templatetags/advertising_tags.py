@@ -85,7 +85,7 @@ def advertising(context, dimensions):
 
 
 @register.inclusion_tag('advertising/advertising_group.html', takes_context=True)
-def advertising_group(context, dimensions, css_class="advertising-right"):
+def advertising_group(context, dimensions, css_class="rotation-right"):
     """
         {% advertising_group "300x250|300x250|300x250" %}
 

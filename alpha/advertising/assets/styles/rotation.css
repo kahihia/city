@@ -3,17 +3,17 @@
 }
 
 
-.advertising-right-container {
+.rotation-right-container {
     float: left;
     margin-left: 10px;
 }
 
-.home .advertising-right-container {
+.home .rotation-right-container {
 	position: absolute;
 	right: 0;
 }
 
-.advertising-right {
+.rotation-right {
     padding: 4px;
     background: #ffffff;
     border: 1px solid #c5c5c5;
@@ -21,14 +21,14 @@
     text-align: center;
 }
 
-.advertising-right.first {
+.rotation-right.first {
     margin-top: 0;
 }
 
-.home .advertising-right.first {
+.home .rotation-right.first {
     margin-top: 0;
 }
 
-.advertising-right a {
+.rotation-right a {
     display: block;
 }
