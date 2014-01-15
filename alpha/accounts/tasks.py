@@ -6,6 +6,7 @@ from utils import remind_account_about_events, inform_account_about_events_with_
 from models import AccountReminding, Account, InTheLoopSchedule
 from event.models import SingleEvent
 from accounts.models import REMINDER_TYPES
+import subprocess
 
 
 @task
@@ -48,3 +49,9 @@ def inform_accounts_about_new_events_with_tags():
         inform_account_about_events_with_tags(account)
 
     InTheLoopSchedule.new_events.all().update(processed=True)
+
+
+@task
+def upgrade_maxmind():
+    subprocess.call(["geoipupdate"]) 
+
