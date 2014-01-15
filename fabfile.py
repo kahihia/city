@@ -66,3 +66,23 @@ def pip_freeze():
 
 def echo_shell():
     print env.shell
+
+def install_geoip():
+    run("apt-get install geoip-bin")
+    run("""
+cat > /etc/GeoIP.conf << EOF
+# GeoIP.conf file - used by geoipupdate program
+# to update databases from http://www.maxmind.com
+# UserId, LicenseKey, ProductIds from rpierce@verticalseven.com account
+UserId 77474
+LicenseKey q4XOEIJMFdId
+ProductIds 132ca
+EOF
+    """)
+    run("""crontab -l | { cat; echo "0 12 * * 3 geoipupdate"; } | crontab -""")
+    run("geoipupdate")
+    with cd(env.alpha_folder):
+        run("rm geoip/*")
+        run("ln -s /usr/share/GeoIP/GeoIPCityca.dat GeoIPCityca.dat")
+        run("ln -s /usr/share/GeoIP/GeoIP.dat GeoIP.dat")
+

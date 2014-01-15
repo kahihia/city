@@ -9,8 +9,8 @@ from django.contrib.gis.db import models
 from django.contrib.sites.models import Site
 
 from accounts.models import Account, AccountReminding
-from .models import Event, EventSlug, SingleEvent, AuditEvent, AuditPhrase, phrases_query, has_changed
-from .settings import DEFAULT_FROM_EMAIL, DELETED_EVENTS_REMINDING_INTERVAL
+from event.models import Event, EventSlug, SingleEvent, AuditEvent, AuditPhrase, phrases_query
+from event.settings import DEFAULT_FROM_EMAIL, DELETED_EVENTS_REMINDING_INTERVAL
 
 
 def audit_event_catch(instance=None, created=False, **kwargs):
