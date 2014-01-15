@@ -182,7 +182,7 @@ def view(request, slug, date=None):
 
     SingleEvent.objects.filter(id=event.id).update(viewed=F("viewed")+1)
 
-    events_from_venue = event.owner_venues_events()
+    events_from_venue = SingleEvent.venue_events(event.venue)
     if date:
         events_from_venue = events_from_venue.exclude(id=event.id)
 
