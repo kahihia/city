@@ -125,8 +125,6 @@ def advertising_group(context, dimensions, css_class="rotation-right"):
             ad.view()
             ads_to_return.append(ad)
 
-    Advertising.objects.filter(id__in=[ad.id for ad in ads_to_return]).update(views=F("views")+1)
-
     return {
         'ads': ads_to_return,
         'css_class': css_class
