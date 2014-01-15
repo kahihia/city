@@ -375,6 +375,10 @@ CELERYBEAT_SCHEDULE = {
     'return-unused-money-to-bonus-every-5-minutes': {
         'task': 'advertising.tasks.return_unused_money_to_bonus_for_advertising_campaigns',
         'schedule': timedelta(minutes=5)
+    },
+    'upgrade-maxmind-on-wednesday': {
+        'task': 'accounts.tasks.upgrade_maxmind',
+        'schedule': crontab(minute='20', hour='22', day_of_week='wed')
     }
 }
 

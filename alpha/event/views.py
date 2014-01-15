@@ -23,8 +23,7 @@ from accounts.decorators import native_region_required
 from accounts.models import Account, VenueAccount
 from ajaxuploader.views import AjaxFileUploader
 from event.filters import EventFilter
-from event.models import (Event, Venue, SingleEvent, EventSlug,
-                          AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder)
+from event.models import (Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder)
 from event.services import facebook_services, location_service, event_service, featured_service
 from event.forms import CreateEventForm, EditEventForm, SetupFeaturedForm
 from event.payments.processors import process_setup_featured
@@ -168,7 +167,7 @@ def view(request, slug, date=None):
                 raise ObjectDoesNotExist
         else:
             try:
-                event = SingleEvent.future_events.get(event__eventslug__slug,
+                event = SingleEvent.future_events.get(event__eventslug__slug=slug,
                                                       event__event_type="MULTIDAY",
                                                       is_occurrence=False)
             except:
@@ -183,9 +182,6 @@ def view(request, slug, date=None):
 
     SingleEvent.objects.filter(id=event.id).update(viewed=F("viewed")+1)
 
-    venue = event.venue
-
-    #events_from_venue = SingleEvent.venue_events(venue)
     events_from_venue = event.owner_venues_events()
     if date:
         events_from_venue = events_from_venue.exclude(id=event.id)
