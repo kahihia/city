@@ -344,8 +344,8 @@ class VenueAccount(models.Model):
 
     tags = TaggableManager()
 
-    public_venues = PublicVenueManager()
     objects = models.Manager()
+    public_venues = PublicVenueManager()
 
     def __unicode__(self):
         return self.venue.__unicode__()
