@@ -169,7 +169,7 @@ class Advertising(models.Model):
     ad_type = models.ForeignKey(AdvertisingType)
     campaign = models.ForeignKey(AdvertisingCampaign)
     payment_type = models.CharField(max_length=3, choices=PAYMENT_TYPE)
-    image = models.ImageField(upload_to="advertising")
+    image = models.ImageField(upload_to="rotation")
     reviewed = models.BooleanField(default=False)
     review_status = models.CharField(max_length=10, choices=REVIEWED_STATUS, default="PENDING")
     views = models.IntegerField(default=0)
