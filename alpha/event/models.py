@@ -232,25 +232,6 @@ class Event(models.Model):
     def is_fb_posted(self):
         return self.post_to_facebook and self.facebook_event
 
-    def owner_venues_events(self):
-        multiday_events = []
-        hidden_single_events = []
-        venue_ids = list(self.owner.get_profile().venueaccount_set.all().values_list('venue__id', flat=True))
-        if self.venue.id not in venue_ids:
-            venue_ids.append(self.venue.id)
-
-        single_events = SingleEvent.future_events.filter(event__venue__id__in=venue_ids)\
-                                                 .select_related("event__venue", "event__venue__city")
-
-        for single_event in single_events:
-            if single_event.event_type=="MULTIDAY":
-                if single_event.event_id in multiday_events:
-                    hidden_single_events.append(single_event.id)
-                else:
-                    multiday_events.append(single_event.event_id)
-
-        return single_events.exclude(id__in=hidden_single_events)
-
     @property
     def first_occurrence(self):
         occurrences = self.single_events.all()
