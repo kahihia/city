@@ -197,7 +197,7 @@ def view(request, slug, date=None):
 @login_required
 def create(request, success_url=None, template_name='events/create/create_event.html'):
     if request.method == 'POST':
-        form = CreateEventForm(account=request.account, data=request.POST)
+        form = CreateEventForm(account=request.account, data=request.POST, by_admin=request.user.is_staff)
         if form.is_valid():
             # try:
             event = event_service.save_event(request.user, request.POST, form)
@@ -215,7 +215,7 @@ def create(request, success_url=None, template_name='events/create/create_event.
     else:
         form = CreateEventForm(account=request.account, initial={
             "venue_account_owner": request.current_venue_account
-        })
+        }, by_admin=request.user.is_staff)
 
 
     context = RequestContext(request)
@@ -230,7 +230,7 @@ def create(request, success_url=None, template_name='events/create/create_event.
 def create_from_facebook(request):
     if request.method == 'POST':
         success = False
-        form = CreateEventForm(account=request.account, data=request.POST)
+        form = CreateEventForm(account=request.account, data=request.POST, by_admin=request.user.is_staff)
         if form.is_valid():
             try:
                 facebook_event_id = request.POST['facebook_event_id']
@@ -248,7 +248,7 @@ def create_from_facebook(request):
             mimetype='application/json')
     else:
         event_data = facebook_services.get_prepared_event_data(request, request.GET)
-        form = CreateEventForm(account=request.account, data=event_data)
+        form = CreateEventForm(account=request.account, data=event_data, by_admin=request.user.is_staff)
         return render_to_response('events/create/create_event_popup.html', {'form': form},
                                   context_instance=RequestContext(request))
 
@@ -355,7 +355,7 @@ def edit(request, success_url=None, authentication_key=None, template_name='even
 @login_required
 def copy(request, authentication_key, template_name='events/create/copy_event.html'):
     if request.method == 'POST':
-        form = CreateEventForm(account=request.account, data=request.POST)
+        form = CreateEventForm(account=request.account, data=request.POST, by_admin=request.user.is_staff)
         if form.is_valid():
             event_obj = event_service.save_event(request.user, request.POST, form)
             event_service.send_event_details_email(event_obj)
@@ -379,7 +379,8 @@ def copy(request, authentication_key, template_name='events/create/copy_event.ht
         form = CreateEventForm(
             account=request.account, 
             instance=event, 
-            initial=event_service.prepare_initial_event_data_for_copy(basic_event)
+            initial=event_service.prepare_initial_event_data_for_copy(basic_event),
+            by_admin=request.user.is_staff
         )
 
     return render_to_response(template_name, {

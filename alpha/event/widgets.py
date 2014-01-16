@@ -8,6 +8,8 @@ from ckeditor.widgets import CKEditorWidget
 
 STATIC_PREFIX = settings.STATIC_URL
 
+from accounts.models import VenueAccount
+
 
 class WhenWidget(forms.TextInput):
     def __init__(self, *args, **kwargs):
@@ -181,7 +183,8 @@ class ChooseUserContextWidget(forms.Widget):
             "js/create_event/venue_account_owner.js",
         )
 
-    def __init__(self, account, *args, **kw):        
+    def __init__(self, account, *args, **kw):
+        created_by_admin = kw.pop('by_admin', False)
         super(ChooseUserContextWidget, self).__init__(*args, **kw)
         self.account = account
 
@@ -192,7 +195,14 @@ class ChooseUserContextWidget(forms.Widget):
             "fullname": ""
         }]
 
-        for venue_account in account.venueaccount_set.all():
+        if created_by_admin:
+            # if an event is created by admin, then get all venue accounts
+            venue_accounts = VenueAccount.objects.order_by('venue__name').all()
+        else:
+            # else get venue accounts, that belong to the given account
+            venue_accounts = account.venueaccount_set.all()
+
+        for venue_account in venue_accounts:
             self.choices.append({
                 "id": venue_account.id,
                 "type": "venue_account",
