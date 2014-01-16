@@ -6,6 +6,8 @@ from django.template import RequestContext, TemplateDoesNotExist
 from django.conf import settings
 from django.contrib.sites.models import Site
 
+from .services import sitemap_service
+
 def custom_404(request):
     return render(request,"404.html")
 
@@ -28,3 +30,6 @@ def page(request, alias):
         return render_to_response('pages/%s.html' % alias, context_instance=RequestContext(request))
     except TemplateDoesNotExist:
         raise Http404
+
+def sitemap(request):
+    return HttpResponse(sitemap_service.get_sitemap_xml(), mimetype='text/xml')
