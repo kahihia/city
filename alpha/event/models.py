@@ -1,13 +1,15 @@
+import dateutil.parser as dateparser
+import string
+import random
+
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.core.validators import URLValidator
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-import dateutil.parser as dateparser
+from django.core.urlresolvers import reverse
 
 from cities.models import City, Country
-import string
-import random
 from taggit_autosuggest.managers import TaggableManager
 import os
 
@@ -445,6 +447,16 @@ class SingleEvent(models.Model):
 
         super(SingleEvent, self).save(*args, **kwargs)
         return self
+
+    def get_absolute_url(self):
+        if self.event.event_type == 'MULTIDAY':
+            url = reverse('event_view', args=(self.event.slug,))
+            if self.is_occurrence:
+                url = '%s#day=%s' % (url, self.start_time.strftime('%Y-%m-%d'))
+
+            return url
+        else:
+            return reverse('event_view', args=(self.event.slug, self.start_time.strftime('%Y-%m-%d')))
 
     def event_description(self):
         description = self.description

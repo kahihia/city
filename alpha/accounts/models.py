@@ -6,6 +6,7 @@ from django.contrib.gis.db import models
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, F, Count
+from django.core.urlresolvers import reverse
 
 from cities.models import Region, City
 from userena.models import UserenaBaseProfile
@@ -355,6 +356,12 @@ class VenueAccount(models.Model):
             self.slug = self.uniqueSlug()
         super(VenueAccount, self).save(*args, **kwargs)
         return self
+
+    def get_absolute_url(self):
+        if self.public:
+            return reverse('public_venue_account', kwargs={'slug': self.slug})
+        else:
+            return reverse('private_venue_account', kwargs={'slug': self.slug})
 
     def uniqueSlug(self):
         """

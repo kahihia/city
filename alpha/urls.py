@@ -16,6 +16,7 @@ urlpatterns = patterns(
     # Examples:
     url(r'^channel.html$', 'home.views.channelfile'),
     url(r'^facebook-for-turbolinks.js$', 'home.views.facebook_for_turbolinks_js'),
+    url(r'^sitemap_xml$', 'home.views.sitemap'),
     url(r'^$', 'event.views.browse', name='home'),
     url(r'^events/', include('event.urls')),
     url(r'^venues/', include('venues.urls')),
