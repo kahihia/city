@@ -49,8 +49,15 @@ def save_event(user, data, form):
     event.venue = venue_service.get_venue_from_request_data(event, data)
 
     if user.is_authenticated():
-        event.owner = user
         event.email = user.email
+
+        if event.venue_account_owner \
+            and event.venue_account_owner.account.user != user \
+                and user.is_staff:
+            # if event is created by admin, but venue account belongs to other user
+            event.owner = event.venue_account_owner.account.user
+        else:
+            event.owner = user
 
     event = event.save()
 

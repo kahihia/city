@@ -192,9 +192,10 @@ class EditEventForm(forms.ModelForm):
 
     def __init__(self, account, *args, **kwargs):
         self.city_required = False
+        created_by_admin = kwargs.pop('by_admin', False)
         super(EditEventForm, self).__init__(*args, **kwargs)
 
-        self.fields['venue_account_owner'].widget = ChooseUserContextWidget(account)
+        self.fields['venue_account_owner'].widget = ChooseUserContextWidget(account, by_admin=created_by_admin)
 
         if 'email' in self.fields:
             self.fields['email'].widget = HTML5EmailInput(attrs={'class': 'text wide'})
