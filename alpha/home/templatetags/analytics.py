@@ -46,7 +46,7 @@ class ShowGoogleAnalyticsJSPush(template.Node):
         #     return "<!-- Goggle Analytics not included because you are in Debug mode! -->"
 
         return """
-        <script>_gaq && _gaq.push(['_trackPageview']);</script>
+        <script type="text/javascript">_gaq && _gaq.push(['_trackPageview']);</script>
         """
 
 @register.tag
