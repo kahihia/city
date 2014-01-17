@@ -301,7 +301,7 @@ html.preview, body.preview {
     text-align: left;
 }
 
-.search-lists ul h3
+.search-lists ul h3, .search-lists__title
 {
     margin:0px;
     padding:8px 15px;
@@ -309,6 +309,7 @@ html.preview, body.preview {
     color:#247cc3;
     font-size:12px;
     font-weight:bold;
+    width: auto !important;
 }
 
 .search-lists ul li a
@@ -782,9 +783,4 @@ a {
 .popup-form-wrapper__inner {
     width: 595px;
     margin: 0 auto;
-}
-
-.facebook-like-button {
-    opacity: 0;
-    filter:alpha(opacity=0);
 }
