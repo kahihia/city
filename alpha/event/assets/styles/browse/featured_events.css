@@ -53,6 +53,7 @@
     border: 4px solid #eee;
     width: 154px;
     height: 153px;
+    display: block;
 }
 
 .featured-img-details {

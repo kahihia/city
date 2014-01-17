@@ -19,7 +19,7 @@
                     {% if event.picture %}
                         <img src="{% cropped_thumbnail event.image "cropping" width=154 %}" height="154" width="154">
                     {% else %}
-                        <img src="/static/images/default-event.jpg" height="154" width="154">
+                        <img src="/static/images/default-event.jpg" height="154" width="154" alt="">
                     {% endif %}
                 </div>
                 <div class="featured-img-details">

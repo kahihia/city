@@ -1,7 +1,7 @@
 {% load query_filter %}
 {% load date_formatting %}
 <div class="schedule-bar schedule-bar_type_popup">
-    <table class="schedule-bar-menu" cellpadding="0" cellspacing="0">
+    <table class="schedule-bar-menu">
         <tr>
             <td class="schedule-bar__item {% if period == "today" %}selected{% endif %}">
                 <a href="{% events_filter_url request eventsFilter period="today" exclude="datetime" %}" class="jump ajax">

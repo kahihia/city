@@ -6,7 +6,7 @@
         {% if venue_account.picture %}
             <img src="{% cropped_thumbnail venue_account "cropping" width=132 %}" height="132px" weight="132px">
         {% else %}
-            <img src="/static/images/default-event.jpg" height="132px" weight="132px">
+            <img src="/static/images/default-event.jpg" height="132px" weight="132px" alt="">
         {% endif %}
     </div>
     <div class="details">

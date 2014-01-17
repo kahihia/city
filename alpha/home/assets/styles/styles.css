@@ -378,6 +378,11 @@ table.schedule-bar-menu {
     background: #c6c6c6;
     border-bottom: 2px solid #022e52;
     color: #022e52;
+    border-collapse: collapse;
+}
+
+table.schedule-bar-menu td {
+    padding: 0px;
 }
 
 .search-pad-content.events-container table.schedule-bar-menu {
@@ -777,4 +782,9 @@ a {
 .popup-form-wrapper__inner {
     width: 595px;
     margin: 0 auto;
+}
+
+.facebook-like-button {
+    opacity: 0;
+    filter:alpha(opacity=0);
 }

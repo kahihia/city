@@ -1,5 +1,7 @@
 .entry-navigation-np ul {
     padding-left: 0;
+    height: 31px;
+    line-height: 31px;
 }
 
 .entry-navigation-np .step-links {
