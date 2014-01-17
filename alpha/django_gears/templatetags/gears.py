@@ -41,11 +41,11 @@ class AssetTagNode(Node):
 
 
 class CSSAssetTagNode(AssetTagNode):
-    template = u'<link rel="stylesheet" href="%s%%s">' % GEARS_URL
+    template = u'<link rel="stylesheet" href="%s%%s" />' % GEARS_URL
 
 
 class JSAssetTagNode(AssetTagNode):
-    template = u'<script src="%s%%s"></script>' % GEARS_URL
+    template = u'<script type="text/javascript" src="%s%%s"></script>' % GEARS_URL
 
 
 @register.tag
