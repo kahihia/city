@@ -64,10 +64,12 @@
         </div>
         <div class="switchers sort">
             <a href="{% events_filter_url request eventsFilter function="tags" sort="abc" %}">
-                Sort by ABC
+                Sort Tags by<br/>
+                <span class="abc-sorting-title">ABC</span>
             </a>
             <a href="{% events_filter_url request eventsFilter function="tags" sort="123" %}">
-                Sort by 123
+                Sort Tags by<br/>
+                <span class="num-sorting-title">123</span>
             </a>
         </div>
 

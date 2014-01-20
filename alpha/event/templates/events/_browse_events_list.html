@@ -8,7 +8,7 @@
     <header class="total">
         Total search numbers found ({{eventsFilter.qs.count}})
     </header>
-    {% paginate 9 eventsFilter.qs as events %}
+    {% paginate 8 eventsFilter.qs as events %}
     {% regroup events by start_time|date:"h:i A" as events_start_time_group %}
 
     {% for event_group in events_start_time_group %}

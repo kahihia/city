@@ -152,6 +152,13 @@ ul.errorlist li {
     padding-bottom: 9px;
 }
 
+.left-menu .switchers .abc-sorting-title,
+.left-menu .switchers .num-sorting-title{
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 3px;
+}
+
 .left-menu ul.categories {
     margin: 0;    
     padding: 14px 10px 16px;
@@ -227,7 +234,7 @@ ul.errorlist li {
 
 .all-tags-container.more {
     min-height: 684px;
-    padding-bottom: 54px;
+    padding-bottom: 36px;
 }
 
 .all-tags-container li.category.more {
@@ -240,7 +247,7 @@ ul.errorlist li {
 
 .more-less-buttons {
     background: #022e52;
-    padding: 22px 0;
+    padding: 4px 0 22px;
     position: absolute;
     width: 100%;
     bottom: 0;
