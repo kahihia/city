@@ -13,7 +13,7 @@ py-moneyed
 django-localflavor==1.0
 django-selectable
 django-userena
-easy-thumbnails
+easy-thumbnails==1.4
 django-guardian
 django_facebook==5.3.1
 django-celery
