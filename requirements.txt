@@ -32,3 +32,4 @@ wadofstuff-django-serializers==1.1.0
 poster==0.8.1
 
 cssmin
+gears-uglifyjs==0.1.1
