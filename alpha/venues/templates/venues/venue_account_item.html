@@ -1,27 +1,23 @@
 {% load location %}
 {% load cropping %}
+{% load common_tags %}
 
-<a href="{% url "public_venue_account" venue_account.slug %}">
-    <div class="picture">
+<div class="venue-item__title">
+    <a href="{% url "public_venue_account" venue_account.slug %}">
+        {{ venue_account.venue.name }}
+    </a>
+</div>
+<div class="picture">
+    <a href="{% url "public_venue_account" venue_account.slug %}">
         {% if venue_account.picture %}
-            <img src="{% cropped_thumbnail venue_account "cropping" width=132 %}" height="132px" weight="132px">
+            <img src="{% cropped_thumbnail venue_account "cropping" width=160 %}" height="160px" weight="160px">
         {% else %}
-            <img src="/static/images/default-event.jpg" height="132px" weight="132px" alt="">
+            <img src="/static/images/default-event.jpg" height="160px" weight="160px" alt="">
         {% endif %}
-    </div>
-    <div class="details">
-        <header>
-            {{ venue_account.venue.name }}
-        </header>
-
-        <div class="address">
-            {% if venue_account.venue.street %}
-                {% if venue_account.venue.street_number %}{{ venue_account.venue.street_number }} {% endif %}{{ venue_account.venue.street }}
-            {% endif %}
-            {{ venue_account.venue.city.name_std }}, {{ venue_account.venue.city.region.name_std|region_shortcut }}
-        </div>
-        {% if venue_account.phone %}
-            <div class="phone">{{ venue_account.phone }}</div>
-        {% endif %}        
-    </div>
-</a>
+    </a>
+</div>
+<div class="venue-item__address">
+    <span title="{{ venue_account.venue.address }}">
+        {{ venue_account.venue.address|shorten_string:31 }}
+    </span>
+</div>

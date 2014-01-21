@@ -28,6 +28,7 @@ from mamona.models import build_featured_event_payment_model
 from decimal import Decimal
 from ckeditor.fields import RichTextField
 from collections import OrderedDict
+from .utils import get_region_shortcut
 
 
 def picture_file_path(instance=None, filename=None):
@@ -584,6 +585,16 @@ class Venue(models.Model):
             return self.venueaccount_set.all()[0]
         except:
             return None
+
+    @property
+    def address(self):
+        address = ''
+        if self.street:
+            street_number = self.street_number if self.street_number else ''
+            address = '%s%s %s' % (address, street_number, self.street)
+        address = '%s %s, %s' % (address, self.city.name_std, get_region_shortcut(self.city.region.name_std))
+
+        return address
 
 
     @staticmethod

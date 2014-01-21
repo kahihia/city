@@ -2,6 +2,22 @@ import datetime
 from cities.models import City
 from django.db.models import Count
 
+regions_names = {
+    "Alberta": "AB",
+    "British Columbia": "BC",
+    "Manitoba": "MB",
+    "New Brunswick": "NB",
+    "Newfoundland and Labrador": "NL",
+    "Northwest Territories": "NT",
+    "Nova Scotia": "NS",
+    "Nunavut": "NU",
+    "Ontario": "ON",
+    "Prince Edward Island": "PE",
+    "Quebec": "QC",
+    "Saskatchewan": "SK",
+    "Yukon": "YT"
+}
+
 
 def find_nearest_city(location, cities=None):
     if not cities:
@@ -36,4 +52,7 @@ def get_times_from_request(request):
     return start_time, end_time
 
 
-
+def get_region_shortcut(region_name=None):
+    if region_name in regions_names:
+        return regions_names[region_name]
+    return region_name

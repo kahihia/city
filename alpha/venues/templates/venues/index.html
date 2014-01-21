@@ -62,59 +62,59 @@
                 </select>
             </div>
         </header>
+        <div class="venue-items">
+            {% paginate 9 venue_accounts %}
 
-        {% paginate 5 venue_accounts %}
+            {% for venue_account in venue_accounts %}
+                <div class="venue-item">
+                    {% venue_account_item venue_account %}
+                </div>
+            {% empty %}
+                <div class="no-item">
+                    No venues was found
+                </div>
+            {% endfor %}
 
-        {% for venue_account in venue_accounts %}
-            <div class="venue-item">
-                {% venue_account_item venue_account %}
-            </div>
-        {% empty %}
-            <div class="no-item">
-                No venues was found
-            </div>
-        {% endfor %}
+            {% if venue_accounts.count > 0 %}
+                <div class="entry-navigation-np">
+                    <p>
+                        <ul>
+                            {% get_pages %}
 
-
-        {% if venue_accounts.count > 0 %}
-            <div class="entry-navigation-np">
-                <p>
-                    <ul>
-                        {% get_pages %}
-
-                        <li class="step-links">
-                            {% if pages.current.is_first %}
-                                <span class="prev">
-                                    prev
-                                </span>
-                            {% else %}
-                                <a href="{{ pages.previous.url }}" class="prev">
-                                    prev
-                                </a>
-                            {% endif %}
-
-                            {% for page in pages %}
-                                {% if page|args:10|call:'is_in_range' %}
-                                    <a href="{{ page.url }}"
-                                        class="page{% if page.is_current %} current{%endif%}">
-                                        {{ page.number }}
+                            <li class="step-links">
+                                {% if pages.current.is_first %}
+                                    <span class="prev">
+                                        prev
+                                    </span>
+                                {% else %}
+                                    <a href="{{ pages.previous.url }}" class="prev">
+                                        prev
                                     </a>
                                 {% endif %}
-                            {% endfor %}
 
-                            {% if pages.current.is_last %}
-                                <span class="next">
-                                    next
-                                </span>
-                            {% else %}
-                                <a href="{{ pages.next.url }}" class="next">
-                                    next
-                                </a>
-                            {% endif %}
-                        </li>
-                    </ul>
-                </p>
-            </div>
-        {% endif %}
+                                {% for page in pages %}
+                                    {% if page|args:10|call:'is_in_range' %}
+                                        <a href="{{ page.url }}"
+                                            class="page{% if page.is_current %} current{%endif%}">
+                                            {{ page.number }}
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if pages.current.is_last %}
+                                    <span class="next">
+                                        next
+                                    </span>
+                                {% else %}
+                                    <a href="{{ pages.next.url }}" class="next">
+                                        next
+                                    </a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </p>
+                </div>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
