@@ -32,10 +32,10 @@
     background-image: url(/static/images/event/white_arrows.png);
     width: 13px;
     height: 13px;
+}
 
 .white-arrow_pos_next {
     background-position: -25px 0;
-}
 }
 
 .searchpad-event-wrapper table td,
