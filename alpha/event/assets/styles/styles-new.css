@@ -78,16 +78,15 @@ a:hover{
 .primary-content .description {
     margin-left: 3px;
     color: #030303;
-    font-size: 14px;
+    font-size: 13px;
     margin-top: 1px;
-    border: 1px solid #c6c6c6;
     padding: 18px 13px;
     overflow-x: hidden;
 }
 
 .primary-content .description * {
     color: #030303;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .primary-content .description p, .searchpad-event-description p {

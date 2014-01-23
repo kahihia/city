@@ -9,13 +9,11 @@
 
 header.event-conversation-header {
     font-size: 14px;
-    
-    background: #eaeaea;
     color: #454545;
     height: 35px;
     line-height: 35px;
     white-space: nowrap;
-    padding: 0 5px;
+    padding: 0 25px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
