@@ -52,7 +52,8 @@
 .event-wrapper .event-photo {
     display: inline-block;    
     border: 1px solid #c6c6c6;
-    vertical-align: top;    
+    vertical-align: top;
+    background: #ffffff;
 }
 
 .event-wrapper .event-photo {
@@ -301,7 +302,7 @@
     width: 85px;
     height: 22px;
     line-height: 22px;
-    top: -3px;
+    top: 0;
     font-size: 11px;
 }
 
@@ -323,7 +324,7 @@
 }
 
 .searchpad-event-wrapper .event-details-bottom .event-actions {
-    width: 263px;
+    width: 252px;
     padding-top: 7px;
     padding-bottom: 7px;
     margin-bottom: 10px;

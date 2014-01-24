@@ -368,7 +368,7 @@ html.preview, body.preview {
 }
 
 .schedule-bar_type_popup {
-    padding: 0 15px;
+    padding: 0 15px 0 6px;
 }
 
 table.schedule-bar-menu {
