@@ -147,7 +147,7 @@ html.preview, body.preview {
 .menu-wrapper ul li a {
     display:block;
     font: 12px Arial, Helvetica, sans-serif;
-    color: #4f4f4f;
+    color: #454545;
     text-decoration:none;    
     vertical-align: middle;
     padding: 0 15px;    
@@ -157,6 +157,7 @@ html.preview, body.preview {
     text-transform: uppercase;
     height: 28px;
     line-height: 28px;
+    font-weight: bold;
 }
 
 .menu-wrapper ul.main-menu li a .hover-effect {
