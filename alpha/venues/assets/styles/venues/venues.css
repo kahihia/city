@@ -106,7 +106,6 @@
 .venue-item__title a {
     font-size: 14px;
     color: #ffffff;
-    font-weight: bold;
 }
 
 .venue-item__title a:hover {
@@ -119,6 +118,7 @@
     color: #ffffff;
     padding: 10px 10px 9px;
     border-bottom: 1px solid #757575;
+    min-height: 32px;
 }
 
 .venue-type-dropdown {
