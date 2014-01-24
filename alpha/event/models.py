@@ -295,6 +295,40 @@ class Event(models.Model):
             Q(featuredevent__all_of_canada=True) | Q(featuredevent__regions__id=region_id)
         ).order_by('?').annotate(Count("id"))
 
+    def venue_events(self):
+        multiday_events = []
+        hidden_single_events = []
+        by_tags_ids = self._get_similar_events_ids_by_tags()
+        single_events = SingleEvent.future_events\
+                                   .filter(Q(event__venue_id=self.venue.id) | Q(event__id__in=by_tags_ids))\
+                                   .select_related("event__venue", "event__venue__city")
+
+        for single_event in single_events:
+            if single_event.event_type=="MULTIDAY":
+                if single_event.event_id in multiday_events:
+                    hidden_single_events.append(single_event.id)
+                else:
+                    multiday_events.append(single_event.event_id)
+
+        return single_events.exclude(id__in=hidden_single_events)
+
+    def _get_similar_events_ids_by_tags(self):
+        tags = list(self.tags.all().values_list('name', flat=True))
+        try:
+            tags.remove(u'Wheelchair')
+        except ValueError:
+            pass
+
+        ids = self.__class__.events.filter(
+            tagged_items__tag__name__in=tags
+        ).annotate(
+            repeat_count=Count('id')
+        ).filter(
+            repeat_count__gte=2 # match at least two tags
+        ).values_list('id', flat=True)
+
+        return list(set(ids))
+
 
 class EventAttachment(models.Model):
     event = models.ForeignKey(Event, blank=False, null=False)

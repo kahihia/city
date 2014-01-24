@@ -20,7 +20,7 @@
     SimilarEvents.prototype = {
         _scroll: function(){
             $(this.content).animate({
-                "top": -204*(this.currentPage-1) + "px"
+                "top": -210*(this.currentPage-1) + "px"
             });
             this.pageNo.html(this.currentPage);
         },
