@@ -13,8 +13,8 @@ class ChooseSubjectWidget(forms.Widget):
 
     def render(self, name, value, *args, **kwargs):
         html = """
-            <div class="dropdown venue-account-owner-dropdown" data-dropdown-class="venue-account-owner-dropdown-list">
-                <select name="%s" id="id_venue_account_owner">
+            <div class="dropdown type-dropdown" data-dropdown-class="type-dropdown-list">
+                <select name="%s" id="id_type">
         """ % name
         for key, value in self.choices:
             html += '<option value="%s">%s</option>' % (key, value)

@@ -10,9 +10,9 @@
 <div class="picture">
     <a href="{% url "public_venue_account" venue_account.slug %}">
         {% if venue_account.picture %}
-            <img src="{% cropped_thumbnail venue_account "cropping" width=160 %}" height="160px" weight="160px">
+            <img src="{% cropped_thumbnail venue_account "cropping" width=160 %}" height="160" width="160" alt="" />
         {% else %}
-            <img src="/static/images/default-event.jpg" height="160px" weight="160px" alt="">
+            <img src="/static/images/default-event.jpg" height="160" width="160" alt="" />
         {% endif %}
     </a>
 </div>
