@@ -77,42 +77,40 @@
 
             {% if venue_accounts.count > 0 %}
                 <div class="entry-navigation-np">
-                    <p>
-                        <ul>
-                            {% get_pages %}
+                    <ul>
+                        {% get_pages %}
 
-                            <li class="step-links">
-                                {% if pages.current.is_first %}
-                                    <span class="prev">
-                                        prev
-                                    </span>
-                                {% else %}
-                                    <a href="{{ pages.previous.url }}" class="prev">
-                                        prev
+                        <li class="step-links">
+                            {% if pages.current.is_first %}
+                                <span class="prev">
+                                    prev
+                                </span>
+                            {% else %}
+                                <a href="{{ pages.previous.url }}" class="prev">
+                                    prev
+                                </a>
+                            {% endif %}
+
+                            {% for page in pages %}
+                                {% if page|args:10|call:'is_in_range' %}
+                                    <a href="{{ page.url }}"
+                                        class="page{% if page.is_current %} current{%endif%}">
+                                        {{ page.number }}
                                     </a>
                                 {% endif %}
+                            {% endfor %}
 
-                                {% for page in pages %}
-                                    {% if page|args:10|call:'is_in_range' %}
-                                        <a href="{{ page.url }}"
-                                            class="page{% if page.is_current %} current{%endif%}">
-                                            {{ page.number }}
-                                        </a>
-                                    {% endif %}
-                                {% endfor %}
-
-                                {% if pages.current.is_last %}
-                                    <span class="next">
-                                        next
-                                    </span>
-                                {% else %}
-                                    <a href="{{ pages.next.url }}" class="next">
-                                        next
-                                    </a>
-                                {% endif %}
-                            </li>
-                        </ul>
-                    </p>
+                            {% if pages.current.is_last %}
+                                <span class="next">
+                                    next
+                                </span>
+                            {% else %}
+                                <a href="{{ pages.next.url }}" class="next">
+                                    next
+                                </a>
+                            {% endif %}
+                        </li>
+                    </ul>
                 </div>
             {% endif %}
         </div>
