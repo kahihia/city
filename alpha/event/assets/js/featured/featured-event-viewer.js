@@ -51,7 +51,7 @@
             for(var i=this.pages; i--; i>0) {
                 var pageLink = dom("a", {
                     "class": "page",
-                    "href": "javascript: void;",
+                    "href": "javascript: void(0);",
                     "innerHTML": i+1,
                     "data-page": i+1
                 });

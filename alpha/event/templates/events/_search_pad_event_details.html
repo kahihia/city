@@ -22,7 +22,11 @@
                                         <div class="image-viewer-content">
                                         {% for image in event.sorted_images %}
                                             <a href="{% event_link event %}">
-                                                <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=154 %}"  height="154" width="154">
+                                                <img class="center-cropped"
+                                                     src="{% cropped_thumbnail image "cropping" height=154 %}"
+                                                     height="154"
+                                                     width="154"
+                                                     alt="" />
                                                 <div class="detail-view"></div>
                                             </a>
                                         {% endfor %}
@@ -37,13 +41,20 @@
                                 {% elif event.sorted_images.count > 0 %}
                                     {% for image in event.sorted_images %}
                                         <a href="{% event_link event %}">
-                                            <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=154 %}" height="154" width="154">
+                                            <img class="center-cropped"
+                                                 src="{% cropped_thumbnail image "cropping" height=154 %}"
+                                                 height="154"
+                                                 width="154"
+                                                 alt="" />
                                             <div class="detail-view"></div>
                                         </a>
                                     {% endfor %}
 
                                 {% else %}
-                                    <img src="{{STATIC_URL}}images/default-event.jpg" height="154" weight="154" alt="">
+                                    <img src="{{STATIC_URL}}images/default-event.jpg"
+                                         height="154"
+                                         weight="154"
+                                         alt="" />
                                 {% endif %}
                                 {% if event.venue_account_owner and event.venue_account_owner.public %}
                                 <footer>
