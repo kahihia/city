@@ -13,7 +13,7 @@ py-moneyed
 django-localflavor==1.0
 django-selectable
 django-userena
-easy-thumbnails
+easy-thumbnails==1.4
 django-guardian
 django_facebook==5.3.1
 django-celery
@@ -32,3 +32,4 @@ wadofstuff-django-serializers==1.1.0
 poster==0.8.1
 
 cssmin
+gears-uglifyjs==0.1.1

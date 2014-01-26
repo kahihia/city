@@ -9,7 +9,7 @@
 
 .venues-wrapper .entry-navigation-np {
     position: absolute;
-    bottom: 35px;
+    bottom: 5px;
     width: 100%;
 }
 
@@ -27,14 +27,7 @@
     line-height: 50px;
     vertical-align: middle;
     font-weight: bold;
-}
-
-.venues-wrapper div.venue-item:nth-of-type(even) {
-    background: #f1f0f0;
-}
-
-.venues-wrapper div.venue-item:nth-of-type(odd) {
-    background: #fff;    
+    font-size: 14px;
 }
 
 .venues-list {    
@@ -47,29 +40,34 @@
     margin-left: 25px;
 }
 
+.venue-items {
+    padding: 22px 67px 0 48px;
+}
+
+.venue-items .entry-navigation-np {
+
+}
+
 .venue-item {
     vertical-align: top;
-    padding: 0;    
-    width: 100%;
-    height: 146px;
+    padding: 0;
+    float: left;
+    width: 160px;
+    margin: 0 0 30px 29px;
+    -webkit-box-shadow: 4px 4px 4px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    4px 4px 4px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         4px 4px 4px 0px rgba(50, 50, 50, 0.75);
 }
 
 .venue-item a {
-    display: block;    
-    padding: 5px;
+    display: block;
 }
 
-.venue-item .picture,
 .venue-item .map-preview,
 .venue-item .details {
     float: left;
 }
 
-.venue-item .picture {
-    margin-left: 100px;
-}
-
-.venue-item .picture,
 .venue-item .map-preview {
     border-top: 1px solid #000;
     border-left: 1px solid #000;
@@ -78,9 +76,7 @@
 }
 
 .venue-item .picture img {
-    border-right: 1px solid #787878;
-    border-bottom: 1px solid #787878;
-
+    display: block;
 }
 
 .venue-item .map-preview {
@@ -100,8 +96,33 @@
     margin-bottom: 15px;
 }
 
+.venue-item__title {
+    background: #013e6f;
+    text-align: center;
+    height: 25px;
+    line-height: 25px;
+}
+
+.venue-item__title a {
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.venue-item__title a:hover {
+    text-decoration: underline;
+}
+
+.venue-item__address {
+    background: #013e6f;
+    font-size: 14px;
+    color: #ffffff;
+    padding: 10px 10px 9px;
+    border-bottom: 1px solid #757575;
+    min-height: 32px;
+}
+
 .venue-type-dropdown {
-    width: 525px;
+    width: 520px;
     margin-left: 15px;
     height: 24px;
     line-height: 24px;    

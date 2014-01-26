@@ -8,162 +8,175 @@
 {% paginate 1 eventsFilter.qs using "search_pad" as events %}
 {% for event in events %}
     <div class="searchpad-event-details" data-no-turbolink>
-        <header>
-            <a href="{% event_link event %}">{{event.name}}</a>
-        </header>
-        <div class="searchpad-event-wrapper">        
-            <table cellspacing="0" cellpadding="0">
-                <tr>
-                    <td>
-                        <div class="event-photo{% if event.event_type == "MULTIDAY" %}{% if not event.venue_account_owner or not event.venue_account_owner.public %} multiday{% endif %}{% endif %}">
-                            {% if event.sorted_images.count > 1 %}
-                                <div class="image-viewer">
-                                    <div class="image-viewer-content">
+        <div class="searchpad-event-details__container">
+            <header>
+                <a href="{% event_link event %}">{{event.name}}</a>
+            </header>
+            <div class="searchpad-event-wrapper">
+                <table cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td>
+                            <div class="event-photo{% if event.event_type == "MULTIDAY" %}{% if not event.venue_account_owner or not event.venue_account_owner.public %} multiday{% endif %}{% endif %}">
+                                {% if event.sorted_images.count > 1 %}
+                                    <div class="image-viewer">
+                                        <div class="image-viewer-content">
+                                        {% for image in event.sorted_images %}
+                                            <a href="{% event_link event %}">
+                                                <img class="center-cropped"
+                                                     src="{% cropped_thumbnail image "cropping" height=154 %}"
+                                                     height="154"
+                                                     width="154"
+                                                     alt="" />
+                                                <div class="detail-view"></div>
+                                            </a>
+                                        {% endfor %}
+                                        </div>
+
+                                        <div class="image-viewer-controls">
+                                            <div class="next" data-ga-label="Photo Scroll Link"><i class="icon-chevron-right"></i></div>
+                                            <div class="prev"><i class="icon-chevron-left"></i></div>
+                                            <span class="page-no">1</span> of <span id="images-total">{{ event.sorted_images.count }}</span>
+                                        </div>
+                                    </div>
+                                {% elif event.sorted_images.count > 0 %}
                                     {% for image in event.sorted_images %}
                                         <a href="{% event_link event %}">
-                                            <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=154 %}"  height="154" width="154">
+                                            <img class="center-cropped"
+                                                 src="{% cropped_thumbnail image "cropping" height=154 %}"
+                                                 height="154"
+                                                 width="154"
+                                                 alt="" />
                                             <div class="detail-view"></div>
                                         </a>
                                     {% endfor %}
-                                    </div>
 
-                                    <div class="image-viewer-controls">
-                                        <div class="next" data-ga-label="Photo Scroll Link"><i class="icon-chevron-right"></i></div>
-                                        <div class="prev"><i class="icon-chevron-left"></i></div>
-                                        <span class="page-no">1</span> of <span id="images-total">{{ event.sorted_images.count }}</span>
-                                    </div>
-                                </div>
-                            {% elif event.sorted_images.count > 0 %}
-                                {% for image in event.sorted_images %}
-                                    <a href="{% event_link event %}">
-                                        <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=154 %}" height="154" width="154">
-                                        <div class="detail-view"></div>
+                                {% else %}
+                                    <img src="{{STATIC_URL}}images/default-event.jpg"
+                                         height="154"
+                                         weight="154"
+                                         alt="" />
+                                {% endif %}
+                                {% if event.venue_account_owner and event.venue_account_owner.public %}
+                                <footer>
+                                    Submitted by
+                                    <a href="{% url 'public_venue_account' event.venue_account_owner.slug %}">
+                                        {{ event.venue_account_owner.venue.name }}
                                     </a>
-                                {% endfor %}
-
-                            {% else %}
-                                <img src="{{STATIC_URL}}images/default-event.jpg" height="154" weight="154">
-                            {% endif %}
-                            {% if event.venue_account_owner and event.venue_account_owner.public %}
-                            <footer>
-                                Submitted by 
-                                <a href="{% url 'public_venue_account' event.venue_account_owner.slug %}">
-                                    {{ event.venue_account_owner.venue.name }}
-                                </a>
-                            </footer>
-                            {% endif %}
-                        </div>
-                    </td>
-                    <td class="event-details-td">
-                        <div class="event-details-block">
-                            <div class="event-details">
-                                <div class="title-wrapper">
-                                    <div class="event-price">
-                                        {% if event.price and event.price != "$" %}
-                                            {{event.price}}
-                                        {% else %}
-                                            Price not set
+                                </footer>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="event-details-td">
+                            <div class="event-details-block">
+                                <div class="event-details">
+                                    <div class="title-wrapper">
+                                        <div class="event-price">
+                                            {% if event.price and event.price != "$" %}
+                                                {{event.price}}
+                                            {% else %}
+                                                Price not set
+                                            {% endif %}
+                                        </div>
+                                        {% if event.tickets %}
+                                            <a href="javascript:void(0);"  class="action-buy-tickets accented">
+                                                Buy tickets
+                                            </a>
+                                            {% buy_tickets_popup event %}
                                         {% endif %}
                                     </div>
-                                    {% if event.tickets %}
-                                        <a href="javascript:void(0);"  class="action-buy-tickets accented">
-                                            Buy tickets
-                                        </a>
-                                        {% buy_tickets_popup event %}
-                                    {% endif %}
-                                </div>
-                                <table class="event-date-and-venue">
-                                    <tr>
-                                        <td>
-                                            <div class="event-date-wrapper">
-                                                {% if event.event_type == "SINGLE" %}
-                                                    {{event.start_time|date:"l, N d"}}
-                                                {% endif %}
-                                                {% if event.event_type == "MULTIDAY" %}
-                                                    {{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.end_time|date:"D, N d"}}
-                                                {% endif %}                                            
-                                            </div>
-                                            <div class="event-time-wrapper">
-                                                {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}
-                                            </div>
-                                            <div class="event-venue">
-                                                {% if event.venue.venue_account %}
-                                                    <a href="{% url "public_venue_account" event.venue.venue_account.slug %}">
-                                                        {{ event.venue.name }}
-                                                    </a>
-                                                {% else %}
-                                                    <span>{{ event.venue.name }}</span>
-                                                {% endif %}
-                                                
-                                                {% if event.venue.street %}
-                                                    <span>
-                                                        {% if event.venue.street_number %}
-                                                            {{ event.venue.street_number }} 
-                                                        {% endif %}
-                                                        {{ event.venue.street }} {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
-                                                    </span>
-                                                {% endif %}
-                                                
-                                                    
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="event-details-bottom">
-                                <div class="event-actions">
-                                    <table cellpadding="0" cellspacing="0">
+                                    <table class="event-date-and-venue">
                                         <tr>
-                                            <td class="with-right-padding">
-                                                <div class="relative-wrapper">
-                                                    <a href="javascript:void(0);" class="action-remind-me" data-single-event-id="{{ event.id }}">Remind Me</a>
-                                                    {% remind_me_popup event %}
-                                                </div>
-                                            </td>
-                                            <td class="with-right-padding">
-                                                <div class="relative-wrapper">
-                                                    <a href="javascript:void(0);" class="action-in-the-loop">In the Loop</a>
-                                                    {% in_the_loop_popup event %}
-                                                </div>
-                                            </td>
                                             <td>
-                                                <div class="relative-wrapper">
-                                                    <a href="{{ event.website }}" class="action-view-site" target="_blank">
-                                                        View Site
-                                                    </a>
+                                                <div class="event-date-wrapper">
+                                                    {% if event.event_type == "SINGLE" %}
+                                                        {{event.start_time|date:"l, N d"}}
+                                                    {% endif %}
+                                                    {% if event.event_type == "MULTIDAY" %}
+                                                        {{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.end_time|date:"D, N d"}}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="event-time-wrapper">
+                                                    {{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}
+                                                </div>
+                                                <div class="event-venue">
+                                                    {% if event.venue.venue_account %}
+                                                        <a href="{% url "public_venue_account" event.venue.venue_account.slug %}">
+                                                            {{ event.venue.name }}
+                                                        </a>
+                                                    {% else %}
+                                                        <span>{{ event.venue.name }}</span>
+                                                    {% endif %}
+
+                                                    {% if event.venue.street %}
+                                                        <span>
+                                                            {% if event.venue.street_number %}
+                                                                {{ event.venue.street_number }}
+                                                            {% endif %}
+                                                            {{ event.venue.street }} {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
+                                                        </span>
+                                                    {% endif %}
+
+
                                                 </div>
                                             </td>
                                         </tr>
                                     </table>
                                 </div>
-
-                                <div class="social-buttons" data-id="social_buttons_cell">
-                                    <!-- AddThis Button BEGIN -->
-                                    <div class="addthis_toolbox addthis_default_style addthis_16x16_style">
-                                        <a class="addthis_button_facebook"></a>
-                                        <a class="addthis_button_twitter"></a>
-                                        <a class="addthis_button_pinterest_share"></a>
-                                        <a class="addthis_button_google_plusone_share"></a>
-                                        <a class="addthis_button_linkedin"></a>
-                                        <a class="addthis_button_myspace"></a>
-                                        <a class="addthis_button_blogger"></a>
-                                        <a class="addthis_button_email"></a>
-                                        <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
+                                <div class="event-details-bottom">
+                                    <div class="event-actions">
+                                        <table cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td class="with-right-padding">
+                                                    <div class="relative-wrapper">
+                                                        <a href="javascript:void(0);" class="action-remind-me" data-single-event-id="{{ event.id }}">Remind Me</a>
+                                                        {% remind_me_popup event %}
+                                                    </div>
+                                                </td>
+                                                <td class="with-right-padding">
+                                                    <div class="relative-wrapper">
+                                                        <a href="javascript:void(0);" class="action-in-the-loop">In the Loop</a>
+                                                        {% in_the_loop_popup event %}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="relative-wrapper">
+                                                        <a href="{{ event.website }}" class="action-view-site" target="_blank">
+                                                            View Site
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </div>
-                                    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-527be736493dac67"></script>
-                                    <!-- AddThis Button END -->
+
+                                    <div class="social-buttons" data-id="social_buttons_cell">
+                                        <!-- AddThis Button BEGIN -->
+                                        <div class="addthis_toolbox addthis_default_style addthis_16x16_style">
+                                            <a class="addthis_button_facebook"></a>
+                                            <a class="addthis_button_twitter"></a>
+                                            <a class="addthis_button_pinterest_share"></a>
+                                            <a class="addthis_button_google_plusone_share"></a>
+                                            <a class="addthis_button_linkedin"></a>
+                                            <a class="addthis_button_myspace"></a>
+                                            <a class="addthis_button_blogger"></a>
+                                            <a class="addthis_button_email"></a>
+                                            <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
+                                        </div>
+                                        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-527be736493dac67"></script>
+                                        <!-- AddThis Button END -->
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+                        </td>
+                    </tr>
+                </table>
 
-            {% if event.event_description %}
-                <div class="description">
-                    {{ event.event_description|html_urlize|safe }}
-                </div>
-            {% endif %}
+                {% if event.event_description %}
+                    <div class="description">
+                        {{ event.event_description|html_urlize|safe }}
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 {% empty %}
@@ -181,7 +194,7 @@
         <ul>
             {% get_pages %}
 
-            <span class="step-links">
+            <li class="step-links">
                 {% if pages.current.is_first %}
                     <span class="prev">
                         prev
@@ -210,7 +223,7 @@
                         next
                     </a>
                 {% endif %}
-            </span>
+            </li>
         </ul>
     </p>
 </div>

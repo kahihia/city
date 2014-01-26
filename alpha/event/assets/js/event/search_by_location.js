@@ -49,7 +49,7 @@
     SearchByLocation.prototype = {
         initLocationLinks: function(){
             var that=this;
-            $("li a", this.searchList).each(function(){
+            $("li.item a", this.searchList).each(function(){
                 $(this).on("click", function(){
                     that.findByLocation(
                         $(this).data("location-id"),
@@ -63,7 +63,7 @@
         },
 
         refreshLocationList: function(data){
-            $("li", this.searchList).remove();
+            $("li.item", this.searchList).remove();
 
             _.forEach(data.locations, function(location) {
                 this.searchList.append(this.appendLink(location));
@@ -79,7 +79,7 @@
             link.attr("data-location-id", data.id);
             link.attr("data-location-type", data.type);
 
-            li = $("<li />").append(link);
+            li = $("<li />", {"class": "item"}).append(link);
             return li;
         },
         showList: function(){

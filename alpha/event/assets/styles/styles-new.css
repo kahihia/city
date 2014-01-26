@@ -78,16 +78,15 @@ a:hover{
 .primary-content .description {
     margin-left: 3px;
     color: #030303;
-    font-size: 14px;
+    font-size: 13px;
     margin-top: 1px;
-    border: 1px solid #c6c6c6;
     padding: 18px 13px;
     overflow-x: hidden;
 }
 
 .primary-content .description * {
     color: #030303;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .primary-content .description p, .searchpad-event-description p {
@@ -150,6 +149,13 @@ ul.errorlist li {
     width: 81px;
     padding-top: 9px;
     padding-bottom: 9px;
+}
+
+.left-menu .switchers .abc-sorting-title,
+.left-menu .switchers .num-sorting-title{
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 3px;
 }
 
 .left-menu ul.categories {
@@ -222,12 +228,12 @@ ul.errorlist li {
 .all-tags-container {
     background: #022e52;
     position: relative;
-    min-height: 738px;
+    min-height: 740px;
 }
 
 .all-tags-container.more {
     min-height: 684px;
-    padding-bottom: 54px;
+    padding-bottom: 36px;
 }
 
 .all-tags-container li.category.more {
@@ -240,7 +246,7 @@ ul.errorlist li {
 
 .more-less-buttons {
     background: #022e52;
-    padding: 22px 0;
+    padding: 4px 0 22px;
     position: absolute;
     width: 100%;
     bottom: 0;
@@ -262,6 +268,9 @@ ul.errorlist li {
 
 .search-pad-content.events-container .searchtags-wrapper {
     background: none;
+    width: 425px;
+    padding: 9px 16px 6px 16px;
+    margin-left: 6px;
 }
 
 .events-container .searchtags-wrapper ul.searchtags {

@@ -24,7 +24,7 @@
                                 <img src="{% cropped_thumbnail current_venue_account "cropping" width=20 %}"
                                      class="user-profile__mugshot" />
                             {% else %}
-                                <img src="{{STATIC_URL}}images/default-event.jpg" class="user-profile__mugshot">
+                                <img src="{{STATIC_URL}}images/default-event.jpg" class="user-profile__mugshot" alt="">
                             {% endif %}
                             <span title="{{ current_venue_account.venue.name }}">
                                 {{ current_venue_account.venue.name|shorten_string:18 }}
@@ -58,36 +58,38 @@
         </ul>
         <div class="clr"></div>
 
-        <ul class="choose-user-profile-popup">
-            <li class="{% if not current_venue_account %} active{% endif %}">
-                <a href="{% url 'account_set_context' "root" %}">
-                    <img src="{{ profile.get_mugshot_url }}" alt="Your mugshot" class="user-profile__mugshot" />
-                    <span title="{{ user.username }}">
-                        {{ user.username|shorten_string:20 }}
-                    </span>
-                </a>
-            </li>
-            {% for venue_account in profile.venueaccount_set.all %}
-                <li class="{% ifequal venue_account.id current_venue_account.id %} active{% endifequal %}">
-                    <a href="{% url 'account_set_context' venue_account.slug %}">
-                        {% if venue_account.picture %}
-                            <img src="{% cropped_thumbnail venue_account "cropping" width=20 %}"
-                                 class="user-profile__mugshot" />
-                        {% else %}
-                            <img src="{{STATIC_URL}}images/default-event.jpg" class="user-profile__mugshot">
-                        {% endif %}
-                        <span title="{{ venue_account.venue.name }}">
-                            {{ venue_account.venue.name|shorten_string:20 }}
+        {% if user.is_authenticated %}
+            <ul class="choose-user-profile-popup">
+                <li class="{% if not current_venue_account %} active{% endif %}">
+                    <a href="{% url 'account_set_context' "root" %}">
+                        <img src="{{ profile.get_mugshot_url }}" alt="Your mugshot" class="user-profile__mugshot" />
+                        <span title="{{ user.username }}">
+                            {{ user.username|shorten_string:20 }}
                         </span>
                     </a>
                 </li>
-            {% empty %}
-                <li>
-                    <a href="{% url 'create_venue_account' %}">
-                        New venue
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
+                {% for venue_account in profile.venueaccount_set.all %}
+                    <li class="{% ifequal venue_account.id current_venue_account.id %} active{% endifequal %}">
+                        <a href="{% url 'account_set_context' venue_account.slug %}">
+                            {% if venue_account.picture %}
+                                <img src="{% cropped_thumbnail venue_account "cropping" width=20 %}"
+                                     class="user-profile__mugshot" />
+                            {% else %}
+                                <img src="{{STATIC_URL}}images/default-event.jpg" class="user-profile__mugshot" alt="">
+                            {% endif %}
+                            <span title="{{ venue_account.venue.name }}">
+                                {{ venue_account.venue.name|shorten_string:20 }}
+                            </span>
+                        </a>
+                    </li>
+                {% empty %}
+                    <li>
+                        <a href="{% url 'create_venue_account' %}">
+                            New venue
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
    </div>
 </div>

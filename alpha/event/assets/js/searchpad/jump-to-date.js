@@ -179,7 +179,7 @@
                 }
 
             } else {
-                href = "javascript: void;";
+                href = "javascript: void(0);";
             }
 
             $(this.jumpLink).prop("href", href);

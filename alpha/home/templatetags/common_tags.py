@@ -1,5 +1,6 @@
 import urllib
 import re
+import cgi
 
 from django import template
 from django.conf import settings
@@ -27,6 +28,11 @@ def shorten_string(value, length):
         return '%s...' % value[:length]
 
     return value
+
+
+@register.filter
+def htmlspecialchars(value):
+    return cgi.escape(value)
 
 
 @register.simple_tag(takes_context=True)

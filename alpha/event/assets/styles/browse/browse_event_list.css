@@ -1,5 +1,5 @@
 .entry-wrapper {
-    background: #fdfcfc;
+    background: #eceaeb;
     border: 1px solid #c6c6c6;
     padding-top: 8px;
     padding-left: 16px;
@@ -20,6 +20,7 @@
     width: 100%;
     border-bottom: 2px solid #619cd7;
     margin-bottom: 0;
+    padding-top: 9px;
 }
 
 .entry-wrapper .time-group span {
@@ -48,10 +49,14 @@
     position: relative;
     height: 64px;
     padding: 6px 5px 10px;
+    -webkit-box-shadow: 2px 2px 5px 1px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    2px 2px 5px 1px rgba(50, 50, 50, 0.75);
+    box-shadow:         2px 2px 5px 1px rgba(50, 50, 50, 0.75);
 }
 
 .entry-wrapper .entry-info.another {
-    margin-top: 13px;
+    margin-top: 20px;
+    border-top: 2px solid #619cd7;
 }
 
 .entry-wrapper .entry-info.with-actions {
@@ -63,7 +68,7 @@
 }
 
 .entry-wrapper div.entry-info:nth-of-type(odd) {
-    background: #ecebeb;    
+    background: #d2d0d1;
 }
 
 .entry-wrapper .entry-info.extended {
@@ -77,6 +82,7 @@
 .entry-wrapper .entry-info .entry-img-prev img {
     width: 60px;
     height: 60px;
+    display: block;
 }
 
 .entry-wrapper .entry-info .entry-details-wrapper,

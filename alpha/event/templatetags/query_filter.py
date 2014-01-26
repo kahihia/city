@@ -1,6 +1,8 @@
-from django import template
 import urllib
 import types
+import cgi
+
+from django import template
 
 
 register = template.Library()
@@ -8,7 +10,7 @@ register = template.Library()
 
 @register.simple_tag
 def events_filter_url(request, filter, **kwargs):
-    return "%s?%s" % (request.path, filter.url_query(**kwargs))
+    return cgi.escape("%s?%s" % (request.path, filter.url_query(**kwargs)))
 
 
 @register.filter

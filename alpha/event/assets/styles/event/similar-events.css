@@ -80,7 +80,17 @@
     width: 25px;
     text-align: center;
     border-left: 1px solid #022e52;
-    height: 16px;
+    height: 22px;
     vertical-align: middle;
-    padding-top: 6px;
+}
+
+.blue-arrow {
+    display: inline-block;
+    background-image: url(/static/images/event/blue_arrows.png);
+    width: 13px;
+    height: 13px;
+}
+
+.blue-arrow_pos_next {
+    background-position: -25px 0;
 }

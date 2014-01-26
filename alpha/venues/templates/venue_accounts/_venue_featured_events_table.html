@@ -24,7 +24,7 @@
                             {% if event.event_day.picture %}
                                 <img src="{% cropped_thumbnail event.event_day.image "cropping" width=60 %}" height="60px" weight="60px">
                             {% else %}
-                                <img src="{{ STATIC_URL }}images/default-event.jpg" height="60px" weight="60px">
+                                <img src="{{ STATIC_URL }}images/default-event.jpg" height="60px" weight="60px" alt="">
                             {% endif %}
                         </div>
                         <div class="entry-details-wrapper">

@@ -36,9 +36,8 @@
     width: 25px;
     text-align: center;
     border-left: 1px solid #fff;
-    height: 13px;
+    height: 16px;
     vertical-align: middle;
-    padding-top: 3px;
 }
 
 .searchpad-event-wrapper .image-viewer {
@@ -57,6 +56,5 @@
 .searchpad-event-wrapper .image-viewer .image-viewer-controls .prev,
 .searchpad-event-wrapper .image-viewer .image-viewer-controls .next {    
     width: 18px;    
-    height: 8px;    
-    padding-top: 1px;
+    height: 9px;
 }

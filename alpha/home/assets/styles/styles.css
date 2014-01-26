@@ -147,7 +147,7 @@ html.preview, body.preview {
 .menu-wrapper ul li a {
     display:block;
     font: 12px Arial, Helvetica, sans-serif;
-    color: #4f4f4f;
+    color: #454545;
     text-decoration:none;    
     vertical-align: middle;
     padding: 0 15px;    
@@ -157,6 +157,7 @@ html.preview, body.preview {
     text-transform: uppercase;
     height: 28px;
     line-height: 28px;
+    font-weight: bold;
 }
 
 .menu-wrapper ul.main-menu li a .hover-effect {
@@ -301,7 +302,7 @@ html.preview, body.preview {
     text-align: left;
 }
 
-.search-lists ul h3
+.search-lists ul h3, .search-lists__title
 {
     margin:0px;
     padding:8px 15px;
@@ -309,6 +310,7 @@ html.preview, body.preview {
     color:#247cc3;
     font-size:12px;
     font-weight:bold;
+    width: auto !important;
 }
 
 .search-lists ul li a
@@ -367,7 +369,7 @@ html.preview, body.preview {
 }
 
 .schedule-bar_type_popup {
-    padding: 0 15px;
+    padding: 0 15px 0 6px;
 }
 
 table.schedule-bar-menu {
@@ -378,6 +380,11 @@ table.schedule-bar-menu {
     background: #c6c6c6;
     border-bottom: 2px solid #022e52;
     color: #022e52;
+    border-collapse: collapse;
+}
+
+table.schedule-bar-menu td {
+    padding: 0px;
 }
 
 .search-pad-content.events-container table.schedule-bar-menu {
@@ -467,7 +474,7 @@ table.schedule-bar-menu td.selected a {
 
 .entry-navigation-np
 {
-    padding-top: 13px;
+    padding: 30px 0 28px;
     text-align:center;
 }
 
