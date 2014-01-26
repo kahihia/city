@@ -25,7 +25,7 @@
 
     {% css_asset_tag 'event-detail-page-combine.css' %}
 
-    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>        
+    <script src="{{ 'http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en'|htmlspecialchars|safe }}"></script>
     <script>
         var venue_latitude = {{ event.venue.location.y }},
             venue_longtitude = {{ event.venue.location.x }},
@@ -65,8 +65,12 @@
                                     <div class="image-viewer">
                                         <div class="image-viewer-content">
                                         {% for image in event.sorted_images %}
-                                            <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
-                                                <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}" width="265" height="265">
+                                            <a id="photoFancy" data-fancybox-group="galery" href="/media/{{ image.picture }}">
+                                                <img class="center-cropped"
+                                                     src="{% cropped_thumbnail image "cropping" height=265 %}"
+                                                     width="265"
+                                                     height="265"
+                                                     alt="" />
                                                 <div class="detail-view"></div>
                                             </a>
                                         {% endfor %}
@@ -81,7 +85,11 @@
                                 {% elif event.sorted_images.count > 0 %}
                                     {% for image in event.sorted_images %}
                                         <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
-                                            <img class="center-cropped" src="{% cropped_thumbnail image "cropping" height=265 %}" width="265" height="265">
+                                            <img class="center-cropped"
+                                                 src="{% cropped_thumbnail image "cropping" height=265 %}"
+                                                 width="265"
+                                                 height="265"
+                                                 alt="" />
                                             <div class="detail-view"></div>
                                         </a>
                                     {% endfor %}
@@ -149,7 +157,7 @@
                                             {% if event.venue %}
                                             <td>
                                                 <div class="venue_map_preview">
-                                                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.venue.location.y }},{{ event.venue.location.x }}&zoom=13&size=127x90&maptype=roadmap&markers=color:blue%7C{{ event.venue.location.y }},{{ event.venue.location.x }}&sensor=false">
+                                                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.venue.location.y }},{{ event.venue.location.x }}&amp;zoom=13&amp;size=127x90&amp;maptype=roadmap&amp;markers=color:blue%7C{{ event.venue.location.y }},{{ event.venue.location.x }}&amp;sensor=false" alt="" />
                                                 </div>
                                                 <div id="venue_map" class="map"></div>
                                             </td>
@@ -295,7 +303,7 @@
 
             <div class="tags">
                 {% for tag in event.tags.all %}
-                    <a href="{% url 'event_browse' %}?function=tags&tag={{ tag.name|urlencode }}">
+                    <a href="{% url 'event_browse' %}?function=tags&amp;tag={{ tag.name|urlencode }}">
                         {{ tag }}
                     </a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
@@ -303,12 +311,12 @@
 
             {% load admin_event_actions %}
             <div class="report-and-claim">
-                <a href="javascript: void" class="report-event-button">
+                <a href="javascript: void(0);" class="report-event-button">
                     Report Event
                 </a>
                 |
                 {% report_event_popup event %}
-                <a href="javascript: void" class="claim-event-button">
+                <a href="javascript: void(0);" class="claim-event-button">
                     Claim Event
                 </a>
                 {% claim_event_popup event %}
