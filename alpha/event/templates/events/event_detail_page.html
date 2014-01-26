@@ -84,7 +84,7 @@
                                     </div>
                                 {% elif event.sorted_images.count > 0 %}
                                     {% for image in event.sorted_images %}
-                                        <a id="photoFancy"  rel="galery" href="/media/{{ image.picture }}">
+                                        <a id="photoFancy" data-fancybox-group="galery" href="/media/{{ image.picture }}">
                                             <img class="center-cropped"
                                                  src="{% cropped_thumbnail image "cropping" height=265 %}"
                                                  width="265"
