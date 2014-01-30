@@ -89,7 +89,7 @@ def search_pad(request):
                             }, context_instance=RequestContext(request))
 
 
-def browse(request):
+def browse(request, *args, **kwargs):
     search_params = ["search", "tag", "period", "start_date", "end_date", "start_time", "end_time", "function"]
     start_date, end_date = utils.get_dates_from_request(request)
     start_time, end_time = utils.get_times_from_request(request)
@@ -97,6 +97,8 @@ def browse(request):
     featured_events = featured_service.featured_events_for_region(request)
 
     params = request.GET.copy()
+    if 'extra_params' in kwargs:
+        params.update(kwargs['extra_params'])
 
     if set(search_params) & set(params.keys()):
         events = SingleEvent.future_events.all()

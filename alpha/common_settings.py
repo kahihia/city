@@ -118,6 +118,7 @@ MIDDLEWARE_CLASSES = (
     'accounts.middleware.UserProfileMiddleware',
     'event.middleware.LocationMiddleware',
     'turbolinks.middleware.TurbolinksMiddleware',
+    'home.url_management.middleware.UrlManagementMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 

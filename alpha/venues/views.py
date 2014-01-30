@@ -25,8 +25,17 @@ MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
 TAG_MODEL = getattr(settings, 'TAGGIT_AUTOSUGGEST_MODEL', ('taggit', 'Tag'))
 TAG_MODEL = get_model(*TAG_MODEL)
 
-def venues(request):
+def venues(request, *args, **kwargs):
     current_venue_type = int(request.GET.get("venue_type", 0))
+    if not current_venue_type \
+            and 'extra_params' in kwargs \
+                and 'venue_type' in kwargs['extra_params']:
+        try:
+            venue_type = VenueType.active_types.get(name=kwargs['extra_params']['venue_type'])
+        except VenueType.DoesNotExist:
+            pass
+        else:
+            current_venue_type = venue_type.id
 
     featured_events = featured_events_for_region(request)
 
