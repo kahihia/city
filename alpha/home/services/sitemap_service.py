@@ -4,13 +4,14 @@ from xml.dom import minidom
 
 from django.contrib.sites.models import Site
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 
 from accounts.models import VenueAccount
 from event.models import SingleEvent
 
 
 class SiteMap(object):
-    SOURCES = ('event', 'venue')
+    SOURCES = ('index', 'page', 'event', 'venue')
 
     def __init__(self, domain):
         self._domain = domain
@@ -27,6 +28,14 @@ class SiteMap(object):
                 changefreq.text = 'daily'
 
         return self._prettify(urlset)
+
+    def _get_index_data(self):
+        return ['http://%s%s' % (self._domain, reverse('event_browse'))]
+
+    def _get_page_data(self):
+        aliases = ['faq', 'advertising', 'privacy_policy', 'terms_of_service']
+        return ['http://%s%s' % (self._domain, reverse('staticpage', kwargs={'alias': alias}))
+                for alias in aliases]
 
     def _get_event_data(self):
         single_events = SingleEvent.homepage_events.all()
