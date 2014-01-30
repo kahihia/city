@@ -14,7 +14,9 @@
 	font-size: 16px;
 	text-transform: uppercase;
 	font-weight: bold;
-    margin: 6px 0 0 15px;
+    margin: 13px 0 0 15px;
+    height: 23px;
+    line-height: 24px;
 }
 
 .secondary-content .similar-events-wrapper header div {
