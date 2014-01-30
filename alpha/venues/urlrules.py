@@ -2,7 +2,7 @@ from home.base import EnhancedObject
 from accounts.models import VenueType
 
 
-class VanueTypesUrlRule(EnhancedObject):
+class VenueTypesUrlRule(EnhancedObject):
     @staticmethod
     def get_params(request):
         path = request.get_full_path()
@@ -10,7 +10,8 @@ class VanueTypesUrlRule(EnhancedObject):
         # first element is a venue type name
         if len(path_components) == 1:
             try:
-                venue_type = VenueType.active_types.get(name=path_components[0])
+                venue_type_name = path_components[0].replace('__', ' & ').replace('_', ' ')
+                venue_type = VenueType.active_types.get(name=venue_type_name)
             except VenueType.DoesNotExist:
                 pass
             else:

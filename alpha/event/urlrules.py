@@ -10,7 +10,8 @@ class EventTagsUrlRule(EnhancedObject):
         # first element is a tag name
         if len(path_components) == 1:
             try:
-                tag = Tag.objects.get(name=path_components[0])
+                tag_name = path_components[0].replace('_', ' ')
+                tag = Tag.objects.get(name=tag_name)
             except Tag.DoesNotExist:
                 pass
             else:
