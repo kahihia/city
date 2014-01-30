@@ -589,7 +589,7 @@
 
 .events-occurrences {
     width: 341px;
-    margin-top: 10px;
+    margin-top: -3px;
     margin-left: 15px;
 }
 
@@ -645,6 +645,11 @@
 
 .events-occurrences .show-times table {
     margin: 0 auto;
+}
+
+.events-occurrences .show-times td {
+    height: 15px;
+    line-height: 15px;
 }
 
 .events-occurrences .event-days {
