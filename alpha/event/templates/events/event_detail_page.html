@@ -204,9 +204,17 @@
                                                 <table>
                                                     {% for occurrence in event.same_date_events %}
                                                         <tr>
-                                                            <td>{{occurrence.start_time|just_time|lower}}</td>
-                                                            <td>-</td>
-                                                            <td>{{occurrence.end_time|just_time|lower}}</td>
+                                                            <td>
+                                                                <span>
+                                                                    {{occurrence.start_time|just_time|lower}}
+                                                                </span>
+                                                            </td>
+                                                            <td><span>-</span></td>
+                                                            <td>
+                                                                <span>
+                                                                    {{occurrence.end_time|just_time|lower}}
+                                                                </span>
+                                                            </td>
                                                         </tr>
                                                     {% endfor %}
 
@@ -221,9 +229,17 @@
                                                     <table>
                                                         {% for occurrence in occurrences %}
                                                             <tr>
-                                                                <td>{{occurrence.start_time|just_time|lower}}</td>
-                                                                <td>-</td>
-                                                                <td>{{occurrence.end_time|just_time|lower}}</td>
+                                                                <td>
+                                                                    <span>
+                                                                        {{occurrence.start_time|just_time|lower}}
+                                                                    </span>
+                                                                </td>
+                                                                <td><span>-</span></td>
+                                                                <td>
+                                                                    <span>
+                                                                        {{occurrence.end_time|just_time|lower}}
+                                                                    </span>
+                                                                </td>
                                                             </tr>
                                                         {% endfor %}
                                                     </table>
