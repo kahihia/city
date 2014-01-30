@@ -645,11 +645,14 @@
 
 .events-occurrences .show-times table {
     margin: 0 auto;
+    border-collapse: collapse;
 }
 
-.events-occurrences .show-times td {
-    height: 15px;
-    line-height: 15px;
+.events-occurrences .show-times span {
+    display: block;
+    height: 14px;
+    line-height: 14px;
+    padding: 3px 0 0 0;
 }
 
 .events-occurrences .event-days {
