@@ -40,6 +40,10 @@
     line-height: 154px;
 }
 
+.venue-account-avatar img {
+    display: block;
+}
+
 .account-avatar img{
     vertical-align: middle;
 }
