@@ -566,21 +566,6 @@ class SingleEvent(models.Model):
     def same_date_events(self):
         return SingleEvent.future_events.filter(event_id=self.event.id, start_time__startswith=self.start_time.date()).order_by("start_time")
 
-    @staticmethod
-    def venue_events(venue):
-        multiday_events = []
-        hidden_single_events = []
-        single_events = SingleEvent.future_events.filter(event__venue_id=venue.id).select_related("event__venue", "event__venue__city")
-
-        for single_event in single_events:
-            if single_event.event_type=="MULTIDAY":
-                if single_event.event_id in multiday_events:
-                    hidden_single_events.append(single_event.id)
-                else:
-                    multiday_events.append(single_event.event_id)
-
-        return single_events.exclude(id__in=hidden_single_events)
-
 
 class FacebookEvent(models.Model):
     eid = models.BigIntegerField(blank=False, null=False)
