@@ -1,5 +1,6 @@
 from event.models import FeaturedEvent
 from django import template
+from django.template.loader import render_to_string
 from easy_thumbnails.files import get_thumbnailer
 from PIL import Image
 from PIL import ImageDraw
@@ -34,11 +35,9 @@ def featured_event(context, event, in_email=False):
         'site': context.get("site", "")
     }
 
-@register.inclusion_tag('events/list/featured_event_link.html', takes_context=True)
+@register.simple_tag(takes_context=True)
 def featured_event_link(context, event):
-    return {
-        'event': event
-    }    
+    return render_to_string('events/list/featured_event_link.html', {'event': event}).strip()
 
 
 def truncatesmart(value, limit=80):
