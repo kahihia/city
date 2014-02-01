@@ -159,7 +159,7 @@ def create_venue_account(request):
 def edit_venue_account(request, slug):
     venue_account = VenueAccount.objects.get(slug=slug)
 
-    if venue_account.account.user != request.user:
+    if not request.user.is_staff and venue_account.account.user != request.user:
         resp = render_to_response('403.html', context_instance=RequestContext(request))
         resp.status_code = 403
         return resp
@@ -182,7 +182,11 @@ def edit_venue_account(request, slug):
             form.save()
             types = form.cleaned_data['types']
             venue_account.types = types
-            return HttpResponseRedirect(reverse('private_venue_account', args=(venue_account.slug, )))
+            if venue_account.account.user == request.user:
+                return HttpResponseRedirect(reverse('private_venue_account', args=(venue_account.slug, )))
+            else:
+                # if admin edits not his venue
+                return HttpResponseRedirect(reverse('public_venue_account', args=(venue_account.slug, )))
 
     return render_to_response('venue_accounts/edit_venue_account.html', {
             'venue_account': venue_account,
