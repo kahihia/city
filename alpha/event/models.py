@@ -216,11 +216,12 @@ class Event(models.Model):
         else:
             return self.tickets
 
-
     def next_day(self):
         try:
-            return SingleEvent.objects.filter(end_time__gte=datetime.datetime.now(), event=self).order_by("start_time")[0]
-        except:
+            return SingleEvent.objects.filter(end_time__gte=datetime.datetime.now(), event=self)\
+                                      .filter(is_occurrence=False)\
+                                      .order_by("start_time")[0]
+        except Exception:
             return None
 
     def base(self):
@@ -295,22 +296,16 @@ class Event(models.Model):
             Q(featuredevent__all_of_canada=True) | Q(featuredevent__regions__id=region_id)
         ).order_by('?').annotate(Count("id"))
 
-    def venue_events(self):
-        multiday_events = []
-        hidden_single_events = []
+    def venue_events(self, exclude_id=None):
         by_tags_ids = self._get_similar_events_ids_by_tags()
-        single_events = SingleEvent.future_events\
-                                   .filter(Q(event__venue_id=self.venue.id) | Q(event__id__in=by_tags_ids))\
-                                   .select_related("event__venue", "event__venue__city")
+        events = Event.future_events.filter(Q(venue_id=self.venue.id) | Q(id__in=by_tags_ids))
+        result = []
+        for event in events:
+            next_day = event.next_day()
+            if not exclude_id or next_day.id != exclude_id:
+                result.append(next_day)
 
-        for single_event in single_events:
-            if single_event.event_type=="MULTIDAY":
-                if single_event.event_id in multiday_events:
-                    hidden_single_events.append(single_event.id)
-                else:
-                    multiday_events.append(single_event.event_id)
-
-        return single_events.exclude(id__in=hidden_single_events)
+        return result
 
     def _get_similar_events_ids_by_tags(self):
         tags = list(self.tags.all().values_list('name', flat=True))
