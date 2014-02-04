@@ -7,6 +7,7 @@
 {% load advertising_tags %}
 {% load admin_event_actions %}
 {% load common_tags %}
+{% load url_tags %}
 {% load location %}
 {% load gears %}
 
@@ -319,7 +320,7 @@
 
             <div class="tags">
                 {% for tag in event.tags.all %}
-                    <a href="{% url 'event_browse' %}?function=tags&amp;tag={{ tag.name|urlencode }}">
+                    <a href="{% url_by_identifier tag.name %}">
                         {{ tag }}
                     </a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}

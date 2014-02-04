@@ -76,7 +76,6 @@ def search_pad(request):
             .annotate(count=Count('id')) \
             .order_by('-count')[:10]
 
-
     return render_to_response('events/search_pad.html', {
                                 'events': events,
                                 'eventsFilter': eventsFilter,
@@ -128,7 +127,6 @@ def browse(request, *args, **kwargs):
         tags = tags.order_by('tag__name')
     else:
         tags = tags.order_by('-count')
-
 
     return render_to_response('events/browse_events.html', {
                                 'page_type': 'index',

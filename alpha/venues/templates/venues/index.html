@@ -5,6 +5,7 @@
 {% load endless %}
 {% load venues %}
 {% load common_tags %}
+{% load url_tags %}
 
 {% block head %}
 
@@ -53,9 +54,9 @@
             <span class="title">Venue type</span>
             <div class="venue-type-dropdown dropdown" data-dropdown-class="venue-type-dropdown-list">
                 <select>
-                    <option value="all">All</option>
+                    <option value="{% url 'venues' %}">All</option>
                     {% for venue_type in venue_types %}
-                        <option value="{{ venue_type.id }}" {% if current_venue_type == venue_type.id %} selected {% endif %}>
+                        <option value="{% url_by_identifier venue_type.name %}" {% if current_venue_type == venue_type.id %} selected {% endif %}>
                             {{ venue_type.name }}
                         </option>
                     {% endfor %}

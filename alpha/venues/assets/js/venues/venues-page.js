@@ -13,11 +13,7 @@
         initVenueTypeFilter: function(){
             new Dropdown($(".venue-type-dropdown")[0], {
                 onChange: function(value, text){
-                    if(value=="all") {
-                        window.location = window.filters.removeFilter("venue_type").getURL();
-                    } else {
-                        window.location = window.filters.removeFilter("venue_type").setFilter("venue_type", value).getURL();
-                    }
+                    window.location = value
                 }
             });
         }        

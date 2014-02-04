@@ -76,7 +76,7 @@
         <ul class="categories tags">
             {% for tag in tags %}
                 <li class="category{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}">
-                    <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"
+                    <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name tag_page=tag.tag__name %}"
                        {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}
                        title="{{ tag.tag__name }}">
                         {{ tag.tag__name|shorten_string:20 }}

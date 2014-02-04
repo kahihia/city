@@ -24,7 +24,7 @@ class Filter(object):
 
         return qs.filter(**{'%s__%s' % (self.field, lookup): value})
 
-    def url_query(self, querydict):
+    def url_query(self, querydict, **kwargs):
         return "%s=%s" % (self.name, querydict[self.name])
 
     def upgrade_value(self, querydict, value):
@@ -85,11 +85,15 @@ class TagsFilter(Filter):
         ).values_list("id", flat=True)
         return qs.filter(event_id__in=list(event_ids_with_tags))
 
-    def url_query(self, querydict):
+    def url_query(self, querydict, **kwargs):
         tags = querydict["tag"]
         if isinstance(tags, basestring):
             tags = querydict.getlist(self.name)
-        return "&".join(["tag=%s" % urllib.quote(tag.encode('utf8')) for tag in tags])
+
+        if 'tag_page' in kwargs:
+            tags.remove(kwargs['tag_page'])
+
+        return "&".join(["tag=%s" % urllib.quote(tag.encode('utf8')) for tag in tags]) if tags else ''
 
     def upgrade_value(self, querydict, value):
         return_value = []
@@ -445,7 +449,6 @@ class EventFilter(object):
     def objects_list(self):
         return list(self.qs())
 
-
     def url_query(self, **kwargs):
         data = self.data.copy()
         if "shortcut" in kwargs:
@@ -457,7 +460,17 @@ class EventFilter(object):
             if key in self.filters:
                 data[key] = self.filters[key].upgrade_value(data, kwargs[key])
 
-        query_list = [self.filters[key].url_query(data) for key, value in data.iteritems() if value and key in self.filters]
+        query_elements = {}
+        for key, value in data.iteritems():
+            if value and key in self.filters:
+                query_elements[key] = self.filters[key].url_query(data, **kwargs)
+
+        # hard code because of the needs of SEO =(
+        if 'tag' in query_elements and not query_elements['tag'] and 'tag_page' in kwargs:
+            for key in ('tag', 'function'):
+                del query_elements[key]
+
+        query_list = query_elements.values()
         if 'sort' in kwargs:
             query_list.append('sort=%s' % kwargs['sort'])
 

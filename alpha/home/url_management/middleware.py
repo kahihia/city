@@ -5,7 +5,8 @@ from .registry import url_management_registry
 class UrlManagementMiddleware(object):
     def process_request(self, request):
         for url_rule in url_management_registry:
-            params = url_rule.get_params(request)
+            path = request.get_full_path()
+            params = url_rule.parse_url(path)
             if params:
                 callback, callback_args, callback_kwargs = params
                 if not callable(callback):
