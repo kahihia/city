@@ -3,6 +3,7 @@ import datetime
 import dateutil.parser as dateparser
 from accounts.models import VenueType
 from django.db.models import Q, Count
+from django.core.urlresolvers import reverse
 from cities.models import Region, City
 import urllib
 
@@ -90,7 +91,7 @@ class TagsFilter(Filter):
         if isinstance(tags, basestring):
             tags = querydict.getlist(self.name)
 
-        if 'tag_page' in kwargs:
+        if 'tag_page' in kwargs and kwargs['tag_page'] in tags:
             tags.remove(kwargs['tag_page'])
 
         return "&".join(["tag=%s" % urllib.quote(tag.encode('utf8')) for tag in tags]) if tags else ''
@@ -115,9 +116,14 @@ class TagsFilter(Filter):
     def search_tags(self, tags):
         tags_to_return = []
         for tag in tags:
+            if not self.parent.tag_page:
+                remove_url = '?' + self.parent.url_query(tag=tag)
+            else:
+                remove_url = reverse('home') + '?' + self.parent.url_query(tag=tag)
+
             tags_to_return.append({
                 "name": tag,
-                "remove_url": "?" + self.parent.url_query(tag=tag)
+                "remove_url": remove_url
             })
         return tags_to_return
 
@@ -419,9 +425,10 @@ class NightLifeFilter(Filter):
 
 
 class EventFilter(object):
-    def __init__(self, data, queryset=Event.events.all(), account=None):
+    def __init__(self, data, queryset=Event.events.all(), account=None, tag_page=''):
         self.data = data.copy()
         self.queryset = queryset
+        self.tag_page = tag_page
         self.filters = {
             "start_date": DateFilter("start_date", "start_time", lookup="gte"),
             "end_date": DateFilter("end_date", "start_time", lookup="lte"),
@@ -468,7 +475,8 @@ class EventFilter(object):
         # hard code because of the needs of SEO =(
         if 'tag' in query_elements and not query_elements['tag'] and 'tag_page' in kwargs:
             for key in ('tag', 'function'):
-                del query_elements[key]
+                if key in query_elements:
+                    del query_elements[key]
 
         query_list = query_elements.values()
         if 'sort' in kwargs:

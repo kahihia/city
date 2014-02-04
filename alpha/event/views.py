@@ -112,7 +112,8 @@ def browse(request, *args, **kwargs):
             location_from_user_choice.location_id,
         )
 
-    eventsFilter = EventFilter(params, queryset=events, account=request.account)
+    tag_page = kwargs['extra_params']['tag'] if 'extra_params' in kwargs and 'tag' in kwargs['extra_params'] else ''
+    eventsFilter = EventFilter(params, queryset=events, account=request.account, tag_page=tag_page)
 
     if 'search' in params:
         tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
@@ -138,7 +139,9 @@ def browse(request, *args, **kwargs):
                                 'end_date': end_date,
                                 'start_time': start_time,
                                 'end_time': end_time,
-                                'period': params.get('period', '')
+                                'period': params.get('period', ''),
+                                'tag_page': kwargs['extra_params']['tag'] if 'extra_params' in kwargs
+                                and 'tag' in kwargs['extra_params'] else ''
                             }, context_instance=RequestContext(request))
 
 

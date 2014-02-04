@@ -18,9 +18,9 @@ class EventTagsUrlRule(BaseUrlRule):
 
         return url
 
-    @staticmethod
-    def parse_url(path):
-        path_components = path.strip('/').split('/')
+    @classmethod
+    def parse_url(cls, path):
+        path_components = cls.get_path_components(path)
         # first element is a tag name
         if len(path_components) == 1:
             try:

@@ -4,22 +4,22 @@
     <table class="schedule-bar-menu">
         <tr>
             <td class="schedule-bar__item {% if period == "today" %}selected{% endif %}">
-                <a href="{% events_filter_url request eventsFilter period="today" exclude="datetime" %}" class="jump ajax">
+                <a href="{% events_filter_url request eventsFilter period="today" tag_page=tag_page exclude="datetime" %}" class="jump ajax">
                     Today
                 </a>
             </td>
             <td class="schedule-bar__item {% if period == "tomorrow" %}selected{% endif %}">
-                <a href="{% events_filter_url request eventsFilter period="tomorrow"  exclude="datetime" %}" class="jump ajax">
+                <a href="{% events_filter_url request eventsFilter period="tomorrow" tag_page=tag_page exclude="datetime" %}" class="jump ajax">
                     Tomorrow
                 </a>
             </td>
             <td class="schedule-bar__item {% if period == "this-weekend" %}selected{% endif %}">
-                <a href="{% events_filter_url request eventsFilter period="this-weekend"  exclude="datetime" %}" class="jump ajax">
+                <a href="{% events_filter_url request eventsFilter period="this-weekend" tag_page=tag_page exclude="datetime" %}" class="jump ajax">
                     This weekend
                 </a>
             </td>
             <td class="schedule-bar__item {% if period == "next-week" %}selected{% endif %}">
-                <a href="{% events_filter_url request eventsFilter period="next-week"  exclude="datetime" %}" class="jump ajax">
+                <a href="{% events_filter_url request eventsFilter period="next-week" tag_page=tag_page exclude="datetime" %}" class="jump ajax">
                     Next week
                 </a>
             </td>
