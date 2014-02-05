@@ -8,6 +8,7 @@ from django.template.defaultfilters import slugify
 from django.core.validators import URLValidator
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.urlresolvers import reverse
+from django.utils.html import strip_tags
 
 from cities.models import City, Country
 from taggit_autosuggest.managers import TaggableManager
@@ -284,6 +285,9 @@ class Event(models.Model):
         except:
             return None
 
+    @property
+    def tags_as_string(self):
+        return ', '.join([tag.name for tag in self.tags.all()])
 
     @staticmethod
     def featured_events_for_region(region):
@@ -542,6 +546,12 @@ class SingleEvent(models.Model):
 
         return occurrences
 
+    def short_description(self):
+        description = strip_tags(self.event_description())
+        if len(description) > 255:
+            return '%s...' % description[:255]
+
+        return description
 
     @property
     def sorted_occurrences_days(self):

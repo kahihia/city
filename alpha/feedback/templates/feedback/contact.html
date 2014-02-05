@@ -1,5 +1,9 @@
 {% extends 'base-with-advertising.html' %}
-{% block title %} > Feedback{% endblock %}
+{% block meta %}
+    <title>City Fusion - {{ page_info.meta_title }}</title>
+    <meta name="keywords" content="{{ page_info.meta_keywords }}" />
+    <meta name="description" content="{{ page_info.meta_description }}" />
+{% endblock meta %}
 
 {% block head %}
     <link type="text/css" href="{{STATIC_URL}}css/feedback.css" rel="stylesheet" />

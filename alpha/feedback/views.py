@@ -1,11 +1,13 @@
-# Create your views here.
-from .forms import ContactForm
-from .models import Feedback
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.mail import mail_managers
 from django.core.urlresolvers import reverse
+
+from home.models import Page
+from .forms import ContactForm
+from .models import Feedback
+
 
 def feedback(request):
     if request.method == 'POST':
@@ -19,7 +21,15 @@ def feedback(request):
     else:
         form = ContactForm()
 
-    return render_to_response("feedback/contact.html", { 'form' : form }, context_instance=RequestContext(request))
+    try:
+        page_info = Page.objects.get(alias='feedback')
+    except Page.DoesNotExist:
+        page_info = {}
+
+    return render_to_response("feedback/contact.html",
+                              {'form': form,
+                               'page_info': page_info},
+                              context_instance=RequestContext(request))
 
 def feedback_thanks(request):
     return render_to_response("feedback/contact_thanks.html", {}, context_instance=RequestContext(request))

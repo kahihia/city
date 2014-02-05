@@ -7,16 +7,21 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 
 from .services import sitemap_service
+from .models import Page
+
 
 def custom_404(request):
     return render(request,"404.html")
 
+
 def redirect(request):
     return HttpResponseRedirect(reverse('home'))
+
 
 # for facebook connect
 def channelfile(request):
     return HttpResponse('''<script src="//connect.facebook.net/en_US/all.js"></script>''')
+
 
 def facebook_for_turbolinks_js(request):
     return render(request, 'facebook-for-turbolinks.js', {
@@ -27,9 +32,17 @@ def facebook_for_turbolinks_js(request):
 
 def page(request, alias):
     try:
-        return render_to_response('pages/%s.html' % alias, context_instance=RequestContext(request))
+        try:
+            page_info = Page.objects.get(alias=alias)
+        except Page.DoesNotExist:
+            page_info = {}
+
+        return render_to_response('pages/%s.html' % alias,
+                                  {'page_info': page_info},
+                                  context_instance=RequestContext(request))
     except TemplateDoesNotExist:
         raise Http404
+
 
 def sitemap(request):
     return HttpResponse(sitemap_service.get_sitemap_xml(), mimetype='text/xml')

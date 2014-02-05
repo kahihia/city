@@ -3,6 +3,12 @@
 {% load advertising_tags %}
 {% load gears %}
 
+{% block meta %}
+    <title>{{ venue_account.venue.name }}</title>
+    <meta name="keywords" content="{{ venue_account.tags_as_string }}" />
+    <meta name="description" content="{{ venue_account.short_description }}" />
+{% endblock meta %}
+
 {% block head %}
     {% css_asset_tag "view-venue-combine.css" %}
 

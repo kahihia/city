@@ -7,7 +7,11 @@
     {% googleanalyticsjs %}
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>City Fusion</title>
+    {% block meta %}
+        <title>City Fusion</title>
+        <meta name="keywords" content="" />
+        <meta name="description" content="" />
+    {% endblock meta %}
 
     {% css_asset_tag 'base-combine.css' %}
     

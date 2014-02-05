@@ -11,6 +11,12 @@
 {% load location %}
 {% load gears %}
 
+{% block meta %}
+    <title>{{ event.name }}</title>
+    <meta name="keywords" content="{{ event.tags_as_string }}" />
+    <meta name="description" content="{{ event.short_description }}" />
+{% endblock meta %}
+
 {% block head %}
     <meta property="og:title" content="{{event.name}}" />
     <meta property="og:type" content="website" />
