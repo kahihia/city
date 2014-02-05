@@ -4,3 +4,4 @@ Disallow: /events/*?*
 Disallow: /account*
 Disallow: /events/create/
 Disallow: /events/copy/*
+Sitemap: http://www.cityfusion.ca/sitemap_xml

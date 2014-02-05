@@ -4,8 +4,13 @@
 {% load advertising_tags %}
 {% load gears %}
 
-{% block head %}
+{% block meta %}
+    <title>City Fusion - {{ page_info.meta_title }}</title>
+    <meta name="keywords" content="{{ page_info.meta_keywords }}" />
+    <meta name="description" content="{{ page_info.meta_description }}" />
+{% endblock meta %}
 
+{% block head %}
     {% css_asset_tag 'browse-events-combine.css' %}
     <script type="text/javascript" src="{{STATIC_URL}}turbolinks/turbolinks.js"></script>
     {% js_asset_tag 'browse-events-combine.js' %}    

@@ -4,51 +4,51 @@
 
 <div class="left-menu">
     <div class="switchers">
-        <a href="{% events_filter_url request eventsFilter function="reminder" exclude="all" %}" class="ajax auth-required">
+        <a href="{% events_filter_url request eventsFilter function="reminder" tag_page="" exclude="all" %}" class="ajax auth-required">
             Reminder Events
         </a>
-        <a href="{% events_filter_url request eventsFilter function="in_the_loop" exclude="all" %}" class="ajax auth-required">
+        <a href="{% events_filter_url request eventsFilter function="in_the_loop" tag_page="" exclude="all" %}" class="ajax auth-required">
             In the Loop Events
         </a>
     </div>
     <ul class="categories">
         <li>
-            <a href="{% events_filter_url request eventsFilter function="recently_featured" exclude="tag" %}">
+            <a href="{% events_filter_url request eventsFilter function="recently_featured" tag_page="" exclude="tag" %}">
                 Featured
             </a>
         </li>
         <li>
-            <a href="{% events_filter_url request eventsFilter function="top_viewed" exclude="tag" %}">
+            <a href="{% events_filter_url request eventsFilter function="top_viewed" tag_page="" exclude="tag" %}">
                 Top viewed
             </a>
         </li>
         <li>
-            <a href="{% events_filter_url request eventsFilter function="latest" exclude="tag" %}">
+            <a href="{% events_filter_url request eventsFilter function="latest" tag_page="" exclude="tag" %}">
                 Recently Added
             </a>
         </li>
         <li>
-            <a href="{% events_filter_url request eventsFilter function="random" exclude="tag" %}">
+            <a href="{% events_filter_url request eventsFilter function="random" tag_page="" exclude="tag" %}">
                 Random
             </a>
         </li>
         <li>
-            <a href="{% events_filter_url request eventsFilter function="night_life"  exclude="tag" %}">
+            <a href="{% events_filter_url request eventsFilter function="night_life" tag_page="" exclude="tag" %}">
                 Night life
             </a>
         </li>
         <li>
-            <a href="{% events_filter_url request eventsFilter function="date_night"  exclude="tag" %}">
+            <a href="{% events_filter_url request eventsFilter function="date_night" tag_page="" exclude="tag" %}">
                 Date Night
             </a>
         </li>
         <li>
-            <a href="{% events_filter_url request eventsFilter function="free"  exclude="tag" %}">
+            <a href="{% events_filter_url request eventsFilter function="free" tag_page="" exclude="tag" %}">
                 Free
             </a>
         </li>
         <li class="last">
-            <a href="{% events_filter_url request eventsFilter function="family"  exclude="tag" %}">
+            <a href="{% events_filter_url request eventsFilter function="family" tag_page="" exclude="tag" %}">
                 Family
             </a>
         </li>
@@ -60,14 +60,14 @@
 
     <div class="all-tags-container{% if not pages.current.is_last %} more{% endif %}">
         <div class="all-tags">
-            <a href="{% events_filter_url request eventsFilter function="tags" exclude="tag|datetime" %}" >All Tags</a>
+            <a href="{% events_filter_url request eventsFilter function="tags" tag_page="" exclude="tag|datetime" %}" >All Tags</a>
         </div>
         <div class="switchers sort">
-            <a href="{% events_filter_url request eventsFilter function="tags" sort="abc" %}">
+            <a href="{% events_filter_url request eventsFilter function="tags" tag_page=tag_page sort="abc" %}">
                 Sort Tags by<br/>
                 <span class="abc-sorting-title">ABC</span>
             </a>
-            <a href="{% events_filter_url request eventsFilter function="tags" sort="123" %}">
+            <a href="{% events_filter_url request eventsFilter function="tags" tag_page=tag_page sort="123" %}">
                 Sort Tags by<br/>
                 <span class="num-sorting-title">123</span>
             </a>
@@ -76,7 +76,7 @@
         <ul class="categories tags">
             {% for tag in tags %}
                 <li class="category{% if tag.tag__name in eventsFilter.tags %} selected{% endif %}">
-                    <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name %}"
+                    <a href="{% events_filter_url request eventsFilter function="tags" tag=tag.tag__name tag_page=tag.tag__name %}"
                        {% if tag.tag__name in eventsFilter.tags %} class="selected"{% endif %}
                        title="{{ tag.tag__name }}">
                         {{ tag.tag__name|shorten_string:20 }}

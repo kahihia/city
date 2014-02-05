@@ -13,8 +13,8 @@ class UrlManagementRegistry(object):
 
     @staticmethod
     def validate(url_rule):
-        if not hasattr(url_rule, 'get_params'):
-            raise Exception(u'Registered url rule must have "get_params" method')
+        if not hasattr(url_rule, 'parse_url') or not hasattr(url_rule, 'create_url'):
+            raise Exception(u'Registered url rule must have "parse_url" and "create_url" methods')
 
     def __iter__(self):
         return self._registry.itervalues()

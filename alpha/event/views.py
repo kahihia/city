@@ -27,6 +27,7 @@ from event.models import (Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent,
 from event.services import facebook_services, location_service, event_service, featured_service
 from event.forms import CreateEventForm, EditEventForm, SetupFeaturedForm
 from event.payments.processors import process_setup_featured
+from home.models import Page
 
 
 def start(request):
@@ -76,7 +77,6 @@ def search_pad(request):
             .annotate(count=Count('id')) \
             .order_by('-count')[:10]
 
-
     return render_to_response('events/search_pad.html', {
                                 'events': events,
                                 'eventsFilter': eventsFilter,
@@ -113,7 +113,8 @@ def browse(request, *args, **kwargs):
             location_from_user_choice.location_id,
         )
 
-    eventsFilter = EventFilter(params, queryset=events, account=request.account)
+    tag_page = kwargs['extra_params']['tag'] if 'extra_params' in kwargs and 'tag' in kwargs['extra_params'] else ''
+    eventsFilter = EventFilter(params, queryset=events, account=request.account, tag_page=tag_page)
 
     if 'search' in params:
         tags = TaggedItem.objects.filter(object_id__in=map(lambda event: event.event.id, eventsFilter.qs())) \
@@ -129,6 +130,10 @@ def browse(request, *args, **kwargs):
     else:
         tags = tags.order_by('-count')
 
+    try:
+        page_info = Page.objects.get(alias='home')
+    except Page.DoesNotExist:
+        page_info = {}
 
     return render_to_response('events/browse_events.html', {
                                 'page_type': 'index',
@@ -140,7 +145,10 @@ def browse(request, *args, **kwargs):
                                 'end_date': end_date,
                                 'start_time': start_time,
                                 'end_time': end_time,
-                                'period': params.get('period', '')
+                                'period': params.get('period', ''),
+                                'tag_page': kwargs['extra_params']['tag'] if 'extra_params' in kwargs
+                                and 'tag' in kwargs['extra_params'] else '',
+                                'page_info': page_info
                             }, context_instance=RequestContext(request))
 
 
@@ -187,6 +195,8 @@ def view(request, slug, date=None):
     #events_from_venue = SingleEvent.venue_events(event.venue)
     exclude_id = event.id if date else None
     events_from_venue = event.event.venue_events(exclude_id)
+
+
 
     return render_to_response('events/event_detail_page.html', {
             'event': event,

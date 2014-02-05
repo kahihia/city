@@ -7,6 +7,7 @@ from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, F, Count
 from django.core.urlresolvers import reverse
+from django.utils.html import strip_tags
 
 from cities.models import Region, City
 from userena.models import UserenaBaseProfile
@@ -387,9 +388,20 @@ class VenueAccount(models.Model):
     def view(self):
         VenueAccount.objects.filter(id=self.id).update(viewed=F("viewed")+1)
 
+    def short_description(self):
+        description = strip_tags(self.about)
+        if len(description) > 255:
+            return '%s...' % description[:255]
+
+        return description
+
     @property
     def social_links(self):
         return self.venueaccountsociallink_set.all()
+
+    @property
+    def tags_as_string(self):
+        return ', '.join([tag.name for tag in self.tags.all()])
 
 
 class VenueAccountSocialLink(models.Model):

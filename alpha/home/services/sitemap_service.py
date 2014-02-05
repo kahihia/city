@@ -6,12 +6,15 @@ from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 
-from accounts.models import VenueAccount
+from taggit.models import Tag
+
+from accounts.models import VenueAccount, VenueType
 from event.models import SingleEvent
+from ..url_management.utils import url_by_identifier
 
 
 class SiteMap(object):
-    SOURCES = ('index', 'page', 'event', 'venue')
+    SOURCES = ('index', 'page', 'event', 'venue', 'tag', 'venue_type')
 
     def __init__(self, domain):
         self._domain = domain
@@ -30,7 +33,7 @@ class SiteMap(object):
         return self._prettify(urlset)
 
     def _get_index_data(self):
-        return ['http://%s%s' % (self._domain, reverse('event_browse'))]
+        return ['http://%s%s' % (self._domain, reverse('home'))]
 
     def _get_page_data(self):
         aliases = ['faq', 'advertising', 'privacy_policy', 'terms_of_service']
@@ -46,6 +49,16 @@ class SiteMap(object):
         venue_accounts = VenueAccount.public_venues.all()
         return ['http://%s%s' % (self._domain, venue_account.get_absolute_url())
                 for venue_account in venue_accounts]
+
+    def _get_tag_data(self):
+        tags = Tag.objects.all()
+        return ['http://%s%s' % (self._domain, url_by_identifier(tag.name))
+                for tag in tags]
+
+    def _get_venue_type_data(self):
+        venue_types = VenueType.active_types.all()
+        return ['http://%s%s' % (self._domain, url_by_identifier(venue_type.name))
+                for venue_type in venue_types]
 
     def _prettify(self, elem):
         """Return a pretty-printed XML string for the Element.

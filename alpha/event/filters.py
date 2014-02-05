@@ -3,6 +3,7 @@ import datetime
 import dateutil.parser as dateparser
 from accounts.models import VenueType
 from django.db.models import Q, Count
+from django.core.urlresolvers import reverse
 from cities.models import Region, City
 import urllib
 
@@ -24,7 +25,7 @@ class Filter(object):
 
         return qs.filter(**{'%s__%s' % (self.field, lookup): value})
 
-    def url_query(self, querydict):
+    def url_query(self, querydict, **kwargs):
         return "%s=%s" % (self.name, querydict[self.name])
 
     def upgrade_value(self, querydict, value):
@@ -85,11 +86,15 @@ class TagsFilter(Filter):
         ).values_list("id", flat=True)
         return qs.filter(event_id__in=list(event_ids_with_tags))
 
-    def url_query(self, querydict):
+    def url_query(self, querydict, **kwargs):
         tags = querydict["tag"]
         if isinstance(tags, basestring):
             tags = querydict.getlist(self.name)
-        return "&".join(["tag=%s" % urllib.quote(tag.encode('utf8')) for tag in tags])
+
+        if 'tag_page' in kwargs and kwargs['tag_page'] in tags:
+            tags.remove(kwargs['tag_page'])
+
+        return "&".join(["tag=%s" % urllib.quote(tag.encode('utf8')) for tag in tags]) if tags else ''
 
     def upgrade_value(self, querydict, value):
         return_value = []
@@ -111,9 +116,14 @@ class TagsFilter(Filter):
     def search_tags(self, tags):
         tags_to_return = []
         for tag in tags:
+            if not self.parent.tag_page:
+                remove_url = '?' + self.parent.url_query(tag=tag)
+            else:
+                remove_url = reverse('home') + '?' + self.parent.url_query(tag=tag)
+
             tags_to_return.append({
                 "name": tag,
-                "remove_url": "?" + self.parent.url_query(tag=tag)
+                "remove_url": remove_url
             })
         return tags_to_return
 
@@ -415,9 +425,10 @@ class NightLifeFilter(Filter):
 
 
 class EventFilter(object):
-    def __init__(self, data, queryset=Event.events.all(), account=None):
+    def __init__(self, data, queryset=Event.events.all(), account=None, tag_page=''):
         self.data = data.copy()
         self.queryset = queryset
+        self.tag_page = tag_page
         self.filters = {
             "start_date": DateFilter("start_date", "start_time", lookup="gte"),
             "end_date": DateFilter("end_date", "start_time", lookup="lte"),
@@ -445,7 +456,6 @@ class EventFilter(object):
     def objects_list(self):
         return list(self.qs())
 
-
     def url_query(self, **kwargs):
         data = self.data.copy()
         if "shortcut" in kwargs:
@@ -457,7 +467,18 @@ class EventFilter(object):
             if key in self.filters:
                 data[key] = self.filters[key].upgrade_value(data, kwargs[key])
 
-        query_list = [self.filters[key].url_query(data) for key, value in data.iteritems() if value and key in self.filters]
+        query_elements = {}
+        for key, value in data.iteritems():
+            if value and key in self.filters:
+                query_elements[key] = self.filters[key].url_query(data, **kwargs)
+
+        # hard code because of the needs of SEO =(
+        if 'tag' in query_elements and not query_elements['tag'] and 'tag_page' in kwargs:
+            for key in ('tag', 'function'):
+                if key in query_elements:
+                    del query_elements[key]
+
+        query_list = query_elements.values()
         if 'sort' in kwargs:
             query_list.append('sort=%s' % kwargs['sort'])
 

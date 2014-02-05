@@ -1,12 +1,26 @@
-from home.base import EnhancedObject
+from home.url_management.base import BaseUrlRule
 from accounts.models import VenueType
 
 
-class VenueTypesUrlRule(EnhancedObject):
-    @staticmethod
-    def get_params(request):
-        path = request.get_full_path()
-        path_components = path.strip('/').split('/')
+class VenueTypesUrlRule(BaseUrlRule):
+    @classmethod
+    def create_url(cls, identifier):
+        url = cls.get_stored_url(identifier)
+        if not url:
+            try:
+                venue_type = VenueType.active_types.get(name=identifier)
+            except VenueType.DoesNotExist:
+                pass
+            else:
+                venue_type_alias = venue_type.name.replace(' & ', '__').replace(' ', '_')
+                url = '/%s/' % venue_type_alias
+                cls.store_url(identifier, url)
+
+        return url
+
+    @classmethod
+    def parse_url(cls, path):
+        path_components = cls.get_path_components(path)
         # first element is a venue type name
         if len(path_components) == 1:
             try:
