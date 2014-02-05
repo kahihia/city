@@ -60,7 +60,9 @@
     <div class="primary-content event-details-primary-content">
         <div class="event-details__container">
             <header class="event-details__title">
-                <a href="{% event_link event %}">{{event.name}}</a>
+                <a href="{% event_link event %}" title="{{ event.name }}">
+                    {{ event.name|shorten_string:58 }}
+                </a>
             </header>
             <div class="event-wrapper">
                 {% manage_event_actions %}
