@@ -58,10 +58,12 @@
 {% block page %}
     <div id="fb-root"></div>
     <div class="primary-content event-details-primary-content">
-        <div class="event-details__container">
+        <div class="event-details__container" itemscope itemtype="http://data-vocabulary.org/Event">
             <header class="event-details__title">
-                <a href="{% event_link event %}" title="{{ event.name }}">
-                    {{ event.name|shorten_string:58 }}
+                <a href="{% event_link event %}" title="{{ event.name }}" itemprop="url">
+                    <span itemprop="summary">
+                        {{ event.name|shorten_string:58 }}
+                    </span>
                 </a>
             </header>
             <div class="event-wrapper">
@@ -79,7 +81,8 @@
                                                      src="{% cropped_thumbnail image "cropping" height=265 %}"
                                                      width="265"
                                                      height="265"
-                                                     alt="" />
+                                                     alt=""
+                                                     {% if forloop.first %}itemprop="photo"{% endif %} />
                                                 <div class="detail-view"></div>
                                             </a>
                                         {% endfor %}
@@ -98,7 +101,8 @@
                                                  src="{% cropped_thumbnail image "cropping" height=265 %}"
                                                  width="265"
                                                  height="265"
-                                                 alt="" />
+                                                 alt=""
+                                                 {% if forloop.first %}itemprop="photo"{% endif %} />
                                             <div class="detail-view"></div>
                                         </a>
                                     {% endfor %}
@@ -138,29 +142,41 @@
                                             <td>
                                                 <div class="event-date-wrapper">
                                                     {% if event.event_type == "SINGLE" %}
-                                                        {{event.start_time|date:"l, N d"}}
+                                                        {{ event.start_time|date:"l, N d" }}
+                                                        <time itemprop="startDate" datetime="{{ event.start_time|date:"c" }}"></time>
+                                                        <time itemprop="endDate" datetime="{{ event.end_time|date:"c" }}"></time>
                                                     {% endif %}
                                                     {% if event.event_type == "MULTIDAY" %}
-                                                        {{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.end_time|date:"D, N d"}}
+                                                        {{ event.first_occurrence.start_time|date:"D, N d" }} - {{ event.last_occurrence.end_time|date:"D, N d" }}
+                                                        <time itemprop="startDate" datetime="{{ event.first_occurrence.start_time|date:"c" }}"></time>
+                                                        <time itemprop="endDate" datetime="{{ event.last_occurrence.end_time|date:"c" }}"></time>
                                                     {% endif %}
                                                 </div>
-                                                <div class="event-venue">
+                                                <div class="event-venue" itemprop="location" itemscope itemtype="http://data-vocabulary.org/Organization">
                                                     {% if event.venue.venue_account %}
-                                                        <a href="{% url "public_venue_account" event.venue.venue_account.slug %}">
+                                                        <a href="{% url "public_venue_account" event.venue.venue_account.slug %}"
+                                                           itemprop="name">
                                                             {{ event.venue.name }}
                                                         </a>
                                                     {% else %}
-                                                        <span>{{ event.venue.name }}</span>
+                                                        <span itemprop="name">{{ event.venue.name }}</span>
                                                     {% endif %}
-
-                                                    {% if event.venue.street %}
-                                                        <span>
-                                                            {% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}
-                                                        </span>
-                                                    {% endif %}
-                                                    <div class="event-venue-name">
-                                                        {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
-                                                    </div>
+                                                    <span itemprop="address" itemscope itemtype="http://data-vocabulary.org/Address">
+                                                        {% if event.venue.street %}
+                                                            <span itemprop="street-address">
+                                                                {% if event.venue.street_number %}{{ event.venue.street_number }} {% endif %}{{ event.venue.street }}
+                                                            </span>
+                                                        {% endif %}
+                                                        <div class="event-venue-name">
+                                                            {{ event.venue.city.name_std }}, {{ event.venue.city.region.name_std|region_shortcut }}
+                                                            <span class="hidden" itemprop="locality">{{ event.venue.city.name_std }}</span>
+                                                            <span class="hidden" itemprop="region">{{ event.venue.city.region.name_std|region_shortcut }}</span>
+                                                        </div>
+                                                    </span>
+                                                    <span itemprop="geo" itemscope itemtype="http://data-vocabulary.org/Geo">
+                                                        <meta itemprop="latitude" content="{{ event.venue.location.y }}" />
+                                                        <meta itemprop="longitude" content="{{ event.venue.location.x }}" />
+                                                    </span>
                                                 </div>
                                             </td>
                                             {% if event.venue %}
@@ -302,7 +318,9 @@
                     <div class="description">
                         {% for occurrence in event.sorted_occurences_for_description %}
                             {% if occurrence.event_description %}
-                                <div class="show-day-description {% if forloop.first and occurrence.start_time > now %} active{% endif %}{% if occurrence.start_time.date == now.date %} active{% endif %}" data-day="{{ occurrence.start_time|date:"Y-m-d" }}">
+                                <div class="show-day-description {% if forloop.first and occurrence.start_time > now %} active{% endif %}{% if occurrence.start_time.date == now.date %} active{% endif %}"
+                                     data-day="{{ occurrence.start_time|date:"Y-m-d" }}"
+                                     {% if forloop.first and occurrence.start_time > now %} itemprop="description"{% endif %}{% if occurrence.start_time.date == now.date %} itemprop="description"{% endif %}>
                                     {{ occurrence.event_description|html_urlize|safe }}
                                 </div>
                             {% endif %}
@@ -310,7 +328,7 @@
                     </div>
                 {% else %}
                     {% if event.event_description %}
-                        <div class="description">
+                        <div class="description" itemprop="description">
                             {{ event.event_description|html_urlize|safe }}
                         </div>
                     {% endif %}
