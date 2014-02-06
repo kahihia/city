@@ -306,7 +306,7 @@ class Event(models.Model):
         result = []
         for event in events:
             next_day = event.next_day()
-            if not exclude_id or next_day.id != exclude_id:
+            if next_day and (not exclude_id or next_day.id != exclude_id):
                 result.append(next_day)
 
         return result
