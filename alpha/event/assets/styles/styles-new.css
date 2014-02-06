@@ -322,5 +322,5 @@ ul.errorlist li {
 /* Form fields */
 
 .hidden {
-    display: none;
+    display: none !important;
 }
