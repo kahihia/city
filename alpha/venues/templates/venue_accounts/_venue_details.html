@@ -77,6 +77,8 @@
         <header class="block-header">
             About Us
         </header>
-        {{ venue_account.about|safe }}
+        <div class="block-description">
+            {{ venue_account.about|safe }}
+        </div>
     </div>
 {% endif %}
