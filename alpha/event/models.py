@@ -287,7 +287,9 @@ class Event(models.Model):
 
     @property
     def tags_as_string(self):
-        return ', '.join([tag.name for tag in self.tags.all()])
+        tags = [tag.name for tag in self.tags.all()]
+        tags.append(self.venue.city.name_std)
+        return ', '.join(tags)
 
     @staticmethod
     def featured_events_for_region(region):
