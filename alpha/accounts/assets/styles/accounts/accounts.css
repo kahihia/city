@@ -61,6 +61,10 @@
     text-transform: capitalize;
 }
 
+.block-description {
+    overflow: hidden;
+}
+
 .about .block-header {
     font-size: 14px;
     font-weight: bold;
