@@ -19,7 +19,9 @@
         </header>
         {% for event in event_group.list %}
             <div class="entry-info home-page{% if not forloop.first %} another{% endif %}"
-                 data-no-turbolink>
+                 data-no-turbolink
+                 itemscope
+                 itemtype="http://data-vocabulary.org/Event">
                 {% short_single_event event %}
             </div>
         {%endfor%}
