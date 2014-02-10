@@ -2,6 +2,7 @@
     'use strict';
 
     function CreateEventPage(){
+        this.doNotSubmitTwice();
         this.doNotSubmitOnEnter();
         this.initBalloons();
         this.initTagsWidget();
@@ -15,6 +16,16 @@
     }
 
     CreateEventPage.prototype = {
+        doNotSubmitTwice: function() {
+            $("body").on("click", "[data-id=event_submit]", function() {
+                if(!$(this).attr("data-submitted")) {
+                    $(this).attr("data-submitted", 1);
+                    return true;
+                }
+
+                return false;
+            });
+        },
         doNotSubmitOnEnter: function(){
             var keyStop = {
                 13: "input, textarea", // stop enter = submit
