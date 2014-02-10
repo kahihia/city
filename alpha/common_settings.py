@@ -119,7 +119,7 @@ MIDDLEWARE_CLASSES = (
     'event.middleware.LocationMiddleware',
     'turbolinks.middleware.TurbolinksMiddleware',
     'home.url_management.middleware.UrlManagementMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 INTERNAL_IPS = ('127.0.0.1', '31.43.27.104')
@@ -180,7 +180,7 @@ INSTALLED_APPS = (
     'gears',
     'django_gears'
     # 'sprockets'
-    # 'debug_toolbar',
+    #'debug_toolbar',
 )
 
 # A sample logging configuration. The only tangible logging performed
