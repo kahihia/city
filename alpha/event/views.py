@@ -4,12 +4,13 @@ import utils
 
 from django.core.urlresolvers import reverse, resolve, Resolver404
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseServerError
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.middleware.csrf import get_token
 from django.contrib.gis.geos import Point
 from django.db.models import Q, Count, F
+from django.db import transaction
 from django.forms.util import ErrorList
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET
@@ -196,8 +197,6 @@ def view(request, slug, date=None):
     exclude_id = event.id if date else None
     events_from_venue = event.event.venue_events(exclude_id)
 
-
-
     return render_to_response('events/event_detail_page.html', {
             'event': event,
             'events_from_venue': events_from_venue,
@@ -206,19 +205,25 @@ def view(request, slug, date=None):
 
 
 @login_required
+@transaction.commit_manually
 def create(request, success_url=None, template_name='events/create/create_event.html'):
     if request.method == 'POST':
         form = CreateEventForm(account=request.account, data=request.POST, by_admin=request.user.is_staff)
         if form.is_valid():
-            # try:
-            event = event_service.save_event(request.user, request.POST, form)
+            try:
+                event = event_service.save_event(request.user, request.POST, form)
+                event_service.send_event_details_email(event)
+            except Exception:
+                response = HttpResponseServerError()
+                transaction.rollback()
+                return response
+            else:
+                if success_url is None:
+                    success_url = reverse('event_created', kwargs={'slug': event.slug})
 
-            event_service.send_event_details_email(event)
-
-            if success_url is None:
-                success_url = reverse('event_created', kwargs={ 'slug': event.slug })
-
-            return HttpResponseRedirect(success_url)
+                response = HttpResponseRedirect(success_url)
+                transaction.commit()
+                return response
 
             # except:
             #     form._errors['__all__'] = ErrorList(["Unhandled exception. Please inform administrator."])
@@ -228,13 +233,15 @@ def create(request, success_url=None, template_name='events/create/create_event.
             "venue_account_owner": request.current_venue_account
         }, by_admin=request.user.is_staff)
 
-
     context = RequestContext(request)
-    return render_to_response(template_name, {
-            'form': form,
-            'posting': True,
-            'location': request.user_location["user_location_lat_lon"],
-        }, context_instance=context)
+    response = render_to_response(template_name, {
+        'form': form,
+        'posting': True,
+        'location': request.user_location["user_location_lat_lon"],
+    }, context_instance=context)
+
+    transaction.commit() # unavoidable action
+    return response
 
 
 @login_required
@@ -317,7 +324,6 @@ def bind_to_venue(request):
         error = 'Incorrect parameters.'
 
     return HttpResponse(json.dumps({'success': success, 'error': error}), mimetype='application/json')
-
 
 
 def created(request, slug=None):
