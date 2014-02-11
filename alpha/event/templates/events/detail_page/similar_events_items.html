@@ -1,0 +1,28 @@
+{% load event_tags %}
+{% load cropping %}
+
+{% if events.count > 0 %}
+    <ul class="similar-events-ul {% if events.count < 4 %}one-line{% endif %}">
+        {% for event in events %}
+            <li class="hover-container">
+                <a href="{% event_link event %}">
+                    {% if event.image %}
+                        <img height="92" width="92" src="{% cropped_thumbnail event.image "cropping" height=92 %}" alt="{{event.name}}">
+                    {% else %}
+                        <img height="92" width="92" src="{{STATIC_URL}}/images/default-event-92x92.jpg" alt="{{event.name}}">
+                    {% endif %}
+                </a>
+                <div class="hover-effect {% cycle 'effect1' 'effect2' 'effect3' 'effect4' 'effect5' 'effect6' %}">
+                    {% if event.event_type == "SINGLE" %}
+                        {{ event.start_time|date:"l, N d" }}
+                    {% endif %}
+                    {% if event.event_type == "MULTIDAY" %}
+                        {{ event.first_occurrence.start_time|date:"D, N d" }} - {{ event.last_occurrence.end_time|date:"D, N d" }}
+                    {% endif %} - {{ event.name }}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <span class="empty">No upcoming events</span>
+{% endif %}
