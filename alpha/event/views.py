@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse, resolve, Resolver404
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseServerError
 from django.shortcuts import render_to_response, get_object_or_404
+from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.middleware.csrf import get_token
 from django.contrib.gis.geos import Point
@@ -189,7 +190,6 @@ def view(request, slug, date=None):
 
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('event_browse'))
-
 
     SingleEvent.objects.filter(id=event.id).update(viewed=F("viewed")+1)
 
@@ -571,6 +571,24 @@ def audit_event_approve(request, id):
     event_obj.audited = True
     event_obj.save()
     return audit_event_list(request)
+
+
+def more_events(request, id):
+    try:
+        target_event = SingleEvent.objects.get(pk=id)
+    except SingleEvent.DoesNotExist:
+        events = []
+    else:
+        events = list(target_event.event.venue_events(target_event.id))
+
+    content = render_to_string('events/detail_page/similar_events_items.html',
+                               {'events': events},
+                               context_instance=RequestContext(request))
+
+    return HttpResponse(json.dumps({'success': True,
+                                    'content': content,
+                                    'count': len(events)}),
+                        mimetype='application/json')
 
 
 def nearest_venues(request):

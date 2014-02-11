@@ -4,7 +4,8 @@
 
     var SimilarEvents = function(){
         this.viewer = $(".similar-events-wrapper");
-        this.content = $(".similar-events-ul", this.viewer);
+        this.itemsContainer = $("[data-id=similar_items_container]");
+        this.controls = $(".similar-events-viewer-controls");
         this.next = $(".next", this.viewer);
         this.prev = $(".prev", this.viewer);
         this.pages = Math.ceil($("a", this.viewer).length/6);
@@ -15,6 +16,7 @@
         this.next.on("click", this.scrollNextPage.bind(this));
 
         $("#similar-events-total").html(this.pages);
+        this.loadContent();
     };
 
     SimilarEvents.prototype = {
@@ -35,6 +37,24 @@
         },
         scrollPrevPage: function(){
             this.scrollToPage(this.currentPage-1);
+        },
+        loadContent: function() {
+            var self = this;
+            $.get(this.viewer.data("more-events-url"),
+                function(data) {
+                    if(data.success) {
+                        self.itemsContainer.html(data.content);
+                        self.content = $(".similar-events-ul", self.viewer);
+
+                        if(data.count > 6) {
+                            self.pages = Math.ceil(data.count/6);
+                            $("#similar-events-total").html(self.pages);
+                            self.controls.show();
+                        }
+                    }
+                },
+                'json'
+            );
         }
     };
 

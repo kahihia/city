@@ -1,44 +1,16 @@
-{% load event_tags %}
-{% load cropping %}
-
-<div class="similar-events-wrapper">
+<div class="similar-events-wrapper" data-more-events-url="{% url 'more_events' event.id %}">
     <header>
         More Events
     </header>
-    <div class="similar-events">
-        {% if events_from_venue.count > 0 %}
-            <ul class="similar-events-ul {% if events_from_venue.count < 4 %}one-line{% endif %}">
-                {% for venue_event in events_from_venue %}
-                    <li class="hover-container">
-                        <a href="{% event_link venue_event %}">
-                            {% if venue_event.image %}
-                                <img height="92" width="92" src="{% cropped_thumbnail venue_event.image "cropping" height=92 %}" alt="{{venue_event.name}}">
-                            {% else %}
-                                <img height="92" width="92" src="{{STATIC_URL}}/images/default-event-92x92.jpg" alt="{{venue_event.name}}">
-                            {% endif %}
-                        </a>
-                        <div class="hover-effect {% cycle 'effect1' 'effect2' 'effect3' 'effect4' 'effect5' 'effect6' %}">
-                            {% if venue_event.event_type == "SINGLE" %}
-                                {{ venue_event.start_time|date:"l, N d" }}
-                            {% endif %}
-                            {% if venue_event.event_type == "MULTIDAY" %}
-                                {{ venue_event.first_occurrence.start_time|date:"D, N d" }} - {{ venue_event.last_occurrence.end_time|date:"D, N d" }}
-                            {% endif %} - {{ venue_event.name }}
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <span class="empty">No upcoming events</span>
-        {% endif %}
-
+    <div class="similar-events" data-id="similar_items_container">
+        <div class="indicator-block">
+            <img src="{{ STATIC_URL }}images/event/blue-ajax-loader.gif"/>
+        </div>
     </div>
 
-    {% if events_from_venue.count > 6 %}
-        <div class="similar-events-viewer-controls">
-            <div class="next"><i class="blue-arrow blue-arrow_pos_next"></i></div>
-            <div class="prev"><i class="blue-arrow blue-arrow_pos_prev"></i></div>
-            <span class="page-no">1</span> of <span id="similar-events-total">{{ events_from_venue.count }}</span>
-        </div>
-    {% endif %}
+    <div class="similar-events-viewer-controls">
+        <div class="next"><i class="blue-arrow blue-arrow_pos_next"></i></div>
+        <div class="prev"><i class="blue-arrow blue-arrow_pos_prev"></i></div>
+        <span class="page-no">1</span> of <span id="similar-events-total"></span>
+    </div>
 </div>
