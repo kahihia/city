@@ -192,14 +192,8 @@ def view(request, slug, date=None):
         return HttpResponseRedirect(reverse('event_browse'))
 
     SingleEvent.objects.filter(id=event.id).update(viewed=F("viewed")+1)
-
-    #events_from_venue = SingleEvent.venue_events(event.venue)
-    exclude_id = event.id if date else None
-    events_from_venue = event.event.venue_events(exclude_id)
-
     return render_to_response('events/event_detail_page.html', {
             'event': event,
-            'events_from_venue': events_from_venue,
             'now': datetime.datetime.now()
         }, context_instance=RequestContext(request))
 
