@@ -48,6 +48,18 @@
 	overflow: hidden;
 	margin-top: 10px;
     height: 208px;
+    position: relative;
+}
+
+.secondary-content .similar-events .indicator-block {
+    display: block;
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -20px 0 0 -16px;
+    padding: 0;
 }
 
 .secondary-content .similar-events-wrapper ul li {
@@ -72,6 +84,7 @@
     vertical-align: middle;
     line-height: 26px;
     margin-left: 4px;
+    display: none;
 }
 
 .similar-events-viewer-controls .prev,
