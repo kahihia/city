@@ -11,7 +11,7 @@ from .models import Page
 
 
 def custom_404(request):
-    return render(request,"404.html")
+    return render(request, "404.html", status=404)
 
 
 def redirect(request):
