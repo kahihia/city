@@ -1,6 +1,7 @@
 {% if request.user.is_staff or request.user == venue_account.account.user %}
     <div class="cfadmin-actions">
         <a href="{% url 'edit_venue_account' slug=venue_account.slug %}">Edit</a>
+        <a class="venue-delete-action" href="{% url 'unlink_venue_account_by_admin' slug=venue_account.slug %}">Delete</a>
         <span>Viewed: {{ venue_account.viewed }}</span>
     </div>
 {% endif %}

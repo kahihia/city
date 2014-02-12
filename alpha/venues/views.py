@@ -5,18 +5,14 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
-from django.contrib.gis.geos import Point
-from django.db.models import Q
 from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
-
-from cities.models import City, Country
+from django.contrib.admin.views.decorators import staff_member_required
 
 from accounts.models import VenueAccount, VenueType, Account
-from event.models import Event, SingleEvent, FeaturedEvent, Venue
+from event.models import SingleEvent, FeaturedEvent
 from event.services.featured_service import featured_events_for_region
 from event.services import venue_service as event_venue_service
-from event.utils import find_nearest_city
 from venues.forms import VenueAccountForm, NewVenueAccountForm
 from .services import social_links_services, venue_service
 
@@ -234,6 +230,12 @@ def unlink_venue_account_from_user_profile(request):
             success = True
 
     return HttpResponse(json.dumps({'success': success}), mimetype='application/json')
+
+@staff_member_required
+def unlink_venue_account_by_admin(request, slug):
+    venue_account = VenueAccount.objects.get(slug=slug)
+    venue_service.unlink_venue_account(venue_account, 'remove_events', '', venue_account.account.user)
+    return HttpResponseRedirect(reverse('venues'))
 
 
 def venue_tags(request):
