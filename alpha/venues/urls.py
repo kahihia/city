@@ -38,6 +38,10 @@ urlpatterns = patterns('',
         views.unlink_venue_account_from_user_profile,
         name="unlink_venue_account_from_user_profile"
     ),
+    url(r'^unlink-venue-account-admin/(?P<slug>[-\w]+)/$',
+        views.unlink_venue_account_by_admin,
+        name="unlink_venue_account_by_admin"
+    ),
     url(r'^(?P<slug>[-\w]+)/$',
         views.public_venue_account,
         name='public_venue_account'

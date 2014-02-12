@@ -604,7 +604,7 @@ fieldset legend{
     color: #9c1a00;
 }
 
-.event-delete-action {
+.event-delete-action, .venue-delete-action {
     color: #9c1a00;
 }
 
