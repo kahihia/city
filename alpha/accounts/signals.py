@@ -23,6 +23,14 @@ def after_logout(sender, user, request, **kwargs):
     clear_persistent_graph_cache(request)
 
 
+def after_account_save(sender, instance, created, **kwargs):
+    if created:
+        if instance.user.email:
+            reminding_service.update_reminder_emails(instance, instance.user.email)
+
+        copy_occurring_bonus(instance)
+
+
 def create_facebook_profile(sender, instance, created, **kwargs):
     if created:
         user = instance
@@ -35,14 +43,11 @@ def create_facebook_profile(sender, instance, created, **kwargs):
             assign(perm[0], user, user)
 
 
-def copy_occurring_bonus(sender, instance, created, **kwargs):
-    if created:
-        account = instance
-
-        for bonus_campaign in BonusCampaign.occurring_bonuses.all():
-            Account.objects.filter(id=account.id).update(
-                bonus_budget=F("bonus_budget")+bonus_campaign.budget.amount
-            )
+def copy_occurring_bonus(account):
+    for bonus_campaign in BonusCampaign.occurring_bonuses.all():
+        Account.objects.filter(id=account.id).update(
+            bonus_budget=F("bonus_budget")+bonus_campaign.budget.amount
+        )
 
 
 def sync_schedule_after_reminder_single_events_was_modified(sender, **kwargs):
@@ -69,7 +74,7 @@ user_logged_in.connect(after_login)
 user_logged_out.connect(after_logout)
 
 post_save.connect(create_facebook_profile, sender=User)
-post_save.connect(copy_occurring_bonus, sender=Account)
+post_save.connect(after_account_save, sender=Account)
 post_save.connect(sync_schedule_after_reminder_settings_was_changed, sender=Account)
 
 m2m_changed.connect(sync_schedule_after_reminder_single_events_was_modified,

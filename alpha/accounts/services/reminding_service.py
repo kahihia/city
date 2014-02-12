@@ -3,6 +3,17 @@ from datetime import timedelta
 from ..models import AccountReminding
 
 
+def update_reminder_emails(account, email):
+    """ Update reminder and in the loop emails.
+
+    @type account: accounts.models.Account
+    @type email: unicode
+    """
+    account.reminder_email = email
+    account.in_the_loop_email = email
+    account.save(update_fields=['reminder_email', 'in_the_loop_email'])
+
+
 def add_single_events_to_schedule(account, events, reminder_type):
     for event_day in events:
         if reminder_type == 'DAYS' and account.reminder_days_before_event:
