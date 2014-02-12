@@ -189,7 +189,7 @@ def view(request, slug, date=None):
             raise ObjectDoesNotExist
 
     except ObjectDoesNotExist:
-        return HttpResponseRedirect(reverse('event_browse'))
+        raise Http404
 
     SingleEvent.objects.filter(id=event.id).update(viewed=F("viewed")+1)
     return render_to_response('events/event_detail_page.html', {
