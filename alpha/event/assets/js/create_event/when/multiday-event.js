@@ -53,10 +53,12 @@
 
             if(days.length<2) return false;
 
-            firstDay = days[0];
-            lastDay = days[days.length-1];
+            return true;
 
-            return (days.length-1) == Math.round((lastDay.getTime() - firstDay.getTime())/oneDay);
+//            firstDay = days[0];
+//            lastDay = days[days.length-1];
+//
+//            return (days.length-1) == Math.round((lastDay.getTime() - firstDay.getTime())/oneDay);
         },
         is_turned_on: function(){
             if(this.checkIfMultiDayEventPosible() && $(this.checkbox).hasClass("checked")) {                
