@@ -345,6 +345,7 @@ def get_prepared_event_data(request, data):
         'website': 'https://www.facebook.com/events/' + data['facebook_event_id'],
         'when': start_time.strftime('%d-%m-%Y'),
         'when_json': _get_time_range_json(start_time, end_time),
+        'price': '$',
         'description': description,
         'description_json': json.dumps({
             'default': description,
