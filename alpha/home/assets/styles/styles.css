@@ -320,6 +320,10 @@ html.preview, body.preview {
     font-size:12px !important;
 }
 
+.search-lists ul li.selected a {
+    font-weight: bold;
+}
+
 .search-lists ul li a:hover,
 .search-lists ul li a.selected
 {
