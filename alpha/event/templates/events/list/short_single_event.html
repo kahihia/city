@@ -31,10 +31,10 @@
                     <span class="event-date">{{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.start_time|date:"D, N d"}}</span>
                 </div>
                 <div class="entry-date-time">
-                    <span class="event-time">{{event.first_occurrence.start_time|just_time|lower}} - {{event.first_occurrence.end_time|just_time|lower}}*</span>
+                    <span class="event-time">{{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}*</span>
                 </div>
-                <time itemprop="startDate" datetime="{{ event.first_occurrence.start_time|date:"c" }}"></time>
-                <time itemprop="endDate" datetime="{{ event.last_occurrence.end_time|date:"c" }}"></time>
+                <time itemprop="startDate" datetime="{{ event.start_time.start_time|date:"c" }}"></time>
+                <time itemprop="endDate" datetime="{{ event.end_time|date:"c" }}"></time>
             {% endif %}
         </div>
         <div class="event-location" itemprop="location" itemscope itemtype="http://data-vocabulary.org/Organization">
