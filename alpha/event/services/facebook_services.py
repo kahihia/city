@@ -19,6 +19,7 @@ from django_facebook.api import get_persistent_graph
 from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 
+from home.utils import shorten_string
 from event.models import Event, FacebookEvent, SingleEvent
 from ..settings import EVENTFUL_ID, CONCERTIN_ID
 
@@ -150,7 +151,7 @@ def create_facebook_event(event, request, facebook_owner_id, facebook_owner_type
         dates.end_time += datetime.timedelta(days=1)
 
     common_params = {
-        'name': event.name,
+        'name': shorten_string(event.name, 72), # max length is 75 (with ...)
         'description': unicode(description).encode('utf-8'),
         'location': location
     }

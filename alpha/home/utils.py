@@ -26,3 +26,10 @@ def deserialize_json_deep(data, relations={}):
 
         objects.append(obj)
     return objects[0] if is_single else objects
+
+
+def shorten_string(value, length):
+    if len(value) > length:
+        return '%s...' % value[:length]
+
+    return value
