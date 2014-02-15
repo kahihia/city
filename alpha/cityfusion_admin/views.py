@@ -21,7 +21,7 @@ from advertising.filters import AdvertisingCampaignFilter
 from advertising.models import AdvertisingOrder
 from cityfusion_admin.models import ReportEvent, ClaimEvent
 from cityfusion_admin.forms import FreeTryForm, BonusCampaignForm
-from event.models import Event, FeaturedEvent, FacebookEvent, EventTransferring, FeaturedEventOrder
+from event.models import Event, EventSlug, FeaturedEvent, FacebookEvent, EventTransferring, FeaturedEventOrder
 from event.forms import SetupFeaturedByAdminForm, CreateEventForm
 from event.services import facebook_services, event_service
 from venues.models import VenueAccountTransferring
@@ -557,7 +557,7 @@ def change_event_owner_search(request):
 def change_event_owner(request, slug):
     owner_id = request.POST.get("owner_id", None)
     if owner_id:
-        event = Event.events.get(slug=slug)
+        event = EventSlug.objects.get(slug=slug).event
         event.owner = User.objects.get(id=owner_id)
         event.save()
 

@@ -5,6 +5,8 @@ import cgi
 from django import template
 from django.conf import settings
 
+from .. import utils
+
 register = template.Library()
 
 
@@ -24,10 +26,7 @@ def none_convert(value):
 
 @register.filter
 def shorten_string(value, length):
-    if len(value) > length:
-        return '%s...' % value[:length]
-
-    return value
+    return utils.shorten_string(value, length)
 
 
 @register.filter
