@@ -4,7 +4,11 @@ import utils
 
 from django.core.urlresolvers import reverse, resolve, Resolver404
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseServerError
+from django.http import (Http404,
+                         HttpResponseRedirect,
+                         HttpResponse,
+                         HttpResponseServerError,
+                         HttpResponsePermanentRedirect)
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.loader import render_to_string
 from django.template import RequestContext
@@ -189,7 +193,7 @@ def view(request, slug, date=None):
             raise ObjectDoesNotExist
 
     except ObjectDoesNotExist:
-        raise Http404
+        return HttpResponsePermanentRedirect(reverse('home'))
 
     SingleEvent.objects.filter(id=event.id).update(viewed=F("viewed")+1)
     return render_to_response('events/event_detail_page.html', {
