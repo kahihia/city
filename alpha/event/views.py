@@ -28,7 +28,7 @@ from moneyed import CAD
 from accounts.decorators import native_region_required
 from accounts.models import Account, VenueAccount
 from ajaxuploader.views import AjaxFileUploader
-from event.filters import EventFilter
+from event.filters import EventFilter, FunctionFilter
 from event.models import (Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder)
 from event.services import facebook_services, location_service, event_service, featured_service
 from event.forms import CreateEventForm, EditEventForm, SetupFeaturedForm
@@ -106,7 +106,7 @@ def browse(request, *args, **kwargs):
     if 'extra_params' in kwargs:
         params.update(kwargs['extra_params'])
 
-    if set(search_params) & set(params.keys()):
+    if 'function' in params and params['function'] in FunctionFilter.SPLIT_FUNCTIONS:
         events = SingleEvent.future_events.all()
     else:
         events = SingleEvent.homepage_events.all()

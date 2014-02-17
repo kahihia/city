@@ -143,6 +143,10 @@ search_tags_for_filters = {
 
 
 class FunctionFilter(Filter):
+    SPLIT_FUNCTIONS = ['recently_featured', 'top_viewed', 'latest',
+                       'random', 'night_life', 'date_night', 'free', 'family']
+    OVERLAP_FUNCTIONS = ['tags', 'reminder', 'in_the_loop']
+
     def __init__(self, name, account=None):
         self.name = name
         self.account = account
