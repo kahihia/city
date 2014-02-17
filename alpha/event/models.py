@@ -279,6 +279,10 @@ class Event(models.Model):
             return ''
 
     @property
+    def extended_name(self):
+        return '%s - %s' % (self.name, self.venue.city.name_std)
+
+    @property
     def picture(self):
         try:
             return self.sorted_images[0].picture

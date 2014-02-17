@@ -12,7 +12,7 @@
 {% load gears %}
 
 {% block meta %}
-    <title>{{ event.name }} - {{ event.venue.city.name_std }}</title>
+    <title>{{ event.extended_name }}</title>
     <meta name="keywords" content="{{ event.tags_as_string }}" />
     <meta name="description" content="{{ event.short_description }}" />
 {% endblock meta %}
@@ -60,9 +60,9 @@
     <div class="primary-content event-details-primary-content">
         <div class="event-details__container" itemscope itemtype="http://data-vocabulary.org/Event">
             <header class="event-details__title">
-                <a href="{% event_link event %}" title="{{ event.name }}" itemprop="url">
+                <a href="{% event_link event %}" title="{{ event.extended_name }}" itemprop="url">
                     <span itemprop="summary">
-                        {{ event.name|shorten_string:58 }}
+                        {{ event.extended_name|shorten_string:58 }}
                     </span>
                 </a>
             </header>
