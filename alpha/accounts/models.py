@@ -339,7 +339,7 @@ class VenueAccount(models.Model):
     about = models.TextField(verbose_name='Text for "About Us" block', blank=True, null=True)
     picture = ImageCropField(upload_to='venue_profile_imgs', blank=True, null=True, help_text='Custom Venue Profile picture')
     cropping = ImageRatioField('picture', '154x154', size_warning=True, allow_fullsize=True)
-    slug = models.SlugField(verbose_name='Unique URL for custom Venue, created from name', unique=True)
+    slug = models.SlugField(verbose_name='Unique URL for custom Venue, created from name', max_length=255, unique=True)
     public = models.BooleanField(default=True)
     types = models.ManyToManyField(VenueType)
 
