@@ -325,6 +325,25 @@ class PublicVenueManager(models.Manager):
     def get_query_set(self):
         return super(PublicVenueManager, self).get_query_set().filter(public=True)
 
+    def filter_by_location(self, location_type, location_id):
+        if location_type == 'country':
+            return self._filter_by_country(location_id)
+        elif location_type == 'region':
+            return self._filter_by_region(location_id)
+        elif location_type == 'city':
+            return self._filter_by_city(location_id)
+        else:
+            return self
+
+    def _filter_by_country(self, id):
+        return self.filter(venue__country__id=id)
+
+    def _filter_by_region(self, id):
+        return self.filter(Q(venue__city__region__id=id) | Q(venue__city__subregion__id=id))
+
+    def _filter_by_city(self, id):
+        return self.filter(venue__city__id=id)
+
 
 class VenueAccount(models.Model):
     venue = models.ForeignKey(Venue)
