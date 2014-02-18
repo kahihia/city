@@ -306,9 +306,9 @@ class Event(models.Model):
             Q(featuredevent__all_of_canada=True) | Q(featuredevent__regions__id=region_id)
         ).order_by('?').annotate(Count("id"))
 
-    def venue_events(self, exclude_id=None, limit=30):
+    def venue_events(self, exclude_id=None, limit=36):
         by_tags_ids = self._get_similar_events_ids_by_tags()
-        events = Event.future_events.filter(Q(venue_id=self.venue.id) | Q(id__in=by_tags_ids))
+        events = Event.future_events.filter(Q(venue_id=self.venue.id) | Q(id__in=by_tags_ids)).order_by('?')
         result, count = [], 0
         for event in events:
             next_day = event.next_day()
