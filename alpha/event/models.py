@@ -306,31 +306,17 @@ class Event(models.Model):
             Q(featuredevent__all_of_canada=True) | Q(featuredevent__regions__id=region_id)
         ).order_by('?').annotate(Count("id"))
 
-    def venue_events(self, exclude_id=None):
-        #by_tags_ids = self._get_similar_events_ids_by_tags()
-        #event_ids = Event.future_events\
-        #                 .filter(Q(venue_id=self.venue.id) | Q(id__in=by_tags_ids))\
-        #                 .values_list('id', flat=True)
-        #event_day_ids = SingleEvent.objects\
-        #                           .values('event__id')\
-        #                           .filter(event__id__in=event_ids)\
-        #                           .filter(end_time__gte=datetime.datetime.now())\
-        #                           .filter(is_occurrence=False)\
-        #                           .annotate(min_event_time=Min('start_time'))\
-        #                           .filter(start_time=F('min_event_time'))\
-        #                           .values_list('id', flat=True)
-        #
-        #events = list(SingleEvent.objects
-        #                         .filter(id__in=event_day_ids)
-        #                         .select_related('event__venue', 'event__venue__city')
-        #                         .prefetch_related('event__eventimage_set', 'event__eventslug_set'))
+    def venue_events(self, exclude_id=None, limit=30):
         by_tags_ids = self._get_similar_events_ids_by_tags()
         events = Event.future_events.filter(Q(venue_id=self.venue.id) | Q(id__in=by_tags_ids))
-        result = []
+        result, count = [], 0
         for event in events:
             next_day = event.next_day()
             if next_day and (not exclude_id or next_day.id != exclude_id):
                 result.append(next_day)
+                count += 1
+                if count >= limit:
+                    break
 
         return result
 
