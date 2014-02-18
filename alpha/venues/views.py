@@ -12,7 +12,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from accounts.models import VenueAccount, VenueType, Account
 from event.models import SingleEvent, FeaturedEvent
 from event.services.featured_service import featured_events_for_region
-from event.services import venue_service as event_venue_service
+from event.services import venue_service as event_venue_service, location_service
 from venues.forms import VenueAccountForm, NewVenueAccountForm
 from .services import social_links_services, venue_service
 
@@ -20,6 +20,7 @@ MAX_SUGGESTIONS = getattr(settings, 'TAGGIT_AUTOSUGGEST_MAX_SUGGESTIONS', 10)
 
 TAG_MODEL = getattr(settings, 'TAGGIT_AUTOSUGGEST_MODEL', ('taggit', 'Tag'))
 TAG_MODEL = get_model(*TAG_MODEL)
+
 
 def venues(request, *args, **kwargs):
     current_venue_type = int(request.GET.get("venue_type", 0))
@@ -37,10 +38,14 @@ def venues(request, *args, **kwargs):
 
     venue_types = VenueType.active_types.all()
 
+    location_from_user_choice = location_service.LocationFromUserChoice(request)
+    venue_accounts = VenueAccount.public_venues.filter_by_location(location_from_user_choice.location_type,
+                                                                   location_from_user_choice.location_id)
+
     if current_venue_type:
-        venue_accounts = VenueAccount.public_venues.filter(types__id=int(current_venue_type)).order_by("venue__name")
-    else:
-        venue_accounts = VenueAccount.public_venues.all().order_by("venue__name") # TODO: filter by region
+        venue_accounts = venue_accounts.filter(types__id=int(current_venue_type))
+
+    venue_accounts = venue_accounts.order_by('venue__name')
 
     return render_to_response('venues/index.html', {
         'featured_events': featured_events,
