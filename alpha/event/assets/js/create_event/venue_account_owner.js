@@ -6,19 +6,17 @@
 
         this.tagsWidget = tagsWidget;
 
-        if($(".venue-account-owner-dropdown select option").length<=1){
-            $(".event-owner-tr, .venue-account-owner").hide();
-        } else {
-            $(".venue-account-owner-dropdown").qap_dropdown();
-            this.select = $(".venue-account-owner-dropdown select");
-            
-            $(".venue-account-owner-dropdown").on("dropdown.change", function(){
+        $(".venue-account-owner-dropdown").qap_dropdown();
+        this.select = $(".venue-account-owner-dropdown select");
+
+        if($(".venue-account-owner-dropdown select option").length > 1) {
+            $(".venue-account-owner-dropdown").on("dropdown.change", function() {
                 that.onSelect(true)
             });
+        }
 
-            if(window.location.pathname.indexOf("events/create")!=-1) {                
-                that.onSelect(false);
-            }
+        if(window.location.pathname.indexOf("events/create")!=-1) {
+            that.onSelect(false);
         }
     }
 
