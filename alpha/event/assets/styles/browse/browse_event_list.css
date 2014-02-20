@@ -100,12 +100,16 @@
     width: 520px;
 }
 
-.entry-wrapper .entry-info .entry-details-wrapper .title {
+.entry-details-wrapper .title {
     float: left;
     width: 250px !important;
 }
 
-.entry-wrapper .entry-info .entry-details-wrapper .enty-extra-date {
+.entry-wrapper .entry-info.with-actions .entry-details-wrapper .title {
+    width: 185px !important;
+}
+
+.entry-details-wrapper .enty-extra-date {
     float: right;
     color: #000000;
     margin-top: 3px;
@@ -127,7 +131,6 @@
 }
 
 .select-buttons {
-    background: #ffffff;
     height: 18px;
 }
 
@@ -247,7 +250,7 @@
 }
 
 .entry-wrapper .entry-info.with-actions .event-location {
-    width: 290px;    
+    width: 300px;
 }
 
 .entry-wrapper .entry-info.with-actions .event-location .event-name-and-street{
@@ -262,7 +265,7 @@
 .entry-wrapper .entry-info.with-actions .entry-details-wrapper .title,
 .entry-wrapper .entry-info.with-actions .entry-details-wrapper .entry-date,
 .entry-wrapper .entry-info.with-actions .entry-details-wrapper .entry-description {
-    width: 290px;
+    width: 300px;
 }
 
 .entry-wrapper .entry-info .auctions-details-wrapper .title,
