@@ -100,6 +100,18 @@
     width: 520px;
 }
 
+.entry-wrapper .entry-info .entry-details-wrapper .title {
+    float: left;
+    width: 250px !important;
+}
+
+.entry-wrapper .entry-info .entry-details-wrapper .enty-extra-date {
+    float: right;
+    color: #000000;
+    margin-top: 3px;
+    font-size: 1.0em;
+}
+
 .account-events-list {
     position: relative;
     padding-top: 66px;
