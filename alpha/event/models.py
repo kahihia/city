@@ -98,6 +98,25 @@ class FutureManager(models.Manager):
 
         return queryset
 
+    def filter_by_location(self, location_type, location_id):
+        if location_type == 'country':
+            return self._filter_by_country(location_id)
+        elif location_type == 'region':
+            return self._filter_by_region(location_id)
+        elif location_type == 'city':
+            return self._filter_by_city(location_id)
+        else:
+            return self
+
+    def _filter_by_country(self, id):
+        return self.filter(venue__country__id=id)
+
+    def _filter_by_region(self, id):
+        return self.filter(Q(venue__city__region__id=id) | Q(venue__city__subregion__id=id))
+
+    def _filter_by_city(self, id):
+        return self.filter(venue__city__id=id)
+
 
 # manager will help me to outflank django restriction https://code.djangoproject.com/ticket/13363
 class FutureWithoutAnnotationsManager(models.Manager):
@@ -306,9 +325,10 @@ class Event(models.Model):
             Q(featuredevent__all_of_canada=True) | Q(featuredevent__regions__id=region_id)
         ).order_by('?').annotate(Count("id"))
 
-    def venue_events(self, exclude_id=None, limit=36):
+    def venue_events(self, location, exclude_id=None, limit=36):
         by_tags_ids = self._get_similar_events_ids_by_tags()
-        events = Event.future_events.filter(Q(venue_id=self.venue.id) | Q(id__in=by_tags_ids)).order_by('?')
+        events = self.__class__.future_events.filter_by_location(location.location_type, location.location_id)\
+                                             .filter(Q(venue_id=self.venue.id) | Q(id__in=by_tags_ids)).order_by('?')
         result, count = [], 0
         for event in events:
             next_day = event.next_day()
