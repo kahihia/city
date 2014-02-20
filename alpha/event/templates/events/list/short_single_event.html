@@ -12,8 +12,15 @@
         {% endif %}
     </div>
     <div class="entry-details-wrapper">
-        <div class="title" itemprop="summary">
-            {{ event.name }}
+        <div class="entry-title">
+            <div class="title" itemprop="summary">
+                {{ event.name }}
+            </div>
+            <div class="enty-extra-date">
+                {% if event.event_type == "MULTIDAY" %}
+                    {{event.first_occurrence.start_time|date:"N d"}} - {{event.last_occurrence.start_time|date:"N d"}}
+                {% endif %}
+            </div>
         </div>
         <div class="entry-date">
             {% if event.event_type == "SINGLE" %}
@@ -28,7 +35,7 @@
             {% endif %}
             {% if event.event_type == "MULTIDAY" %}
                 <div class="entry-date-day">
-                    <span class="event-date">{{event.first_occurrence.start_time|date:"D, N d"}} - {{event.last_occurrence.start_time|date:"D, N d"}}</span>
+                    <span class="event-date">{{event.start_time|date:"l, N d"}}</span>
                 </div>
                 <div class="entry-date-time">
                     <span class="event-time">{{event.start_time|just_time|lower}} - {{event.end_time|just_time|lower}}*</span>
