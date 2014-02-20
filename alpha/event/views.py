@@ -577,7 +577,9 @@ def more_events(request, id):
     except SingleEvent.DoesNotExist:
         events = []
     else:
-        events = list(target_event.event.venue_events(target_event.id))
+        location_from_user_choice = location_service.LocationFromUserChoice(request)
+        events = list(target_event.event.venue_events(location=location_from_user_choice,
+                                                      exclude_id=target_event.id))
 
     content = render_to_string('events/detail_page/similar_events_items.html',
                                {'events': events},
