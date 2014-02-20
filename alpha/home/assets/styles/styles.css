@@ -81,9 +81,7 @@ html.preview, body.preview {
 }
 
 .primary-header {
-    width:auto;    
-    background: #022e52;
-    border-bottom: 1px solid #5c768c;
+    width:auto;
     min-width: 1024px;
 }
 
@@ -93,6 +91,8 @@ html.preview, body.preview {
     margin: 0 auto;
     text-align: left;
     height: 78px;
+    background: #022e52;
+    border-bottom: 1px solid #5c768c;
 }
 
 .post-events-for-free {
@@ -121,14 +121,14 @@ html.preview, body.preview {
 }
 
 .menu-header {
-    background: #ecece9;
-    border-bottom: 2px solid #b8b8b8;
     min-width: 1024px
 }
 
 .menu-header .content {
     width: 1007px;
-    margin: 0 auto;    
+    margin: 0 auto;
+    background: #ecece9;
+    border-bottom: 2px solid #b8b8b8;
 }
 
 .menu-wrapper ul.main-menu {
@@ -518,10 +518,15 @@ table.schedule-bar-menu td.selected a {
 {
     min-width: 1024px;
     width:auto;
-    padding: 9px 10px 3px 10px;
-    background:#022E52;
     text-align:center;
     margin-top: 10px;
+}
+
+.footer-content {
+    width: 987px;
+    margin: 0 auto;
+    padding: 9px 10px 3px 10px;
+    background:#022E52;
 }
 
 .copyright

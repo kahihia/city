@@ -104,7 +104,7 @@
 .login_with_facebook {
     display: inline-block;
     background: url("/static/images/fb-sign-in-with-facebook.png") no-repeat;
-    width: 151px;
+    width: 71px;
     height: 22px;
     margin-left: 15px;
 }
@@ -120,6 +120,16 @@
 
 .login-entry__link {
     color: #999999;
+    font-weight: bold;
+}
+
+.login-entry__link:hover {
+    font-weight: bold !important;
+}
+
+.login-entry__divider {
+    color: #022e52;
+    font-weight: bold;
 }
 
 .sign-up-and-facebook .login-entry-info ul li a:hover {

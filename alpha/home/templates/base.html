@@ -46,6 +46,7 @@
                 </ul>
             {% endif %}
         {% endblock messages %}
+        {% block advertising_header %}{% endblock %}
         <div class="wrapper outer-wrapper">
             <div class="primary-header" data-no-turbolink>
                 <div class="content">
@@ -57,11 +58,6 @@
 
                     <div class="sign-up-wrapper-top">
                         {% include '_signin_signup.html' %}
-                        <div class="post-events-for-free">
-                            <a href="{% url 'event_create' %}">
-                                Post events for <span>free</span>
-                            </a>
-                        </div>
                     </div>
 
                     <div class="clr"></div>
@@ -89,33 +85,35 @@
             </div>
 
             <div class="footer-site-links" data-no-turbolink>
-                <div class="footer-container">
-                    <div class="copyright">&copy; 2014 Cityfusion</div>
-                    <div class="footer-site-map">
-                        <ul>
-                            <li><a href="{% url 'staticpage' alias='faq' %}">FAQ</a></li>
-                            <li><a href="/feedback/">Feedback</a></li>
-                            <li><a href="{% url 'staticpage' alias='advertising' %}">Advertising</a></li>
-                            <li><a href="{% url 'staticpage' alias='privacy_policy' %}">Privacy Policy</a></li>
-                            <li class="last">
-                                <a href="{% url 'staticpage' alias='terms_of_service' %}">Terms of Service</a>
-                            </li>
-                            <li class="last">
-                                {% like_button "http://"|add:request.META.HTTP_HOST %}
-                            </li>
-                            <li class="last">
-                                <a href="https://www.facebook.com/cityfusion.ca" target="_blank" class="footer-icon facebook"></a>
-                                <a href="http://www.twitter.com/cityfusion_ca" target="_blank" class="footer-icon twitter"></a>
-                                <a href="mailto:info@cityfusion.ca" class="footer-icon email"></a>
-                                <a href="https://plus.google.com/115070192756503195680"
-                                   target="_blank"
-                                   class="footer-icon google"
-                                   rel="publisher"></a>
-                                <a href="#" class="footer-icon youtube"></a>
-                            </li>
-                        </ul>
+                <div class="footer-content">
+                    <div class="footer-container">
+                        <div class="copyright">&copy; 2014 Cityfusion</div>
+                        <div class="footer-site-map">
+                            <ul>
+                                <li><a href="{% url 'staticpage' alias='faq' %}">FAQ</a></li>
+                                <li><a href="/feedback/">Feedback</a></li>
+                                <li><a href="{% url 'staticpage' alias='advertising' %}">Advertising</a></li>
+                                <li><a href="{% url 'staticpage' alias='privacy_policy' %}">Privacy Policy</a></li>
+                                <li class="last">
+                                    <a href="{% url 'staticpage' alias='terms_of_service' %}">Terms of Service</a>
+                                </li>
+                                <li class="last">
+                                    {% like_button "http://"|add:request.META.HTTP_HOST %}
+                                </li>
+                                <li class="last">
+                                    <a href="https://www.facebook.com/cityfusion.ca" target="_blank" class="footer-icon facebook"></a>
+                                    <a href="http://www.twitter.com/cityfusion_ca" target="_blank" class="footer-icon twitter"></a>
+                                    <a href="mailto:info@cityfusion.ca" class="footer-icon email"></a>
+                                    <a href="https://plus.google.com/115070192756503195680"
+                                       target="_blank"
+                                       class="footer-icon google"
+                                       rel="publisher"></a>
+                                    <a href="#" class="footer-icon youtube"></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="clr"></div>
                     </div>
-                    <div class="clr"></div>
                 </div>
             </div>
         </div>
