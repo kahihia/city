@@ -73,10 +73,15 @@
         },
 
         appendLink: function(data) {
-            var link, li,
+            var link, link_text, li,
                 currentLocationId = this.searchInput.attr("data-location-id");
 
-            link = $("<a href='javascript:void(0);'></a>").html(data.name);
+            link_text = data.name;
+            if(data.count) {
+                link_text += " (" + data.count + ")";
+            }
+
+            link = $("<a href='javascript:void(0);'></a>").html(link_text);
             link.attr("data-location-id", data.id);
             link.attr("data-location-type", data.type);
 
