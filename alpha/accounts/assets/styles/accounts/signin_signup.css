@@ -94,7 +94,7 @@
 
 .sign-up-wrapper-top .sign-up-and-facebook {
     position: relative;
-    padding-top: 5px;
+    padding-top: 4px;
 }
 
 .sign-up-and-facebook .login-entry-info {
@@ -104,7 +104,7 @@
 .login_with_facebook {
     display: inline-block;
     background: url("/static/images/fb-sign-in-with-facebook.png") no-repeat;
-    width: 71px;
+    width: 75px;
     height: 22px;
     margin-left: 15px;
 }

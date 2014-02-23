@@ -69,7 +69,8 @@ html.preview, body.preview {
 }
 
 .logo {
-    float:left;
+    float: left;
+    margin: 18px 0 0 20px;
 }
 
 .logo a {
@@ -489,6 +490,11 @@ table.schedule-bar-menu td.selected a {
 
 .entry-navigation-np .step-links span {
     opacity: 0.5;
+}
+
+.header-ads-container {
+    text-align: center;
+    padding: 6px 0 4px;
 }
 
 .footer-wrapper
