@@ -1,10 +1,14 @@
-from cities.models import City, Region, Country
-from event.models import CountryBorder
-from event.utils import find_nearest_city
+import logging
+import datetime
+
 from django.contrib.gis.geos import Point
 from django.contrib.gis.utils.geoip import GeoIP
+from django.db.models import Q, Count
 
-import logging
+from cities.models import City, Region, Country
+
+from event.models import Event, CountryBorder
+from event.utils import find_nearest_city
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -333,3 +337,83 @@ def user_location(request):
         "user_location_id": from_user_choice.location_id,
         "advertising_region": from_user_choice.canadian_region or from_account_settings.canadian_region or from_browser.canadian_region or by_IP.canadian_region
     }
+
+
+def get_autocomplete_locations(search, location=None):
+    """
+        I should give user opportunity to choose region where from events is interesting for him. It can be whole Canada, regions or city
+    """
+
+    canada = Country.objects.get(name="Canada")
+
+    locations = []
+
+    kwargs = {
+        "country": canada
+    }
+
+    if search:
+        kwargs["name__icontains"] = search
+
+    event_counts = list(Event.events.values('venue__city__id')
+                             .annotate(event_count=Count('id'))
+                             .filter(Q(single_events__end_time__gte=datetime.datetime.now())
+                                     &
+                                     ~Q(Q(single_events__is_occurrence=False) & Q(event_type='MULTIDAY')))
+                             .filter(venue__city__isnull=False)
+                             .order_by('-event_count')
+                             .values_list('venue__city__id', 'event_count'))
+    prepared_counts = {city: count for (city, count) in event_counts}
+    with_count_ids = [city for (city, count) in event_counts]
+
+    cities_with_count = {city.id: city for city in City.objects.filter(**kwargs).filter(id__in=with_count_ids)}
+
+    cities = City.objects.filter(**kwargs).exclude(id__in=with_count_ids)
+
+    if location and location["user_location_lat_lon"]:
+        cities = cities.distance(Point(location["user_location_lat_lon"][::-1])).order_by('distance')
+
+    cities = cities[0:5-len(cities_with_count)]
+
+    for city_id in with_count_ids:
+        if city_id in cities_with_count:
+            city = cities_with_count[city_id]
+            if city.region:
+                name = "%s, %s, %s" % (city.name, city.region.name, city.country.name)
+            else:
+                name = "%s, %s" % (city.name, city.country.name)
+            locations.append({
+                "id": city.id,
+                "type": "city",
+                "name": name,
+                "count": prepared_counts[city.id]
+            })
+
+    for city in cities:
+        if city.region:
+            name = "%s, %s, %s" % (city.name, city.region.name, city.country.name)
+        else:
+            name = "%s, %s" % (city.name, city.country.name)
+        locations.append({
+            "id": city.id,
+            "type": "city",
+            "name": name
+        })
+
+    regions = Region.objects.filter(**kwargs)[:3]
+
+    for region in regions:
+        locations.append({
+            "id": region.id,
+            "type": "region",
+            "name": "%s, %s" % (region.name, region.country.name)
+        })
+
+    if not search or search.lower() in "canada":
+        locations.append({
+            "id": canada.id,
+            "type": "country",
+            "name": "Canada"
+        })
+
+    return locations
