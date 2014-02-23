@@ -617,60 +617,12 @@ def save_active_tab(request, page, tab):
 
 @require_GET
 def location_autocomplete(request):
-    """
-        I should give user opportunity to choose region where from events is interesting for him. It can be whole Canada, regions or city
-    """
-
-    canada = Country.objects.get(name="Canada")
-
-    locations = []
-
-    kwargs = {
-        "country": canada
-    }
-
-    search = request.GET.get("search", "")
-
-    if search: 
-        kwargs["name__icontains"] = search
-
-    cities = City.objects.filter(**kwargs)
-
-    if request.user_location and request.user_location["user_location_lat_lon"]:
-        cities = cities.distance(Point(request.user_location["user_location_lat_lon"][::-1])).order_by('distance')
-
-    cities = cities[0:5]
-
-    for city in cities:
-        if city.region:
-            name = "%s, %s, %s" % (city.name, city.region.name, city.country.name)
-        else:
-            name = "%s, %s" % (city.name, city.country.name)
-        locations.append({
-            "id": city.id,
-            "type": "city",
-            "name": name
-        })
-
-    regions = Region.objects.filter(**kwargs)[:3]
-
-    for region in regions:
-        locations.append({
-            "id": region.id,
-            "type": "region",
-            "name": "%s, %s" % (region.name, region.country.name)
-        })
-
-    if not search or search.lower() in "canada":
-        locations.append({
-            "id": canada.id,
-            "type": "country",
-            "name": "Canada"
-        })
+    search = request.GET.get('search', '')
+    locations = location_service.get_autocomplete_locations(search, request.user_location)
 
     return HttpResponse(json.dumps({
-        "locations": locations
-    }), mimetype="application/json")
+        'locations': locations
+    }), mimetype='application/json')
 
 
 @require_GET
