@@ -73,9 +73,11 @@
 .sign-up-wrapper-top
 {
     width: 284px;
-    min-height:60px;
-    background:url(/static/images/login-bg.png) no-repeat;
+    min-height:35px;
+    background: #ffffff;
     float:right;
+    margin-right: 6px;
+    border-radius: 0 0 10px 10px;
 }
 
 .sign-up-and-facebook
