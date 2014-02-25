@@ -76,7 +76,7 @@ a:hover{
 }
 
 .primary-content .description {
-    margin: 1px 0 0 3px;
+    margin: 0 0 0 3px;
     color: #030303;
     font-size: 13px;
     overflow-x: hidden;

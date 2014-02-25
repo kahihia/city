@@ -319,17 +319,21 @@
                         {% for occurrence in event.sorted_occurences_for_description %}
                             {% if occurrence.event_description %}
                                 <div class="show-day-description {% if forloop.first and occurrence.start_time > now %} active{% endif %}{% if occurrence.start_time.date == now.date %} active{% endif %}"
-                                     data-day="{{ occurrence.start_time|date:"Y-m-d" }}"
-                                     {% if forloop.first and occurrence.start_time > now %} itemprop="description"{% endif %}{% if occurrence.start_time.date == now.date %} itemprop="description"{% endif %}>
-                                    {{ occurrence.event_description|html_urlize|safe }}
+                                     data-day="{{ occurrence.start_time|date:"Y-m-d" }}">
+                                        <div class="description-item" data-type="event_description">
+                                            <div class="description-inner"
+                                                 {% if forloop.first and occurrence.start_time > now %} itemprop="description"{% endif %}{% if occurrence.start_time.date == now.date %} itemprop="description"{% endif %}>
+                                                {{ occurrence.event_description|html_urlize|safe }}
+                                            </div>
+                                        </div>
                                 </div>
                             {% endif %}
                         {% endfor %}
                     </div>
                 {% else %}
                     {% if event.event_description %}
-                        <div class="description" itemprop="description" data-type="event_description">
-                            <div class="description-inner">
+                        <div class="description" data-type="event_description">
+                            <div class="description-inner" itemprop="description">
                                 {{ event.event_description|html_urlize|safe }}
                             </div>
                         </div>
@@ -339,9 +343,9 @@
             {% if event.eventattachment_set.count > 0 %}
                 <div class="attachments">
                     {% for attachment in event.eventattachment_set.all %}
-                        <div>
-                            <a target="_blank" href="/media/{{ attachment.attachment }}">{{ attachment.filename }}</a>
-                        </div>
+                        <a target="_blank" href="/media/{{ attachment.attachment }}">
+                            {{ attachment.filename }}
+                        </a>{% if not forloop.last %} , {% endif %}
                     {% endfor %}
                 </div>
             {% endif %}
