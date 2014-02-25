@@ -7,6 +7,22 @@
             'hideOnContentClick': true
         });
 
+        var scrollHeight;
+        if($(".attachments").length !== 0) {
+            scrollHeight = 195;
+        }
+        else {
+            scrollHeight = 216;
+        }
+
+        console.debug(scrollHeight);
+        $("[data-type=event_description]").each(function(i, obj) {
+            $(obj).slimScroll({
+                height: scrollHeight + "px",
+                alwaysVisible: true
+            });
+        });
+
         $(".venue_map_preview").on("click", this.showMap.bind(this));
 
         this.reportEvent = new ReportEvent();

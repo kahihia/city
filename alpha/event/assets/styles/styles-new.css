@@ -76,12 +76,14 @@ a:hover{
 }
 
 .primary-content .description {
-    margin-left: 3px;
+    margin: 1px 0 0 3px;
     color: #030303;
     font-size: 13px;
-    margin-top: 1px;
-    padding: 18px 13px;
     overflow-x: hidden;
+}
+
+.primary-content .description .description-inner {
+    padding: 18px 13px;
 }
 
 .primary-content .description * {

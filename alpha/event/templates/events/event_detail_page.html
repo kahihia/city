@@ -328,8 +328,10 @@
                     </div>
                 {% else %}
                     {% if event.event_description %}
-                        <div class="description" itemprop="description">
-                            {{ event.event_description|html_urlize|safe }}
+                        <div class="description" itemprop="description" data-type="event_description">
+                            <div class="description-inner">
+                                {{ event.event_description|html_urlize|safe }}
+                            </div>
                         </div>
                     {% endif %}
                 {% endif %}
@@ -364,13 +366,6 @@
                 </a>
                 {% claim_event_popup event %}
             </div>
-        </div>
-
-        <header class="event-conversation-header">
-            Join the conversation about "{{ event.name }}"
-        </header>
-        <div class="event-conversation">
-            <div class="fb-comments" data-href="http://{{ request.META.HTTP_HOST }}{% event_link event %}" data-width="630" data-num-posts="5"></div>
         </div>
     </div>
 
