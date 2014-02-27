@@ -311,7 +311,6 @@ class Event(models.Model):
     @property
     def tags_as_string(self):
         tags = [tag.name for tag in self.tags.all()]
-        tags.append(self.venue.city.name_std)
         return ', '.join(tags)
 
     @staticmethod
