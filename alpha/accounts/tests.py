@@ -23,7 +23,7 @@ class InTheLoopSettingsTests(TestCase):
         account = Account(
             user=user,
             all_of_canada=False,
-            regions=[Region.objects.filter(name="Alberta"), Region.objects.filter(name="Saskatchewan")]
+            regions=[Region.objects.filter(name="Alberta"), Region.objects.filter(name="Saskatchewan")],
             tags=["boo"]
         )
 
