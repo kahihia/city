@@ -44,6 +44,7 @@ def send_event_details_email(event):
 
 @transaction.commit_on_success
 def save_event(user, data, form):
+    is_new = (form.instance.pk is None)
     event = form.save()
 
     event.venue = venue_service.get_venue_from_request_data(event, data)
@@ -58,6 +59,10 @@ def save_event(user, data, form):
             event.owner = event.venue_account_owner.account.user
         else:
             event.owner = user
+
+    # add city name to tags if it's a new record
+    if is_new and event.venue.city and not event.venue.city.name_std in [tag.name for tag in event.tags.all()]:
+        event.tags.add(event.venue.city.name_std)
 
     event = event.save()
 
