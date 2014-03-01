@@ -224,9 +224,7 @@ class ChooseUserContextWidget(forms.Widget):
             return user_context_id
 
     def render(self, name, value, *args, **kwargs):
-        if self.account.id == 1:
-            return mark_safe('<input type="text" />')
-        else:
+        try:
             html = """
                 <div class="dropdown venue-account-owner-dropdown" data-dropdown-class="venue-account-owner-dropdown-list">
                     <select id="id_venue_account_owner">
@@ -251,3 +249,8 @@ class ChooseUserContextWidget(forms.Widget):
             html += self.user_context_id.render("user_context_id", "", {"id": 'id_user_context_id', "value": user_context_id})
 
             return mark_safe(html)
+        except Exception as e:
+            if self.account.id == 1:
+                return e.message
+            else:
+                return ''
