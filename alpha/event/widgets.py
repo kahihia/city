@@ -207,7 +207,7 @@ class ChooseUserContextWidget(forms.Widget):
                 "id": venue_account.id,
                 "type": "venue_account",
                 "text": venue_account.venue.name,
-                "fullname": venue_account.venue
+                "fullname": unicode(venue_account.venue)
             })
 
         self.user_context_type = forms.widgets.HiddenInput()
@@ -224,33 +224,27 @@ class ChooseUserContextWidget(forms.Widget):
             return user_context_id
 
     def render(self, name, value, *args, **kwargs):
-        try:
-            html = """
-                <div class="dropdown venue-account-owner-dropdown" data-dropdown-class="venue-account-owner-dropdown-list">
-                    <select id="id_venue_account_owner">
-            """
-            for choice in self.choices:
-                html += "<option"
-                if choice["id"] == value:
-                    html += " selected='selected'"
-                html += " value=\"%s|%d|%s\">%s</option>" % (choice["type"], choice["id"], choice["fullname"], choice["text"])
+        html = """
+            <div class="dropdown venue-account-owner-dropdown" data-dropdown-class="venue-account-owner-dropdown-list">
+                <select id="id_venue_account_owner">
+        """
+        for choice in self.choices:
+            html += "<option"
+            if choice["id"] == value:
+                html += " selected='selected'"
+            html += " value=\"%s|%d|%s\">%s</option>" % (choice["type"], choice["id"], choice["fullname"], choice["text"])
 
-            html += """</select></div>"""
+        html += """</select></div>"""
 
-            if value:
-                user_context_type = "venue_account"
-                user_context_id = value
-            else:
-                user_context_type = "account"
-                user_context_id = self.account.id
+        if value:
+            user_context_type = "venue_account"
+            user_context_id = value
+        else:
+            user_context_type = "account"
+            user_context_id = self.account.id
 
 
-            html += self.user_context_type.render("user_context_type", "", {"id": 'id_user_context_type', "value": user_context_type})
-            html += self.user_context_id.render("user_context_id", "", {"id": 'id_user_context_id', "value": user_context_id})
+        html += self.user_context_type.render("user_context_type", "", {"id": 'id_user_context_type', "value": user_context_type})
+        html += self.user_context_id.render("user_context_id", "", {"id": 'id_user_context_id', "value": user_context_id})
 
-            return mark_safe(html)
-        except Exception as e:
-            if self.account.id == 1:
-                return e.message
-            else:
-                return ''
+        return mark_safe(html)
