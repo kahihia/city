@@ -36,5 +36,5 @@ elif host_ip == '192.81.133.213':
         }
     }
 
-    DEBUG = False
-    GEARS_DEBUG = False
+    #DEBUG = False
+    #GEARS_DEBUG = False
