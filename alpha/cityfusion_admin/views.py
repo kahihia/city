@@ -21,7 +21,7 @@ from advertising.filters import AdvertisingCampaignFilter
 from advertising.models import AdvertisingOrder
 from cityfusion_admin.models import ReportEvent, ClaimEvent
 from cityfusion_admin.forms import FreeTryForm, BonusCampaignForm
-from event.models import Event, EventSlug, FeaturedEvent, FacebookEvent, EventTransferring, FeaturedEventOrder
+from event.models import Event, EventSlug, FeaturedEvent, FacebookEvent, EventTransferring, FeaturedEventOrder, Venue
 from event.forms import SetupFeaturedByAdminForm, CreateEventForm
 from event.services import facebook_services, event_service
 from venues.models import VenueAccountTransferring
@@ -689,5 +689,22 @@ def admin_orders(request):
             'tabs_page': tabs_page,
             'active_tab': active_tab,
             'admin': True
-        }, context_instance=RequestContext(request))    
+        }, context_instance=RequestContext(request))
 
+
+@staff_member_required
+def admin_venues(request):
+    search = request.REQUEST.get('search', '')
+
+    if search:
+        venues = Venue.objects.filter(Q(name__icontains=search) | Q(street__icontains=search)).order_by('name')
+    else:
+        venues = Venue.objects.order_by('name')
+
+    return render_to_response('cf-admin/admin-venues.html',
+                              {'venues': venues},
+                              context_instance=RequestContext(request))
+
+@staff_member_required
+def admin_edit_venue(request, id):
+    pass
