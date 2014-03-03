@@ -103,5 +103,9 @@ CF_ADMIN_MENU = {
     "orders": {
         "urlname": "admin_orders",
         "linktext": "Orders"
+    },
+    "venues": {
+        "urlname": "admin_venues",
+        "linktext": "Venues"
     }
 }
