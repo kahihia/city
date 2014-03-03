@@ -13,7 +13,7 @@ ALLOWED_HOSTS = ['localhost', 'dev.cityfusion.ca',
                  'www.cityfusion.biz', 'cityfusion.biz']
 
 ADMINS = (
-    ('alexandr', 'chigrinets.alexandr@gmail.com'),
+    ('alexandr', 'chigrinets.alexandr@silkcode.com'),
     ('tim', 'tim@cityfusion.ca'),
     ('igor', 'info@silkcode.com'),
 )
