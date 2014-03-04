@@ -188,4 +188,12 @@ urlpatterns = patterns('',
         views.admin_venues,
         name='admin_venues'
     ),
+    url(r'^admin-edit-venue/(?P<id>\d+)$',
+        views.admin_edit_venue,
+        name='admin_edit_venue'
+    ),
+    url(r'^admin-delete-venue/(?P<id>\d+)$',
+        views.admin_delete_venue,
+        name='admin_delete_venue'
+    )
 )

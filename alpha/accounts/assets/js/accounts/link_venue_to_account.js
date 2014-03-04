@@ -72,7 +72,7 @@
 
                 if ($(locationPointField).val()) {
                     var point = $(locationPointField).val().split(','), identifier;
-                    
+
                     $("#id_city_identifier").val(point[0]);
                     
                     latlng = new google.maps.LatLng(parseFloat(point[2]), parseFloat(point[1]));

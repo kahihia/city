@@ -83,7 +83,7 @@
                 center: point,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
-            
+
             this.map = new google.maps.Map(document.getElementById("map_location"), options);
 
             this.marker = new google.maps.Marker({
@@ -152,13 +152,15 @@
             }
         },
         initCKEditor: function(){
-            CKEDITOR.instances.id_about.on("instanceReady", function(){
-                CKEDITOR.instances.id_about.on('paste', function(e){
-                    e.data.html = e.data.dataValue.replace(/\s*width="[^"]*"/g, '');
-                });
+            if(typeof(CKEDITOR) !== "undefined") {
+                CKEDITOR.instances.id_about.on("instanceReady", function(){
+                    CKEDITOR.instances.id_about.on('paste', function(e){
+                        e.data.html = e.data.dataValue.replace(/\s*width="[^"]*"/g, '');
+                    });
 
-                CKEDITOR.instances.id_about.resize(340, 200);
-            });
+                    CKEDITOR.instances.id_about.resize(340, 200);
+                });
+            }
         },
         onCityfusionVenueChoose: function(venue){
             setTimeout(function(){
@@ -174,6 +176,10 @@
             setInterval(this.calculateTagsCount.bind(this), 50);
         },
         calculateTagsCount: function(){
+            if($("#as-values-id_tags__tagautosuggest").length === 0) {
+                return;
+            }
+
             var count = _.filter($("#as-values-id_tags__tagautosuggest").val().split(","), function(tag){ 
                 return tag.trim(); 
             }).length;

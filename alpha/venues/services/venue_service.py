@@ -2,9 +2,12 @@ import datetime
 import json
 
 from django.core.urlresolvers import reverse
+from django.contrib.gis.geos import Point
+
+from cities.models import Country, City
 
 from accounts.models import Account, VenueAccount
-from event.models import Event
+from event.models import Event, Venue
 from notices import services as notice_service
 from notices.models import Notice
 from ..models import VenueAccountTransferring
@@ -178,6 +181,30 @@ def reject_venue_transferring(venue_transferring_id, notice_id):
 
         result = True
     return result
+
+
+def save_venue(data, form):
+    venue = form.save()
+
+    venue.city = City.objects.get(id=int(data.get('city_identifier')))
+    venue.country = Country.objects.get(name='Canada')
+    venue.location = Point((
+        float(data.get('location_lng')),
+        float(data.get('location_lat'))
+    ))
+    venue.save()
+
+
+def delete_venue(venue):
+    venue_accounts = VenueAccount.objects.filter(venue=venue)
+    for venue_account in venue_accounts:
+        venue_account.delete()
+
+    venue_events = Event.events.filter(venue=venue)
+    for event in venue_events:
+        event.delete()
+
+    venue.delete()
 
 
 def _transfer_venue_events_to_owner(venue_account, owner, user):
