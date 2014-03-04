@@ -26,6 +26,7 @@ from event.forms import SetupFeaturedByAdminForm, CreateEventForm
 from event.services import facebook_services, event_service
 from venues.models import VenueAccountTransferring
 from venues.services import venue_service
+from venues.forms import VenueForm
 from cityfusion_admin.filters import AdvertisingOrderFilter, FeaturedEventOrderFilter
 
 
@@ -696,15 +697,45 @@ def admin_orders(request):
 def admin_venues(request):
     search = request.REQUEST.get('search', '')
 
+    venues = Venue.objects.filter(suggested=True)
     if search:
-        venues = Venue.objects.filter(Q(name__icontains=search) | Q(street__icontains=search)).order_by('name')
-    else:
-        venues = Venue.objects.order_by('name')
+        venues = venues.filter(Q(name__icontains=search) | Q(street__icontains=search))
+
+    venues = venues.order_by('name')
 
     return render_to_response('cf-admin/admin-venues.html',
-                              {'venues': venues},
+                              {'venues': venues,
+                               'search': search},
                               context_instance=RequestContext(request))
 
 @staff_member_required
 def admin_edit_venue(request, id):
-    pass
+    venue = Venue.objects.get(pk=id)
+
+    if request.method == 'POST':
+        form = VenueForm(instance=venue, data=request.POST)
+        if form.is_valid():
+            venue_service.save_venue(request.POST, form)
+            return HttpResponseRedirect(
+                reverse('admin_venues')
+            )
+    else:
+        form = VenueForm(instance=venue)
+
+    return render_to_response('cf-admin/admin-edit-venue.html',
+                              {'venue': venue,
+                               'form': form},
+                              context_instance=RequestContext(request))
+
+@staff_member_required
+def admin_delete_venue(request, id):
+    try:
+        venue = Venue.objects.get(pk=id)
+    except Venue.DoesNotExist:
+        pass
+    else:
+        venue_service.delete_venue(venue)
+
+    return HttpResponseRedirect(
+        reverse('admin_venues')
+    )

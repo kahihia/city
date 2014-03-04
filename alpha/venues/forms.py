@@ -2,7 +2,7 @@ import json
 import selectable.forms as selectable
 from django import forms
 from django.core import validators
-from accounts.models import VenueAccount, VenueType, VenueAccountSocialLink
+from accounts.models import VenueAccount, VenueType, VenueAccountSocialLink, Venue
 from event.widgets import AjaxCropWidget, GeoCompleteWidget
 from event.forms import JSONCharField
 from gmapi.forms.widgets import LocationWidget
@@ -177,3 +177,30 @@ class NewVenueAccountForm(VenueAccountForm):
             pass
 
         return cleaned_data
+
+
+class VenueForm(forms.ModelForm):
+    name = forms.CharField(required=True, max_length=255, min_length=3)
+    city = forms.CharField(
+        widget=selectable.AutoCompleteSelectWidget(CityLookup, allow_new=True),
+        required=False
+    )
+    city_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
+    location = forms.Field(widget=LocationWidget(), required=False)
+
+    class Meta:
+        model = Venue
+        fields = ['name', 'street', 'street_number', 'location']
+
+    def __init__(self, **kwargs):
+        if 'instance' in kwargs and kwargs['instance']:
+            initial = kwargs['initial'] if 'initial' in kwargs else {}
+            if 'city_identifier' not in initial:
+                initial['city_identifier'] = kwargs['instance'].city.id
+
+            if 'city' not in initial:
+                initial['city'] = kwargs['instance'].city
+
+            kwargs['initial'] = initial
+
+        super(VenueForm, self).__init__(**kwargs)

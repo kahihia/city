@@ -37,8 +37,11 @@
                         {{ venue.name }}
                     </td>
                     <td>
-                        <a href="#">
+                        <a href="{% url 'admin_edit_venue' venue.id %}" title="Edit venue">
                             <img src="/static/images/edit-icon.png"/>
+                        </a>
+                        <a href="{% url 'admin_delete_venue' venue.id %}" title="Delete venue">
+                            <img src="/static/images/delete-icon.png"/>
                         </a>
                     </td>
                 </tr>
