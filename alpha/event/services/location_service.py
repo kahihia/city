@@ -185,22 +185,22 @@ class LocationFromUserChoice(object):
 
 
     def change_user_choice(self):
-        if "location" in self.request.GET:
+        if 'location' in self.request.GET and self.request.GET['location'].count('|') != 0:
             user_location_data = {}
-            user_location_type, user_location_id = self.request.GET["location"].split("|")
+            user_location_type, user_location_id = self.request.GET['location'].split('|')
             user_location_id = int(user_location_id)
 
-            if user_location_type == "country":
-                user_location_name = "Canada"
+            if user_location_type == 'country':
+                user_location_name = 'Canada'
 
-            if user_location_type == "region":
+            if user_location_type == 'region':
                 region = Region.objects.get(id=user_location_id)
-                user_location_name = "%s" % (region.name)
+                user_location_name = '%s' % (region.name)
 
-            if user_location_type == "city":
+            if user_location_type == 'city':
                 city = City.objects.get(id=user_location_id)
                 if city.region:
-                    user_location_name = "%s, %s" % (city.name, city.region.name)
+                    user_location_name = '%s, %s' % (city.name, city.region.name)
                 else:
                     user_location_name = city.name
 
@@ -214,11 +214,11 @@ class LocationFromUserChoice(object):
                     self.account.location_id = user_location_id
                     self.account.save()
 
-            user_location_data["user_location_id"] = user_location_id
-            user_location_data["user_location_name"] = user_location_name
-            user_location_data["user_location_type"] = user_location_type
+            user_location_data['user_location_id'] = user_location_id
+            user_location_data['user_location_name'] = user_location_name
+            user_location_data['user_location_type'] = user_location_type
 
-            self.request.session["user_location_data"] = user_location_data
+            self.request.session['user_location_data'] = user_location_data
 
 
     @property
