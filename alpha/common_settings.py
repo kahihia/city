@@ -7,10 +7,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['localhost', 'dev.cityfusion.ca',
-                 'www.cityfusion.ca', 'cityfusion.ca',
-                 'www.cityfusion.info', 'cityfusion.info',
-                 'www.cityfusion.org', 'cityfusion.org',
-                 'www.cityfusion.biz', 'cityfusion.biz']
+                 'www.cityfusion.ca', 'cityfusion.ca']
 
 ADMINS = (
     ('alexandr', 'alexandr.chigrinets@silkcode.com'),
@@ -19,6 +16,8 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+
+EMAIL_SUBJECT_PREFIX = ''
 
 BASE_PATH = os.path.abspath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
