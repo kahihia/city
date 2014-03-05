@@ -5,6 +5,8 @@ from .widgets import ChooseSubjectWidget
 class ContactForm(forms.ModelForm):
     class Meta:
         model = Feedback
+        fields = ['type', 'name', 'email', 'comments']
+
     def __init__(self,*args,**kwargs):
         kwargs['label_suffix'] = ''
         super(ContactForm, self).__init__(*args, **kwargs)
