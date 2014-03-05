@@ -73,9 +73,11 @@
 .sign-up-wrapper-top
 {
     width: 284px;
-    min-height:60px;
-    background:url(/static/images/login-bg.png) no-repeat;
+    min-height:35px;
+    background: #ffffff;
     float:right;
+    margin-right: 6px;
+    border-radius: 0 0 10px 10px;
 }
 
 .sign-up-and-facebook
@@ -94,7 +96,7 @@
 
 .sign-up-wrapper-top .sign-up-and-facebook {
     position: relative;
-    padding-top: 5px;
+    padding-top: 4px;
 }
 
 .sign-up-and-facebook .login-entry-info {
@@ -104,7 +106,7 @@
 .login_with_facebook {
     display: inline-block;
     background: url("/static/images/fb-sign-in-with-facebook.png") no-repeat;
-    width: 151px;
+    width: 75px;
     height: 22px;
     margin-left: 15px;
 }
@@ -120,6 +122,16 @@
 
 .login-entry__link {
     color: #999999;
+    font-weight: bold;
+}
+
+.login-entry__link:hover {
+    font-weight: bold !important;
+}
+
+.login-entry__divider {
+    color: #022e52;
+    font-weight: bold;
 }
 
 .sign-up-and-facebook .login-entry-info ul li a:hover {

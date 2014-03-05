@@ -711,6 +711,7 @@
 
 .attachments {    
     background: url("/static/images/event/attachment-icon.png") 19px 2px no-repeat #7f7e7e;
+    color: #ffffff;
 }
 
 .tags {

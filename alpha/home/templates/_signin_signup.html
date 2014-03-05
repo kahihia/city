@@ -40,20 +40,22 @@
                 </li>
             {% else %}
                 <li>
-                    <a class="login-entry__link" href="{% url 'userena_signin' %}">Login</a><span>&nbsp; | &nbsp;</span>
-                </li>
-                <li>
-                    <a class="login-entry__link" href="{% url 'userena_signup' %}">Sign up</a>
-                </li>
-                <li>
                     <form action="{% url 'facebook_connect' %}?facebook_login=1" method="post">
                         <a class="login_with_facebook" href="javascript:void(0);" style="font-size: 20px;" onclick="F.connect(this.parentNode);"></a>
                         <input type="hidden" value="{{ request.path }}" name="next" />
                         <input type="hidden" value="{{ request.path }}" name="register_next" />
                         <input type="hidden" value="{{ request.path }}" name="error_next" />
-                        {% csrf_token %} 
+                        {% csrf_token %}
                     </form>
-                </li>                   
+                </li>
+                <li>
+                    <span class="login-entry__divider">&nbsp; | &nbsp;</span>
+                    <a class="login-entry__link" href="{% url 'userena_signin' %}">Login</a>
+                    <span class="login-entry__divider">&nbsp; | &nbsp;</span>
+                </li>
+                <li>
+                    <a class="login-entry__link" href="{% url 'userena_signup' %}">Sign up</a>
+                </li>
             {% endif %}
         </ul>
         <div class="clr"></div>
