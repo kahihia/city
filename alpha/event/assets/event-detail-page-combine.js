@@ -7,3 +7,4 @@
 //= require js/event/image-viewer
 //= require js/event/similar-events
 //= require js/event/eventpage
+//= require slimScroll/jquery.slimscroll.min
