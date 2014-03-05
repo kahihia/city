@@ -353,6 +353,9 @@ class LocationFilter(Filter):
             }]
 
     def filter(self, qs, location):
+        if location.count('|') == 0:
+            return qs
+
         location_type, location_id = location.split("|")
         location_id = int(location_id)
 
