@@ -95,13 +95,14 @@ def update_single_events(data, event):
 
 
 def get_duplicate_single_event_from_list(single_event, single_event_list):
-    for item in single_event_list:
-        start_time = dateparser.parse(single_event.start_time)
-        end_time = dateparser.parse(single_event.end_time)
-        if end_time < start_time:
-            end_time += datetime.timedelta(days=1)
+    start_time = dateparser.parse(single_event.start_time)
+    end_time = dateparser.parse(single_event.end_time)
+    if end_time < start_time:
+        end_time += datetime.timedelta(days=1)
 
-        if item.start_time == start_time and item.end_time == end_time:
+    for item in single_event_list:
+        if item.start_time == start_time and item.end_time == end_time \
+                and single_event.is_occurrence == item.is_occurrence:
             return item
 
     return False
