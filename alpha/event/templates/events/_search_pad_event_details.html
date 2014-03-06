@@ -188,7 +188,7 @@
 
 <div class="entry-navigation-np">
     <p>
-        Total search numbers found ({{ eventsFilter.qs.count }})
+        Total search numbers{% if location_name %} for "{{ location_name }}",{% endif %} ({{eventsFilter.qs.count}})
     </p>
     <p>
         <ul>
