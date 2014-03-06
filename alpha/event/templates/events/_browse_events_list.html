@@ -6,7 +6,7 @@
 
 <div class="entry-wrapper">
     <header class="total">
-        Total search numbers found ({{eventsFilter.qs.count}})
+        Total search numbers{% if location_name %} for "{{ location_name }}",{% endif %} ({{eventsFilter.qs.count}})
     </header>
     {% paginate 8 eventsFilter.qs as events %}
     {% regroup events by start_time|date:"h:i A" as events_start_time_group %}

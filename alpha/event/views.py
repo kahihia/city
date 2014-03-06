@@ -85,6 +85,7 @@ def search_pad(request):
 
     return render_to_response('events/search_pad.html', {
                                 'events': events,
+                                'location_name': location_from_user_choice.location_name,
                                 'eventsFilter': eventsFilter,
                                 'top10_tags': top10_tags,
                                 'events_all_count': events_all_count,
@@ -143,6 +144,7 @@ def browse(request, *args, **kwargs):
 
     return render_to_response('events/browse_events.html', {
                                 'page_type': 'index',
+                                'location_name': location_from_user_choice.location_name,
                                 'featured_events': featured_events,
                                 'events': events,
                                 'eventsFilter': eventsFilter,
