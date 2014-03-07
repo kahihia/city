@@ -6,6 +6,7 @@
 //= require js/create_event/description
 //= require js/create_event/price
 //= require js/create_event/boolean_tags
+//= require js/tags.popup
 //= require js/create_event/tags-widget
 //= require js/jquery-ui.multidatespicker
 //= require js/jquery.ui.timepicker
