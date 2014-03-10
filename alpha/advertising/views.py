@@ -75,6 +75,7 @@ def setup(request):
     }, context_instance=RequestContext(request))
 
 
+@login_required
 def edit_campaign(request, campaign_id):
     account = Account.objects.get(user_id=request.user.id)
     campaign = AdvertisingCampaign.objects.get(id=campaign_id)

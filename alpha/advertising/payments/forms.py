@@ -39,8 +39,12 @@ class PaypalSetupForm(AdvertisingSetupForm):
     def clean(self):
         cleaned_data = super(PaypalSetupForm, self).clean()
 
-        budget = cleaned_data["budget"]
-        bonus = cleaned_data["bonus"]
+        if 'budget' in cleaned_data:
+            budget = cleaned_data['budget']
+        else:
+            budget = Money(0, CAD)
+
+        bonus = cleaned_data['bonus']
 
         if bonus.amount > budget.amount:
             raise forms.ValidationError('Ensure budget is greater than bonus')
