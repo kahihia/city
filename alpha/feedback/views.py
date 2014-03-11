@@ -3,7 +3,6 @@ import datetime
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.core.mail import mail_managers
 from django.core.mail.message import EmailMultiAlternatives
 from django.core.urlresolvers import reverse
 from django.conf import settings
