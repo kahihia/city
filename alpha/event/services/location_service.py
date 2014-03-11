@@ -7,7 +7,7 @@ from django.db.models import Q, Count
 
 from cities.models import City, Region, Country
 
-from event.models import Event, CountryBorder
+from event.models import Event, SingleEvent, CountryBorder
 from event.utils import find_nearest_city
 
 # Get an instance of a logger
@@ -355,19 +355,8 @@ def get_autocomplete_locations(search, location=None):
     if search:
         kwargs["name__icontains"] = search
 
-    event_counts = list(Event.events.values('venue__city__id')
-                             .annotate(event_count=Count('id'))
-                             .filter(Q(single_events__end_time__gte=datetime.datetime.now())
-                                     &
-                                     ~Q(Q(single_events__is_occurrence=False) & Q(event_type='MULTIDAY')))
-                             .filter(venue__city__isnull=False)
-                             .order_by('-event_count')
-                             .values_list('venue__city__id', 'event_count'))
-    prepared_counts = {city: count for (city, count) in event_counts}
-    with_count_ids = [city for (city, count) in event_counts]
-
+    counts, with_count_ids = _get_counts_for_value('venue__city__id')
     cities_with_count = {city.id: city for city in City.objects.filter(**kwargs).filter(id__in=with_count_ids)}
-
     cities = City.objects.filter(**kwargs).exclude(id__in=with_count_ids)
 
     if location and location["user_location_lat_lon"]:
@@ -386,7 +375,7 @@ def get_autocomplete_locations(search, location=None):
                 "id": city.id,
                 "type": "city",
                 "name": name,
-                "count": prepared_counts[city.id]
+                "count": counts[city.id]
             })
 
     for city in cities:
@@ -400,7 +389,20 @@ def get_autocomplete_locations(search, location=None):
             "name": name
         })
 
-    regions = Region.objects.filter(**kwargs)[:3]
+    counts, with_count_ids = _get_counts_for_value('venue__city__region__id')
+    regions_with_count = {region.id: region for region in Region.objects.filter(**kwargs).filter(id__in=with_count_ids)}
+
+    regions = Region.objects.filter(**kwargs).exclude(id__in=with_count_ids)[:3-len(regions_with_count)]
+
+    for region_id in with_count_ids:
+        if region_id in regions_with_count:
+            region = regions_with_count[region_id]
+            locations.append({
+                "id": region.id,
+                "type": "region",
+                "name": "%s, %s" % (region.name, region.country.name),
+                "count": counts[region.id]
+            })
 
     for region in regions:
         locations.append({
@@ -410,10 +412,28 @@ def get_autocomplete_locations(search, location=None):
         })
 
     if not search or search.lower() in "canada":
+        canada_count = SingleEvent.homepage_events.count()
         locations.append({
             "id": canada.id,
             "type": "country",
-            "name": "Canada"
+            "name": "Canada",
+            "count": canada_count
         })
 
     return locations
+
+
+def _get_counts_for_value(value):
+    event_counts = list(Event.events.values(value)
+                        .annotate(event_count=Count('id'))
+                        .filter(Q(single_events__end_time__gte=datetime.datetime.now())
+                                &
+                                ~Q(Q(single_events__is_occurrence=False) & Q(event_type='MULTIDAY')))
+                        .filter(venue__city__isnull=False)
+                        .order_by('-event_count')
+                        .values_list(value, 'event_count'))
+
+    prepared_counts = {entity: count for (entity, count) in event_counts}
+    with_count_ids = [entity for (entity, count) in event_counts]
+
+    return prepared_counts, with_count_ids
