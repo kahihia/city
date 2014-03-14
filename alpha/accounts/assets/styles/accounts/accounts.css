@@ -1179,3 +1179,23 @@
 .available-owners-dropdown-options {
     width: 170px;
 }
+
+.account-venue-item {
+    padding-top: 15px;
+    width: 400px;
+}
+
+.account-venue-name {
+    float: left;
+    color: #000000;
+    font-weight: bold;
+    width: 180px;
+}
+
+.account-venue-address {
+    float: left;
+    color: #333333;
+    font-weight: bold;
+    margin-left: 15px;
+    width: 200px;
+}

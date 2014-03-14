@@ -47,7 +47,7 @@ def save_event(user, data, form):
     is_new = (form.instance.pk is None)
     event = form.save()
 
-    event.venue = venue_service.get_venue_from_request_data(event, data)
+    event.venue = venue_service.get_venue_from_request_data(event, data, user)
 
     if user.is_authenticated():
         event.email = user.email
@@ -93,8 +93,8 @@ def save_event(user, data, form):
     return event
 
 
-def prepare_initial_place(event):
-    venue = event.venue
+def prepare_initial_place(owner_entity):
+    venue = owner_entity.venue
 
     full_parts = [x for x in [venue.name, venue.street, venue.city.name, venue.country.name] if x]
     place = {
@@ -110,8 +110,8 @@ def prepare_initial_place(event):
     return place
 
 
-def prepare_initial_location(event):
-    return (event.venue.location.x, event.venue.location.y)
+def prepare_initial_location(owner_entity):
+    return owner_entity.venue.location.x, owner_entity.venue.location.y
 
 
 def prepare_initial_attachments(event):
@@ -133,9 +133,9 @@ def prepare_initial_images(event):
     return json.dumps(images_json)
 
 
-def prepare_initial_venue_id(event):
-    if event.venue:
-        return event.venue.id
+def prepare_initial_venue_id(owner_entity):
+    if owner_entity.venue:
+        return owner_entity.venue.id
     return None
 
 

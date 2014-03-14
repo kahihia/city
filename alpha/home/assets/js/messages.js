@@ -15,7 +15,7 @@
             return confirm(message);
         });
 
-        $("a.event-delete-action").on("click", function() {
+        $("a.event-delete-action, a.entity-delete-action").on("click", function() {
             var isFeatured = parseInt($(this).data("is-featured")),
                 message = "Are you sure?";
             if(isFeatured) {

@@ -34,6 +34,7 @@ from event.services import facebook_services, location_service, event_service, f
 from event.forms import CreateEventForm, EditEventForm, SetupFeaturedForm
 from event.payments.processors import process_setup_featured
 from home.models import Page
+from venues.services import venue_service
 
 
 def start(request):
@@ -630,13 +631,16 @@ def location_autocomplete(request):
 @require_GET
 def suggest_cityfusion_venue(request):
     search = request.GET.get("search", "")
+    user = request.user
 
     if search:
         venues = Venue.objects.filter(suggested=True).filter(
             Q(name__icontains=search)|Q(street__icontains=search)|Q(city__name__icontains=search)
-        )[:5]
+        )
     else:
-        venues = Venue.objects.filter(suggested=True)[:5]
+        venues = Venue.objects.filter(suggested=True)
+
+    venues = venues.filter(user=user)[:5]
 
     return HttpResponse(json.dumps({
         "venues": map(lambda venue: { 
@@ -672,6 +676,30 @@ def set_browser_location(request):
         "status": status
     }), mimetype="application/json")
 
+@login_required
+def edit_venue(request, venue_id):
+    try:
+        venue = Venue.objects.get(pk=venue_id, user=request.user, suggested=True)
+
+        return render_to_response('venues/e', context_instance=RequestContext(request))
+    except Exception:
+        resp = render_to_response('403.html', context_instance=RequestContext(request))
+        resp.status_code = 403
+        return resp
+
+
+@login_required
+def remove_venue(request, venue_id):
+    try:
+        venue = Venue.objects.get(pk=venue_id, user=request.user, suggested=True)
+        venue_service.delete_venue(venue)
+
+        return HttpResponseRedirect(reverse('userena_profile_detail', kwargs={'username': request.user.username}))
+    except Venue.DoesNotExist:
+        resp = render_to_response('403.html', context_instance=RequestContext(request))
+        resp.status_code = 403
+        return resp
+
 
 def load_model(cls, pk, manager='objects'):
     try:
@@ -680,4 +708,3 @@ def load_model(cls, pk, manager='objects'):
         model = None
 
     return model
-

@@ -1,0 +1,59 @@
+{% extends 'base-with-advertising.html' %}
+{% load gears %}
+
+{% block head %}
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=en"></script>
+    <script src="{{STATIC_URL}}selectable/js/jquery.dj.selectable.js" type="text/javascript"></script>
+    {% include 'variables.html' %}
+    {% js_asset_tag "edit-location-combine.js" %}
+{% endblock %}
+
+{% block title %} > Edit Location{% endblock %}
+
+{% block page %}
+    <div class="primary-content">
+        <div class="entity-form">
+            <div class="entity-form__title">
+                Location - edit
+            </div>
+            <div class="entity-form__fields">
+                <form method="post">
+                    {% csrf_token %}
+                    <header class="entity-form__field-title">Venue name</header>
+                    <div class="entity-form__text-field">
+                        {{ form.name }}
+                        {% for error in form.name.errors %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                        <br/><br/>
+                    </div>
+                    <header class="entity-form__field-title">Street address</header>
+                    <div class="entity-form__text-field">
+                        {{ form.street }}
+                        <br/><br/>
+                    </div>
+                    <header class="entity-form__field-title">Street number</header>
+                    <div class="entity-form__text-field">
+                        {{ form.street_number }}
+                        <br/><br/>
+                    </div>
+                    <header class="entity-form__field-title">City</header>
+                    <div class="entity-form__text-field">
+                        {{ form.city }}
+                        {{ form.city_identifier }}
+                        <br/><br/>
+                    </div>
+                    <header class="entity-form__field-title">Location</header>
+                    <div class="location_map">{{form.location}}</div>
+                    <span data-id="init_lng" data-value="{{ form.location.value.x }}"></span>
+                    <span data-id="init_lat" data-value="{{ form.location.value.y }}"></span>
+                    <div class="submit-wrapper">
+                        <input type="submit" name="save_venue" value="Save" data-id="submit_button" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block advertising_footer %}{% endblock %}

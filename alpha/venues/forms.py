@@ -14,6 +14,28 @@ from widgets import VenueTagAutoSuggest
 from taggit.forms import TagField
 
 class VenueAccountForm(forms.ModelForm):
+    # There will be three modes, how we will detect wich venue user choose
+    # SUGGEST - when user can not found venue in google autocomplete he can suggest new venue
+    # GOOGLE - user can choose venue with help of google autocomplete widget
+    # EXIST - user can choose also from venues that already exist on cityfusion
+    linking_venue_mode = forms.CharField(required=True, widget=forms.widgets.HiddenInput())
+
+    place = JSONCharField(
+        widget=GeoCompleteWidget(),
+        required=False
+    )
+
+    location = forms.Field(widget=LocationWidget(), required=False)
+    venue_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
+    venue_name = forms.CharField(required=False, max_length=50, min_length=3)
+    street = forms.CharField(required=False)
+    street_number = forms.CharField(required=False)
+    city = forms.CharField(
+        widget=selectable.AutoCompleteSelectWidget(CityLookup, allow_new=True),
+        required=False
+    )
+    city_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
+
     picture_src = forms.CharField(
         widget=AjaxCropWidget(),
         required=False
@@ -75,73 +97,8 @@ class VenueAccountForm(forms.ModelForm):
 
         return social_links
 
-    def save(self, *args, **kwargs):        
-        venue_account = super(VenueAccountForm, self).save(*args, **kwargs)
-        venue_account.venueaccountsociallink_set.all().delete()
-
-        social_links = self.cleaned_data["social_links"]
-
-        for social_link in social_links:
-            VenueAccountSocialLink.objects.create(
-                title=social_link["title"],
-                link=social_link["url"],
-                venue_account=venue_account
-            )
-
-        return venue_account
-
-
-class NewVenueAccountForm(VenueAccountForm):
-
-    # There will be three modes, how we will detect wich venue user choose
-    # SUGGEST - when user can not found venue in google autocomplete he can suggest new venue
-    # GOOGLE - user can choose venue with help of google autocomplete widget
-    # EXIST - user can choose also from venues that already exist on cityfusion
-    linking_venue_mode = forms.CharField(required=True, widget=forms.widgets.HiddenInput())
-
-    place = JSONCharField(
-        widget=GeoCompleteWidget(),
-        required=False
-    )
-
-    location = forms.Field(widget=LocationWidget(), required=False)
-    venue_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
-    venue_name = forms.CharField(required=False, max_length=50, min_length=3)
-    street = forms.CharField(required=False)
-    street_number = forms.CharField(required=False)
-    city = forms.CharField(
-        widget=selectable.AutoCompleteSelectWidget(CityLookup, allow_new=True),
-        required=False
-    )
-    city_identifier = forms.CharField(required=False, widget=forms.widgets.HiddenInput())
-    about = RichTextFormField(required=False)
-
-    picture_src = forms.CharField(
-        widget=AjaxCropWidget(),
-        required=False
-    )
-
-    types = forms.ModelMultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        queryset=VenueType.active_types.all(),
-        required=False
-    )
-
-    phone = CAPhoneNumberField(required=False)
-    fax = CAPhoneNumberField(required=False)
-    about = RichTextFormField(required=False)
-
-    tags = TagField(widget=VenueTagAutoSuggest(), required=False)
-
-    social_links = forms.CharField(
-        required=False,
-        widget=forms.widgets.HiddenInput()
-    )
-
     def clean(self):
         cleaned_data = self.cleaned_data
-
-        place = cleaned_data["place"]
 
         if "linking_venue_mode" in cleaned_data:
             linking_venue_mode = cleaned_data["linking_venue_mode"]
@@ -177,6 +134,47 @@ class NewVenueAccountForm(VenueAccountForm):
             pass
 
         return cleaned_data
+
+    def save(self, *args, **kwargs):        
+        venue_account = super(VenueAccountForm, self).save(*args, **kwargs)
+        venue_account.venueaccountsociallink_set.all().delete()
+
+        social_links = self.cleaned_data["social_links"]
+
+        for social_link in social_links:
+            VenueAccountSocialLink.objects.create(
+                title=social_link["title"],
+                link=social_link["url"],
+                venue_account=venue_account
+            )
+
+        return venue_account
+
+
+class NewVenueAccountForm(VenueAccountForm):
+    about = RichTextFormField(required=False)
+
+    picture_src = forms.CharField(
+        widget=AjaxCropWidget(),
+        required=False
+    )
+
+    types = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        queryset=VenueType.active_types.all(),
+        required=False
+    )
+
+    phone = CAPhoneNumberField(required=False)
+    fax = CAPhoneNumberField(required=False)
+    about = RichTextFormField(required=False)
+
+    tags = TagField(widget=VenueTagAutoSuggest(), required=False)
+
+    social_links = forms.CharField(
+        required=False,
+        widget=forms.widgets.HiddenInput()
+    )
 
 
 class VenueForm(forms.ModelForm):

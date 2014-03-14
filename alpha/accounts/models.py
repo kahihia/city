@@ -192,6 +192,9 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     def notices_history(self):
         return Notice.objects.filter(user__id=self.user.id).order_by('-id')
 
+    def venues(self):
+        return Venue.objects.filter(user=self.user, suggested=True)
+
     def check_reminder_type_state(self, type, state=None):
         if not state:
             state = self.reminder_type_state

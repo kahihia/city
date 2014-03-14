@@ -6,4 +6,4 @@
 //= require js/location/suggest_form
 //= require js/location/venue_autocomplete
 //= require js/accounts/create-venue-page
-//= require js/venues/venue_account/edit-page
+//= require js/venues/venue/edit-page

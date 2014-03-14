@@ -8,9 +8,11 @@ from cities.models import Country, City
 
 from accounts.models import Account, VenueAccount
 from event.models import Event, Venue
+from event.services import event_service
 from notices import services as notice_service
 from notices.models import Notice
 from ..models import VenueAccountTransferring
+from . import social_links_services
 
 
 def unlink_venue_account(venue_account, after_action, owner, user):
@@ -97,6 +99,10 @@ def accept_venue_transferring(venue_transferring_id, notice_id):
 
         venue_account.account = venue_transferring.target
         venue_account.save()
+
+        venue_account.venue.user = venue_transferring.target
+        venue_account.venue.save()
+
         Event.events.filter(venue_account_owner_id=venue_account.id).update(owner=venue_transferring.target.user.id)
 
         venue_transferring.delete()
@@ -184,6 +190,8 @@ def reject_venue_transferring(venue_transferring_id, notice_id):
 
 
 def save_venue(data, form):
+    """ Save an instance of Venue class.
+    """
     venue = form.save()
 
     venue.city = City.objects.get(id=int(data.get('city_identifier')))
@@ -196,6 +204,8 @@ def save_venue(data, form):
 
 
 def delete_venue(venue):
+    """ Delete an instance of Venue class.
+    """
     venue_accounts = VenueAccount.objects.filter(venue=venue)
     for venue_account in venue_accounts:
         venue_account.delete()
@@ -205,6 +215,17 @@ def delete_venue(venue):
         event.delete()
 
     venue.delete()
+
+
+def prepare_venue_account_edit_initial_data(venue_account):
+    return {
+        'picture_src': '/media/%s' % venue_account.picture,
+        'social_links': social_links_services.prepare_social_links(venue_account),
+        'venue_identifier': event_service.prepare_initial_venue_id(venue_account),
+        'place': event_service.prepare_initial_place(venue_account),
+        'location': event_service.prepare_initial_location(venue_account),
+        'linking_venue_mode': 'EXIST'
+    }
 
 
 def _transfer_venue_events_to_owner(venue_account, owner, user):

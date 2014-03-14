@@ -24,7 +24,14 @@
             <table class="profile-table" celpadding="0" cellspacing="0">
                 <tr>
                     <th>
-                        Venue
+                        <a href="?order=name">
+                            Venue
+                        </a>
+                    </th>
+                     <th>
+                        <a href="?order=user">
+                            User
+                        </a>
                     </th>
                     <th width="50%">Actions</th>
                 </tr>
@@ -35,6 +42,9 @@
                 <tr>
                     <td>
                         {{ venue.name }}
+                    </td>
+                    <td>
+                        {{ venue.user.username }}
                     </td>
                     <td>
                         <a href="{% url 'admin_edit_venue' venue.id %}" title="Edit venue">
