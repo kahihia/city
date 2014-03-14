@@ -1,0 +1,25 @@
+{% load endless %}
+{% load cf_pagination %}
+
+{% paginate 6 account_venues using "location_page" as venues %}
+
+<div class="account-entry-wrapper entry-wrapper">
+    {% for venue in venues %}
+        <div class="entry-info with-actions">
+            <div class="account-venue-item">
+                <div class="account-venue-name">{{ venue.name }}</div>
+                <div class="account-venue-address">{{ venue.address }}</div>
+            </div>
+            <div class="event-edit-actions">
+                <a class="event-edit-actions__item"
+                   href="{% url 'edit_venue' venue.id %}">
+                    Edit
+                </a>
+                <a href="{% url 'remove_venue' venue.id %}" class="event-edit-actions__item entity-delete-action">
+                    Delete
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+    {% cf_pagination %}
+</div>

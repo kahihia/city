@@ -82,6 +82,9 @@
                             <td data-tab-id="notices" {% if active_tab == "notices" %}class="current"{% endif %}>
                                 <span>Notices</span>
                             </td>
+                            <td data-tab-id="locations" {% if active_tab == "locations" %}class="current"{% endif %}>
+                                <span>Locations</span>
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -105,6 +108,9 @@
                 </div>
                 <div class="box{% if active_tab == "notices" %} visible{% endif %} notices">
                     {% include 'notices/_list_history.html' with notices=profile.notices_history %}
+                </div>
+                <div class="box{% if active_tab == "locations" %} visible{% endif %} locations">
+                    {% include 'accounts/_account_locations_table.html' with account_venues=profile.venues %}
                 </div>
             </div>
         </div>        

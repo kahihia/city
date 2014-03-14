@@ -696,12 +696,16 @@ def admin_orders(request):
 @staff_member_required
 def admin_venues(request):
     search = request.REQUEST.get('search', '')
+    order = request.REQUEST.get('order', '')
 
     venues = Venue.objects.filter(suggested=True)
     if search:
         venues = venues.filter(Q(name__icontains=search) | Q(street__icontains=search))
 
-    venues = venues.order_by('name')
+    if order and order == 'user':
+        venues = venues.order_by('user__username')
+    else:
+        venues = venues.order_by('name')
 
     return render_to_response('cf-admin/admin-venues.html',
                               {'venues': venues,

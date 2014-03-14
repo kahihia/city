@@ -614,6 +614,7 @@ def without_empty(array):
 
 
 class Venue(models.Model):
+    user = models.ForeignKey(User, blank=True, null=True)
     name = models.CharField(max_length=250, default='Default Venue')
     street = models.CharField(max_length=250, blank=True)
     street_number = models.CharField(max_length=250, blank=True)

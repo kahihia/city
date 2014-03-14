@@ -5,10 +5,10 @@ from django.contrib.gis.geos import Point
 from event.utils import find_nearest_city
 
 
-def get_venue_from_request_data(event, data):
+def get_venue_from_request_data(event, data, user=None):
     mode = data.get("linking_venue_mode")
     if mode=="SUGGEST":
-        return get_venue_suggested_by_user(data)
+        return get_venue_suggested_by_user(data, user)
     if mode=="GOOGLE":
         return get_venue_from_google(data)
     if mode=="OWNER":
@@ -16,7 +16,7 @@ def get_venue_from_request_data(event, data):
     if mode=="EXIST":
         return get_venue_that_exist(data)
 
-def get_venue_suggested_by_user(data):
+def get_venue_suggested_by_user(data, user=None):
     name = data.get("venue_name")
     street = data.get("street")
     city = City.objects.get(id=int(data.get("city_identifier")))
@@ -26,7 +26,7 @@ def get_venue_suggested_by_user(data):
         float(data.get("location_lat"))
     ))
     
-    venue = Venue(name=name, street=street, city=city, country=country, location=location, suggested=True)
+    venue = Venue(name=name, street=street, city=city, country=country, location=location, suggested=True, user=user)
     venue.save()
 
     return venue

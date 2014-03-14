@@ -800,3 +800,31 @@ a {
     width: 595px;
     margin: 0 auto;
 }
+
+.submit-wrapper {
+    width: 100%;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.entity-form {
+    width: 682px;
+    background: #ffffff;
+    border: 1px solid #B9B8B8;
+}
+
+.entity-form__title {
+    text-transform: uppercase;
+    height: 35px;
+    line-height: 35px;
+    background: #8c8a8a;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    padding-left: 30px;
+}
+
+.entity-form__fields {
+    padding: 35px 94px 21px 105px;
+    position: relative;
+}

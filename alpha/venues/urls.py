@@ -45,5 +45,12 @@ urlpatterns = patterns('',
     url(r'^(?P<slug>[-\w]+)/$',
         views.public_venue_account,
         name='public_venue_account'
-    )
+    ),
+    url(r'location/edit/(?P<venue_id>\d+)/$',
+        views.edit_venue,
+        name='edit_venue'),
+
+    url(r'location/remove/(?P<venue_id>\d+)/$',
+        views.remove_venue,
+        name='remove_venue')
 )
