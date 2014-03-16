@@ -343,10 +343,9 @@ def get_autocomplete_locations(search, location=None):
     """
         I should give user opportunity to choose region where from events is interesting for him. It can be whole Canada, regions or city
     """
-
     canada = Country.objects.get(name="Canada")
 
-    locations = []
+    locations_with_count, locations_without_count = [], []
 
     kwargs = {
         "country": canada
@@ -371,7 +370,7 @@ def get_autocomplete_locations(search, location=None):
                 name = "%s, %s, %s" % (city.name, city.region.name, city.country.name)
             else:
                 name = "%s, %s" % (city.name, city.country.name)
-            locations.append({
+            locations_with_count.append({
                 "id": city.id,
                 "type": "city",
                 "name": name,
@@ -383,7 +382,7 @@ def get_autocomplete_locations(search, location=None):
             name = "%s, %s, %s" % (city.name, city.region.name, city.country.name)
         else:
             name = "%s, %s" % (city.name, city.country.name)
-        locations.append({
+        locations_without_count.append({
             "id": city.id,
             "type": "city",
             "name": name
@@ -397,7 +396,7 @@ def get_autocomplete_locations(search, location=None):
     for region_id in with_count_ids:
         if region_id in regions_with_count:
             region = regions_with_count[region_id]
-            locations.append({
+            locations_with_count.append({
                 "id": region.id,
                 "type": "region",
                 "name": "%s, %s" % (region.name, region.country.name),
@@ -405,7 +404,7 @@ def get_autocomplete_locations(search, location=None):
             })
 
     for region in regions:
-        locations.append({
+        locations_without_count.append({
             "id": region.id,
             "type": "region",
             "name": "%s, %s" % (region.name, region.country.name)
@@ -413,14 +412,14 @@ def get_autocomplete_locations(search, location=None):
 
     if not search or search.lower() in "canada":
         canada_count = SingleEvent.homepage_events.count()
-        locations.append({
+        locations_with_count.append({
             "id": canada.id,
             "type": "country",
             "name": "Canada",
             "count": canada_count
         })
 
-    return locations
+    return locations_with_count + locations_without_count
 
 
 def _get_counts_for_value(value):
