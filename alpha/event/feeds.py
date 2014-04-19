@@ -50,7 +50,8 @@ class EventFeed(Feed):
         return item.name
 
     def item_description(self, item):
-        return shorten_string(strip_tags(item.event_description()), 500)
+        prepared_description = unicode(item.event_description()).encode('utf-8')
+        return shorten_string(strip_tags(prepared_description), 500)
 
     def item_link(self, item):
         return 'http://%s%s' % (self._domain, item.get_absolute_url())
