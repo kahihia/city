@@ -37,10 +37,10 @@ class EventFeed(Feed):
             self.title = ''
 
     def get_feed(self, obj, request):
-        feed = cache.get('rss_feed')
-        if not feed:
-            feed = super(EventFeed, self).get_feed(obj, request)
-            cache.set('rss_feed', feed, 900) # caching for 15 minutes
+        #feed = cache.get('rss_feed')
+        #if not feed:
+        feed = super(EventFeed, self).get_feed(obj, request)
+        cache.set('rss_feed', feed, 900) # caching for 15 minutes
         return feed
 
     def items(self):
@@ -50,7 +50,8 @@ class EventFeed(Feed):
         return item.name
 
     def item_description(self, item):
-        prepared_description = unicode(item.event_description()).encode('utf-8')
+        mpa = dict.fromkeys(range(32))
+        prepared_description = item.event_description().translate(mpa) # removing control characters
         return shorten_string(strip_tags(prepared_description), 500)
 
     def item_link(self, item):
