@@ -361,7 +361,11 @@ def get_autocomplete_locations(search, location=None):
     if location and location["user_location_lat_lon"]:
         cities = cities.distance(Point(location["user_location_lat_lon"][::-1])).order_by('distance')
 
-    cities = cities[0:5-len(cities_with_count)]
+    cities_without_count_limit = 5 - len(cities_with_count)
+    if cities_without_count_limit > 0:
+        cities = cities[0:cities_without_count_limit]
+    else:
+        cities = []
 
     for city_id in with_count_ids:
         if city_id in cities_with_count:
@@ -391,7 +395,11 @@ def get_autocomplete_locations(search, location=None):
     counts, with_count_ids = _get_counts_for_value('venue__city__region__id')
     regions_with_count = {region.id: region for region in Region.objects.filter(**kwargs).filter(id__in=with_count_ids)}
 
-    regions = Region.objects.filter(**kwargs).exclude(id__in=with_count_ids)[:3-len(regions_with_count)]
+    regions_without_count_limit = 3 - len(regions_with_count)
+    if regions_without_count_limit > 0:
+        regions = Region.objects.filter(**kwargs).exclude(id__in=with_count_ids)[:regions_without_count_limit]
+    else:
+        regions = []
 
     for region_id in with_count_ids:
         if region_id in regions_with_count:
