@@ -290,6 +290,13 @@ class Event(models.Model):
             return None
 
     @property
+    def image_name(self):
+        try:
+            return self.sorted_images[0].picture.name
+        except Exception:
+            return ''
+
+    @property
     def slug(self):
             available_slugs = self.eventslug_set.all()
             for available_slug in available_slugs:
