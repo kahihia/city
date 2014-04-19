@@ -44,7 +44,7 @@ class EventFeed(Feed):
         return feed
 
     def items(self):
-        return [SingleEventModelDecorator(single_event) for single_event in SingleEvent.homepage_events.all()]
+        return [SingleEventModelDecorator(single_event) for single_event in SingleEvent.homepage_events.all()[:100]]
 
     def item_title(self, item):
         return item.name
