@@ -1,5 +1,7 @@
 from django.conf.urls import patterns, include, url
 from event import views as event
+from .feeds import EventFeed
+
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -103,4 +105,5 @@ urlpatterns = patterns('',
     # url(r'^audit-single-event-update/(?P<id>\d+)', event.audit_single_event_update),
 
     url(r'^taggit_autosuggest/', include('taggit_autosuggest.urls')),
+    url(r'^feed/$', EventFeed()),
 )
