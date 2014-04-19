@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.cache import cache
 
 from home.models import Page
+from home.utils import shorten_string
 from .models import SingleEvent
 from .model_decorators import SingleEventModelDecorator
 
@@ -49,7 +50,7 @@ class EventFeed(Feed):
         return item.name
 
     def item_description(self, item):
-        return strip_tags(item.event_description())
+        return shorten_string(strip_tags(item.event_description()), 500)
 
     def item_link(self, item):
         return 'http://%s%s' % (self._domain, item.get_absolute_url())
