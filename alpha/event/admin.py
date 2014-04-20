@@ -16,10 +16,29 @@ approve_events.short_description = "Approve selected events"
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'venue', 'tags_representation')
+    list_display = ('name', 'tags_list', 'city_name', 'venue', 'event_owner', 'created')
     fields = ('owner', 'venue_account_owner', 'email',
               'name', 'description', 'venue', 'price', 'website', 'tickets',
               'audited', 'tags',)
+
+    def city_name(self, object):
+        return object.venue.city.name if object.venue else ''
+
+    def tags_list(self, object):
+        return object.tags_representation()
+
+    def event_owner(self, object):
+        return object.owner
+
+    tags_list.short_description = 'Tags'
+    city_name.short_description = 'City'
+    event_owner.short_description = 'User'
+    city_name.admin_order_field  = 'venue__city'
+    event_owner.admin_order_field = 'owner'
+
+    def queryset(self, request):
+        # Prefetch related objects
+        return super(EventAdmin, self).queryset(request).select_related('venue')
 
 
 class AuditEventAdmin(admin.ModelAdmin):
