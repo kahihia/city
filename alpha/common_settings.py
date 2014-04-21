@@ -181,7 +181,8 @@ INSTALLED_APPS = (
     'notices',
     'venues',
     'gears',
-    'django_gears'
+    'django_gears',
+    'django_exportable_admin'
     # 'sprockets'
     #'debug_toolbar',
 )
