@@ -33,3 +33,4 @@ poster==0.8.1
 
 cssmin
 gears-uglifyjs==0.1.1
+-e git+https://github.com/jwineinger/django-exportable-admin.git@4927c5acb037fdaff67140b3528f85198dcd0e69#egg=django-exportable-admin

@@ -1,5 +1,16 @@
 from django.contrib import admin
-from event.models import Event, SingleEvent, AuditEvent, AuditSingleEvent, AuditPhrase, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder
+from django.utils.html import format_html
+
+from django_exportable_admin.admin import CSVExportableAdmin
+
+from event.models import (Event,
+                          SingleEvent,
+                          AuditEvent,
+                          AuditSingleEvent,
+                          AuditPhrase,
+                          FakeAuditEvent,
+                          FeaturedEvent,
+                          FeaturedEventOrder)
 from event.models import Venue
 
 
@@ -15,11 +26,15 @@ def approve_events(modeladmin, request, queryset):
 approve_events.short_description = "Approve selected events"
 
 
-class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'tags_list', 'city_name', 'venue', 'event_owner', 'created')
+class EventAdmin(CSVExportableAdmin):
+    list_display = ('name', 'tags_list', 'city_name', 'venue_name', 'event_owner', 'created')
     fields = ('owner', 'venue_account_owner', 'email',
               'name', 'description', 'venue', 'price', 'website', 'tickets',
               'audited', 'tags',)
+    change_form_template = 'events/edit/admin_edit_event.html'
+    export_formats = (
+        (u'CSV', u';'),
+    )
 
     def city_name(self, object):
         return object.venue.city.name if object.venue else ''
@@ -27,18 +42,37 @@ class EventAdmin(admin.ModelAdmin):
     def tags_list(self, object):
         return object.tags_representation()
 
+    def venue_name(self, object):
+        if object.venue_account_owner:
+            return format_html('<a target="_blank" href="{0}">{1}</a>',
+                               object.venue_account_owner.get_absolute_url(),
+                               object.venue_account_owner.venue.name)
+        else:
+            return ''
+
     def event_owner(self, object):
         return object.owner
+
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        context.update({
+            'event_link': obj.get_absolute_url()
+        })
+
+        return super(EventAdmin, self).render_change_form(request, context, add=add,
+                                                          change=change, form_url=form_url, obj=obj)
 
     tags_list.short_description = 'Tags'
     city_name.short_description = 'City'
     event_owner.short_description = 'User'
+    venue_name.short_description = 'Venue'
+
     city_name.admin_order_field  = 'venue__city'
+    venue_name.admin_order_field = 'venue_account_owner__venue__name'
     event_owner.admin_order_field = 'owner'
 
     def queryset(self, request):
         # Prefetch related objects
-        return super(EventAdmin, self).queryset(request).select_related('venue')
+        return super(EventAdmin, self).queryset(request).select_related('venue', 'venue_account_owner')
 
 
 class AuditEventAdmin(admin.ModelAdmin):

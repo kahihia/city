@@ -199,6 +199,9 @@ class Event(models.Model):
         super(Event, self).save(*args, **kwargs)
         return self
 
+    def get_absolute_url(self):
+            return reverse('event_view', kwargs={'slug': self.slug})
+
     def tags_representation(self):
         return ", ".join([tag.name for tag in self.tags.all()])
 
