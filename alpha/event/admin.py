@@ -33,7 +33,7 @@ class EventAdmin(CSVExportableAdmin):
               'audited', 'tags',)
     change_form_template = 'events/edit/admin_edit_event.html'
     export_formats = (
-        (u'CSV', u';'),
+        (u'CSV', u','),
     )
 
     def city_name(self, object):

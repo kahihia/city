@@ -12,7 +12,7 @@ from accounts.models import AccountReminding, InTheLoopSchedule, VenueAccount, V
 class VenueAccountAdmin(CSVExportableAdmin):
     list_display = ('venue', 'venue_address', 'venue_phone', 'venue_email', 'venue_fax', 'venue_site')
     export_formats = (
-        (u'CSV', u';'),
+        (u'CSV', u','),
     )
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
