@@ -1,4 +1,18 @@
+from easy_thumbnails.files import get_thumbnailer
 from home.base import ModelDecorator
+
+
+class EventModelDecorator(ModelDecorator):
+    def sized_image(self, width=0, height=0):
+        image_name = self._instance.image_name
+        if image_name:
+            thumbnailer = get_thumbnailer(image_name)
+            thumbnail_options = {'crop': 'smart',
+                                 'size': (width, height)}
+
+            return thumbnailer.get_thumbnail(thumbnail_options).name
+        else:
+            return ''
 
 
 class SingleEventModelDecorator(ModelDecorator):

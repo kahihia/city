@@ -1,6 +1,7 @@
 import datetime
 import json
 import utils
+import mimetypes
 
 from django.core.urlresolvers import reverse, resolve, Resolver404
 from django.core.exceptions import ObjectDoesNotExist
@@ -19,6 +20,7 @@ from django.db import transaction
 from django.forms.util import ErrorList
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET
+from django.conf import settings
 
 from cities.models import City, Country, Region
 from django_facebook.decorators import facebook_required
@@ -29,7 +31,9 @@ from accounts.decorators import native_region_required
 from accounts.models import Account, VenueAccount
 from ajaxuploader.views import AjaxFileUploader
 from event.filters import EventFilter, FunctionFilter
-from event.models import (Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent, FeaturedEvent, FeaturedEventOrder)
+from event.models import (Event, Venue, SingleEvent, AuditEvent, FakeAuditEvent,
+                          FeaturedEvent, FeaturedEventOrder, EventSlug)
+from event.model_decorators import EventModelDecorator
 from event.services import facebook_services, location_service, event_service, featured_service
 from event.forms import CreateEventForm, EditEventForm, SetupFeaturedForm
 from event.payments.processors import process_setup_featured
@@ -708,3 +712,18 @@ def load_model(cls, pk, manager='objects'):
         model = None
 
     return model
+
+
+def get_event_image(request, slug, width, height):
+    try:
+        event = EventModelDecorator(EventSlug.objects.get(slug=slug).event)
+        thumb = event.sized_image(width, height)
+        if not thumb:
+            thumb_path = '%s/%s' % (settings.STATIC_ROOT, 'images/default-event.jpg')
+        else:
+            thumb_path = '%s/%s' % (settings.MEDIA_ROOT, thumb)
+        image_data = open(thumb_path, 'rb').read()
+        mime_type = mimetypes.guess_type(thumb_path)
+        return HttpResponse(image_data, mimetype=mime_type)
+    except Exception:
+        return Http404
