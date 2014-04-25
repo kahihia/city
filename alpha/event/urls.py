@@ -106,4 +106,7 @@ urlpatterns = patterns('',
 
     url(r'^taggit_autosuggest/', include('taggit_autosuggest.urls')),
     url(r'^feed/$', EventFeed()),
+    url(r'^get-event-image/(?P<slug>[^/]+)/(?P<width>\d+)/(?P<height>\d+)/',
+        event.get_event_image,
+        name='get_event_image')
 )
