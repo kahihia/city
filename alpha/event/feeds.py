@@ -43,11 +43,11 @@ class EventFeed(Feed):
         return super(EventFeed, self).get_object(request, args, kwargs)
 
     def get_feed(self, obj, request):
-        #cache_key = 'rss_feed_%s' % self._tag_name
-        #feed = cache.get(cache_key)
-        #if not feed:
-        feed = super(EventFeed, self).get_feed(obj, request)
-        #cache.set(cache_key, feed, 900) # caching for 15 minutes
+        cache_key = 'rss_feed_%s' % self._tag_name
+        feed = cache.get(cache_key)
+        if not feed:
+            feed = super(EventFeed, self).get_feed(obj, request)
+            cache.set(cache_key, feed, 900) # caching for 15 minutes
         return feed
 
     def items(self):
