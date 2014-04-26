@@ -43,11 +43,11 @@ class EventFeed(Feed):
         return super(EventFeed, self).get_object(request, args, kwargs)
 
     def get_feed(self, obj, request):
-        cache_key = 'rss_feed_%s' % self._tag_name
-        feed = cache.get(cache_key)
-        if not feed:
-            feed = super(EventFeed, self).get_feed(obj, request)
-            cache.set(cache_key, feed, 900) # caching for 15 minutes
+        #cache_key = 'rss_feed_%s' % self._tag_name
+        #feed = cache.get(cache_key)
+        #if not feed:
+        feed = super(EventFeed, self).get_feed(obj, request)
+        #cache.set(cache_key, feed, 900) # caching for 15 minutes
         return feed
 
     def items(self):
@@ -56,9 +56,10 @@ class EventFeed(Feed):
                 tagged_items__tag__name__in=[self._tag_name]
             ).values_list('id', flat=True)
             single_events = SingleEvent.homepage_events.filter(event_id__in=list(event_ids_with_tags))\
-                .select_related('event__venue')
+                .select_related('event__venue').prefetch_related('event__eventslug_set')
         else:
-            single_events = SingleEvent.homepage_events.select_related('event__venue').all()
+            single_events = SingleEvent.homepage_events.select_related('event__venue')\
+                .prefetch_related('event__eventslug_set').all()
         return [SingleEventModelDecorator(single_event) for single_event in single_events]
 
     def item_title(self, item):
