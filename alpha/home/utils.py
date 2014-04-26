@@ -1,4 +1,6 @@
 import json
+import re
+from htmlentitydefs import name2codepoint
 from django.core.serializers import deserialize
 
 
@@ -33,3 +35,25 @@ def shorten_string(value, length):
         return '%s...' % value[:length]
 
     return value
+
+
+def htmldecode(text):
+        """Decode HTML entities in the given text."""
+        if type(text) is unicode:
+                uchr = unichr
+        else:
+                uchr = lambda value: value > 255 and unichr(value) or chr(value)
+
+        def entitydecode(match, uchr=uchr):
+                entity = match.group(1)
+                if entity.startswith('#x'):
+                        return uchr(int(entity[2:], 16))
+                elif entity.startswith('#'):
+                        return uchr(int(entity[1:]))
+                elif entity in name2codepoint:
+                        return uchr(name2codepoint[entity])
+                else:
+                        return match.group(0)
+        text = text.replace('&nbsp;', '')
+        charrefpat = re.compile(r'&(#(\d+|x[\da-fA-F]+)|[\w.:-]+);?')
+        return charrefpat.sub(entitydecode, text)

@@ -4,13 +4,13 @@ from django import forms
 from userena.utils import get_user_model
 from userena.admin import UserenaAdmin
 from userena import settings as userena_settings
-from django_exportable_admin.admin import CSVExportableAdmin
 
 from accounts.models import AccountReminding, InTheLoopSchedule, VenueAccount, VenueType, AccountTax, AccountTaxCost
+from home.admin import FusionExportableAdmin
 
 
-class VenueAccountAdmin(CSVExportableAdmin):
-    list_display = ('venue', 'venue_address', 'venue_phone', 'venue_email', 'venue_fax', 'venue_site')
+class VenueAccountAdmin(FusionExportableAdmin):
+    list_display = ('venue_name', 'venue_address', 'city_name', 'venue_phone', 'venue_email', 'venue_fax', 'venue_site')
     export_formats = (
         (u'CSV', u','),
     )
@@ -22,8 +22,14 @@ class VenueAccountAdmin(CSVExportableAdmin):
 
         return db_field.formfield(**kwargs)
 
+    def venue_name(self, object):
+        return object.venue.name
+
     def venue_address(self, object):
         return object.venue.address
+
+    def city_name(self, object):
+        return object.venue.city.name
 
     def venue_phone(self, object):
         return object.phone
@@ -37,11 +43,15 @@ class VenueAccountAdmin(CSVExportableAdmin):
     def venue_site(self, object):
         return object.site
 
+    venue_name.short_description = 'Venue'
     venue_address.short_description = 'Address'
+    city_name.short_description = 'City'
     venue_phone.short_description = 'Phone'
     venue_email.short_description = 'Email'
     venue_fax.short_description = 'Fax'
     venue_site.short_description = 'Web site'
+
+    city_name.admin_order_field  = 'venue__city'
 
     def queryset(self, request):
         # Prefetch related objects

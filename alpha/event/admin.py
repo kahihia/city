@@ -1,8 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from django_exportable_admin.admin import CSVExportableAdmin
-
 from event.models import (Event,
                           SingleEvent,
                           AuditEvent,
@@ -12,6 +10,7 @@ from event.models import (Event,
                           FeaturedEvent,
                           FeaturedEventOrder)
 from event.models import Venue
+from home.admin import FusionExportableAdmin
 
 
 def approve_events(modeladmin, request, queryset):
@@ -26,7 +25,7 @@ def approve_events(modeladmin, request, queryset):
 approve_events.short_description = "Approve selected events"
 
 
-class EventAdmin(CSVExportableAdmin):
+class EventAdmin(FusionExportableAdmin):
     list_display = ('name', 'tags_list', 'city_name', 'venue_name', 'event_owner', 'created')
     fields = ('owner', 'venue_account_owner', 'email',
               'name', 'description', 'venue', 'price', 'website', 'tickets',
