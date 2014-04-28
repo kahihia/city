@@ -1,10 +1,7 @@
-import urllib
-
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Rss201rev2Feed
 from django.contrib.sites.models import Site
 from django.utils.html import strip_tags
-from django.conf import settings
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 

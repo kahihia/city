@@ -28,6 +28,7 @@ from venues.models import VenueAccountTransferring
 from venues.services import venue_service
 from venues.forms import VenueForm
 from cityfusion_admin.filters import AdvertisingOrderFilter, FeaturedEventOrderFilter
+from .decorators import staff_member_or_fb_import_allowed
 
 
 @require_POST
@@ -89,7 +90,7 @@ def claim_event_list(request):
                             }, context_instance=RequestContext(request))
 
 
-@staff_member_required
+@staff_member_or_fb_import_allowed
 def import_facebook_events(request):
     form = CreateEventForm(account=request.account, initial={
         "venue_account_owner": request.current_venue_account
@@ -100,7 +101,7 @@ def import_facebook_events(request):
                               context_instance=RequestContext(request))
 
 
-@staff_member_required
+@staff_member_or_fb_import_allowed
 @facebook_required
 def load_facebook_events(request):
     if request.is_ajax():
@@ -130,7 +131,7 @@ def load_facebook_events(request):
 
 
 @require_POST
-@staff_member_required
+@staff_member_or_fb_import_allowed
 def reject_facebook_event(request):
     if request.is_ajax():
         facebook_event_id = request.POST['facebook_event_id']
@@ -141,7 +142,7 @@ def reject_facebook_event(request):
         raise Http404
 
 
-@staff_member_required
+@staff_member_or_fb_import_allowed
 def location_autocomplete(request):
     if request.is_ajax():
         if request.method == 'GET':
