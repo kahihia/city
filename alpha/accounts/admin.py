@@ -5,8 +5,18 @@ from userena.utils import get_user_model
 from userena.admin import UserenaAdmin
 from userena import settings as userena_settings
 
-from accounts.models import AccountReminding, InTheLoopSchedule, VenueAccount, VenueType, AccountTax, AccountTaxCost
+from accounts.models import (Account,
+                             AccountReminding,
+                             InTheLoopSchedule,
+                             VenueAccount,
+                             VenueType,
+                             AccountTax,
+                             AccountTaxCost)
 from home.admin import FusionExportableAdmin
+
+
+class AccountAdmin(admin.ModelAdmin):
+    fields = ('user', 'tax_origin_confirmed', 'not_from_canada', 'website', 'allow_fb_import')
 
 
 class VenueAccountAdmin(FusionExportableAdmin):
@@ -63,6 +73,8 @@ class CityFusionUserAdmin(UserenaAdmin):
                     'is_staff', 'is_active', 'date_joined', 'last_login')
 
 
+admin.site.unregister(Account)
+admin.site.register(Account, AccountAdmin)
 admin.site.register(AccountReminding)
 admin.site.register(AccountTax)
 admin.site.register(AccountTaxCost)
