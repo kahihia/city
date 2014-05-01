@@ -8,7 +8,7 @@ from event.settings import DEFAULT_FROM_EMAIL
 from .models import Notice
 
 
-def create_notice(notice_type, user, mail_data={}, notice_data={}):
+def create_notice(notice_type, user, mail_data={}, notice_data={}, mail_template=None):
     """ Create a new notice.
 
     @type notice_type: unicode
@@ -24,7 +24,8 @@ def create_notice(notice_type, user, mail_data={}, notice_data={}):
     if email and mail_data:
         current_site = Site.objects.get_current().domain
         mail_data['site'] = current_site
-        message = render_to_string('mail/%s.txt' % notice_type, mail_data)
+        template = mail_template if mail_template else 'mail/%s.txt' % notice_type
+        message = render_to_string(template, mail_data)
 
         msg = EmailMessage(mail_data['subject'],
                            message,

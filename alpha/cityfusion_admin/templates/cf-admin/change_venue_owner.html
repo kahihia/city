@@ -26,6 +26,9 @@
                     <td class="current">
                         <span>Venue owner</span>
                     </td>
+                    <td>
+                        <a href="{% url 'mass_venue_transfer' %}"><span>Mass venue transferring</span></a>
+                    </td>
                 </tr>                
             </table>
             <div class="box visible options">
@@ -34,7 +37,7 @@
                 </h1>
                 <form method="post" name="search-events" >
                     {% csrf_token %}
-                    Please, provide part of event title <br/>
+                    Please, provide part of venue title <br/>
                     <input name="search" placeholder="Title" value="{{ search }}"/>
                     <input type="submit" value="Search" />
                 </form>
@@ -51,6 +54,7 @@
                                 Owner
                             </a>
                         </th>
+                        <th>City</th>
                         <th width="50%">Change owner</th>
                     </tr>
 
@@ -64,6 +68,7 @@
                         <td>
                             {{ venue_account.account.user }}
                         </td>
+                        <td>{{ venue_account.venue.city.name }}</td>
                         <td>
                             <form method="post" name="venue-change-owner" action="{% url 'change_venue_owner' venue_account.id %}">
                                 {% csrf_token %}

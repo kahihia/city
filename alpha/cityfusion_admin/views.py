@@ -605,6 +605,40 @@ def change_venue_owner(request, venue_account_id):
     )
 
 @staff_member_required
+def venue_mass_transfer(request):
+    search = request.REQUEST.get('search', '')
+    order = request.REQUEST.get('order', '')
+    transferred_venues = VenueAccountTransferring.objects\
+                                                 .all()\
+                                                 .values_list('venue_account_id', flat=True)
+    if search:
+        venue_accounts = VenueAccount.objects.filter(Q(venue__name__icontains=search) | Q(venue__street__icontains=search))
+    else:
+        venue_accounts = VenueAccount.objects.all()
+
+    venue_accounts = venue_accounts.exclude(id__in=transferred_venues)
+
+    if order and order == 'owner':
+        venue_accounts = venue_accounts.order_by('account__user__username')
+    else:
+        venue_accounts = venue_accounts.order_by('venue__name')
+
+    return render_to_response('cf-admin/venue_mass_transfer.html', {
+        'venue_accounts': venue_accounts,
+        'search': search
+    }, context_instance=RequestContext(request))
+
+
+@require_POST
+@staff_member_required
+def change_venues_owner_ajax(request):
+    venue_ids = request.POST.getlist('venue_ids[]')
+    owner_id = request.POST.get('owner_id', None)
+    result = venue_service.change_venues_owner(venue_ids, owner_id)
+    return HttpResponse(json.dumps({'result': result}), mimetype='application/json')
+
+
+@staff_member_required
 def event_mass_transfer(request):
     events, owner, search = [], None, ''
     transferred_events = EventTransferring.events.through.objects.all().values_list('event_id', flat=True)
