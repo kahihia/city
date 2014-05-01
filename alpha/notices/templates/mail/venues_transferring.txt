@@ -1,0 +1,23 @@
+<html>
+<head></head>
+    <body>
+        <h1>
+        	This is the list of venues that have been transferred to you on <a href="http://{{ site }}/">{{ site }}</a>
+        	by CityFusion administration.
+        </h1>
+
+        {% for venue_account in venue_accounts %}
+        	<a href="http://{{ site }}{{ venue_account.get_absolute_url }}">
+        		{{ venue_account.venue.name }}
+        	</a>
+        	<br/>
+		{% endfor %}
+
+        <h2>You can accept or reject transferring in your account:</h2>
+        <a href="http://{{ site }}{% url 'userena_profile_detail' user.username %}">
+        	http://{{ site }}{% url 'userena_profile_detail' user.username %}
+        </a>
+
+        <p>Have a great day.</p>
+    </body>
+</html>

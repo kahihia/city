@@ -79,6 +79,64 @@ def change_venue_owner(venue_account_id, owner_id):
     return result
 
 
+def change_venues_owner(venue_account_ids, owner_id):
+    """ Change owner of venues list.
+
+    @type venue_account_ids: list
+    @type owner_id: int
+    @param owner_id: a new owner id
+    @rtype: int
+    """
+    transferred_accounts, counter = [], 0
+    for venue_account_id in venue_account_ids:
+        counter += 1
+        try:
+            venue_account = VenueAccount.objects.get(pk=venue_account_id)
+            target = Account.objects.get(user_id=owner_id)
+            if venue_account.account == target:
+                raise Exception('The venue is already belongs to this account')
+
+            if VenueAccountTransferring.objects.filter(target=target, venue_account=venue_account).count() > 0:
+                raise Exception('The venue is already in the transfer process')
+
+            venue_account_transferring = VenueAccountTransferring.objects.create(target=target,
+                                                                                 venue_account=venue_account)
+            transferred_accounts.append(venue_account)
+            target_name = target.user.username
+            target_link = reverse('userena_profile_detail', kwargs={'username': target.user.username})
+            notice_service.create_notice(notice_type='venue_transferring_to_owner',
+                                         user=venue_account.account.user,
+                                         notice_data={
+                                             'venue_name': venue_account.venue.name,
+                                             'venue_link': reverse('public_venue_account',
+                                                                   kwargs={'slug': venue_account.slug}),
+                                             'target_name': target_name,
+                                             'target_link': target_link,
+                                             'date': datetime.datetime.now().strftime('%A, %b. %d, %I:%M %p'),
+                                         })
+
+            if counter == len(venue_account_ids):
+                mail_data = {'subject': 'CityFusion: venues has been transferred to you.',
+                             'user': target.user,
+                             'venue_accounts': transferred_accounts
+                }
+            else:
+                mail_data = {}
+
+            notice_service.create_notice('venue_transferring', target.user, mail_data, {
+                'venue_name': venue_account.venue.name,
+                'venue_link': reverse('public_venue_account', kwargs={'slug': venue_account.slug}),
+                'date': datetime.datetime.now().strftime('%A, %b. %d, %I:%M %p'),
+                'accept_link': reverse('accept_venue_transferring', kwargs={
+                    'venue_transferring_id': venue_account_transferring.id}),
+                'reject_link': reverse('reject_venue_transferring', kwargs={
+                    'venue_transferring_id': venue_account_transferring.id})
+            }, mail_template='mail/venues_transferring.txt')
+        except Exception as e:
+            raise Exception(e.message)
+    return len(transferred_accounts)
+
+
 def accept_venue_transferring(venue_transferring_id, notice_id):
     """ Accept a venue transferring.
 
@@ -100,7 +158,7 @@ def accept_venue_transferring(venue_transferring_id, notice_id):
         venue_account.account = venue_transferring.target
         venue_account.save()
 
-        venue_account.venue.user = venue_transferring.target
+        venue_account.venue.user = venue_transferring.target.user
         venue_account.venue.save()
 
         Event.events.filter(venue_account_owner_id=venue_account.id).update(owner=venue_transferring.target.user.id)

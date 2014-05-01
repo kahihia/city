@@ -179,6 +179,7 @@ a.add-button {
     height: auto;
     opacity: 1;
     vertical-align: middle;
+    position: relative;
 }
 
 .pure-events-list .entry-wrapper {
