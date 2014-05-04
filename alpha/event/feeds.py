@@ -1,3 +1,5 @@
+from xml.dom import minidom
+
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Rss201rev2Feed
 from django.contrib.sites.models import Site
@@ -12,13 +14,14 @@ from .model_decorators import SingleEventModelDecorator
 
 
 class RssFusionFeed(Rss201rev2Feed):
-    extra_elements = ['image', 'date', 'time', 'cost', 'venue', 'location']
-
     def add_item_elements(self, handler, item):
-        super(RssFusionFeed, self).add_item_elements(handler, item)
-
-        for extra_element in self.extra_elements:
-            handler.addQuickElement(extra_element, item[extra_element])
+        handler.addQuickElement('image', item['image'])
+        handler.addQuickElement('title', item['title'])
+        handler.addQuickElement('date', item['date'])
+        handler.addQuickElement('cost', item['cost'])
+        handler.addQuickElement('venue', item['venue'])
+        handler.addQuickElement('address', item['address'])
+        handler.addQuickElement('description', item['description'])
 
 
 class EventFeed(Feed):
@@ -34,6 +37,12 @@ class EventFeed(Feed):
             self.title = Page.objects.get(alias='home').meta_title
         except Exception:
             self.title = ''
+
+    def __call__(self, request, *args, **kwargs):
+        response = super(EventFeed, self).__call__(request, *args, **kwargs)
+        reparsed = minidom.parseString(response.content)
+        response.content = reparsed.toprettyxml(indent='', encoding='utf-8')
+        return response
 
     def get_object(self, request, *args, **kwargs):
         self._tag_name = request.GET.get('tag', '')
@@ -75,9 +84,8 @@ class EventFeed(Feed):
             u'image': '%s%s' % (self._domain, reverse('get_event_image', kwargs={'slug': item.slug,
                                                                                  'width': 650,
                                                                                  'height': 550})),
-            u'date': item.date(),
-            u'time': item.time(),
+            u'date': item.datetime(),
             u'cost': item.price(),
             u'venue': item.venue.name,
-            u'location': item.venue.address
+            u'address': item.venue.address
         }

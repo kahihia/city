@@ -22,6 +22,9 @@ class SingleEventModelDecorator(ModelDecorator):
     def time(self):
         return self._instance.start_time.strftime('%I:%M %p')
 
+    def datetime(self):
+        return self._instance.start_time.strftime('%A, %B %d - %I:%M %p')
+
     def price(self):
         if self._instance.price and self._instance.price != "$":
             return self._instance.price
