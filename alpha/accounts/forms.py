@@ -1,7 +1,7 @@
 from django import forms
 from accounts.models import Account
 
-from widgets import InTheLoopTagAutoSuggest, CityAutoSuggest
+from widgets import InTheLoopTagAutoSuggest, CityAutoSuggest, AddFacebookPagesWidget
 from taggit.forms import TagField
 from accounts.lookups import RegionLookup
 from accounts.models import REMINDER_TYPES
@@ -105,4 +105,8 @@ class AccountForm(EditProfileForm):
             'native_region',
             'tax_origin_confirmed',
             'not_from_canada',
+            'fb_pages'
         ]
+        widgets = {
+            'fb_pages': AddFacebookPagesWidget
+        }

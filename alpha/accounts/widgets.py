@@ -1,4 +1,5 @@
 import copy
+import json
 
 from django.utils import simplejson as json
 from django import forms
@@ -6,6 +7,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from django.template.loader import render_to_string
 
 from taggit_autosuggest.utils import edit_string_for_tags
 from cities.models import City
@@ -224,3 +226,15 @@ class ChooseUserContextWidget(forms.Widget):
 
         return mark_safe(html)
 
+
+class AddFacebookPagesWidget(forms.Widget):
+    def value_from_datadict(self, data, files, name):
+        fb_pages = data.getlist('fb_page[]', [])
+        return json.dumps(fb_pages)
+
+    def render(self, name, value, *args, **kwargs):
+        if not value:
+            pages = []
+        else:
+            pages = json.loads(value)
+        return mark_safe(render_to_string('accounts/fields/add_facebook_pages.html', {'pages': pages}))

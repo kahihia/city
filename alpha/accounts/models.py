@@ -125,7 +125,7 @@ class Account(UserenaBaseProfile, FacebookProfileModel, AccountSettingsMixin):
     cities = models.ManyToManyField(City)
 
     bonus_budget = MoneyField(max_digits=10, decimal_places=2, default_currency='CAD')
-    allow_fb_import = models.BooleanField(verbose_name='Allow import from FB', default=False)
+    fb_pages = models.TextField(blank=True, null=True)
 
     objects = models.Manager()
     accounts = money_manager(models.Manager())

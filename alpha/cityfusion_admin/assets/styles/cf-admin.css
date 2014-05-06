@@ -36,4 +36,25 @@ body .entry-wrapper .entry-info.home-page .entry-details-wrapper .title,
 body .entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-date,
 body .entry-wrapper .entry-info.home-page .entry-details-wrapper .entry-description {
     width: 285px;
-} 
+}
+
+.fb-pages-dropdown {
+    width: 460px;
+    height: 18px;
+    line-height: 18px;
+    text-align: left;
+    margin-right: 5px;
+}
+
+.fb-pages-dropdown:after, .fb-pages-dropdown:after {
+    top: 2px;
+    right: 1px;
+    background: url("/static/images/widgets/dropdown-small.png") no-repeat;
+    width: 15px;
+    height: 14px;
+}
+
+.fb-pages-dropdown-options {
+    width: 480px;
+    text-align: left;
+}

@@ -8,6 +8,7 @@
         });
 
         this.showOrHideRegionField();
+        this.initFacebookPagesField();
     }
 
     AccountEditPage.prototype = {
@@ -17,7 +18,23 @@
             } else {
                 $(".native-region-tr").show();
             }
-        }       
+        },
+
+        initFacebookPagesField: function() {
+            $("body").on("click", "[data-type=fb_page_add]", function() {
+                if($("[data-type=fb_page_item]").length < 5) {
+                    $("<input type='text' name='fb_page[]' data-type='fb_page_item' />\n" +
+                        "<input type='button' value='-' data-type='fb_page_del' />").insertBefore(this);
+                    $("<br/>").insertBefore(this);
+                }
+            });
+
+            $("body").on("click", "[data-type=fb_page_del]", function() {
+                $(this).next("br").remove();
+                $(this).prev("input").remove();
+                $(this).remove();
+            });
+        }
     };
 
     $(document).on("ready page:load", function(){

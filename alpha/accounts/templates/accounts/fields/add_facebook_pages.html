@@ -1,0 +1,6 @@
+{% for page in pages %}
+    <input type="text" name="fb_page[]" value="{{ page }}" data-type="fb_page_item"/>
+    <input type="button" value="-" data-type="fb_page_del" />
+    <br/>
+{% endfor %}
+<input type="button" value="+" data-type="fb_page_add" />

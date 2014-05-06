@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Q, F
+from django.contrib.auth.decorators import login_required
 
 from cities.models import City, Country
 from django_facebook.decorators import facebook_required
@@ -28,7 +29,6 @@ from venues.models import VenueAccountTransferring
 from venues.services import venue_service
 from venues.forms import VenueForm
 from cityfusion_admin.filters import AdvertisingOrderFilter, FeaturedEventOrderFilter
-from .decorators import staff_member_or_fb_import_allowed
 
 
 @require_POST
@@ -90,18 +90,20 @@ def claim_event_list(request):
                             }, context_instance=RequestContext(request))
 
 
-@staff_member_or_fb_import_allowed
+@login_required
 def import_facebook_events(request):
     form = CreateEventForm(account=request.account, initial={
         "venue_account_owner": request.current_venue_account
     })  # form for manual location choice
 
     return render_to_response('cf-admin/import_facebook_events.html',
-                              {'form': form},
+                              {'form': form,
+                               'is_admin': request.user.is_staff,
+                               'fb_pages': json.loads(request.user.get_profile().fb_pages)},
                               context_instance=RequestContext(request))
 
 
-@staff_member_or_fb_import_allowed
+@login_required
 @facebook_required
 def load_facebook_events(request):
     if request.is_ajax():
@@ -131,7 +133,7 @@ def load_facebook_events(request):
 
 
 @require_POST
-@staff_member_or_fb_import_allowed
+@login_required
 def reject_facebook_event(request):
     if request.is_ajax():
         facebook_event_id = request.POST['facebook_event_id']
@@ -142,7 +144,7 @@ def reject_facebook_event(request):
         raise Http404
 
 
-@staff_member_or_fb_import_allowed
+@login_required
 def location_autocomplete(request):
     if request.is_ajax():
         if request.method == 'GET':
