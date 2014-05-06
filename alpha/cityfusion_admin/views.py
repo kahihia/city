@@ -99,7 +99,7 @@ def import_facebook_events(request):
     return render_to_response('cf-admin/import_facebook_events.html',
                               {'form': form,
                                'is_admin': request.user.is_staff,
-                               'fb_pages': json.loads(request.user.get_profile().fb_pages)},
+                               'fb_pages': json.loads(request.user.get_profile().fb_pages or '[]')},
                               context_instance=RequestContext(request))
 
 
