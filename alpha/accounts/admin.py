@@ -16,7 +16,7 @@ from home.admin import FusionExportableAdmin
 
 
 class AccountAdmin(admin.ModelAdmin):
-    fields = ('user', 'tax_origin_confirmed', 'not_from_canada', 'website', 'allow_fb_import')
+    fields = ('user', 'tax_origin_confirmed', 'not_from_canada', 'website')
 
 
 class VenueAccountAdmin(FusionExportableAdmin):

@@ -33,6 +33,7 @@
 
             self.eventsBlock.on("click", "[data-type=button_import]", self.onImportButtonClick);
             self.eventsBlock.on("click", "[data-type=button_reject]", self.onRejectButtonClick);
+            $(".fb-pages-dropdown").qap_dropdown();
         };
 
         self.reset = function() {

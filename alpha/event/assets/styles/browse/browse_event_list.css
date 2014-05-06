@@ -118,7 +118,7 @@
 
 .account-events-list {
     position: relative;
-    padding-top: 66px;
+    padding-top: 90px;
 }
 
 .events-actions-row {
@@ -176,6 +176,21 @@
     background: #505050 !important;
     font-size: 12px;
     margin-right: 5px !important;
+}
+
+.events-actions-row__fb_import {
+    display: block;
+    height: 18px !important;
+    line-height: 18px !important;
+    background: #505050 !important;
+    width: 212px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 3px;
+}
+
+.events-actions-row__fb_import:hover {
+    color: #ffffff;
 }
 
 .entry-wrapper .entry-info .checkbox-field,
