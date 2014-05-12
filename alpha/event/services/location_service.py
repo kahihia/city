@@ -223,18 +223,21 @@ class LocationFromUserChoice(object):
 
     @property
     def city(self):
-        if missing_in_session("user_location_data", self.request.session):
-            return (self.from_browser.city or self.by_IP.city)
+        if not hasattr(self, '_city'):
+            if missing_in_session("user_location_data", self.request.session):
+                setattr(self, '_city', (self.from_browser.city or self.by_IP.city))
+                return self._city
 
-        user_location_data = self.request.session["user_location_data"]
+            user_location_data = self.request.session["user_location_data"]
 
-        user_location_id = user_location_data["user_location_id"]
-        user_location_type = user_location_data["user_location_type"]
+            user_location_id = user_location_data["user_location_id"]
+            user_location_type = user_location_data["user_location_type"]
 
-        if user_location_type=="city":
-            return City.objects.get(id=user_location_id)
-        else:
-            return None
+            if user_location_type=="city":
+                setattr(self, '_city', City.objects.get(id=user_location_id))
+            else:
+                setattr(self, '_city', None)
+        return self._city
 
     @property
     def canadian_region(self):
