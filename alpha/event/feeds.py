@@ -29,7 +29,7 @@ class EventFeed(Feed):
     description = 'Last events on Cityfusion'
 
     def __init__(self):
-        self._tag_name = ''
+        self._raw_tags, self._tags = '', []
         self._domain = Site.objects.get_current().domain
         self.link = 'http://%s' % self._domain
 
@@ -45,11 +45,13 @@ class EventFeed(Feed):
         return response
 
     def get_object(self, request, *args, **kwargs):
-        self._tag_name = request.GET.get('tag', '')
+        self._raw_tags = request.GET.get('tags', '')
+        if self._raw_tags:
+            self._tags = self._raw_tags.split(',')
         return super(EventFeed, self).get_object(request, args, kwargs)
 
     def get_feed(self, obj, request):
-        cache_key = 'rss_feed_%s' % self._tag_name
+        cache_key = 'rss_feed_%s' % self._raw_tags
         feed = cache.get(cache_key)
         if not feed:
             feed = super(EventFeed, self).get_feed(obj, request)
@@ -57,9 +59,9 @@ class EventFeed(Feed):
         return feed
 
     def items(self):
-        if self._tag_name:
+        if self._tags:
             event_ids_with_tags = Event.events.filter(
-                tagged_items__tag__name__in=[self._tag_name]
+                tagged_items__tag__name__in=self._tags
             ).values_list('id', flat=True)
             single_events = SingleEvent.homepage_events.filter(event_id__in=list(event_ids_with_tags))\
                 .select_related('event__venue').prefetch_related('event__eventslug_set')
