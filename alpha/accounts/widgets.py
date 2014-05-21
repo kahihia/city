@@ -230,7 +230,7 @@ class ChooseUserContextWidget(forms.Widget):
 class AddFacebookPagesWidget(forms.Widget):
     def value_from_datadict(self, data, files, name):
         fb_pages = data.getlist('fb_page[]', [])
-        return json.dumps(fb_pages)
+        return json.dumps([fb_page for fb_page in fb_pages if fb_page != ''])
 
     def render(self, name, value, *args, **kwargs):
         if not value:

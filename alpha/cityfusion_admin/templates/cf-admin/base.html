@@ -70,7 +70,9 @@
         <div class="page-container {{ page_type }}">
             <div class="content-wrapper">
                 <h1>
-                    Cityfusion Admin
+                    {% block admin_title %}
+                        Cityfusion Admin
+                    {% endblock %}
                 </h1>
                 {% block page %}{% endblock %}
             </div>
