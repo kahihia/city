@@ -109,9 +109,17 @@
     </div>
 {% endblock body_start %}
 
+{% if not is_admin %}
+    {% block admin_title %}
+       Import events from Facebook
+    {% endblock %}
+{% endif %}
+
 {% block page %}
     <div class="tabs-container">
-        {% cf_admin_menu "import_facebook_events" %}
+        {% if is_admin %}
+            {% cf_admin_menu "import_facebook_events" %}
+        {% endif %}
 
         <div class="box visible options">
             <div class="form-block" data-id="form_block">
@@ -122,17 +130,26 @@
                                data-id="city_input" />
                         AND/OR
                         <input type="text" class="modern-input" placeholder="Facebook page url" data-id="fb_page_url" />
+                        <input class="events-search-button" type="button" value="Search" data-id="search_button" />
                     {% else %}
-                        <div class="dropdown fb-pages-dropdown"
-                             data-dropdown-class="fb-pages-dropdown-options">
-                            <select autocomplete="off" data-id="fb_page_url">
-                                {% for fb_page in fb_pages %}
-                                    <option value="{{ fb_page }}">{{ fb_page }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                        {% if fb_pages %}
+                            <div class="dropdown fb-pages-dropdown"
+                                 data-dropdown-class="fb-pages-dropdown-options">
+                                <select autocomplete="off" data-id="fb_page_url">
+                                    {% for fb_page in fb_pages %}
+                                        <option value="{{ fb_page }}">{{ fb_page }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <input class="events-search-button" type="button" value="Search" data-id="search_button" />
+                        {% else %}
+                            You should
+                            <a href="{% url 'userena_profile_edit' user.username %}" style="text-decoration: underline">
+                                add Facebook pages
+                            </a>
+                            for import
+                        {% endif %}
                     {% endif %}
-                    <input class="events-search-button" type="button" value="Search" data-id="search_button" />
                 </p>
                 <input type="hidden" value="" data-id="city_name" />
                 {% csrf_token %}

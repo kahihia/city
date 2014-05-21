@@ -1,6 +1,13 @@
-{% for page in pages %}
-    <input type="text" name="fb_page[]" value="{{ page }}" data-type="fb_page_item"/>
-    <input type="button" value="-" data-type="fb_page_del" />
+{% if pages %}
+    {% for page in pages %}
+        <input type="text" name="fb_page[]" value="{{ page }}" data-type="fb_page_item"/>
+        {% if not forloop.first %}
+            <input type="button" value="-" data-type="fb_page_del" />
+        {% endif %}
+        <br/>
+    {% endfor %}
+{% else %}
+    <input type="text" name="fb_page[]" value="" data-type="fb_page_item"/>
     <br/>
-{% endfor %}
+{% endif %}
 <input type="button" value="+" data-type="fb_page_add" />
