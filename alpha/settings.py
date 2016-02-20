@@ -42,5 +42,5 @@ elif host_ip == '69.164.208.181':
         }
     }
 
-    DEBUG = False
-    GEARS_DEBUG = False
+    DEBUG = True
+    GEARS_DEBUG = True
